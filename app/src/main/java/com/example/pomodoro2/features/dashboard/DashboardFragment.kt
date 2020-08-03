@@ -15,7 +15,7 @@ class DashboardFragment : BaseFragment() {
     private lateinit var dashboardViewModel: DashboardViewModel
 
     override fun layoutId(): Int {
-        return R.layout.fragment_notifications
+        return R.layout.fragment_dashboard
     }
 
     override fun onCreateView(
