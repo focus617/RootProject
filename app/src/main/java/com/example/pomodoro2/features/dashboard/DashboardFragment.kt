@@ -1,4 +1,4 @@
-package com.example.pomodoro2.ui.dashboard
+package com.example.pomodoro2.features.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater

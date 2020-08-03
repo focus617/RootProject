@@ -1,4 +1,4 @@
-package com.example.pomodoro2.ui.notifications
+package com.example.pomodoro2.features.notifications
 
 import android.os.Bundle
 import android.view.LayoutInflater
