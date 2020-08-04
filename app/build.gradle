@@ -89,6 +89,9 @@ dependencies {
     // 2. Unit/Integration tests dependencies
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testImplementation "junit:junit:$junit_version"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation "org.robolectric:robolectric:$robolectric_version"
+    testImplementation "org.amshove.kluent:kluent:$kluent_version"
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
 
