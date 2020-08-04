@@ -14,7 +14,11 @@ import kotlinx.coroutines.launch
  *
  * By convention each [UseCase] implementation will execute its job in a background thread
  * (kotlin coroutine) and will post the result in the UI thread.
+ *
+ * @param <out Type>: a return type which is the result of the executed use case.
+ * @param <in Params>: a parameters class which will be consumed inside the run() function in case we need extra data for our use case.
  */
+
 abstract class UseCase<out Type, in Params> where Type : Any {
 
     abstract suspend fun run(params: Params): Either<Failure, Type>

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     def config = rootProject.extensions.getByName("ext")
@@ -71,8 +72,8 @@ dependencies {
 
     // Room
     implementation "androidx.room:room-runtime:$room_version"
-    // TODO: For Kotlin use kapt instead of annotationProcessor
-    annotationProcessor "androidx.room:room-compiler:$room_version"
+    // annotationProcessor
+    kapt "androidx.room:room-compiler:$room_version"
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$room_version"
 
