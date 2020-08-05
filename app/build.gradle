@@ -12,8 +12,8 @@ android {
 
     defaultConfig {
         applicationId config.getAt("application_id")
-        minSdkVersion config.getAt("min_sdk")
-        targetSdkVersion config.getAt("target_sdk")
+        minSdkVersion config.getAt("min_sdk_version")
+        targetSdkVersion config.getAt("target_sdk_version")
         versionCode config.getAt("version_code")
         versionName config.getAt("version_name")
 
@@ -39,6 +39,10 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    // Always show the result of every unit test when running via command line, even if it passes.
+    testOptions.unitTests {
+        includeAndroidResources = true
     }
 }
 
@@ -89,12 +93,18 @@ dependencies {
     // 2. Unit/Integration tests dependencies
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testImplementation "junit:junit:$junit_version"
+
+    // AndroidX Test - JVM testing
+    testImplementation "androidx.test.ext:junit-ktx:$androidx_test_ext_junit_kotlin_version"
+    testImplementation "androidx.test:core-ktx:$androidx_test_core_kotlin_version"
+    testImplementation "androidx.arch.core:core-testing:$androidx_arch_core_testing_version"
+
     testImplementation "org.mockito:mockito-core:$mockito_version"
-    testImplementation "org.robolectric:robolectric:$robolectric_version"
     testImplementation "org.amshove.kluent:kluent:$kluent_version"
+    testImplementation "org.robolectric:robolectric:$robolectric_version"
+
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
-
 
     // 3. Acceptance tests dependencies
     // Assertions

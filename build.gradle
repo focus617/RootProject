@@ -3,11 +3,10 @@ buildscript {
     // Define versions in a single place
     ext{
         //Sdk and tools
-        compile_sdk_version = 30
         build_tools_version = "30.0.1"
-        compile_sdk = 25
-        target_sdk = 30
-        min_sdk = 16
+        compile_sdk_version = 28
+        target_sdk_version = 28
+        min_sdk_version = 16
 
         application_id = 'com.example.pomodoro2'
         version_name = '1.0'
@@ -39,20 +38,29 @@ buildscript {
         // Log
         timber_version = "4.7.1"
 
-        //Testing
+
+        // AndroidX Test
         androidx_test_core_version = "1.2.0"
+        androidx_test_core_kotlin_version = "1.2.0"
         androidx_test_runner_version = "1.2.0"
-        androidx_test_rules_version = "1.1.1"
+        androidx_test_rules_version = "1.2.0"
+        androidx_arch_core_testing_version = "2.1.0"
+
+        // Assertions
+        androidx_test_ext_junit_version = "1.1.1"
+        androidx_test_ext_junit_kotlin_version = "1.1.1"
+        androidx_test_ext_truth_version = "1.2.0"
+        google_truth_version = "0.42"
+
+        // 3rd party Testing
         junit_version = "4.13"
-        mockito_version = "2.7.22"
+        mockito_version = "2.19.0"
         espresso_version = "3.2.0"
         robolectric_version = "4.3.1"
         kluent_version = "1.14"
 
-        // Assertions
-        androidx_test_ext_junit_version = "1.1.1"
-        androidx_test_ext_truth_version = "1.2.0"
-        google_truth_version = "0.42"
+
+
     }
 
     repositories {
