@@ -10,4 +10,7 @@
 
 <!--TODO: for initial debug&testing only, will remove in future    -->
     <string name="rules_text" translatable="false">Select the answer from the options given. Each time you get an answer correct, you advance to the next question.\n\nIf you get the answer wrong, your game ends! You can return to the title screen using up or back from within the game screen, and this will also end your game.</string>
+    <string name="terms_of_service" translatable="false">Terms of Service</string>
+    <string name="privacy_policy" translatable="false">Privacy Policy</string>
+    <string name="agreement" translatable="false">Agreement</string>
 </resources>

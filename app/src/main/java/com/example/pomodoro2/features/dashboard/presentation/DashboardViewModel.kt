@@ -1,4 +1,4 @@
-package com.example.pomodoro2.features.dashboard
+package com.example.pomodoro2.features.dashboard.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

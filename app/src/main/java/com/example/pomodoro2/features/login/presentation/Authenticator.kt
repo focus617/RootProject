@@ -1,4 +1,4 @@
-package com.example.pomodoro2.features.login
+package com.example.pomodoro2.features.login.presentation
 
 import javax.inject.Inject
 import javax.inject.Singleton
