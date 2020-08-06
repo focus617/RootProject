@@ -62,8 +62,6 @@ dependencies {
     implementation "androidx.vectordrawable:vectordrawable:$vectordrawable_version"
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment:$navigation_version"
-    implementation "androidx.navigation:navigation-ui:$navigation_version"
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
 
@@ -89,6 +87,7 @@ dependencies {
     // Used for Log
     implementation "com.jakewharton.timber:timber:$timber_version"
 
+    implementation "com.google.code.gson:gson:$google_gson_version"
 
     // 2. Unit/Integration tests dependencies
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"

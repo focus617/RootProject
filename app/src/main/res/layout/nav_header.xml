@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.pomodoro2.features.login.presentation.UserViewModel" />
+            type="com.example.pomodoro2.features.login.presentation.UserProfileViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -8,4 +8,7 @@
     <string name="action_create_data">创建数据</string>
     <string name="action_settings">设置</string>
     <string name="action_about">关于</string>
+    <string name="account">账户</string>
+    <string name="save">保存</string>
+    <string name="edit_profile">更改账户信息</string>
 </resources>
