@@ -4,4 +4,8 @@
     <string name="title_project">目标</string>
     <string name="title_activities">活动</string>
     <string name="title_statistics">统计</string>
+    <string name="action_delete_data">删除数据</string>
+    <string name="action_create_data">创建数据</string>
+    <string name="action_settings">设置</string>
+    <string name="action_about">关于</string>
 </resources>

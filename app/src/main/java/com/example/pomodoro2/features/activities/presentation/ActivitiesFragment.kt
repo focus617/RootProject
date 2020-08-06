@@ -15,7 +15,7 @@ class ActivitiesFragment : BaseFragment() {
     private lateinit var activitiesViewModel: ActivitiesViewModel
 
     override fun layoutId(): Int {
-        return R.layout.fragment_activities
+        return R.layout.fragment_activity
     }
 
     override fun onCreateView(

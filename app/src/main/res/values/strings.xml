@@ -3,4 +3,11 @@
     <string name="title_project">Goals</string>
     <string name="title_activities">Activities</string>
     <string name="title_statistics">Statistics</string>
+    <string name="action_create_data">CreateData</string>
+    <string name="action_delete_data">DeleteAllData</string>
+    <string name="action_settings">Setting</string>
+    <string name="action_about">About</string>
+
+<!--TODO: for initial debug&testing only, will remove in future    -->
+    <string name="rules_text" translatable="false">Select the answer from the options given. Each time you get an answer correct, you advance to the next question.\n\nIf you get the answer wrong, your game ends! You can return to the title screen using up or back from within the game screen, and this will also end your game.</string>
 </resources>

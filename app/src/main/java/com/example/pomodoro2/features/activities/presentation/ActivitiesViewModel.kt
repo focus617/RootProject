@@ -25,7 +25,7 @@ class ActivitiesViewModel(
 
     // TODO: remove in future
     private val _text = MutableLiveData<String>().apply {
-        value = "This is activities Fragment"
+        value = "This is activity Fragment"
     }
     val text: LiveData<String> = _text
 }

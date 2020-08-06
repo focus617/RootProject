@@ -1,4 +1,4 @@
-package com.example.pomodoro2.features.notifications
+package com.example.pomodoro2.features.countDownTimer.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,12 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
 import com.example.pomodoro2.core.platform.BaseFragment
 
-class NotificationsFragment : BaseFragment() {
+class CountDownTimerFragment : BaseFragment() {
 
-    private lateinit var notificationsViewModel: NotificationsViewModel
+    private lateinit var countDownTimerViewModel: CountDownTimerViewModel
 
     override fun layoutId(): Int {
-        return R.layout.fragment_activities
+        return R.layout.fragment_timer
     }
 
     override fun onCreateView(
@@ -23,11 +23,11 @@ class NotificationsFragment : BaseFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        notificationsViewModel =
-                ViewModelProvider(this).get(NotificationsViewModel::class.java)
+        countDownTimerViewModel =
+                ViewModelProvider(this).get(CountDownTimerViewModel::class.java)
         val root = super.onCreateView(inflater, container, savedInstanceState)
-        val textView: TextView = root.findViewById(R.id.text_activity)
-        notificationsViewModel.text.observe(viewLifecycleOwner, Observer {
+        val textView: TextView = root.findViewById(R.id.text_timer)
+        countDownTimerViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

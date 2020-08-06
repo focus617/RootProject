@@ -9,18 +9,46 @@
         android:id="@+id/navigation_project"
         android:name="com.example.pomodoro2.features.projects.presentation.ProjectFragment"
         android:label="@string/title_project"
-        tools:layout="@layout/fragment_project" />
+        tools:layout="@layout/fragment_project" >
+        <action
+            android:id="@+id/action_navigation_project_to_navigation_activity"
+            app:destination="@id/navigation_activity" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_activities"
+        android:id="@+id/navigation_activity"
         android:name="com.example.pomodoro2.features.activities.presentation.ActivitiesFragment"
         android:label="@string/title_activities"
-        tools:layout="@layout/fragment_activities" />
+        tools:layout="@layout/fragment_activity" >
+        <action
+            android:id="@+id/action_navigation_activity_to_countDownTimerFragment"
+            app:destination="@id/countDownTimerFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_statistics"
         android:name="com.example.pomodoro2.features.dashboard.DashboardFragment"
         android:label="@string/title_statistics"
         tools:layout="@layout/fragment_dashboard" />
+    <fragment
+        android:id="@+id/countDownTimerFragment"
+        android:name="com.example.pomodoro2.features.countDownTimer.presentation.CountDownTimerFragment"
+        android:label="fragment_timer"
+        tools:layout="@layout/fragment_timer" />
+
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.pomodoro2.features.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.pomodoro2.features.utils.AboutFragment"
+        android:label="AboutFragment" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.pomodoro2.features.utils.SettingsFragment"
+        android:label="SettingsFragment" />
 
 </navigation>
