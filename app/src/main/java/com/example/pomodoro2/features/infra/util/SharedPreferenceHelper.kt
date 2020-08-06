@@ -28,7 +28,7 @@
  * THE SOFTWARE.
  */
 
-package com.example.pomodoro2.infra.util
+package com.example.pomodoro2.features.infra.util
 
 import android.content.Context
 import com.example.pomodoro2.domain.Profile

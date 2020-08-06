@@ -4,8 +4,7 @@ import android.app.Application
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import com.example.pomodoro2.core.extension.getOrEmpty
-import com.example.pomodoro2.core.platform.BaseViewModel
-import com.example.pomodoro2.infra.util.SharedPreferenceHelper
+import com.example.pomodoro2.features.infra.util.SharedPreferenceHelper
 
 /**
  * ViewModel for the login screen.
@@ -25,5 +24,10 @@ class UserProfileViewModel(val app: Application) : AndroidViewModel(app) {
         val profile = sharedPreferenceHelper.getProfile()
         profileName.set(profile.name)
         profileEmail.set(profile.email)
+    }
+
+    fun hasFullProfile(): Boolean {
+        val profile = sharedPreferenceHelper.getProfile()
+        return profile.name.isNotEmpty() && profile.email.isNotEmpty()
     }
 }
