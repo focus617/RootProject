@@ -3,22 +3,23 @@ package com.example.pomodoro2
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.pomodoro2.databinding.ActivityMainBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var mBinding : ActivityMainBinding
+
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         //Databinding
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        val mBinding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
 
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
@@ -26,12 +27,15 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration(setOf(
                 R.id.navigation_project, R.id.navigation_activity, R.id.navigation_statistics))
         setupActionBarWithNavController(navController, appBarConfiguration)
-        setupActionBarWithNavController(navController, mBinding.drawerLayout)
-        mBinding.bottomNavigationView.setupWithNavController(navController)
-        mBinding.drawerNavigationView.setupWithNavController(navController)
 
+        drawerLayout = mBinding.drawerLayout
+        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
+        NavigationUI.setupWithNavController(mBinding.bottomNavigationView, navController)
+        NavigationUI.setupWithNavController(mBinding.drawerNavigationView, navController)
     }
 
-    override fun onSupportNavigateUp() =
-        findNavController(R.id.nav_host_fragment).navigateUp()
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = this.findNavController(R.id.nav_host_fragment)
+        return NavigationUI.navigateUp(navController, drawerLayout)
+    }
 }
