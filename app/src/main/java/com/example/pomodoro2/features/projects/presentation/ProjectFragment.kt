@@ -1,4 +1,4 @@
-package com.example.pomodoro2.features.notifications
+package com.example.pomodoro2.features.projects.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,12 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
 import com.example.pomodoro2.core.platform.BaseFragment
 
-class NotificationsFragment : BaseFragment() {
+class ProjectFragment : BaseFragment() {
 
-    private lateinit var notificationsViewModel: NotificationsViewModel
+    private lateinit var projectsViewModel: ProjectsViewModel
 
     override fun layoutId(): Int {
-        return R.layout.fragment_activities
+        return R.layout.fragment_project
     }
 
     override fun onCreateView(
@@ -23,11 +23,10 @@ class NotificationsFragment : BaseFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        notificationsViewModel =
-                ViewModelProvider(this).get(NotificationsViewModel::class.java)
+        projectsViewModel = ViewModelProvider(this).get(ProjectsViewModel::class.java)
         val root = super.onCreateView(inflater, container, savedInstanceState)
-        val textView: TextView = root.findViewById(R.id.text_activity)
-        notificationsViewModel.text.observe(viewLifecycleOwner, Observer {
+        val textView: TextView = root.findViewById(R.id.text_goal)
+        projectsViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

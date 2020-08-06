@@ -24,12 +24,14 @@ class ActivitiesViewModelTest {
 
     @Before
     fun setupViewModel() {
-        // Given a fresh ViewModel
-        val activitiesViewModel = ActivitiesViewModel()
+
     }
 
     @Test
     fun startTimer_setLaunchTimerEvent() {
+
+        // Given a fresh ViewModel
+        val activitiesViewModel = ActivitiesViewModel()
 
         // Create observer - no need for it to do anything!
         val observer = Observer<SingleLiveEvent<Unit>> {}

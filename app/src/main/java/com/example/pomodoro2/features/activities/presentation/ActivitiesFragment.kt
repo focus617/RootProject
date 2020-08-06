@@ -1,4 +1,4 @@
-package com.example.pomodoro2.features.home
+package com.example.pomodoro2.features.activities.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,12 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
 import com.example.pomodoro2.core.platform.BaseFragment
 
-class HomeFragment : BaseFragment() {
+class ActivitiesFragment : BaseFragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var activitiesViewModel: ActivitiesViewModel
 
     override fun layoutId(): Int {
-        return R.layout.fragment_home
+        return R.layout.fragment_activities
     }
 
     override fun onCreateView(
@@ -23,10 +23,11 @@ class HomeFragment : BaseFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        activitiesViewModel =
+                ViewModelProvider(this).get(ActivitiesViewModel::class.java)
         val root = super.onCreateView(inflater, container, savedInstanceState)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
+        val textView: TextView = root.findViewById(R.id.text_activity)
+        activitiesViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

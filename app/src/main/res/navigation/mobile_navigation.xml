@@ -3,23 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_project">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.pomodoro2.features.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_project"
+        android:name="com.example.pomodoro2.features.projects.presentation.ProjectFragment"
+        android:label="@string/title_project"
+        tools:layout="@layout/fragment_project" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_activities"
+        android:name="com.example.pomodoro2.features.activities.presentation.ActivitiesFragment"
+        android:label="@string/title_activities"
+        tools:layout="@layout/fragment_activities" />
+
+    <fragment
+        android:id="@+id/navigation_statistics"
         android:name="com.example.pomodoro2.features.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_statistics"
         tools:layout="@layout/fragment_dashboard" />
 
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.pomodoro2.features.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
 </navigation>

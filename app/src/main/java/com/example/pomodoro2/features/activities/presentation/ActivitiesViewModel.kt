@@ -22,4 +22,10 @@ class ActivitiesViewModel(
     fun launchTimer() {
         _launchTimerEvent.value = SingleLiveEvent(Unit)
     }
+
+    // TODO: remove in future
+    private val _text = MutableLiveData<String>().apply {
+        value = "This is activities Fragment"
+    }
+    val text: LiveData<String> = _text
 }

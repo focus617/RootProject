@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">番茄工作法</string>
+    <string name="title_project">目标</string>
+    <string name="title_activities">活动</string>
+    <string name="title_statistics">统计</string>
+</resources>
