@@ -1,9 +1,12 @@
 package com.example.pomodoro2.core.platform
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 
@@ -39,4 +42,16 @@ abstract class BaseDialogFragment : DialogFragment() {
     open fun onBackPressed() {}
 
     internal fun firstTimeCreated(savedInstanceState: Bundle?) = savedInstanceState == null
+}
+
+
+fun Fragment.hideKeyboard() {
+    this.activity?.apply {
+        if (currentFocus != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view?.windowToken, 0)
+        } else {
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+        }
+    }
 }
