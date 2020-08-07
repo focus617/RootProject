@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             )
             var userProfileViewModel = viewModelProvider.get(UserProfileViewModel::class.java)
             headerBinding.viewModel = userProfileViewModel
-            userProfileViewModel?.loadProfile()
+            userProfileViewModel.loadProfile()
         } catch (e: IllegalArgumentException) {
             e.printStackTrace()
         }

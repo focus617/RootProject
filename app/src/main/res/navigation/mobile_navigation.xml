@@ -29,7 +29,7 @@
     <fragment
         android:id="@+id/navigation_timer"
         android:name="com.example.pomodoro2.features.countDownTimer.presentation.CountDownTimerFragment"
-        android:label="fragment_timer"
+        android:label="@string/title_timer"
         tools:layout="@layout/fragment_timer" />
 
     <fragment
@@ -41,16 +41,15 @@
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.example.pomodoro2.features.utils.AboutFragment"
-        android:label="AboutFragment" />
+        android:label="@string/title_about" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.pomodoro2.features.utils.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="@string/title_settings" />
 
     <dialog
         android:id="@+id/loginFragment"
         android:name="com.example.pomodoro2.features.login.presentation.LoginFragment"
-        android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
 
 </navigation>

@@ -12,4 +12,6 @@
     <string name="save">保存</string>
     <string name="edit_profile">更改账户信息</string>
     <string name="title_timer">定时器</string>
+    <string name="title_about">关于</string>
+    <string name="title_settings">设置</string>
 </resources>
