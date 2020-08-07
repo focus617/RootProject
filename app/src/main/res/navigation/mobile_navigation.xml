@@ -22,19 +22,21 @@
         tools:layout="@layout/fragment_activity" >
         <action
             android:id="@+id/action_navigation_activity_to_countDownTimerFragment"
-            app:destination="@id/countDownTimerFragment" />
+            app:destination="@id/navigation_timer" />
     </fragment>
+
+
+    <fragment
+        android:id="@+id/navigation_timer"
+        android:name="com.example.pomodoro2.features.countDownTimer.presentation.CountDownTimerFragment"
+        android:label="fragment_timer"
+        tools:layout="@layout/fragment_timer" />
 
     <fragment
         android:id="@+id/navigation_statistics"
         android:name="com.example.pomodoro2.features.dashboard.presentation.DashboardFragment"
         android:label="@string/title_statistics"
         tools:layout="@layout/fragment_dashboard" />
-    <fragment
-        android:id="@+id/countDownTimerFragment"
-        android:name="com.example.pomodoro2.features.countDownTimer.presentation.CountDownTimerFragment"
-        android:label="fragment_timer"
-        tools:layout="@layout/fragment_timer" />
 
     <fragment
         android:id="@+id/aboutFragment"

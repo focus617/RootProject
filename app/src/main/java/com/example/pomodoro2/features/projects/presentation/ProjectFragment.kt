@@ -38,7 +38,7 @@ class ProjectFragment : BaseFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.options_menu, menu)
+        inflater.inflate(R.menu.options_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -61,7 +61,7 @@ class ProjectFragment : BaseFragment() {
 
             R.id.aboutFragment -> {
                 NavigationUI.onNavDestinationSelected(
-                    item!!,
+                    item,
                     requireView().findNavController()
                 )
             }

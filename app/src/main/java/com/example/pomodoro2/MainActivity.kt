@@ -16,10 +16,10 @@ import com.example.pomodoro2.features.login.presentation.UserProfileViewModel
 
 class MainActivity : AppCompatActivity() {
 
-
     private lateinit var activityMainBinding: ActivityMainBinding
     private lateinit var headerBinding: NavHeaderBinding
     private lateinit var drawerLayout: DrawerLayout
+
 
     private val navController by lazy { findNavController(R.id.nav_host_fragment) }
 
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_project, R.id.navigation_activity, R.id.navigation_statistics
+                R.id.navigation_project, R.id.navigation_timer, R.id.navigation_statistics
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -83,7 +83,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = this.findNavController(R.id.nav_host_fragment)
         return NavigationUI.navigateUp(navController, drawerLayout)
     }
 

@@ -11,4 +11,5 @@
     <string name="account">账户</string>
     <string name="save">保存</string>
     <string name="edit_profile">更改账户信息</string>
+    <string name="title_timer">定时器</string>
 </resources>
