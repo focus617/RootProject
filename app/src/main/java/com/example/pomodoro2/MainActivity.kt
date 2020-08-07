@@ -70,9 +70,9 @@ class MainActivity : AppCompatActivity() {
     private fun setupNavigation() {
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
         NavigationUI.setupWithNavController(activityMainBinding.bottomNavigationView, navController)
-        NavigationUI.setupWithNavController(activityMainBinding.drawerNavigationView, navController)
+        NavigationUI.setupWithNavController(activityMainBinding.drawerNavigationView, navController)   
     }
-
+    
     private fun setupDrawerViewModel() {
         try {
             val viewModelProvider = ViewModelProvider(
