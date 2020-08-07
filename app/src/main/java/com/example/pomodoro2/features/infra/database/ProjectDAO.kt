@@ -45,6 +45,6 @@ interface ProjectDAO {
      *
      * sorted by priority in ascending order.
      */
-    @get:Query("SELECT * FROM PROJECT_TABLE ORDER BY priority")
-    val getAllProjectsLive: LiveData<List<Project?>?>?
+    @Query("SELECT * FROM PROJECT_TABLE ORDER BY priority")
+    fun getAllProjectsLive(): LiveData<List<Project>>
 }

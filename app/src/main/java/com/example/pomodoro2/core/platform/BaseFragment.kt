@@ -19,6 +19,7 @@ abstract class BaseFragment : Fragment() {
 
     abstract fun layoutId(): Int
 
+    // TODO: seems not work in case of databinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
         inflater.inflate(layoutId(), container, false)
 
