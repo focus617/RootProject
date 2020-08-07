@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import com.example.pomodoro2.core.extension.getOrEmpty
-import com.example.pomodoro2.features.infra.util.SharedPreferenceHelper
+import com.example.pomodoro2.core.helper.SharedPreferenceHelper
 
 /**
  * ViewModel for the login screen.

@@ -28,35 +28,18 @@
  * THE SOFTWARE.
  */
 
-package com.example.pomodoro2.features.infra.util
+package com.example.pomodoro2.core.helper
 
-import android.content.Context
-import com.example.pomodoro2.domain.Profile
-import com.google.gson.Gson
+import java.text.SimpleDateFormat
+import java.util.*
 
-class SharedPreferenceHelper(context: Context) {
-  companion object {
-    const val NAME = "Pomodoro"
-    const val PROFILE = "profile"
-  }
-
-  private val gson by lazy { Gson() }
-
-  private val sharedPreferences = context.getSharedPreferences(NAME, Context.MODE_PRIVATE)
-
-  fun getProfile(): Profile {
-    val jsonString = sharedPreferences.getString(PROFILE, null)
-    return if (jsonString == null) {
-      Profile()
+class DateTimeHelper {
+  fun parse(dateTime: Long?): String {
+    return if (dateTime != null) {
+      val formatter = SimpleDateFormat("yyyy-MM-dd\nhh:mm a", Locale.getDefault())
+      formatter.format(Date(dateTime))
     } else {
-      gson.fromJson(jsonString, Profile::class.java)
-    }
-  }
-
-  fun saveProfile(name: String, email: String) {
-    with(sharedPreferences.edit()) {
-      putString(PROFILE, gson.toJson(Profile(name, email)))
-      apply()
+      ""
     }
   }
 }
