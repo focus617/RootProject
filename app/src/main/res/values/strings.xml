@@ -21,4 +21,6 @@
     <string name="terms_of_service" translatable="false">Terms of Service</string>
     <string name="privacy_policy" translatable="false">Privacy Policy</string>
     <string name="agreement" translatable="false">Agreement</string>
+    <string name="goodbye_message">Welcome to use Pomodoro Tool again.</string>
+    <string name="action_show_in_snackbar">SnackBar</string>
 </resources>

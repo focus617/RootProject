@@ -14,4 +14,6 @@
     <string name="title_timer">定时器</string>
     <string name="title_about">关于</string>
     <string name="title_settings">设置</string>
+    <string name="goodbye_message">欢迎再次使用番茄法专注辅助工具</string>
+    <string name="action_show_in_snackbar">SnackBar</string>
 </resources>
