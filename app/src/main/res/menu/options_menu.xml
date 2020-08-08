@@ -20,4 +20,8 @@
         android:id="@+id/action_delete_data"
         android:title="@string/action_delete_data"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_snack_bar"
+        android:title="@string/action_show_in_snackbar"
+        app:showAsAction="never" />
 </menu>

@@ -63,7 +63,7 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
     private val _showSnackBarEvent = MutableLiveData<SingleLiveEvent<String>>()
     val showSnackBarEvent: LiveData<SingleLiveEvent<String>> = _showSnackBarEvent
 
-    private fun showInSnackBar(str:String) {
+    private fun showInSnackBar(str: String) {
         _showSnackBarEvent.value = SingleLiveEvent(str)
     }
 
@@ -149,11 +149,17 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
 
             // And clear tonight since it's no longer in the database
             _currentProject.value = null
-
-            // Show a snackbar message, because it's friendly.
-            showInSnackBar(_application.getString(R.string.goodbye_message))
         }
     }
+
+    /**
+     * UseCase: test the snackBar
+     */
+    fun testSnackBar() {
+        // Show a snackbar message, because it's friendly.
+        showInSnackBar(_application.getString(R.string.goodbye_message))
+    }
+
 
     // TODO: Below functions will be integrated into Repository
 

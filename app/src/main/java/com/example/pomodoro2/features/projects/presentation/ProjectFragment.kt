@@ -106,6 +106,12 @@ class ProjectFragment : BaseFragment() {
                 )
             }
 
+            R.id.action_snack_bar -> {
+                projectsViewModel.testSnackBar()
+                true
+            }
+
+
             else -> super.onOptionsItemSelected(item);
         }
     }
