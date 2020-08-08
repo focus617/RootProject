@@ -117,7 +117,7 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
             uiScope.launch {
                 // Create a new project , which captures the current time,
                 // then insert it into the database.
-                val project = Project(i.toLong(), titles[i], images[i], i + 1)
+                val project = Project(title = titles[i], imageId = images[i], priority =  i + 1)
                 withContext(Dispatchers.IO) {
                     dataSource.insert(project)
                 }
@@ -131,7 +131,9 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
     fun clearDummyProjectsForTesting(dataSource: ProjectDAO) {
         uiScope.launch {
             // Clear the database table.
-            dataSource.clear()
+            withContext(Dispatchers.IO) {
+                dataSource.clear()
+            }
 
             // And clear tonight since it's no longer in the database
             _currentProject.value = null
