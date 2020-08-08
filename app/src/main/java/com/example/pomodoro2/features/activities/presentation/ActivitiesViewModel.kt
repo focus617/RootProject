@@ -56,12 +56,10 @@ class ActivitiesViewModel(
     private val _launchTimerEvent = MutableLiveData<SingleLiveEvent<Unit>>()
     val launchTimerEvent: LiveData<SingleLiveEvent<Unit>> = _launchTimerEvent
 
-    /**
-     * Called by the Data Binding library and the Start Button's click listener.
-     */
     fun doNavigating() {
         _launchTimerEvent.value = SingleLiveEvent(Unit)
     }
+
 
     // TODO: remove in future
     private val _text = MutableLiveData<String>().apply {

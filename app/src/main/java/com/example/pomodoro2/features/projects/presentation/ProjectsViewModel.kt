@@ -89,7 +89,8 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
      */
     private var _currentProject = MutableLiveData<Project?>()
 
-    private var projects = dataSource.getAllProjectsLive()
+    private var _projects = dataSource.getAllProjectsLive()
+    var projects : LiveData<List<Project>> = _projects
 
     /**
      * To initialize the projects variable as soon as possible
@@ -100,7 +101,7 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
 
     private fun initializeProjects() {
         uiScope.launch {
-            projects = getProjectsFromDatabase()
+            _projects = getProjectsFromDatabase()
         }
     }
 
@@ -215,13 +216,6 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
             _projectDao.clear()
         }
     }
-
-
-    // TODO: for initial debug&testing only, will remove in future
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is goal & project Fragment"
-    }
-    val text: LiveData<String> = _text
 
 
 }

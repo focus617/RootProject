@@ -60,6 +60,15 @@ class ProjectFragment : BaseFragment() {
         // give the binding object a reference to it.
         binding.viewModel = projectsViewModel
 
+        val adapter = ProjectRecyclerViewAdapter()
+        project_list.adapter = adapter
+
+        projectsViewModel.projects.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.data = it
+            }
+        })
+
         // Specify the current activity as the lifecycle owner of the binding.
         // This is necessary so that the binding can observe LiveData updates.
         binding.lifecycleOwner = this
@@ -78,12 +87,6 @@ class ProjectFragment : BaseFragment() {
             requireView().findNavController().navigate(
                 ProjectFragmentDirections.actionNavigationProjectToNavigationActivity(it.id)
             )
-        })
-
-        // TODO: for initial debug&testing only, plan to replace it with a snack bar in future
-        projectsViewModel.text.observe(viewLifecycleOwner, Observer
-        {
-            text_goal.text = it
         })
 
         setHasOptionsMenu(true)
