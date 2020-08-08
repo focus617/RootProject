@@ -7,11 +7,11 @@ import androidx.lifecycle.Observer
  *
  * @sample
  * In ViewModel: showSnackBar() is exposed to trigger this one-time event
- *     private val _showSnackBarEvent = MutableLiveData<SingleLiveEvent<Unit>>()
- *     val showSnackBarEvent: LiveData<SingleLiveEvent<Unit>> = _showSnackBarEvent
+ *     private val _showSnackBarEvent = MutableLiveData<SingleLiveEvent<String>>()
+ *     val showSnackBarEvent: LiveData<SingleLiveEvent<String>> = _showSnackBarEvent
  *
- *     private fun showSnackBar() {
- *        _showSnackBarEvent.value = SingleLiveEvent(Unit)
+ *     private fun showSnackBar(str:String) {
+ *        _showSnackBarEvent.value = SingleLiveEvent(str)
  *     }
  *
  * @sample
@@ -19,7 +19,7 @@ import androidx.lifecycle.Observer
  *     viewModel.showSnackBarEvent.observe(viewLifecycleOwner, EventObserver {
  *         Snackbar.make(
  *            requireActivity().findViewById(android.R.id.content),
- *            getString(R.string.goodbye_message),
+ *            it,
  *            Snackbar.LENGTH_SHORT // How long to display the message.
  *         ).show()
  *     })

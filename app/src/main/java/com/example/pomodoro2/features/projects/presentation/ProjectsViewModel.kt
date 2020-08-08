@@ -17,6 +17,7 @@ import kotlinx.coroutines.*
 class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
     AndroidViewModel(application) {
 
+    private var _application: Application = application
     private var _projectDao: ProjectDAO = dataSource
 
     /** Coroutine variables */
@@ -59,12 +60,13 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
      * so if the user rotates their phone it won't show a duplicate toast.
      *
      */
-    private val _showSnackBarEvent = MutableLiveData<SingleLiveEvent<Unit>>()
-    val showSnackBarEvent: LiveData<SingleLiveEvent<Unit>> = _showSnackBarEvent
+    private val _showSnackBarEvent = MutableLiveData<SingleLiveEvent<String>>()
+    val showSnackBarEvent: LiveData<SingleLiveEvent<String>> = _showSnackBarEvent
 
-    private fun showSnackBar() {
-        _showSnackBarEvent.value = SingleLiveEvent(Unit)
+    private fun showInSnackBar(str:String) {
+        _showSnackBarEvent.value = SingleLiveEvent(str)
     }
+
 
     /**
      * LiveData for this viewModel
@@ -149,7 +151,7 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
             _currentProject.value = null
 
             // Show a snackbar message, because it's friendly.
-            showSnackBar()
+            showInSnackBar(_application.getString(R.string.goodbye_message))
         }
     }
 

@@ -57,7 +57,7 @@ class ProjectFragment : BaseFragment() {
         projectsViewModel.showSnackBarEvent.observe(viewLifecycleOwner, EventObserver {
             Snackbar.make(
                 requireActivity().findViewById(android.R.id.content),
-                getString(R.string.goodbye_message),
+                it,
                 Snackbar.LENGTH_SHORT // How long to display the message.
             ).show()
         })
