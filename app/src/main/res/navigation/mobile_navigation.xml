@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_project" >
         <action
             android:id="@+id/action_navigation_project_to_navigation_activity"
-            app:destination="@id/navigation_activity" />
+            app:destination="@id/navigation_activity"
+            app:enterAnim="@anim/slide_in_right"
+            app:popEnterAnim="@anim/slide_in_right"/>
     </fragment>
 
     <fragment
