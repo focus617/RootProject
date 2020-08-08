@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_activity"
-        android:name="com.example.pomodoro2.features.activities.presentation.ActivitiesFragment"
+        android:name="com.example.pomodoro2.features.activities.presentation.ActivityFragment"
         android:label="@string/title_activities"
         tools:layout="@layout/fragment_activity" >
         <action
