@@ -51,6 +51,22 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
     }
 
     /**
+     * Event for navigation to activity fragment.
+     *
+     * Trigger this singleLiveEvent by setting a new Event as a new value
+     *
+     * It will be cleared automatically after the toast request,
+     * so if the user rotates their phone it won't show a duplicate toast.
+     *
+     */
+    private val _navigateToActivityFragment = MutableLiveData<SingleLiveEvent<Project>>()
+    val navigateToActivityFragment: LiveData<SingleLiveEvent<Project>> = _navigateToActivityFragment
+
+    fun doNavigating(project: Project) {
+        _navigateToActivityFragment.value = SingleLiveEvent(project)
+    }
+
+    /**
      * Event for SnackBar displaying.
      *
      * Trigger this singleLiveEvent by setting a new Event as a new value

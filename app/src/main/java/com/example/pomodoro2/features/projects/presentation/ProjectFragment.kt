@@ -7,12 +7,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.pomodoro2.R
 import com.example.pomodoro2.core.platform.BaseFragment
 import com.example.pomodoro2.core.platform.EventObserver
 import com.example.pomodoro2.databinding.FragmentProjectBinding
 import com.example.pomodoro2.features.infra.database.AppDatabase
+import com.example.pomodoro2.features.infra.database.Project
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_project.*
 
@@ -62,6 +64,13 @@ class ProjectFragment : BaseFragment() {
             ).show()
         })
 
+        // Add an Observer on the state variable for Navigating
+        projectsViewModel.navigateToActivityFragment.observe(viewLifecycleOwner, EventObserver {
+            requireView().findNavController().navigate(
+                ProjectFragmentDirections.actionNavigationProjectToNavigationActivity(it.id)
+            )
+        })
+
         // TODO: for initial debug&testing only, plan to replace it with a snack bar in future
         projectsViewModel.text.observe(viewLifecycleOwner, Observer
         {
@@ -108,6 +117,10 @@ class ProjectFragment : BaseFragment() {
 
             R.id.action_snack_bar -> {
                 projectsViewModel.testSnackBar()
+
+                val project =
+                    Project(title = "学习Android开发", imageId = R.drawable.read_book, priority = 1)
+                projectsViewModel.doNavigating(project)
                 true
             }
 

@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
 import com.example.pomodoro2.core.platform.BaseFragment
 
-class ActivitiesFragment : BaseFragment() {
+class ActivityFragment : BaseFragment() {
 
     private lateinit var activitiesViewModel: ActivitiesViewModel
 
