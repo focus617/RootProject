@@ -16,6 +16,8 @@ import kotlinx.coroutines.*
 class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
     AndroidViewModel(application) {
 
+    private var _projectDao: ProjectDAO = dataSource
+
     /** Coroutine variables */
 
     /**
@@ -64,14 +66,6 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
         }
     }
 
-    /**
-     * Return the result from a coroutine that runs in the Dispatchers.IO context.
-     * Use the I/O dispatcher, because getting data from the database is an I/O operation
-     * and has nothing to do with the UI.
-     */
-    private fun getProjectsFromDatabase(): LiveData<List<Project>> {
-        return dataSource.getAllProjectsLive()
-    }
 
     fun createTestData() {
         createDummyProjectsForTesting(dataSource)
@@ -117,10 +111,8 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
             uiScope.launch {
                 // Create a new project , which captures the current time,
                 // then insert it into the database.
-                val project = Project(title = titles[i], imageId = images[i], priority =  i + 1)
-                withContext(Dispatchers.IO) {
-                    dataSource.insert(project)
-                }
+                val project = Project(title = titles[i], imageId = images[i], priority = i + 1)
+                insertProject(project)
             }
         }
     }
@@ -131,15 +123,52 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
     fun clearDummyProjectsForTesting(dataSource: ProjectDAO) {
         uiScope.launch {
             // Clear the database table.
-            withContext(Dispatchers.IO) {
-                dataSource.clear()
-            }
+            clearProjectTable()
 
             // And clear tonight since it's no longer in the database
             _currentProject.value = null
 
             // Show a snackbar message, because it's friendly.
-            //_showSnackbarEvent.value = true
+            _showSnackbarEvent.value = true
+        }
+    }
+
+    // TODO: Below functions will be integrated into Repository
+
+    /**
+     * Suspend functions to do the long-running work,
+     * so that you don't block the UI thread while waiting for the result.
+     *
+     * Suspend functions return the result from a coroutine that runs in the Dispatchers.IO context.
+     * Use the I/O dispatcher, because getting data from the database is an I/O operation
+     * and has nothing to do with the UI.
+     *
+     **/
+    private suspend fun getProjectFromDatabase(id: Long): Project? {
+        return withContext(Dispatchers.IO) {
+            _projectDao.getProjectById(id)
+        }
+    }
+
+    private suspend fun getProjectsFromDatabase(): LiveData<List<Project>> {
+        return _projectDao.getAllProjectsLive()
+    }
+
+    private suspend fun insertProject(project: Project) {
+        withContext(Dispatchers.IO) {
+            _projectDao.insert(project)
+        }
+    }
+
+    private suspend fun updateProject(project: Project) {
+        withContext(Dispatchers.IO) {
+            _projectDao.update(project)
+        }
+    }
+
+    private suspend fun clearProjectTable() {
+        withContext(Dispatchers.IO) {
+            _projectDao.clear()
         }
     }
 
@@ -150,4 +179,27 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
     }
     val text: LiveData<String> = _text
 
+
+    /**
+     * Request a toast by setting this value to true.
+     *
+     * This is private because we don't want to expose setting this value to the Fragment.
+     */
+    private var _showSnackbarEvent = MutableLiveData<Boolean>()
+
+    /**
+     * If this is true, immediately `show()` a toast and call `doneShowingSnackbar()`.
+     */
+    val showSnackBarEvent: LiveData<Boolean>
+        get() = _showSnackbarEvent
+
+    /**
+     * Call this immediately after calling `show()` on a toast.
+     *
+     * It will clear the toast request, so if the user rotates their phone it won't show a duplicate
+     * toast.
+     */
+    fun doneShowingSnackbar() {
+        _showSnackbarEvent.value = false
+    }
 }

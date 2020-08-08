@@ -26,26 +26,38 @@ public class AppRepository {
         _prjListLive = database.projectDao.getAllProjectsLive()
     }
 
+    /**
+     * Suspend functions to do the long-running work,
+     * so that you don't block the UI thread while waiting for the result.
+     *
+     * Suspend functions return the result from a coroutine that runs in the Dispatchers.IO context.
+     * Use the I/O dispatcher, because getting data from the database is an I/O operation
+     * and has nothing to do with the UI.
+     *
+     **/
     suspend fun getProjectFromDatabase(id: Long): Project? {
         return withContext(Dispatchers.IO) {
-            var project = _projectDao.getProjectById(id)
-            project
+            _projectDao.getProjectById(id)
         }
     }
 
-    private suspend fun insert(project: Project) {
+    suspend fun getProjectsFromDatabase(): LiveData<List<Project>> {
+        return _projectDao.getAllProjectsLive()
+    }
+
+    suspend fun insertProject(project: Project) {
         withContext(Dispatchers.IO) {
             _projectDao.insert(project)
         }
     }
 
-    private suspend fun update(night: Project) {
+    suspend fun updateProject(project: Project) {
         withContext(Dispatchers.IO) {
-            _projectDao.update(night)
+            _projectDao.update(project)
         }
     }
 
-    private suspend fun clear() {
+    suspend fun clearProjectTable() {
         withContext(Dispatchers.IO) {
             _projectDao.clear()
         }

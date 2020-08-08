@@ -2,7 +2,6 @@ package com.example.pomodoro2.features.projects.presentation
 
 import android.os.Bundle
 import android.view.*
-import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -11,9 +10,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.pomodoro2.R
 import com.example.pomodoro2.core.platform.BaseFragment
-import com.example.pomodoro2.databinding.FragmentLoginBinding
 import com.example.pomodoro2.databinding.FragmentProjectBinding
 import com.example.pomodoro2.features.infra.database.AppDatabase
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_project.*
 
 class ProjectFragment : BaseFragment() {
@@ -53,7 +52,20 @@ class ProjectFragment : BaseFragment() {
         // This is necessary so that the binding can observe LiveData updates.
         binding.lifecycleOwner = this
 
-
+        // Add an Observer on the state variable for showing a Snackbar message
+        // when the CLEAR button is pressed.
+        projectsViewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
+            if (it == true) { // Observed state is true.
+                Snackbar.make(
+                    activity!!.findViewById(android.R.id.content),
+                    getString(R.string.goodbye_message),
+                    Snackbar.LENGTH_SHORT // How long to display the message.
+                ).show()
+                // Reset state to make sure the snackbar is only shown once, even if the device
+                // has a configuration change.
+                projectsViewModel.doneShowingSnackbar()
+            }
+        })
 
         // TODO: for initial debug&testing only, plan to replace it with a snack bar in future
         projectsViewModel.text.observe(viewLifecycleOwner, Observer {
