@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pomodoro2.R
+import com.example.pomodoro2.core.platform.SingleLiveEvent
 import com.example.pomodoro2.features.infra.database.Project
 import com.example.pomodoro2.features.infra.database.ProjectDAO
 import kotlinx.coroutines.*
@@ -48,7 +49,26 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
         viewModelJob.cancel()
     }
 
+    /**
+     * Event for SnackBar displaying.
+     *
+     * Trigger this singleLiveEvent by setting a new Event as a new value
+     * for example:  _showSnackbarEvent.value = SingleLiveEvent(Unit)
+     *
+     * It will be cleared automatically after the toast request,
+     * so if the user rotates their phone it won't show a duplicate toast.
+     *
+     */
+    private val _showSnackBarEvent = MutableLiveData<SingleLiveEvent<Unit>>()
+    val showSnackBarEvent: LiveData<SingleLiveEvent<Unit>> = _showSnackBarEvent
 
+    private fun showSnackBar() {
+        _showSnackBarEvent.value = SingleLiveEvent(Unit)
+    }
+
+    /**
+     * LiveData for this viewModel
+     */
     private var _currentProject = MutableLiveData<Project?>()
 
     private var projects = dataSource.getAllProjectsLive()
@@ -129,7 +149,7 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
             _currentProject.value = null
 
             // Show a snackbar message, because it's friendly.
-            _showSnackbarEvent.value = true
+            showSnackBar()
         }
     }
 
@@ -180,26 +200,4 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
     val text: LiveData<String> = _text
 
 
-    /**
-     * Request a toast by setting this value to true.
-     *
-     * This is private because we don't want to expose setting this value to the Fragment.
-     */
-    private var _showSnackbarEvent = MutableLiveData<Boolean>()
-
-    /**
-     * If this is true, immediately `show()` a toast and call `doneShowingSnackbar()`.
-     */
-    val showSnackBarEvent: LiveData<Boolean>
-        get() = _showSnackbarEvent
-
-    /**
-     * Call this immediately after calling `show()` on a toast.
-     *
-     * It will clear the toast request, so if the user rotates their phone it won't show a duplicate
-     * toast.
-     */
-    fun doneShowingSnackbar() {
-        _showSnackbarEvent.value = false
-    }
 }
