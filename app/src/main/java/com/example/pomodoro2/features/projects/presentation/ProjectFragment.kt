@@ -2,14 +2,19 @@ package com.example.pomodoro2.features.projects.presentation
 
 import android.os.Bundle
 import android.view.*
-import android.widget.TextView
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.pomodoro2.R
 import com.example.pomodoro2.core.platform.BaseFragment
+import com.example.pomodoro2.core.platform.EventObserver
+import com.example.pomodoro2.databinding.FragmentProjectBinding
+import com.example.pomodoro2.features.infra.database.AppDatabase
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_project.*
 
 class ProjectFragment : BaseFragment() {
 
@@ -24,16 +29,48 @@ class ProjectFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        projectsViewModel = ViewModelProvider(this).get(ProjectsViewModel::class.java)
-        val root = super.onCreateView(inflater, container, savedInstanceState)
-        val textView: TextView = root.findViewById(R.id.text_goal)
-        projectsViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
+
+        // Get a reference to the binding object and inflate the fragment views.
+        val binding: FragmentProjectBinding = DataBindingUtil.inflate(
+            inflater, layoutId(), container, false
+        )
+
+        val application = requireNotNull(this.activity).application
+
+        // Create an instance of the ViewModel Factory.
+        val dataSource = AppDatabase.getInstance(application).projectDao
+        val viewModelFactory = ProjectsViewModelFactory(dataSource, application)
+
+        // Get a reference to the ViewModel associated with this fragment.
+        projectsViewModel =
+            ViewModelProvider(this, viewModelFactory).get(ProjectsViewModel::class.java)
+
+        // To use the View Model with data binding, you have to explicitly
+        // give the binding object a reference to it.
+        binding.viewModel = projectsViewModel
+
+        // Specify the current activity as the lifecycle owner of the binding.
+        // This is necessary so that the binding can observe LiveData updates.
+        binding.lifecycleOwner = this
+
+        // Add an Observer on the state variable for showing a SnackBar message
+        projectsViewModel.showSnackBarEvent.observe(viewLifecycleOwner, EventObserver {
+            Snackbar.make(
+                requireActivity().findViewById(android.R.id.content),
+                it,
+                Snackbar.LENGTH_SHORT // How long to display the message.
+            ).show()
+        })
+
+        // TODO: for initial debug&testing only, plan to replace it with a snack bar in future
+        projectsViewModel.text.observe(viewLifecycleOwner, Observer
+        {
+            text_goal.text = it
         })
 
         setHasOptionsMenu(true)
 
-        return root
+        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -48,6 +85,8 @@ class ProjectFragment : BaseFragment() {
                     context, "Pseudo_Data created",
                     Toast.LENGTH_SHORT
                 ).show()
+
+                projectsViewModel.createTestData()
                 true
             }
 
@@ -56,6 +95,7 @@ class ProjectFragment : BaseFragment() {
                     context, "Pseudo_Data deleted",
                     Toast.LENGTH_SHORT
                 ).show()
+                projectsViewModel.clearTestData()
                 true
             }
 
@@ -65,6 +105,12 @@ class ProjectFragment : BaseFragment() {
                     requireView().findNavController()
                 )
             }
+
+            R.id.action_snack_bar -> {
+                projectsViewModel.testSnackBar()
+                true
+            }
+
 
             else -> super.onOptionsItemSelected(item);
         }

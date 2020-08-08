@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
     def config = rootProject.extensions.getByName("ext")
@@ -18,9 +19,7 @@ android {
         versionName config.getAt("version_name")
 
         testInstrumentationRunner config.getAt("test_runner")
-
-        //Data Binding
-        buildFeatures.dataBinding true
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -33,6 +32,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    //Data Binding
+    buildFeatures.dataBinding true
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -50,13 +52,20 @@ dependencies {
     //1. Application dependencies
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    // Android KTX
     implementation "androidx.core:core-ktx:$core_ktx_version"
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     // javax
     implementation "javax.annotation:jsr250-api:$javaxAnnotations_version"
     implementation "javax.inject:javax.inject:$javaxInject_version"
 
+    // Support libraries
     implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "androidx.fragment:fragment:1.0.0"
     implementation "com.google.android.material:material:$material_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
     implementation "androidx.vectordrawable:vectordrawable:$vectordrawable_version"
