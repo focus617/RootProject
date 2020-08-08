@@ -29,7 +29,7 @@ interface ProjectDAO {
      * @param id key of row to match
      */
     @Query("SELECT * FROM PROJECT_TABLE WHERE Id = :id")
-    fun getById(id: Long): Project?
+    fun getProjectById(id: Long): Project?
 
     /**
      * Deletes all values from the table.

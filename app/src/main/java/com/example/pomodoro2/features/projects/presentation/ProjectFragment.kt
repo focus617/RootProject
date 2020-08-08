@@ -42,7 +42,7 @@ class ProjectFragment : BaseFragment() {
         val viewModelFactory = ProjectsViewModelFactory(dataSource, application)
 
         // Get a reference to the ViewModel associated with this fragment.
-        val projectsViewModel =
+        projectsViewModel =
             ViewModelProvider(this, viewModelFactory).get(ProjectsViewModel::class.java)
 
         // To use the View Model with data binding, you have to explicitly
@@ -77,6 +77,8 @@ class ProjectFragment : BaseFragment() {
                     context, "Pseudo_Data created",
                     Toast.LENGTH_SHORT
                 ).show()
+
+                projectsViewModel.createTestData()
                 true
             }
 
@@ -85,6 +87,7 @@ class ProjectFragment : BaseFragment() {
                     context, "Pseudo_Data deleted",
                     Toast.LENGTH_SHORT
                 ).show()
+                projectsViewModel.clearTestData()
                 true
             }
 

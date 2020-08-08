@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.pomodoro2.R
 import com.example.pomodoro2.features.infra.database.Project
 import com.example.pomodoro2.features.infra.database.ProjectDAO
 import kotlinx.coroutines.*
@@ -12,7 +13,7 @@ import kotlinx.coroutines.*
 /**
  * ViewModel for ProjectFragment.
  */
-class ProjectsViewModel(val database: ProjectDAO, application: Application) :
+class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
     AndroidViewModel(application) {
 
     /** Coroutine variables */
@@ -46,9 +47,9 @@ class ProjectsViewModel(val database: ProjectDAO, application: Application) :
     }
 
 
-    private var currentProject = MutableLiveData<Project?>()
+    private var _currentProject = MutableLiveData<Project?>()
 
-    private var projects = database.getAllProjectsLive()
+    private var projects = dataSource.getAllProjectsLive()
 
     /**
      * To initialize the projects variable as soon as possible
@@ -68,15 +69,83 @@ class ProjectsViewModel(val database: ProjectDAO, application: Application) :
      * Use the I/O dispatcher, because getting data from the database is an I/O operation
      * and has nothing to do with the UI.
      */
-    private suspend fun getProjectsFromDatabase(): LiveData<List<Project>> {
-        return withContext(Dispatchers.IO) {
-            database.getAllProjectsLive()
+    private fun getProjectsFromDatabase(): LiveData<List<Project>> {
+        return dataSource.getAllProjectsLive()
+    }
+
+    fun createTestData() {
+        createDummyProjectsForTesting(dataSource)
+    }
+
+    fun clearTestData() {
+        clearDummyProjectsForTesting(dataSource)
+    }
+
+
+    /**
+     * UseCase: Create dummy project list for testing purpose
+     */
+    fun createDummyProjectsForTesting(dataSource: ProjectDAO) {
+        val titles = arrayOf(
+            "读书",
+            "锻炼身体",
+            "学习Android开发",
+            "冥想",
+            "工作",
+            "读书",
+            "锻炼身体",
+            "学习Android开发",
+            "冥想",
+            "工作"
+        )
+
+        val images = intArrayOf(
+            R.drawable.read_book,
+            R.drawable.exercise,
+            R.drawable.study,
+            R.drawable.thinking,
+            R.drawable.work,
+            R.drawable.read_book,
+            R.drawable.exercise,
+            R.drawable.study,
+            R.drawable.thinking,
+            R.drawable.work
+        )
+
+        // Create some sample projects and insert them into database.
+        for (i in images.indices) {
+            uiScope.launch {
+                // Create a new project , which captures the current time,
+                // then insert it into the database.
+                val project = Project(i.toLong(), titles[i], images[i], i + 1)
+                withContext(Dispatchers.IO) {
+                    dataSource.insert(project)
+                }
+            }
         }
     }
+
+    /**
+     * UseCase: Clear the dummy project list created for testing purpose
+     */
+    fun clearDummyProjectsForTesting(dataSource: ProjectDAO) {
+        uiScope.launch {
+            // Clear the database table.
+            dataSource.clear()
+
+            // And clear tonight since it's no longer in the database
+            _currentProject.value = null
+
+            // Show a snackbar message, because it's friendly.
+            //_showSnackbarEvent.value = true
+        }
+    }
+
 
     // TODO: for initial debug&testing only, will remove in future
     private val _text = MutableLiveData<String>().apply {
         value = "This is goal & project Fragment"
     }
     val text: LiveData<String> = _text
+
 }

@@ -48,7 +48,7 @@ class AppDatabaseTest {
     fun insertAndGetProject() {
         val project = Project(1,"番茄工作", R.drawable.read_book,1)
         projectDAO.insert(project)
-        val proj = projectDAO.getById(1L)
+        val proj = projectDAO.getProjectById(1L)
         assertEquals(proj?.title, "番茄工作")
         assertEquals(proj?.imageId, R.drawable.read_book)
         assertEquals(proj?.priority, 1)
