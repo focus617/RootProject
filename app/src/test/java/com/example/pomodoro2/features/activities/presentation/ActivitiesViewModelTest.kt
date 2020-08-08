@@ -2,8 +2,10 @@ package com.example.pomodoro2.features.activities.presentation
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.pomodoro2.core.platform.SingleLiveEvent
+import com.example.pomodoro2.features.infra.database.AppDatabase
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.nullValue
@@ -11,6 +13,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.Rule
 import org.junit.runner.RunWith
+import org.robolectric.RuntimeEnvironment.application
 
 @RunWith(AndroidJUnit4::class)
 class ActivitiesViewModelTest {
@@ -30,8 +33,12 @@ class ActivitiesViewModelTest {
     @Test
     fun startTimer_setLaunchTimerEvent() {
 
+        // Create an instance of Database.
+        // TODO:change ProjectDAO to ActivityDAO later
+        val dataSource = AppDatabase.getInstance(application).projectDao
+
         // Given a fresh ViewModel
-        val activitiesViewModel = ActivitiesViewModel()
+        val activitiesViewModel = ActivitiesViewModel(0L, dataSource)
 
         // Create observer - no need for it to do anything!
         val observer = Observer<SingleLiveEvent<Unit>> {}
@@ -41,7 +48,7 @@ class ActivitiesViewModelTest {
             activitiesViewModel.launchTimerEvent.observeForever(observer)
 
             // When launch a new countdown timer
-            activitiesViewModel.launchTimer()
+            activitiesViewModel.doNavigating()
 
             // Then the launch CountDownTimer fragment event is triggered
             // Test LiveData
