@@ -67,7 +67,7 @@ class ProjectFragment : BaseFragment() {
         // Add an Observer on the state variable for Navigating
         projectsViewModel.navigateToActivityFragment.observe(viewLifecycleOwner, EventObserver {
             requireView().findNavController().navigate(
-                ProjectFragmentDirections.actionNavigationProjectToNavigationActivity()
+                ProjectFragmentDirections.actionNavigationProjectToNavigationActivity(it.id)
             )
         })
 
