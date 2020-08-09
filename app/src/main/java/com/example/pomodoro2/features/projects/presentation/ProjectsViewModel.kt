@@ -105,18 +105,18 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
 
 
     fun createTestData() {
-        createDummyProjectsForTesting(dataSource)
+        createDummyProjectsForTesting()
     }
 
     fun clearTestData() {
-        clearDummyProjectsForTesting(dataSource)
+        clearDummyProjectsForTesting()
     }
 
 
     /**
      * UseCase: Create dummy project list for testing purpose
      */
-    fun createDummyProjectsForTesting(dataSource: ProjectDAO) {
+    private fun createDummyProjectsForTesting() {
         val titles = arrayOf(
             "读书",
             "锻炼身体",
@@ -157,7 +157,7 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
     /**
      * UseCase: Clear the dummy project list created for testing purpose
      */
-    fun clearDummyProjectsForTesting(dataSource: ProjectDAO) {
+    private fun clearDummyProjectsForTesting() {
         uiScope.launch {
             // Clear the database table.
             clearProjectTable()
