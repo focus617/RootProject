@@ -91,8 +91,17 @@ class ProjectFragment : BaseFragment() {
 
         setHasOptionsMenu(true)
 
+        binding.fab.setOnClickListener{
+            Toast.makeText(
+                context, "You clicked fab button",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
         return binding.root
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)

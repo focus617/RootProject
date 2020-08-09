@@ -10,6 +10,9 @@
     <!-- RecyclerView -->
     <dimen name="text_margin">16dp</dimen>
     <dimen name="bottomNavView_height_margin">58dp</dimen>
+    <!-- FloatingActionButton -->
+    <dimen name="fab_margin_right">24dp</dimen>
+    <dimen name="fab_margin_bottom">64dp</dimen>
 
     <!-- Drawer -->
     <dimen name="setting_image_header_height">192dp</dimen>
