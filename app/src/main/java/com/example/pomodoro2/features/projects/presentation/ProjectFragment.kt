@@ -7,8 +7,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pomodoro2.R
 import com.example.pomodoro2.core.platform.BaseFragment
 import com.example.pomodoro2.core.platform.EventObserver
@@ -16,7 +17,6 @@ import com.example.pomodoro2.databinding.FragmentProjectBinding
 import com.example.pomodoro2.features.infra.database.AppDatabase
 import com.example.pomodoro2.features.infra.database.Project
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_project.*
 
 class ProjectFragment : BaseFragment() {
 
@@ -24,6 +24,26 @@ class ProjectFragment : BaseFragment() {
 
     override fun layoutId(): Int {
         return R.layout.fragment_project
+    }
+
+    // Customize parameter argument names
+    private val ARG_COLUMN_COUNT = "column-count"
+    // Customize parameters for Grid LayoutManager of RecyclerView
+    private var _columnCount = 1
+
+    fun newInstance(columnCount: Int): ProjectFragment? {
+        val fragment = ProjectFragment()
+        val args = Bundle()
+        args.putInt(ARG_COLUMN_COUNT, columnCount)
+        fragment.setArguments(args)
+        return fragment
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (arguments != null) {
+            _columnCount = arguments!!.getInt(ARG_COLUMN_COUNT)
+        }
     }
 
     /**
@@ -60,18 +80,27 @@ class ProjectFragment : BaseFragment() {
         // give the binding object a reference to it.
         binding.viewModel = projectsViewModel
 
+        // Specify the current activity as the lifecycle owner of the binding.
+        // This is necessary so that the binding can observe LiveData updates.
+        binding.lifecycleOwner = this
+
+
+        // Set the RecycleView.adapter
         val adapter = ProjectRecyclerViewAdapter()
         binding.projectList.adapter = adapter
+
+        // 构造 RecycleView.layoutManager
+        if (_columnCount <= 1) {
+            binding.projectList.layoutManager = LinearLayoutManager(activity)
+        } else {
+            binding.projectList.layoutManager = GridLayoutManager(activity, _columnCount)
+        }
 
         projectsViewModel.projects.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)
             }
         })
-
-        // Specify the current activity as the lifecycle owner of the binding.
-        // This is necessary so that the binding can observe LiveData updates.
-        binding.lifecycleOwner = this
 
         // Add an Observer on the state variable for showing a SnackBar message
         projectsViewModel.showSnackBarEvent.observe(viewLifecycleOwner, EventObserver {
