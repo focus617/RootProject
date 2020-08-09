@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pomodoro2.R
+import com.example.pomodoro2.databinding.ListItemProjectBinding
 import com.example.pomodoro2.features.infra.database.Project
 
 class ProjectRecyclerViewAdapter :
@@ -23,23 +24,19 @@ class ProjectRecyclerViewAdapter :
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val itemView: View = itemView
-        val itemTitle: TextView = itemView.findViewById(R.id.item_title)
-        val itemImage: ImageView = itemView.findViewById(R.id.item_image)
+    class ViewHolder private constructor(val binding: ListItemProjectBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Project) {
-            itemTitle.text = item.title
-            itemImage.setImageResource(item.imageId)
+            binding.project = item
+            binding.executePendingBindings()
         }
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater
-                    .inflate(R.layout.list_item_project, parent, false)
-
-                return ViewHolder(view)
+                val binding = ListItemProjectBinding.inflate(layoutInflater, parent, false)
+                return ViewHolder(binding)
             }
         }
     }

@@ -5,14 +5,13 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.example.pomodoro2.features.infra.database.Project
 
-object BindingUtils {
-    @BindingAdapter("projectTitle")
-    fun setProjectTitle(view: TextView, item: Project) {
-        view.setText(item.title)
-    }
 
-    @BindingAdapter("projectImage")
-    fun setProjectImage(view: ImageView, item: Project) {
-        view.setImageResource(item.imageId)
-    }
+@BindingAdapter("projectTitle")
+fun TextView.setProjectTitle(item: Project) {
+    text = item.title
+}
+
+@BindingAdapter("projectImage")
+fun ImageView.setProjectImage(item: Project) {
+    setImageResource(item.imageId)
 }
