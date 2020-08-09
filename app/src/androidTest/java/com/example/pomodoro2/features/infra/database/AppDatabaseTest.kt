@@ -46,7 +46,7 @@ class AppDatabaseTest {
     @Test
     @Throws(Exception::class)
     fun insertAndGetProject() {
-        val project = Project(1,"番茄工作", R.drawable.read_book,1)
+        val project = Project(1L,"番茄工作", R.drawable.read_book,1)
         projectDAO.insert(project)
         val proj = projectDAO.getProjectById(1L)
         assertEquals(proj?.title, "番茄工作")

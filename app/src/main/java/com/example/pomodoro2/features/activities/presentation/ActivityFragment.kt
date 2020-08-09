@@ -58,6 +58,7 @@ class ActivityFragment : BaseFragment() {
         // To use the View Model with data binding, you have to explicitly
         // give the binding object a reference to it.
         binding.viewModel = activitiesViewModel
+        binding.lifecycleOwner = this
 
         // Add an Observer to the state variable for Navigating when a Quality icon is tapped.
 

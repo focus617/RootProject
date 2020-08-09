@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pomodoro2.core.platform.BaseViewModel
 import com.example.pomodoro2.core.platform.SingleLiveEvent
+import com.example.pomodoro2.features.infra.database.Project
 import com.example.pomodoro2.features.infra.database.ProjectDAO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,11 @@ class ActivitiesViewModel(
     private val dataSource: ProjectDAO
     //private val getTasksUseCase: GetTasksUseCase
 ) : BaseViewModel() {
+
+    /**
+     * Hold a reference to AppDatabase via its ActivityDatabaseDao.
+     */
+    val database = dataSource
 
     /** Coroutine variables */
 
@@ -59,6 +65,13 @@ class ActivitiesViewModel(
     fun doNavigating() {
         _launchTimerEvent.value = SingleLiveEvent(Unit)
     }
+
+    /**
+     * LiveData for this viewModel
+     */
+    private var _currentProject = MutableLiveData<Project?>()
+
+    fun getCurrentProject() = _currentProject
 
 
     // TODO: remove in future

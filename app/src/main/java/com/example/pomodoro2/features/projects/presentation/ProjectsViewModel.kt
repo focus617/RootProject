@@ -87,8 +87,6 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
     /**
      * LiveData for this viewModel
      */
-    private var _currentProject = MutableLiveData<Project?>()
-
     private var _projects = dataSource.getAllProjectsLive()
     var projects : LiveData<List<Project>> = _projects
 
@@ -163,9 +161,6 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
         uiScope.launch {
             // Clear the database table.
             clearProjectTable()
-
-            // And clear tonight since it's no longer in the database
-            _currentProject.value = null
         }
     }
 
