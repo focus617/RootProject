@@ -61,7 +61,7 @@ class ProjectFragment : BaseFragment() {
         binding.viewModel = projectsViewModel
 
         val adapter = ProjectRecyclerViewAdapter()
-        project_list.adapter = adapter
+        binding.projectList.adapter = adapter
 
         projectsViewModel.projects.observe(viewLifecycleOwner, Observer {
             it?.let {

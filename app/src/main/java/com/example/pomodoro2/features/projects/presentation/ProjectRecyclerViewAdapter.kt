@@ -1,10 +1,12 @@
 package com.example.pomodoro2.features.projects.presentation
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pomodoro2.R
-import com.example.pomodoro2.databinding.ListItemProjectBinding
 import com.example.pomodoro2.features.infra.database.Project
 
 class ProjectRecyclerViewAdapter : RecyclerView.Adapter<ProjectRecyclerViewAdapter.ViewHolder>() {
@@ -27,24 +29,23 @@ class ProjectRecyclerViewAdapter : RecyclerView.Adapter<ProjectRecyclerViewAdapt
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(binding: ListItemProjectBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        val binding: ListItemProjectBinding = binding
+    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val itemView: View = itemView
+        val itemTitle: TextView = itemView.findViewById(R.id.item_title)
+        val itemImage: ImageView = itemView.findViewById(R.id.item_image)
 
         fun bind(item: Project) {
-            binding.project = item
-            binding.executePendingBindings()
+            itemTitle.text = item.title
+            itemImage.setImageResource(item.imageId)
         }
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
+                val view = layoutInflater
+                    .inflate(R.layout.list_item_project, parent, false)
 
-                return ViewHolder(
-                    ListItemProjectBinding.inflate(
-                        layoutInflater, parent, false
-                    )
-                )
+                return ViewHolder(view)
             }
         }
     }

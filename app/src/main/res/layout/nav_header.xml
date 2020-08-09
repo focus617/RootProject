@@ -30,7 +30,6 @@
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="?attr/actionBarSize"
             app:srcCompat="@drawable/picture" />
 
         <TextView
