@@ -8,7 +8,9 @@
         <variable
             name="project"
             type="com.example.pomodoro2.features.infra.database.Project" />
-
+        <variable
+            name="clickListener"
+            type="com.example.pomodoro2.features.projects.presentation.ProjectListener"/>
     </data>
 
     <androidx.cardview.widget.CardView
@@ -20,7 +22,8 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         app:cardCornerRadius="8dp"
-        app:cardElevation="8dp">
+        app:cardElevation="8dp"
+        android:onClick="@{() -> clickListener.onClick(project)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

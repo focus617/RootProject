@@ -85,16 +85,20 @@ class ProjectFragment : BaseFragment() {
         binding.lifecycleOwner = this
 
 
-        // Set the RecycleView.adapter
-        val adapter = ProjectRecyclerViewAdapter()
-        binding.projectList.adapter = adapter
-
         // 构造 RecycleView.layoutManager
         if (_columnCount <= 1) {
             binding.projectList.layoutManager = LinearLayoutManager(activity)
         } else {
             binding.projectList.layoutManager = GridLayoutManager(activity, _columnCount)
         }
+
+        // Set the RecycleView.adapter
+        val adapter = ProjectRecyclerViewAdapter(ProjectListener { projectId ->
+            //Toast.makeText(context, "${projectId}", Toast.LENGTH_LONG).show()
+            projectsViewModel.onProjectClicked(projectId)
+        })
+        binding.projectList.adapter = adapter
+
 
         projectsViewModel.projects.observe(viewLifecycleOwner, Observer {
             it?.let {

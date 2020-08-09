@@ -83,6 +83,12 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
         _showSnackBarEvent.value = SingleLiveEvent(str)
     }
 
+    /**
+     * ClickHandler for recyclerview item click
+     */
+    fun onProjectClicked(projectId: Long){
+        showInSnackBar("Project($projectId) selected, Will Navigate to ActivityFragment.")
+    }
 
     /**
      * LiveData for this viewModel

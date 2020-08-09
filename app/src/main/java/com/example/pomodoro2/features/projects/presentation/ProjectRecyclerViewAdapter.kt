@@ -12,12 +12,11 @@ import com.example.pomodoro2.R
 import com.example.pomodoro2.databinding.ListItemProjectBinding
 import com.example.pomodoro2.features.infra.database.Project
 
-class ProjectRecyclerViewAdapter :
+class ProjectRecyclerViewAdapter(val clickListener: ProjectListener) :
     ListAdapter<Project, ProjectRecyclerViewAdapter.ViewHolder>(ProjectDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item)
+        holder.bind(getItem(position)!!, clickListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,8 +26,9 @@ class ProjectRecyclerViewAdapter :
     class ViewHolder private constructor(val binding: ListItemProjectBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Project) {
+        fun bind(item: Project, clickListener: ProjectListener) {
             binding.project = item
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
 
@@ -52,4 +52,8 @@ class ProjectDiffCallback : DiffUtil.ItemCallback<Project>() {
     override fun areContentsTheSame(oldItem: Project, newItem: Project): Boolean {
         return oldItem == newItem
     }
+}
+
+class ProjectListener(val clickListener: (projectId: Long) -> Unit) {
+    fun onClick(project: Project) = clickListener(project.id)
 }
