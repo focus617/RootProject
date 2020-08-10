@@ -103,8 +103,13 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:$glide_version"
 
     // Api - Retrofit (with Moshi) and OkHttp
-//    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-//    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    //implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+    implementation "com.squareup.moshi:moshi:$moshi_version"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
+    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$retrofit_coroutines_adapter_version"
+
 //    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
 //    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
