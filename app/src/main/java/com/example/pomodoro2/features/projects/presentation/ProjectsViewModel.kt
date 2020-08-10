@@ -151,11 +151,11 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
         )
 
         // Create some sample projects and insert them into database.
-        for (i in images.indices) {
+        for ((index, element) in images.withIndex()) {
             uiScope.launch {
                 // Create a new project , which captures the current time,
                 // then insert it into the database.
-                val project = Project(title = titles[i], imageId = images[i], priority = i + 1)
+                val project = Project(title = titles[index], imageId = element, priority = index + 1)
                 insertProject(project)
             }
         }

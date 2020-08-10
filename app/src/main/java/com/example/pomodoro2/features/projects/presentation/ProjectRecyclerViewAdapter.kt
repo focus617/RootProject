@@ -1,28 +1,80 @@
 package com.example.pomodoro2.features.projects.presentation
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pomodoro2.R
 import com.example.pomodoro2.databinding.ListItemProjectBinding
 import com.example.pomodoro2.features.infra.database.Project
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+private val ITEM_VIEW_TYPE_HEADER = 0
+private val ITEM_VIEW_TYPE_ITEM = 1
 
 class ProjectRecyclerViewAdapter(val clickListener: ProjectListener) :
-    ListAdapter<Project, ProjectRecyclerViewAdapter.ViewHolder>(ProjectDiffCallback()) {
+    ListAdapter<DataItem, RecyclerView.ViewHolder>(ProjectDiffCallback()) {
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position)!!, clickListener)
+    private val adapterScope = CoroutineScope(Dispatchers.Default)
+
+    fun addHeaderAndSubmitList(list: List<Project>?) {
+        adapterScope.launch {
+            val items = when (list) {
+                null -> listOf(DataItem.Header)
+                else -> listOf(DataItem.Header) + list.map { DataItem.ProjectItem(it) }
+            }
+            withContext(Dispatchers.Main) {
+                submitList(items)
+            }
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder.from(parent)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is ViewHolder -> {
+                val projectItem = getItem(position) as DataItem.ProjectItem
+                holder.bind(projectItem.project, clickListener)
+            }
+        }
     }
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            ITEM_VIEW_TYPE_HEADER -> HeaderViewHolder.from(parent)
+            ITEM_VIEW_TYPE_ITEM -> ViewHolder.from(parent)
+            else -> throw ClassCastException("Unknown viewType $viewType")
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is DataItem.Header -> ITEM_VIEW_TYPE_HEADER
+            is DataItem.ProjectItem -> ITEM_VIEW_TYPE_ITEM
+        }
+    }
+
+    /**
+     *  ViewHolder class for header of recyclerview.
+     */
+    class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        companion object {
+            fun from(parent: ViewGroup): HeaderViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val view = layoutInflater.inflate(R.layout.list_header_project, parent, false)
+                return HeaderViewHolder(view)
+            }
+        }
+    }
+
+    /**
+     *  ViewHolder class for normal item of recyclerview.
+     */
     class ViewHolder private constructor(val binding: ListItemProjectBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -42,14 +94,17 @@ class ProjectRecyclerViewAdapter(val clickListener: ProjectListener) :
     }
 }
 
-class ProjectDiffCallback : DiffUtil.ItemCallback<Project>() {
+/**
+ *  A DiffUtil class that optimize the RecyclerView for changes to the data.
+ */
+class ProjectDiffCallback : DiffUtil.ItemCallback<DataItem>() {
 
-    override fun areItemsTheSame(oldItem: Project, newItem: Project): Boolean {
+    override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
         return oldItem.id == newItem.id
     }
 
-
-    override fun areContentsTheSame(oldItem: Project, newItem: Project): Boolean {
+    @SuppressLint("DiffUtilEquals")
+    override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
         return oldItem == newItem
     }
 }
@@ -59,4 +114,19 @@ class ProjectDiffCallback : DiffUtil.ItemCallback<Project>() {
  */
 class ProjectListener(val clickListener: (project: Project) -> Unit) {
     fun onClick(project: Project) = clickListener(project)
+}
+
+/**
+ * A data holder class that represents either a SleepNight or a Header
+ */
+sealed class DataItem {
+    data class ProjectItem(val project: Project) : DataItem() {
+        override val id = project.id
+    }
+
+    object Header : DataItem() {
+        override val id = Long.MIN_VALUE
+    }
+
+    abstract val id: Long
 }

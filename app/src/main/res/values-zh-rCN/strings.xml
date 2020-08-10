@@ -18,4 +18,5 @@
     <string name="action_show_in_snackbar">SnackBar</string>
     <string name="icon_msg">图标</string>
     <string name="item_removable">左右拖动删除</string>
+    <string name="List_header_text_project">计划的任务</string>
 </resources>

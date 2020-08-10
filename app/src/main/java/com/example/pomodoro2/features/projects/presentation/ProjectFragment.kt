@@ -89,7 +89,15 @@ class ProjectFragment : BaseFragment() {
         if (_columnCount <= 1) {
             binding.projectList.layoutManager = LinearLayoutManager(activity)
         } else {
-            binding.projectList.layoutManager = GridLayoutManager(activity, _columnCount)
+            val manager = GridLayoutManager(activity, _columnCount)
+            manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int) =  when (position) {
+                    0 -> _columnCount
+                    else -> 1
+                }
+            }
+            binding.projectList.layoutManager = manager
+
         }
 
         // Set the RecycleView.adapter
@@ -102,7 +110,7 @@ class ProjectFragment : BaseFragment() {
 
         projectsViewModel.projects.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.submitList(it)
+                adapter.addHeaderAndSubmitList(it)
             }
         })
 
