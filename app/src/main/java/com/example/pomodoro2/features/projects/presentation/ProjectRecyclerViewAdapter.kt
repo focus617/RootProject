@@ -54,6 +54,9 @@ class ProjectDiffCallback : DiffUtil.ItemCallback<Project>() {
     }
 }
 
-class ProjectListener(val clickListener: (projectId: Long) -> Unit) {
-    fun onClick(project: Project) = clickListener(project.id)
+/**
+ *  A listener class that takes a lambda [clickListener] and assigns it to an onClick() function.
+ */
+class ProjectListener(val clickListener: (project: Project) -> Unit) {
+    fun onClick(project: Project) = clickListener(project)
 }

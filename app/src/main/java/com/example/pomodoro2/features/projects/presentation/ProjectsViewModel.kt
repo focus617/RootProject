@@ -86,8 +86,9 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
     /**
      * ClickHandler for recyclerview item click
      */
-    fun onProjectClicked(projectId: Long){
-        showInSnackBar("Project($projectId) selected, Will Navigate to ActivityFragment.")
+    fun onProjectClicked(project: Project){
+        showInSnackBar("Project(${project.title}) selected, Will Navigate to ActivityFragment.")
+        doNavigating(project)
     }
 
     /**

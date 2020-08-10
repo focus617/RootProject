@@ -93,9 +93,9 @@ class ProjectFragment : BaseFragment() {
         }
 
         // Set the RecycleView.adapter
-        val adapter = ProjectRecyclerViewAdapter(ProjectListener { projectId ->
-            //Toast.makeText(context, "${projectId}", Toast.LENGTH_LONG).show()
-            projectsViewModel.onProjectClicked(projectId)
+        val adapter = ProjectRecyclerViewAdapter(ProjectListener { project ->
+            //Toast.makeText(context, "${project.id}", Toast.LENGTH_LONG).show()
+            projectsViewModel.onProjectClicked(project)
         })
         binding.projectList.adapter = adapter
 

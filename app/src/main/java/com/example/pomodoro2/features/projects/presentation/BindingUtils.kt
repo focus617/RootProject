@@ -7,11 +7,15 @@ import com.example.pomodoro2.features.infra.database.Project
 
 
 @BindingAdapter("projectTitle")
-fun TextView.setProjectTitle(item: Project) {
-    text = item.title
+fun TextView.setProjectTitle(item: Project?) {
+    item?.let {
+        text = item.title
+    }
 }
 
 @BindingAdapter("projectImage")
-fun ImageView.setProjectImage(item: Project) {
-    setImageResource(item.imageId)
+fun ImageView.setProjectImage(item: Project?) {
+    item?.let {
+        setImageResource(item.imageId)
+    }
 }
