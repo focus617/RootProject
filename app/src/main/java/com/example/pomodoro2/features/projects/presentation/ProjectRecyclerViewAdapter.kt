@@ -9,14 +9,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pomodoro2.R
 import com.example.pomodoro2.databinding.ListItemProjectBinding
-import com.example.pomodoro2.features.infra.database.Project
+import com.example.pomodoro2.features.projects.domain.Project
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-private val ITEM_VIEW_TYPE_HEADER = 0
-private val ITEM_VIEW_TYPE_ITEM = 1
+private const val ITEM_VIEW_TYPE_HEADER = 0
+private const val ITEM_VIEW_TYPE_ITEM = 1
 
 class ProjectRecyclerViewAdapter(val clickListener: ProjectListener) :
     ListAdapter<DataItem, RecyclerView.ViewHolder>(ProjectDiffCallback()) {

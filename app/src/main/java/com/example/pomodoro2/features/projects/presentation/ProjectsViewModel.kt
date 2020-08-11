@@ -7,9 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pomodoro2.R
 import com.example.pomodoro2.core.platform.SingleLiveEvent
-import com.example.pomodoro2.features.infra.database.Project
 import com.example.pomodoro2.features.infra.database.ProjectDAO
+import com.example.pomodoro2.features.projects.domain.AppRepository
+import com.example.pomodoro2.features.projects.domain.Project
+import com.example.pomodoro2.features.projects.domain.asDatabaseEntity
 import kotlinx.coroutines.*
+import java.io.IOException
 
 /**
  * ViewModel for ProjectFragment.
@@ -19,6 +22,11 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
 
     private var _application: Application = application
     private var _projectDao: ProjectDAO = dataSource
+
+    /**
+     * The data source this ViewModel will fetch results from.
+     */
+    private val repository = AppRepository(_application)
 
     /** Coroutine variables */
 
@@ -94,19 +102,33 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
     /**
      * LiveData for this viewModel
      */
-    private var _projects = dataSource.getAllProjectsLive()
-    var projects : LiveData<List<Project>> = _projects
+    // project list displayed on the screen
+    var projects : LiveData<List<Project>> = repository.prjListLive
 
     /**
      * To initialize the projects variable as soon as possible
      */
     init {
-        initializeProjects()
+        refreshDataFromRepository()
     }
 
-    private fun initializeProjects() {
+    /**
+     * Refresh data from the repository. Use a coroutine launch to run in a
+     * background thread.
+     */
+    private fun refreshDataFromRepository() {
         uiScope.launch {
-            _projects = getProjectsFromDatabase()
+            try {
+                repository.refreshProjects()
+//                _eventNetworkError.value = false
+//                _isNetworkErrorShown.value = false
+
+            } catch (networkError: IOException) {
+                // Show a Toast error message and hide the progress bar.
+                if(projects.value.isNullOrEmpty()) {
+//                    _eventNetworkError.value = true
+                }
+            }
         }
     }
 
@@ -156,7 +178,7 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
                 // Create a new project , which captures the current time,
                 // then insert it into the database.
                 val project = Project(title = titles[index], imageId = element, priority = index + 1)
-                insertProject(project)
+                repository.insertProject(project.asDatabaseEntity())
             }
         }
     }
@@ -167,7 +189,7 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
     private fun clearDummyProjectsForTesting() {
         uiScope.launch {
             // Clear the database table.
-            clearProjectTable()
+            repository.clearProjectTable()
         }
     }
 
@@ -191,6 +213,7 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
      * and has nothing to do with the UI.
      *
      **/
+/*
     private suspend fun getProjectFromDatabase(id: Long): Project? {
         return withContext(Dispatchers.IO) {
             _projectDao.getProjectById(id)
@@ -218,6 +241,7 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
             _projectDao.clear()
         }
     }
+*/
 
 
 }

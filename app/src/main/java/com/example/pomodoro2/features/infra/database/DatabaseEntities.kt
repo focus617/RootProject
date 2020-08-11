@@ -4,13 +4,15 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.pomodoro2.features.projects.domain.Project
 import kotlinx.android.parcel.Parcelize
 
-
-// 表示项目（目标）的数据类，用来存储创建的项目，并提供给ProjectFragment
-@Parcelize
+/**
+ * DatabaseProject represents a project entity in the database.
+ * 表示任务（目标）的数据类，用来存储创建的任务项目，并提供给ProjectFragment
+ */
 @Entity(tableName = "project_table")
-data class Project(
+data class DatabaseProject(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0L,
 
@@ -27,5 +29,19 @@ data class Project(
 
     @ColumnInfo(name = "create_time")
     var createTime: Long = System.currentTimeMillis()
-): Parcelable
+)
 
+/**
+ * Map DatabaseVideos to domain entities
+ */
+fun List<DatabaseProject>.asDomainModel(): List<Project> {
+    return map {
+        Project(
+            id = it.id,
+            title = it.title,
+            imageId = it.imageId,
+            priority = it.priority,
+            createTime = it.createTime
+        )
+    }
+}

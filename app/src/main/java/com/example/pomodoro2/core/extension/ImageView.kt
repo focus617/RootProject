@@ -15,6 +15,7 @@ import com.bumptech.glide.request.transition.Transition
  * implementation "com.github.bumptech.glide:glide:$glide_version"
  * kapt "com.github.bumptech.glide:compiler:$glide_version"
  */
+// TODO: merge into dashboard.BindingUtils
 fun ImageView.load(imageAddress: String, onClick: (() -> Unit)? = null) {
     val imageView = this
     Glide.with(this)

@@ -13,7 +13,7 @@ import androidx.room.RoomDatabase
  * so you can reuse it.
  */
 @Database(
-    entities = [Project::class],
+    entities = [DatabaseProject::class],
     version = 1,
     exportSchema = false
 )
