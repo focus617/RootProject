@@ -30,7 +30,6 @@
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="?attr/actionBarSize"
             app:srcCompat="@drawable/picture" />
 
         <TextView
@@ -39,7 +38,8 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             android:text="@={viewModel.profileName}"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textAppearance="@style/TextAppearance.Body"
+            android:textColor="@android:color/white"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imageView"
             tools:text="Name"/>
@@ -49,6 +49,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@={viewModel.profileEmail}"
+            android:textAppearance="@style/TextAppearance.BodySmall"
+            android:textColor="@android:color/white"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvName"
             tools:text="name@email.com"/>

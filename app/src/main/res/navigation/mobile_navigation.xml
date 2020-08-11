@@ -23,8 +23,8 @@
         android:label="@string/title_activities"
         tools:layout="@layout/fragment_activity" >
         <argument
-            android:name="projectKey"
-            app:argType="long" />
+            android:name="project"
+            app:argType="com.example.pomodoro2.features.projects.domain.Project" />
         <action
             android:id="@+id/action_navigation_activity_to_countDownTimerFragment"
             app:destination="@id/navigation_timer" />

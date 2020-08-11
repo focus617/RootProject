@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBar()
         setupNavigation()
         setupDrawerViewModel()
+        setupViews()
 
     }
 
@@ -70,7 +71,19 @@ class MainActivity : AppCompatActivity() {
     private fun setupNavigation() {
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
         NavigationUI.setupWithNavController(activityMainBinding.bottomNavigationView, navController)
-        NavigationUI.setupWithNavController(activityMainBinding.drawerNavigationView, navController)   
+        NavigationUI.setupWithNavController(activityMainBinding.drawerNavigationView, navController)
+
+/*        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id in arrayOf(
+                    R.id.navigation_project,
+                    R.id.navigation_activity
+                )
+            ) {
+                fab.show()
+            } else {
+                fab.hide()
+            }
+        }*/
     }
     
     private fun setupDrawerViewModel() {
@@ -85,6 +98,9 @@ class MainActivity : AppCompatActivity() {
         } catch (e: IllegalArgumentException) {
             e.printStackTrace()
         }
+    }
+
+    private fun setupViews(){
 
     }
 

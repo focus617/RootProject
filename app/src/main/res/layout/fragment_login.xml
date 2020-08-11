@@ -26,6 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@={viewModel.profileName}"
+                android:textAppearance="@style/TextAppearance.Body"
                 tools:text="Account"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -41,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:text="@={viewModel.profileEmail}"
+                android:textAppearance="@style/TextAppearance.Body"
                 tools:text="Email"/>
         </com.google.android.material.textfield.TextInputLayout>
 

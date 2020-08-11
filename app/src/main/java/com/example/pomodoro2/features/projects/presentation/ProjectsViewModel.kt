@@ -7,9 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pomodoro2.R
 import com.example.pomodoro2.core.platform.SingleLiveEvent
-import com.example.pomodoro2.features.infra.database.Project
 import com.example.pomodoro2.features.infra.database.ProjectDAO
+import com.example.pomodoro2.features.projects.domain.AppRepository
+import com.example.pomodoro2.features.projects.domain.Project
+import com.example.pomodoro2.features.projects.domain.asDatabaseEntity
 import kotlinx.coroutines.*
+import java.io.IOException
 
 /**
  * ViewModel for ProjectFragment.
@@ -19,6 +22,11 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
 
     private var _application: Application = application
     private var _projectDao: ProjectDAO = dataSource
+
+    /**
+     * The data source this ViewModel will fetch results from.
+     */
+    private val repository = AppRepository(_application)
 
     /** Coroutine variables */
 
@@ -83,41 +91,61 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
         _showSnackBarEvent.value = SingleLiveEvent(str)
     }
 
+    /**
+     * ClickHandler for recyclerview item click
+     */
+    fun onProjectClicked(project: Project){
+        showInSnackBar("Project(${project.title}) selected, Will Navigate to ActivityFragment.")
+        doNavigating(project)
+    }
 
     /**
      * LiveData for this viewModel
      */
-    private var _currentProject = MutableLiveData<Project?>()
-
-    private var projects = dataSource.getAllProjectsLive()
+    // project list displayed on the screen
+    var projects : LiveData<List<Project>> = repository.prjListLive
 
     /**
      * To initialize the projects variable as soon as possible
      */
     init {
-        initializeProjects()
+        refreshDataFromRepository()
     }
 
-    private fun initializeProjects() {
+    /**
+     * Refresh data from the repository. Use a coroutine launch to run in a
+     * background thread.
+     */
+    private fun refreshDataFromRepository() {
         uiScope.launch {
-            projects = getProjectsFromDatabase()
+            try {
+                repository.refreshProjects()
+//                _eventNetworkError.value = false
+//                _isNetworkErrorShown.value = false
+
+            } catch (networkError: IOException) {
+                // Show a Toast error message and hide the progress bar.
+                if(projects.value.isNullOrEmpty()) {
+//                    _eventNetworkError.value = true
+                }
+            }
         }
     }
 
 
     fun createTestData() {
-        createDummyProjectsForTesting(dataSource)
+        createDummyProjectsForTesting()
     }
 
     fun clearTestData() {
-        clearDummyProjectsForTesting(dataSource)
+        clearDummyProjectsForTesting()
     }
 
 
     /**
      * UseCase: Create dummy project list for testing purpose
      */
-    fun createDummyProjectsForTesting(dataSource: ProjectDAO) {
+    private fun createDummyProjectsForTesting() {
         val titles = arrayOf(
             "读书",
             "锻炼身体",
@@ -145,12 +173,12 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
         )
 
         // Create some sample projects and insert them into database.
-        for (i in images.indices) {
+        for ((index, element) in images.withIndex()) {
             uiScope.launch {
                 // Create a new project , which captures the current time,
                 // then insert it into the database.
-                val project = Project(title = titles[i], imageId = images[i], priority = i + 1)
-                insertProject(project)
+                val project = Project(title = titles[index], imageId = element, priority = index + 1)
+                repository.insertProject(project.asDatabaseEntity())
             }
         }
     }
@@ -158,13 +186,10 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
     /**
      * UseCase: Clear the dummy project list created for testing purpose
      */
-    fun clearDummyProjectsForTesting(dataSource: ProjectDAO) {
+    private fun clearDummyProjectsForTesting() {
         uiScope.launch {
             // Clear the database table.
-            clearProjectTable()
-
-            // And clear tonight since it's no longer in the database
-            _currentProject.value = null
+            repository.clearProjectTable()
         }
     }
 
@@ -188,6 +213,7 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
      * and has nothing to do with the UI.
      *
      **/
+/*
     private suspend fun getProjectFromDatabase(id: Long): Project? {
         return withContext(Dispatchers.IO) {
             _projectDao.getProjectById(id)
@@ -215,13 +241,7 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
             _projectDao.clear()
         }
     }
-
-
-    // TODO: for initial debug&testing only, will remove in future
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is goal & project Fragment"
-    }
-    val text: LiveData<String> = _text
+*/
 
 
 }

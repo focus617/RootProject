@@ -16,4 +16,7 @@
     <string name="title_settings">设置</string>
     <string name="goodbye_message">欢迎再次使用番茄法专注辅助工具</string>
     <string name="action_show_in_snackbar">SnackBar</string>
+    <string name="icon_msg">图标</string>
+    <string name="item_removable">左右拖动删除</string>
+    <string name="List_header_text_project">计划的任务</string>
 </resources>

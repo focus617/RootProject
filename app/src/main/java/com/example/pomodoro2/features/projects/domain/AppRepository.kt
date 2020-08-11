@@ -2,9 +2,8 @@ package com.example.pomodoro2.features.projects.domain
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import com.example.pomodoro2.features.infra.database.AppDatabase
-import com.example.pomodoro2.features.infra.database.Project
-import com.example.pomodoro2.features.infra.database.ProjectDAO
+import androidx.lifecycle.Transformations
+import com.example.pomodoro2.features.infra.database.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -12,18 +11,28 @@ import kotlinx.coroutines.withContext
  *  Handling the database operation
  *  TODO: thinking how to integrate into single Repository
  */
-public class AppRepository {
+public class AppRepository(context: Context) {
 
-    private lateinit var _projectDao: ProjectDAO
+    val database: AppDatabase = AppDatabase.getInstance(context.applicationContext)
+    private val _projectDao = database.projectDao
+    val prjListLive: LiveData<List<Project>> = Transformations.map(_projectDao.getAllProjectsLive()){
+        it.asDomainModel()
 
-    private lateinit var _prjListLive: LiveData<List<Project>>
-    var prjListLive: LiveData<List<Project>> = _prjListLive
+//    private lateinit var _prjListLive: LiveData<List<Project>>
+//    var prjListLive: LiveData<List<Project>> = _prjListLive
 
+}
 
-    fun AppRepository(context: Context) {
-        val database: AppDatabase = AppDatabase.getInstance(context.applicationContext)
-        _projectDao = database.projectDao
-        _prjListLive = database.projectDao.getAllProjectsLive()
+//    init {
+//        val database: AppDatabase = AppDatabase.getInstance(context.applicationContext)
+//        _projectDao = database.projectDao
+//        _prjListLive = Transformations.map(_projectDao.getAllProjectsLive()){
+//            it.asDomainModel()
+//        }
+//    }
+
+    fun refreshProjects(){
+
     }
 
     /**
@@ -35,23 +44,23 @@ public class AppRepository {
      * and has nothing to do with the UI.
      *
      **/
-    suspend fun getProjectFromDatabase(id: Long): Project? {
+    suspend fun getProjectFromDatabase(id: Long): DatabaseProject? {
         return withContext(Dispatchers.IO) {
             _projectDao.getProjectById(id)
         }
     }
 
-    suspend fun getProjectsFromDatabase(): LiveData<List<Project>> {
+    suspend fun getProjectsFromDatabase(): LiveData<List<DatabaseProject>> {
         return _projectDao.getAllProjectsLive()
     }
 
-    suspend fun insertProject(project: Project) {
+    suspend fun insertProject(project: DatabaseProject) {
         withContext(Dispatchers.IO) {
             _projectDao.insert(project)
         }
     }
 
-    suspend fun updateProject(project: Project) {
+    suspend fun updateProject(project: DatabaseProject) {
         withContext(Dispatchers.IO) {
             _projectDao.update(project)
         }

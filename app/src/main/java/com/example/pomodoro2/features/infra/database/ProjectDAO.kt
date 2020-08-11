@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 
 /**
- * Defines Database Access Object and methods for using the Project class with Room.
+ * Defines Database Access Object and methods for using the DatabaseProject class with Room.
  */
 @Dao
 interface ProjectDAO {
     @Insert
-    fun insert(vararg projects: Project?)
+    fun insert(vararg projects: DatabaseProject?)
 
     /**
      * When updating a row with a value already set in a column,
@@ -18,10 +18,10 @@ interface ProjectDAO {
      * @param Projects new value to write
      */
     @Update
-    fun update(vararg projects: Project?)
+    fun update(vararg projects: DatabaseProject?)
 
     @Delete
-    fun deleteProject(vararg projects: Project?)
+    fun deleteProject(vararg projects: DatabaseProject?)
 
     /**
      * Selects and returns the row that matches the key.
@@ -29,7 +29,7 @@ interface ProjectDAO {
      * @param id key of row to match
      */
     @Query("SELECT * FROM PROJECT_TABLE WHERE Id = :id")
-    fun getProjectById(id: Long): Project?
+    fun getProjectById(id: Long): DatabaseProject?
 
     /**
      * Deletes all values from the table.
@@ -46,5 +46,5 @@ interface ProjectDAO {
      * sorted by priority in ascending order.
      */
     @Query("SELECT * FROM PROJECT_TABLE ORDER BY priority")
-    fun getAllProjectsLive(): LiveData<List<Project>>
+    fun getAllProjectsLive(): LiveData<List<DatabaseProject>>
 }
