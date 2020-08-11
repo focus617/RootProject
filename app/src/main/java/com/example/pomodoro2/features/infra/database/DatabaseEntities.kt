@@ -3,14 +3,14 @@ package com.example.pomodoro2.features.infra.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.pomodoro2.domain.Project
+import com.example.pomodoro2.domain.Task
 
 /**
  * DatabaseProject represents a project entity in the database.
  * 表示任务（目标）的数据类，用来存储创建的任务项目，并提供给ProjectFragment
  */
 @Entity(tableName = "project_table")
-data class DatabaseProject(
+data class DatabaseTask(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0L,
 
@@ -32,9 +32,9 @@ data class DatabaseProject(
 /**
  * Map DatabaseVideos to domain entities
  */
-fun List<DatabaseProject>.asDomainModel(): List<Project> {
+fun List<DatabaseTask>.asDomainModel(): List<Task> {
     return map {
-        Project(
+        Task(
             id = it.id,
             title = it.title,
             imageId = it.imageId,

@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
-import com.example.pomodoro2.core.platform.BaseFragment
+import com.example.pomodoro2.framework.platform.BaseFragment
 
 class CountDownTimerFragment : BaseFragment() {
 

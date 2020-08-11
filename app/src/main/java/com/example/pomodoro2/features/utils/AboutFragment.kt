@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.pomodoro2.R
-import com.example.pomodoro2.core.platform.BaseFragment
+import com.example.pomodoro2.framework.platform.BaseFragment
 
 class AboutFragment : BaseFragment() {
 

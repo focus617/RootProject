@@ -4,9 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.pomodoro2.R
-import com.example.pomodoro2.core.platform.SingleLiveEvent
+import com.example.pomodoro2.framework.platform.SingleLiveEvent
 import com.example.pomodoro2.features.infra.database.AppDatabase
-import com.example.pomodoro2.domain.Project
+import com.example.pomodoro2.domain.Task
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.nullValue
@@ -37,7 +37,7 @@ class ActivitiesViewModelTest {
         // Create an instance of Database.
         // TODO:change ProjectDAO to ActivityDAO later
         val dataSource = AppDatabase.getInstance(application).projectDao
-        val project = Project(
+        val project = Task(
             1L,
             "番茄工作",
             R.drawable.read_book,

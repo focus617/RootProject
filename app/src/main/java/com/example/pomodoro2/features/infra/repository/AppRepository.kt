@@ -3,7 +3,7 @@ package com.example.pomodoro2.features.infra.repository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.example.pomodoro2.domain.Project
+import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.features.infra.database.*
 import com.example.pomodoro2.features.infra.network.Api
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +17,7 @@ import timber.log.Timber
 public class AppRepository(context: Context) {
 
     // singleton database instance
-    val database: AppDatabase = AppDatabase.getInstance(context.applicationContext)
+    val db = AppDatabase.getInstance(context.applicationContext)
 
     // singleton Retrofit service instance
     val api = Api.create()
@@ -25,11 +25,15 @@ public class AppRepository(context: Context) {
     // Network Status
     var status: Api.Companion.ApiStatus = Api.Companion.ApiStatus.DONE
 
+    fun closeDB() {
+        if (db.isOpen) db.close()
+    }
+
     /**
      * LiveData object kept inside Repository, which is automatically updated when the database is updated.
      */
-    val prjListLive: LiveData<List<Project>> =
-        Transformations.map(database.projectDao.getAllProjectsLive()){
+    val prjListLive: LiveData<List<Task>> =
+        Transformations.map(db.projectDao.getAllProjectsLive()){
             it.asDomainModel()
         }
 
@@ -70,31 +74,31 @@ public class AppRepository(context: Context) {
      * and has nothing to do with the UI.
      *
      **/
-    suspend fun getProjectFromDatabase(id: Long): DatabaseProject? {
+    suspend fun getProjectFromDatabase(id: Long): DatabaseTask? {
         return withContext(Dispatchers.IO) {
-            database.projectDao.getProjectById(id)
+            db.projectDao.getProjectById(id)
         }
     }
 
-    suspend fun getProjectsFromDatabase(): LiveData<List<DatabaseProject>> {
-        return database.projectDao.getAllProjectsLive()
+    suspend fun getProjectsFromDatabase(): LiveData<List<DatabaseTask>> {
+        return db.projectDao.getAllProjectsLive()
     }
 
-    suspend fun insertProject(project: DatabaseProject) {
+    suspend fun insertProject(task: DatabaseTask) {
         withContext(Dispatchers.IO) {
-            database.projectDao.insert(project)
+            db.projectDao.insert(task)
         }
     }
 
-    suspend fun updateProject(project: DatabaseProject) {
+    suspend fun updateProject(task: DatabaseTask) {
         withContext(Dispatchers.IO) {
-            database.projectDao.update(project)
+            db.projectDao.update(task)
         }
     }
 
     suspend fun clearProjectTable() {
         withContext(Dispatchers.IO) {
-            database.projectDao.clear()
+            db.projectDao.clear()
         }
     }
 }

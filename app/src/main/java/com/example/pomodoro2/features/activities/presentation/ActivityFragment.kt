@@ -4,16 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
-import com.example.pomodoro2.core.platform.BaseFragment
+import com.example.pomodoro2.framework.platform.BaseFragment
 import com.example.pomodoro2.databinding.FragmentActivityBinding
-import com.example.pomodoro2.databinding.FragmentProjectBinding
 import com.example.pomodoro2.features.infra.database.AppDatabase
-import com.example.pomodoro2.features.projects.presentation.ProjectsViewModel
 import kotlinx.android.synthetic.main.fragment_activity.*
 
 class ActivityFragment : BaseFragment() {
@@ -49,7 +46,7 @@ class ActivityFragment : BaseFragment() {
         // Create an instance of the ViewModel Factory.
         // TODO:change ProjectDAO to ActivityDAO later
         val dataSource = AppDatabase.getInstance(application).projectDao
-        val viewModelFactory = ActivitiesViewModelFactory(arguments.project, dataSource)
+        val viewModelFactory = ActivitiesViewModelFactory(arguments.task, dataSource)
 
         // Get a reference to the ViewModel associated with this fragment.
         val activitiesViewModel =

@@ -9,10 +9,10 @@ import androidx.room.*
 @Dao
 interface ProjectDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(vararg projects: DatabaseProject?)
+    fun insert(vararg task: DatabaseTask?)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll( projects: List<DatabaseProject>)
+    fun insertAll(tasks: List<DatabaseTask>)
 
     /**
      * When updating a row with a value already set in a column,
@@ -21,10 +21,10 @@ interface ProjectDAO {
      * @param Projects new value to write
      */
     @Update
-    fun update(vararg projects: DatabaseProject?)
+    fun update(vararg tasks: DatabaseTask?)
 
     @Delete
-    fun deleteProject(vararg projects: DatabaseProject?)
+    fun deleteProject(vararg tasks: DatabaseTask?)
 
    /**
      * Deletes all values from the table.
@@ -41,7 +41,7 @@ interface ProjectDAO {
      * @param id key of row to match
      */
     @Query("SELECT * FROM PROJECT_TABLE WHERE Id = :id")
-    fun getProjectById(id: Long): DatabaseProject?
+    fun getProjectById(id: Long): DatabaseTask?
 
     /**
      * Selects and returns all rows in the table,
@@ -50,5 +50,5 @@ interface ProjectDAO {
      * sorted by priority in ascending order.
      */
     @Query("SELECT * FROM PROJECT_TABLE ORDER BY priority")
-    fun getAllProjectsLive(): LiveData<List<DatabaseProject>>
+    fun getAllProjectsLive(): LiveData<List<DatabaseTask>>
 }

@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@+id/navigation_project">
+    app:startDestination="@+id/navigation_task">
 
     <fragment
-        android:id="@+id/navigation_project"
-        android:name="com.example.pomodoro2.features.projects.presentation.ProjectFragment"
+        android:id="@+id/navigation_task"
+        android:name="com.example.pomodoro2.features.tasks.presentation.TaskFragment"
         android:label="@string/title_project"
-        tools:layout="@layout/fragment_project" >
+        tools:layout="@layout/fragment_task" >
         <action
             android:id="@+id/action_navigation_project_to_navigation_activity"
             app:destination="@id/navigation_activity"
@@ -23,8 +23,8 @@
         android:label="@string/title_activities"
         tools:layout="@layout/fragment_activity" >
         <argument
-            android:name="project"
-            app:argType="com.example.pomodoro2.domain.Project" />
+            android:name="task"
+            app:argType="com.example.pomodoro2.domain.Task" />
         <action
             android:id="@+id/action_navigation_activity_to_countDownTimerFragment"
             app:destination="@id/navigation_timer" />

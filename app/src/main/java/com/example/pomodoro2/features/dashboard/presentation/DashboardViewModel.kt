@@ -19,6 +19,8 @@ class DashboardViewModel(application: Application) : ViewModel() {
     val api = Api.create()
     public val imgSrcUrl:String = ApiConstants.imgSrcUrl
 
+    // TODO: how to get the singleton repository here?
+
     /** Coroutine variables */
 
     /**

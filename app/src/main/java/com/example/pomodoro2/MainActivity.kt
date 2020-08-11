@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
             // menu should be considered as top level destinations.
             AppBarConfiguration(
                 topLevelDestinationIds = setOf(
-                    R.id.navigation_project, R.id.navigation_timer, R.id.navigation_statistics
+                    R.id.navigation_task, R.id.navigation_timer, R.id.navigation_statistics
                 )
             )
         }

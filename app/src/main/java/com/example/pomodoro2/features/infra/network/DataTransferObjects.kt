@@ -1,7 +1,7 @@
 package com.example.pomodoro2.features.infra.network
 
-import com.example.pomodoro2.domain.Project
-import com.example.pomodoro2.features.infra.database.DatabaseProject
+import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.features.infra.database.DatabaseTask
 import com.squareup.moshi.JsonClass
 
 /**
@@ -55,9 +55,9 @@ data class NetworkContact(
 /**
  * convenience method: Convert Network results to domain objects
  */
-fun NetworkProjectContainer.asDomainModel(): List<Project> {
+fun NetworkProjectContainer.asDomainModel(): List<Task> {
     return projects.map {
-        Project(
+        Task(
             id = it.id,
             title = it.title,
             imageId = it.imageId,
@@ -70,9 +70,9 @@ fun NetworkProjectContainer.asDomainModel(): List<Project> {
 /**
  * convenience method: Convert Network results to database objects
  */
-fun NetworkProjectContainer.asDatabaseModel(): List<DatabaseProject> {
+fun NetworkProjectContainer.asDatabaseModel(): List<DatabaseTask> {
     return projects.map {
-        DatabaseProject(
+        DatabaseTask(
             id = it.id,
             title = it.title,
             imageId = it.imageId,
