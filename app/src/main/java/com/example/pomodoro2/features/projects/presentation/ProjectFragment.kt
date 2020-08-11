@@ -15,7 +15,7 @@ import com.example.pomodoro2.core.platform.BaseFragment
 import com.example.pomodoro2.core.platform.EventObserver
 import com.example.pomodoro2.databinding.FragmentProjectBinding
 import com.example.pomodoro2.features.infra.database.AppDatabase
-import com.example.pomodoro2.features.projects.domain.Project
+import com.example.pomodoro2.domain.Project
 import com.google.android.material.snackbar.Snackbar
 
 class ProjectFragment : BaseFragment() {
@@ -184,7 +184,11 @@ class ProjectFragment : BaseFragment() {
                 projectsViewModel.testSnackBar()
 
                 val project =
-                    Project(title = "学习Android开发", imageId = R.drawable.read_book, priority = 1)
+                    Project(
+                        title = "学习Android开发",
+                        imageId = R.drawable.read_book,
+                        priority = 1
+                    )
                 projectsViewModel.doNavigating(project)
                 true
             }

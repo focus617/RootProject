@@ -8,8 +8,11 @@ import androidx.room.*
  */
 @Dao
 interface ProjectDAO {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg projects: DatabaseProject?)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll( projects: List<DatabaseProject>)
 
     /**
      * When updating a row with a value already set in a column,
@@ -23,6 +26,15 @@ interface ProjectDAO {
     @Delete
     fun deleteProject(vararg projects: DatabaseProject?)
 
+   /**
+     * Deletes all values from the table.
+     *
+     * This does not delete the table, only its contents.
+     */
+   // TODO: check why Query, not Delete?
+    @Query("DELETE FROM PROJECT_TABLE")
+    fun clear()
+
     /**
      * Selects and returns the row that matches the key.
      *
@@ -30,14 +42,6 @@ interface ProjectDAO {
      */
     @Query("SELECT * FROM PROJECT_TABLE WHERE Id = :id")
     fun getProjectById(id: Long): DatabaseProject?
-
-    /**
-     * Deletes all values from the table.
-     *
-     * This does not delete the table, only its contents.
-     */
-    @Query("DELETE FROM PROJECT_TABLE")
-    fun clear()
 
     /**
      * Selects and returns all rows in the table,

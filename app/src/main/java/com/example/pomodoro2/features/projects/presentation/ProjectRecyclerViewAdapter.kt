@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pomodoro2.R
 import com.example.pomodoro2.databinding.ListItemProjectBinding
-import com.example.pomodoro2.features.projects.domain.Project
+import com.example.pomodoro2.domain.Project
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -1,10 +1,6 @@
-package com.example.pomodoro2.features.projects.domain
+package com.example.pomodoro2.domain
 
 import android.os.Parcelable
-import androidx.lifecycle.Transformations.map
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.example.pomodoro2.features.infra.database.DatabaseProject
 import kotlinx.android.parcel.Parcelize
 

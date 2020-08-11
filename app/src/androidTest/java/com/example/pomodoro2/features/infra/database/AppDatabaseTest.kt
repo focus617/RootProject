@@ -4,8 +4,8 @@ import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.pomodoro2.R
-import com.example.pomodoro2.features.projects.domain.Project
-import com.example.pomodoro2.features.projects.domain.asDatabaseEntity
+import com.example.pomodoro2.domain.Project
+import com.example.pomodoro2.domain.asDatabaseEntity
 import org.junit.After
 import org.junit.Before
 
@@ -48,7 +48,12 @@ class AppDatabaseTest {
     @Test
     @Throws(Exception::class)
     fun insertAndGetProject() {
-        val project = Project(1L,"番茄工作", R.drawable.read_book,1)
+        val project = Project(
+            1L,
+            "番茄工作",
+            R.drawable.read_book,
+            1
+        )
         projectDAO.insert(project.asDatabaseEntity())
         val proj = projectDAO.getProjectById(1L)
         assertEquals("番茄工作", proj?.title)

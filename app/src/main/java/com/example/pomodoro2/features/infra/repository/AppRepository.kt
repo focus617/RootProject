@@ -1,11 +1,14 @@
-package com.example.pomodoro2.features.projects.domain
+package com.example.pomodoro2.features.infra.repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import com.example.pomodoro2.domain.Project
 import com.example.pomodoro2.features.infra.database.*
+import com.example.pomodoro2.features.infra.network.Api
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 /**
  *  Handling the database operation
@@ -13,26 +16,36 @@ import kotlinx.coroutines.withContext
  */
 public class AppRepository(context: Context) {
 
+    // singleton database instance
     val database: AppDatabase = AppDatabase.getInstance(context.applicationContext)
-    private val _projectDao = database.projectDao
-    val prjListLive: LiveData<List<Project>> = Transformations.map(_projectDao.getAllProjectsLive()){
-        it.asDomainModel()
 
-//    private lateinit var _prjListLive: LiveData<List<Project>>
-//    var prjListLive: LiveData<List<Project>> = _prjListLive
+    // singleton Retrofit service instance
+    val api = Api.create()
 
-}
+    /**
+     * LiveData kept inside Repository
+     */
+    val prjListLive: LiveData<List<Project>> =
+        Transformations.map(database.projectDao.getAllProjectsLive()){
+            it.asDomainModel()
+        }
 
-//    init {
-//        val database: AppDatabase = AppDatabase.getInstance(context.applicationContext)
-//        _projectDao = database.projectDao
-//        _prjListLive = Transformations.map(_projectDao.getAllProjectsLive()){
-//            it.asDomainModel()
-//        }
-//    }
+    /**
+     * Refresh the database entities stored in the offline cache.
+     *
+     * This function uses the IO dispatcher to ensure the database insert database operation
+     * happens on the IO dispatcher. By switching to the IO dispatcher using `withContext` this
+     * function is now safe to call from any thread including the Main thread.
+     *
+     */
+    suspend fun refreshProjects(){
+        withContext(Dispatchers.IO) {
+            Timber.d("refresh projects is called");
+            val user = api.getPropertiesAsync().await()
 
-    fun refreshProjects(){
-
+            // Store into local cache
+            // database.projectDao.insertAll(projectList.asDatabaseModel())
+        }
     }
 
     /**
@@ -44,6 +57,8 @@ public class AppRepository(context: Context) {
      * and has nothing to do with the UI.
      *
      **/
+    private val _projectDao = database.projectDao
+
     suspend fun getProjectFromDatabase(id: Long): DatabaseProject? {
         return withContext(Dispatchers.IO) {
             _projectDao.getProjectById(id)

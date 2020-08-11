@@ -7,7 +7,7 @@
 
         <variable
             name="project"
-            type="com.example.pomodoro2.features.projects.domain.Project" />
+            type="com.example.pomodoro2.domain.Project" />
         <variable
             name="clickListener"
             type="com.example.pomodoro2.features.projects.presentation.ProjectListener"/>

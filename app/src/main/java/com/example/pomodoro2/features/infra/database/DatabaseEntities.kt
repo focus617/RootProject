@@ -1,11 +1,9 @@
 package com.example.pomodoro2.features.infra.database
 
-import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.pomodoro2.features.projects.domain.Project
-import kotlinx.android.parcel.Parcelize
+import com.example.pomodoro2.domain.Project
 
 /**
  * DatabaseProject represents a project entity in the database.

@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModel
 import com.example.pomodoro2.R
 import com.example.pomodoro2.core.platform.SingleLiveEvent
 import com.example.pomodoro2.features.infra.database.ProjectDAO
-import com.example.pomodoro2.features.projects.domain.AppRepository
-import com.example.pomodoro2.features.projects.domain.Project
-import com.example.pomodoro2.features.projects.domain.asDatabaseEntity
+import com.example.pomodoro2.features.infra.repository.AppRepository
+import com.example.pomodoro2.domain.Project
+import com.example.pomodoro2.domain.asDatabaseEntity
 import kotlinx.coroutines.*
 import java.io.IOException
 
@@ -95,7 +95,7 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
      * ClickHandler for recyclerview item click
      */
     fun onProjectClicked(project: Project){
-        showInSnackBar("Project(${project.title}) selected, Will Navigate to ActivityFragment.")
+        showInSnackBar("Start Project(${project.title})")
         doNavigating(project)
     }
 
@@ -177,7 +177,11 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
             uiScope.launch {
                 // Create a new project , which captures the current time,
                 // then insert it into the database.
-                val project = Project(title = titles[index], imageId = element, priority = index + 1)
+                val project = Project(
+                    title = titles[index],
+                    imageId = element,
+                    priority = index + 1
+                )
                 repository.insertProject(project.asDatabaseEntity())
             }
         }

@@ -3,7 +3,7 @@ package com.example.pomodoro2.features.activities.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.features.infra.database.ProjectDAO
-import com.example.pomodoro2.features.projects.domain.Project
+import com.example.pomodoro2.domain.Project
 
 /**
  * This is pretty much boiler plate code for a ViewModel Factory.
