@@ -12,7 +12,7 @@
 
         <variable
             name="ViewModel"
-            type="com.example.pomodoro2.features.tasks.presentation.ProjectsViewModel" />
+            type="com.example.pomodoro2.features.tasks.presentation.TasksViewModel" />
     </data>
 
     <!-- Start of the visible fragment layout using ConstraintLayout -->

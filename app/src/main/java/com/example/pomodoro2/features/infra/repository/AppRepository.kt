@@ -32,8 +32,8 @@ public class AppRepository(context: Context) {
     /**
      * LiveData object kept inside Repository, which is automatically updated when the database is updated.
      */
-    val prjListLive: LiveData<List<Task>> =
-        Transformations.map(db.projectDao.getAllProjectsLive()){
+    val taskListLive: LiveData<List<Task>> =
+        Transformations.map(db.taskDao.getAllTasksLive()){
             it.asDomainModel()
         }
 
@@ -45,23 +45,23 @@ public class AppRepository(context: Context) {
      * function is now safe to call from any thread including the Main thread.
      *
      */
-    suspend fun refreshProjects(){
+    suspend fun refreshTasks(){
         withContext(Dispatchers.IO) {
-            Timber.d("refresh projects is called");
+            Timber.d("refresh tasks is called");
 
             // creates and starts the network call on a background thread
             var getPropertiesDeferred = api.getPropertiesAsync()
 
             try {
                 status = Api.Companion.ApiStatus.LOADING
-                var projectList = getPropertiesDeferred.await()
+                var taskList = getPropertiesDeferred.await()
                 status = Api.Companion.ApiStatus.DONE
             } catch (e: Exception) {
                 status = Api.Companion.ApiStatus.ERROR
             }
 
             // Store into database as local cache
-            // database.projectDao.insertAll(projectList.asDatabaseModel())
+            // database.taskDao.insertAll(taskList.asDatabaseModel())
         }
     }
 
@@ -74,31 +74,31 @@ public class AppRepository(context: Context) {
      * and has nothing to do with the UI.
      *
      **/
-    suspend fun getProjectFromDatabase(id: Long): DatabaseTask? {
+    suspend fun getTaskFromDatabase(id: Long): DatabaseTask? {
         return withContext(Dispatchers.IO) {
-            db.projectDao.getProjectById(id)
+            db.taskDao.getTaskById(id)
         }
     }
 
-    suspend fun getProjectsFromDatabase(): LiveData<List<DatabaseTask>> {
-        return db.projectDao.getAllProjectsLive()
+    suspend fun getTasksFromDatabase(): LiveData<List<DatabaseTask>> {
+        return db.taskDao.getAllTasksLive()
     }
 
-    suspend fun insertProject(task: DatabaseTask) {
+    suspend fun insertTask(task: DatabaseTask) {
         withContext(Dispatchers.IO) {
-            db.projectDao.insert(task)
+            db.taskDao.insert(task)
         }
     }
 
-    suspend fun updateProject(task: DatabaseTask) {
+    suspend fun updateTask(task: DatabaseTask) {
         withContext(Dispatchers.IO) {
-            db.projectDao.update(task)
+            db.taskDao.update(task)
         }
     }
 
-    suspend fun clearProjectTable() {
+    suspend fun clearTaskTable() {
         withContext(Dispatchers.IO) {
-            db.projectDao.clear()
+            db.taskDao.clear()
         }
     }
 }

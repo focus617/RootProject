@@ -9,13 +9,13 @@ import androidx.lifecycle.ViewModelProvider
  *
  * Provides the context to the ViewModel.
  */
-class ProjectsViewModelFactory(
+class TasksViewModelFactory(
     private val application: Application
 ) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ProjectsViewModel::class.java)) {
-            return ProjectsViewModel(application) as T
+        if (modelClass.isAssignableFrom(TasksViewModel::class.java)) {
+            return TasksViewModel(application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

@@ -36,7 +36,7 @@ class ActivitiesViewModelTest {
 
         // Create an instance of Database.
         // TODO:change ProjectDAO to ActivityDAO later
-        val dataSource = AppDatabase.getInstance(application).projectDao
+        val dataSource = AppDatabase.getInstance(application).taskDao
         val project = Task(
             1L,
             "番茄工作",

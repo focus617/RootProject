@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/navigation_task"
         android:name="com.example.pomodoro2.features.tasks.presentation.TaskFragment"
-        android:label="@string/title_project"
+        android:label="@string/title_task"
         tools:layout="@layout/fragment_task" >
         <action
             android:id="@+id/action_navigation_project_to_navigation_activity"

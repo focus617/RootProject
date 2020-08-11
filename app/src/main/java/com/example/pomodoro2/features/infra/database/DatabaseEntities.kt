@@ -6,10 +6,10 @@ import androidx.room.PrimaryKey
 import com.example.pomodoro2.domain.Task
 
 /**
- * DatabaseProject represents a project entity in the database.
- * 表示任务（目标）的数据类，用来存储创建的任务项目，并提供给ProjectFragment
+ * DatabaseTask represents a task entity in the database.
+ * 表示任务（目标）的数据类，用来存储创建的任务项目，并提供给TaskFragment
  */
-@Entity(tableName = "project_table")
+@Entity(tableName = "TASK_TABLE")
 data class DatabaseTask(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0L,

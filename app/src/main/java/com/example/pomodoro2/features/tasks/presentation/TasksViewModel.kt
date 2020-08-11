@@ -14,9 +14,9 @@ import kotlinx.coroutines.*
 import java.io.IOException
 
 /**
- * ViewModel for ProjectFragment.
+ * ViewModel for TaskFragment.
  */
-class ProjectsViewModel(application: Application) :
+class TasksViewModel(application: Application) :
     AndroidViewModel(application) {
 
     private var _application: Application = application
@@ -118,7 +118,7 @@ class ProjectsViewModel(application: Application) :
     /**
      * ClickHandler for recyclerview item click
      */
-    fun onProjectClicked(task: Task){
+    fun onTaskClicked(task: Task){
         showInSnackBar("Start Task(${task.title})")
         doNavigating(task)
     }
@@ -126,11 +126,11 @@ class ProjectsViewModel(application: Application) :
     /**
      * LiveData for this viewModel
      */
-    // project list displayed on the screen
-    var projects : LiveData<List<Task>> = repository.prjListLive
+    // Task list displayed on the screen
+    var tasks : LiveData<List<Task>> = repository.taskListLive
 
     /**
-     * To initialize the projects variable as soon as possible
+     * To initialize the tasks variable as soon as possible
      */
     init {
         refreshDataFromRepository()
@@ -143,13 +143,13 @@ class ProjectsViewModel(application: Application) :
     private fun refreshDataFromRepository() {
         uiScope.launch {
             try {
-                repository.refreshProjects()
+                repository.refreshTasks()
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
 
             } catch (networkError: IOException) {
                 // Show a Toast error message and hide the progress bar.
-                if(projects.value.isNullOrEmpty()) {
+                if(tasks.value.isNullOrEmpty()) {
                     _eventNetworkError.value = true
                 }
             }
@@ -158,18 +158,18 @@ class ProjectsViewModel(application: Application) :
 
 
     fun createTestData() {
-        createDummyProjectsForTesting()
+        createDummyTasksForTesting()
     }
 
     fun clearTestData() {
-        clearDummyProjectsForTesting()
+        clearDummyTasksForTesting()
     }
 
 
     /**
-     * UseCase: Create dummy project list for testing purpose
+     * UseCase: Create dummy task list for testing purpose
      */
-    private fun createDummyProjectsForTesting() {
+    private fun createDummyTasksForTesting() {
         val titles = arrayOf(
             "读书",
             "锻炼身体",
@@ -196,28 +196,28 @@ class ProjectsViewModel(application: Application) :
             R.drawable.work
         )
 
-        // Create some sample projects and insert them into database.
+        // Create some sample Tasks and insert them into database.
         for ((index, element) in images.withIndex()) {
             uiScope.launch {
-                // Create a new project , which captures the current time,
+                // Create a new Task , which captures the current time,
                 // then insert it into the database.
-                val project = Task(
+                val task = Task(
                     title = titles[index],
                     imageId = element,
                     priority = index + 1
                 )
-                repository.insertProject(project.asDatabaseEntity())
+                repository.insertTask(task.asDatabaseEntity())
             }
         }
     }
 
     /**
-     * UseCase: Clear the dummy project list created for testing purpose
+     * UseCase: Clear the dummy Task list created for testing purpose
      */
-    private fun clearDummyProjectsForTesting() {
+    private fun clearDummyTasksForTesting() {
         uiScope.launch {
             // Clear the database table.
-            repository.clearProjectTable()
+            repository.clearTaskTable()
         }
     }
 

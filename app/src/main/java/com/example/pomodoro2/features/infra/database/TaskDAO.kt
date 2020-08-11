@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 
 /**
- * Defines Database Access Object and methods for using the DatabaseProject class with Room.
+ * Defines Database Access Object and methods for using the DatabaseTask class with Room.
  */
 @Dao
-interface ProjectDAO {
+interface TaskDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg task: DatabaseTask?)
 
@@ -18,13 +18,13 @@ interface ProjectDAO {
      * When updating a row with a value already set in a column,
      * replaces the old value with the new one.
      *
-     * @param Projects new value to write
+     * @param Tasks new value to write
      */
     @Update
     fun update(vararg tasks: DatabaseTask?)
 
     @Delete
-    fun deleteProject(vararg tasks: DatabaseTask?)
+    fun deleteTask(vararg tasks: DatabaseTask?)
 
    /**
      * Deletes all values from the table.
@@ -32,7 +32,7 @@ interface ProjectDAO {
      * This does not delete the table, only its contents.
      */
    // TODO: check why Query, not Delete?
-    @Query("DELETE FROM PROJECT_TABLE")
+    @Query("DELETE FROM TASK_TABLE")
     fun clear()
 
     /**
@@ -40,8 +40,8 @@ interface ProjectDAO {
      *
      * @param id key of row to match
      */
-    @Query("SELECT * FROM PROJECT_TABLE WHERE Id = :id")
-    fun getProjectById(id: Long): DatabaseTask?
+    @Query("SELECT * FROM TASK_TABLE WHERE Id = :id")
+    fun getTaskById(id: Long): DatabaseTask?
 
     /**
      * Selects and returns all rows in the table,
@@ -49,6 +49,6 @@ interface ProjectDAO {
      *
      * sorted by priority in ascending order.
      */
-    @Query("SELECT * FROM PROJECT_TABLE ORDER BY priority")
-    fun getAllProjectsLive(): LiveData<List<DatabaseTask>>
+    @Query("SELECT * FROM TASK_TABLE ORDER BY priority")
+    fun getAllTasksLive(): LiveData<List<DatabaseTask>>
 }

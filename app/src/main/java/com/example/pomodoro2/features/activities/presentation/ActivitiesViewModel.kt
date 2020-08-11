@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pomodoro2.framework.platform.BaseViewModel
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
-import com.example.pomodoro2.features.infra.database.ProjectDAO
+import com.example.pomodoro2.features.infra.database.TaskDAO
 import com.example.pomodoro2.domain.Task
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +17,7 @@ import kotlinx.coroutines.Job
 // TODO:change ProjectDAO to ActivityDAO later
 class ActivitiesViewModel(
     task: Task,
-    private val dataSource: ProjectDAO
+    private val dataSource: TaskDAO
     //private val getTasksUseCase: GetTasksUseCase
 ) : BaseViewModel() {
 

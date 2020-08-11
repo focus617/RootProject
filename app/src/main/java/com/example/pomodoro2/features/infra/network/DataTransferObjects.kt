@@ -13,18 +13,18 @@ import com.squareup.moshi.JsonClass
  */
 
 /**
- * VideoHolder holds a list of Projects.
+ * VideoHolder holds a list of Tasks.
  *
  * This is to parse first level of our network result which looks like
  *
  * {
- *   "projects": []
+ *   "tasks": []
  * }
  */
 
 @JsonClass(generateAdapter = true)
-data class NetworkProjectContainer(
-    val projects: List<NetworkProject>,
+data class NetworkTaskContainer(
+    val tasks: List<NetworkTask>,
     val networkContact: NetworkContact
 )
 
@@ -32,7 +32,7 @@ data class NetworkProjectContainer(
  * Network object definition.
  */
 @JsonClass(generateAdapter = true)
-data class NetworkProject(
+data class NetworkTask(
     var id: Long,
     var title: String,
     var imageId: Int,
@@ -55,8 +55,8 @@ data class NetworkContact(
 /**
  * convenience method: Convert Network results to domain objects
  */
-fun NetworkProjectContainer.asDomainModel(): List<Task> {
-    return projects.map {
+fun NetworkTaskContainer.asDomainModel(): List<Task> {
+    return tasks.map {
         Task(
             id = it.id,
             title = it.title,
@@ -70,8 +70,8 @@ fun NetworkProjectContainer.asDomainModel(): List<Task> {
 /**
  * convenience method: Convert Network results to database objects
  */
-fun NetworkProjectContainer.asDatabaseModel(): List<DatabaseTask> {
-    return projects.map {
+fun NetworkTaskContainer.asDatabaseModel(): List<DatabaseTask> {
+    return tasks.map {
         DatabaseTask(
             id = it.id,
             title = it.title,

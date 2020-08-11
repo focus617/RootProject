@@ -24,7 +24,7 @@ import java.io.IOException
 @RunWith(AndroidJUnit4::class)
 class AppDatabaseTest {
 
-    private lateinit var projectDAO: ProjectDAO
+    private lateinit var taskDAO: TaskDAO
     private lateinit var db: AppDatabase
 
     @Before
@@ -36,7 +36,7 @@ class AppDatabaseTest {
             // Allowing main thread queries, just for testing.
             .allowMainThreadQueries()
             .build()
-        projectDAO = db.projectDao
+        taskDAO = db.taskDao
     }
 
     @After
@@ -54,8 +54,8 @@ class AppDatabaseTest {
             R.drawable.read_book,
             1
         )
-        projectDAO.insert(project.asDatabaseEntity())
-        val proj = projectDAO.getProjectById(1L)
+        taskDAO.insert(project.asDatabaseEntity())
+        val proj = taskDAO.getTaskById(1L)
         assertEquals("番茄工作", proj?.title)
         assertEquals(R.drawable.read_book, proj?.imageId)
         assertEquals(1, proj?.priority)

@@ -18,8 +18,8 @@ import kotlinx.coroutines.withContext
 private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1
 
-class ProjectRecyclerViewAdapter(val clickListener: TaskListener) :
-    ListAdapter<DataItem, RecyclerView.ViewHolder>(ProjectDiffCallback()) {
+class TaskRecyclerViewAdapter(val clickListener: TaskListener) :
+    ListAdapter<DataItem, RecyclerView.ViewHolder>(TaskDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
@@ -27,7 +27,7 @@ class ProjectRecyclerViewAdapter(val clickListener: TaskListener) :
         adapterScope.launch {
             val items = when (list) {
                 null -> listOf(DataItem.Header)
-                else -> listOf(DataItem.Header) + list.map { DataItem.ProjectItem(it) }
+                else -> listOf(DataItem.Header) + list.map { DataItem.TaskItem(it) }
             }
             withContext(Dispatchers.Main) {
                 submitList(items)
@@ -38,8 +38,8 @@ class ProjectRecyclerViewAdapter(val clickListener: TaskListener) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ViewHolder -> {
-                val projectItem = getItem(position) as DataItem.ProjectItem
-                holder.bind(projectItem.task, clickListener)
+                val taskItem = getItem(position) as DataItem.TaskItem
+                holder.bind(taskItem.task, clickListener)
             }
         }
     }
@@ -55,7 +55,7 @@ class ProjectRecyclerViewAdapter(val clickListener: TaskListener) :
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
             is DataItem.Header -> ITEM_VIEW_TYPE_HEADER
-            is DataItem.ProjectItem -> ITEM_VIEW_TYPE_ITEM
+            is DataItem.TaskItem -> ITEM_VIEW_TYPE_ITEM
         }
     }
 
@@ -66,7 +66,7 @@ class ProjectRecyclerViewAdapter(val clickListener: TaskListener) :
         companion object {
             fun from(parent: ViewGroup): HeaderViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater.inflate(R.layout.list_header_project, parent, false)
+                val view = layoutInflater.inflate(R.layout.list_header_task, parent, false)
                 return HeaderViewHolder(view)
             }
         }
@@ -97,7 +97,7 @@ class ProjectRecyclerViewAdapter(val clickListener: TaskListener) :
 /**
  *  A DiffUtil class that optimize the RecyclerView for changes to the data.
  */
-class ProjectDiffCallback : DiffUtil.ItemCallback<DataItem>() {
+class TaskDiffCallback : DiffUtil.ItemCallback<DataItem>() {
 
     override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
         return oldItem.id == newItem.id
@@ -120,7 +120,7 @@ class TaskListener(val clickListener: (task: Task) -> Unit) {
  * A data holder class that represents either a SleepNight or a Header
  */
 sealed class DataItem {
-    data class ProjectItem(val task: Task) : DataItem() {
+    data class TaskItem(val task: Task) : DataItem() {
         override val id = task.id
     }
 

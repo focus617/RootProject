@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">番茄工作法</string>
-    <string name="title_project">目标</string>
+    <string name="title_task">目标</string>
     <string name="title_activities">活动</string>
     <string name="title_statistics">统计</string>
     <string name="action_delete_data">删除数据</string>
@@ -18,5 +18,5 @@
     <string name="action_show_in_snackbar">SnackBar</string>
     <string name="icon_msg">图标</string>
     <string name="item_removable">左右拖动删除</string>
-    <string name="List_header_text_project">计划的任务</string>
+    <string name="List_header_text_task">计划的任务</string>
 </resources>

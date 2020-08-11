@@ -2,7 +2,7 @@ package com.example.pomodoro2.features.activities.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.pomodoro2.features.infra.database.ProjectDAO
+import com.example.pomodoro2.features.infra.database.TaskDAO
 import com.example.pomodoro2.domain.Task
 
 /**
@@ -12,7 +12,7 @@ import com.example.pomodoro2.domain.Task
  */
 class ActivitiesViewModelFactory(
     private val task: Task,
-    private val dataSource: ProjectDAO) : ViewModelProvider.Factory {
+    private val dataSource: TaskDAO) : ViewModelProvider.Factory {
     // TODO:change ProjectDAO to ActivityDAO later
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
