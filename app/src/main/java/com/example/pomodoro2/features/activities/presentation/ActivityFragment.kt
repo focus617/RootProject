@@ -49,7 +49,7 @@ class ActivityFragment : BaseFragment() {
         // Create an instance of the ViewModel Factory.
         // TODO:change ProjectDAO to ActivityDAO later
         val dataSource = AppDatabase.getInstance(application).projectDao
-        val viewModelFactory = ActivitiesViewModelFactory(arguments.projectKey, dataSource)
+        val viewModelFactory = ActivitiesViewModelFactory(arguments.project, dataSource)
 
         // Get a reference to the ViewModel associated with this fragment.
         val activitiesViewModel =

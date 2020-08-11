@@ -24,7 +24,7 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
     }
 }
 
-@BindingAdapter("marsApiStatus")
+@BindingAdapter("apiStatus")
 fun bindStatus(statusImageView: ImageView, status: Api.Companion.ApiStatus?) {
     when (status) {
         Api.Companion.ApiStatus.LOADING -> {

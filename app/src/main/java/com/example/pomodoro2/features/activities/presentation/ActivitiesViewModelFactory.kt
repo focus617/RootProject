@@ -2,6 +2,7 @@ package com.example.pomodoro2.features.activities.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.pomodoro2.features.infra.database.Project
 import com.example.pomodoro2.features.infra.database.ProjectDAO
 
 /**
@@ -10,13 +11,13 @@ import com.example.pomodoro2.features.infra.database.ProjectDAO
  * Provides the key for the night and the SleepDatabaseDao to the ViewModel.
  */
 class ActivitiesViewModelFactory(
-    private val projectKey: Long,
+    private val project: Project,
     private val dataSource: ProjectDAO) : ViewModelProvider.Factory {
     // TODO:change ProjectDAO to ActivityDAO later
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ActivitiesViewModel::class.java)) {
-            return ActivitiesViewModel(projectKey, dataSource) as T
+            return ActivitiesViewModel(project, dataSource) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

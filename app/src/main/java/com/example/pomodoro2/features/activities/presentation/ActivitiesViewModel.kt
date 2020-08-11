@@ -12,11 +12,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
 /**
-* ViewModel for the activitiesFragment.
-*/
+ * ViewModel for the activitiesFragment.
+ */
 // TODO:change ProjectDAO to ActivityDAO later
 class ActivitiesViewModel(
-    private val projectKey: Long = 0L,
+    project: Project,
     private val dataSource: ProjectDAO
     //private val getTasksUseCase: GetTasksUseCase
 ) : BaseViewModel() {
@@ -57,8 +57,8 @@ class ActivitiesViewModel(
     }
 
     /**
-    * Event for navigation to CountDownTimer fragment.
-    */
+     * Event for navigation to CountDownTimer fragment.
+     */
     private val _launchTimerEvent = MutableLiveData<SingleLiveEvent<Unit>>()
     val launchTimerEvent: LiveData<SingleLiveEvent<Unit>> = _launchTimerEvent
 
@@ -69,10 +69,16 @@ class ActivitiesViewModel(
     /**
      * LiveData for this viewModel
      */
-    private var _currentProject = MutableLiveData<Project?>()
+    // The internal MutableLiveData for the selected project
+    private var _selectedProject = MutableLiveData<Project>()
+    // The external LiveData for the SelectedProject
+    val selectedProject: LiveData<Project>
+        get() = _selectedProject
 
-    fun getCurrentProject() = _currentProject
-
+    // Initialize the _selectedProperty MutableLiveData
+    init {
+        _selectedProject.value = project
+    }
 
     // TODO: remove in future
     private val _text = MutableLiveData<String>().apply {

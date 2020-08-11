@@ -85,7 +85,7 @@ class ProjectFragment : BaseFragment() {
         binding.lifecycleOwner = this
 
 
-        // 构造 RecycleView.layoutManager
+        // Set RecycleView.layoutManager
         if (_columnCount <= 1) {
             binding.projectList.layoutManager = LinearLayoutManager(activity)
         } else {
@@ -100,7 +100,7 @@ class ProjectFragment : BaseFragment() {
 
         }
 
-        // Set the RecycleView.adapter
+        // Set RecycleView.adapter
         val adapter = ProjectRecyclerViewAdapter(ProjectListener { project ->
             //Toast.makeText(context, "${project.id}", Toast.LENGTH_LONG).show()
             projectsViewModel.onProjectClicked(project)
@@ -126,7 +126,7 @@ class ProjectFragment : BaseFragment() {
         // Add an Observer on the state variable for Navigating
         projectsViewModel.navigateToActivityFragment.observe(viewLifecycleOwner, EventObserver {
             requireView().findNavController().navigate(
-                ProjectFragmentDirections.actionNavigationProjectToNavigationActivity(it.id)
+                ProjectFragmentDirections.actionNavigationProjectToNavigationActivity(it)
             )
         })
 
