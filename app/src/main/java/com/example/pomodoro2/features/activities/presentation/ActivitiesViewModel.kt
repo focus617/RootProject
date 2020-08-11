@@ -75,14 +75,18 @@ class ActivitiesViewModel(
     val selectedProject: LiveData<Project>
         get() = _selectedProject
 
-    // Initialize the _selectedProperty MutableLiveData
-    init {
-        _selectedProject.value = project
-    }
+
 
     // TODO: remove in future
     private val _text = MutableLiveData<String>().apply {
         value = "This is activity Fragment"
     }
     val text: LiveData<String> = _text
+
+
+    // Initialize the _selectedProperty MutableLiveData
+    init {
+        _selectedProject.value = project
+        _text.value = selectedProject.value?.title
+    }
 }
