@@ -72,8 +72,7 @@ class ProjectFragment : BaseFragment() {
         val application = requireNotNull(this.activity).application
 
         // Create an instance of the ViewModel Factory.
-        val dataSource = AppDatabase.getInstance(application).projectDao
-        val viewModelFactory = ProjectsViewModelFactory(dataSource, application)
+        val viewModelFactory = ProjectsViewModelFactory(application)
 
         // Get a reference to the ViewModel associated with this fragment.
         projectsViewModel =

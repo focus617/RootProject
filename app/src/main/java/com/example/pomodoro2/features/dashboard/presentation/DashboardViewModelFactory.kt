@@ -1,4 +1,4 @@
-package com.example.pomodoro2.features.projects.presentation
+package com.example.pomodoro2.features.dashboard.presentation
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
@@ -9,13 +9,13 @@ import androidx.lifecycle.ViewModelProvider
  *
  * Provides the context to the ViewModel.
  */
-class ProjectsViewModelFactory(
+class DashboardViewModelFactory(
     private val application: Application
 ) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ProjectsViewModel::class.java)) {
-            return ProjectsViewModel(application) as T
+        if (modelClass.isAssignableFrom(DashboardViewModel::class.java)) {
+            return DashboardViewModel(application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

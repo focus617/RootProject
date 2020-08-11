@@ -22,8 +22,11 @@ public class AppRepository(context: Context) {
     // singleton Retrofit service instance
     val api = Api.create()
 
+    // Network Status
+    var status: Api.Companion.ApiStatus = Api.Companion.ApiStatus.DONE
+
     /**
-     * LiveData kept inside Repository
+     * LiveData object kept inside Repository, which is automatically updated when the database is updated.
      */
     val prjListLive: LiveData<List<Project>> =
         Transformations.map(database.projectDao.getAllProjectsLive()){
@@ -41,9 +44,19 @@ public class AppRepository(context: Context) {
     suspend fun refreshProjects(){
         withContext(Dispatchers.IO) {
             Timber.d("refresh projects is called");
-            val user = api.getPropertiesAsync().await()
 
-            // Store into local cache
+            // creates and starts the network call on a background thread
+            var getPropertiesDeferred = api.getPropertiesAsync()
+
+            try {
+                status = Api.Companion.ApiStatus.LOADING
+                var projectList = getPropertiesDeferred.await()
+                status = Api.Companion.ApiStatus.DONE
+            } catch (e: Exception) {
+                status = Api.Companion.ApiStatus.ERROR
+            }
+
+            // Store into database as local cache
             // database.projectDao.insertAll(projectList.asDatabaseModel())
         }
     }
@@ -57,33 +70,31 @@ public class AppRepository(context: Context) {
      * and has nothing to do with the UI.
      *
      **/
-    private val _projectDao = database.projectDao
-
     suspend fun getProjectFromDatabase(id: Long): DatabaseProject? {
         return withContext(Dispatchers.IO) {
-            _projectDao.getProjectById(id)
+            database.projectDao.getProjectById(id)
         }
     }
 
     suspend fun getProjectsFromDatabase(): LiveData<List<DatabaseProject>> {
-        return _projectDao.getAllProjectsLive()
+        return database.projectDao.getAllProjectsLive()
     }
 
     suspend fun insertProject(project: DatabaseProject) {
         withContext(Dispatchers.IO) {
-            _projectDao.insert(project)
+            database.projectDao.insert(project)
         }
     }
 
     suspend fun updateProject(project: DatabaseProject) {
         withContext(Dispatchers.IO) {
-            _projectDao.update(project)
+            database.projectDao.update(project)
         }
     }
 
     suspend fun clearProjectTable() {
         withContext(Dispatchers.IO) {
-            _projectDao.clear()
+            database.projectDao.clear()
         }
     }
 }

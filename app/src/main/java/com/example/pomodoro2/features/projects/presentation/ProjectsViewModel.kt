@@ -17,11 +17,10 @@ import java.io.IOException
 /**
  * ViewModel for ProjectFragment.
  */
-class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
+class ProjectsViewModel(application: Application) :
     AndroidViewModel(application) {
 
     private var _application: Application = application
-    private var _projectDao: ProjectDAO = dataSource
 
     /**
      * The data source this ViewModel will fetch results from.
@@ -57,6 +56,32 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
         super.onCleared()
         viewModelJob.cancel()
     }
+
+    /**
+     * Event triggered for network error. This is private to avoid exposing a
+     * way to set this value to observers.
+     */
+    private var _eventNetworkError = MutableLiveData<Boolean>(false)
+
+    /**
+     * Event triggered for network error. Views should use this to get access
+     * to the data.
+     */
+    val eventNetworkError: LiveData<Boolean>
+        get() = _eventNetworkError
+
+    /**
+     * Flag to display the error message. This is private to avoid exposing a
+     * way to set this value to observers.
+     */
+    private var _isNetworkErrorShown = MutableLiveData<Boolean>(false)
+
+    /**
+     * Flag to display the error message. Views should use this to get access
+     * to the data.
+     */
+    val isNetworkErrorShown: LiveData<Boolean>
+        get() = _isNetworkErrorShown
 
     /**
      * Event for navigation to activity fragment.
@@ -120,13 +145,13 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
         uiScope.launch {
             try {
                 repository.refreshProjects()
-//                _eventNetworkError.value = false
-//                _isNetworkErrorShown.value = false
+                _eventNetworkError.value = false
+                _isNetworkErrorShown.value = false
 
             } catch (networkError: IOException) {
                 // Show a Toast error message and hide the progress bar.
                 if(projects.value.isNullOrEmpty()) {
-//                    _eventNetworkError.value = true
+                    _eventNetworkError.value = true
                 }
             }
         }
@@ -204,48 +229,5 @@ class ProjectsViewModel(val dataSource: ProjectDAO, application: Application) :
         // Show a snackbar message, because it's friendly.
         showInSnackBar(_application.getString(R.string.goodbye_message))
     }
-
-
-    // TODO: Below functions will be integrated into Repository
-
-    /**
-     * Suspend functions to do the long-running work,
-     * so that you don't block the UI thread while waiting for the result.
-     *
-     * Suspend functions return the result from a coroutine that runs in the Dispatchers.IO context.
-     * Use the I/O dispatcher, because getting data from the database is an I/O operation
-     * and has nothing to do with the UI.
-     *
-     **/
-/*
-    private suspend fun getProjectFromDatabase(id: Long): Project? {
-        return withContext(Dispatchers.IO) {
-            _projectDao.getProjectById(id)
-        }
-    }
-
-    private suspend fun getProjectsFromDatabase(): LiveData<List<Project>> {
-        return _projectDao.getAllProjectsLive()
-    }
-
-    private suspend fun insertProject(project: Project) {
-        withContext(Dispatchers.IO) {
-            _projectDao.insert(project)
-        }
-    }
-
-    private suspend fun updateProject(project: Project) {
-        withContext(Dispatchers.IO) {
-            _projectDao.update(project)
-        }
-    }
-
-    private suspend fun clearProjectTable() {
-        withContext(Dispatchers.IO) {
-            _projectDao.clear()
-        }
-    }
-*/
-
 
 }
