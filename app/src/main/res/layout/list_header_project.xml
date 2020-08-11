@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:text="@string/List_header_text_project"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="@style/TextAppearance.Title"
         android:textColor="@color/white_text_color"
         android:layout_marginStart="2dp"
         android:layout_marginTop="16dp"

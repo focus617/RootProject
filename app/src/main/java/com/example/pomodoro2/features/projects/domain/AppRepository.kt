@@ -13,20 +13,23 @@ import kotlinx.coroutines.withContext
  */
 public class AppRepository(context: Context) {
 
-    private lateinit var _projectDao: ProjectDAO
+    val database: AppDatabase = AppDatabase.getInstance(context.applicationContext)
+    private val _projectDao = database.projectDao
+    val prjListLive: LiveData<List<Project>> = Transformations.map(_projectDao.getAllProjectsLive()){
+        it.asDomainModel()
 
-    private lateinit var _prjListLive: LiveData<List<Project>>
-    var prjListLive: LiveData<List<Project>> = _prjListLive
+//    private lateinit var _prjListLive: LiveData<List<Project>>
+//    var prjListLive: LiveData<List<Project>> = _prjListLive
 
+}
 
-    init {
-        val database: AppDatabase = AppDatabase.getInstance(context.applicationContext)
-        _projectDao = database.projectDao
-        _prjListLive = Transformations.map(database.projectDao.getAllProjectsLive()){
-            it.asDomainModel()
-        }
-
-    }
+//    init {
+//        val database: AppDatabase = AppDatabase.getInstance(context.applicationContext)
+//        _projectDao = database.projectDao
+//        _prjListLive = Transformations.map(_projectDao.getAllProjectsLive()){
+//            it.asDomainModel()
+//        }
+//    }
 
     fun refreshProjects(){
 
