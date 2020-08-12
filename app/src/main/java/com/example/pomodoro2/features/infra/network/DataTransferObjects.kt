@@ -1,5 +1,7 @@
 package com.example.pomodoro2.features.infra.network
 
+import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.features.infra.database.TaskEntity
 import com.squareup.moshi.JsonClass
 
 /**
@@ -11,56 +13,70 @@ import com.squareup.moshi.JsonClass
  */
 
 /**
- * VideoHolder holds a list of Videos.
+ * VideoHolder holds a list of Tasks.
  *
  * This is to parse first level of our network result which looks like
  *
  * {
- *   "videos": []
+ *   "tasks": []
  * }
  */
-/*
-@JsonClass(generateAdapter = true)
-data class NetworkVideoContainer(val videos: List<NetworkVideo>)
 
-*//**
- * Videos represent a devbyte that can be played.
- *//*
 @JsonClass(generateAdapter = true)
-data class NetworkVideo(
-    val title: String,
-    val description: String,
-    val url: String,
-    val updated: String,
-    val thumbnail: String,
-    val closedCaptions: String?)
+data class NetworkTaskContainer(
+    val tasks: List<NetworkTask>,
+    val networkContact: NetworkContact
+)
 
-*//**
- * Convert Network results to database objects
- *//*
-fun NetworkVideoContainer.asDomainModel(): List<DevByteVideo> {
-    return videos.map {
-        DevByteVideo(
+/**
+ * Network object definition.
+ */
+@JsonClass(generateAdapter = true)
+data class NetworkTask(
+    var id: Long,
+    var title: String,
+    var imageId: Int,
+    var priority: Int,
+    var createTime: Long)
+
+@JsonClass(generateAdapter = true)
+data class Phone(
+    val home: String,
+    val mobile: String
+)
+
+@JsonClass(generateAdapter = true)
+data class NetworkContact(
+    val name: String,
+    val email: String,
+    val phone: Phone
+)
+
+/**
+ * convenience method: Convert Network results to domain objects
+ */
+fun NetworkTaskContainer.asDomainModel(): List<Task> {
+    return tasks.map {
+        Task(
+            id = it.id,
             title = it.title,
-            description = it.description,
-            url = it.url,
-            updated = it.updated,
-            thumbnail = it.thumbnail)
+            imageId = it.imageId,
+            priority = it.priority,
+            createTime = it.createTime)
     }
 }
 
 
-*//**
- * Convert Network results to database objects
- *//*
-fun NetworkVideoContainer.asDatabaseModel(): List<DatabaseVideo> {
-    return videos.map {
-        DatabaseVideo(
+/**
+ * convenience method: Convert Network results to database objects
+ */
+fun NetworkTaskContainer.asDatabaseModel(): List<TaskEntity> {
+    return tasks.map {
+        TaskEntity(
+            id = it.id,
             title = it.title,
-            description = it.description,
-            url = it.url,
-            updated = it.updated,
-            thumbnail = it.thumbnail)
+            imageId = it.imageId,
+            priority = it.priority,
+            createTime = it.createTime)
     }
 }
-*/

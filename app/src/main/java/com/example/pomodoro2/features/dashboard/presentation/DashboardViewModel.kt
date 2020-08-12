@@ -1,16 +1,26 @@
 package com.example.pomodoro2.features.dashboard.presentation
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pomodoro2.features.infra.network.Api
 import com.example.pomodoro2.features.infra.network.ApiConstants
+import com.example.pomodoro2.features.tasks.domain.Interactors
+import com.example.pomodoro2.framework.platform.BaseViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class DashboardViewModel : ViewModel() {
+class DashboardViewModel(application: Application, interactors: Interactors)
+: BaseViewModel(application, interactors) {
+
+    // singleton Retrofit service instance
+    val api = Api.create()
+    public val imgSrcUrl:String = ApiConstants.imgSrcUrl
+
+    // TODO: how to get the singleton repository here?
 
     /** Coroutine variables */
 
@@ -42,6 +52,44 @@ class DashboardViewModel : ViewModel() {
         viewModelJob.cancel()
     }
 
+    // Network Status
+    private val _status = MutableLiveData<Api.Companion.ApiStatus>()
+    val status: LiveData<Api.Companion.ApiStatus>
+        get() = _status
+
+    // TODO: change below event to SingleLiveEvent
+    /**
+     * Event triggered for network error. This is private to avoid exposing a
+     * way to set this value to observers.
+     */
+    private var _eventNetworkError = MutableLiveData<Boolean>(false)
+
+    /**
+     * Event triggered for network error. Views should use this to get access
+     * to the data.
+     */
+    val eventNetworkError: LiveData<Boolean>
+        get() = _eventNetworkError
+
+    /**
+     * Flag to display the error message. This is private to avoid exposing a
+     * way to set this value to observers.
+     */
+    private var _isNetworkErrorShown = MutableLiveData<Boolean>(false)
+
+    /**
+     * Flag to display the error message. Views should use this to get access
+     * to the data.
+     */
+    val isNetworkErrorShown: LiveData<Boolean>
+        get() = _isNetworkErrorShown
+
+    /**
+     * Resets the network error flag.
+     */
+    fun onNetworkErrorShown() {
+        _isNetworkErrorShown.value = true
+    }
 
     /**
      * LiveData for this viewModel
@@ -53,25 +101,16 @@ class DashboardViewModel : ViewModel() {
     // The external immutable LiveData for the response String
     val text: LiveData<String> = _text
 
-    // singleton Retrofit service instance
-    val api = Api.create()
-    public val imgSrcUrl:String = ApiConstants.imgSrcUrl
-
-    // Network Status
-    private val _status = MutableLiveData<Api.Companion.ApiStatus>()
-    val status: LiveData<Api.Companion.ApiStatus>
-        get() = _status
-
-
 
     /**
      * To initialize the projects variable as soon as possible
      */
     init {
-        initializeDomainEntities()
+        refreshDataFromNetwork() // this is used for test only
+        refreshDataFromRepository()
     }
 
-    private fun initializeDomainEntities() {
+    private fun refreshDataFromNetwork() {
 /*
         api.getProperties().enqueue(
             object : Callback<Contact> {
@@ -100,6 +139,26 @@ class DashboardViewModel : ViewModel() {
             }
         }
 
+    }
+
+    /**
+     * Refresh data from the repository. Use a coroutine launch to run in a
+     * background thread.
+     */
+    private fun refreshDataFromRepository() {
+/*        coroutineScope.launch {
+            try {
+                repository.refreshProjects()
+                _eventNetworkError.value = false
+                _isNetworkErrorShown.value = false
+
+            } catch (networkError: IOException) {
+                // Show a Toast error message and hide the progress bar.
+                if(projects.value.isNullOrEmpty()) {
+                    _eventNetworkError.value = true
+                }
+            }
+        }*/
     }
 
 

@@ -4,8 +4,8 @@ import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.pomodoro2.R
-import com.example.pomodoro2.features.projects.domain.Project
-import com.example.pomodoro2.features.projects.domain.asDatabaseEntity
+import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.framework.extension.asDatabaseEntity
 import org.junit.After
 import org.junit.Before
 
@@ -24,7 +24,7 @@ import java.io.IOException
 @RunWith(AndroidJUnit4::class)
 class AppDatabaseTest {
 
-    private lateinit var projectDAO: ProjectDAO
+    private lateinit var taskDAO: TaskDAO
     private lateinit var db: AppDatabase
 
     @Before
@@ -36,7 +36,7 @@ class AppDatabaseTest {
             // Allowing main thread queries, just for testing.
             .allowMainThreadQueries()
             .build()
-        projectDAO = db.projectDao
+        taskDAO = db.taskDao
     }
 
     @After
@@ -48,9 +48,14 @@ class AppDatabaseTest {
     @Test
     @Throws(Exception::class)
     fun insertAndGetProject() {
-        val project = Project(1L,"番茄工作", R.drawable.read_book,1)
-        projectDAO.insert(project.asDatabaseEntity())
-        val proj = projectDAO.getProjectById(1L)
+        val project = Task(
+            1L,
+            "番茄工作",
+            R.drawable.read_book,
+            1
+        )
+        taskDAO.insertTask(project.asDatabaseEntity())
+        val proj = taskDAO.getTaskById(1L)
         assertEquals("番茄工作", proj?.title)
         assertEquals(R.drawable.read_book, proj?.imageId)
         assertEquals(1, proj?.priority)

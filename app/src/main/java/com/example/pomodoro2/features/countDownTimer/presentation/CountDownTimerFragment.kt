@@ -8,7 +8,9 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
-import com.example.pomodoro2.core.platform.BaseFragment
+import com.example.pomodoro2.features.activities.presentation.ActivitiesViewModel
+import com.example.pomodoro2.framework.platform.BaseFragment
+import com.example.pomodoro2.framework.platform.MyViewModelFactory
 
 class CountDownTimerFragment : BaseFragment() {
 
@@ -24,7 +26,8 @@ class CountDownTimerFragment : BaseFragment() {
             savedInstanceState: Bundle?
     ): View {
         countDownTimerViewModel =
-                ViewModelProvider(this).get(CountDownTimerViewModel::class.java)
+            ViewModelProvider(this, MyViewModelFactory).get(CountDownTimerViewModel::class.java)
+
         val root = super.onCreateView(inflater, container, savedInstanceState)
         val textView: TextView = root.findViewById(R.id.text_timer)
         countDownTimerViewModel.text.observe(viewLifecycleOwner, Observer {

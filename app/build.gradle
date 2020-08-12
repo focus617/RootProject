@@ -51,6 +51,9 @@ android {
 dependencies {
     //1. Application dependencies
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(':core')
+
+    // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     // Android KTX

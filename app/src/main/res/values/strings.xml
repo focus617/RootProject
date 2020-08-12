@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Pomodoro</string>
-    <string name="title_project">Goals</string>
+    <string name="title_task">Goals</string>
     <string name="title_activities">Activities</string>
     <string name="title_timer">Timer</string>
     <string name="title_statistics">Statistics</string>
@@ -19,7 +19,7 @@
     <!-- RecyclerView -->
     <string name="icon_msg">Icon</string>
     <string name="item_removable">Drag  and Remove</string>
-    <string name="List_header_text_project">Tasks in Plan</string>
+    <string name="List_header_text_task">Tasks in Plan</string>
 
 <!--TODO: for initial debug&testing only, will remove in future    -->
     <string name="rules_text" translatable="false">Select the answer from the options given. Each time you get an answer correct, you advance to the next question.\n\nIf you get the answer wrong, your game ends! You can return to the title screen using up or back from within the game screen, and this will also end your game.</string>

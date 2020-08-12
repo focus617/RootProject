@@ -3,8 +3,8 @@ package com.example.pomodoro2.features.login.presentation
 import android.app.Application
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
-import com.example.pomodoro2.core.extension.getOrEmpty
-import com.example.pomodoro2.core.helper.SharedPreferenceHelper
+import com.example.pomodoro2.framework.extension.getOrEmpty
+import com.example.pomodoro2.framework.helper.SharedPreferenceHelper
 
 /**
  * ViewModel for the login screen.

@@ -1,15 +1,12 @@
 package com.example.pomodoro2.features.infra.network
 
 
-import com.example.pomodoro2.features.infra.database.Contact
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Deferred
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Path
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 
 /**
@@ -22,7 +19,7 @@ interface Api {
             Call<Contact>
 */
     /**
-     * Returns a Coroutine [Deferred] of [Contact] which can be fetched with await() if
+     * Returns a Coroutine [Deferred] of [NetworkContact] which can be fetched with await() if
      * in a Coroutine scope.
      * The @GET annotation indicates that the "person_object.json" endpoint will be requested with the GET
      * HTTP method
@@ -32,7 +29,7 @@ interface Api {
      */
     @GET("person_object.json")
     fun getPropertiesAsync():
-            Deferred<Contact>
+            Deferred<NetworkContact>
 
     companion object {
         // Network Status
