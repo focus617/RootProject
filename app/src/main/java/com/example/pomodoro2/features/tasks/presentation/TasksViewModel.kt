@@ -51,32 +51,6 @@ class TasksViewModel(application: Application, interactors: Interactors) :
     }
 
     /**
-     * Event triggered for network error. This is private to avoid exposing a
-     * way to set this value to observers.
-     */
-    private var _eventNetworkError = MutableLiveData<Boolean>(false)
-
-    /**
-     * Event triggered for network error. Views should use this to get access
-     * to the data.
-     */
-    val eventNetworkError: LiveData<Boolean>
-        get() = _eventNetworkError
-
-    /**
-     * Flag to display the error message. This is private to avoid exposing a
-     * way to set this value to observers.
-     */
-    private var _isNetworkErrorShown = MutableLiveData<Boolean>(false)
-
-    /**
-     * Flag to display the error message. Views should use this to get access
-     * to the data.
-     */
-    val isNetworkErrorShown: LiveData<Boolean>
-        get() = _isNetworkErrorShown
-
-    /**
      * Event for navigation to activity fragment.
      *
      * Trigger this singleLiveEvent by setting a new Event as a new value
@@ -163,22 +137,41 @@ class TasksViewModel(application: Application, interactors: Interactors) :
         uiScope.launch {
             try {
                 repository.refreshTasks()
-                _eventNetworkError.value = false
-                _isNetworkErrorShown.value = false
 
             } catch (networkError: IOException) {
                 // Show a Toast error message and hide the progress bar.
                 if(tasks.value.isNullOrEmpty()) {
-                    _eventNetworkError.value = true
+                    networkErrorStateChange(error = true)
                 }
             }
         }
     }
  */
+    /**
+     * Event triggered for network error. This is private to avoid exposing a
+     * way to set this value to observers.
+     */
+    private var _eventNetworkError :Boolean = false
+    /**
+     * Event triggered for network error. Views should use this to get access
+     * to the data.
+     */
+    private val _isNetworkErrorShown = MutableLiveData<SingleLiveEvent<Boolean>>()
+    val isNetworkErrorShown: LiveData<SingleLiveEvent<Boolean>> = _isNetworkErrorShown
 
+    private fun networkErrorStateChange(error: Boolean) {
+        _eventNetworkError = error
+        _isNetworkErrorShown.value = SingleLiveEvent(error)
+    }
+
+
+    /**
+     * Blow functions are used for testing purpose.
+     * */
 
     fun createTestData() {
         createDummyTasksForTesting()
+        // Maybe add more dummy data builder here.
     }
 
     fun clearTestData() {
