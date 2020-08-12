@@ -15,6 +15,8 @@ import com.example.pomodoro2.framework.platform.BaseFragment
 import com.example.pomodoro2.framework.platform.EventObserver
 import com.example.pomodoro2.databinding.FragmentTaskBinding
 import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.features.dashboard.presentation.DashboardViewModel
+import com.example.pomodoro2.framework.platform.MyViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 
 class TaskFragment : BaseFragment() {
@@ -68,14 +70,9 @@ class TaskFragment : BaseFragment() {
             inflater, layoutId(), container, false
         )
 
-        val application = requireNotNull(this.activity).application
-
-        // Create an instance of the ViewModel Factory.
-        val viewModelFactory = TasksViewModelFactory(application)
-
         // Get a reference to the ViewModel associated with this fragment.
         tasksViewModel =
-            ViewModelProvider(this, viewModelFactory).get(TasksViewModel::class.java)
+            ViewModelProvider(this, MyViewModelFactory).get(TasksViewModel::class.java)
 
         // To use the View Model with data binding, you have to explicitly
         // give the binding object a reference to it.

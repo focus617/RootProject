@@ -1,12 +1,13 @@
 package com.example.pomodoro2.features.activities.presentation
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pomodoro2.framework.platform.BaseViewModel
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
-import com.example.pomodoro2.features.infra.database.TaskDAO
 import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.features.tasks.domain.Interactors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -14,17 +15,13 @@ import kotlinx.coroutines.Job
 /**
  * ViewModel for the activitiesFragment.
  */
-// TODO:change ProjectDAO to ActivityDAO later
-class ActivitiesViewModel(
-    task: Task,
-    private val dataSource: TaskDAO
-    //private val getTasksUseCase: GetTasksUseCase
-) : BaseViewModel() {
+class ActivitiesViewModel(application: Application, interactors: Interactors)
+    : BaseViewModel(application, interactors) {
 
     /**
      * Hold a reference to AppDatabase via its ActivityDatabaseDao.
      */
-    val database = dataSource
+    //val database = dataSource
 
     /** Coroutine variables */
 
@@ -84,8 +81,8 @@ class ActivitiesViewModel(
     val text: LiveData<String> = _text
 
 
-    // Initialize the _selectedProperty MutableLiveData
-    init {
+    // Initialize the _selectedTask MutableLiveData
+    fun setSelectedTask(task: Task) {
         _selectedProject.value = task
         _text.value = selectedTask.value?.title
     }

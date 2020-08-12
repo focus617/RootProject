@@ -11,6 +11,7 @@ import com.example.pomodoro2.R
 import com.example.pomodoro2.framework.platform.BaseFragment
 import com.example.pomodoro2.databinding.FragmentActivityBinding
 import com.example.pomodoro2.features.infra.database.AppDatabase
+import com.example.pomodoro2.framework.platform.MyViewModelFactory
 import kotlinx.android.synthetic.main.fragment_activity.*
 
 class ActivityFragment : BaseFragment() {
@@ -40,17 +41,11 @@ class ActivityFragment : BaseFragment() {
         val binding: FragmentActivityBinding = DataBindingUtil.inflate(
             inflater, layoutId(), container, false)
 
-        val application = requireNotNull(this.activity).application
         val arguments = ActivityFragmentArgs.fromBundle(requireArguments())
-
-        // Create an instance of the ViewModel Factory.
-        // TODO:change ProjectDAO to ActivityDAO later
-        val dataSource = AppDatabase.getInstance(application).taskDao
-        val viewModelFactory = ActivitiesViewModelFactory(arguments.task, dataSource)
 
         // Get a reference to the ViewModel associated with this fragment.
         val activitiesViewModel =
-            ViewModelProvider(this, viewModelFactory).get(ActivitiesViewModel::class.java)
+            ViewModelProvider(this, MyViewModelFactory).get(ActivitiesViewModel::class.java)
 
         // To use the View Model with data binding, you have to explicitly
         // give the binding object a reference to it.

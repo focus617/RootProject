@@ -9,15 +9,17 @@ import com.example.pomodoro2.R
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
 import com.example.pomodoro2.features.infra.repository.AppRepository
 import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.features.tasks.domain.Interactors
 import com.example.pomodoro2.framework.extension.asDatabaseEntity
+import com.example.pomodoro2.framework.platform.BaseViewModel
 import kotlinx.coroutines.*
 import java.io.IOException
 
 /**
  * ViewModel for TaskFragment.
  */
-class TasksViewModel(application: Application) :
-    AndroidViewModel(application) {
+class TasksViewModel(application: Application, interactors: Interactors) :
+    BaseViewModel(application, interactors) {
 
     private var _application: Application = application
 

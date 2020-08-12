@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
 import com.example.pomodoro2.framework.platform.BaseFragment
 import com.example.pomodoro2.databinding.FragmentDashboardBinding
+import com.example.pomodoro2.features.countDownTimer.presentation.CountDownTimerViewModel
+import com.example.pomodoro2.framework.platform.MyViewModelFactory
 
 class DashboardFragment : BaseFragment() {
 
@@ -31,13 +33,9 @@ class DashboardFragment : BaseFragment() {
             inflater, layoutId(), container, false
         )
 
-        // Create an instance of the ViewModel Factory.
-        val application = requireNotNull(this.activity).application
-        val viewModelFactory = DashboardViewModelFactory(application)
-
         // Get a reference to the ViewModel associated with this fragment.
         dashboardViewModel =
-            ViewModelProvider(this, viewModelFactory).get(DashboardViewModel::class.java)
+            ViewModelProvider(this, MyViewModelFactory).get(DashboardViewModel::class.java)
 
         // To use the View Model with data binding, you have to explicitly
         // give the binding object a reference to it.
