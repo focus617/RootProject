@@ -12,6 +12,8 @@ class TaskRepository(
 
     suspend fun removeTask(task: Task) = taskDataSource.remove(task)
 
+    suspend fun removeAllTask() = taskDataSource.removeAll()
+
     fun setSelectedTask(task: Task) = selectedTaskDataSource.setSelectedTask(task)
 
     fun getSelectedTask() = selectedTaskDataSource.getSelectedTask()

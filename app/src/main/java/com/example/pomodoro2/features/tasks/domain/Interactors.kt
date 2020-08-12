@@ -6,6 +6,7 @@ data class Interactors(
     val addTask: AddTask,
     val removeTask: RemoveTask,
     val getTasks: GetTasks,
+    val removeAllTask: RemoveAllTask,
     val getSelectedTask: GetSelectedTask,
-    val selectedTask: GetSelectedTask
+    val setSelectedTask: SetSelectedTask
 )

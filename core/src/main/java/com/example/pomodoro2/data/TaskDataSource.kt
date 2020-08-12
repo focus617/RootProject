@@ -9,4 +9,6 @@ interface TaskDataSource {
     suspend fun getAll(): List<Task>
 
     suspend fun remove(task: Task)
+
+    suspend fun removeAll()
 }

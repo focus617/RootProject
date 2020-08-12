@@ -12,19 +12,18 @@ class RoomTaskDataSource(val context: Context) : TaskDataSource {
     private val taskDao = AppDatabase.getInstance(context.applicationContext).taskDao
 
     override suspend fun add(task: Task){
-        withContext(Dispatchers.IO) {
-            taskDao.insertTask(task.asDatabaseEntity())
-        }
+        taskDao.insertTask(task.asDatabaseEntity())
     }
 
-    override suspend fun getAll(): List<Task> {
-        return taskDao.getAllTasksLive().value!!.asDomainModel()
-    }
+    override suspend fun getAll(): List<Task> = taskDao.getTasks().asDomainModel()
 
     override suspend fun remove(task: Task){
-        withContext(Dispatchers.IO) {
-            taskDao.removeTask(task.asDatabaseEntity())
-        }
+        taskDao.removeTask(task.asDatabaseEntity())
     }
+
+    override suspend fun removeAll() {
+        taskDao.clearTaskTable()
+    }
+
 
 }

@@ -72,7 +72,11 @@ class ActivitiesViewModel(application: Application, interactors: Interactors)
     val selectedTask: LiveData<Task>
         get() = _selectedProject
 
-
+    // Initialize the _selectedTask MutableLiveData
+    fun setSelectedTask(task: Task) {
+        _selectedProject.value = task
+        _text.value = selectedTask.value?.title
+    }
 
     // TODO: remove in future
     private val _text = MutableLiveData<String>().apply {
@@ -81,9 +85,5 @@ class ActivitiesViewModel(application: Application, interactors: Interactors)
     val text: LiveData<String> = _text
 
 
-    // Initialize the _selectedTask MutableLiveData
-    fun setSelectedTask(task: Task) {
-        _selectedProject.value = task
-        _text.value = selectedTask.value?.title
-    }
+
 }

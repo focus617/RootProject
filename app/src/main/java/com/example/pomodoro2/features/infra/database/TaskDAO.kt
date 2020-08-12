@@ -45,10 +45,9 @@ interface TaskDAO {
     @Query("SELECT * FROM TASK_TABLE WHERE Id = :id")
     fun getTaskById(id: Long): TaskEntity?
 
-/*
+
     @Query("SELECT * FROM TASK_TABLE ORDER BY priority")
     fun getTasks(): List<TaskEntity>
-*/
 
     /**
      * Selects and returns all rows in the table,

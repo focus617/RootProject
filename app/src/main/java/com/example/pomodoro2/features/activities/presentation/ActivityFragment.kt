@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
 import com.example.pomodoro2.framework.platform.BaseFragment
 import com.example.pomodoro2.databinding.FragmentActivityBinding
-import com.example.pomodoro2.features.infra.database.AppDatabase
 import com.example.pomodoro2.framework.platform.MyViewModelFactory
 import kotlinx.android.synthetic.main.fragment_activity.*
 
@@ -42,6 +41,7 @@ class ActivityFragment : BaseFragment() {
             inflater, layoutId(), container, false)
 
         val arguments = ActivityFragmentArgs.fromBundle(requireArguments())
+        val currentTask = arguments.task
 
         // Get a reference to the ViewModel associated with this fragment.
         val activitiesViewModel =
@@ -57,6 +57,8 @@ class ActivityFragment : BaseFragment() {
         activitiesViewModel.text.observe(viewLifecycleOwner, Observer {
             text_activity.text = it
         })
+
+        activitiesViewModel.setSelectedTask(currentTask)
 
         return binding.root
     }

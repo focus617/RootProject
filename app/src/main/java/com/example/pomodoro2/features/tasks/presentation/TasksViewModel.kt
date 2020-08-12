@@ -1,19 +1,15 @@
 package com.example.pomodoro2.features.tasks.presentation
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pomodoro2.R
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
-import com.example.pomodoro2.features.infra.repository.AppRepository
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.features.tasks.domain.Interactors
-import com.example.pomodoro2.framework.extension.asDatabaseEntity
 import com.example.pomodoro2.framework.platform.BaseViewModel
 import kotlinx.coroutines.*
-import java.io.IOException
 
 /**
  * ViewModel for TaskFragment.
@@ -23,10 +19,6 @@ class TasksViewModel(application: Application, interactors: Interactors) :
 
     private var _application: Application = application
 
-    /**
-     * The data source this ViewModel will fetch results from.
-     */
-    private val repository = AppRepository(_application)
 
     /** Coroutine variables */
 
@@ -129,20 +121,45 @@ class TasksViewModel(application: Application, interactors: Interactors) :
      * LiveData for this viewModel
      */
     // Task list displayed on the screen
-    var tasks : LiveData<List<Task>> = repository.taskListLive
+    private val _tasks: MutableLiveData<List<Task>> = MutableLiveData()
+    val tasks : LiveData<List<Task>> = _tasks
+
+    fun loadTasks() {
+        GlobalScope.launch {
+            _tasks.postValue(interactors.getTasks())
+        }
+    }
+
+    fun addTask(task: Task) {
+        GlobalScope.launch {
+            withContext(Dispatchers.IO) {
+                interactors.addTask(task)
+            }
+
+            loadTasks()
+        }
+    }
+
+    fun setSelectedTask(task: Task) {
+        interactors.setSelectedTask(task)
+    }
+
 
     /**
      * To initialize the tasks variable as soon as possible
      */
     init {
-        refreshDataFromRepository()
+        refreshCacheFromRemote()
+        loadTasks()
     }
 
     /**
      * Refresh data from the repository. Use a coroutine launch to run in a
      * background thread.
      */
-    private fun refreshDataFromRepository() {
+    private fun refreshCacheFromRemote() {}
+/*
+    private fun refreshCacheFromRemote() {
         uiScope.launch {
             try {
                 repository.refreshTasks()
@@ -157,6 +174,7 @@ class TasksViewModel(application: Application, interactors: Interactors) :
             }
         }
     }
+ */
 
 
     fun createTestData() {
@@ -200,16 +218,14 @@ class TasksViewModel(application: Application, interactors: Interactors) :
 
         // Create some sample Tasks and insert them into database.
         for ((index, element) in images.withIndex()) {
-            uiScope.launch {
-                // Create a new Task , which captures the current time,
-                // then insert it into the database.
-                val task = Task(
-                    title = titles[index],
-                    imageId = element,
-                    priority = index + 1
-                )
-                repository.insertTask(task.asDatabaseEntity())
-            }
+            // Create a new Task , which captures the current time,
+            // then insert it into the database.
+            val task = Task(
+                title = titles[index],
+                imageId = element,
+                priority = index + 1
+            )
+            addTask(task)
         }
     }
 
@@ -217,9 +233,10 @@ class TasksViewModel(application: Application, interactors: Interactors) :
      * UseCase: Clear the dummy Task list created for testing purpose
      */
     private fun clearDummyTasksForTesting() {
-        uiScope.launch {
+        GlobalScope.launch {
             // Clear the database table.
-            repository.clearTaskTable()
+            interactors.removeAllTask()
+            loadTasks()
         }
     }
 

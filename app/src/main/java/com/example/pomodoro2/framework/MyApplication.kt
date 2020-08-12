@@ -6,10 +6,7 @@ import com.example.pomodoro2.features.infra.database.InMemorySelectedTaskDataSou
 import com.example.pomodoro2.features.infra.database.RoomTaskDataSource
 import com.example.pomodoro2.features.tasks.domain.Interactors
 import com.example.pomodoro2.framework.platform.MyViewModelFactory
-import com.example.pomodoro2.interactors.AddTask
-import com.example.pomodoro2.interactors.GetSelectedTask
-import com.example.pomodoro2.interactors.GetTasks
-import com.example.pomodoro2.interactors.RemoveTask
+import com.example.pomodoro2.interactors.*
 import timber.log.Timber
 
 class MyApplication : Application() {
@@ -29,8 +26,9 @@ class MyApplication : Application() {
                 AddTask(taskRepository),
                 RemoveTask(taskRepository),
                 GetTasks(taskRepository),
+                RemoveAllTask(taskRepository),
                 GetSelectedTask(taskRepository),
-                GetSelectedTask(taskRepository)
+                SetSelectedTask(taskRepository)
             )
         )
     }
