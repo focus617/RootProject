@@ -17,4 +17,6 @@ interface ActivityDao {
     @Delete
     suspend fun removeActivity(activity: ActivityEntity)
 
+    @Query("DELETE FROM ACTIVITY_TABLE")
+    suspend fun clearActivityTable()
 }

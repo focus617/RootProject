@@ -18,7 +18,7 @@ fun Task.asDatabaseEntity(): TaskEntity {
         )
 }
 
-fun Activity.asDomainModel(): ActivityEntity {
+fun Activity.asDatabaseEntity(): ActivityEntity {
     return ActivityEntity(
             id = this.id,
             title = this.title,

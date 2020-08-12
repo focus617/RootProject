@@ -10,11 +10,11 @@ import com.example.pomodoro2.framework.extension.asDatabaseEntity
 
 object TaskConstants{
     val titles = arrayOf(
-        "1. 点击右下方加号新建任务",
-        "2. 点击左侧方框完成任务",
-        "3. 点击任务卡片，进入番茄工作时间",
-        "4. 左滑屏幕进行设置",
-        "5. 查看统计总结过去",
+        "点击右下方加号新建任务",
+        "点击左侧方框完成任务",
+        "点击任务卡片，进入番茄工作时间",
+        "左滑屏幕进行设置",
+        "查看统计总结过去",
         "读书",
         "锻炼身体",
         "学习Android开发",

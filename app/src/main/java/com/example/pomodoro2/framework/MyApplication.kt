@@ -1,8 +1,10 @@
 package com.example.pomodoro2.framework
 
 import android.app.Application
+import com.example.pomodoro2.data.ActivityRepository
 import com.example.pomodoro2.data.TaskRepository
-import com.example.pomodoro2.features.infra.memory.InMemoryTaskDataSource
+import com.example.pomodoro2.features.infra.database.RoomActivityDataSource
+import com.example.pomodoro2.features.infra.memory.InMemoryDataSource
 import com.example.pomodoro2.features.infra.database.RoomTaskDataSource
 import com.example.pomodoro2.features.tasks.domain.Interactors
 import com.example.pomodoro2.framework.platform.MyViewModelFactory
@@ -15,9 +17,16 @@ class MyApplication : Application() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
 
+        val inMemoryDataSource = InMemoryDataSource()
+
         val taskRepository = TaskRepository(
             RoomTaskDataSource(this),
-            InMemoryTaskDataSource()
+            inMemoryDataSource
+        )
+
+        val activityRepository = ActivityRepository(
+            RoomActivityDataSource(this),
+            inMemoryDataSource
         )
 
         MyViewModelFactory.inject(

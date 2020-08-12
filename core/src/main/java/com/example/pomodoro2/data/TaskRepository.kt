@@ -4,7 +4,7 @@ import com.example.pomodoro2.domain.Task
 
 class TaskRepository(
     private val taskDataSource: TaskDataSource,
-    private val inMemoryTaskDataSource: InMemoryTaskDataSource) {
+    private val inMemoryDataSource: InMemoryDataSource) {
 
     suspend fun addTask(task: Task) = taskDataSource.add(task)
 
@@ -14,9 +14,9 @@ class TaskRepository(
 
     suspend fun removeAllTask() = taskDataSource.removeAll()
 
-    fun setSelectedTask(task: Task) = inMemoryTaskDataSource.setSelectedTask(task)
+    fun setSelectedTask(task: Task) = inMemoryDataSource.setSelectedTask(task)
 
-    fun getSelectedTask() = inMemoryTaskDataSource.getSelectedTask()
+    fun getSelectedTask() = inMemoryDataSource.getSelectedTask()
 
     suspend fun initializeStartingTasks() = taskDataSource.initializeTutorialTasks()
 
