@@ -11,4 +11,7 @@ interface TaskDataSource {
     suspend fun remove(task: Task)
 
     suspend fun removeAll()
+
+    suspend fun initializeTutorialTasks()
+
 }

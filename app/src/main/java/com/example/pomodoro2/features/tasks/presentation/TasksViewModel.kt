@@ -40,6 +40,14 @@ class TasksViewModel(application: Application, interactors: Interactors) :
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     /**
+     * To initialize the tasks variable as soon as possible
+     */
+    init {
+        refreshCacheFromRemote()
+        loadTasks()
+    }
+
+    /**
      * Called when the ViewModel is dismantled.
      * At this point, we want to cancel all coroutines;
      * otherwise we end up with processes that have nowhere to return to
@@ -49,6 +57,7 @@ class TasksViewModel(application: Application, interactors: Interactors) :
         super.onCleared()
         viewModelJob.cancel()
     }
+
 
     /**
      * Event for navigation to activity fragment.
@@ -88,6 +97,7 @@ class TasksViewModel(application: Application, interactors: Interactors) :
      */
     fun onTaskClicked(task: Task){
         showInSnackBar("Start Task(${task.title})")
+        setSelectedTask(task)
         doNavigating(task)
     }
 
@@ -110,6 +120,7 @@ class TasksViewModel(application: Application, interactors: Interactors) :
                 interactors.addTask(task)
             }
 
+            // Refresh view model
             loadTasks()
         }
     }
@@ -118,14 +129,32 @@ class TasksViewModel(application: Application, interactors: Interactors) :
         interactors.setSelectedTask(task)
     }
 
+    /**
+     * UseCase: Clear the Task Table, used for testing purpose
+     */
+    fun clearTaskTable() {
+        GlobalScope.launch {
+            // Clear the database table.
+            interactors.removeAllTask()
+
+            // Refresh view model
+            loadTasks()
+        }
+    }
 
     /**
-     * To initialize the tasks variable as soon as possible
+     * UseCase: Create tutorial tasks
      */
-    init {
-        refreshCacheFromRemote()
-        loadTasks()
+    fun initializeTutorialTasks() {
+        GlobalScope.launch {
+            interactors.initStartingTasks()
+
+            // Refresh view model
+            loadTasks()
+        }
     }
+
+
 
     /**
      * Refresh data from the repository. Use a coroutine launch to run in a
@@ -137,7 +166,7 @@ class TasksViewModel(application: Application, interactors: Interactors) :
         uiScope.launch {
             try {
                 repository.refreshTasks()
-
+                networkErrorStateChange(error = false)
             } catch (networkError: IOException) {
                 // Show a Toast error message and hide the progress bar.
                 if(tasks.value.isNullOrEmpty()) {
@@ -147,90 +176,30 @@ class TasksViewModel(application: Application, interactors: Interactors) :
         }
     }
  */
+
     /**
-     * Event triggered for network error. This is private to avoid exposing a
-     * way to set this value to observers.
+     * Event triggered for network error.
      */
-    private var _eventNetworkError :Boolean = false
-    /**
-     * Event triggered for network error. Views should use this to get access
-     * to the data.
-     */
-    private val _isNetworkErrorShown = MutableLiveData<SingleLiveEvent<Boolean>>()
-    val isNetworkErrorShown: LiveData<SingleLiveEvent<Boolean>> = _isNetworkErrorShown
+    private val _eventNetworkError = MutableLiveData<SingleLiveEvent<Boolean>>()
+    val eventNetworkError: LiveData<SingleLiveEvent<Boolean>> = _eventNetworkError
 
     private fun networkErrorStateChange(error: Boolean) {
-        _eventNetworkError = error
-        _isNetworkErrorShown.value = SingleLiveEvent(error)
+        _eventNetworkError.value = SingleLiveEvent(error)
     }
 
 
     /**
      * Blow functions are used for testing purpose.
-     * */
+     */
 
     fun createTestData() {
-        createDummyTasksForTesting()
+        initializeTutorialTasks()
         // Maybe add more dummy data builder here.
     }
 
     fun clearTestData() {
-        clearDummyTasksForTesting()
-    }
-
-
-    /**
-     * UseCase: Create dummy task list for testing purpose
-     */
-    private fun createDummyTasksForTesting() {
-        val titles = arrayOf(
-            "读书",
-            "锻炼身体",
-            "学习Android开发",
-            "冥想",
-            "工作",
-            "读书",
-            "锻炼身体",
-            "学习Android开发",
-            "冥想",
-            "工作"
-        )
-
-        val images = intArrayOf(
-            R.drawable.read_book,
-            R.drawable.exercise,
-            R.drawable.study,
-            R.drawable.thinking,
-            R.drawable.work,
-            R.drawable.read_book,
-            R.drawable.exercise,
-            R.drawable.study,
-            R.drawable.thinking,
-            R.drawable.work
-        )
-
-        // Create some sample Tasks and insert them into database.
-        for ((index, element) in images.withIndex()) {
-            // Create a new Task , which captures the current time,
-            // then insert it into the database.
-            val task = Task(
-                title = titles[index],
-                imageId = element,
-                priority = index + 1
-            )
-            addTask(task)
-        }
-    }
-
-    /**
-     * UseCase: Clear the dummy Task list created for testing purpose
-     */
-    private fun clearDummyTasksForTesting() {
-        GlobalScope.launch {
-            // Clear the database table.
-            interactors.removeAllTask()
-            loadTasks()
-        }
+        clearTaskTable()
+        // Maybe add more dummy data cleaner here.
     }
 
     /**

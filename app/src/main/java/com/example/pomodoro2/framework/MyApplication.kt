@@ -2,7 +2,7 @@ package com.example.pomodoro2.framework
 
 import android.app.Application
 import com.example.pomodoro2.data.TaskRepository
-import com.example.pomodoro2.features.infra.database.InMemorySelectedTaskDataSource
+import com.example.pomodoro2.features.infra.database.InMemoryTaskDataSource
 import com.example.pomodoro2.features.infra.database.RoomTaskDataSource
 import com.example.pomodoro2.features.tasks.domain.Interactors
 import com.example.pomodoro2.framework.platform.MyViewModelFactory
@@ -17,7 +17,7 @@ class MyApplication : Application() {
 
         val taskRepository = TaskRepository(
             RoomTaskDataSource(this),
-            InMemorySelectedTaskDataSource()
+            InMemoryTaskDataSource()
         )
 
         MyViewModelFactory.inject(
@@ -28,7 +28,8 @@ class MyApplication : Application() {
                 GetTasks(taskRepository),
                 RemoveAllTask(taskRepository),
                 GetSelectedTask(taskRepository),
-                SetSelectedTask(taskRepository)
+                SetSelectedTask(taskRepository),
+                InitializeStartingTasks(taskRepository)
             )
         )
     }
