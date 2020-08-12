@@ -22,7 +22,7 @@ abstract class AppDatabase : RoomDatabase() {
     /**
      * Connects the database to the DAO.
      */
-    abstract val taskDao: TaskDAO
+    abstract val taskDao: TaskDao
 
     /**
      * Define a companion object, this allows us to add functions on the Entities class.

@@ -4,16 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 
 /**
- * Defines Database Access Object and methods for using the DatabaseTask class with Room.
+ * Defines Database Access Object and methods for using the TaskEntity class with Room.
  */
 @Dao
-interface TaskDAO {
+interface TaskDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTask(vararg taskEntity: TaskEntity?)
+    suspend fun insertTask(taskEntity: TaskEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTasks(taskEntities: List<TaskEntity>)
+    suspend fun insertTasks(taskEntities: List<TaskEntity>)
 
     /**
      * When updating a row with a value already set in a column,
@@ -22,11 +22,11 @@ interface TaskDAO {
      * @param Tasks new value to write
      */
     @Update
-    fun updateTask(vararg taskEntities: TaskEntity?)
+    suspend fun updateTask(taskEntity: TaskEntity)
 
 
     @Delete
-    fun removeTask(vararg taskEntities: TaskEntity?)
+    suspend fun removeTask(taskEntity: TaskEntity)
 
    /**
      * Deletes all values from the table.
@@ -35,7 +35,7 @@ interface TaskDAO {
      */
    // TODO: check why Query, not Delete?
     @Query("DELETE FROM TASK_TABLE")
-    fun clearTaskTable()
+    suspend fun clearTaskTable()
 
     /**
      * Selects and returns the row that matches the key.
@@ -43,11 +43,11 @@ interface TaskDAO {
      * @param id key of row to match
      */
     @Query("SELECT * FROM TASK_TABLE WHERE Id = :id")
-    fun getTaskById(id: Long): TaskEntity?
+    suspend fun getTaskById(id: Long): TaskEntity?
 
 
     @Query("SELECT * FROM TASK_TABLE ORDER BY priority")
-    fun getTasks(): List<TaskEntity>
+    suspend fun getTasks(): List<TaskEntity>
 
     /**
      * Selects and returns all rows in the table,

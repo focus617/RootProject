@@ -2,7 +2,7 @@ package com.example.pomodoro2.framework
 
 import android.app.Application
 import com.example.pomodoro2.data.TaskRepository
-import com.example.pomodoro2.features.infra.database.InMemoryTaskDataSource
+import com.example.pomodoro2.features.infra.memory.InMemoryTaskDataSource
 import com.example.pomodoro2.features.infra.database.RoomTaskDataSource
 import com.example.pomodoro2.features.tasks.domain.Interactors
 import com.example.pomodoro2.framework.platform.MyViewModelFactory
