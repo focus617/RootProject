@@ -1,4 +1,4 @@
-package com.example.pomodoro2.framework.exception
+package com.example.pomodoro2.platform.exception
 
 /**
  * Base Class for handling errors/failures/exceptions.

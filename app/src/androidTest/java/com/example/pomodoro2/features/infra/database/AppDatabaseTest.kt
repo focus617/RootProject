@@ -54,7 +54,7 @@ class AppDatabaseTest {
             R.drawable.read_book,
             1
         )
-        taskDAO.insert(project.asDatabaseEntity())
+        taskDAO.insertTask(project.asDatabaseEntity())
         val proj = taskDAO.getTaskById(1L)
         assertEquals("番茄工作", proj?.title)
         assertEquals(R.drawable.read_book, proj?.imageId)

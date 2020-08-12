@@ -1,4 +1,4 @@
-package com.example.pomodoro2
+package com.example.pomodoro2.framework
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.example.pomodoro2.R
 import com.example.pomodoro2.databinding.ActivityMainBinding
 import com.example.pomodoro2.databinding.NavHeaderBinding
 import com.example.pomodoro2.features.login.presentation.UserProfileViewModel
@@ -37,7 +38,9 @@ class MainActivity : AppCompatActivity() {
     private fun setupDataBinding() {
 
         activityMainBinding =
-            DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+            DataBindingUtil.setContentView<ActivityMainBinding>(this,
+                R.layout.activity_main
+            )
 
         // TODO: check how to improve below unnecessary remove?
         var view = activityMainBinding.drawerNavigationView.getHeaderView(0)
@@ -61,7 +64,9 @@ class MainActivity : AppCompatActivity() {
             // menu should be considered as top level destinations.
             AppBarConfiguration(
                 topLevelDestinationIds = setOf(
-                    R.id.navigation_task, R.id.navigation_timer, R.id.navigation_statistics
+                    R.id.navigation_task,
+                    R.id.navigation_timer,
+                    R.id.navigation_statistics
                 )
             )
         }

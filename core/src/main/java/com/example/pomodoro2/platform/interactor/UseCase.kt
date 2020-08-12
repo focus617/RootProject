@@ -1,7 +1,7 @@
-package com.example.pomodoro2.framework.interactor
+package com.example.pomodoro2.platform.interactor
 
-import com.example.pomodoro2.framework.exception.Failure
-import com.example.pomodoro2.framework.functional.Either
+import com.example.pomodoro2.platform.exception.Failure
+import com.example.pomodoro2.platform.functional.Either
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async

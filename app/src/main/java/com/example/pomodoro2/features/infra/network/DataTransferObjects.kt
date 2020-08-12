@@ -1,7 +1,7 @@
 package com.example.pomodoro2.features.infra.network
 
 import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.features.infra.database.DatabaseTask
+import com.example.pomodoro2.features.infra.database.TaskEntity
 import com.squareup.moshi.JsonClass
 
 /**
@@ -70,9 +70,9 @@ fun NetworkTaskContainer.asDomainModel(): List<Task> {
 /**
  * convenience method: Convert Network results to database objects
  */
-fun NetworkTaskContainer.asDatabaseModel(): List<DatabaseTask> {
+fun NetworkTaskContainer.asDatabaseModel(): List<TaskEntity> {
     return tasks.map {
-        DatabaseTask(
+        TaskEntity(
             id = it.id,
             title = it.title,
             imageId = it.imageId,

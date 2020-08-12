@@ -74,31 +74,31 @@ public class AppRepository(context: Context) {
      * and has nothing to do with the UI.
      *
      **/
-    suspend fun getTaskFromDatabase(id: Long): DatabaseTask? {
+    suspend fun getTaskFromDatabase(id: Long): TaskEntity? {
         return withContext(Dispatchers.IO) {
             db.taskDao.getTaskById(id)
         }
     }
 
-    suspend fun getTasksFromDatabase(): LiveData<List<DatabaseTask>> {
+    suspend fun getTasksFromDatabase(): LiveData<List<TaskEntity>> {
         return db.taskDao.getAllTasksLive()
     }
 
-    suspend fun insertTask(task: DatabaseTask) {
+    suspend fun insertTask(taskEntity: TaskEntity) {
         withContext(Dispatchers.IO) {
-            db.taskDao.insert(task)
+            db.taskDao.insertTask(taskEntity)
         }
     }
 
-    suspend fun updateTask(task: DatabaseTask) {
+    suspend fun updateTask(taskEntity: TaskEntity) {
         withContext(Dispatchers.IO) {
-            db.taskDao.update(task)
+            db.taskDao.updateTask(taskEntity)
         }
     }
 
     suspend fun clearTaskTable() {
         withContext(Dispatchers.IO) {
-            db.taskDao.clear()
+            db.taskDao.clearTaskTable()
         }
     }
 }

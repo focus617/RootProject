@@ -4,15 +4,15 @@ import com.example.pomodoro2.domain.Task
 
 class TaskRepository(
     private val taskDataSource: TaskDataSource,
-    private val openTaskDataSource: OpenTaskDataSource) {
+    private val selectedTaskDataSource: SelectedTaskDataSource) {
 
     suspend fun addTask(task: Task) = taskDataSource.add(task)
 
-    suspend fun getTasks() = taskDataSource.readAll()
+    suspend fun getTasks() = taskDataSource.getAll()
 
     suspend fun removeTask(task: Task) = taskDataSource.remove(task)
 
-    fun setOpenTask(task: Task) = openTaskDataSource.setOpenTask(task)
+    fun setSelectedTask(task: Task) = selectedTaskDataSource.setSelectedTask(task)
 
-    fun getOpenTask() = openTaskDataSource.getOpenTask()
+    fun getSelectedTask() = selectedTaskDataSource.getSelectedTask()
 }

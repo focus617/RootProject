@@ -3,7 +3,7 @@ package com.example.pomodoro2.framework.platform
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.pomodoro2.framework.exception.Failure
+import com.example.pomodoro2.platform.exception.Failure
 
 /**
  * Base ViewModel class with default Failure handling.

@@ -1,13 +1,13 @@
 package com.example.pomodoro2.framework.extension
 
 import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.features.infra.database.DatabaseTask
+import com.example.pomodoro2.features.infra.database.TaskEntity
 
 /**
  * Map domain entity to DatabaseObject
  */
-fun Task.asDatabaseEntity(): DatabaseTask {
-    return DatabaseTask(
+fun Task.asDatabaseEntity(): TaskEntity {
+    return TaskEntity(
             id = this.id,
             title = this.title,
             imageId = this.imageId,

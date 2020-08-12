@@ -10,7 +10,7 @@ import com.example.pomodoro2.domain.Task
  * 表示任务（目标）的数据类，用来存储创建的任务项目，并提供给TaskFragment
  */
 @Entity(tableName = "TASK_TABLE")
-data class DatabaseTask(
+data class TaskEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0L,
 
@@ -32,7 +32,7 @@ data class DatabaseTask(
 /**
  * Map DatabaseVideos to domain entities
  */
-fun List<DatabaseTask>.asDomainModel(): List<Task> {
+fun List<TaskEntity>.asDomainModel(): List<Task> {
     return map {
         Task(
             id = it.id,

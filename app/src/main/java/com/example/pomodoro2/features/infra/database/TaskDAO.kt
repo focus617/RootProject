@@ -8,11 +8,12 @@ import androidx.room.*
  */
 @Dao
 interface TaskDAO {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(vararg task: DatabaseTask?)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(tasks: List<DatabaseTask>)
+    fun insertTask(vararg taskEntity: TaskEntity?)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTasks(taskEntities: List<TaskEntity>)
 
     /**
      * When updating a row with a value already set in a column,
@@ -21,10 +22,11 @@ interface TaskDAO {
      * @param Tasks new value to write
      */
     @Update
-    fun update(vararg tasks: DatabaseTask?)
+    fun updateTask(vararg taskEntities: TaskEntity?)
+
 
     @Delete
-    fun deleteTask(vararg tasks: DatabaseTask?)
+    fun removeTask(vararg taskEntities: TaskEntity?)
 
    /**
      * Deletes all values from the table.
@@ -33,7 +35,7 @@ interface TaskDAO {
      */
    // TODO: check why Query, not Delete?
     @Query("DELETE FROM TASK_TABLE")
-    fun clear()
+    fun clearTaskTable()
 
     /**
      * Selects and returns the row that matches the key.
@@ -41,7 +43,12 @@ interface TaskDAO {
      * @param id key of row to match
      */
     @Query("SELECT * FROM TASK_TABLE WHERE Id = :id")
-    fun getTaskById(id: Long): DatabaseTask?
+    fun getTaskById(id: Long): TaskEntity?
+
+/*
+    @Query("SELECT * FROM TASK_TABLE ORDER BY priority")
+    fun getTasks(): List<TaskEntity>
+*/
 
     /**
      * Selects and returns all rows in the table,
@@ -50,5 +57,5 @@ interface TaskDAO {
      * sorted by priority in ascending order.
      */
     @Query("SELECT * FROM TASK_TABLE ORDER BY priority")
-    fun getAllTasksLive(): LiveData<List<DatabaseTask>>
+    fun getAllTasksLive(): LiveData<List<TaskEntity>>
 }

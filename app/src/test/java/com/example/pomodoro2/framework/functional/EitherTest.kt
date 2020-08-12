@@ -16,8 +16,10 @@
 package com.example.pomodoro2.framework.functional
 
 import com.example.pomodoro2.UnitTest
-import com.example.pomodoro2.framework.functional.Either.Left
-import com.example.pomodoro2.framework.functional.Either.Right
+import com.example.pomodoro2.platform.functional.Either
+import com.example.pomodoro2.platform.functional.Either.Left
+import com.example.pomodoro2.platform.functional.Either.Right
+import com.example.pomodoro2.platform.functional.getOrElse
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldEqualTo

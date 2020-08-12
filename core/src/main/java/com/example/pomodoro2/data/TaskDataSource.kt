@@ -6,7 +6,7 @@ interface TaskDataSource {
 
     suspend fun add(task: Task)
 
-    suspend fun readAll(): List<Task>
+    suspend fun getAll(): List<Task>
 
     suspend fun remove(task: Task)
 }

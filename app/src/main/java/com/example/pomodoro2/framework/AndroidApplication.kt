@@ -1,4 +1,4 @@
-package com.example.pomodoro2
+package com.example.pomodoro2.framework
 
 import android.app.Application
 import timber.log.Timber
