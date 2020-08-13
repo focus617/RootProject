@@ -134,6 +134,8 @@ class TasksViewModel(application: Application, interactors: Interactors) :
     private var isNewTask: Boolean = true
 
     fun createNewTask(task: Task) {
+        task.imageId = R.drawable.read_book
+        task.priority = _tasks.value?.size ?: 1
         viewModelScope.launch {
                 interactors.createNewTaskUseCase(task)
 

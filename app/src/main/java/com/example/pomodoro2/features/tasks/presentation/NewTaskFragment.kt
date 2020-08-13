@@ -53,7 +53,7 @@ class NewTaskFragment : BaseDialogFragment() {
         }
 
         btnSave.setOnClickListener {
-            viewModel.addNewTask(task)
+            viewModel.createNewTask(task)
             dismiss()
         }
 
