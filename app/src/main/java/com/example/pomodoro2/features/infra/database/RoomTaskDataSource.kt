@@ -7,6 +7,12 @@ import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.features.infra.database.TaskConstants.images
 import com.example.pomodoro2.features.infra.database.TaskConstants.titles
 import com.example.pomodoro2.framework.extension.asDatabaseEntity
+import com.example.pomodoro2.platform.functional.Result
+import com.example.pomodoro2.platform.functional.Result.Success
+import com.example.pomodoro2.platform.functional.Result.Error
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 object TaskConstants{
     val titles = arrayOf(
@@ -36,22 +42,63 @@ object TaskConstants{
     )
 }
 
+/**
+ * Concrete implementation of a data source as a db.
+ */
 class RoomTaskDataSource(val context: Context) : TaskDataSource {
 
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
     private val taskDao = AppDatabase.getInstance(context.applicationContext).taskDao
 
-    override suspend fun add(task: Task){
-        taskDao.insertTask(task.asDatabaseEntity())
+
+    override suspend fun getTask(taskId: Long): Result<Task> = withContext(ioDispatcher) {
+        try {
+                val task = taskDao.getTaskById(taskId)?.asDomainModel()
+                if (task != null) {
+                    return@withContext Success(task)
+                } else {
+                    return@withContext Error(Exception("Task not found!"))
+                }
+            } catch (e: Exception) {
+            return@withContext Error(e)
+        }
     }
 
-    override suspend fun getAll(): List<Task> = taskDao.getTasks().asDomainModel()
-
-    override suspend fun remove(task: Task){
-        taskDao.deleteTaskById(task.id)
+    override suspend fun getTasks(): Result<List<Task>> = withContext(ioDispatcher) {
+        return@withContext try {
+            Success(taskDao.getTasks().asDomainModel())
+        } catch (e: Exception) {
+            Error(e)
+        }
     }
 
-    override suspend fun removeAll() {
-        taskDao.deleteTasks()
+    override suspend fun saveTask(task: Task){
+        withContext(ioDispatcher) {
+            taskDao.insertTask(task.asDatabaseEntity())
+        }
+    }
+
+
+    override suspend fun deleteTask(task: Task){
+        withContext(ioDispatcher) {
+            taskDao.deleteTaskById(task.id)
+        }
+    }
+
+    override suspend fun deleteAllTasks() {
+        withContext(ioDispatcher) {
+            taskDao.deleteTasks()
+        }
+    }
+
+    override suspend fun completeTask(taskId: Long) {
+        withContext(ioDispatcher) {
+            taskDao.updateCompleted(taskId, true)
+        }
+    }
+
+    override suspend fun clearCompletedTasks() = withContext<Unit>(ioDispatcher) {
+        taskDao.deleteCompletedTasks()
     }
 
     /**

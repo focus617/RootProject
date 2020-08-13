@@ -25,7 +25,7 @@ class MyApplication : Application() {
             Interactors(
                 AddTask(taskRepository),
                 RemoveTask(taskRepository),
-                GetTasks(taskRepository),
+                GetTasksUseCase(taskRepository),
                 RemoveAllTask(taskRepository),
                 GetSelectedTask(taskRepository),
                 SetSelectedTask(taskRepository),

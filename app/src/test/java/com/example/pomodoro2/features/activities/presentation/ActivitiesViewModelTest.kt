@@ -10,7 +10,7 @@ import com.example.pomodoro2.features.tasks.domain.Interactors
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
 import com.example.pomodoro2.interactors.AddTask
 import com.example.pomodoro2.interactors.GetSelectedTask
-import com.example.pomodoro2.interactors.GetTasks
+import com.example.pomodoro2.interactors.GetTasksUseCase
 import com.example.pomodoro2.interactors.RemoveTask
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.not
@@ -50,7 +50,7 @@ class ActivitiesViewModelTest {
             ActivitiesViewModel(application, Interactors(
                 AddTask(taskRepository),
                 RemoveTask(taskRepository),
-                GetTasks(taskRepository),
+                GetTasksUseCase(taskRepository),
                 GetSelectedTask(taskRepository),
                 GetSelectedTask(taskRepository)
             ))

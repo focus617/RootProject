@@ -54,7 +54,22 @@ data class TaskEntity(
 }
 
 /**
- * Map DatabaseVideos to domain entities
+ * Map DatabaseObject to domain entity
+ */
+fun TaskEntity.asDomainModel(): Task {
+    return Task(
+        id = this.id,
+        title = this.title,
+        description = this.description,
+        isCompleted = this.isCompleted,
+        imageId = this.imageId,
+        priority = this.priority,
+        createTime = this.createTime
+    )
+}
+
+/**
+ * Map DatabaseObjects to domain entities
  */
 fun List<TaskEntity>.asDomainModel(): List<Task> {
     return map {

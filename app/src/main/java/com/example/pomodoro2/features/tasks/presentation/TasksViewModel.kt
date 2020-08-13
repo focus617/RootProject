@@ -4,11 +4,13 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.pomodoro2.R
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.features.tasks.domain.Interactors
 import com.example.pomodoro2.framework.platform.BaseViewModel
+import com.example.pomodoro2.platform.functional.Result
 import kotlinx.coroutines.*
 
 /**
@@ -108,9 +110,18 @@ class TasksViewModel(application: Application, interactors: Interactors) :
     private val _tasks: MutableLiveData<List<Task>> = MutableLiveData()
     val tasks : LiveData<List<Task>> = _tasks
 
+    /**
+     * @param forceUpdate   Pass in true to refresh the data in the [TasksDataSource]
+     */
     fun loadTasks() {
-        GlobalScope.launch {
-            _tasks.postValue(interactors.getTasks())
+        viewModelScope.launch {
+            val tasksResult = interactors.getTasksUseCase()
+            if (tasksResult is Result.Success) {
+                _tasks.value = tasksResult.data
+            } else {
+                _tasks.value = emptyList()
+                showInSnackBar("Error while loading tasks")
+            }
         }
     }
 
