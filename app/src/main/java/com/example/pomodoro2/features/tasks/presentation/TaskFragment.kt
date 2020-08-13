@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +16,6 @@ import com.example.pomodoro2.framework.platform.BaseFragment
 import com.example.pomodoro2.framework.platform.EventObserver
 import com.example.pomodoro2.databinding.FragmentTaskBinding
 import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.features.dashboard.presentation.DashboardViewModel
 import com.example.pomodoro2.framework.platform.MyViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 
@@ -101,7 +101,7 @@ class TaskFragment : BaseFragment() {
         // Set RecycleView.adapter
         val adapter = TaskRecyclerViewAdapter(TaskListener { task ->
             //Toast.makeText(context, "${project.id}", Toast.LENGTH_LONG).show()
-            tasksViewModel.onTaskClicked(task)
+            tasksViewModel.onTaskSelected(task)
         })
         binding.projectList.adapter = adapter
 
@@ -135,6 +135,8 @@ class TaskFragment : BaseFragment() {
                 context, "You clicked fab button",
                 Toast.LENGTH_SHORT
             ).show()
+            var navController = findNavController()
+            navController.navigate(R.id.newTaskFragment)
         }
 
         return binding.root

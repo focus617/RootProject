@@ -47,7 +47,7 @@ interface TaskDao {
 
 
     @Query("SELECT * FROM TASK_TABLE ORDER BY priority")
-    fun getTasks(): List<TaskEntity>
+    suspend fun getTasks(): List<TaskEntity>
 
     /**
      * Selects and returns all rows in the table,

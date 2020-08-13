@@ -10,6 +10,7 @@ import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.features.tasks.domain.Interactors
 import com.example.pomodoro2.framework.platform.BaseViewModel
 import kotlinx.coroutines.*
+import timber.log.Timber
 
 /**
  * ViewModel for TaskFragment.
@@ -95,10 +96,19 @@ class TasksViewModel(application: Application, interactors: Interactors) :
     /**
      * ClickHandler for recyclerview item click
      */
-    fun onTaskClicked(task: Task){
+    fun onTaskSelected(task: Task){
         showInSnackBar("Start Task(${task.title})")
         setSelectedTask(task)
         doNavigating(task)
+    }
+
+    /**
+     * Callback for floatingActionButton to add a new task
+     */
+    fun addNewTask(task: Task){
+        task.imageId = R.drawable.study
+        task.priority = _tasks.value?.size ?: 1
+        addTask(task)
     }
 
     /**
@@ -110,15 +120,15 @@ class TasksViewModel(application: Application, interactors: Interactors) :
 
     fun loadTasks() {
         GlobalScope.launch {
-            _tasks.postValue(interactors.getTasks())
+            withContext(Dispatchers.IO) {
+                _tasks.postValue(interactors.getTasks())
+            }
         }
     }
 
     fun addTask(task: Task) {
         GlobalScope.launch {
-            withContext(Dispatchers.IO) {
-                interactors.addTask(task)
-            }
+            interactors.addTask(task)
 
             // Refresh view model
             loadTasks()

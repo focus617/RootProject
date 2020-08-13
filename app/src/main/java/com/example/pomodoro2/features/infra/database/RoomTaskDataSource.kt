@@ -14,20 +14,17 @@ object TaskConstants{
         "点击左侧方框完成任务",
         "点击任务卡片，进入番茄工作时间",
         "左滑屏幕进行设置",
-        "查看统计总结过去",
+        "查看统计总结过去"
+/*
         "读书",
         "锻炼身体",
         "学习Android开发",
         "冥想",
         "工作"
+*/
     )
 
     val images = intArrayOf(
-        R.drawable.read_book,
-        R.drawable.exercise,
-        R.drawable.study,
-        R.drawable.thinking,
-        R.drawable.work,
         R.drawable.read_book,
         R.drawable.exercise,
         R.drawable.study,

@@ -19,4 +19,7 @@
     <string name="icon_msg">图标</string>
     <string name="item_removable">左右拖动删除</string>
     <string name="List_header_text_task">计划的任务</string>
+    <string name="image_task">图标</string>
+    <string name="create_task">新建任务</string>
+    <string name="input_task_name">输入新任务名称</string>
 </resources>
