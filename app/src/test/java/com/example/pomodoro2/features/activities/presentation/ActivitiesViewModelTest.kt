@@ -8,7 +8,7 @@ import com.example.pomodoro2.features.infra.memory.InMemoryTaskDataSource
 import com.example.pomodoro2.features.infra.database.RoomTaskDataSource
 import com.example.pomodoro2.features.tasks.domain.Interactors
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
-import com.example.pomodoro2.interactors.AddTask
+import com.example.pomodoro2.interactors.CreateNewTaskUseCase
 import com.example.pomodoro2.interactors.GetSelectedTask
 import com.example.pomodoro2.interactors.GetTasksUseCase
 import com.example.pomodoro2.interactors.RemoveTask
@@ -48,7 +48,7 @@ class ActivitiesViewModelTest {
         // Given a fresh ViewModel
         val activitiesViewModel =
             ActivitiesViewModel(application, Interactors(
-                AddTask(taskRepository),
+                CreateNewTaskUseCase(taskRepository),
                 RemoveTask(taskRepository),
                 GetTasksUseCase(taskRepository),
                 GetSelectedTask(taskRepository),

@@ -6,10 +6,11 @@ import com.example.pomodoro2.interactors.*
  * Definition of UseCase Set for each feature
  */
 data class Interactors(
-    val addTask: AddTask,
-    val removeTask: RemoveTask,
+    val createNewTaskUseCase: CreateNewTaskUseCase,
     val getTasksUseCase: GetTasksUseCase,
+    val removeTask: RemoveTask,
     val removeAllTask: RemoveAllTask,
+    val updateTaskUseCase: UpdateTaskUseCase,
     val getSelectedTask: GetSelectedTask,
     val setSelectedTask: SetSelectedTask,
     val initStartingTasks: InitializeStartingTasks

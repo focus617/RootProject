@@ -51,6 +51,13 @@ class RoomTaskDataSource(val context: Context) : TaskDataSource {
     private val taskDao = AppDatabase.getInstance(context.applicationContext).taskDao
 
 
+    override suspend fun createTask(task: Task) {
+        withContext(ioDispatcher) {
+            taskDao.insertTask(task.asDatabaseEntity())
+        }
+    }
+
+
     override suspend fun getTask(taskId: Long): Result<Task> = withContext(ioDispatcher) {
         try {
                 val task = taskDao.getTaskById(taskId)?.asDomainModel()
@@ -72,9 +79,9 @@ class RoomTaskDataSource(val context: Context) : TaskDataSource {
         }
     }
 
-    override suspend fun saveTask(task: Task){
+    override suspend fun updateTask(task: Task){
         withContext(ioDispatcher) {
-            taskDao.insertTask(task.asDatabaseEntity())
+            taskDao.updateTask(task.asDatabaseEntity())
         }
     }
 
@@ -91,9 +98,9 @@ class RoomTaskDataSource(val context: Context) : TaskDataSource {
         }
     }
 
-    override suspend fun completeTask(taskId: Long) {
+    override suspend fun completeTask(task: Task) {
         withContext(ioDispatcher) {
-            taskDao.updateCompleted(taskId, true)
+            taskDao.updateCompleted(task.id, true)
         }
     }
 

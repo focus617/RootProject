@@ -6,9 +6,11 @@ class TaskRepository(
     private val taskDataSource: TaskDataSource,
     private val inMemoryTaskDataSource: InMemoryTaskDataSource) {
 
-    suspend fun addTask(task: Task) = taskDataSource.saveTask(task)
+    suspend fun createTask(task: Task) = taskDataSource.createTask(task)
 
     suspend fun getTasks() = taskDataSource.getTasks()
+
+    suspend fun updateTask(task: Task) = taskDataSource.updateTask(task)
 
     suspend fun removeTask(task: Task) = taskDataSource.deleteTask(task)
 

@@ -124,21 +124,34 @@ class TasksViewModel(application: Application, interactors: Interactors) :
             }
         }
     }
+    fun setSelectedTask(task: Task) {
+        interactors.setSelectedTask(task)
+    }
 
-    fun addTask(task: Task) {
-        GlobalScope.launch {
-            withContext(Dispatchers.IO) {
-                interactors.addTask(task)
-            }
+    /**
+     * Below functions are used by Create or Edit Task Fragment
+     */
+    private var isNewTask: Boolean = true
+
+    fun createNewTask(task: Task) {
+        viewModelScope.launch {
+                interactors.createNewTaskUseCase(task)
 
             // Refresh view model
             loadTasks()
         }
     }
 
-    fun setSelectedTask(task: Task) {
-        interactors.setSelectedTask(task)
+    fun updateTask(task: Task) {
+        if (isNewTask) {
+            throw RuntimeException("updateTask() was called but task is new.")
+        }
+        viewModelScope.launch {
+            interactors.updateTaskUseCase(task)
+        }
     }
+
+
 
     /**
      * UseCase: Clear the Task Table, used for testing purpose
@@ -156,8 +169,8 @@ class TasksViewModel(application: Application, interactors: Interactors) :
     /**
      * UseCase: Create tutorial tasks
      */
-    fun initializeTutorialTasks() {
-        GlobalScope.launch {
+    private fun initializeTutorialTasks() {
+        viewModelScope.launch {
             interactors.initStartingTasks()
 
             // Refresh view model

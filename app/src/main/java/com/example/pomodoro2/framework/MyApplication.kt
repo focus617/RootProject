@@ -23,10 +23,11 @@ class MyApplication : Application() {
         MyViewModelFactory.inject(
             this,
             Interactors(
-                AddTask(taskRepository),
-                RemoveTask(taskRepository),
+                CreateNewTaskUseCase(taskRepository),
                 GetTasksUseCase(taskRepository),
+                RemoveTask(taskRepository),
                 RemoveAllTask(taskRepository),
+                UpdateTaskUseCase(taskRepository),
                 GetSelectedTask(taskRepository),
                 SetSelectedTask(taskRepository),
                 InitializeStartingTasks(taskRepository)
