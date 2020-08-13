@@ -6,13 +6,15 @@ class TaskRepository(
     private val taskDataSource: TaskDataSource,
     private val inMemoryDataSource: InMemoryDataSource) {
 
-    suspend fun addTask(task: Task) = taskDataSource.add(task)
+    suspend fun createTask(task: Task) = taskDataSource.createTask(task)
 
-    suspend fun getTasks() = taskDataSource.getAll()
+    suspend fun getTasks() = taskDataSource.getTasks()
 
-    suspend fun removeTask(task: Task) = taskDataSource.remove(task)
+    suspend fun updateTask(task: Task) = taskDataSource.updateTask(task)
 
-    suspend fun removeAllTask() = taskDataSource.removeAll()
+    suspend fun removeTask(task: Task) = taskDataSource.deleteTask(task)
+
+    suspend fun removeAllTask() = taskDataSource.deleteAllTasks()
 
     fun setSelectedTask(task: Task) = inMemoryDataSource.setSelectedTask(task)
 

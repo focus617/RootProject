@@ -4,13 +4,14 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.pomodoro2.R
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.features.tasks.domain.Interactors
 import com.example.pomodoro2.framework.platform.BaseViewModel
+import com.example.pomodoro2.platform.functional.Result
 import kotlinx.coroutines.*
-import timber.log.Timber
 
 /**
  * ViewModel for TaskFragment.
@@ -103,41 +104,54 @@ class TasksViewModel(application: Application, interactors: Interactors) :
     }
 
     /**
-     * Callback for floatingActionButton to add a new task
-     */
-    fun addNewTask(task: Task){
-        task.imageId = R.drawable.study
-        task.priority = _tasks.value?.size ?: 1
-        addTask(task)
-    }
-
-    /**
      * LiveData for this viewModel
      */
     // Task list displayed on the screen
     private val _tasks: MutableLiveData<List<Task>> = MutableLiveData()
     val tasks : LiveData<List<Task>> = _tasks
 
+    /**
+     * @param forceUpdate   Pass in true to refresh the data in the [TasksDataSource]
+     */
     fun loadTasks() {
-        GlobalScope.launch {
-            withContext(Dispatchers.IO) {
-                _tasks.postValue(interactors.getTasks())
+        viewModelScope.launch {
+            val tasksResult = interactors.getTasksUseCase()
+            if (tasksResult is Result.Success) {
+                _tasks.value = tasksResult.data
+            } else {
+                _tasks.value = emptyList()
+                showInSnackBar("Error while loading tasks")
             }
         }
     }
+    fun setSelectedTask(task: Task) {
+        interactors.setSelectedTask(task)
+    }
 
-    fun addTask(task: Task) {
-        GlobalScope.launch {
-            interactors.addTask(task)
+    /**
+     * Below functions are used by Create or Edit Task Fragment
+     */
+    private var isNewTask: Boolean = true
+
+    fun createNewTask(task: Task) {
+        viewModelScope.launch {
+                interactors.createNewTaskUseCase(task)
 
             // Refresh view model
             loadTasks()
         }
     }
 
-    fun setSelectedTask(task: Task) {
-        interactors.setSelectedTask(task)
+    fun updateTask(task: Task) {
+        if (isNewTask) {
+            throw RuntimeException("updateTask() was called but task is new.")
+        }
+        viewModelScope.launch {
+            interactors.updateTaskUseCase(task)
+        }
     }
+
+
 
     /**
      * UseCase: Clear the Task Table, used for testing purpose
@@ -155,8 +169,8 @@ class TasksViewModel(application: Application, interactors: Interactors) :
     /**
      * UseCase: Create tutorial tasks
      */
-    fun initializeTutorialTasks() {
-        GlobalScope.launch {
+    private fun initializeTutorialTasks() {
+        viewModelScope.launch {
             interactors.initStartingTasks()
 
             // Refresh view model

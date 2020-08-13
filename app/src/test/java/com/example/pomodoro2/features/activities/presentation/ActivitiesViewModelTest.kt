@@ -8,9 +8,9 @@ import com.example.pomodoro2.features.infra.memory.InMemoryDataSource
 import com.example.pomodoro2.features.infra.database.RoomTaskDataSource
 import com.example.pomodoro2.features.tasks.domain.Interactors
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
-import com.example.pomodoro2.interactors.AddTask
+import com.example.pomodoro2.interactors.CreateNewTaskUseCase
 import com.example.pomodoro2.interactors.GetSelectedTask
-import com.example.pomodoro2.interactors.GetTasks
+import com.example.pomodoro2.interactors.GetTasksUseCase
 import com.example.pomodoro2.interactors.RemoveTask
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.not
@@ -48,9 +48,9 @@ class ActivitiesViewModelTest {
         // Given a fresh ViewModel
         val activitiesViewModel =
             ActivitiesViewModel(application, Interactors(
-                AddTask(taskRepository),
+                CreateNewTaskUseCase(taskRepository),
                 RemoveTask(taskRepository),
-                GetTasks(taskRepository),
+                GetTasksUseCase(taskRepository),
                 GetSelectedTask(taskRepository),
                 GetSelectedTask(taskRepository)
             ))

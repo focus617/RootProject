@@ -8,11 +8,13 @@ import java.io.Serializable
 data class Task(
     var id: Long = 0L,
     var title: String,
+    var description: String = "",
+    var isCompleted: Boolean = false,
     var imageId: Int,
     var priority: Int,
     var createTime: Long = System.currentTimeMillis()
 ): Serializable {
     companion object {
-        val DefaultTask = Task(1L, "番茄工作法",0,1)
+        val DefaultTask = Task(title = "番茄工作法", imageId = 0, priority = 1)
     }
 }

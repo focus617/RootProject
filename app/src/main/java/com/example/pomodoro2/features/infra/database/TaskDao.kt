@@ -9,6 +9,11 @@ import androidx.room.*
 @Dao
 interface TaskDao {
 
+    /**
+     * Insert a task in the database. If the task already exists, replace it.
+     *
+     * @param taskEntity the task to be inserted.
+     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTask(taskEntity: TaskEntity)
 
@@ -19,33 +24,60 @@ interface TaskDao {
      * When updating a row with a value already set in a column,
      * replaces the old value with the new one.
      *
-     * @param Tasks new value to write
+     * @param taskEntity new value to write
+     * @return the number of tasks updated. This should always be 1.
      */
     @Update
-    suspend fun updateTask(taskEntity: TaskEntity)
+    suspend fun updateTask(taskEntity: TaskEntity): Int
+
+    /**
+     * Update the complete status of a task
+     *
+     * @param taskId    id of the task
+     * @param completed status to be updated
+     */
+    @Query("UPDATE TASK_TABLE SET completed = :completed WHERE Id = :taskId")
+    suspend fun updateCompleted(taskId: Long, completed: Boolean)
 
 
-    @Delete
-    suspend fun removeTask(taskEntity: TaskEntity)
+    /**
+     * Delete a task by id.
+     *
+     * @return the number of tasks deleted. This should always be 1.
+     */
+    @Query("DELETE FROM TASK_TABLE WHERE Id = :taskId")
+    suspend fun deleteTaskById(taskId: Long): Int
 
-   /**
-     * Deletes all values from the table.
+    /**
+     * Deletes all tasks from the table.
      *
      * This does not delete the table, only its contents.
-     */
-   // TODO: check why Query, not Delete?
+    */
     @Query("DELETE FROM TASK_TABLE")
-    suspend fun clearTaskTable()
+    suspend fun deleteTasks()
+
+    /**
+     * Delete all completed tasks from the table.
+     *
+     * @return the number of tasks deleted.
+     */
+    @Query("DELETE FROM TASK_TABLE WHERE completed = 1")
+    suspend fun deleteCompletedTasks(): Int
 
     /**
      * Selects and returns the row that matches the key.
      *
-     * @param id key of row to match
+     * @param taskId id of the task
+     * @return the entity match the Id.
      */
-    @Query("SELECT * FROM TASK_TABLE WHERE Id = :id")
-    suspend fun getTaskById(id: Long): TaskEntity?
+    @Query("SELECT * FROM TASK_TABLE WHERE Id = :taskId")
+    suspend fun getTaskById(taskId: Long): TaskEntity?
 
-
+    /**
+     * Select all tasks from the tasks table.
+     *
+     * @return all tasks.
+     */
     @Query("SELECT * FROM TASK_TABLE ORDER BY priority")
     suspend fun getTasks(): List<TaskEntity>
 
@@ -55,6 +87,6 @@ interface TaskDao {
      *
      * sorted by priority in ascending order.
      */
-    @Query("SELECT * FROM TASK_TABLE ORDER BY priority")
-    fun getAllTasksLive(): LiveData<List<TaskEntity>>
+//    @Query("SELECT * FROM TASK_TABLE ORDER BY priority")
+//    fun getAllTasksLive(): LiveData<List<TaskEntity>>
 }

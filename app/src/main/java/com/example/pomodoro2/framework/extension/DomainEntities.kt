@@ -12,6 +12,8 @@ fun Task.asDatabaseEntity(): TaskEntity {
     return TaskEntity(
             id = this.id,
             title = this.title,
+            description = this.description,
+            isCompleted = this.isCompleted,
             imageId = this.imageId,
             priority = this.priority,
             createTime = this.createTime
