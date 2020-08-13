@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.pomodoro2.R
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
 import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.features.tasks.domain.Interactors
+import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.framework.platform.BaseViewModel
 import com.example.pomodoro2.platform.functional.Result
 import kotlinx.coroutines.*
@@ -16,8 +16,8 @@ import kotlinx.coroutines.*
 /**
  * ViewModel for TaskFragment.
  */
-class TasksViewModel(application: Application, interactors: Interactors) :
-    BaseViewModel(application, interactors) {
+class TasksViewModel(application: Application, val taskInteractors: TaskInteractors) :
+    BaseViewModel(application) {
 
     private var _application: Application = application
 
@@ -115,7 +115,7 @@ class TasksViewModel(application: Application, interactors: Interactors) :
      */
     fun loadTasks() {
         viewModelScope.launch {
-            val tasksResult = interactors.getTasksUseCase()
+            val tasksResult = taskInteractors.getTasksUseCase()
             if (tasksResult is Result.Success) {
                 _tasks.value = tasksResult.data
             } else {
@@ -125,7 +125,7 @@ class TasksViewModel(application: Application, interactors: Interactors) :
         }
     }
     fun setSelectedTask(task: Task) {
-        interactors.setSelectedTask(task)
+        taskInteractors.setSelectedTask(task)
     }
 
     /**
@@ -137,7 +137,7 @@ class TasksViewModel(application: Application, interactors: Interactors) :
         task.imageId = R.drawable.read_book
         task.priority = _tasks.value?.size ?: 1
         viewModelScope.launch {
-                interactors.createNewTaskUseCase(task)
+                taskInteractors.createNewTaskUseCase(task)
 
             // Refresh view model
             loadTasks()
@@ -149,7 +149,7 @@ class TasksViewModel(application: Application, interactors: Interactors) :
             throw RuntimeException("updateTask() was called but task is new.")
         }
         viewModelScope.launch {
-            interactors.updateTaskUseCase(task)
+            taskInteractors.updateTaskUseCase(task)
         }
     }
 
@@ -161,7 +161,7 @@ class TasksViewModel(application: Application, interactors: Interactors) :
     fun clearTaskTable() {
         GlobalScope.launch {
             // Clear the database table.
-            interactors.removeAllTask()
+            taskInteractors.removeAllTask()
 
             // Refresh view model
             loadTasks()
@@ -173,7 +173,7 @@ class TasksViewModel(application: Application, interactors: Interactors) :
      */
     private fun initializeTutorialTasks() {
         viewModelScope.launch {
-            interactors.initStartingTasks()
+            taskInteractors.initStartingTasks()
 
             // Refresh view model
             loadTasks()

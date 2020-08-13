@@ -5,7 +5,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.pomodoro2.features.tasks.domain.Interactors
 import com.example.pomodoro2.framework.MyApplication
 import com.example.pomodoro2.platform.exception.Failure
 
@@ -14,7 +13,7 @@ import com.example.pomodoro2.platform.exception.Failure
  * @see ViewModel
  * @see Failure
  */
-abstract class BaseViewModel(application: Application, protected val interactors: Interactors) :
+abstract class BaseViewModel(application: Application) :
     AndroidViewModel(application) {
 
     protected val application: MyApplication = getApplication()

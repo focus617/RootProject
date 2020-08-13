@@ -6,15 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pomodoro2.features.infra.network.Api
 import com.example.pomodoro2.features.infra.network.ApiConstants
-import com.example.pomodoro2.features.tasks.domain.Interactors
+import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.framework.platform.BaseViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class DashboardViewModel(application: Application, interactors: Interactors)
-: BaseViewModel(application, interactors) {
+class DashboardViewModel(application: Application, taskInteractors: TaskInteractors)
+: BaseViewModel(application) {
 
     // singleton Retrofit service instance
     val api = Api.create()

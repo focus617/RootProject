@@ -6,7 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.pomodoro2.data.TaskRepository
 import com.example.pomodoro2.features.infra.memory.InMemoryDataSource
 import com.example.pomodoro2.features.infra.database.RoomTaskDataSource
-import com.example.pomodoro2.features.tasks.domain.Interactors
+import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
 import com.example.pomodoro2.interactors.CreateNewTaskUseCase
 import com.example.pomodoro2.interactors.GetSelectedTask
@@ -47,7 +47,7 @@ class ActivitiesViewModelTest {
 
         // Given a fresh ViewModel
         val activitiesViewModel =
-            ActivitiesViewModel(application, Interactors(
+            ActivitiesViewModel(application, TaskInteractors(
                 CreateNewTaskUseCase(taskRepository),
                 RemoveTask(taskRepository),
                 GetTasksUseCase(taskRepository),

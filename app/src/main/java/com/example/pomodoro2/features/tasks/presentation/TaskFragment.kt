@@ -1,5 +1,6 @@
 package com.example.pomodoro2.features.tasks.presentation
 
+import android.app.Application
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -16,7 +17,10 @@ import com.example.pomodoro2.framework.platform.BaseFragment
 import com.example.pomodoro2.framework.platform.EventObserver
 import com.example.pomodoro2.databinding.FragmentTaskBinding
 import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.features.tasks.domain.TaskInteractors
+import com.example.pomodoro2.framework.MyApplication
 import com.example.pomodoro2.framework.platform.MyViewModelFactory
+import com.example.pomodoro2.interactors.*
 import com.google.android.material.snackbar.Snackbar
 
 class TaskFragment : BaseFragment() {
@@ -70,9 +74,26 @@ class TaskFragment : BaseFragment() {
             inflater, layoutId(), container, false
         )
 
+        // Build the ViewModelFactory with Interactors for this feature
+        val application = requireNotNull(this.activity).application
+        val taskRepository = MyViewModelFactory.taskRepository
+        TasksViewModelFactory.inject(
+            application,
+            TaskInteractors(
+                CreateNewTaskUseCase(taskRepository),
+                GetTasksUseCase(taskRepository),
+                RemoveTask(taskRepository),
+                RemoveAllTask(taskRepository),
+                UpdateTaskUseCase(taskRepository),
+                GetSelectedTask(taskRepository),
+                SetSelectedTask(taskRepository),
+                InitializeStartingTasks(taskRepository)
+            )
+        )
+
         // Get a reference to the ViewModel associated with this fragment.
         tasksViewModel =
-            ViewModelProvider(this, MyViewModelFactory).get(TasksViewModel::class.java)
+            ViewModelProvider(this, TasksViewModelFactory).get(TasksViewModel::class.java)
 
         // To use the View Model with data binding, you have to explicitly
         // give the binding object a reference to it.
