@@ -9,10 +9,13 @@ import com.example.pomodoro2.domain.Task
  * DatabaseTask represents a task entity in the database.
  * 表示任务（目标）的数据类，用来存储创建的任务项目，并提供给TaskFragment
  *
+ * @param id          id of the task
  * @param title       title of the task
  * @param description description of the task
  * @param isCompleted whether or not this task is completed
- * @param id          id of the task
+ * @param imageId     id of the task's icon
+ * @param priority    displaying order the task
+ * @param createTime  timestampe of task creation
  */
 @Entity(tableName = "TASK_TABLE")
 data class TaskEntity(

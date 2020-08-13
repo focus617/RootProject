@@ -47,11 +47,11 @@ class RoomTaskDataSource(val context: Context) : TaskDataSource {
     override suspend fun getAll(): List<Task> = taskDao.getTasks().asDomainModel()
 
     override suspend fun remove(task: Task){
-        taskDao.removeTask(task.asDatabaseEntity())
+        taskDao.deleteTaskById(task.id)
     }
 
     override suspend fun removeAll() {
-        taskDao.clearTaskTable()
+        taskDao.deleteTasks()
     }
 
     /**
