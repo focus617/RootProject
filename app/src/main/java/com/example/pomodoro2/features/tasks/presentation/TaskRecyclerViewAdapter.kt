@@ -18,7 +18,9 @@ import kotlinx.coroutines.withContext
 private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1
 
-class TaskRecyclerViewAdapter(val clickListener: TaskListener) :
+class TaskRecyclerViewAdapter(
+    private val viewModel: TasksViewModel,
+    val clickListener: TaskListener) :
     ListAdapter<DataItem, RecyclerView.ViewHolder>(TaskDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
@@ -39,7 +41,7 @@ class TaskRecyclerViewAdapter(val clickListener: TaskListener) :
         when (holder) {
             is ViewHolder -> {
                 val taskItem = getItem(position) as DataItem.TaskItem
-                holder.bind(taskItem.task, clickListener)
+                holder.bind(taskItem.task, viewModel, clickListener)
             }
         }
     }
@@ -78,8 +80,9 @@ class TaskRecyclerViewAdapter(val clickListener: TaskListener) :
     class ViewHolder private constructor(val binding: ListItemTaskBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Task, clickListener: TaskListener) {
+        fun bind(item: Task, viewModel: TasksViewModel, clickListener: TaskListener) {
             binding.task = item
+            binding.viewmodel = viewModel
             binding.clickListener = clickListener
             binding.executePendingBindings()
         }

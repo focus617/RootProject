@@ -11,6 +11,8 @@ data class TaskInteractors (
     val removeTask: RemoveTask,
     val removeAllTask: RemoveAllTask,
     val updateTaskUseCase: UpdateTaskUseCase,
+    val completeTaskUseCase: CompleteTaskUseCase,
+    val activateTaskUseCase: ActivateTaskUseCase,
     val getSelectedTask: GetSelectedTask,
     val setSelectedTask: SetSelectedTask,
     val initStartingTasks: InitializeStartingTasks

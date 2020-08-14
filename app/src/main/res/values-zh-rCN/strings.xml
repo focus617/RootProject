@@ -22,4 +22,5 @@
     <string name="image_task">图标</string>
     <string name="create_task">新建任务</string>
     <string name="input_task_name">输入新任务名称</string>
+    <string name="task_marked_complete">选中任务已标记为完成状态</string>
 </resources>

@@ -16,6 +16,9 @@
     <string name="save">Save</string>
     <string name="edit_profile">Edit Profile</string>
 
+    <!-- Show tasks   -->
+    <string name="task_marked_complete">Task marked complete</string>
+
     <!-- Create a new task   -->
     <string name="image_task">Icon</string>
     <string name="create_task">Create a new task</string>

@@ -19,6 +19,8 @@ interface TaskDataSource {
 
     suspend fun completeTask(task: Task)
 
+    suspend fun activateTask(task: Task)
+
     suspend fun clearCompletedTasks()
 
     suspend fun initializeTutorialTasks()

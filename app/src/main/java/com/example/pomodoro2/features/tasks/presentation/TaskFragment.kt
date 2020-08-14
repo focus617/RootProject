@@ -71,6 +71,8 @@ class TaskFragment : BaseFragment() {
                 RemoveTask(taskRepository),
                 RemoveAllTask(taskRepository),
                 UpdateTaskUseCase(taskRepository),
+                CompleteTaskUseCase(taskRepository),
+                ActivateTaskUseCase(taskRepository),
                 GetSelectedTask(taskRepository),
                 SetSelectedTask(taskRepository),
                 InitializeStartingTasks(taskRepository)
@@ -131,10 +133,12 @@ class TaskFragment : BaseFragment() {
         }
 
         // Set RecycleView.adapter
-        val adapter = TaskRecyclerViewAdapter(TaskListener { task ->
-            //Toast.makeText(context, "${project.id}", Toast.LENGTH_LONG).show()
-            tasksViewModel.onTaskSelected(task)
-        })
+        val adapter = TaskRecyclerViewAdapter(
+            tasksViewModel,
+            TaskListener { task ->
+                //Toast.makeText(context, "${project.id}", Toast.LENGTH_LONG).show()
+                tasksViewModel.onTaskSelected(task)
+            })
         binding.projectList.adapter = adapter
 
 

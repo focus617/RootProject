@@ -153,7 +153,15 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
         }
     }
 
-
+    fun completeTask(task: Task, completed: Boolean) = viewModelScope.launch {
+        if (completed) {
+            taskInteractors.completeTaskUseCase(task)
+        } else {
+            taskInteractors.activateTaskUseCase(task)
+        }
+        // Refresh list to show the new state
+        loadTasks()
+    }
 
     /**
      * UseCase: Clear the Task Table, used for testing purpose

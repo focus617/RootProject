@@ -14,6 +14,16 @@ data class Task(
     var priority: Int,
     var createTime: Long = System.currentTimeMillis()
 ): Serializable {
+
+    val titleForList: String
+        get() = if (title.isNotEmpty()) title else description
+
+    val isActive
+        get() = !isCompleted
+
+    val isEmpty
+        get() = title.isEmpty() || description.isEmpty()
+
     companion object {
         val DefaultTask = Task(title = "番茄工作法", imageId = 0, priority = 1)
     }

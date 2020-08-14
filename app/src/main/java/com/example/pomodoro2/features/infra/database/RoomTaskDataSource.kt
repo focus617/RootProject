@@ -89,16 +89,16 @@ class RoomTaskDataSource(val context: Context) : TaskDataSource {
         }
     }
 
-    override suspend fun deleteAllTasks() {
-        withContext(ioDispatcher) {
-            taskDao.deleteTasks()
-        }
+    override suspend fun deleteAllTasks() =  withContext(ioDispatcher) {
+        taskDao.deleteTasks()
     }
 
-    override suspend fun completeTask(task: Task) {
-        withContext(ioDispatcher) {
-            taskDao.updateCompleted(task.id, true)
-        }
+    override suspend fun completeTask(task: Task) = withContext(ioDispatcher) {
+        taskDao.updateCompleted(task.id, true)
+    }
+
+    override suspend fun activateTask(task: Task) = withContext(ioDispatcher) {
+        taskDao.updateCompleted(task.id, false)
     }
 
     override suspend fun clearCompletedTasks() = withContext<Unit>(ioDispatcher) {

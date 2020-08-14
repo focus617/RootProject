@@ -6,7 +6,7 @@ package com.example.pomodoro2.data
 object DataSourceContainer {
 
     lateinit var roomTaskDataSource: TaskDataSource
-    lateinit var activityDataSource: ActivityDataSource
+    lateinit var roomActivityDataSource: ActivityDataSource
     lateinit var inMemoryDataSource: InMemoryDataSource
     lateinit var networkDataSource: NetworkDataSource
 
@@ -18,7 +18,7 @@ object DataSourceContainer {
         networkDataSource: NetworkDataSource
     ) {
         DataSourceContainer.roomTaskDataSource = roomTaskDataSource
-        DataSourceContainer.activityDataSource = activityDataSource
+        DataSourceContainer.roomActivityDataSource = activityDataSource
         DataSourceContainer.inMemoryDataSource = inMemoryDataSource
         DataSourceContainer.networkDataSource = networkDataSource
     }

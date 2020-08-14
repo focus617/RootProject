@@ -4,10 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.widget.CompoundButton" />
 
         <variable
             name="task"
             type="com.example.pomodoro2.domain.Task" />
+        <variable
+            name="viewmodel"
+            type="com.example.pomodoro2.features.tasks.presentation.TasksViewModel" />
         <variable
             name="clickListener"
             type="com.example.pomodoro2.features.tasks.presentation.TaskListener"/>
@@ -30,21 +34,33 @@
             android:layout_height="match_parent"
             android:padding="5dp">
 
+            <CheckBox
+                android:id="@+id/complete_checkbox"
+                android:layout_width="31dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{(view) -> viewmodel.completeTask(task, ((CompoundButton)view).isChecked())}"
+                android:checked="@{task.isCompleted}"/>
+
             <ImageView
                 android:id="@+id/item_image"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="4dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginEnd="@dimen/text_margin"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="5dp"
                 android:contentDescription="@string/icon_msg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/item_title"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/complete_checkbox"
                 app:layout_constraintTop_toTopOf="parent"
-                app:taskImage="@{task}"/>
+                app:taskImage="@{task}" />
 
             <TextView
                 android:id="@+id/item_title"
@@ -52,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
+                android:text="@{task.titleForList}"
                 android:textAppearance="@style/TextAppearance.Body"
                 app:layout_constraintBottom_toBottomOf="@+id/item_image"
                 app:layout_constraintEnd_toStartOf="@id/item_icon"
@@ -59,7 +76,7 @@
                 app:layout_constraintStart_toEndOf="@id/item_image"
                 app:layout_constraintTop_toTopOf="@+id/item_image"
                 tools:text="Study"
-                app:taskTitle="@{task}"/>
+                app:completedTask="@{task}" />
 
             <ImageView
                 android:id="@+id/item_icon"
@@ -67,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="10dp"
                 android:contentDescription="@string/item_removable"
                 app:layout_constraintBottom_toBottomOf="@+id/item_title"
@@ -77,6 +94,8 @@
                 app:layout_constraintTop_toTopOf="@+id/item_title"
                 app:layout_constraintVertical_bias="0.50"
                 app:srcCompat="@drawable/ic_baseline_chevron_right_24" />
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

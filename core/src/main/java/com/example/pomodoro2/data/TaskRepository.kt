@@ -17,6 +17,10 @@ class TaskRepository private constructor(
 
     suspend fun removeAllTask() = taskDataSource.deleteAllTasks()
 
+    suspend fun completeTask(task: Task) = taskDataSource.completeTask(task)
+
+    suspend fun activateTask(task: Task) = taskDataSource.activateTask(task)
+
     fun setSelectedTask(task: Task) = inMemoryDataSource.setSelectedTask(task)
 
     fun getSelectedTask() = inMemoryDataSource.getSelectedTask()
