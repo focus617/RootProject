@@ -10,13 +10,11 @@ object MyViewModelFactory : ViewModelProvider.Factory {
 
     lateinit var application: Application
     lateinit var dependencies: TaskInteractors
-    lateinit var taskRepository: TaskRepository
 
 
     fun inject(application: Application, dependencies: TaskInteractors, taskRepository: TaskRepository) {
         MyViewModelFactory.application = application
         MyViewModelFactory.dependencies = dependencies
-        MyViewModelFactory.taskRepository =taskRepository
     }
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
