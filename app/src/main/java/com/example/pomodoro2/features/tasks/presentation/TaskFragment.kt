@@ -32,6 +32,7 @@ class TaskFragment : BaseFragment() {
 
     // Customize parameter argument names
     private val ARG_COLUMN_COUNT = "column-count"
+
     // Customize parameters for Grid LayoutManager of RecyclerView
     private var _columnCount = 1
 
@@ -91,7 +92,7 @@ class TaskFragment : BaseFragment() {
         } else {
             val manager = GridLayoutManager(activity, _columnCount)
             manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(position: Int) =  when (position) {
+                override fun getSpanSize(position: Int) = when (position) {
                     0 -> _columnCount
                     else -> 1
                 }
@@ -132,7 +133,7 @@ class TaskFragment : BaseFragment() {
 
         setHasOptionsMenu(true)
 
-        binding.fab.setOnClickListener{
+        binding.fab.setOnClickListener {
             Toast.makeText(
                 context, "You clicked fab button",
                 Toast.LENGTH_SHORT
@@ -166,7 +167,10 @@ class TaskFragment : BaseFragment() {
         )
 
         // Get a reference to the ViewModel associated with this fragment.
-        return ViewModelProvider(this, TasksViewModelFactory).get(TasksViewModel::class.java)
+        return ViewModelProvider(
+            requireActivity(),
+            TasksViewModelFactory
+        ).get(TasksViewModel::class.java)
     }
 
 

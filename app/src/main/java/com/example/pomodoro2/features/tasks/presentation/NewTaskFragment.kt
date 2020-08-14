@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_login.*
 class NewTaskFragment : BaseDialogFragment() {
 
     private lateinit var viewModel: TasksViewModel
-    private var task = Task(title="", imageId = R.drawable.read_book, priority = 100)
+    private var task = Task(title = "", imageId = R.drawable.read_book, priority = 100)
 
     override fun layoutId(): Int {
         return R.layout.fragment_new_task
@@ -34,8 +34,9 @@ class NewTaskFragment : BaseDialogFragment() {
 
         // Get a reference to the ViewModel associated with this fragment.
         viewModel =
-            ViewModelProvider(this,
-                MyViewModelFactory
+            ViewModelProvider(
+                requireActivity(),
+                TasksViewModelFactory
             ).get(TasksViewModel::class.java)
 
         binding.task = task
