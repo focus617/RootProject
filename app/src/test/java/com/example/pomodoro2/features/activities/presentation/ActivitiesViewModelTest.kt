@@ -4,13 +4,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.pomodoro2.data.TaskRepository
-import com.example.pomodoro2.features.infra.database.InMemorySelectedTaskDataSource
+import com.example.pomodoro2.features.infra.memory.AppInMemoryDataSource
 import com.example.pomodoro2.features.infra.database.RoomTaskDataSource
-import com.example.pomodoro2.features.tasks.domain.Interactors
+import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
-import com.example.pomodoro2.interactors.AddTask
+import com.example.pomodoro2.interactors.CreateNewTaskUseCase
 import com.example.pomodoro2.interactors.GetSelectedTask
-import com.example.pomodoro2.interactors.GetTasks
+import com.example.pomodoro2.interactors.GetTasksUseCase
 import com.example.pomodoro2.interactors.RemoveTask
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.not
@@ -42,15 +42,15 @@ class ActivitiesViewModelTest {
         // Create an instance of Repository.
         val taskRepository = TaskRepository(
             RoomTaskDataSource(application),
-            InMemorySelectedTaskDataSource()
+            AppInMemoryDataSource()
         )
 
         // Given a fresh ViewModel
         val activitiesViewModel =
-            ActivitiesViewModel(application, Interactors(
-                AddTask(taskRepository),
+            ActivitiesViewModel(application, TaskInteractors(
+                CreateNewTaskUseCase(taskRepository),
                 RemoveTask(taskRepository),
-                GetTasks(taskRepository),
+                GetTasksUseCase(taskRepository),
                 GetSelectedTask(taskRepository),
                 GetSelectedTask(taskRepository)
             ))

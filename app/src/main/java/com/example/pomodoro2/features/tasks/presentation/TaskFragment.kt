@@ -7,16 +7,19 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pomodoro2.R
-import com.example.pomodoro2.framework.platform.BaseFragment
-import com.example.pomodoro2.framework.platform.EventObserver
+import com.example.pomodoro2.data.TaskRepository
 import com.example.pomodoro2.databinding.FragmentTaskBinding
 import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.features.dashboard.presentation.DashboardViewModel
-import com.example.pomodoro2.framework.platform.MyViewModelFactory
+import com.example.pomodoro2.data.DataSourceContainer
+import com.example.pomodoro2.features.tasks.domain.TaskInteractors
+import com.example.pomodoro2.framework.platform.BaseFragment
+import com.example.pomodoro2.framework.platform.EventObserver
+import com.example.pomodoro2.interactors.*
 import com.google.android.material.snackbar.Snackbar
 
 class TaskFragment : BaseFragment() {
@@ -29,6 +32,7 @@ class TaskFragment : BaseFragment() {
 
     // Customize parameter argument names
     private val ARG_COLUMN_COUNT = "column-count"
+
     // Customize parameters for Grid LayoutManager of RecyclerView
     private var _columnCount = 1
 
@@ -48,7 +52,38 @@ class TaskFragment : BaseFragment() {
         if (arguments != null) {
             _columnCount = requireArguments().getInt(ARG_COLUMN_COUNT)
         }
+
+        tasksViewModel = buildViewModel()
     }
+
+    private fun buildViewModel(): TasksViewModel {
+        // Build the ViewModelFactory with Interactors for this feature
+        val application = requireNotNull(this.activity).application
+        val taskRepository = TaskRepository.getInstance(
+            DataSourceContainer.roomTaskDataSource,
+            DataSourceContainer.inMemoryDataSource
+        )
+        TasksViewModelFactory.inject(
+            application,
+            TaskInteractors(
+                CreateNewTaskUseCase(taskRepository),
+                GetTasksUseCase(taskRepository),
+                RemoveTask(taskRepository),
+                RemoveAllTask(taskRepository),
+                UpdateTaskUseCase(taskRepository),
+                GetSelectedTask(taskRepository),
+                SetSelectedTask(taskRepository),
+                InitializeStartingTasks(taskRepository)
+            )
+        )
+
+        // Get a reference to the ViewModel associated with this fragment.
+        return ViewModelProvider(
+            requireActivity(),
+            TasksViewModelFactory
+        ).get(TasksViewModel::class.java)
+    }
+
 
     /**
      * Called when the Fragment is ready to display content to the screen.
@@ -70,9 +105,6 @@ class TaskFragment : BaseFragment() {
             inflater, layoutId(), container, false
         )
 
-        // Get a reference to the ViewModel associated with this fragment.
-        tasksViewModel =
-            ViewModelProvider(this, MyViewModelFactory).get(TasksViewModel::class.java)
 
         // To use the View Model with data binding, you have to explicitly
         // give the binding object a reference to it.
@@ -89,7 +121,7 @@ class TaskFragment : BaseFragment() {
         } else {
             val manager = GridLayoutManager(activity, _columnCount)
             manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(position: Int) =  when (position) {
+                override fun getSpanSize(position: Int) = when (position) {
                     0 -> _columnCount
                     else -> 1
                 }
@@ -101,7 +133,7 @@ class TaskFragment : BaseFragment() {
         // Set RecycleView.adapter
         val adapter = TaskRecyclerViewAdapter(TaskListener { task ->
             //Toast.makeText(context, "${project.id}", Toast.LENGTH_LONG).show()
-            tasksViewModel.onTaskClicked(task)
+            tasksViewModel.onTaskSelected(task)
         })
         binding.projectList.adapter = adapter
 
@@ -130,17 +162,14 @@ class TaskFragment : BaseFragment() {
 
         setHasOptionsMenu(true)
 
-        binding.fab.setOnClickListener{
-            Toast.makeText(
-                context, "You clicked fab button",
-                Toast.LENGTH_SHORT
-            ).show()
+        binding.fab.setOnClickListener {
+            // launch the new task fragment for creating new task
+            var navController = findNavController()
+            navController.navigate(R.id.newTaskFragment)
         }
 
         return binding.root
     }
-
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)

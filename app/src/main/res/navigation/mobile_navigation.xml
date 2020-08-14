@@ -15,6 +15,9 @@
             app:destination="@id/navigation_activity"
             app:enterAnim="@anim/slide_in_right"
             app:popEnterAnim="@anim/slide_in_right"/>
+        <action
+            android:id="@+id/action_navigation_task_to_newTaskFragment"
+            app:destination="@id/newTaskFragment" />
     </fragment>
 
     <fragment
@@ -56,5 +59,9 @@
         android:id="@+id/loginFragment"
         android:name="com.example.pomodoro2.features.login.presentation.LoginFragment"
         tools:layout="@layout/fragment_login" />
+    <dialog
+        android:id="@+id/newTaskFragment"
+        android:name="com.example.pomodoro2.features.tasks.presentation.NewTaskFragment"
+        android:label="NewTaskFragment" />
 
 </navigation>

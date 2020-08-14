@@ -4,10 +4,11 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.features.activities.domain.ActivityInteractors
+import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.framework.platform.BaseViewModel
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
-import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.features.tasks.domain.Interactors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -15,13 +16,9 @@ import kotlinx.coroutines.Job
 /**
  * ViewModel for the activitiesFragment.
  */
-class ActivitiesViewModel(application: Application, interactors: Interactors)
-    : BaseViewModel(application, interactors) {
+class ActivitiesViewModel(application: Application, val activityInteractors: ActivityInteractors)
+    : BaseViewModel(application) {
 
-    /**
-     * Hold a reference to AppDatabase via its ActivityDatabaseDao.
-     */
-    //val database = dataSource
 
     /** Coroutine variables */
 

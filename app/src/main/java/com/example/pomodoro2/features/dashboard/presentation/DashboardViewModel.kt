@@ -4,23 +4,23 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.pomodoro2.features.dashboard.domain.DashboardInteractors
 import com.example.pomodoro2.features.infra.network.Api
 import com.example.pomodoro2.features.infra.network.ApiConstants
-import com.example.pomodoro2.features.tasks.domain.Interactors
+import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.framework.platform.BaseViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class DashboardViewModel(application: Application, interactors: Interactors)
-: BaseViewModel(application, interactors) {
+class DashboardViewModel(application: Application, val dashboardInteractors: DashboardInteractors)
+: BaseViewModel(application) {
 
     // singleton Retrofit service instance
     val api = Api.create()
     public val imgSrcUrl:String = ApiConstants.imgSrcUrl
 
-    // TODO: how to get the singleton repository here?
 
     /** Coroutine variables */
 

@@ -16,6 +16,11 @@
     <string name="save">Save</string>
     <string name="edit_profile">Edit Profile</string>
 
+    <!-- Create a new task   -->
+    <string name="image_task">Icon</string>
+    <string name="create_task">Create a new task</string>
+    <string name="input_task_name">Input name of new task</string>
+
     <!-- RecyclerView -->
     <string name="icon_msg">Icon</string>
     <string name="item_removable">Drag  and Remove</string>
@@ -28,5 +33,6 @@
     <string name="agreement" translatable="false">Agreement</string>
     <string name="goodbye_message">Welcome to use Pomodoro Tool again.</string>
     <string name="action_show_in_snackbar">SnackBar</string>
+
 
 </resources>

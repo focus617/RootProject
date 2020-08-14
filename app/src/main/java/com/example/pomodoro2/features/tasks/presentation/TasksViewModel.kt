@@ -4,18 +4,20 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.pomodoro2.R
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
 import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.features.tasks.domain.Interactors
+import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.framework.platform.BaseViewModel
+import com.example.pomodoro2.platform.functional.Result
 import kotlinx.coroutines.*
 
 /**
  * ViewModel for TaskFragment.
  */
-class TasksViewModel(application: Application, interactors: Interactors) :
-    BaseViewModel(application, interactors) {
+class TasksViewModel(application: Application, val taskInteractors: TaskInteractors) :
+    BaseViewModel(application) {
 
     private var _application: Application = application
 
@@ -40,6 +42,14 @@ class TasksViewModel(application: Application, interactors: Interactors) :
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     /**
+     * To initialize the tasks variable as soon as possible
+     */
+    init {
+        refreshCacheFromRemote()
+        loadTasks()
+    }
+
+    /**
      * Called when the ViewModel is dismantled.
      * At this point, we want to cancel all coroutines;
      * otherwise we end up with processes that have nowhere to return to
@@ -49,6 +59,7 @@ class TasksViewModel(application: Application, interactors: Interactors) :
         super.onCleared()
         viewModelJob.cancel()
     }
+
 
     /**
      * Event for navigation to activity fragment.
@@ -86,8 +97,9 @@ class TasksViewModel(application: Application, interactors: Interactors) :
     /**
      * ClickHandler for recyclerview item click
      */
-    fun onTaskClicked(task: Task){
+    fun onTaskSelected(task: Task){
         showInSnackBar("Start Task(${task.title})")
+        setSelectedTask(task)
         doNavigating(task)
     }
 
@@ -98,34 +110,77 @@ class TasksViewModel(application: Application, interactors: Interactors) :
     private val _tasks: MutableLiveData<List<Task>> = MutableLiveData()
     val tasks : LiveData<List<Task>> = _tasks
 
+    /**
+     * @param forceUpdate   Pass in true to refresh the data in the [TasksDataSource]
+     */
     fun loadTasks() {
-        GlobalScope.launch {
-            _tasks.postValue(interactors.getTasks())
+        viewModelScope.launch {
+            val tasksResult = taskInteractors.getTasksUseCase()
+            if (tasksResult is Result.Success) {
+                _tasks.value = tasksResult.data
+            } else {
+                _tasks.value = emptyList()
+                showInSnackBar("Error while loading tasks")
+            }
         }
     }
+    fun setSelectedTask(task: Task) {
+        taskInteractors.setSelectedTask(task)
+    }
 
-    fun addTask(task: Task) {
-        GlobalScope.launch {
-            withContext(Dispatchers.IO) {
-                interactors.addTask(task)
-            }
+    /**
+     * Below functions are used by Create or Edit Task Fragment
+     */
+    private var isNewTask: Boolean = true
 
+    fun createNewTask(task: Task) {
+        task.imageId = R.drawable.read_book
+        task.priority = _tasks.value?.size ?: 1
+        viewModelScope.launch {
+                taskInteractors.createNewTaskUseCase(task)
+
+            // Refresh view model
             loadTasks()
         }
     }
 
-    fun setSelectedTask(task: Task) {
-        interactors.setSelectedTask(task)
+    fun updateTask(task: Task) {
+        if (isNewTask) {
+            throw RuntimeException("updateTask() was called but task is new.")
+        }
+        viewModelScope.launch {
+            taskInteractors.updateTaskUseCase(task)
+        }
     }
+
 
 
     /**
-     * To initialize the tasks variable as soon as possible
+     * UseCase: Clear the Task Table, used for testing purpose
      */
-    init {
-        refreshCacheFromRemote()
-        loadTasks()
+    fun clearTaskTable() {
+        GlobalScope.launch {
+            // Clear the database table.
+            taskInteractors.removeAllTask()
+
+            // Refresh view model
+            loadTasks()
+        }
     }
+
+    /**
+     * UseCase: Create tutorial tasks
+     */
+    private fun initializeTutorialTasks() {
+        viewModelScope.launch {
+            taskInteractors.initStartingTasks()
+
+            // Refresh view model
+            loadTasks()
+        }
+    }
+
+
 
     /**
      * Refresh data from the repository. Use a coroutine launch to run in a
@@ -137,7 +192,7 @@ class TasksViewModel(application: Application, interactors: Interactors) :
         uiScope.launch {
             try {
                 repository.refreshTasks()
-
+                networkErrorStateChange(error = false)
             } catch (networkError: IOException) {
                 // Show a Toast error message and hide the progress bar.
                 if(tasks.value.isNullOrEmpty()) {
@@ -147,90 +202,30 @@ class TasksViewModel(application: Application, interactors: Interactors) :
         }
     }
  */
+
     /**
-     * Event triggered for network error. This is private to avoid exposing a
-     * way to set this value to observers.
+     * Event triggered for network error.
      */
-    private var _eventNetworkError :Boolean = false
-    /**
-     * Event triggered for network error. Views should use this to get access
-     * to the data.
-     */
-    private val _isNetworkErrorShown = MutableLiveData<SingleLiveEvent<Boolean>>()
-    val isNetworkErrorShown: LiveData<SingleLiveEvent<Boolean>> = _isNetworkErrorShown
+    private val _eventNetworkError = MutableLiveData<SingleLiveEvent<Boolean>>()
+    val eventNetworkError: LiveData<SingleLiveEvent<Boolean>> = _eventNetworkError
 
     private fun networkErrorStateChange(error: Boolean) {
-        _eventNetworkError = error
-        _isNetworkErrorShown.value = SingleLiveEvent(error)
+        _eventNetworkError.value = SingleLiveEvent(error)
     }
 
 
     /**
      * Blow functions are used for testing purpose.
-     * */
+     */
 
     fun createTestData() {
-        createDummyTasksForTesting()
+        initializeTutorialTasks()
         // Maybe add more dummy data builder here.
     }
 
     fun clearTestData() {
-        clearDummyTasksForTesting()
-    }
-
-
-    /**
-     * UseCase: Create dummy task list for testing purpose
-     */
-    private fun createDummyTasksForTesting() {
-        val titles = arrayOf(
-            "读书",
-            "锻炼身体",
-            "学习Android开发",
-            "冥想",
-            "工作",
-            "读书",
-            "锻炼身体",
-            "学习Android开发",
-            "冥想",
-            "工作"
-        )
-
-        val images = intArrayOf(
-            R.drawable.read_book,
-            R.drawable.exercise,
-            R.drawable.study,
-            R.drawable.thinking,
-            R.drawable.work,
-            R.drawable.read_book,
-            R.drawable.exercise,
-            R.drawable.study,
-            R.drawable.thinking,
-            R.drawable.work
-        )
-
-        // Create some sample Tasks and insert them into database.
-        for ((index, element) in images.withIndex()) {
-            // Create a new Task , which captures the current time,
-            // then insert it into the database.
-            val task = Task(
-                title = titles[index],
-                imageId = element,
-                priority = index + 1
-            )
-            addTask(task)
-        }
-    }
-
-    /**
-     * UseCase: Clear the dummy Task list created for testing purpose
-     */
-    private fun clearDummyTasksForTesting() {
-        GlobalScope.launch {
-            // Clear the database table.
-            interactors.removeAllTask()
-            loadTasks()
-        }
+        clearTaskTable()
+        // Maybe add more dummy data cleaner here.
     }
 
     /**
