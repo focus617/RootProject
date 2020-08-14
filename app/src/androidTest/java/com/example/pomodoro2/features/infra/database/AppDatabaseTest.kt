@@ -1,11 +1,15 @@
 package com.example.pomodoro2.features.infra.database
 
+import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.pomodoro2.R
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.framework.extension.asDatabaseEntity
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.junit.After
 import org.junit.Before
 
@@ -48,17 +52,23 @@ class AppDatabaseTest {
     @Test
     @Throws(Exception::class)
     fun insertAndGetProject() {
-        val project = Task(
+        val task = Task(
             1L,
             "番茄工作",
+            "详细描述",
+            false,
             R.drawable.read_book,
             1
         )
-        taskDao.insertTask(project.asDatabaseEntity())
-        val proj = taskDao.getTaskById(1L)
-        assertEquals("番茄工作", proj?.title)
-        assertEquals(R.drawable.read_book, proj?.imageId)
-        assertEquals(1, proj?.priority)
+        GlobalScope.launch {
+            taskDao.insertTask(task.asDatabaseEntity())
+            val taskEntity = taskDao.getTaskById(1L)
+            assertEquals("番茄工作", taskEntity?.title)
+            assertEquals("详细描述", taskEntity?.description)
+            assertEquals(false, taskEntity?.isCompleted)
+            assertEquals(R.drawable.read_book, taskEntity?.imageId)
+            assertEquals(1, taskEntity?.priority)
+        }
     }
 
 }

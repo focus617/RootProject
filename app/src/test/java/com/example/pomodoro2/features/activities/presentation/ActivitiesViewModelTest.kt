@@ -3,9 +3,13 @@ package com.example.pomodoro2.features.activities.presentation
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.pomodoro2.data.DataSourceContainer
 import com.example.pomodoro2.data.TaskRepository
+import com.example.pomodoro2.features.activities.domain.ActivityInteractors
+import com.example.pomodoro2.features.infra.database.RoomActivityDataSource
 import com.example.pomodoro2.features.infra.memory.AppInMemoryDataSource
 import com.example.pomodoro2.features.infra.database.RoomTaskDataSource
+import com.example.pomodoro2.features.infra.network.AppNetworkDataSource
 import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
 import com.example.pomodoro2.interactors.CreateNewTaskUseCase
@@ -39,21 +43,9 @@ class ActivitiesViewModelTest {
     @Test
     fun startTimer_setLaunchTimerEvent() {
 
-        // Create an instance of Repository.
-        val taskRepository = TaskRepository(
-            RoomTaskDataSource(application),
-            AppInMemoryDataSource()
-        )
-
         // Given a fresh ViewModel
         val activitiesViewModel =
-            ActivitiesViewModel(application, TaskInteractors(
-                CreateNewTaskUseCase(taskRepository),
-                RemoveTask(taskRepository),
-                GetTasksUseCase(taskRepository),
-                GetSelectedTask(taskRepository),
-                GetSelectedTask(taskRepository)
-            ))
+            ActivitiesViewModel(application, ActivityInteractors())
 
         // Create observer - no need for it to do anything!
         val observer = Observer<SingleLiveEvent<Unit>> {}
