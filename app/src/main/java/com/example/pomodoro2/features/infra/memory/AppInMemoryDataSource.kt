@@ -4,7 +4,7 @@ import com.example.pomodoro2.data.InMemoryDataSource
 import com.example.pomodoro2.domain.Activity
 import com.example.pomodoro2.domain.Task
 
-class InMemoryDataSource : InMemoryDataSource {
+class AppInMemoryDataSource : InMemoryDataSource {
 
     private var _selectedTask : Task = Task.DefaultTask
     private var _selectedActivity : Activity? = null

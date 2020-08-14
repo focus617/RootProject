@@ -6,13 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.navGraphViewModels
 import com.example.pomodoro2.R
 import com.example.pomodoro2.framework.platform.BaseDialogFragment
-import com.example.pomodoro2.databinding.FragmentLoginBinding
 import com.example.pomodoro2.databinding.FragmentNewTaskBinding
 import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.framework.platform.MyViewModelFactory
+import com.example.pomodoro2.framework.platform.deprecated.MyViewModelFactory
 import kotlinx.android.synthetic.main.fragment_login.*
 
 class NewTaskFragment : BaseDialogFragment() {
@@ -36,7 +34,9 @@ class NewTaskFragment : BaseDialogFragment() {
 
         // Get a reference to the ViewModel associated with this fragment.
         viewModel =
-            ViewModelProvider(this, MyViewModelFactory).get(TasksViewModel::class.java)
+            ViewModelProvider(this,
+                MyViewModelFactory
+            ).get(TasksViewModel::class.java)
 
         binding.task = task
         return binding.root

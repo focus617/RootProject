@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.pomodoro2.data.TaskRepository
-import com.example.pomodoro2.features.infra.memory.InMemoryDataSource
+import com.example.pomodoro2.features.infra.memory.AppInMemoryDataSource
 import com.example.pomodoro2.features.infra.database.RoomTaskDataSource
 import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
@@ -42,7 +42,7 @@ class ActivitiesViewModelTest {
         // Create an instance of Repository.
         val taskRepository = TaskRepository(
             RoomTaskDataSource(application),
-            InMemoryDataSource()
+            AppInMemoryDataSource()
         )
 
         // Given a fresh ViewModel

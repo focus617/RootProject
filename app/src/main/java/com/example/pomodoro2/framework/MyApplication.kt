@@ -1,14 +1,11 @@
 package com.example.pomodoro2.framework
 
 import android.app.Application
-import com.example.pomodoro2.data.ActivityRepository
-import com.example.pomodoro2.data.TaskRepository
+import com.example.pomodoro2.data.DataSourceContainer
 import com.example.pomodoro2.features.infra.database.RoomActivityDataSource
-import com.example.pomodoro2.features.infra.memory.InMemoryDataSource
 import com.example.pomodoro2.features.infra.database.RoomTaskDataSource
-import com.example.pomodoro2.features.tasks.domain.TaskInteractors
-import com.example.pomodoro2.framework.platform.MyViewModelFactory
-import com.example.pomodoro2.interactors.*
+import com.example.pomodoro2.features.infra.memory.AppInMemoryDataSource
+import com.example.pomodoro2.features.infra.network.AppNetworkDataSource
 import timber.log.Timber
 
 class MyApplication : Application() {
@@ -17,31 +14,12 @@ class MyApplication : Application() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
 
-        val inMemoryDataSource = InMemoryDataSource()
-
-        val taskRepository = TaskRepository.getInstance(
+        // build the singleton data source
+        DataSourceContainer.inject(
             RoomTaskDataSource(this),
-            inMemoryDataSource
-        )
-
-        val activityRepository = ActivityRepository(
             RoomActivityDataSource(this),
-            inMemoryDataSource
-        )
-
-        MyViewModelFactory.inject(
-            this,
-            TaskInteractors(
-                CreateNewTaskUseCase(taskRepository),
-                GetTasksUseCase(taskRepository),
-                RemoveTask(taskRepository),
-                RemoveAllTask(taskRepository),
-                UpdateTaskUseCase(taskRepository),
-                GetSelectedTask(taskRepository),
-                SetSelectedTask(taskRepository),
-                InitializeStartingTasks(taskRepository)
-            ),
-            taskRepository
+            AppInMemoryDataSource(),
+            AppNetworkDataSource(this)
         )
     }
 }

@@ -1,9 +1,4 @@
-package com.example.pomodoro2.features.infra
-
-import com.example.pomodoro2.data.ActivityDataSource
-import com.example.pomodoro2.data.InMemoryDataSource
-import com.example.pomodoro2.data.NetworkDataSource
-import com.example.pomodoro2.data.TaskDataSource
+package com.example.pomodoro2.data
 
 /**
  * Definition of container for each type of data source

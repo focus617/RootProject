@@ -1,10 +1,8 @@
 package com.example.pomodoro2.features.infra.network
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.features.infra.database.*
+import com.example.pomodoro2.data.NetworkDataSource
+import com.example.pomodoro2.features.infra.database.AppDatabase
 import com.example.pomodoro2.features.infra.network.Api
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -14,7 +12,7 @@ import timber.log.Timber
  *  Handling the data operation via network
  *  TODO: thinking how to integrate into Repository, and synchronization strategy
  */
-public class NetworkDataSource(val context: Context) {
+public class AppNetworkDataSource(val context: Context): NetworkDataSource {
 
     // singleton database instance
     val db = AppDatabase.getInstance(context.applicationContext)
