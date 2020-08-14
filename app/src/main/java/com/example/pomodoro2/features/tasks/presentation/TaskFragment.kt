@@ -163,10 +163,7 @@ class TaskFragment : BaseFragment() {
         setHasOptionsMenu(true)
 
         binding.fab.setOnClickListener {
-            Toast.makeText(
-                context, "You clicked fab button",
-                Toast.LENGTH_SHORT
-            ).show()
+            // launch the new task fragment for creating new task
             var navController = findNavController()
             navController.navigate(R.id.newTaskFragment)
         }
