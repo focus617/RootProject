@@ -29,6 +29,27 @@ class ActivityFragment : BaseFragment() {
         activitiesViewModel = buildViewModel()
     }
 
+    private fun buildViewModel(): ActivitiesViewModel {
+        // Build the ViewModelFactory with Interactors for this feature
+        val application = requireNotNull(this.activity).application
+
+        // TODO: change to activity repository
+        val taskRepository = TaskRepository.getInstance(
+            DataSourceContainer.roomTaskDataSource,
+            DataSourceContainer.inMemoryDataSource
+        )
+        ActivitiesViewModelFactory.inject(
+            application,
+            ActivityInteractors(
+                //TODO: Add use case set for activity feature here
+            )
+        )
+
+        // Get a reference to the ViewModel associated with this fragment.
+        return ViewModelProvider(requireActivity(), ActivitiesViewModelFactory)
+            .get(ActivitiesViewModel::class.java)
+    }
+
     /**
      * Called when the Fragment is ready to display content to the screen.
      *
@@ -70,24 +91,5 @@ class ActivityFragment : BaseFragment() {
     }
 
 
-    private fun buildViewModel(): ActivitiesViewModel {
-        // Build the ViewModelFactory with Interactors for this feature
-        val application = requireNotNull(this.activity).application
 
-        // TODO: change to activity repository
-        val taskRepository = TaskRepository.getInstance(
-            DataSourceContainer.roomTaskDataSource,
-            DataSourceContainer.inMemoryDataSource
-        )
-        ActivitiesViewModelFactory.inject(
-            application,
-            ActivityInteractors(
-                //TODO: Add use case set for activity feature here
-            )
-        )
-
-        // Get a reference to the ViewModel associated with this fragment.
-        return ViewModelProvider(requireActivity(), ActivitiesViewModelFactory)
-            .get(ActivitiesViewModel::class.java)
-    }
 }

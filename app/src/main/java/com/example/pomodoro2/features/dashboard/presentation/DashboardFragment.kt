@@ -9,8 +9,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
+import com.example.pomodoro2.data.DataSourceContainer
+import com.example.pomodoro2.data.TaskRepository
 import com.example.pomodoro2.framework.platform.BaseFragment
 import com.example.pomodoro2.databinding.FragmentDashboardBinding
+import com.example.pomodoro2.features.activities.domain.ActivityInteractors
+import com.example.pomodoro2.features.activities.presentation.ActivitiesViewModel
+import com.example.pomodoro2.features.activities.presentation.ActivitiesViewModelFactory
+import com.example.pomodoro2.features.dashboard.domain.DashboardInteractors
 import com.example.pomodoro2.framework.platform.deprecated.MyViewModelFactory
 
 class DashboardFragment : BaseFragment() {
@@ -19,6 +25,34 @@ class DashboardFragment : BaseFragment() {
 
     override fun layoutId(): Int {
         return R.layout.fragment_dashboard
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Get a reference to the ViewModel associated with this fragment.
+        dashboardViewModel = buildViewModel()
+    }
+
+    private fun buildViewModel(): DashboardViewModel {
+        // Build the ViewModelFactory with Interactors for this feature
+        val application = requireNotNull(this.activity).application
+
+        // TODO: change to dashboard repository
+        val taskRepository = TaskRepository.getInstance(
+            DataSourceContainer.roomTaskDataSource,
+            DataSourceContainer.inMemoryDataSource
+        )
+        DashboardViewModelFactory.inject(
+            application,
+            DashboardInteractors(
+                //TODO: Add use case set for activity feature here
+            )
+        )
+
+        // Get a reference to the ViewModel associated with this fragment.
+        return ViewModelProvider(requireActivity(), DashboardViewModelFactory)
+            .get(DashboardViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -31,12 +65,6 @@ class DashboardFragment : BaseFragment() {
         val binding: FragmentDashboardBinding = DataBindingUtil.inflate(
             inflater, layoutId(), container, false
         )
-
-        // Get a reference to the ViewModel associated with this fragment.
-        dashboardViewModel =
-            ViewModelProvider(this,
-                MyViewModelFactory
-            ).get(DashboardViewModel::class.java)
 
         // To use the View Model with data binding, you have to explicitly
         // give the binding object a reference to it.

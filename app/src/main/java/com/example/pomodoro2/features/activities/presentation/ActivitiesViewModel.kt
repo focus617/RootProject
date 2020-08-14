@@ -16,13 +16,9 @@ import kotlinx.coroutines.Job
 /**
  * ViewModel for the activitiesFragment.
  */
-class ActivitiesViewModel(application: Application, activityInteractors: ActivityInteractors)
+class ActivitiesViewModel(application: Application, val activityInteractors: ActivityInteractors)
     : BaseViewModel(application) {
 
-    /**
-     * Hold a reference to AppDatabase via its ActivityDatabaseDao.
-     */
-    //val database = dataSource
 
     /** Coroutine variables */
 

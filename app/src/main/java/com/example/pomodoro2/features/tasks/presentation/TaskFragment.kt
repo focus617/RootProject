@@ -56,6 +56,35 @@ class TaskFragment : BaseFragment() {
         tasksViewModel = buildViewModel()
     }
 
+    private fun buildViewModel(): TasksViewModel {
+        // Build the ViewModelFactory with Interactors for this feature
+        val application = requireNotNull(this.activity).application
+        val taskRepository = TaskRepository.getInstance(
+            DataSourceContainer.roomTaskDataSource,
+            DataSourceContainer.inMemoryDataSource
+        )
+        TasksViewModelFactory.inject(
+            application,
+            TaskInteractors(
+                CreateNewTaskUseCase(taskRepository),
+                GetTasksUseCase(taskRepository),
+                RemoveTask(taskRepository),
+                RemoveAllTask(taskRepository),
+                UpdateTaskUseCase(taskRepository),
+                GetSelectedTask(taskRepository),
+                SetSelectedTask(taskRepository),
+                InitializeStartingTasks(taskRepository)
+            )
+        )
+
+        // Get a reference to the ViewModel associated with this fragment.
+        return ViewModelProvider(
+            requireActivity(),
+            TasksViewModelFactory
+        ).get(TasksViewModel::class.java)
+    }
+
+
     /**
      * Called when the Fragment is ready to display content to the screen.
      *
@@ -144,35 +173,6 @@ class TaskFragment : BaseFragment() {
 
         return binding.root
     }
-
-    private fun buildViewModel(): TasksViewModel {
-        // Build the ViewModelFactory with Interactors for this feature
-        val application = requireNotNull(this.activity).application
-        val taskRepository = TaskRepository.getInstance(
-            DataSourceContainer.roomTaskDataSource,
-            DataSourceContainer.inMemoryDataSource
-        )
-        TasksViewModelFactory.inject(
-            application,
-            TaskInteractors(
-                CreateNewTaskUseCase(taskRepository),
-                GetTasksUseCase(taskRepository),
-                RemoveTask(taskRepository),
-                RemoveAllTask(taskRepository),
-                UpdateTaskUseCase(taskRepository),
-                GetSelectedTask(taskRepository),
-                SetSelectedTask(taskRepository),
-                InitializeStartingTasks(taskRepository)
-            )
-        )
-
-        // Get a reference to the ViewModel associated with this fragment.
-        return ViewModelProvider(
-            requireActivity(),
-            TasksViewModelFactory
-        ).get(TasksViewModel::class.java)
-    }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
