@@ -8,12 +8,13 @@ package com.example.pomodoro2.features.activities.domain
  * 4. Getting selected activity
  * 5. Set selected activity
  */
-/*
 data class ActivityInteractors(
-    val addActivity: AddActivity,
+    val tmp:Int = 0
+    //TODO: Add use case set for activity feature here
+/*    val addActivity: AddActivity,
     val getActivities: GetActivities,
     val deleteActivity: RemoveActivity,
     val getSelectedActivity: GetSelectedActivity,
     val setSelectedActivity: SetSelectedActivity
-)
 */
+)

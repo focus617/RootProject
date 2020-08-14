@@ -5,7 +5,7 @@ import com.example.pomodoro2.interactors.*
 /**
  * Definition of UseCase Set for each feature
  */
-data class TaskInteractors(
+data class TaskInteractors (
     val createNewTaskUseCase: CreateNewTaskUseCase,
     val getTasksUseCase: GetTasksUseCase,
     val removeTask: RemoveTask,
@@ -14,4 +14,4 @@ data class TaskInteractors(
     val getSelectedTask: GetSelectedTask,
     val setSelectedTask: SetSelectedTask,
     val initStartingTasks: InitializeStartingTasks
-)
+) : Interactors

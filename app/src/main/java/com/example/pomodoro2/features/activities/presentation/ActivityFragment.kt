@@ -8,9 +8,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
-import com.example.pomodoro2.framework.platform.BaseFragment
+import com.example.pomodoro2.data.DataSourceContainer
+import com.example.pomodoro2.data.TaskRepository
 import com.example.pomodoro2.databinding.FragmentActivityBinding
-import com.example.pomodoro2.framework.platform.deprecated.MyViewModelFactory
+import com.example.pomodoro2.features.activities.domain.ActivityInteractors
+import com.example.pomodoro2.framework.platform.BaseFragment
 import kotlinx.android.synthetic.main.fragment_activity.*
 
 class ActivityFragment : BaseFragment() {
@@ -19,6 +21,12 @@ class ActivityFragment : BaseFragment() {
 
     override fun layoutId(): Int {
         return R.layout.fragment_activity
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activitiesViewModel = buildViewModel()
     }
 
     /**
@@ -31,23 +39,19 @@ class ActivityFragment : BaseFragment() {
      * to use the [LiveData] on our ViewModel.
      */
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
 
         // Get a reference to the binding object and inflate the fragment views.
         val binding: FragmentActivityBinding = DataBindingUtil.inflate(
-            inflater, layoutId(), container, false)
+            inflater, layoutId(), container, false
+        )
 
         val arguments = ActivityFragmentArgs.fromBundle(requireArguments())
         val currentTask = arguments.task
-
-        // Get a reference to the ViewModel associated with this fragment.
-        val activitiesViewModel =
-            ViewModelProvider(this,
-                MyViewModelFactory
-            ).get(ActivitiesViewModel::class.java)
+        //TODO: attach current task to view model
 
         // To use the View Model with data binding, you have to explicitly
         // give the binding object a reference to it.
@@ -63,5 +67,27 @@ class ActivityFragment : BaseFragment() {
         activitiesViewModel.setSelectedTask(currentTask)
 
         return binding.root
+    }
+
+
+    private fun buildViewModel(): ActivitiesViewModel {
+        // Build the ViewModelFactory with Interactors for this feature
+        val application = requireNotNull(this.activity).application
+
+        // TODO: change to activity repository
+        val taskRepository = TaskRepository.getInstance(
+            DataSourceContainer.roomTaskDataSource,
+            DataSourceContainer.inMemoryDataSource
+        )
+        ActivitiesViewModelFactory.inject(
+            application,
+            ActivityInteractors(
+                //TODO: Add use case set for activity feature here
+            )
+        )
+
+        // Get a reference to the ViewModel associated with this fragment.
+        return ViewModelProvider(requireActivity(), ActivitiesViewModelFactory)
+            .get(ActivitiesViewModel::class.java)
     }
 }
