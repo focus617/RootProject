@@ -1,4 +1,4 @@
-package com.example.pomodoro2.features.infra.network
+package com.example.pomodoro2.features.data.network
 
 
 import com.squareup.moshi.Moshi

@@ -1,10 +1,11 @@
-package com.example.pomodoro2.features.infra.memory
+package com.example.pomodoro2.features.data.memory
 
-import com.example.pomodoro2.data.InMemoryDataSource
+import com.example.pomodoro2.data.interface_def.InMemoryDataSource
 import com.example.pomodoro2.domain.Activity
 import com.example.pomodoro2.domain.Task
 
-class AppInMemoryDataSource : InMemoryDataSource {
+class AppInMemoryDataSource :
+    InMemoryDataSource {
 
     private var _selectedTask : Task = Task.DefaultTask
     private var _selectedActivity : Activity? = null

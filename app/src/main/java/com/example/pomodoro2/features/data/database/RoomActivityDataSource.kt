@@ -1,16 +1,13 @@
-package com.example.pomodoro2.features.infra.database
+package com.example.pomodoro2.features.data.database
 
 import android.content.Context
-import com.example.pomodoro2.R
-import com.example.pomodoro2.data.ActivityDataSource
-import com.example.pomodoro2.data.TaskDataSource
+import com.example.pomodoro2.data.interface_def.ActivityDataSource
 import com.example.pomodoro2.domain.Activity
 import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.features.infra.database.TaskConstants.images
-import com.example.pomodoro2.features.infra.database.TaskConstants.titles
 import com.example.pomodoro2.framework.extension.asDatabaseEntity
 
-class RoomActivityDataSource(val context: Context) : ActivityDataSource {
+class RoomActivityDataSource(val context: Context) :
+    ActivityDataSource {
 
     private val activityDao = AppDatabase.getInstance(context.applicationContext).activityDao
 

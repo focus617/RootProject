@@ -1,7 +1,7 @@
-package com.example.pomodoro2.features.infra.network
+package com.example.pomodoro2.features.data.network
 
 import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.features.infra.database.TaskEntity
+import com.example.pomodoro2.features.data.database.TaskEntity
 import com.squareup.moshi.JsonClass
 
 /**

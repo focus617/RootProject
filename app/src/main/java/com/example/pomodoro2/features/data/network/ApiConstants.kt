@@ -28,7 +28,7 @@
  * THE SOFTWARE.
  */
 
-package com.example.pomodoro2.features.infra.network
+package com.example.pomodoro2.features.data.network
 
 object ApiConstants {
     const val API = "https://api.androidhive.info/volley/"

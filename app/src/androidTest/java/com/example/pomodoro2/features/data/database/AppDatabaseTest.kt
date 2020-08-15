@@ -1,6 +1,5 @@
-package com.example.pomodoro2.features.infra.database
+package com.example.pomodoro2.features.data.database
 
-import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -9,7 +8,6 @@ import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.framework.extension.asDatabaseEntity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.junit.After
 import org.junit.Before
 

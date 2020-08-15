@@ -3,7 +3,7 @@ package com.example.pomodoro2.framework.platform.deprecated
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.pomodoro2.data.TaskRepository
+import com.example.pomodoro2.data.implementation.DefaultTaskRepository
 import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.framework.platform.BaseViewModel
 
@@ -16,7 +16,7 @@ object MyViewModelFactory : ViewModelProvider.Factory {
     fun inject(
         application: Application,
         dependencies: TaskInteractors,
-        taskRepository: TaskRepository
+        taskRepository: DefaultTaskRepository
     ) {
         MyViewModelFactory.application = application
         MyViewModelFactory.dependencies = dependencies

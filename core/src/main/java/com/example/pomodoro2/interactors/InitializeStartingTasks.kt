@@ -1,8 +1,7 @@
 package com.example.pomodoro2.interactors
 
-import com.example.pomodoro2.data.TaskRepository
-import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.data.implementation.DefaultTaskRepository
 
-class InitializeStartingTasks(private val taskRepository: TaskRepository) {
+class InitializeStartingTasks(private val taskRepository: DefaultTaskRepository) {
     suspend operator fun invoke() = taskRepository.initializeStartingTasks()
 }

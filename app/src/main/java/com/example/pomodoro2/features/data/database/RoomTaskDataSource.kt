@@ -1,11 +1,11 @@
-package com.example.pomodoro2.features.infra.database
+package com.example.pomodoro2.features.data.database
 
 import android.content.Context
 import com.example.pomodoro2.R
-import com.example.pomodoro2.data.TaskDataSource
+import com.example.pomodoro2.data.interface_def.TaskDataSource
 import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.features.infra.database.TaskConstants.images
-import com.example.pomodoro2.features.infra.database.TaskConstants.titles
+import com.example.pomodoro2.features.data.database.TaskConstants.images
+import com.example.pomodoro2.features.data.database.TaskConstants.titles
 import com.example.pomodoro2.framework.extension.asDatabaseEntity
 import com.example.pomodoro2.platform.functional.Result
 import com.example.pomodoro2.platform.functional.Result.Success
@@ -42,7 +42,8 @@ object TaskConstants{
 /**
  * Concrete implementation of a data source as a db.
  */
-class RoomTaskDataSource(val context: Context) : TaskDataSource {
+class RoomTaskDataSource(val context: Context) :
+    TaskDataSource {
 
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
     private val taskDao = AppDatabase.getInstance(context.applicationContext).taskDao

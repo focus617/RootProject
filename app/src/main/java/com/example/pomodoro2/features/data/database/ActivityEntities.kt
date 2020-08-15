@@ -1,4 +1,4 @@
-package com.example.pomodoro2.features.infra.database
+package com.example.pomodoro2.features.data.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

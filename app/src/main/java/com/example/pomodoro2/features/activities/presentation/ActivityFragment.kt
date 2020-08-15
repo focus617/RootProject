@@ -8,8 +8,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
-import com.example.pomodoro2.data.DataSourceContainer
-import com.example.pomodoro2.data.TaskRepository
+import com.example.pomodoro2.data.implementation.DataSourceContainer
+import com.example.pomodoro2.data.implementation.DefaultTaskRepository
 import com.example.pomodoro2.databinding.FragmentActivityBinding
 import com.example.pomodoro2.features.activities.domain.ActivityInteractors
 import com.example.pomodoro2.framework.platform.BaseFragment
@@ -34,7 +34,7 @@ class ActivityFragment : BaseFragment() {
         val application = requireNotNull(this.activity).application
 
         // TODO: change to activity repository
-        val taskRepository = TaskRepository.getInstance(
+        val taskRepository = DefaultTaskRepository.getInstance(
             DataSourceContainer.roomTaskDataSource,
             DataSourceContainer.inMemoryDataSource
         )

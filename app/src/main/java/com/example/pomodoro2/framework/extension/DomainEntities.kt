@@ -2,8 +2,8 @@ package com.example.pomodoro2.framework.extension
 
 import com.example.pomodoro2.domain.Activity
 import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.features.infra.database.ActivityEntity
-import com.example.pomodoro2.features.infra.database.TaskEntity
+import com.example.pomodoro2.features.data.database.ActivityEntity
+import com.example.pomodoro2.features.data.database.TaskEntity
 
 /**
  * Map domain entity to DatabaseObject

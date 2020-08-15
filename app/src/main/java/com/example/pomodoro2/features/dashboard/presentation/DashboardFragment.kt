@@ -9,15 +9,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
-import com.example.pomodoro2.data.DataSourceContainer
-import com.example.pomodoro2.data.TaskRepository
+import com.example.pomodoro2.data.implementation.DataSourceContainer
+import com.example.pomodoro2.data.implementation.DefaultTaskRepository
 import com.example.pomodoro2.framework.platform.BaseFragment
 import com.example.pomodoro2.databinding.FragmentDashboardBinding
-import com.example.pomodoro2.features.activities.domain.ActivityInteractors
-import com.example.pomodoro2.features.activities.presentation.ActivitiesViewModel
-import com.example.pomodoro2.features.activities.presentation.ActivitiesViewModelFactory
 import com.example.pomodoro2.features.dashboard.domain.DashboardInteractors
-import com.example.pomodoro2.framework.platform.deprecated.MyViewModelFactory
 
 class DashboardFragment : BaseFragment() {
 
@@ -39,7 +35,7 @@ class DashboardFragment : BaseFragment() {
         val application = requireNotNull(this.activity).application
 
         // TODO: change to dashboard repository
-        val taskRepository = TaskRepository.getInstance(
+        val taskRepository = DefaultTaskRepository.getInstance(
             DataSourceContainer.roomTaskDataSource,
             DataSourceContainer.inMemoryDataSource
         )

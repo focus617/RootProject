@@ -39,8 +39,7 @@ sealed class Either<out L, out R> {
      * Creates a Left type.
      * @see Right
      */
-    fun <R> right(b: R) =
-        Right(b)
+    fun <R> right(b: R) = Right(b)
 
     /**
      * Applies fnL if this is a Left or fnR if this is a Right.
@@ -68,9 +67,7 @@ fun <A, B, C> ((A) -> B).c(f: (B) -> C): (A) -> C = {
  */
 fun <T, L, R> Either<L, R>.flatMap(fn: (R) -> Either<L, T>): Either<L, T> =
     when (this) {
-        is Either.Left -> Either.Left(
-            a
-        )
+        is Either.Left -> Either.Left(a)
         is Either.Right -> fn(b)
     }
 

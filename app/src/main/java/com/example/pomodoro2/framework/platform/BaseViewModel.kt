@@ -3,13 +3,9 @@ package com.example.pomodoro2.framework.platform
 import android.app.Application
 import androidx.annotation.NonNull
 import androidx.lifecycle.*
-import com.example.pomodoro2.data.DataSourceContainer
-import com.example.pomodoro2.data.TaskRepository
-import com.example.pomodoro2.features.tasks.domain.TaskInteractors
-import com.example.pomodoro2.features.tasks.presentation.TasksViewModel
-import com.example.pomodoro2.features.tasks.presentation.TasksViewModelFactory
+import com.example.pomodoro2.data.implementation.DataSourceContainer
+import com.example.pomodoro2.data.implementation.DefaultTaskRepository
 import com.example.pomodoro2.framework.MyApplication
-import com.example.pomodoro2.framework.platform.deprecated.MyViewModelFactory
 import com.example.pomodoro2.interactors.*
 import com.example.pomodoro2.platform.exception.Failure
 
@@ -46,7 +42,7 @@ open class MyBaseViewModel(application: Application) :
         modelClass: Class<T>
     ): T {
         // Build the ViewModelFactory with Interactors for this feature
-        val taskRepository = TaskRepository.getInstance(
+        val taskRepository = DefaultTaskRepository.getInstance(
             dataSourceContainer.roomTaskDataSource,
             dataSourceContainer.inMemoryDataSource
         )

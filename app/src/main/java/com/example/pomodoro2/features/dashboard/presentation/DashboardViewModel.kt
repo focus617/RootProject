@@ -5,9 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pomodoro2.features.dashboard.domain.DashboardInteractors
-import com.example.pomodoro2.features.infra.network.Api
-import com.example.pomodoro2.features.infra.network.ApiConstants
-import com.example.pomodoro2.features.tasks.domain.TaskInteractors
+import com.example.pomodoro2.features.data.network.Api
+import com.example.pomodoro2.features.data.network.ApiConstants
 import com.example.pomodoro2.framework.platform.BaseViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
