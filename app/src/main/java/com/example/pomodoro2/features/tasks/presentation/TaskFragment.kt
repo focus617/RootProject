@@ -68,14 +68,14 @@ class TaskFragment : BaseFragment() {
             TaskInteractors(
                 CreateNewTaskUseCase(taskRepository),
                 GetTasksUseCase(taskRepository),
-                RemoveTask(taskRepository),
-                RemoveAllTask(taskRepository),
+                RemoveTaskUseCase(taskRepository),
+                RemoveAllTaskUseCase(taskRepository),
                 UpdateTaskUseCase(taskRepository),
                 CompleteTaskUseCase(taskRepository),
                 ActivateTaskUseCase(taskRepository),
-                GetSelectedTask(taskRepository),
-                SetSelectedTask(taskRepository),
-                InitializeStartingTasks(taskRepository)
+                GetSelectedTaskUseCase(taskRepository),
+                SetSelectedTaskUseCase(taskRepository),
+                InitializeStartingTasksUseCase(taskRepository)
             )
         )
 

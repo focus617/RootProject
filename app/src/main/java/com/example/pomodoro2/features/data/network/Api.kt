@@ -21,6 +21,7 @@ interface Api {
     /**
      * Returns a Coroutine [Deferred] of [NetworkContact] which can be fetched with await() if
      * in a Coroutine scope.
+     * @GET declares an HTTP GET request
      * The @GET annotation indicates that the "person_object.json" endpoint will be requested with the GET
      * HTTP method
      *

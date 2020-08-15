@@ -65,6 +65,7 @@ buildscript {
         // 3rd party Testing
         junit_version = "4.13"
         mockito_version = "2.19.0"
+        mockito_kt_version = "1.5.0"
         espresso_version = "3.2.0"
         robolectric_version = "4.3.1"
         kluent_version = "1.14"

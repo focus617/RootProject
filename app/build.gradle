@@ -126,6 +126,7 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:$androidx_arch_core_testing_version"
 
     testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation "com.nhaarman:mockito-kotlin-kt1.1:$mockito_kt_version"
     testImplementation "org.amshove.kluent:kluent:$kluent_version"
     testImplementation "org.robolectric:robolectric:$robolectric_version"
 

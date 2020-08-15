@@ -8,12 +8,12 @@ import com.example.pomodoro2.interactors.*
 data class TaskInteractors (
     val createNewTaskUseCase: CreateNewTaskUseCase,
     val getTasksUseCase: GetTasksUseCase,
-    val removeTask: RemoveTask,
-    val removeAllTask: RemoveAllTask,
+    val removeTaskUseCase: RemoveTaskUseCase,
+    val removeAllTaskUseCase: RemoveAllTaskUseCase,
     val updateTaskUseCase: UpdateTaskUseCase,
     val completeTaskUseCase: CompleteTaskUseCase,
     val activateTaskUseCase: ActivateTaskUseCase,
-    val getSelectedTask: GetSelectedTask,
-    val setSelectedTask: SetSelectedTask,
-    val initStartingTasks: InitializeStartingTasks
+    val getSelectedTaskUseCase: GetSelectedTaskUseCase,
+    val setSelectedTaskUseCase: SetSelectedTaskUseCase,
+    val initStartingTasksUseCase: InitializeStartingTasksUseCase
 ) : Interactors

@@ -126,7 +126,7 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
         }
     }
     fun setSelectedTask(task: Task) {
-        taskInteractors.setSelectedTask(task)
+        taskInteractors.setSelectedTaskUseCase(task)
     }
 
     /**
@@ -170,7 +170,7 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
     fun clearTaskTable() {
         GlobalScope.launch {
             // Clear the database table.
-            taskInteractors.removeAllTask()
+            taskInteractors.removeAllTaskUseCase()
 
             // Refresh view model
             loadTasks()
@@ -182,7 +182,7 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
      */
     private fun initializeTutorialTasks() {
         viewModelScope.launch {
-            taskInteractors.initStartingTasks()
+            taskInteractors.initStartingTasksUseCase()
 
             // Refresh view model
             loadTasks()

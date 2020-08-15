@@ -6,7 +6,7 @@ import com.example.pomodoro2.platform.functional.Result
 /**
  * Interface to the data layer.
  */
-interface TaskRepositoryInterface{
+interface TaskRepository{
 
     suspend fun createTask(task: Task)
 
