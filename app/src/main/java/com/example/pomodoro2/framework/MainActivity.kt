@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViews(){
-
+        drawerLayout.setStatusBarBackground(R.color.colorPrimaryDark)
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -91,6 +91,7 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
     val showSnackBarEvent: LiveData<SingleLiveEvent<String>> = _showSnackBarEvent
 
     private fun showInSnackBar(str: String) {
+        // TODO：研究如何显示 R.String 资源
         _showSnackBarEvent.value = SingleLiveEvent(str)
     }
 
