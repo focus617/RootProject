@@ -1,7 +1,6 @@
 package com.example.pomodoro2.interactors
 
-import com.example.pomodoro2.data.implementation.DefaultTaskRepository
-import com.example.pomodoro2.data.interface_def.TaskRepository
+import com.example.pomodoro2.platform.interface_def.TaskRepository
 import com.example.pomodoro2.domain.Task
 
 class CompleteTaskUseCase(private val taskRepository: TaskRepository) {

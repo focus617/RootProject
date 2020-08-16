@@ -6,8 +6,8 @@ import androidx.lifecycle.*
 import com.example.pomodoro2.data.implementation.DataSourceContainer
 import com.example.pomodoro2.data.implementation.DefaultTaskRepository
 import com.example.pomodoro2.framework.MyApplication
-import com.example.pomodoro2.interactors.*
 import com.example.pomodoro2.platform.exception.Failure
+import com.example.pomodoro2.platform.interactor.Interactors
 
 /**
  * Base ViewModel class with default Failure handling.

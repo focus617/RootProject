@@ -1,7 +1,7 @@
 package com.example.pomodoro2.features.data.database
 
 import android.content.Context
-import com.example.pomodoro2.data.interface_def.ActivityDataSource
+import com.example.pomodoro2.platform.interface_def.ActivityDataSource
 import com.example.pomodoro2.domain.Activity
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.framework.extension.asDatabaseEntity

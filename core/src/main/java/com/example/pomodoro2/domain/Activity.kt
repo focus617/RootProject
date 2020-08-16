@@ -1,5 +1,7 @@
 package com.example.pomodoro2.domain
 
+import com.example.pomodoro2.platform.domain.BaseEntity
+
 /**
  * Data Class represents activity to finish task.
  * 表示活动的数据类，代表任务执行的各项活动，并提供给ActivitiesFragment
@@ -15,4 +17,4 @@ data class Activity(
     var createTime: Long = System.currentTimeMillis(),
     var focusCounter: Long = 0L,
     var totalTime: Long = 0L
-)
+): BaseEntity()

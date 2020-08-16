@@ -1,6 +1,6 @@
 package com.example.pomodoro2.interactors
 
-import com.example.pomodoro2.data.interface_def.TaskRepository
+import com.example.pomodoro2.platform.interface_def.TaskRepository
 import com.example.pomodoro2.domain.Task
 
 class RemoveTaskUseCase(private val taskRepository: TaskRepository) {

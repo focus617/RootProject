@@ -119,16 +119,16 @@ dependencies {
     // 2. Unit/Integration tests dependencies
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testImplementation "junit:junit:$junit_version"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation "com.nhaarman:mockito-kotlin-kt1.1:$mockito_kt_version"
+    testImplementation "org.amshove.kluent:kluent:$kluent_version"
+    testImplementation "org.robolectric:robolectric:$robolectric_version"
 
     // AndroidX Test - JVM testing
     testImplementation "androidx.test.ext:junit-ktx:$androidx_test_ext_junit_kotlin_version"
     testImplementation "androidx.test:core-ktx:$androidx_test_core_kotlin_version"
     testImplementation "androidx.arch.core:core-testing:$androidx_arch_core_testing_version"
 
-    testImplementation "org.mockito:mockito-core:$mockito_version"
-    testImplementation "com.nhaarman:mockito-kotlin-kt1.1:$mockito_kt_version"
-    testImplementation "org.amshove.kluent:kluent:$kluent_version"
-    testImplementation "org.robolectric:robolectric:$robolectric_version"
 
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
@@ -155,7 +155,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso.idling:idling-concurrent:$espresso_version"
 
     // Optional -- Hamcrest library
-    androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
+    androidTestImplementation "org.hamcrest:hamcrest-library:$hamcrest_version"
     // Optional -- UI testing with UI Automator
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 

@@ -1,5 +1,6 @@
 package com.example.pomodoro2.domain
 
+import com.example.pomodoro2.platform.domain.BaseAggregate
 import java.io.Serializable
 
 /**
@@ -13,7 +14,7 @@ data class Task(
     var imageId: Int,
     var priority: Int,
     var createTime: Long = System.currentTimeMillis()
-): Serializable {
+): BaseAggregate(), Serializable {
 
     val titleForList: String
         get() = if (title.isNotEmpty()) title else description

@@ -69,8 +69,7 @@ buildscript {
         espresso_version = "3.2.0"
         robolectric_version = "4.3.1"
         kluent_version = "1.14"
-
-
+        hamcrest_version = "1.3"
 
     }
 

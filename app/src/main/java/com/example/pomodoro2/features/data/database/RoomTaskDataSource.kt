@@ -2,7 +2,7 @@ package com.example.pomodoro2.features.data.database
 
 import android.content.Context
 import com.example.pomodoro2.R
-import com.example.pomodoro2.data.interface_def.TaskDataSource
+import com.example.pomodoro2.platform.interface_def.TaskDataSource
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.features.data.database.TaskConstants.images
 import com.example.pomodoro2.features.data.database.TaskConstants.titles

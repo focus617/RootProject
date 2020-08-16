@@ -1,8 +1,8 @@
 package com.example.pomodoro2.data.implementation
 
-import com.example.pomodoro2.data.interface_def.InMemoryDataSource
-import com.example.pomodoro2.data.interface_def.TaskDataSource
-import com.example.pomodoro2.data.interface_def.TaskRepository
+import com.example.pomodoro2.platform.interface_def.InMemoryDataSource
+import com.example.pomodoro2.platform.interface_def.TaskDataSource
+import com.example.pomodoro2.platform.interface_def.TaskRepository
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.platform.functional.Result
 import kotlinx.coroutines.CoroutineDispatcher

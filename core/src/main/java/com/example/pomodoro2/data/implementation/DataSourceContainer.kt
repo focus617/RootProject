@@ -1,9 +1,9 @@
 package com.example.pomodoro2.data.implementation
 
-import com.example.pomodoro2.data.interface_def.ActivityDataSource
-import com.example.pomodoro2.data.interface_def.InMemoryDataSource
-import com.example.pomodoro2.data.interface_def.NetworkDataSource
-import com.example.pomodoro2.data.interface_def.TaskDataSource
+import com.example.pomodoro2.platform.interface_def.ActivityDataSource
+import com.example.pomodoro2.platform.interface_def.InMemoryDataSource
+import com.example.pomodoro2.platform.interface_def.NetworkDataSource
+import com.example.pomodoro2.platform.interface_def.TaskDataSource
 
 /**
  * Definition of container for each type of data source

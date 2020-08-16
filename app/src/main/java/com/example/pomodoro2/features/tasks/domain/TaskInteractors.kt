@@ -1,6 +1,7 @@
 package com.example.pomodoro2.features.tasks.domain
 
 import com.example.pomodoro2.interactors.*
+import com.example.pomodoro2.platform.interactor.Interactors
 
 /**
  * Definition of UseCase Set for each feature

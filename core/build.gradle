@@ -6,6 +6,26 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
+    // Dependencies for local unit tests
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation "org.hamcrest:hamcrest-all:$hamcrest_version"
+    testImplementation "androidx.arch.core:core-testing:$androidx_arch_core_testing_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    testImplementation "org.robolectric:robolectric:$robolectric_version"
+    testImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    testImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
+    testImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
+    testImplementation "com.google.truth:truth:$google_truth_version"
+
+    // AndroidX Test - JVM testing
+    testImplementation "androidx.test:core-ktx:$androidx_test_core_version"
+    testImplementation "androidx.test.ext:junit-ktx:$androidx_test_ext_junit_version"
+    testImplementation "androidx.test:rules:$androidx_test_rules_version"
+    // Once https://issuetracker.google.com/127986458 is fixed this can be testImplementation
+    implementation "androidx.test:core:$androidx_test_core_version"
 }
 
 sourceCompatibility = "7"
