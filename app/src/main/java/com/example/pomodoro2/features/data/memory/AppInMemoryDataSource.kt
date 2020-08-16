@@ -1,6 +1,6 @@
 package com.example.pomodoro2.features.data.memory
 
-import com.example.pomodoro2.platform.interface_def.InMemoryDataSource
+import com.example.pomodoro2.platform.data.InMemoryDataSource
 import com.example.pomodoro2.domain.Activity
 import com.example.pomodoro2.domain.Task
 

@@ -12,10 +12,10 @@ import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pomodoro2.R
-import com.example.pomodoro2.data.implementation.DefaultTaskRepository
+import com.example.pomodoro2.data.DefaultTaskRepository
 import com.example.pomodoro2.databinding.FragmentTaskBinding
 import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.data.implementation.DataSourceContainer
+import com.example.pomodoro2.data.DataSourceContainer
 import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.framework.platform.BaseFragment
 import com.example.pomodoro2.framework.platform.EventObserver

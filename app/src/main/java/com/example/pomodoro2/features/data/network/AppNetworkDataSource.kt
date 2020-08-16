@@ -1,7 +1,7 @@
 package com.example.pomodoro2.features.data.network
 
 import android.content.Context
-import com.example.pomodoro2.platform.interface_def.NetworkDataSource
+import com.example.pomodoro2.platform.data.NetworkDataSource
 import com.example.pomodoro2.features.data.database.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

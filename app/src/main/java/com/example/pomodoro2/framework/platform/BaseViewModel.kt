@@ -3,8 +3,8 @@ package com.example.pomodoro2.framework.platform
 import android.app.Application
 import androidx.annotation.NonNull
 import androidx.lifecycle.*
-import com.example.pomodoro2.data.implementation.DataSourceContainer
-import com.example.pomodoro2.data.implementation.DefaultTaskRepository
+import com.example.pomodoro2.data.DataSourceContainer
+import com.example.pomodoro2.data.DefaultTaskRepository
 import com.example.pomodoro2.framework.MyApplication
 import com.example.pomodoro2.platform.exception.Failure
 import com.example.pomodoro2.platform.interactor.Interactors

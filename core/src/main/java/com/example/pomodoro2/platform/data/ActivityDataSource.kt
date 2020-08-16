@@ -1,4 +1,4 @@
-package com.example.pomodoro2.platform.interface_def
+package com.example.pomodoro2.platform.data
 
 import com.example.pomodoro2.domain.Activity
 import com.example.pomodoro2.domain.Task

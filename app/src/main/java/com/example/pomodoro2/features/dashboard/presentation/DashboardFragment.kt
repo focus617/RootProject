@@ -9,8 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
-import com.example.pomodoro2.data.implementation.DataSourceContainer
-import com.example.pomodoro2.data.implementation.DefaultTaskRepository
+import com.example.pomodoro2.data.DataSourceContainer
+import com.example.pomodoro2.data.DefaultTaskRepository
 import com.example.pomodoro2.framework.platform.BaseFragment
 import com.example.pomodoro2.databinding.FragmentDashboardBinding
 import com.example.pomodoro2.features.dashboard.domain.DashboardInteractors

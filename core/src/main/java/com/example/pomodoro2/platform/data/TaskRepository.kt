@@ -1,28 +1,31 @@
-package com.example.pomodoro2.platform.interface_def
+package com.example.pomodoro2.platform.data
 
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.platform.functional.Result
 
-interface TaskDataSource {
+/**
+ * Interface to the data layer.
+ */
+interface TaskRepository{
 
     suspend fun createTask(task: Task)
-
-    suspend fun getTask(taskId: Long): Result<Task>
 
     suspend fun getTasks(): Result<List<Task>>
 
     suspend fun updateTask(task: Task)
 
-    suspend fun deleteTask(task: Task)
+    suspend fun removeTask(task: Task)
 
-    suspend fun deleteAllTasks()
+    suspend fun removeAllTask()
 
     suspend fun completeTask(task: Task)
 
     suspend fun activateTask(task: Task)
 
-    suspend fun clearCompletedTasks()
+    fun setSelectedTask(task: Task)
 
-    suspend fun initializeTutorialTasks()
+    fun getSelectedTask(): Task
+
+    suspend fun initializeStartingTasks()
 
 }
