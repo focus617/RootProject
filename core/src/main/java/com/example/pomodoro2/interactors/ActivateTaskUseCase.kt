@@ -1,8 +1,8 @@
 package com.example.pomodoro2.interactors
 
-import com.example.pomodoro2.platform.data.TaskRepository
+import com.example.pomodoro2.platform.data.IRepository
 import com.example.pomodoro2.domain.Task
 
-class ActivateTaskUseCase(private val taskRepository: TaskRepository) {
+class ActivateTaskUseCase(private val taskRepository: IRepository<Task>) {
     suspend operator fun invoke(task: Task) = taskRepository.activateTask(task)
 }

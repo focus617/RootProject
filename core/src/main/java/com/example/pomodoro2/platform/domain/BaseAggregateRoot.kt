@@ -1,7 +1,7 @@
 package com.example.pomodoro2.platform.domain
 
 
-abstract class BaseAggregate: BaseEntity() {
+abstract class BaseAggregateRoot: BaseEntity() {
 
     private var _events: MutableList<DomainEvent>? = null
 

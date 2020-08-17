@@ -1,14 +1,16 @@
 package com.example.pomodoro2.data
 
+import com.example.pomodoro2.domain.CustomerSpecification
+import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.platform.data.IRepository
 import com.example.pomodoro2.platform.data.InMemoryDataSource
 import com.example.pomodoro2.platform.data.TaskDataSource
-import com.example.pomodoro2.platform.data.TaskRepository
-import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.platform.domain.BaseSpecification
 import com.example.pomodoro2.platform.functional.Result
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.ConcurrentMap
-import javax.inject.Inject
+
 
 /**
  * Concrete implementation to load tasks from the data sources into a cache.
@@ -20,7 +22,7 @@ class DefaultTaskRepository private constructor(
     private val tasksLocalDataSource: TaskDataSource,
     private val inMemoryDataSource: InMemoryDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-): TaskRepository {
+): IRepository<Task/*, BaseSpecification*/> {
 
     private var cachedTasks: ConcurrentMap<String, Task>? = null
 
@@ -50,14 +52,39 @@ class DefaultTaskRepository private constructor(
         return Result.Error(Exception("Error fetching from remote and local"))
     }
 
+    override suspend fun ofId(id: Long): Result<Task> {
+        val localTask = tasksLocalDataSource.getTask(id)
+        if (localTask is Result.Success) return localTask
+        return Result.Error(Exception("Error fetching from remote and local"))
+    }
 
-    override suspend fun createTask(task: Task) = tasksLocalDataSource.createTask(task)
+    override suspend fun add(task: Task) = tasksLocalDataSource.createTask(task)
 
-    override suspend fun getTasks() = tasksLocalDataSource.getTasks()
+    override suspend fun remove(task: Task) = tasksLocalDataSource.deleteTask(task)
 
+    override suspend fun querySpecification(/*specification: BaseSpecification*/): Result<List<Task>>{
+/*
+        val tasks: MutableList<Task> = ArrayList()
+        if (specification !is CustomerSpecification) {
+            return Result.Success(tasks)
+        }
+        if (CollectionUtils.isEmpty(specification.getIds())) {
+            return tasks
+        }
+        specification.getIds().forEach { id ->
+            if (ofId(id) != null) {
+                tasks.add(ofId(id))
+            }
+        }
+        return tasks
+*/
+        return tasksLocalDataSource.getTasks()
+    }
+
+    // TODO: remove below fun due to thought: 用集合的思想来操作聚合根
+    // How to deal with below update method?
     override suspend fun updateTask(task: Task) = tasksLocalDataSource.updateTask(task)
 
-    override suspend fun removeTask(task: Task) = tasksLocalDataSource.deleteTask(task)
 
     override suspend fun removeAllTask() = tasksLocalDataSource.deleteAllTasks()
 
