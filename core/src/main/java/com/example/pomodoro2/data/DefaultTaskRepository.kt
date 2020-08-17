@@ -1,11 +1,9 @@
 package com.example.pomodoro2.data
 
-import com.example.pomodoro2.domain.CustomerSpecification
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.platform.data.IRepository
 import com.example.pomodoro2.platform.data.InMemoryDataSource
 import com.example.pomodoro2.platform.data.TaskDataSource
-import com.example.pomodoro2.platform.domain.BaseSpecification
 import com.example.pomodoro2.platform.functional.Result
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -52,16 +50,33 @@ class DefaultTaskRepository private constructor(
         return Result.Error(Exception("Error fetching from remote and local"))
     }
 
+    // Implement IRepository
     override suspend fun ofId(id: Long): Result<Task> {
         val localTask = tasksLocalDataSource.getTask(id)
         if (localTask is Result.Success) return localTask
         return Result.Error(Exception("Error fetching from remote and local"))
     }
 
-    override suspend fun add(task: Task) = tasksLocalDataSource.createTask(task)
+    override suspend fun add(task: Task) {
+        if(task != null) {
+            cachedTasks?.set(task.id.toString(), task)
+            tasksLocalDataSource.createTask(task)
+        }
+    }
 
-    override suspend fun remove(task: Task) = tasksLocalDataSource.deleteTask(task)
+    override suspend fun remove(task: Task) {
+        if(task != null) {
+            cachedTasks?.remove(task.id.toString(), task)
+            tasksLocalDataSource.deleteTask(task)
+        }
+    }
 
+    /**
+     * 我们在Specification里面定义更加复杂的查询条件
+     *
+     * @param specification 此处举例：基于id批量查询
+     * @return
+     */
     override suspend fun querySpecification(/*specification: BaseSpecification*/): Result<List<Task>>{
 /*
         val tasks: MutableList<Task> = ArrayList()
@@ -76,7 +91,7 @@ class DefaultTaskRepository private constructor(
                 tasks.add(ofId(id))
             }
         }
-        return tasks
+        return Result.Success(tasks)
 */
         return tasksLocalDataSource.getTasks()
     }

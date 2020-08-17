@@ -28,13 +28,14 @@
  * THE SOFTWARE.
  */
 
-package com.example.pomodoro2.framework.helper
+package com.example.pomodoro2.features.data.localfile
 
 import android.content.Context
-import com.example.pomodoro2.features.login.domain.Profile
+import com.example.pomodoro2.domain.UserProfile
+import com.example.pomodoro2.platform.data.IPreferencesDataSource
 import com.google.gson.Gson
 
-class SharedPreferenceHelper(context: Context) {
+class SharedPreferenceDataSource(context: Context):IPreferencesDataSource {
   companion object {
     const val NAME = "Pomodoro"
     const val PROFILE = "profile"
@@ -44,22 +45,20 @@ class SharedPreferenceHelper(context: Context) {
 
   private val sharedPreferences = context.getSharedPreferences(NAME, Context.MODE_PRIVATE)
 
-  fun getProfile(): Profile {
+  override fun loadUser(): UserProfile {
     val jsonString = sharedPreferences.getString(PROFILE, null)
     return if (jsonString == null) {
-      Profile()
+        UserProfile()
     } else {
-      gson.fromJson(jsonString, Profile::class.java)
+      gson.fromJson(jsonString, UserProfile::class.java)
     }
   }
 
-  fun saveProfile(name: String, email: String) {
+  override fun saveUser(UserProfile: UserProfile) {
     with(sharedPreferences.edit()) {
-      putString(PROFILE, gson.toJson(
-        Profile(
-          name,
-          email
-        )
+      putString(
+          PROFILE, gson.toJson(
+          UserProfile
       ))
       apply()
     }
