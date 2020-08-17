@@ -1,4 +1,4 @@
-package com.example.pomodoro2.platform.mockito
+package com.example.pomodoro2
 
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -20,8 +20,7 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 abstract class BaseUnitTest {
     @Suppress("LeakingThis")
-    @Rule
-    @JvmField val injectMocks = InjectMocksRule.create(this@BaseUnitTest)
+    @Rule @JvmField val injectMocks = InjectMocksRule.create(this@BaseUnitTest)
 
     open fun <T> captureArg(argumentCaptor: ArgumentCaptor<T>): T =
         argumentCaptor.capture()

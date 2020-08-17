@@ -2,7 +2,7 @@ package com.example.pomodoro2.platform.functional
 
 import com.example.pomodoro2.platform.functional.Either.Left
 import com.example.pomodoro2.platform.functional.Either.Right
-import com.example.pomodoro2.platform.mockito.BaseUnitTest
+import com.example.pomodoro2.BaseUnitTest
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldEqualTo
