@@ -4,7 +4,7 @@ import android.app.Application
 import com.example.pomodoro2.data.DataSourceContainer
 import com.example.pomodoro2.features.data.database.RoomActivityDataSource
 import com.example.pomodoro2.features.data.database.RoomTaskDataSource
-import com.example.pomodoro2.features.data.memory.AppInMemoryDataSource
+import com.example.pomodoro2.data.AppInMemoryDataSource
 import com.example.pomodoro2.features.data.network.AppNetworkDataSource
 import timber.log.Timber
 

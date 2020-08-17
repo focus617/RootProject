@@ -5,20 +5,19 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
-    def config = rootProject.extensions.getByName("ext")
 
-    compileSdkVersion config["compile_sdk_version"]
-    buildToolsVersion config["build_tools_version"]
+    compileSdkVersion rootProject.compile_sdk_version
+    buildToolsVersion rootProject.build_tools_version
 
 
     defaultConfig {
-        applicationId config["application_id"]
-        minSdkVersion config["min_sdk_version"]
-        targetSdkVersion config["target_sdk_version"]
-        versionCode config["version_code"]
-        versionName config["version_name"]
+        applicationId rootProject.application_id
+        minSdkVersion rootProject.min_sdk_version
+        targetSdkVersion rootProject.target_sdk_version
+        versionCode rootProject.version_code
+        versionName rootProject.version_name
 
-        testInstrumentationRunner config["test_runner"]
+        testInstrumentationRunner rootProject.test_runner
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -34,6 +33,8 @@ android {
     }
     //Data Binding
     buildFeatures.dataBinding true
+    dataBinding {enabledForTests = true}
+
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -42,10 +43,40 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    flavorDimensions "default"
+
+    // If you need to add more flavors, consider using flavor dimensions.
+    productFlavors {
+        mock {
+            dimension "default"
+            applicationIdSuffix = ".mock"
+        }
+        prod {
+            dimension "default"
+        }
+    }
+
+    // Remove mockRelease as it's not needed.
+    android.variantFilter { variant ->
+        if (variant.buildType.name == 'release'
+                && variant.getFlavors().get(0).name == 'mock') {
+            variant.setIgnore(true)
+        }
+    }
+
     // Always show the result of every unit test when running via command line, even if it passes.
     testOptions.unitTests {
         includeAndroidResources = true
+
+        all {
+            testLogging {
+                events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+            }
+        }
     }
+
+
 }
 
 dependencies {
@@ -129,6 +160,10 @@ dependencies {
     testImplementation "androidx.test:core-ktx:$androidx_test_core_kotlin_version"
     testImplementation "androidx.arch.core:core-testing:$androidx_arch_core_testing_version"
 
+    // Dagger 2 dependencies
+    implementation "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"

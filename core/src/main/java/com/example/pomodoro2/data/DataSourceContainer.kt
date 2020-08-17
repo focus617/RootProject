@@ -5,6 +5,11 @@ import com.example.pomodoro2.platform.data.InMemoryDataSource
 import com.example.pomodoro2.platform.data.NetworkDataSource
 import com.example.pomodoro2.platform.data.TaskDataSource
 
+/*
+* TODO: Study Service Locator pattern
+* under architecture-samples: mock.ServiceLocator
+*/
+
 /**
  * Definition of container for each type of data source
  */

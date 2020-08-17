@@ -1,4 +1,4 @@
-package com.example.pomodoro2.features.data.memory
+package com.example.pomodoro2.data
 
 import com.example.pomodoro2.platform.data.InMemoryDataSource
 import com.example.pomodoro2.domain.Activity

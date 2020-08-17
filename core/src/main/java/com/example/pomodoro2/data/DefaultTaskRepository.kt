@@ -8,6 +8,7 @@ import com.example.pomodoro2.platform.functional.Result
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.ConcurrentMap
+import javax.inject.Inject
 
 /**
  * Concrete implementation to load tasks from the data sources into a cache.
