@@ -14,7 +14,9 @@ import com.example.pomodoro2.data.DefaultTaskRepository
 import com.example.pomodoro2.framework.platform.BaseFragment
 import com.example.pomodoro2.databinding.FragmentDashboardBinding
 import com.example.pomodoro2.features.dashboard.domain.DashboardInteractors
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DashboardFragment : BaseFragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel

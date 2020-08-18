@@ -21,7 +21,9 @@ import com.example.pomodoro2.framework.platform.BaseFragment
 import com.example.pomodoro2.framework.platform.EventObserver
 import com.example.pomodoro2.interactors.*
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TaskFragment : BaseFragment() {
 
     private lateinit var tasksViewModel: TasksViewModel

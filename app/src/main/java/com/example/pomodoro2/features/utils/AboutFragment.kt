@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.pomodoro2.R
 import com.example.pomodoro2.framework.platform.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AboutFragment : BaseFragment() {
 
     override fun layoutId(): Int {

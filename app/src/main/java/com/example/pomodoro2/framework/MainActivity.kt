@@ -13,8 +13,10 @@ import com.example.pomodoro2.R
 import com.example.pomodoro2.databinding.ActivityMainBinding
 import com.example.pomodoro2.databinding.NavHeaderBinding
 import com.example.pomodoro2.features.login.presentation.UserProfileViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var activityMainBinding: ActivityMainBinding

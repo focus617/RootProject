@@ -6,12 +6,16 @@ import com.example.pomodoro2.features.data.database.RoomActivityDataSource
 import com.example.pomodoro2.features.data.database.RoomTaskDataSource
 import com.example.pomodoro2.data.AppInMemoryDataSource
 import com.example.pomodoro2.features.data.network.AppNetworkDataSource
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
-class MyApplication : Application() {
+@HiltAndroidApp
+open class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        INSTANCE = this
+
         Timber.plant(Timber.DebugTree())
 
         // build the singleton data source
@@ -21,5 +25,9 @@ class MyApplication : Application() {
             AppInMemoryDataSource(),
             AppNetworkDataSource(this)
         )
+    }
+
+    companion object {
+        lateinit var INSTANCE: BaseApplication
     }
 }

@@ -12,7 +12,9 @@ import com.example.pomodoro2.data.DataSourceContainer
 import com.example.pomodoro2.data.DefaultTaskRepository
 import com.example.pomodoro2.features.countDownTimer.domain.CountDownTimerInteractors
 import com.example.pomodoro2.framework.platform.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CountDownTimerFragment : BaseFragment() {
 
     private lateinit var countDownTimerViewModel: CountDownTimerViewModel

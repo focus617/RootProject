@@ -13,8 +13,10 @@ import com.example.pomodoro2.data.DefaultTaskRepository
 import com.example.pomodoro2.databinding.FragmentActivityBinding
 import com.example.pomodoro2.features.activities.domain.ActivityInteractors
 import com.example.pomodoro2.framework.platform.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_activity.*
 
+@AndroidEntryPoint
 class ActivityFragment : BaseFragment() {
 
     private lateinit var activitiesViewModel: ActivitiesViewModel

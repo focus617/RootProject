@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.example.pomodoro2.domain.UserProfile
 import com.example.pomodoro2.framework.extension.getOrEmpty
 import com.example.pomodoro2.features.data.localfile.SharedPreferenceDataSource
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * ViewModel for the login screen.

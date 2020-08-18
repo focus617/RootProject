@@ -17,11 +17,20 @@ import androidx.fragment.app.Fragment
  */
 abstract class BaseFragment : Fragment() {
 
+    private var mRootView: View? = null
+
     abstract fun layoutId(): Int
 
     // TODO: seems not work in case of databinding
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-        inflater.inflate(layoutId(), container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        mRootView = inflater.inflate(layoutId(), container, false)
+        return mRootView!!
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mRootView = null
+    }
 
     open fun onBackPressed() {}
 

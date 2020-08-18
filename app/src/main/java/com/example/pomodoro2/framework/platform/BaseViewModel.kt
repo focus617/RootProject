@@ -5,7 +5,7 @@ import androidx.annotation.NonNull
 import androidx.lifecycle.*
 import com.example.pomodoro2.data.DataSourceContainer
 import com.example.pomodoro2.data.DefaultTaskRepository
-import com.example.pomodoro2.framework.MyApplication
+import com.example.pomodoro2.framework.BaseApplication
 import com.example.pomodoro2.platform.exception.Failure
 import com.example.pomodoro2.platform.interactor.Interactors
 
@@ -17,7 +17,7 @@ import com.example.pomodoro2.platform.interactor.Interactors
 abstract class BaseViewModel(application: Application) :
     AndroidViewModel(application) {
 
-    protected val application: MyApplication = getApplication()
+    protected val application: BaseApplication = getApplication()
 
 
     private val _failure: MutableLiveData<Failure> = MutableLiveData()
