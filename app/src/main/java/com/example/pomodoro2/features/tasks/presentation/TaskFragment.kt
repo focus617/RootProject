@@ -17,7 +17,7 @@ import com.example.pomodoro2.databinding.FragmentTaskBinding
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.data.DataSourceContainer
 import com.example.pomodoro2.features.tasks.domain.TaskInteractors
-import com.example.pomodoro2.framework.platform.BaseFragment
+import com.example.pomodoro2.framework.base.BaseFragment
 import com.example.pomodoro2.framework.platform.EventObserver
 import com.example.pomodoro2.interactors.*
 import com.google.android.material.snackbar.Snackbar

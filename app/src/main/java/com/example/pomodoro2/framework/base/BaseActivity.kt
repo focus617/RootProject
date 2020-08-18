@@ -1,4 +1,4 @@
-package com.example.pomodoro2.framework.platform
+package com.example.pomodoro2.framework.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

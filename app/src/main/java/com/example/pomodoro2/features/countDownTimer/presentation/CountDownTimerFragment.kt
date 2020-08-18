@@ -11,7 +11,7 @@ import com.example.pomodoro2.R
 import com.example.pomodoro2.data.DataSourceContainer
 import com.example.pomodoro2.data.DefaultTaskRepository
 import com.example.pomodoro2.features.countDownTimer.domain.CountDownTimerInteractors
-import com.example.pomodoro2.framework.platform.BaseFragment
+import com.example.pomodoro2.framework.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

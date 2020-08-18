@@ -1,13 +1,14 @@
 package com.example.pomodoro2.framework
 
 import android.app.Application
+import com.example.pomodoro2.BuildConfig
 import com.example.pomodoro2.data.DataSourceContainer
 import com.example.pomodoro2.features.data.database.RoomActivityDataSource
 import com.example.pomodoro2.features.data.database.RoomTaskDataSource
 import com.example.pomodoro2.data.AppInMemoryDataSource
 import com.example.pomodoro2.features.data.network.AppNetworkDataSource
+import com.example.pomodoro2.framework.platform.initLogger
 import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
 
 @HiltAndroidApp
 open class BaseApplication : Application() {
@@ -16,7 +17,7 @@ open class BaseApplication : Application() {
         super.onCreate()
         INSTANCE = this
 
-        Timber.plant(Timber.DebugTree())
+        initLogger(BuildConfig.DEBUG)
 
         // build the singleton data source
         DataSourceContainer.inject(

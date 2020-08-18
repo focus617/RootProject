@@ -17,7 +17,7 @@ package com.example.pomodoro2
 
 import android.app.Application
 import android.content.Context
-import com.example.pomodoro2.framework.platform.BaseActivity
+import com.example.pomodoro2.framework.base.BaseActivity
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock

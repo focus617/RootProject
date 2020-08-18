@@ -6,8 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.features.activities.domain.ActivityInteractors
-import com.example.pomodoro2.features.tasks.domain.TaskInteractors
-import com.example.pomodoro2.framework.platform.BaseViewModel
+import com.example.pomodoro2.framework.base.BaseViewModel
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

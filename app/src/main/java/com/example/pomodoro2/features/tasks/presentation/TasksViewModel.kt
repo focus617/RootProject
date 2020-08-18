@@ -9,7 +9,7 @@ import com.example.pomodoro2.R
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.features.tasks.domain.TaskInteractors
-import com.example.pomodoro2.framework.platform.BaseViewModel
+import com.example.pomodoro2.framework.base.BaseViewModel
 import com.example.pomodoro2.platform.functional.Result
 import kotlinx.coroutines.*
 

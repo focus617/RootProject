@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.navGraphViewModels
 import com.example.pomodoro2.R
-import com.example.pomodoro2.framework.platform.BaseDialogFragment
+import com.example.pomodoro2.framework.base.BaseDialogFragment
 import com.example.pomodoro2.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_login.*

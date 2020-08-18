@@ -1,4 +1,4 @@
-package com.example.pomodoro2.framework.platform
+package com.example.pomodoro2.framework.base
 
 import android.content.Context
 import android.os.Bundle

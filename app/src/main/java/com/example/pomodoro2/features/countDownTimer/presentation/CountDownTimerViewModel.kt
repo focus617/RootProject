@@ -4,8 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.pomodoro2.features.countDownTimer.domain.CountDownTimerInteractors
-import com.example.pomodoro2.features.tasks.domain.TaskInteractors
-import com.example.pomodoro2.framework.platform.BaseViewModel
+import com.example.pomodoro2.framework.base.BaseViewModel
 
 class CountDownTimerViewModel(
     application: Application,

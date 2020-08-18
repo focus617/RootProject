@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.pomodoro2.features.dashboard.domain.DashboardInteractors
 import com.example.pomodoro2.features.data.network.Api
 import com.example.pomodoro2.features.data.network.ApiConstants
-import com.example.pomodoro2.framework.platform.BaseViewModel
+import com.example.pomodoro2.framework.base.BaseViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

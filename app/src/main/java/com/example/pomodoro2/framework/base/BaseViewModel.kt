@@ -1,4 +1,4 @@
-package com.example.pomodoro2.framework.platform
+package com.example.pomodoro2.framework.base
 
 import android.app.Application
 import androidx.annotation.NonNull
@@ -46,13 +46,15 @@ open class MyBaseViewModel(application: Application) :
             dataSourceContainer.roomTaskDataSource,
             dataSourceContainer.inMemoryDataSource
         )
-        BaseViewModelFactory.inject(
+        inject(
             this.application,
             dependencies
         )
 
         // Get a reference to the ViewModel associated with this fragment.
-        return ViewModelProvider(owner, BaseViewModelFactory).get(modelClass)
+        return ViewModelProvider(owner,
+            BaseViewModelFactory
+        ).get(modelClass)
     }
 
 
@@ -75,8 +77,8 @@ open class MyBaseViewModel(application: Application) :
             if (BaseViewModel::class.java.isAssignableFrom(modelClass)) {
                 return modelClass.getConstructor(Application::class.java, Interactors::class.java)
                     .newInstance(
-                        BaseViewModelFactory.application,
-                        BaseViewModelFactory.dependencies
+                        application,
+                        dependencies
                     )
             } else {
                 throw IllegalStateException("${modelClass.name} must extend BaseViewModel")
