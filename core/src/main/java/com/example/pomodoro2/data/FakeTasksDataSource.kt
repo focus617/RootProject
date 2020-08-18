@@ -25,7 +25,7 @@ import java.util.LinkedHashMap
 /**
  * Implementation of a remote data source with static access to the data for easy testing.
  */
-object FakeTasksRemoteDataSource  : IDbLikeDataSource<Task> {
+object FakeTasksDataSource  : IDbLikeDataSource<Task> {
 
     private var TASKS_SERVICE_DATA: LinkedHashMap<String, Task> = LinkedHashMap()
 
