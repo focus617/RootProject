@@ -30,7 +30,7 @@ object FakeTasksDataSource  : IDbLikeDataSource<Task> {
     private var TASKS_SERVICE_DATA: LinkedHashMap<String, Task> = LinkedHashMap()
 
 
-    override suspend fun createTask(task: Task) {
+    override suspend fun createOrUpdateTask(task: Task) {
         TASKS_SERVICE_DATA[task.id.toString()] = task
     }
 
@@ -45,9 +45,9 @@ object FakeTasksDataSource  : IDbLikeDataSource<Task> {
         return Success(TASKS_SERVICE_DATA.values.toList())
     }
 
-    override suspend fun updateTask(t: Task) {
+/*    override suspend fun updateTask(t: Task) {
         TODO("Not yet implemented")
-    }
+    }*/
 
     override suspend fun deleteTask(task: Task) {
         TASKS_SERVICE_DATA.remove(task.id.toString())

@@ -6,13 +6,13 @@ import com.example.pomodoro2.platform.functional.Result
 
 interface IDbLikeDataSource<T: BaseEntity> {
 
-    suspend fun createTask(t: T)
+    suspend fun createOrUpdateTask(t: T)
 
     suspend fun retrieveTask(Id: Long): Result<T>
 
     suspend fun retrieveTasks(): Result<List<T>>
 
-    suspend fun updateTask(t: T)
+    //suspend fun updateTask(t: T)
 
     suspend fun deleteTask(t: T)
 

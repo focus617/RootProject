@@ -31,7 +31,7 @@ object DataSourceContainer {
     ) {
         DataSourceContainer.remoteTaskDataSource = remoteTaskDataSource
         DataSourceContainer.roomTaskDataSource = roomTaskDataSource
-        roomActivityDataSource = activityDataSource
+        DataSourceContainer.roomActivityDataSource = activityDataSource
         DataSourceContainer.inMemoryDataSource = inMemoryDataSource
         DataSourceContainer.networkDataSource = networkDataSource
     }

@@ -10,6 +10,7 @@ import com.example.pomodoro2.data.FakeTasksDataSource
 import com.example.pomodoro2.features.data.network.AppNetworkDataSource
 import com.example.pomodoro2.framework.platform.initLogger
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
 @HiltAndroidApp
 open class BaseApplication : Application() {
@@ -19,6 +20,7 @@ open class BaseApplication : Application() {
         INSTANCE = this
 
         initLogger(BuildConfig.DEBUG)
+        Timber.d("Pomodoro Application Start.")
 
         // build the singleton data source
         DataSourceContainer.inject(

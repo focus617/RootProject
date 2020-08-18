@@ -49,7 +49,7 @@ class RoomTaskDataSource(val context: Context) :
     private val taskDao = AppDatabase.getInstance(context.applicationContext).taskDao
 
 
-    override suspend fun createTask(task: Task) {
+    override suspend fun createOrUpdateTask(task: Task) {
         withContext(ioDispatcher) {
             taskDao.insertTask(task.asDatabaseEntity())
         }
@@ -77,11 +77,11 @@ class RoomTaskDataSource(val context: Context) :
         }
     }
 
-    override suspend fun updateTask(task: Task){
+/*    override suspend fun updateTask(task: Task){
         withContext(ioDispatcher) {
             taskDao.updateTask(task.asDatabaseEntity())
         }
-    }
+    }*/
 
 
     override suspend fun deleteTask(task: Task){
