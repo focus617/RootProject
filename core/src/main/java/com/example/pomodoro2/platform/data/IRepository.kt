@@ -16,25 +16,25 @@ interface IRepository<T: BaseAggregateRoot/*, Q: BaseSpecification*/>{
 
     suspend fun add(t: T)
 
-    suspend fun remove(task: Task)
+    suspend fun remove(t: T)
 
-    suspend fun querySpecification(forceUpdate: Boolean = false/*q: Q*/): Result<List<Task>>
+    suspend fun querySpecification(forceUpdate: Boolean = false/*q: Q*/): Result<List<T>>
 
-    fun setSelectedTask(task: Task)
+    fun setSelectedTask(t: T)
 
-    fun getSelectedTask(): Task
+    fun getSelectedTask(): T
 
     //
     // TODO: remove below fun due to thought: 用集合的思想来操作聚合根
     //
 
-    suspend fun updateTask(task: Task)
+    suspend fun updateTask(t: T)
 
     suspend fun removeAllTask()
 
-    suspend fun completeTask(task: Task)
+    suspend fun completeTask(t: T)
 
-    suspend fun activateTask(task: Task)
+    suspend fun activateTask(t: T)
 
     suspend fun initializeStartingTasks()
 
