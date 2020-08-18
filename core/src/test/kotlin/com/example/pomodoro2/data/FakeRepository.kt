@@ -36,8 +36,6 @@ class FakeRepository : IRepository<Task> {
         shouldReturnError = value
     }
 
-
-
     @VisibleForTesting
     fun addTasks(vararg tasks: Task) {
         for (task in tasks) {
