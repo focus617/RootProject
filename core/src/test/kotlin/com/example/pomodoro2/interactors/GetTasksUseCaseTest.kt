@@ -1,5 +1,6 @@
 package com.example.pomodoro2.interactors
 
+import com.example.pomodoro2.BaseUnitTest
 import com.example.pomodoro2.data.FakeRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -18,7 +19,7 @@ import org.junit.*
  * Unit tests for [GetTasksUseCase].
  */
 @ExperimentalCoroutinesApi
-class GetTasksUseCaseTest {
+class GetTasksUseCaseTest : BaseUnitTest() {
 
     private val tasksRepository = FakeRepository()
     private val useCase = GetTasksUseCase(tasksRepository)
