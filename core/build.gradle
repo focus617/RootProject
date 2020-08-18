@@ -38,9 +38,9 @@ dependencies {
     implementation "androidx.test:core:$androidx_test_core_version"
 
     // Dagger 2 dependencies
-    implementation "com.google.dagger:dagger:$dagger_version"
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+//    implementation "com.google.dagger:dagger:$dagger_version"
+//    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+//    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
     // Hilt
 //    implementation "com.google.dagger:hilt-android:$hilt_version"

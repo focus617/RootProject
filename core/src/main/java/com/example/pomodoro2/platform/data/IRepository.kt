@@ -2,9 +2,7 @@ package com.example.pomodoro2.platform.data
 
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.platform.domain.BaseAggregateRoot
-import com.example.pomodoro2.platform.domain.BaseSpecification
 import com.example.pomodoro2.platform.functional.Result
-import dagger.Component
 
 /**
  * Interface to the Repository of domain.
