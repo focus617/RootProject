@@ -38,6 +38,7 @@ class DashboardFragment : BaseFragment() {
 
         // TODO: change to dashboard repository
         val taskRepository = DefaultTaskRepository.getInstance(
+            DataSourceContainer.remoteTaskDataSource,
             DataSourceContainer.roomTaskDataSource,
             DataSourceContainer.inMemoryDataSource
         )

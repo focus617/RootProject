@@ -2,7 +2,7 @@ package com.example.pomodoro2.features.data.database
 
 import android.content.Context
 import com.example.pomodoro2.R
-import com.example.pomodoro2.platform.data.TaskDataSource
+import com.example.pomodoro2.platform.data.IDbLikeDataSource
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.features.data.database.TaskConstants.images
 import com.example.pomodoro2.features.data.database.TaskConstants.titles
@@ -43,7 +43,7 @@ object TaskConstants{
  * Concrete implementation of a data source as a db.
  */
 class RoomTaskDataSource(val context: Context) :
-    TaskDataSource {
+    IDbLikeDataSource<Task> {
 
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
     private val taskDao = AppDatabase.getInstance(context.applicationContext).taskDao
@@ -56,7 +56,7 @@ class RoomTaskDataSource(val context: Context) :
     }
 
 
-    override suspend fun getTask(taskId: Long): Result<Task> = withContext(ioDispatcher) {
+    override suspend fun retrieveTask(taskId: Long): Result<Task> = withContext(ioDispatcher) {
         try {
                 val task = taskDao.getTaskById(taskId)?.asDomainModel()
                 if (task != null) {
@@ -69,7 +69,7 @@ class RoomTaskDataSource(val context: Context) :
         }
     }
 
-    override suspend fun getTasks(): Result<List<Task>> = withContext(ioDispatcher) {
+    override suspend fun retrieveTasks(): Result<List<Task>> = withContext(ioDispatcher) {
         return@withContext try {
             Success(taskDao.getTasks().asDomainModel())
         } catch (e: Exception) {

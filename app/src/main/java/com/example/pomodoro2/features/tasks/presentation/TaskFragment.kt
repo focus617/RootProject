@@ -62,6 +62,7 @@ class TaskFragment : BaseFragment() {
         // Build the ViewModelFactory with Interactors for this feature
         val application = requireNotNull(this.activity).application
         val taskRepository = DefaultTaskRepository.getInstance(
+            DataSourceContainer.remoteTaskDataSource,
             DataSourceContainer.roomTaskDataSource,
             DataSourceContainer.inMemoryDataSource
         )

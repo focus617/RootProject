@@ -3,7 +3,7 @@ package com.example.pomodoro2.data
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.platform.data.IRepository
 import com.example.pomodoro2.platform.data.InMemoryDataSource
-import com.example.pomodoro2.platform.data.TaskDataSource
+import com.example.pomodoro2.platform.data.IDbLikeDataSource
 import com.example.pomodoro2.platform.functional.Result
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +17,8 @@ import java.util.concurrent.ConcurrentMap
  * data source fails. Remote is the source of truth.
  */
 class DefaultTaskRepository private constructor(
-    private val tasksLocalDataSource: TaskDataSource,
+    private val tasksRemoteDataSource: IDbLikeDataSource<Task>,
+    private val tasksLocalDataSource: IDbLikeDataSource<Task>,
     private val inMemoryDataSource: InMemoryDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): IRepository<Task/*, BaseSpecification*/> {
@@ -45,14 +46,14 @@ class DefaultTaskRepository private constructor(
         }
 
         // Local if remote fails
-        val localTasks = tasksLocalDataSource.getTasks()
+        val localTasks = tasksLocalDataSource.retrieveTasks()
         if (localTasks is Result.Success) return localTasks
         return Result.Error(Exception("Error fetching from remote and local"))
     }
 
     // Implement IRepository
     override suspend fun ofId(id: Long, forceUpdate: Boolean): Result<Task> {
-        val localTask = tasksLocalDataSource.getTask(id)
+        val localTask = tasksLocalDataSource.retrieveTask(id)
         if (localTask is Result.Success) return localTask
         return Result.Error(Exception("Error fetching from remote and local"))
     }
@@ -93,7 +94,7 @@ class DefaultTaskRepository private constructor(
         }
         return Result.Success(tasks)
 */
-        return tasksLocalDataSource.getTasks()
+        return tasksLocalDataSource.retrieveTasks()
     }
 
     // TODO: remove below fun due to thought: 用集合的思想来操作聚合根
@@ -121,7 +122,8 @@ class DefaultTaskRepository private constructor(
         private lateinit var INSTANCE: DefaultTaskRepository
 
         fun getInstance(
-            tasksLocalDataSource: TaskDataSource,
+            tasksRemoteDataSource: IDbLikeDataSource<Task>,
+            tasksLocalDataSource: IDbLikeDataSource<Task>,
             inMemoryDataSource: InMemoryDataSource
         ): DefaultTaskRepository {
             synchronized(DefaultTaskRepository::class.java) {
@@ -131,6 +133,7 @@ class DefaultTaskRepository private constructor(
                 if (!Companion::INSTANCE.isInitialized) {
                     INSTANCE =
                         DefaultTaskRepository(
+                            tasksRemoteDataSource,
                             tasksLocalDataSource,
                             inMemoryDataSource
                         )

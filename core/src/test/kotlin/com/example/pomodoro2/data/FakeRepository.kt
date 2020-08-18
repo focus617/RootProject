@@ -24,7 +24,7 @@ import com.example.pomodoro2.platform.data.IRepository
 import java.util.LinkedHashMap
 
 /**
- * Implementation of a remote data source with static access to the data for easy testing.
+ * Implementation of a fake repository with static access to the data for easy testing on UseCases.
  */
 class FakeRepository : IRepository<Task> {
 
@@ -55,11 +55,7 @@ class FakeRepository : IRepository<Task> {
     }
 
     override suspend fun add(task: Task) {
-        val newTask = Task(
-            task.id, task.title, task.description, task.isCompleted,
-            task.imageId, task.priority, task.createTime
-        )
-        tasksServiceData[task.id.toString()] = newTask
+        tasksServiceData[task.id.toString()] = task
     }
 
     override suspend fun remove(task: Task) {

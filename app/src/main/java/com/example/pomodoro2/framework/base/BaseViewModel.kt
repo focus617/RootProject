@@ -43,8 +43,9 @@ open class MyBaseViewModel(application: Application) :
     ): T {
         // Build the ViewModelFactory with Interactors for this feature
         val taskRepository = DefaultTaskRepository.getInstance(
-            dataSourceContainer.roomTaskDataSource,
-            dataSourceContainer.inMemoryDataSource
+            DataSourceContainer.remoteTaskDataSource,
+            DataSourceContainer.roomTaskDataSource,
+            DataSourceContainer.inMemoryDataSource
         )
         inject(
             this.application,

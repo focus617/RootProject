@@ -37,6 +37,7 @@ class ActivityFragment : BaseFragment() {
 
         // TODO: change to activity repository
         val taskRepository = DefaultTaskRepository.getInstance(
+            DataSourceContainer.remoteTaskDataSource,
             DataSourceContainer.roomTaskDataSource,
             DataSourceContainer.inMemoryDataSource
         )
