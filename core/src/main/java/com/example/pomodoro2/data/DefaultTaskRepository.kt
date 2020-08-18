@@ -51,7 +51,7 @@ class DefaultTaskRepository private constructor(
     }
 
     // Implement IRepository
-    override suspend fun ofId(id: Long): Result<Task> {
+    override suspend fun ofId(id: Long, forceUpdate: Boolean): Result<Task> {
         val localTask = tasksLocalDataSource.getTask(id)
         if (localTask is Result.Success) return localTask
         return Result.Error(Exception("Error fetching from remote and local"))
@@ -77,7 +77,7 @@ class DefaultTaskRepository private constructor(
      * @param specification 此处举例：基于id批量查询
      * @return
      */
-    override suspend fun querySpecification(/*specification: BaseSpecification*/): Result<List<Task>>{
+    override suspend fun querySpecification(forceUpdate: Boolean/*specification: BaseSpecification*/): Result<List<Task>>{
 /*
         val tasks: MutableList<Task> = ArrayList()
         if (specification !is CustomerSpecification) {

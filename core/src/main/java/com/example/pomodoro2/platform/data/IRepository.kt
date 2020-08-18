@@ -12,13 +12,13 @@ import com.example.pomodoro2.platform.functional.Result
 interface IRepository<T: BaseAggregateRoot/*, Q: BaseSpecification*/>{
 
     // TODO: change id type from Long to String in case of DomainEntity supporting with UUID
-    suspend fun ofId(id: Long): Result<T>
+    suspend fun ofId(id: Long, forceUpdate: Boolean = false): Result<T>
 
     suspend fun add(t: T)
 
     suspend fun remove(task: Task)
 
-    suspend fun querySpecification(/*q: Q*/): Result<List<Task>>
+    suspend fun querySpecification(forceUpdate: Boolean = false/*q: Q*/): Result<List<Task>>
 
     fun setSelectedTask(task: Task)
 
