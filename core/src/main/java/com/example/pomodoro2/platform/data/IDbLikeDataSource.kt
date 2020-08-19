@@ -8,7 +8,7 @@ interface IDbLikeDataSource<T: BaseEntity> {
 
     suspend fun createOrUpdateTask(t: T)
 
-    suspend fun retrieveTask(Id: Long): Result<T>
+    suspend fun retrieveTask(Id: String): Result<T>
 
     suspend fun retrieveTasks(): Result<List<T>>
 

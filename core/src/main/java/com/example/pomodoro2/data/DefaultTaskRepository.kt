@@ -22,7 +22,7 @@ class DefaultTaskRepository private constructor(
     private val tasksLocalDataSource: IDbLikeDataSource<Task>,
     private val inMemoryDataSource: InMemoryDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-): IRepository<Task/*, BaseSpecification*/> {
+) : IRepository<Task/*, BaseSpecification*/> {
 
     private var cachedTasks: ConcurrentHashMap<String, Task>? = null
 
@@ -35,7 +35,7 @@ class DefaultTaskRepository private constructor(
     override suspend fun querySpecification(
         forceUpdate: Boolean
         /*, specification: BaseSpecification*/
-    ): Result<List<Task>>{
+    ): Result<List<Task>> {
 
         return withContext(ioDispatcher) {
             // Respond immediately with cache if available and not dirty
@@ -67,7 +67,7 @@ class DefaultTaskRepository private constructor(
 
 
     // Implement IRepository
-    override suspend fun ofId(id: Long, forceUpdate: Boolean): Result<Task> {
+    override suspend fun ofId(id: String, forceUpdate: Boolean): Result<Task> {
 
         return withContext(ioDispatcher) {
             // Respond immediately with cache if available
@@ -93,28 +93,24 @@ class DefaultTaskRepository private constructor(
     }
 
     override suspend fun add(task: Task) {
-        if(task != null) {
-            // Do in memory cache update to keep the app UI up to date
-            cacheAndPerform(task) {
-                coroutineScope {
-                    launch { tasksRemoteDataSource.createOrUpdateTask(it) }
-                    launch { tasksLocalDataSource.createOrUpdateTask(it) }
-                }
+        // Do in memory cache update to keep the app UI up to date
+        cacheAndPerform(task) {
+            coroutineScope {
+                launch { tasksRemoteDataSource.createOrUpdateTask(it) }
+                launch { tasksLocalDataSource.createOrUpdateTask(it) }
             }
-            cachedTasks?.set(task.id.toString(), task)
-            tasksLocalDataSource.createOrUpdateTask(task)
         }
+        cachedTasks?.set(task.id, task)
+        tasksLocalDataSource.createOrUpdateTask(task)
     }
 
     override suspend fun remove(task: Task) {
-        if(task != null) {
-            coroutineScope {
-                launch { tasksRemoteDataSource.deleteTask(task) }
-                launch { tasksLocalDataSource.deleteTask(task) }
-            }
-
-            cachedTasks?.remove(task.id.toString())
+        coroutineScope {
+            launch { tasksRemoteDataSource.deleteTask(task) }
+            launch { tasksLocalDataSource.deleteTask(task) }
         }
+
+        cachedTasks?.remove(task.id)
     }
 
 
@@ -130,7 +126,7 @@ class DefaultTaskRepository private constructor(
 
     // TODO: remove below fun due to thought: 用集合的思想来操作聚合根
     // How to deal with below update method?
-    override suspend fun updateTask(task: Task){
+    override suspend fun updateTask(task: Task) {
         // Do in memory cache update to keep the app UI up to date
         cacheAndPerform(task) {
             coroutineScope {
@@ -140,7 +136,7 @@ class DefaultTaskRepository private constructor(
         }
     }
 
-    override suspend fun completeTask(task: Task){
+    override suspend fun completeTask(task: Task) {
         // Do in memory cache update to keep the app UI up to date
         cacheAndPerform(task) {
             it.isCompleted = true
@@ -151,7 +147,7 @@ class DefaultTaskRepository private constructor(
         }
     }
 
-    override suspend fun activateTask(task: Task){
+    override suspend fun activateTask(task: Task) {
         // Do in memory cache update to keep the app UI up to date
         cacheAndPerform(task) {
             it.isCompleted = false
@@ -172,14 +168,14 @@ class DefaultTaskRepository private constructor(
             launch { tasksLocalDataSource.initializeTutorialTasks() }
             launch {
                 val localTasks = tasksLocalDataSource.retrieveTasks()
-                if (localTasks is Result.Success) refreshCache(localTasks.data)
+                if (localTasks is Success) refreshCache(localTasks.data)
             }
         }
     }
 
 
     private suspend fun fetchTaskFromRemoteOrLocal(
-        taskId: Long,
+        taskId: String,
         forceUpdate: Boolean
     ): Result<Task> {
         // Remote first
@@ -204,15 +200,13 @@ class DefaultTaskRepository private constructor(
     }
 
 
-
     // TODO: add synchronization strategy for repository, plan to following google sample
-    private suspend fun fetchTasksFromRemoteOrLocal(forceUpdate: Boolean): Result<List<Task>>
-    {
+    private suspend fun fetchTasksFromRemoteOrLocal(forceUpdate: Boolean): Result<List<Task>> {
         // Remote first
         when (val remoteTasks = tasksRemoteDataSource.retrieveTasks()) {
             // TODO: check why Timber can't work?
             is Error -> println("Remote data source fetch failed")
-            is Result.Success -> {
+            is Success -> {
                 refreshLocalDataSource(remoteTasks.data)
                 return remoteTasks
             }
@@ -226,8 +220,8 @@ class DefaultTaskRepository private constructor(
 
         // Local if remote fails
         val localTasks = tasksLocalDataSource.retrieveTasks()
-        if (localTasks is Result.Success) return localTasks
-        return Result.Error(Exception("Error fetching from remote and local"))
+        if (localTasks is Success) return localTasks
+        return Error(Exception("Error fetching from remote and local"))
     }
 
     private fun refreshCache(tasks: List<Task>) {
@@ -248,7 +242,7 @@ class DefaultTaskRepository private constructor(
         tasksLocalDataSource.createOrUpdateTask(task)
     }
 
-    private fun getTaskWithId(id: Long) = cachedTasks?.get(id.toString())
+    private fun getTaskWithId(id: String) = cachedTasks?.get(id)
 
     private fun cacheTask(task: Task): Task {
         val cachedTask = Task(
@@ -259,7 +253,7 @@ class DefaultTaskRepository private constructor(
         if (cachedTasks == null) {
             cachedTasks = ConcurrentHashMap()
         }
-        cachedTasks?.put(cachedTask.id.toString(), cachedTask)
+        cachedTasks?.put(cachedTask.id, cachedTask)
         return cachedTask
     }
 

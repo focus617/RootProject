@@ -33,8 +33,10 @@ data class NetworkTaskContainer(
  */
 @JsonClass(generateAdapter = true)
 data class NetworkTask(
-    var id: Long,
+    var id: String,
     var title: String,
+    var description: String,
+    var isCompleted: Boolean,
     var imageId: Int,
     var priority: Int,
     var createTime: Long)
@@ -60,6 +62,8 @@ fun NetworkTaskContainer.asDomainModel(): List<Task> {
         Task(
             id = it.id,
             title = it.title,
+            description = it.description,
+            isCompleted = it.isCompleted,
             imageId = it.imageId,
             priority = it.priority,
             createTime = it.createTime)
@@ -75,6 +79,8 @@ fun NetworkTaskContainer.asDatabaseModel(): List<TaskEntity> {
         TaskEntity(
             id = it.id,
             title = it.title,
+            description = it.description,
+            isCompleted = it.isCompleted,
             imageId = it.imageId,
             priority = it.priority,
             createTime = it.createTime)

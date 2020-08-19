@@ -15,6 +15,7 @@ import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
+import java.util.*
 
 
 /**
@@ -51,7 +52,7 @@ class AppDatabaseTest {
     @Throws(Exception::class)
     fun insertAndGetProject() {
         val task = Task(
-            1L,
+            UUID.randomUUID().toString(),
             "番茄工作",
             "详细描述",
             false,
@@ -60,7 +61,7 @@ class AppDatabaseTest {
         )
         GlobalScope.launch {
             taskDao.insertTask(task.asDatabaseEntity())
-            val taskEntity = taskDao.getTaskById(1L)
+            val taskEntity = taskDao.getTaskById(task.id)
             assertEquals("番茄工作", taskEntity?.title)
             assertEquals("详细描述", taskEntity?.description)
             assertEquals(false, taskEntity?.isCompleted)

@@ -28,7 +28,7 @@ import java.util.LinkedHashMap
  */
 class FakeRepository : IRepository<Task> {
 
-    var tasksServiceData: LinkedHashMap<String, Task> = LinkedHashMap()
+    private var tasksServiceData: LinkedHashMap<String, Task> = LinkedHashMap()
 
     private var shouldReturnError = false
 
@@ -39,27 +39,27 @@ class FakeRepository : IRepository<Task> {
     @VisibleForTesting
     fun addTasks(vararg tasks: Task) {
         for (task in tasks) {
-            tasksServiceData[task.id.toString()] = task
+            tasksServiceData[task.id] = task
         }
     }
 
 
-    override suspend fun ofId(id: Long, forceUpdate: Boolean): Result<Task> {
+    override suspend fun ofId(id: String, forceUpdate: Boolean): Result<Task> {
         if (shouldReturnError) {
             return Error(Exception("Test exception"))
         }
-        tasksServiceData[id.toString()]?.let {
+        tasksServiceData[id]?.let {
             return Success(it)
         }
         return Error(Exception("Could not find task"))
     }
 
     override suspend fun add(task: Task) {
-        tasksServiceData[task.id.toString()] = task
+        tasksServiceData[task.id] = task
     }
 
     override suspend fun remove(task: Task) {
-        tasksServiceData.remove(task.id.toString())
+        tasksServiceData.remove(task.id)
     }
 
     override suspend fun querySpecification(forceUpdate: Boolean): Result<List<Task>> {
@@ -80,8 +80,7 @@ class FakeRepository : IRepository<Task> {
     }
 
     override suspend fun updateTask(task: Task) {
-        var localTask = task
-        tasksServiceData[task.id.toString()] = localTask
+        tasksServiceData[task.id] = task
 
     }
 
@@ -90,7 +89,7 @@ class FakeRepository : IRepository<Task> {
     }
 
     override suspend fun initializeStartingTasks() {
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
         throw NotImplementedError()
     }
 
@@ -99,7 +98,7 @@ class FakeRepository : IRepository<Task> {
             task.id, task.title, task.description, true,
             task.imageId, task.priority, task.createTime
         )
-        tasksServiceData[task.id.toString()] = completedTask
+        tasksServiceData[task.id] = completedTask
     }
 
 
@@ -108,7 +107,7 @@ class FakeRepository : IRepository<Task> {
             task.id, task.title, task.description, false,
             task.imageId, task.priority, task.createTime
         )
-        tasksServiceData[task.id.toString()] = activeTask
+        tasksServiceData[task.id] = activeTask
     }
 
     suspend fun clearCompletedTasks() {

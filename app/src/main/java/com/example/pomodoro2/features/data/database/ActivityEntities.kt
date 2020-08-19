@@ -22,7 +22,7 @@ data class ActivityEntity(
     var focusDuration: Long,
 
     @ColumnInfo(name = "taskID")
-    var taskId: Long,
+    var taskId: String,
 
     /* 显示的顺序 */
     @ColumnInfo(name = "priority")

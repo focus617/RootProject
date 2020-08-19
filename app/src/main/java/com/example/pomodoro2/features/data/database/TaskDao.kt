@@ -35,8 +35,8 @@ interface TaskDao {
      * @param taskId    id of the task
      * @param completed status to be updated
      */
-    @Query("UPDATE TASK_TABLE SET Completed = :completed WHERE Id = :taskId")
-    suspend fun updateCompleted(taskId: Long, completed: Boolean)
+    @Query("UPDATE TASK_TABLE SET Completed = :completed WHERE EntryId = :taskId")
+    suspend fun updateCompleted(taskId: String, completed: Boolean)
 
 
     /**
@@ -44,8 +44,8 @@ interface TaskDao {
      *
      * @return the number of tasks deleted. This should always be 1.
      */
-    @Query("DELETE FROM TASK_TABLE WHERE Id = :taskId")
-    suspend fun deleteTaskById(taskId: Long): Int
+    @Query("DELETE FROM TASK_TABLE WHERE EntryId = :taskId")
+    suspend fun deleteTaskById(taskId: String): Int
 
     /**
      * Deletes all tasks from the table.
@@ -69,8 +69,8 @@ interface TaskDao {
      * @param taskId id of the task
      * @return the entity match the Id.
      */
-    @Query("SELECT * FROM TASK_TABLE WHERE Id = :taskId")
-    suspend fun getTaskById(taskId: Long): TaskEntity?
+    @Query("SELECT * FROM TASK_TABLE WHERE EntryId = :taskId")
+    suspend fun getTaskById(taskId: String): TaskEntity?
 
     /**
      * Select all tasks from the tasks table.

@@ -53,9 +53,9 @@ class GetTasksUseCaseTest : BaseUnitTest() {
     fun loadTasks_noFilter() = runBlockingTest {
         // Given a repository with 1 active and 2 completed tasks:
         tasksRepository.addTasks(
-            Task(id = 1, title = "title1", description = "desc1", isCompleted = false, imageId = 1, priority = 1),
-            Task(id = 2, title = "title2", description = "desc2", isCompleted = true, imageId = 2, priority = 2),
-            Task(id = 3, title = "title3", description = "desc3", isCompleted = true, imageId = 3, priority = 3)
+            Task( title = "title1", description = "desc1", isCompleted = false, imageId = 1, priority = 1),
+            Task( title = "title2", description = "desc2", isCompleted = true, imageId = 2, priority = 2),
+            Task( title = "title3", description = "desc3", isCompleted = true, imageId = 3, priority = 3)
         )
 
         // Load tasks
@@ -70,9 +70,9 @@ class GetTasksUseCaseTest : BaseUnitTest() {
     fun loadTasks_completedFilter() = runBlockingTest{
         // Given a repository with 1 active and 2 completed tasks:
         tasksRepository.addTasks(
-            Task(id = 1, title = "title1", description = "desc1", isCompleted = false, imageId = 1, priority = 1),
-            Task(id = 2, title = "title2", description = "desc2", isCompleted = true, imageId = 2, priority = 2),
-            Task(id = 3, title = "title3", description = "desc3", isCompleted = true, imageId = 3, priority = 3)
+            Task( title = "title1", description = "desc1", isCompleted = false, imageId = 1, priority = 1),
+            Task( title = "title2", description = "desc2", isCompleted = true, imageId = 2, priority = 2),
+            Task( title = "title3", description = "desc3", isCompleted = true, imageId = 3, priority = 3)
         )
 
         // Load tasks
@@ -87,9 +87,9 @@ class GetTasksUseCaseTest : BaseUnitTest() {
     fun loadTasks_activeFilter() = runBlockingTest{
         // Given a repository with 1 active and 2 completed tasks:
         tasksRepository.addTasks(
-            Task(id = 1, title = "title1", description = "desc1", isCompleted = false, imageId = 1, priority = 1),
-            Task(id = 2, title = "title2", description = "desc2", isCompleted = true, imageId = 2, priority = 2),
-            Task(id = 3, title = "title3", description = "desc3", isCompleted = true, imageId = 3, priority = 3)
+            Task( title = "title1", description = "desc1", isCompleted = false, imageId = 1, priority = 1),
+            Task( title = "title2", description = "desc2", isCompleted = true, imageId = 2, priority = 2),
+            Task( title = "title3", description = "desc3", isCompleted = true, imageId = 3, priority = 3)
         )
 
         // Load tasks

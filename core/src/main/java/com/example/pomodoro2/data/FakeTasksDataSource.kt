@@ -34,7 +34,7 @@ object FakeTasksDataSource  : IDbLikeDataSource<Task> {
         TASKS_SERVICE_DATA[task.id.toString()] = task
     }
 
-    override suspend fun retrieveTask(taskId: Long): Result<Task> {
+    override suspend fun retrieveTask(taskId: String): Result<Task> {
         TASKS_SERVICE_DATA[taskId.toString()]?.let {
             return Success(it)
         }
@@ -50,7 +50,7 @@ object FakeTasksDataSource  : IDbLikeDataSource<Task> {
     }*/
 
     override suspend fun deleteTask(task: Task) {
-        TASKS_SERVICE_DATA.remove(task.id.toString())
+        TASKS_SERVICE_DATA.remove(task.id)
     }
 
     override suspend fun deleteAllTasks() {
@@ -66,7 +66,7 @@ object FakeTasksDataSource  : IDbLikeDataSource<Task> {
             task.id, task.title, task.description, true,
             task.imageId, task.priority, task.createTime
         )
-        TASKS_SERVICE_DATA[task.id.toString()] = completedTask
+        TASKS_SERVICE_DATA[task.id] = completedTask
     }
 
     override suspend fun clearCompletedTasks() {
@@ -80,7 +80,7 @@ object FakeTasksDataSource  : IDbLikeDataSource<Task> {
             task.id, task.title, task.description, false,
             task.imageId, task.priority, task.createTime
         )
-        TASKS_SERVICE_DATA[task.id.toString()] = activeTask
+        TASKS_SERVICE_DATA[task.id] = activeTask
     }
 
 

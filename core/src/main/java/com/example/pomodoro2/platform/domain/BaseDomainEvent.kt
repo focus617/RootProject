@@ -5,7 +5,7 @@ import java.util.UUID
 
 
 //@Getter
-abstract class DomainEvent {
+abstract class BaseDomainEvent {
     private val _id: String = UUID.randomUUID().toString()
     private val _createdAt = System.currentTimeMillis()
     override fun toString(): String {

@@ -12,7 +12,7 @@ interface ActivityDao {
     suspend fun insertActivity(activity: ActivityEntity)
 
     @Query("SELECT * FROM ACTIVITY_TABLE WHERE taskID = :taskID")
-    suspend fun getActivities(taskID: Long): List<ActivityEntity>
+    suspend fun getActivities(taskID: String): List<ActivityEntity>
 
     @Delete
     suspend fun removeActivity(activity: ActivityEntity)

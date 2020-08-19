@@ -56,7 +56,7 @@ class RoomTaskDataSource(val context: Context) :
     }
 
 
-    override suspend fun retrieveTask(taskId: Long): Result<Task> = withContext(ioDispatcher) {
+    override suspend fun retrieveTask(taskId: String): Result<Task> = withContext(ioDispatcher) {
         try {
                 val task = taskDao.getTaskById(taskId)?.asDomainModel()
                 if (task != null) {
@@ -114,12 +114,12 @@ class RoomTaskDataSource(val context: Context) :
         for ((index, element) in images.withIndex()) {
             // Create a new Task , which captures the current time,
             // then insert it into the database.
-            val task = TaskEntity(
+            val task = Task(
                 title = titles[index],
                 imageId = element,
                 priority = index + 1
             )
-            taskDao.insertTask(task)
+            taskDao.insertTask(task.asDatabaseEntity())
         }
     }
 

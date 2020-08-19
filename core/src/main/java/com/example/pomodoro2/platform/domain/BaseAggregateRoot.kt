@@ -3,9 +3,9 @@ package com.example.pomodoro2.platform.domain
 
 abstract class BaseAggregateRoot: BaseEntity() {
 
-    private var _events: MutableList<DomainEvent>? = null
+    private var _events: MutableList<BaseDomainEvent>? = null
 
-    protected fun raiseEvent(event: DomainEvent) {
+    protected fun raiseEvent(event: BaseDomainEvent) {
         get_events().add(event)
     }
 
@@ -13,6 +13,6 @@ abstract class BaseAggregateRoot: BaseEntity() {
         get_events().clear()
     }
 
-    fun get_events(): MutableList<DomainEvent> = _events?:arrayListOf()
+    fun get_events(): MutableList<BaseDomainEvent> = _events?:arrayListOf()
 
 }

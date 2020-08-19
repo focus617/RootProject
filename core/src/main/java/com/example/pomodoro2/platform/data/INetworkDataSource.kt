@@ -1,6 +1,6 @@
 package com.example.pomodoro2.platform.data
 
-interface NetworkDataSource{
+interface INetworkDataSource{
 
     fun getTasksNum(): Int
 

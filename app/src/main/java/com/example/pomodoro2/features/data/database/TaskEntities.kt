@@ -19,18 +19,19 @@ import com.example.pomodoro2.domain.Task
  */
 @Entity(tableName = "TASK_TABLE")
 data class TaskEntity(
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0L,
+    @PrimaryKey
+    @ColumnInfo(name = "entryid")
+    var id: String,
 
     /* 如果希望与成员变量的名称不同，请通过name指定列的名称。*/
     @ColumnInfo(name = "title")
     var title: String,
 
     @ColumnInfo(name = "description")
-    var description: String = "",
+    var description: String,
 
     @ColumnInfo(name = "completed")
-    var isCompleted: Boolean = false,
+    var isCompleted: Boolean,
 
     @ColumnInfo(name = "imageID")
     var imageId: Int,
@@ -40,18 +41,8 @@ data class TaskEntity(
     var priority: Int,
 
     @ColumnInfo(name = "create_time")
-    var createTime: Long = System.currentTimeMillis()
-){
-    val titleForList: String
-        get() = if (title.isNotEmpty()) title else description
-
-
-    val isActive
-        get() = !isCompleted
-
-    val isEmpty
-        get() = title.isEmpty() || description.isEmpty()
-}
+    var createTime: Long
+)
 
 /**
  * Map DatabaseObject to domain entity

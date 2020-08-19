@@ -120,7 +120,7 @@ class TaskListener(val clickListener: (task: Task) -> Unit) {
 }
 
 /**
- * A data holder class that represents either a SleepNight or a Header
+ * A data holder class that represents either a Task or a Header
  */
 sealed class DataItem {
     data class TaskItem(val task: Task) : DataItem() {
@@ -128,8 +128,8 @@ sealed class DataItem {
     }
 
     object Header : DataItem() {
-        override val id = Long.MIN_VALUE
+        override val id = Long.MIN_VALUE.toString()
     }
 
-    abstract val id: Long
+    abstract val id: String
 }

@@ -11,7 +11,7 @@ data class Activity(
     /* 如果希望与成员变量的名称不同，请通过name指定列的名称。*/
     var title: String,
     var focusDuration: Long,
-    var taskId: Long,
+    var taskId: String,
     /* 显示的顺序 */
     var priority: Int,
     var createTime: Long = System.currentTimeMillis(),

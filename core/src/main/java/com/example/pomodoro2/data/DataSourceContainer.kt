@@ -3,7 +3,7 @@ package com.example.pomodoro2.data
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.platform.data.ActivityDataSource
 import com.example.pomodoro2.platform.data.InMemoryDataSource
-import com.example.pomodoro2.platform.data.NetworkDataSource
+import com.example.pomodoro2.platform.data.INetworkDataSource
 import com.example.pomodoro2.platform.data.IDbLikeDataSource
 
 /*
@@ -19,7 +19,7 @@ object DataSourceContainer {
     lateinit var roomTaskDataSource: IDbLikeDataSource<Task>
     lateinit var roomActivityDataSource: ActivityDataSource
     lateinit var inMemoryDataSource: InMemoryDataSource
-    lateinit var networkDataSource: NetworkDataSource
+    lateinit var networkDataSource: INetworkDataSource
 
 
     fun inject(
@@ -27,7 +27,7 @@ object DataSourceContainer {
         roomTaskDataSource: IDbLikeDataSource<Task>,
         activityDataSource: ActivityDataSource,
         inMemoryDataSource: InMemoryDataSource,
-        networkDataSource: NetworkDataSource
+        networkDataSource: INetworkDataSource
     ) {
         DataSourceContainer.remoteTaskDataSource = remoteTaskDataSource
         DataSourceContainer.roomTaskDataSource = roomTaskDataSource

@@ -135,10 +135,14 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
     private var isNewTask: Boolean = true
 
     fun createNewTask(task: Task) {
-        task.imageId = R.drawable.read_book
-        task.priority = _tasks.value?.size ?: 1
+        val newTask = Task(
+            task.id, task.title, task.description, task.isCompleted,
+            task.imageId, task.priority, task.createTime
+        )
+        newTask.imageId = R.drawable.read_book
+        newTask.priority = _tasks.value?.size ?: 1
         viewModelScope.launch {
-                taskInteractors.createNewTaskUseCase(task)
+                taskInteractors.createNewTaskUseCase(newTask)
 
             // Refresh view model
             loadTasks()
