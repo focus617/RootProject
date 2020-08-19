@@ -91,7 +91,7 @@ dependencies {
     // Android KTX
     implementation "androidx.core:core-ktx:$core_ktx_version"
     // Coroutines
-    //implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     // javax
@@ -152,10 +152,10 @@ dependencies {
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     // Coroutines
-    //testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-
+    //testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    // Mockito for Unit Test
     testImplementation "org.mockito:mockito-core:$mockito_version"
     testImplementation ("com.nhaarman:mockito-kotlin-kt1.1:$mockito_kt_version", {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
@@ -185,8 +185,7 @@ dependencies {
     androidTestImplementation "androidx.test:core:$androidx_test_core_version"
 
     // Coroutines
-    //
-    // androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
@@ -198,6 +197,9 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidx_test_ext_junit_version"
     androidTestImplementation "androidx.test.ext:truth:$androidx_test_ext_truth_version"
     androidTestImplementation "com.google.truth:truth:$google_truth_version"
+
+    // Mockito for Android
+    androidTestImplementation "org.mockito:mockito-android:$mockito_version"
 
     // Espresso dependencies
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"

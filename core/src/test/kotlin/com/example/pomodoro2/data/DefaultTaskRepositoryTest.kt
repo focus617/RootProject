@@ -3,11 +3,11 @@ package com.example.pomodoro2.data
 import com.example.pomodoro2.BaseUnitTest
 import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.platform.data.IDbLikeDataSource
+import com.example.pomodoro2.platform.functional.Result
 import com.example.pomodoro2.platform.functional.Result.Success
 import com.example.pomodoro2.platform.functional.Result.Error
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
@@ -27,6 +27,10 @@ class DefaultTaskRepositoryTestSpecialCase: BaseUnitTest() {
     }
 }
 
+/**
+ * Unit tests for the implementation of the in-memory repository with cache.
+ */
+@ExperimentalCoroutinesApi
 class DefaultTaskRepositoryTest: BaseUnitTest() {
 
     private val task1 = Task( title = "title1", description = "Description1", isCompleted = false, imageId = 1, priority = 1)
@@ -50,7 +54,7 @@ class DefaultTaskRepositoryTest: BaseUnitTest() {
         tasksRemoteDataSource = FakeDataSource(remoteTasks.toMutableList())
         tasksLocalDataSource = FakeDataSource(localTasks.toMutableList())
         // Get a reference to the class under test
-        tasksRepository = DefaultTaskRepository.getInstance(
+        tasksRepository = DefaultTaskRepository.buildInstanceForTesting(
             tasksRemoteDataSource, tasksLocalDataSource, AppInMemoryDataSource()
         )
 
@@ -61,7 +65,8 @@ class DefaultTaskRepositoryTest: BaseUnitTest() {
     }
 
     @Test
-    fun getTasks_repositoryCachesAfterFirstApiCall() = runBlockingTest {
+    fun getTasks_repositoryCachesAfterFirstApiCall() = runBlocking{
+
         // Trigger the repository to load data, which loads from remote and caches
         val initial = tasksRepository.querySpecification()
 
@@ -73,5 +78,12 @@ class DefaultTaskRepositoryTest: BaseUnitTest() {
         assertThat(second).isEqualTo(initial)
     }
 
+    @Test
+    fun getTasks_requestsAllTasksFromRemoteDataSource() = runBlocking {
+        // When tasks are requested from the tasks repository
+        val tasks = tasksRepository.querySpecification() as Success
 
+        // Then tasks are loaded from the remote data source
+        assertThat(tasks.data).isEqualTo(remoteTasks)
+    }
 }

@@ -300,6 +300,19 @@ class DefaultTaskRepository private constructor(
             }
         }
 
+        fun buildInstanceForTesting(
+            tasksRemoteDataSource: IDbLikeDataSource<Task>,
+            tasksLocalDataSource: IDbLikeDataSource<Task>,
+            inMemoryDataSource: InMemoryDataSource,
+            ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+        ): DefaultTaskRepository =
+            DefaultTaskRepository(
+                tasksRemoteDataSource,
+                tasksLocalDataSource,
+                inMemoryDataSource,
+                ioDispatcher
+            )
+
     }
 
 
