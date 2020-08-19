@@ -91,7 +91,7 @@ dependencies {
     // Android KTX
     implementation "androidx.core:core-ktx:$core_ktx_version"
     // Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    //implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     // javax
@@ -151,6 +151,10 @@ dependencies {
     // 2. Unit/Integration tests dependencies
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    // Coroutines
+    //testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     testImplementation "org.mockito:mockito-core:$mockito_version"
     testImplementation ("com.nhaarman:mockito-kotlin-kt1.1:$mockito_kt_version", {
@@ -177,17 +181,23 @@ dependencies {
     testImplementation "androidx.room:room-testing:$room_version"
 
     // 3. Acceptance tests dependencies
-    // Assertions
-    androidTestImplementation "androidx.test.ext:junit:$androidx_test_ext_junit_version"
-    androidTestImplementation "androidx.test.ext:truth:$androidx_test_ext_truth_version"
-    androidTestImplementation "com.google.truth:truth:$google_truth_version"
-
     // Test Core library
     androidTestImplementation "androidx.test:core:$androidx_test_core_version"
+
+    // Coroutines
+    //
+    // androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     // AndroidJUnitRunner and JUnit Rules
     androidTestImplementation "androidx.test:runner:$androidx_test_runner_version"
     androidTestImplementation "androidx.test:rules:$androidx_test_rules_version"
+
+    // Assertions
+    androidTestImplementation "androidx.test.ext:junit:$androidx_test_ext_junit_version"
+    androidTestImplementation "androidx.test.ext:truth:$androidx_test_ext_truth_version"
+    androidTestImplementation "com.google.truth:truth:$google_truth_version"
 
     // Espresso dependencies
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"

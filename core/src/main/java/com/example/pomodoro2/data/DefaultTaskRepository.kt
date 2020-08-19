@@ -24,6 +24,7 @@ class DefaultTaskRepository private constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : IRepository<Task/*, BaseSpecification*/> {
 
+    // Domain Aggregate Root data in memory
     private var cachedTasks: ConcurrentHashMap<String, Task>? = null
 
     /**
@@ -166,8 +167,10 @@ class DefaultTaskRepository private constructor(
     override suspend fun initializeStartingTasks() {
         withContext(ioDispatcher) {
             coroutineScope {
+                // retrieve template tasks from application side
                 val newTasks = tasksLocalDataSource.initializeTutorialTasks()
-                // Refresh the cache with the new tasks
+
+                // add new tasks into cache and database
                 (newTasks as? Success)?.let {
                     for (task in it.data)
                         add(task)
@@ -276,7 +279,8 @@ class DefaultTaskRepository private constructor(
         fun getInstance(
             tasksRemoteDataSource: IDbLikeDataSource<Task>,
             tasksLocalDataSource: IDbLikeDataSource<Task>,
-            inMemoryDataSource: InMemoryDataSource
+            inMemoryDataSource: InMemoryDataSource,
+            ioDispatcher: CoroutineDispatcher = Dispatchers.IO
         ): DefaultTaskRepository {
             synchronized(DefaultTaskRepository::class.java) {
 
@@ -287,7 +291,8 @@ class DefaultTaskRepository private constructor(
                         DefaultTaskRepository(
                             tasksRemoteDataSource,
                             tasksLocalDataSource,
-                            inMemoryDataSource
+                            inMemoryDataSource,
+                            ioDispatcher
                         )
                 }
                 // Return instance; smart cast to be non-null.

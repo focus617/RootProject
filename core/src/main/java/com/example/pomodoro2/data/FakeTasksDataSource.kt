@@ -27,15 +27,15 @@ import java.util.LinkedHashMap
  */
 object FakeTasksDataSource  : IDbLikeDataSource<Task> {
 
-    private var TASKS_SERVICE_DATA: LinkedHashMap<String, Task> = LinkedHashMap()
+    var TASKS_SERVICE_DATA: LinkedHashMap<String, Task> = LinkedHashMap()
 
 
     override suspend fun createOrUpdateTask(task: Task) {
-        TASKS_SERVICE_DATA[task.id.toString()] = task
+        TASKS_SERVICE_DATA[task.id] = task
     }
 
     override suspend fun retrieveTask(taskId: String): Result<Task> {
-        TASKS_SERVICE_DATA[taskId.toString()]?.let {
+        TASKS_SERVICE_DATA[taskId]?.let {
             return Success(it)
         }
         return Error(Exception("Could not find task"))

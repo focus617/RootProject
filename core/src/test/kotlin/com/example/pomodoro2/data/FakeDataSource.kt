@@ -1,0 +1,69 @@
+/*
+ * Copyright (C) 2019 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.example.pomodoro2.data
+
+import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.platform.data.IDbLikeDataSource
+import com.example.pomodoro2.platform.functional.Result
+import com.example.pomodoro2.platform.functional.Result.Success
+import com.example.pomodoro2.platform.functional.Result.Error
+
+class FakeDataSource(
+    var tasks: MutableList<Task>? = mutableListOf()
+) : IDbLikeDataSource<Task> {
+
+    override suspend fun createOrUpdateTask(t: Task) {
+        tasks?.add(t)
+    }
+
+    override suspend fun retrieveTask(Id: String): Result<Task> {
+        tasks?.firstOrNull { it.id == Id }?.let { return Success(it) }
+        return Error(Exception("Task not found"))
+    }
+
+    override suspend fun retrieveTasks(): Result<List<Task>> {
+        tasks?.let { return Success(it) }
+        return Error(Exception("Tasks not found"))
+    }
+
+    override suspend fun deleteTask(t: Task) {
+        tasks?.removeIf { it.id == t.id }
+    }
+
+    override suspend fun deleteAllTasks() {
+        tasks?.clear()
+    }
+
+    override suspend fun initializeTutorialTasks(): Result<List<Task>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun completeTask(task: Task) {
+        tasks?.firstOrNull { it.id == task.id }?.let { it.isCompleted = true }
+    }
+
+
+    override suspend fun activateTask(task: Task) {
+        tasks?.firstOrNull { it.id == task.id }?.let { it.isCompleted = false }
+    }
+
+
+    override suspend fun clearCompletedTasks() {
+        tasks?.removeIf { it.isCompleted }
+    }
+
+}

@@ -2,6 +2,7 @@ package com.example.pomodoro2
 
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito
@@ -59,6 +60,7 @@ class SampleMockitoTest:BaseUnitTest(){
 //        verify(mockedList).add(argThat{ argument -> argument.length > 5 })
     }
 
+    @Ignore("Following stubbings are unnecessary")
     @Test fun `Verify the stubbing function`(){
 
         // mockedList[0] 第一次返回 first，之后都会抛出异常
