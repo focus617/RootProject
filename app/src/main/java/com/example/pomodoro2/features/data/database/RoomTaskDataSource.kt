@@ -13,6 +13,7 @@ import com.example.pomodoro2.platform.functional.Result.Error
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.concurrent.ConcurrentHashMap
 
 object TaskConstants{
     val titles = arrayOf(
@@ -109,7 +110,9 @@ class RoomTaskDataSource(val context: Context) :
     /**
      * Create tutorial tasks and insert them into database.
      */
-    override suspend fun initializeTutorialTasks() {
+    override suspend fun initializeTutorialTasks() : Result<List<Task>>{
+
+        var tasks = ConcurrentHashMap<String, Task>()
 
         for ((index, element) in images.withIndex()) {
             // Create a new Task , which captures the current time,
@@ -119,8 +122,10 @@ class RoomTaskDataSource(val context: Context) :
                 imageId = element,
                 priority = index + 1
             )
-            taskDao.insertTask(task.asDatabaseEntity())
+            //taskDao.insertTask(task.asDatabaseEntity())
+            tasks.put(task.id, task)
         }
+        return Success(tasks.values.sortedBy {it.priority})
     }
 
 

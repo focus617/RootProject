@@ -164,11 +164,14 @@ class DefaultTaskRepository private constructor(
     override fun getSelectedTask() = inMemoryDataSource.getSelectedTask()
 
     override suspend fun initializeStartingTasks() {
-        coroutineScope {
-            launch { tasksLocalDataSource.initializeTutorialTasks() }
-            launch {
-                val localTasks = tasksLocalDataSource.retrieveTasks()
-                if (localTasks is Success) refreshCache(localTasks.data)
+        withContext(ioDispatcher) {
+            coroutineScope {
+                val newTasks = tasksLocalDataSource.initializeTutorialTasks()
+                // Refresh the cache with the new tasks
+                (newTasks as? Success)?.let {
+                    for (task in it.data)
+                        add(task)
+                }
             }
         }
     }

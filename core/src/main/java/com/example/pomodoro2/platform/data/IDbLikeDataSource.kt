@@ -24,6 +24,6 @@ interface IDbLikeDataSource<T: BaseEntity> {
 
     suspend fun clearCompletedTasks()
 
-    suspend fun initializeTutorialTasks()
+    suspend fun initializeTutorialTasks(): Result<List<T>>
 
 }

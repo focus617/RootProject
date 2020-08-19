@@ -57,7 +57,7 @@ object FakeTasksDataSource  : IDbLikeDataSource<Task> {
         TASKS_SERVICE_DATA.clear()
     }
 
-    override suspend fun initializeTutorialTasks() {
+    override suspend fun initializeTutorialTasks() : Result<List<Task>>{
         TODO("Not yet implemented")
     }
 

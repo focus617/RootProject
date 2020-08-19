@@ -140,7 +140,7 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
             task.imageId, task.priority, task.createTime
         )
         newTask.imageId = R.drawable.read_book
-        newTask.priority = _tasks.value?.size ?: 1
+        newTask.priority = (_tasks.value?.size ?: 0)+1
         viewModelScope.launch {
                 taskInteractors.createNewTaskUseCase(newTask)
 
