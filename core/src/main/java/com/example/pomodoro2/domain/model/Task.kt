@@ -26,6 +26,10 @@ data class Task (
     val isEmpty
         get() = title.isEmpty() || description.isEmpty()
 
+    public fun testLogger(){
+        Log.info("Kotlin-Logger: I'm a Task Domain Entity.")
+    }
+
     companion object {
         val DefaultTask = Task(
             title = "番茄工作法",
