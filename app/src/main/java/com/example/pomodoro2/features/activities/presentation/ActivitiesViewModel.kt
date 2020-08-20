@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.features.activities.domain.ActivityInteractors
 import com.example.pomodoro2.framework.base.BaseViewModel
 import com.example.pomodoro2.framework.platform.SingleLiveEvent

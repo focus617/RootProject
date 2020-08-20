@@ -27,7 +27,7 @@
         tools:layout="@layout/fragment_activity" >
         <argument
             android:name="task"
-            app:argType="com.example.pomodoro2.domain.Task" />
+            app:argType="com.example.pomodoro2.domain.model.Task" />
         <action
             android:id="@+id/action_navigation_activity_to_countDownTimerFragment"
             app:destination="@id/navigation_timer" />

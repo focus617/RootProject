@@ -8,7 +8,7 @@
 
         <variable
             name="task"
-            type="com.example.pomodoro2.domain.Task" />
+            type="com.example.pomodoro2.domain.model.Task" />
         <variable
             name="viewmodel"
             type="com.example.pomodoro2.features.tasks.presentation.TasksViewModel" />

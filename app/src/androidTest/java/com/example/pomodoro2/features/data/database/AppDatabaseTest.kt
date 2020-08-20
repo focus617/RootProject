@@ -4,7 +4,7 @@ import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.pomodoro2.R
-import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.framework.extension.asDatabaseEntity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

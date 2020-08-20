@@ -1,8 +1,8 @@
 package com.example.pomodoro2.data
 
 import com.example.pomodoro2.platform.data.InMemoryDataSource
-import com.example.pomodoro2.domain.Activity
-import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.domain.model.Activity
+import com.example.pomodoro2.domain.model.Task
 
 class AppInMemoryDataSource :
     InMemoryDataSource {

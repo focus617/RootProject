@@ -3,7 +3,7 @@ package com.example.pomodoro2.features.data.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.pomodoro2.domain.Activity
+import com.example.pomodoro2.domain.model.Activity
 
 /**
  * DatabaseTask represents a task entity in the database.
@@ -50,7 +50,7 @@ fun List<ActivityEntity>.asDomainModel(): List<Activity> {
             taskId = it.taskId,
             priority = it.priority,
             createTime = it.createTime,
-            focusCounter =it.focusCounter,
+            focusCounter = it.focusCounter,
             totalTime = it.totalTime
         )
     }

@@ -1,6 +1,6 @@
 package com.example.pomodoro2.platform.data
 
-import com.example.pomodoro2.domain.UserProfile
+import com.example.pomodoro2.domain.model.UserProfile
 
 interface IPreferencesDataSource{
 

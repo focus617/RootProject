@@ -1,6 +1,6 @@
 package com.example.pomodoro2.features.data.network
 
-import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.features.data.database.TaskEntity
 import com.squareup.moshi.JsonClass
 
@@ -66,7 +66,8 @@ fun NetworkTaskContainer.asDomainModel(): List<Task> {
             isCompleted = it.isCompleted,
             imageId = it.imageId,
             priority = it.priority,
-            createTime = it.createTime)
+            createTime = it.createTime
+        )
     }
 }
 

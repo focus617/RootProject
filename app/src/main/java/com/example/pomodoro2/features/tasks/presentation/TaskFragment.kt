@@ -12,9 +12,9 @@ import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pomodoro2.R
-import com.example.pomodoro2.data.DefaultTaskRepository
+import com.example.pomodoro2.domain.repository.DefaultTaskRepository
 import com.example.pomodoro2.databinding.FragmentTaskBinding
-import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.data.DataSourceContainer
 import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.framework.base.BaseFragment
@@ -22,6 +22,7 @@ import com.example.pomodoro2.framework.platform.EventObserver
 import com.example.pomodoro2.interactors.*
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class TaskFragment : BaseFragment() {
@@ -44,7 +45,7 @@ class TaskFragment : BaseFragment() {
         args.putInt(ARG_COLUMN_COUNT, columnCount)
         with(fragment) {
             args.putInt(ARG_COLUMN_COUNT, columnCount)
-            setArguments(args)
+            arguments = args
         }
         return fragment
     }
@@ -56,6 +57,7 @@ class TaskFragment : BaseFragment() {
         }
 
         tasksViewModel = buildViewModel()
+        Timber.d("ViewModel Available.")
     }
 
     private fun buildViewModel(): TasksViewModel {

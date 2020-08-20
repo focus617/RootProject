@@ -1,6 +1,6 @@
-package com.example.pomodoro2.data
+package com.example.pomodoro2.domain.repository
 
-import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.platform.data.IRepository
 import com.example.pomodoro2.platform.data.InMemoryDataSource
 import com.example.pomodoro2.platform.data.IDbLikeDataSource
@@ -111,11 +111,9 @@ class DefaultTaskRepository private constructor(
 
 
     override suspend fun removeAll() {
-        withContext(ioDispatcher) {
-            coroutineScope {
-                launch { tasksRemoteDataSource.deleteAllTasks() }
-                launch { tasksLocalDataSource.deleteAllTasks() }
-            }
+        coroutineScope {
+            launch { tasksRemoteDataSource.deleteAllTasks() }
+            launch { tasksLocalDataSource.deleteAllTasks() }
         }
         cachedTasks?.clear()
     }

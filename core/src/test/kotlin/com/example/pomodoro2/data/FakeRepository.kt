@@ -16,7 +16,7 @@
 package com.example.pomodoro2.data
 
 import androidx.annotation.VisibleForTesting
-import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.platform.functional.Result
 import com.example.pomodoro2.platform.functional.Result.Success
 import com.example.pomodoro2.platform.functional.Result.Error

@@ -31,7 +31,7 @@
 package com.example.pomodoro2.features.data.localfile
 
 import android.content.Context
-import com.example.pomodoro2.domain.UserProfile
+import com.example.pomodoro2.domain.model.UserProfile
 import com.example.pomodoro2.platform.data.IPreferencesDataSource
 import com.google.gson.Gson
 

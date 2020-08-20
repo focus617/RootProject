@@ -1,4 +1,4 @@
-package com.example.pomodoro2.domain
+package com.example.pomodoro2.domain.model
 
 import com.example.pomodoro2.platform.domain.BaseAggregateRoot
 import java.io.Serializable
@@ -27,7 +27,11 @@ data class Task (
         get() = title.isEmpty() || description.isEmpty()
 
     companion object {
-        val DefaultTask = Task(title = "番茄工作法", imageId = 0, priority = 1)
+        val DefaultTask = Task(
+            title = "番茄工作法",
+            imageId = 0,
+            priority = 1
+        )
     }
 }
 

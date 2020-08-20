@@ -3,7 +3,7 @@ package com.example.pomodoro2.framework.platform.deprecated
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.pomodoro2.data.DefaultTaskRepository
+import com.example.pomodoro2.domain.repository.DefaultTaskRepository
 import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.framework.base.BaseViewModel
 

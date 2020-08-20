@@ -3,7 +3,7 @@ package com.example.pomodoro2.features.data.database
 import android.content.Context
 import com.example.pomodoro2.R
 import com.example.pomodoro2.platform.data.IDbLikeDataSource
-import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.features.data.database.TaskConstants.images
 import com.example.pomodoro2.features.data.database.TaskConstants.titles
 import com.example.pomodoro2.framework.extension.asDatabaseEntity

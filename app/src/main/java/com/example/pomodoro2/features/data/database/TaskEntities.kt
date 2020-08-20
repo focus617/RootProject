@@ -3,7 +3,7 @@ package com.example.pomodoro2.features.data.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.domain.model.Task
 
 /**
  * DatabaseTask represents a task entity in the database.

@@ -2,8 +2,8 @@ package com.example.pomodoro2.features.data.database
 
 import android.content.Context
 import com.example.pomodoro2.platform.data.ActivityDataSource
-import com.example.pomodoro2.domain.Activity
-import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.domain.model.Activity
+import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.framework.extension.asDatabaseEntity
 
 class RoomActivityDataSource(val context: Context) :

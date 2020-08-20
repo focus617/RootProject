@@ -1,13 +1,12 @@
 package com.example.pomodoro2.data
 
 import com.example.pomodoro2.BaseUnitTest
-import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.platform.functional.Result
+import com.example.pomodoro2.domain.model.Task
+import com.example.pomodoro2.domain.repository.DefaultTaskRepository
 import com.example.pomodoro2.platform.functional.Result.Success
 import com.example.pomodoro2.platform.functional.Result.Error
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.*
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

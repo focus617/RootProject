@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
 import com.example.pomodoro2.framework.base.BaseDialogFragment
 import com.example.pomodoro2.databinding.FragmentNewTaskBinding
-import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.domain.model.Task
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_login.*
 
@@ -17,7 +17,11 @@ import kotlinx.android.synthetic.main.fragment_login.*
 class NewTaskFragment : BaseDialogFragment() {
 
     private lateinit var viewModel: TasksViewModel
-    private var task = Task(title = "", imageId = R.drawable.read_book, priority = 100)
+    private var task = Task(
+        title = "",
+        imageId = R.drawable.read_book,
+        priority = 100
+    )
 
     override fun layoutId(): Int {
         return R.layout.fragment_new_task

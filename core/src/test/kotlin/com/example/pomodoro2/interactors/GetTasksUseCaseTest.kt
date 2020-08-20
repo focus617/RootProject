@@ -4,11 +4,9 @@ import com.example.pomodoro2.BaseUnitTest
 import com.example.pomodoro2.data.FakeRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-import com.example.pomodoro2.domain.Task
-import com.example.pomodoro2.platform.functional.Result
+import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.platform.functional.Result.Success
 import com.example.pomodoro2.platform.functional.Result.Error
-import com.example.pomodoro2.interactors.TasksFilterType.ALL_TASKS
 import com.example.pomodoro2.interactors.TasksFilterType.ACTIVE_TASKS
 import com.example.pomodoro2.interactors.TasksFilterType.COMPLETED_TASKS
 import kotlinx.coroutines.test.runBlockingTest
@@ -53,9 +51,27 @@ class GetTasksUseCaseTest : BaseUnitTest() {
     fun loadTasks_noFilter() = runBlockingTest {
         // Given a repository with 1 active and 2 completed tasks:
         tasksRepository.addTasks(
-            Task( title = "title1", description = "desc1", isCompleted = false, imageId = 1, priority = 1),
-            Task( title = "title2", description = "desc2", isCompleted = true, imageId = 2, priority = 2),
-            Task( title = "title3", description = "desc3", isCompleted = true, imageId = 3, priority = 3)
+            Task(
+                title = "title1",
+                description = "desc1",
+                isCompleted = false,
+                imageId = 1,
+                priority = 1
+            ),
+            Task(
+                title = "title2",
+                description = "desc2",
+                isCompleted = true,
+                imageId = 2,
+                priority = 2
+            ),
+            Task(
+                title = "title3",
+                description = "desc3",
+                isCompleted = true,
+                imageId = 3,
+                priority = 3
+            )
         )
 
         // Load tasks
@@ -70,9 +86,27 @@ class GetTasksUseCaseTest : BaseUnitTest() {
     fun loadTasks_completedFilter() = runBlockingTest{
         // Given a repository with 1 active and 2 completed tasks:
         tasksRepository.addTasks(
-            Task( title = "title1", description = "desc1", isCompleted = false, imageId = 1, priority = 1),
-            Task( title = "title2", description = "desc2", isCompleted = true, imageId = 2, priority = 2),
-            Task( title = "title3", description = "desc3", isCompleted = true, imageId = 3, priority = 3)
+            Task(
+                title = "title1",
+                description = "desc1",
+                isCompleted = false,
+                imageId = 1,
+                priority = 1
+            ),
+            Task(
+                title = "title2",
+                description = "desc2",
+                isCompleted = true,
+                imageId = 2,
+                priority = 2
+            ),
+            Task(
+                title = "title3",
+                description = "desc3",
+                isCompleted = true,
+                imageId = 3,
+                priority = 3
+            )
         )
 
         // Load tasks
@@ -87,9 +121,27 @@ class GetTasksUseCaseTest : BaseUnitTest() {
     fun loadTasks_activeFilter() = runBlockingTest{
         // Given a repository with 1 active and 2 completed tasks:
         tasksRepository.addTasks(
-            Task( title = "title1", description = "desc1", isCompleted = false, imageId = 1, priority = 1),
-            Task( title = "title2", description = "desc2", isCompleted = true, imageId = 2, priority = 2),
-            Task( title = "title3", description = "desc3", isCompleted = true, imageId = 3, priority = 3)
+            Task(
+                title = "title1",
+                description = "desc1",
+                isCompleted = false,
+                imageId = 1,
+                priority = 1
+            ),
+            Task(
+                title = "title2",
+                description = "desc2",
+                isCompleted = true,
+                imageId = 2,
+                priority = 2
+            ),
+            Task(
+                title = "title3",
+                description = "desc3",
+                isCompleted = true,
+                imageId = 3,
+                priority = 3
+            )
         )
 
         // Load tasks

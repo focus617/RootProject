@@ -1,4 +1,4 @@
-package com.example.pomodoro2.domain
+package com.example.pomodoro2.domain.model
 
 import com.example.pomodoro2.platform.domain.BaseEntity
 

@@ -1,6 +1,5 @@
 package com.example.pomodoro2.platform.data
 
-import com.example.pomodoro2.domain.Task
 import com.example.pomodoro2.platform.domain.BaseEntity
 import com.example.pomodoro2.platform.functional.Result
 

@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.annotation.NonNull
 import androidx.lifecycle.*
 import com.example.pomodoro2.data.DataSourceContainer
-import com.example.pomodoro2.data.DefaultTaskRepository
+import com.example.pomodoro2.domain.repository.DefaultTaskRepository
 import com.example.pomodoro2.framework.BaseApplication
 import com.example.pomodoro2.platform.exception.Failure
 import com.example.pomodoro2.platform.interactor.Interactors

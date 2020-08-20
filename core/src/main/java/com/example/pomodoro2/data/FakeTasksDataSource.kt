@@ -15,7 +15,7 @@
  */
 package com.example.pomodoro2.data
 
-import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.platform.data.IDbLikeDataSource
 import com.example.pomodoro2.platform.functional.Result
 import com.example.pomodoro2.platform.functional.Result.Success

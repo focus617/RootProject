@@ -3,10 +3,9 @@ package com.example.pomodoro2.features.login.presentation
 import android.app.Application
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
-import com.example.pomodoro2.domain.UserProfile
+import com.example.pomodoro2.domain.model.UserProfile
 import com.example.pomodoro2.framework.extension.getOrEmpty
 import com.example.pomodoro2.features.data.localfile.SharedPreferenceDataSource
-import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * ViewModel for the login screen.
@@ -22,7 +21,10 @@ class UserProfileViewModel(val app: Application) : AndroidViewModel(app) {
     var profileEmail = ObservableField("")
 
     fun saveProfile() {
-        var userProfile = UserProfile(profileName.getOrEmpty(), profileEmail.getOrEmpty())
+        var userProfile = UserProfile(
+            profileName.getOrEmpty(),
+            profileEmail.getOrEmpty()
+        )
         sharedPreferenceHelper.saveUser(userProfile)
     }
 

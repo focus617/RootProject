@@ -4,7 +4,7 @@ import android.graphics.Paint
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.example.pomodoro2.domain.Task
+import com.example.pomodoro2.domain.model.Task
 
 
 @BindingAdapter("app:completedTask")

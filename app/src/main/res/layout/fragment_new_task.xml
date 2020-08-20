@@ -6,7 +6,7 @@
 
         <variable
             name="task"
-            type="com.example.pomodoro2.domain.Task" />
+            type="com.example.pomodoro2.domain.model.Task" />
     </data>
 
     <LinearLayout
