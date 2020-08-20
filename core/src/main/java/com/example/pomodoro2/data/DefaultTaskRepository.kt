@@ -85,12 +85,7 @@ class DefaultTaskRepository private constructor(
 
             return@withContext newTask
         }
-/*
-        // Old Implementation w/o local cache
-        val localTask = tasksLocalDataSource.retrieveTask(id)
-        if (localTask is Result.Success) return localTask
-        return Result.Error(Exception("Error fetching from remote and local"))
-*/
+
     }
 
     override suspend fun add(task: Task) {
@@ -115,7 +110,7 @@ class DefaultTaskRepository private constructor(
     }
 
 
-    override suspend fun removeAllTask() {
+    override suspend fun removeAll() {
         withContext(ioDispatcher) {
             coroutineScope {
                 launch { tasksRemoteDataSource.deleteAllTasks() }
@@ -127,7 +122,7 @@ class DefaultTaskRepository private constructor(
 
     // TODO: remove below fun due to thought: 用集合的思想来操作聚合根
     // How to deal with below update method?
-    override suspend fun updateTask(task: Task) {
+    override suspend fun update(task: Task) {
         // Do in memory cache update to keep the app UI up to date
         cacheAndPerform(task) {
             coroutineScope {
@@ -162,7 +157,7 @@ class DefaultTaskRepository private constructor(
 
     override fun setSelectedTask(task: Task) = inMemoryDataSource.setSelectedTask(task)
 
-    override fun getSelectedTask() = inMemoryDataSource.getSelectedTask()
+    override fun getSelectedTask(): Task = inMemoryDataSource.getSelectedTask()
 
     override suspend fun initializeStartingTasks() {
         withContext(ioDispatcher) {

@@ -24,18 +24,18 @@ interface IRepository<T: BaseAggregateRoot/*, Q: BaseSpecification*/>{
 
     fun getSelectedTask(): T
 
-    //
-    // TODO: remove below fun due to thought: 用集合的思想来操作聚合根
-    //
-
-    suspend fun updateTask(t: T)
-
-    suspend fun removeAllTask()
-
     suspend fun completeTask(t: T)
 
     suspend fun activateTask(t: T)
 
     suspend fun initializeStartingTasks()
+
+    //
+    // TODO: remove below fun due to thought: 用集合的思想来操作聚合根
+    //
+    suspend fun update(t: T)
+
+    suspend fun removeAll()
+
 
 }

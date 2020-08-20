@@ -48,10 +48,6 @@ class FakeDataSource(
         tasks?.clear()
     }
 
-    override suspend fun initializeTutorialTasks(): Result<List<Task>> {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun completeTask(task: Task) {
         tasks?.firstOrNull { it.id == task.id }?.let { it.isCompleted = true }
     }
@@ -66,4 +62,29 @@ class FakeDataSource(
         tasks?.removeIf { it.isCompleted }
     }
 
+    override suspend fun initializeTutorialTasks(): Result<List<Task>> {
+        val task1 = Task(
+            title = "title4",
+            description = "Description1",
+            isCompleted = false,
+            imageId = 1,
+            priority = 1
+        )
+        val task2 = Task(
+            title = "title5",
+            description = "Description2",
+            isCompleted = true,
+            imageId = 2,
+            priority = 2
+        )
+        val task3 = Task(
+            title = "title6",
+            description = "Description3",
+            isCompleted = true,
+            imageId = 3,
+            priority = 3
+        )
+        val taskList = listOf(task1, task2, task3).sortedBy { it.priority }
+        return Success(taskList)
+    }
 }

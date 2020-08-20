@@ -79,12 +79,12 @@ class FakeRepository : IRepository<Task> {
         throw NotImplementedError()
     }
 
-    override suspend fun updateTask(task: Task) {
+    override suspend fun update(task: Task) {
         tasksServiceData[task.id] = task
 
     }
 
-    override suspend fun removeAllTask() {
+    override suspend fun removeAll() {
         tasksServiceData.clear()
     }
 
