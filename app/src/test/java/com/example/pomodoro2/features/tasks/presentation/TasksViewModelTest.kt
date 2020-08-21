@@ -1,0 +1,88 @@
+package com.example.pomodoro2.features.tasks.presentation
+
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.pomodoro2.FakeRepository
+import com.example.pomodoro2.MainCoroutineRule
+import com.example.pomodoro2.domain.model.Task
+import com.example.pomodoro2.features.tasks.domain.TaskInteractors
+import com.example.pomodoro2.interactors.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.Assert.assertThat
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.robolectric.RuntimeEnvironment.application
+
+
+/**
+ * Unit tests for the implementation of [TasksViewModel]
+ */
+@ExperimentalCoroutinesApi
+class TasksViewModelTest {
+
+
+    // Subject under test
+    private lateinit var tasksViewModel: TasksViewModel
+
+    // Use a fake repository to be injected into the viewmodel
+    private lateinit var tasksRepository: FakeRepository
+
+    // Set the main coroutines dispatcher for unit testing.
+    @ExperimentalCoroutinesApi
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
+
+    // Executes each task synchronously using Architecture Components.
+    @get:Rule
+    var instantExecutorRule = InstantTaskExecutorRule()
+
+    @Before
+    fun setupViewModel() {
+        // We initialise the tasks to 3, with one active and two completed
+        tasksRepository = FakeRepository()
+        val task1 = Task(
+            title = "title1",
+            description = "Description1",
+            isCompleted = false,
+            imageId = 1,
+            priority = 1
+        )
+        val task2 = Task(
+            title = "title2",
+            description = "Description2",
+            isCompleted = true,
+            imageId = 2,
+            priority = 2
+        )
+        val task3 = Task(
+            title = "title3",
+            description = "Description3",
+            isCompleted = true,
+            imageId = 3,
+            priority = 3
+        )
+        tasksRepository.addTasks(task1, task2, task3)
+
+        val taskInteractors = TaskInteractors(
+        CreateNewTaskUseCase(tasksRepository),
+        GetTasksUseCase(tasksRepository),
+        RemoveTaskUseCase(tasksRepository),
+        RemoveAllTaskUseCase(tasksRepository),
+        UpdateTaskUseCase(tasksRepository),
+        CompleteTaskUseCase(tasksRepository),
+        ActivateTaskUseCase(tasksRepository),
+        GetSelectedTaskUseCase(tasksRepository),
+        SetSelectedTaskUseCase(tasksRepository),
+        InitializeStartingTasksUseCase(tasksRepository)
+        )
+
+        tasksViewModel = TasksViewModel(application, taskInteractors)
+    }
+
+
+    @Test
+    fun loadTasks() {
+        assertTrue(true)
+    }
+}

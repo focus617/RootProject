@@ -1,8 +1,9 @@
-package com.example.pomodoro2.data
+package com.example.pomodoro2.domain.repository
 
 import com.example.pomodoro2.BaseUnitTest
+import com.example.pomodoro2.data.AppInMemoryDataSource
+import com.example.pomodoro2.data.FakeDataSource
 import com.example.pomodoro2.domain.model.Task
-import com.example.pomodoro2.domain.repository.DefaultTaskRepository
 import com.example.pomodoro2.platform.functional.Result.Success
 import com.example.pomodoro2.platform.functional.Result.Error
 import com.google.common.truth.Truth.assertThat
@@ -11,14 +12,15 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class DefaultTaskRepositoryTestSpecialCase : BaseUnitTest() {
+class DefaultTaskRepositorySpecialCaseTest : BaseUnitTest() {
 
     @ExperimentalCoroutinesApi
     @Test
     fun querySpecification_emptyRepositoryAndUninitializedCache() = runBlocking {
         val emptySource = FakeDataSource()
         val tasksRepository = DefaultTaskRepository.buildInstanceForTesting(
-            emptySource, emptySource, AppInMemoryDataSource(), Dispatchers.Unconfined
+            emptySource, emptySource,
+            AppInMemoryDataSource(), Dispatchers.Unconfined
         )
 
         assertThat(tasksRepository.querySpecification() is Success).isTrue()
@@ -73,11 +75,14 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
     @ExperimentalCoroutinesApi
     @Before
     fun createRepository() {
-        tasksRemoteDataSource = FakeDataSource(remoteTasks.toMutableList())
-        tasksLocalDataSource = FakeDataSource(localTasks.toMutableList())
+        tasksRemoteDataSource =
+            FakeDataSource(remoteTasks.toMutableList())
+        tasksLocalDataSource =
+            FakeDataSource(localTasks.toMutableList())
         // Get a reference to the class under test
         tasksRepository = DefaultTaskRepository.buildInstanceForTesting(
-            tasksRemoteDataSource, tasksLocalDataSource, AppInMemoryDataSource()
+            tasksRemoteDataSource, tasksLocalDataSource,
+            AppInMemoryDataSource()
         )
 
     }
