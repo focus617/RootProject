@@ -2,6 +2,7 @@ package com.example.pomodoro2.features.activities.presentation
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.pomodoro2.features.activities.domain.ActivityInteractors
 import com.example.pomodoro2.framework.platform.SingleLiveEvent
@@ -12,7 +13,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.RuntimeEnvironment.application
 
 @RunWith(AndroidJUnit4::class)
 class ActivitiesViewModelTest {
@@ -34,7 +34,7 @@ class ActivitiesViewModelTest {
 
         // Given a fresh ViewModel
         val activitiesViewModel =
-            ActivitiesViewModel(application, ActivityInteractors())
+            ActivitiesViewModel(ApplicationProvider.getApplicationContext(), ActivityInteractors())
 
         // Create observer - no need for it to do anything!
         val observer = Observer<SingleLiveEvent<Unit>> {}

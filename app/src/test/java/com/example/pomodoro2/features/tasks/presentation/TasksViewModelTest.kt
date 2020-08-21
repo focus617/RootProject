@@ -1,24 +1,26 @@
 package com.example.pomodoro2.features.tasks.presentation
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.pomodoro2.FakeRepository
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.pomodoro2.mock.FakeRepository
 import com.example.pomodoro2.MainCoroutineRule
 import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.interactors.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.robolectric.RuntimeEnvironment.application
+import org.junit.runner.RunWith
 
 
 /**
  * Unit tests for the implementation of [TasksViewModel]
  */
 @ExperimentalCoroutinesApi
+@RunWith(AndroidJUnit4::class)
 class TasksViewModelTest {
 
 
@@ -77,7 +79,7 @@ class TasksViewModelTest {
         InitializeStartingTasksUseCase(tasksRepository)
         )
 
-        tasksViewModel = TasksViewModel(application, taskInteractors)
+        tasksViewModel = TasksViewModel(ApplicationProvider.getApplicationContext(), taskInteractors)
     }
 
 
