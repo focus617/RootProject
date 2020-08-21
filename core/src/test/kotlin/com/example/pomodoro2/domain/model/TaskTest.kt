@@ -13,7 +13,7 @@ class TaskTest: BaseUnitTest() {
     @Test
     fun `Task_Logger can work`(){
         val task = Task(
-            title = "title1",
+            title = "测试任务",
             description = "desc1",
             isCompleted = false,
             imageId = 1,
