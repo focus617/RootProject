@@ -28,6 +28,7 @@ class DefaultTaskRepository private constructor(
     private var cachedTasks: ConcurrentHashMap<String, Task>? = null
 
     /**
+     * 使用 Specification 模式对领域对象进行查询或校验，可以帮助分离领域层的逻辑与规则校验的逻辑
      * 我们在Specification里面定义更加复杂的查询条件
      *
      * @param specification 此处举例：基于id批量查询
