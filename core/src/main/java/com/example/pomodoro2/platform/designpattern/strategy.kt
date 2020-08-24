@@ -5,7 +5,7 @@ import com.example.pomodoro2.platform.logging.unwrapCompanionClass
 
 // 抽象方法类
 abstract class Strategy {
-    companion object: WithLogging(){}
+    companion object: WithLogging()
     // 算法方法
     abstract fun algorithmInterface(context: Context)
 }
@@ -13,21 +13,23 @@ abstract class Strategy {
 // 抽象Context类
 abstract class Context {
 
-    private lateinit var _strategy: Strategy
-    companion object: WithLogging(){}
+    private var _strategies = ArrayList<Strategy>()
 
-    fun setStrategy(strategy: Strategy){
-        this._strategy = strategy
+    companion object: WithLogging()
+
+    fun addStrategy(strategy: Strategy){
+        this._strategies.add(strategy)
     }
 
     // 上下文接口
     fun contextInterface(){
-        _strategy.algorithmInterface(this)
+        for(each in _strategies )
+            each.algorithmInterface(this)
     }
 
     // 对 Strategy 提供的接口
-    fun getInfo(){
-        LOG.info("Hi,${unwrapCompanionClass(_strategy.javaClass).simpleName}." +
+    fun getInfo(strategy: Strategy){
+        LOG.info("Hi,${unwrapCompanionClass(strategy.javaClass).simpleName}." +
                 " 你想知道什么？")
     }
 }
@@ -38,8 +40,10 @@ abstract class Context {
 class ConcreteStrategyA: Strategy(){
     override fun algorithmInterface(context: Context) {
         // 向Context请求数据
-        context.getInfo()
-        LOG.info("(算法A实现): Say Hello!\n")
+        context.getInfo(this)
+
+        // 算法A实现
+        LOG.info("(算法A实现): Hello, ${unwrapCompanionClass(context.javaClass).simpleName} !\n")
     }
 }
 
@@ -47,8 +51,10 @@ class ConcreteStrategyA: Strategy(){
 class ConcreteStrategyB: Strategy(){
     override fun algorithmInterface(context: Context) {
         // 向Context请求数据
-        context.getInfo()
-        LOG.info("(算法B实现): Say Hello!\n")
+        context.getInfo(this)
+
+        // 算法B实现
+        LOG.info("(算法B实现): Hello, ${unwrapCompanionClass(context.javaClass).simpleName} !\n")
     }
 }
 
@@ -56,18 +62,20 @@ class ConcreteStrategyB: Strategy(){
 class ConcreteStrategyC: Strategy(){
     override fun algorithmInterface(context: Context) {
         // 向Context请求数据
-        context.getInfo()
-        LOG.info("(算法C实现): Say Hello!\n")
+        context.getInfo(this)
+
+        // 算法C实现
+        LOG.info("(算法C实现): Hello, ${unwrapCompanionClass(context.javaClass).simpleName} !\n")
     }
 }
 
-class ConcreteContext(algorithmType: String): Context(){
-    init{
+class ConcreteContext: Context(){
+    fun newStrategyInstance(algorithmType: String)  {
         when(algorithmType){
             // 同时应用了简单工厂模式
-            "A" -> setStrategy(ConcreteStrategyA())
-            "B" -> setStrategy(ConcreteStrategyB())
-            "C" -> setStrategy(ConcreteStrategyC())
+            "A" -> addStrategy(ConcreteStrategyA())
+            "B" -> addStrategy(ConcreteStrategyB())
+            "C" -> addStrategy(ConcreteStrategyC())
             else -> LOG.info("Enter the wrong strategy.")
         }
     }
@@ -76,15 +84,13 @@ class ConcreteContext(algorithmType: String): Context(){
 
 
 fun main() {
-    var context: ConcreteContext?
+    val context = ConcreteContext()
 
-    context = ConcreteContext("A")
+    context.newStrategyInstance("A")
     context.contextInterface()
 
-    context = ConcreteContext("B")
-    context.contextInterface()
-
-    context = ConcreteContext("C")
+    context.newStrategyInstance("B")
+    context.newStrategyInstance("C")
     context.contextInterface()
 }
 

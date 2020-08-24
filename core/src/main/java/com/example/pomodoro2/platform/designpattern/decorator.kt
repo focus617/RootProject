@@ -59,8 +59,10 @@ fun main(){
     val tShirt = TShirt()
     val bigTrousers = BigTrousers()
 
-    // 装饰过程
+    // 装饰过程: 灵活动态地给Person添加装饰功能
     tShirt.decorate(xiaoMing)
     bigTrousers.decorate(tShirt)
+
+    // 经过装饰的功能
     bigTrousers.operation()
 }
