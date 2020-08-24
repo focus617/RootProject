@@ -5,14 +5,17 @@ import com.example.pomodoro2.platform.logging.unwrapCompanionClass
 
 // 抽象被装饰类
 abstract class Component {
+    // 提供 Logger
     companion object: WithLogging()
-    // 算法方法
+
+    // 将被装饰的抽象方法
     abstract fun operation()
 }
 
 // 抽象装饰类
 abstract class Decorator: Component(){
 
+    // 被装饰者
     private lateinit var component: Component
 
     // 装扮方法
@@ -33,7 +36,7 @@ abstract class Decorator: Component(){
 open class Person(var name:String=""): Component(){
     override fun operation() {
         LOG.info("(原始类型${unwrapCompanionClass(this.javaClass).simpleName}的操作)"+
-                "装扮的$name:\n")
+                "${name}今天的装扮:")
     }
 }
 
@@ -71,9 +74,6 @@ class Shoes:Decorator(){
 }
 fun main(){
     val xiaoMing = Person("小明")
-    // 未经装饰的功能
-    print("小明的裸装：")
-    xiaoMing.operation()
 
     val tShirt = TShirt()
     val bigTrousers = BigTrousers()
@@ -86,6 +86,6 @@ fun main(){
 
 
     // 经过装饰之后的功能
-    print("小明的套装：")
+    print("小明的套装:\n")
     shoes.operation()
 }
