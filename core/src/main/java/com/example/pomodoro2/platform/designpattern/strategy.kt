@@ -1,4 +1,4 @@
-package com.example.pomodoro2.platform.designpattern.strategy
+package com.example.pomodoro2.platform.designpattern
 
 import com.example.pomodoro2.platform.logging.WithLogging
 import com.example.pomodoro2.platform.logging.unwrapCompanionClass
