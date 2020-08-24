@@ -30,7 +30,7 @@ abstract class Decorator: Component(){
 // Test
 open class Person(var name:String=""): Component(){
     override fun operation() {
-        LOG.info("(原始对象${unwrapCompanionClass(this.javaClass).simpleName}的操作)"+
+        LOG.info("(原始类型${unwrapCompanionClass(this.javaClass).simpleName}的操作)"+
                 "装扮的$name")
     }
 }
@@ -40,20 +40,20 @@ class TShirt:Decorator(){
     private var cloth = "大T恤"
 
     override fun operation() {
-        LOG.info("(具体装饰对象${unwrapCompanionClass(this.javaClass).simpleName}的操作)" +
-                "上身穿$cloth")
         super.operation()
+        LOG.info("(具体装饰类型${unwrapCompanionClass(this.javaClass).simpleName}的操作)" +
+                "上身穿$cloth")
     }
 }
 
 class BigTrousers:Decorator(){
     // BigTrousers类的方法
-    private fun wear() = LOG.info("(具体装饰对象${unwrapCompanionClass(this.javaClass).simpleName}的操作)" +
+    private fun wear() = LOG.info("(具体装饰类型${unwrapCompanionClass(this.javaClass).simpleName}的操作)" +
             "下身配垮裤")
 
     override fun operation() {
-        wear()
         super.operation()
+        wear()
     }
 }
 
