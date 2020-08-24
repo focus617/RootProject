@@ -27,7 +27,7 @@ data class Task (
         get() = title.isEmpty() || description.isEmpty()
 
     public fun testLogger(){
-        Log.info("Kotlin-Logger: I'm a Task Domain Entity: ${this.title}.")
+        LOG.info("Kotlin-Logger: I'm a Task Domain Entity: ${this.title}.")
     }
 
     companion object {

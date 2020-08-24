@@ -1,9 +1,11 @@
-package com.example.pomodoro2.designpattern.strategy
+package com.example.pomodoro2.platform.designpattern.strategy
 
-import com.example.pomodoro2.designpattern.utils.unwrapCompanionClass
+import com.example.pomodoro2.platform.logging.WithLogging
+import com.example.pomodoro2.platform.logging.unwrapCompanionClass
 
 // 抽象方法类
 abstract class Strategy {
+    companion object: WithLogging(){}
     // 算法方法
     abstract fun algorithmInterface(context: Context)
 }
@@ -12,6 +14,7 @@ abstract class Strategy {
 abstract class Context {
 
     private lateinit var _strategy: Strategy
+    companion object: WithLogging(){}
 
     fun setStrategy(strategy: Strategy){
         this._strategy = strategy
@@ -24,7 +27,8 @@ abstract class Context {
 
     // 对 Strategy 提供的接口
     fun getInfo(){
-        println("Context: Hi,${unwrapCompanionClass(_strategy.javaClass).name}. 你想知道什么？")
+        LOG.info("Hi,${unwrapCompanionClass(_strategy.javaClass).simpleName}." +
+                " 你想知道什么？")
     }
 }
 
@@ -35,7 +39,7 @@ class ConcreteStrategyA: Strategy(){
     override fun algorithmInterface(context: Context) {
         // 向Context请求数据
         context.getInfo()
-        println("算法A实现: Say Hello!\n")
+        LOG.info("(算法A实现): Say Hello!\n")
     }
 }
 
@@ -44,7 +48,7 @@ class ConcreteStrategyB: Strategy(){
     override fun algorithmInterface(context: Context) {
         // 向Context请求数据
         context.getInfo()
-        println("算法B实现: Say Hello!\n")
+        LOG.info("(算法B实现): Say Hello!\n")
     }
 }
 
@@ -53,7 +57,7 @@ class ConcreteStrategyC: Strategy(){
     override fun algorithmInterface(context: Context) {
         // 向Context请求数据
         context.getInfo()
-        println("算法C实现: Say Hello!\n")
+        LOG.info("(算法C实现): Say Hello!\n")
     }
 }
 
@@ -64,7 +68,7 @@ class ConcreteContext(algorithmType: String): Context(){
             "A" -> setStrategy(ConcreteStrategyA())
             "B" -> setStrategy(ConcreteStrategyB())
             "C" -> setStrategy(ConcreteStrategyC())
-            else -> println("Enter the wrong strategy.")
+            else -> LOG.info("Enter the wrong strategy.")
         }
     }
 
