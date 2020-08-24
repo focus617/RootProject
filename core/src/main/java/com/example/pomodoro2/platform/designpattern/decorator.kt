@@ -1,6 +1,7 @@
 package com.example.pomodoro2.platform.designpattern
 
 import com.example.pomodoro2.platform.logging.WithLogging
+import com.example.pomodoro2.platform.logging.unwrapCompanionClass
 
 // 抽象被装饰类
 abstract class Component {
@@ -29,7 +30,8 @@ abstract class Decorator: Component(){
 // Test
 open class Person(var name:String=""): Component(){
     override fun operation() {
-        LOG.info("装扮的$name")
+        LOG.info("(原始对象${unwrapCompanionClass(this.javaClass).simpleName}的操作)"+
+                "装扮的$name")
     }
 }
 
@@ -38,14 +40,16 @@ class TShirt:Decorator(){
     private var cloth = "大T恤"
 
     override fun operation() {
-        LOG.info("上身穿$cloth")
+        LOG.info("(具体装饰对象${unwrapCompanionClass(this.javaClass).simpleName}的操作)" +
+                "上身穿$cloth")
         super.operation()
     }
 }
 
 class BigTrousers:Decorator(){
     // BigTrousers类的方法
-    private fun wear() = LOG.info("下身配垮裤")
+    private fun wear() = LOG.info("(具体装饰对象${unwrapCompanionClass(this.javaClass).simpleName}的操作)" +
+            "下身配垮裤")
 
     override fun operation() {
         wear()
@@ -55,6 +59,8 @@ class BigTrousers:Decorator(){
 
 fun main(){
     val xiaoMing = Person("小明")
+    // 未经装饰的功能
+    xiaoMing.operation()
 
     val tShirt = TShirt()
     val bigTrousers = BigTrousers()
@@ -63,6 +69,6 @@ fun main(){
     tShirt.decorate(xiaoMing)
     bigTrousers.decorate(tShirt)
 
-    // 经过装饰的功能
+    // 经过装饰之后的功能
     bigTrousers.operation()
 }
