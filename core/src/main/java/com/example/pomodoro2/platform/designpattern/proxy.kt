@@ -11,21 +11,31 @@ abstract class Subject {
     abstract fun request()
 }
 
-open class RealSubject: Subject(){
+class RealSubject: Subject(){
     override fun request() {
-        LOG.info("对${unwrapCompanionClass(this.javaClass).simpleName}" +
-                "的真实的操作")
+        LOG.info("${unwrapCompanionClass(this.javaClass).simpleName}:" +
+                "收到请求，开始真实的操作")
     }
 
 }
 
-open class Proxy: Subject(){
+class Proxy: Subject(){
     private lateinit var realSubject : RealSubject
 
     override fun request() {
-        LOG.info("${unwrapCompanionClass(this.javaClass).simpleName}:")
+        if(!this::realSubject.isInitialized) {
+            LOG.info("${unwrapCompanionClass(this.javaClass).simpleName}:" +
+                    "真实对象还不存在，开始构造...")
+            realSubject = RealSubject()
+        }
 
-        if(!this::realSubject.isInitialized) realSubject = RealSubject()
+        // Proxy可以在这里引入附加处理
+        LOG.info("${unwrapCompanionClass(this.javaClass).simpleName}:" +
+                "进行实际操作前的附加处理...")
+
+        // 调用真实对象的方法
+        LOG.info("${unwrapCompanionClass(this.javaClass).simpleName}:" +
+                "对真实对象进行实际操作")
         realSubject!!.request()
     }
 }
@@ -33,7 +43,10 @@ open class Proxy: Subject(){
 
 fun main(vararg args: String) {
     val proxy = Proxy()
-    
+
     // 通过代理，访问真实对象
+    proxy.request()
+
+    // 测试第二次操作
     proxy.request()
 }
