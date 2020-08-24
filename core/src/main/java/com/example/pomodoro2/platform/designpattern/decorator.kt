@@ -22,7 +22,10 @@ abstract class Decorator: Component(){
     }
 
     // 算法方法
-    override fun operation() = component.operation()
+    override fun operation() {
+        if(this::component.isInitialized)
+            component.operation()
+    }
 }
 
 
@@ -31,7 +34,7 @@ abstract class Decorator: Component(){
 open class Person(var name:String=""): Component(){
     override fun operation() {
         LOG.info("(原始类型${unwrapCompanionClass(this.javaClass).simpleName}的操作)"+
-                "装扮的$name")
+                "装扮的$name:\n")
     }
 }
 
@@ -57,6 +60,16 @@ class BigTrousers:Decorator(){
     }
 }
 
+class Shoes:Decorator(){
+    // Shoes类的方法
+    private fun wear() = LOG.info("(具体装饰类型${unwrapCompanionClass(this.javaClass).simpleName}的操作)" +
+            "脚穿一双运动鞋")
+
+    override fun operation() {
+        super.operation()
+        wear()
+    }
+}
 fun main(){
     val xiaoMing = Person("小明")
     // 未经装饰的功能
@@ -64,11 +77,14 @@ fun main(){
 
     val tShirt = TShirt()
     val bigTrousers = BigTrousers()
+    val shoes = Shoes()
 
     // 装饰过程: 灵活动态地给Person添加装饰功能
     tShirt.decorate(xiaoMing)
     bigTrousers.decorate(tShirt)
+    shoes.decorate(bigTrousers)
+
 
     // 经过装饰之后的功能
-    bigTrousers.operation()
+    shoes.operation()
 }
