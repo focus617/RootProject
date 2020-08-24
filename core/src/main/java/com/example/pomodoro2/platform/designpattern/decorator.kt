@@ -12,7 +12,6 @@ abstract class Component {
 
 // 抽象装饰类
 abstract class Decorator: Component(){
-    companion object: WithLogging()
 
     private lateinit var component: Component
 
@@ -73,6 +72,7 @@ class Shoes:Decorator(){
 fun main(){
     val xiaoMing = Person("小明")
     // 未经装饰的功能
+    print("小明的裸装：")
     xiaoMing.operation()
 
     val tShirt = TShirt()
@@ -86,5 +86,6 @@ fun main(){
 
 
     // 经过装饰之后的功能
+    print("小明的套装：")
     shoes.operation()
 }
