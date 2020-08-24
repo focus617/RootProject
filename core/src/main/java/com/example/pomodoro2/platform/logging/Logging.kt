@@ -48,16 +48,18 @@ fun <R : Any> R.injectLogger(): Lazy<Logger> {
     return lazyOf(logger(this.javaClass))
 }
 
-interface ILoggable {
 
-    fun ILoggable.logger(): Logger = logger(this.javaClass)
 
-}
+
 
 /**
  * abstract base class to provide logging,
  * intended for companion objects more than classes but works for either
  */
+interface ILoggable {
+    fun ILoggable.logger(): Logger = logger(this.javaClass)
+}
+
 abstract class WithLogging: ILoggable {
     val LOG = logger()
 }
