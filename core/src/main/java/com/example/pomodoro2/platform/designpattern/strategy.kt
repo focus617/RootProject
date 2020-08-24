@@ -9,7 +9,7 @@ import kotlin.collections.ArrayList
 abstract class Strategy {
     companion object : WithLogging()
 
-    // 算法方法
+    // 抽象算法方法
     abstract fun algorithmInterface(context: Context)
 }
 
