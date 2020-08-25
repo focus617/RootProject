@@ -86,31 +86,35 @@ class ConcreteContext : Context() {
 
 }
 
+class ClientStrategy {
+    companion object : WithLogging() {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            val context = ConcreteContext()
 
-fun main(vararg args: String) {
-    val context = ConcreteContext()
+            println("请输入字母选择策略规则：")
+            println("\tA -> 策略规则A")
+            println("\tB -> 策略规则B")
+            println("\tC -> 策略规则C")
 
-    println("请输入字母选择策略规则：")
-    println("\tA -> 策略规则A")
-    println("\tB -> 策略规则B")
-    println("\tC -> 策略规则C")
+            loop@ while (true) {
+                println("请选择（A，B，C）或输入Q：退出:")
+                try {
+                    val sc = Scanner(System.`in`)
+                    when (val select = sc.nextLine()) {
+                        "A", "B", "C", "a", "b", "c" -> context.newStrategyInstance(select.toUpperCase())
+                        "Q", "q" -> break@loop
+                        else -> println("你输入有错, 请重新输入")
+                    }
 
-    loop@ while (true) {
-        println("请选择（A，B，C）或输入Q：退出:")
-        try {
-            val sc = Scanner(System.`in`)
-            when (val select = sc.nextLine()){
-                "A","B","C","a","b","c" -> context.newStrategyInstance(select.toUpperCase())
-                "Q","q" -> break@loop
-                else -> println("你输入有错, 请重新输入")
+                } catch (e: Exception) {
+                    println("你输入有错：${e.message}")
+                }
             }
+            println("输出结果是：")
+            context.contextInterface()
 
-        } catch (e: Exception) {
-            println("你输入有错：${e.message}")
         }
     }
-    println("输出结果是：")
-    context.contextInterface()
-
 }
 

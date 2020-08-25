@@ -114,24 +114,29 @@ class ConcreteObserverD(private val subject: Observable) {
 }
 
 // 测试程序
-fun main(vararg args: String) {
-    val subject = ConcreteObservable()
+class ClientObserver {
+    companion object : WithLogging() {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            val subject = ConcreteObservable()
 
-    // 方式一：注册实例
-    val observerA = ConcreteObserverA(subject)
-    val observerB = ConcreteObserverB(subject)
+            // 方式一：注册实例
+            val observerA = ConcreteObserverA(subject)
+            val observerB = ConcreteObserverB(subject)
 
-    subject.notifySubscribers()
+            subject.notifySubscribers()
 
-    subject.unregister(observerA)
-    subject.notifySubscribers()
+            subject.unregister(observerA)
+            subject.notifySubscribers()
 
-    // 方式二：注册方法
-    val observerC = ConcreteObserverC(subject)
-    val observerD = ConcreteObserverD(subject)
+            // 方式二：注册方法
+            val observerC = ConcreteObserverC(subject)
+            val observerD = ConcreteObserverD(subject)
 
-    subject.notifyObservers()
+            subject.notifyObservers()
 
-    subject.detach(observerD.hashCode())
-    subject.notifyObservers()
+            subject.detach(observerD.hashCode())
+            subject.notifyObservers()
+        }
+    }
 }

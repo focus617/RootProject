@@ -6,55 +6,60 @@ import com.example.pomodoro2.platform.logging.unwrapCompanionClass
 // 抽象被装饰类
 abstract class Component {
     // 提供 Logger
-    companion object: WithLogging()
+    companion object : WithLogging()
 
     // 将被装饰的抽象方法
     abstract fun operation()
 }
 
 // 抽象装饰类
-abstract class Decorator: Component(){
+abstract class Decorator : Component() {
 
     // 被装饰者
     private lateinit var component: Component
 
     // 装扮方法
-    fun decorate(component: Component){
+    fun decorate(component: Component) {
         this.component = component
     }
 
     // 算法方法
     override fun operation() {
-        if(this::component.isInitialized)
+        if (this::component.isInitialized)
             component.operation()
     }
 }
 
 
-
 // Test
-open class Person(var name:String=""): Component(){
+open class Person(var name: String = "") : Component() {
     override fun operation() {
-        LOG.info("(原始类型${unwrapCompanionClass(this.javaClass).simpleName}的操作)"+
-                "${name}今天的装扮:")
+        LOG.info(
+            "(原始类型${unwrapCompanionClass(this.javaClass).simpleName}的操作)" +
+                    "${name}今天的装扮:"
+        )
     }
 }
 
-class TShirt:Decorator(){
+class TShirt : Decorator() {
     // TShirt类的属性
     private var cloth = "大T恤"
 
     override fun operation() {
         super.operation()
-        LOG.info("(具体装饰类型${unwrapCompanionClass(this.javaClass).simpleName}的操作)" +
-                "上身穿$cloth")
+        LOG.info(
+            "(具体装饰类型${unwrapCompanionClass(this.javaClass).simpleName}的操作)" +
+                    "上身穿$cloth"
+        )
     }
 }
 
-class BigTrousers:Decorator(){
+class BigTrousers : Decorator() {
     // BigTrousers类的方法
-    private fun wear() = LOG.info("(具体装饰类型${unwrapCompanionClass(this.javaClass).simpleName}的操作)" +
-            "下身配垮裤")
+    private fun wear() = LOG.info(
+        "(具体装饰类型${unwrapCompanionClass(this.javaClass).simpleName}的操作)" +
+                "下身配垮裤"
+    )
 
     override fun operation() {
         super.operation()
@@ -62,30 +67,38 @@ class BigTrousers:Decorator(){
     }
 }
 
-class Shoes:Decorator(){
+class Shoes : Decorator() {
     // Shoes类的方法
-    private fun wear() = LOG.info("(具体装饰类型${unwrapCompanionClass(this.javaClass).simpleName}的操作)" +
-            "脚穿一双运动鞋")
+    private fun wear() = LOG.info(
+        "(具体装饰类型${unwrapCompanionClass(this.javaClass).simpleName}的操作)" +
+                "脚穿一双运动鞋"
+    )
 
     override fun operation() {
         super.operation()
         wear()
     }
 }
-fun main(){
-    val xiaoMing = Person("小明")
 
-    val tShirt = TShirt()
-    val bigTrousers = BigTrousers()
-    val shoes = Shoes()
+class ClientDecorator {
+    companion object : WithLogging() {
+        @JvmStatic
+        fun main(vararg args: String) {
+            val xiaoMing = Person("小明")
 
-    // 装饰过程: 灵活动态地给Person添加装饰功能
-    tShirt.decorate(xiaoMing)
-    bigTrousers.decorate(tShirt)
-    shoes.decorate(bigTrousers)
+            val tShirt = TShirt()
+            val bigTrousers = BigTrousers()
+            val shoes = Shoes()
+
+            // 装饰过程: 灵活动态地给Person添加装饰功能
+            tShirt.decorate(xiaoMing)
+            bigTrousers.decorate(tShirt)
+            shoes.decorate(bigTrousers)
 
 
-    // 经过装饰之后的功能
-    print("小明的套装:\n")
-    shoes.operation()
+            // 经过装饰之后的功能
+            print("小明的套装:\n")
+            shoes.operation()
+        }
+    }
 }
