@@ -10,37 +10,35 @@ abstract class Observable {
     // 方式一：保存观察者的实例
     private val observers = arrayListOf<Observer>()
 
+    var subjectState = "正常运行"
+
     fun register(observer: Observer) {
-        LOG.info("${unwrapCompanionClass(this.javaClass).simpleName} Registered")
+        LOG.info("${unwrapCompanionClass(observer.javaClass).simpleName} Registered")
         observers.add(observer)
     }
 
     fun unregister(observer: Observer) {
-        LOG.info("${unwrapCompanionClass(this.javaClass).simpleName} Unregistered")
+        LOG.info("${unwrapCompanionClass(observer.javaClass).simpleName} Unregistered")
         observers.remove(observer)
     }
 
-    fun notifySubscriber() {
-        observers.forEach {
-            it.update()
-        }
-    }
+    fun notifySubscribers() = observers.forEach { it.update() }
 
 
     // 方式二：保存观察者的更新方法
-    private var eventHandler = HashMap<Int, ()->Unit>()
+    private var eventHandler = HashMap<Int, () -> Unit>()
 
-    fun attach(key:Int, event:()->Unit){
+    fun attach(key: Int, event: () -> Unit) {
         LOG.info("$key Attached")
-        eventHandler[key]=event
+        eventHandler[key] = event
     }
 
-    fun detach(key:Int){
-        LOG.info("$key detached")
+    fun detach(key: Int) {
+        LOG.info("$key Detached")
         eventHandler.remove(key)
     }
 
-    open fun notifyObserver() = eventHandler.forEach{event -> event.value}
+    open fun notifyObservers() = eventHandler.forEach { it.value() }
 
 }
 
@@ -52,35 +50,60 @@ abstract class Observer {
 }
 
 
-
 // 具体的被观察者
-class ConcreteObservable: Observable()
+class ConcreteObservable : Observable()
 
 
 //具体的观察者A与B
-class ConcreteObserverA: Observer() {
+class ConcreteObserverA(private val subject: Observable) : Observer() {
+    init{ subject.register(this)}
 
     // 方式一：注册实例
     override fun update() {
-        LOG.info("A--->updateObserverA")
-    }
-
-    // 方式二：注册方法
-    fun updateObserverA(){
-        LOG.info("A--->updateObserverA")
+        LOG.info("${unwrapCompanionClass(this.javaClass).simpleName}" +
+                " receive update from ${unwrapCompanionClass(subject.javaClass).simpleName}:" +
+                " subjectState=${subject.subjectState}")
     }
 }
 
-class ConcreteObserverB: Observer() {
+class ConcreteObserverB(private val subject: Observable) : Observer() {
+    init{ subject.register(this)}
 
     // 方式一：注册实例
     override fun update() {
-        LOG.info("B--->updateObserverB")
+        LOG.info("${unwrapCompanionClass(this.javaClass).simpleName}" +
+                " receive update from ${unwrapCompanionClass(subject.javaClass).simpleName}:" +
+                " subjectState=${subject.subjectState}")
+    }
+}
+
+class ConcreteObserverC(private val subject: Observable) {
+    companion object : WithLogging()
+
+    init{
+        subject.attach(this.hashCode()) { this.updateObserverC() }
     }
 
     // 方式二：注册方法
-    fun updateObserverB(){
-        LOG.info("B--->updateObserverB")
+    fun updateObserverC() {
+        LOG.info("${unwrapCompanionClass(this.javaClass).simpleName}" +
+                " receive update from ${unwrapCompanionClass(subject.javaClass).simpleName}:" +
+                " subjectState=${subject.subjectState}")
+    }
+}
+
+class ConcreteObserverD(private val subject: Observable) {
+    companion object : WithLogging()
+
+    init{
+        subject.attach(this.hashCode()) { this.updateObserverD() }
+    }
+
+    // 方式二：注册方法
+    fun updateObserverD() {
+        LOG.info("${unwrapCompanionClass(this.javaClass).simpleName}" +
+                " receive update from ${unwrapCompanionClass(subject.javaClass).simpleName}:" +
+                " subjectState=${subject.subjectState}")
     }
 
 }
@@ -88,17 +111,22 @@ class ConcreteObserverB: Observer() {
 // 测试程序
 fun main(vararg args: String) {
     val subject = ConcreteObservable()
-    val observerA = ConcreteObserverA()
-    val observerB = ConcreteObserverB()
 
     // 方式一：注册实例
-    subject.register(observerA)
-    subject.register(observerB)
-    subject.notifySubscriber()
+    val observerA = ConcreteObserverA(subject)
+    val observerB = ConcreteObserverB(subject)
+
+    subject.notifySubscribers()
+
+    subject.unregister(observerA)
+    subject.notifySubscribers()
 
     // 方式二：注册方法
-    subject.attach(observerA.hashCode()){observerA.updateObserverA()}
-    subject.attach(observerB.hashCode()){observerB.updateObserverB()}
+    val observerC = ConcreteObserverC(subject)
+    val observerD = ConcreteObserverD(subject)
 
-    subject.notifyObserver()
+    subject.notifyObservers()
+
+    subject.detach(observerD.hashCode())
+    subject.notifyObservers()
 }
