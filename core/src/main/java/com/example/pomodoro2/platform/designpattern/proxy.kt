@@ -97,7 +97,7 @@ class Proxy2(private val realSubject: RealSubject) : ICommonAct by realSubject {
 
 /**
  * DynamicProxy类
- * 可以动态生成任意个代理对象，无需要开发者手动编写代理类代码。
+ * 可以动态生成任意个代理对象，不需要开发者手动编写代理类代码。
  */
 internal class DynamicProxy(   //传入被代理类的实例引用
     private val `object`: Any   //被代理类的引用
@@ -105,6 +105,7 @@ internal class DynamicProxy(   //传入被代理类的实例引用
 
     @Throws(Throwable::class)
     override operator fun invoke(proxy: Any?, method: Method, args: Array<Any?>?): Any {
+        // 这里还未完成
         return method.invoke(`object`, args)
     }
 }
