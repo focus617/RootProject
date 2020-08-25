@@ -56,55 +56,60 @@ class ConcreteObservable : Observable()
 
 //具体的观察者A与B
 class ConcreteObserverA(private val subject: Observable) : Observer() {
-    init{ subject.register(this)}
+    init {
+        subject.register(this)
+    }
 
     // 方式一：注册实例
-    override fun update() {
-        LOG.info("${unwrapCompanionClass(this.javaClass).simpleName}" +
+    override fun update() = LOG.info(
+        unwrapCompanionClass(this.javaClass).simpleName +
                 " receive update from ${unwrapCompanionClass(subject.javaClass).simpleName}:" +
-                " subjectState=${subject.subjectState}")
-    }
+                " subjectState=${subject.subjectState}"
+    )
 }
 
 class ConcreteObserverB(private val subject: Observable) : Observer() {
-    init{ subject.register(this)}
+    init {
+        subject.register(this)
+    }
 
     // 方式一：注册实例
-    override fun update() {
-        LOG.info("${unwrapCompanionClass(this.javaClass).simpleName}" +
+    override fun update() = LOG.info(
+        unwrapCompanionClass(this.javaClass).simpleName +
                 " receive update from ${unwrapCompanionClass(subject.javaClass).simpleName}:" +
-                " subjectState=${subject.subjectState}")
-    }
+                " subjectState=${subject.subjectState}"
+    )
+
 }
 
 class ConcreteObserverC(private val subject: Observable) {
     companion object : WithLogging()
 
-    init{
+    init {
         subject.attach(this.hashCode()) { this.updateObserverC() }
     }
 
     // 方式二：注册方法
-    fun updateObserverC() {
-        LOG.info("${unwrapCompanionClass(this.javaClass).simpleName}" +
+    fun updateObserverC() = LOG.info(
+        unwrapCompanionClass(this.javaClass).simpleName +
                 " receive update from ${unwrapCompanionClass(subject.javaClass).simpleName}:" +
-                " subjectState=${subject.subjectState}")
-    }
+                " subjectState=${subject.subjectState}"
+    )
 }
 
 class ConcreteObserverD(private val subject: Observable) {
     companion object : WithLogging()
 
-    init{
+    init {
         subject.attach(this.hashCode()) { this.updateObserverD() }
     }
 
     // 方式二：注册方法
-    fun updateObserverD() {
-        LOG.info("${unwrapCompanionClass(this.javaClass).simpleName}" +
+    fun updateObserverD() = LOG.info(
+        unwrapCompanionClass(this.javaClass).simpleName +
                 " receive update from ${unwrapCompanionClass(subject.javaClass).simpleName}:" +
-                " subjectState=${subject.subjectState}")
-    }
+                " subjectState=${subject.subjectState}"
+    )
 
 }
 
