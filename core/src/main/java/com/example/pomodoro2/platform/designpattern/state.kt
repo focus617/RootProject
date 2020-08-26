@@ -2,9 +2,11 @@ package com.example.pomodoro2.platform.designpattern
 
 import com.example.pomodoro2.platform.logging.WithLogging
 
-// 持有当前状态state，以及状态变迁已知条件的类
+// 持有当前状态，以及状态变迁已知条件的类
 class StateContext(var state: State) {
     companion object : WithLogging()
+
+    var count = 0
 
     fun request() {
         LOG.info("${this::class.java.simpleName}: 状态变迁")
@@ -30,13 +32,32 @@ class ConcreteState1 : State() {
 
     override fun handle(ctx: StateContext) {
         LOG.info("${this::class.java.simpleName}处理请求完毕，切换状态")
-        //将状态改成状态2
-        ctx.state = ConcreteState2()
+
+        // 从Context获取状态变迁的已知因素
+        ctx.count++
+
+        // 处理状态变迁逻辑，决定下一步迁移的状态
+        if (ctx.count % 2 == 0) {
+            //将状态改成状态2
+            ctx.state = ConcreteState2()
+        } else {
+            //将状态改成状态3
+            ctx.state = ConcreteState3()
+        }
     }
 
 }
 
 class ConcreteState2 : State() {
+
+    override fun handle(ctx: StateContext) {
+        LOG.info("${this::class.java.simpleName}处理请求完毕，切换状态")
+        //将状态改成状态1
+        ctx.state = ConcreteState1()
+    }
+}
+
+class ConcreteState3 : State() {
 
     override fun handle(ctx: StateContext) {
         LOG.info("${this::class.java.simpleName}处理请求完毕，切换状态")
@@ -56,9 +77,11 @@ class ClientState {
             val context = StateContext(ConcreteState1())
 
             //不断的请求，并改变状态
-            context.request()
-            context.request()
-            context.request()
+            var i = 0
+            while (i<10) {
+                i++
+                context.request()
+            }
             //此例比较简单，还可以应用在通过传入不同的条件来决定使用哪个状态或是否要切换到哪个状态进行处理
 
         }
