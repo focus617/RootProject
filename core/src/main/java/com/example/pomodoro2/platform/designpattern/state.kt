@@ -2,15 +2,25 @@ package com.example.pomodoro2.platform.designpattern
 
 import com.example.pomodoro2.platform.logging.WithLogging
 
+// 持有当前状态state，以及状态变迁已知条件的类
+class StateContext(var state: State) {
+    companion object : WithLogging()
 
-// 抽象状态类，定义状态类的基本接口
+    fun request() {
+        LOG.info("${this::class.java.simpleName}: 状态变迁")
+        // 将Context自身作为参数，传递给各个State类
+        state.handle(this)
+    }
+}
+
+// 抽象对象：表示状态的类，定义状态类的基本接口
 abstract class State {
     companion object : WithLogging()
     init{
         LOG.info("进入${this::class.java.simpleName}状态")
     }
 
-    // 根据不同的状态进去处理
+    // 根据本状态的状态改变逻辑进行处理的抽象方法
     abstract fun handle(ctx: StateContext)
 
 }
@@ -20,7 +30,8 @@ class ConcreteState1 : State() {
 
     override fun handle(ctx: StateContext) {
         LOG.info("${this::class.java.simpleName}处理请求完毕，切换状态")
-        ctx.state = ConcreteState2()//将状态改成状态2
+        //将状态改成状态2
+        ctx.state = ConcreteState2()
     }
 
 }
@@ -29,19 +40,12 @@ class ConcreteState2 : State() {
 
     override fun handle(ctx: StateContext) {
         LOG.info("${this::class.java.simpleName}处理请求完毕，切换状态")
-        ctx.state = ConcreteState1()//将状态改成状态1
+        //将状态改成状态1
+        ctx.state = ConcreteState1()
     }
 }
 
-// 持有状态的类
-class StateContext(var state: State) {
-    companion object : WithLogging()
 
-    fun request() {
-        LOG.info("${this::class.java.simpleName}: 状态变迁")
-        state.handle(this)
-    }
-}
 
 // 测试类
 class ClientState {
