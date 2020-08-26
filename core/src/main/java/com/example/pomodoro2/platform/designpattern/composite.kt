@@ -75,13 +75,13 @@ class ClientComposite {
             root.add(Leaf("Leaf A"))
             root.add(Leaf("Leaf B"))
 
-            //根上长出分支X
+            //根上长出分支X，分支上长出了两片叶子
             val compositeX = Composite("Composite X")
             compositeX.add(Leaf("Leaf XA"))
             compositeX.add(Leaf("Leaf XB"))
             root.add(compositeX)
 
-            //分支X再长出分支
+            //分支X再长出分支XY
             val compositeXY = Composite("Composite XY")
             compositeXY.add(Leaf("Leaf XYA"))
             compositeXY.add(Leaf("Leaf XYB"))
@@ -89,6 +89,10 @@ class ClientComposite {
 
             //根部又长出叶子
             root.add(Leaf("Leaf C"))
+
+            val leaf = Leaf("Leaf D")
+            root.add(leaf)
+            root.remove(leaf)
 
             //显示大树的样子
             root.display(1)
