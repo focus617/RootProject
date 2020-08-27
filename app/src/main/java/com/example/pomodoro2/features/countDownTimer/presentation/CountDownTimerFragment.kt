@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pomodoro2.R
 import com.example.pomodoro2.data.DataSourceContainer
+import com.example.pomodoro2.databinding.FragmentTaskBinding
+import com.example.pomodoro2.databinding.FragmentTimerBinding
 import com.example.pomodoro2.domain.repository.DefaultTaskRepository
 import com.example.pomodoro2.features.countDownTimer.domain.CountDownTimerInteractors
 import com.example.pomodoro2.framework.base.BaseFragment
@@ -58,11 +61,21 @@ class CountDownTimerFragment : BaseFragment() {
             savedInstanceState: Bundle?
     ): View {
 
-        val root = super.onCreateView(inflater, container, savedInstanceState)
-        val textView: TextView = root.findViewById(R.id.text_timer)
-        countDownTimerViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
+        // Get a reference to the binding object and inflate the fragment views.
+        val binding: FragmentTimerBinding = DataBindingUtil.inflate(
+            inflater, layoutId(), container, false
+        )
+
+        // To use the View Model with data binding, you have to explicitly
+        // give the binding object a reference to it.
+        binding.viewModel = countDownTimerViewModel
+
+        // Specify the current activity as the lifecycle owner of the binding.
+        // This is necessary so that the binding can observe LiveData updates.
+        binding.lifecycleOwner = this
+
+
+
+        return binding.root
     }
 }

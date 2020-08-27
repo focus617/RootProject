@@ -23,4 +23,12 @@
     <string name="create_task">新建任务</string>
     <string name="input_task_name">输入新任务名称</string>
     <string name="task_marked_complete">选中任务已标记为完成状态</string>
+    <string name="start">开始</string>
+    <string name="pause">暂停</string>
+    <string name="resume">继续</string>
+    <string name="reset">重启</string>
+    <string name="hour">小时</string>
+    <string name="minute">分钟</string>
+    <string name="second">秒</string>
+    <string name="time_seperator">:</string>
 </resources>

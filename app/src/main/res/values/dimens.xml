@@ -18,4 +18,8 @@
     <dimen name="setting_image_header_height">192dp</dimen>
     <dimen name="margin_medium">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
+
+    <!-- CountDownTimerFragment   -->
+    <dimen name="notification_clock_text_size">35sp</dimen>
+    <dimen name="btnTextSize">24sp</dimen>
 </resources>
