@@ -15,6 +15,11 @@ class CountDownTimerViewModel(
     // TODO: getSelectedTask - Acitivity, then get it's time counter
     val timer = TaskCountDownTimer(300L)
 
+    override fun onCleared() {
+        super.onCleared()
+        timer.closeTimerUseCase()
+    }
+
     fun getCurrentActivityTile() = "测试计时器"
 
 

@@ -22,9 +22,6 @@ class TaskCountDownTimer(private val initialSecond: Long){
         get() = _eventTimeUp
     private var _eventTimeUp = MutableLiveData<Boolean>()
 
-
-    private var timer: CountDownTimer? = null
-
     // current countdown Timer value
     private lateinit var _secondUntilFinished: MutableLiveData<Long>
 
@@ -37,6 +34,7 @@ class TaskCountDownTimer(private val initialSecond: Long){
         _secondUntilFinished.value = initialSecond
     }
 
+    private var timer: CountDownTimer? = null
 
     fun launchTimerUseCase(){
         if(_secondUntilFinished.value == null) return
@@ -52,6 +50,7 @@ class TaskCountDownTimer(private val initialSecond: Long){
                 Timber.d("CountDownTimer onFinish:")
                 _secondUntilFinished.value = DONE
                 _eventTimeUp.value = true
+                timer?.cancel()
             }
 
             override fun onTick(millisUntilFinished: Long) {
@@ -79,6 +78,10 @@ class TaskCountDownTimer(private val initialSecond: Long){
         Timber.d("onResetTimer: ")
         _secondUntilFinished.value = initialSecond
         launchTimerUseCase()
+    }
+
+    fun closeTimerUseCase(){
+        timer?.cancel()
     }
 }
 
