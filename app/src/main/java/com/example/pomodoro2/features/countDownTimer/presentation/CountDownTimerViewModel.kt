@@ -13,6 +13,8 @@ class CountDownTimerViewModel(
 ) : BaseViewModel(application) {
 
     // TODO: getSelectedTask - Acitivity, then get it's time counter
+    fun getCurrentActivityTile() = "测试计时器"
+
     val timer = TaskCountDownTimer(300L)
 
     override fun onCleared() {
@@ -20,7 +22,7 @@ class CountDownTimerViewModel(
         timer.closeTimerUseCase()
     }
 
-    fun getCurrentActivityTile() = "测试计时器"
+
 
 
     private val _text = MutableLiveData<String>().apply {
