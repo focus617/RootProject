@@ -32,30 +32,32 @@ class DefaultTaskRepository private constructor(
     /**
      * 使用 Specification 模式对领域对象进行查询或校验，可以帮助分离领域层的逻辑与规则校验的逻辑
      * 我们在Specifications里面定义更加复杂的查询条件
-     *
-     * @param specifications 此处举例：基于id批量查询
+     * 此处举例：基于id批量查询
+     * @param specs List of Specification
      * @return
      */
-    private fun selectBy(specifications: List<BaseSpecification<Task>>): List<Task>{
-        val spec:CompositeSpecification<Task> = CompositeSpecification(specifications)
-        val foundTasks = arrayListOf<Task>()
-
-        // Create if it doesn't exist.
+    fun selectBy(specs: List<BaseSpecification<Task>>?): List<Task>{
+        // Create if cache doesn't exist.
         if (cachedTasks == null) {
             cachedTasks = ConcurrentHashMap()
         }
+        // 如果没有过滤条件，直接返回cache
+        if(specs==null) return cachedTasks!!.values.sortedBy { it.priority }
+
+        val spec:CompositeSpecification<Task> = CompositeSpecification(specs)
+        val foundTasks = arrayListOf<Task>()
 
         // 遍历每个Task
         val tasks = cachedTasks!!.iterator()
         while (tasks.hasNext()){
             val task = tasks.next().value
-            
+
             // 依次比对每个Specification
             val specifications =spec.getSpec().iterator()
-            var satisfiesAllSpecs:Boolean = true
+            var satisfiesAllSpecs = true
 
             while (specifications.hasNext()) {
-                var taskSpec = specifications.next()
+                val taskSpec = specifications.next()
                 satisfiesAllSpecs = satisfiesAllSpecs && taskSpec.isSatisfiedBy(task)
             }
             // 如果满足全部Specification
@@ -67,7 +69,7 @@ class DefaultTaskRepository private constructor(
 
     override suspend fun querySpecification(
         forceUpdate: Boolean,
-        q: BaseSpecification<Task>?
+        specs: List<BaseSpecification<Task>>?
     ): Result<List<Task>> {
 
         return withContext(ioDispatcher) {
@@ -235,7 +237,7 @@ class DefaultTaskRepository private constructor(
     private suspend fun fetchTasksFromRemoteOrLocal(forceUpdate: Boolean): Result<List<Task>> {
         // Remote first
         when (val remoteTasks = tasksRemoteDataSource.retrieveTasks()) {
-            // TODO: check why Timber can't work?
+
             is Error -> println("Remote data source fetch failed")
             is Success -> {
                 refreshLocalDataSource(remoteTasks.data)
@@ -246,7 +248,7 @@ class DefaultTaskRepository private constructor(
 
         // Don't read from local if it's forced
         if (forceUpdate) {
-            return Result.Error(Exception("Can't force refresh: remote data source is unavailable"))
+            return Error(Exception("Can't force refresh: remote data source is unavailable"))
         }
 
         // Local if remote fails
@@ -278,7 +280,7 @@ class DefaultTaskRepository private constructor(
     private fun cacheTask(task: Task): Task {
         val cachedTask = Task(
             task.id, task.title, task.description, task.isCompleted,
-            task.imageId, task.priority, task.createTime
+            task.imageId, task.priority, task.createTime, task.getParent()
         )
         // Create if it doesn't exist.
         if (cachedTasks == null) {

@@ -7,7 +7,10 @@ import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.platform.functional.Result.Success
 import com.example.pomodoro2.platform.functional.Result.Error
 import com.google.common.truth.Truth.assertThat
+import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.*
+import org.amshove.kluent.`should not contain`
+import org.amshove.kluent.shouldNotContain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -45,7 +48,8 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
         description = "Description2",
         isCompleted = true,
         imageId = 2,
-        priority = 2
+        priority = 2,
+        parent = task1
     )
     private val task3 = Task(
         title = "title3",
@@ -81,7 +85,8 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
             FakeDataSource(localTasks.toMutableList())
         // Get a reference to the class under test
         tasksRepository = DefaultTaskRepository.buildInstanceForTesting(
-            tasksRemoteDataSource, tasksLocalDataSource,
+            tasksRemoteDataSource,
+            tasksLocalDataSource,
             AppInMemoryDataSource()
         )
 
@@ -186,6 +191,38 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
 
         // The repository returns an error
         assertThat(tasksRepository.querySpecification()).isInstanceOf(Error::class.java)
+    }
+
+    /**
+     * Test Suite for fun selectBy
+     */
+    @Test
+    fun `selectBy_return correct answer with empty Spec filter`() = runBlocking {
+        // Trigger the repository to load data, which loads from remote and caches
+        val initial = tasksRepository.querySpecification()
+
+
+        val taskBySelected = tasksRepository.selectBy(null)
+
+        // both task1 and task2 should be selected
+        assertThat(taskBySelected).contains(task1)
+        assertThat(taskBySelected).contains(task2)
+
+    }
+
+    @Test
+    fun `selectBy_return correct children by parent Spec filter`() = runBlocking {
+        // Trigger the repository to load data, which loads from remote and caches
+        val initial = tasksRepository.querySpecification()
+
+
+        val taskBySelected = tasksRepository.selectBy(listOf(ChildTaskSpec(task1)))
+
+        // Then task1 should not be selected
+        assertThat(taskBySelected).doesNotContain(task1)
+
+        // task2 should be selected via ChildTaskSpec
+        assertThat(taskBySelected).contains(task2)
     }
 
     /**

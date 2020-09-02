@@ -21,6 +21,7 @@ import com.example.pomodoro2.platform.functional.Result
 import com.example.pomodoro2.platform.functional.Result.Success
 import com.example.pomodoro2.platform.functional.Result.Error
 import com.example.pomodoro2.platform.data.IRepository
+import com.example.pomodoro2.platform.domain.BaseSpecification
 import java.util.LinkedHashMap
 
 /**
@@ -62,7 +63,10 @@ class FakeRepository : IRepository<Task> {
         tasksServiceData.remove(task.id)
     }
 
-    override suspend fun querySpecification(forceUpdate: Boolean): Result<List<Task>> {
+    override suspend fun querySpecification(
+        forceUpdate: Boolean,
+        specs: List<BaseSpecification<Task>>?
+    ): Result<List<Task>> {
         if (shouldReturnError) {
             return Error(Exception("Test exception"))
         }
