@@ -75,8 +75,8 @@ class DefaultTaskRepository private constructor(
         return withContext(ioDispatcher) {
             // Respond immediately with cache if available and not dirty
             if (!forceUpdate) {
-                cachedTasks?.let { cachedTasks ->
-                    return@withContext Success(cachedTasks.values.sortedBy { it.priority })
+                cachedTasks?.let {
+                    return@withContext Success(selectBy(specs).sortedBy { it.priority })
                 }
             }
 
@@ -86,8 +86,8 @@ class DefaultTaskRepository private constructor(
             // Refresh the cache with the new tasks
             (newTasks as? Success)?.let { refreshCache(it.data) }
 
-            cachedTasks?.values?.let { tasks ->
-                return@withContext Success(tasks.sortedBy { it.priority })
+            cachedTasks?.values?.let {
+                return@withContext Success(selectBy(specs).sortedBy { it.priority })
             }
 
             (newTasks as? Success)?.let {

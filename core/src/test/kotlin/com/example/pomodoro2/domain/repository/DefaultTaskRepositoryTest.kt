@@ -7,10 +7,7 @@ import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.platform.functional.Result.Success
 import com.example.pomodoro2.platform.functional.Result.Error
 import com.google.common.truth.Truth.assertThat
-import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.*
-import org.amshove.kluent.`should not contain`
-import org.amshove.kluent.shouldNotContain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -95,6 +92,54 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
     @After
     fun tearDown() {
     }
+
+    /**
+     * Test Suite for fun selectBy
+     */
+    @Test
+    fun `selectBy_return correct answer with null Spec filter`() = runBlocking {
+        // Trigger the repository to load data, which loads from remote and caches
+        tasksRepository.querySpecification()
+
+        val taskBySelected = tasksRepository.selectBy(null)
+
+        // both task1 and task2 should be selected
+        assertThat(taskBySelected).contains(task1)
+        assertThat(taskBySelected).contains(task2)
+
+    }
+
+    @Test
+    fun `selectBy_return correct children by ChildTaskSpec filter`() = runBlocking {
+        // Trigger the repository to load data, which loads from remote and caches
+        tasksRepository.querySpecification()
+
+        val taskBySelected = tasksRepository.selectBy(listOf(ChildTaskSpec(task1)))
+
+        // Then task1 should not be selected via ChildTaskSpec
+        assertThat(taskBySelected).doesNotContain(task1)
+
+        // task2 should be selected via ChildTaskSpec
+        assertThat(taskBySelected).contains(task2)
+    }
+
+    @Test
+    fun `selectBy_return correct answer by both ChildTaskSpec and ActiveTaskSpec filter`() = runBlocking {
+        // Trigger the repository to load data, which loads from remote and caches
+        tasksRepository.querySpecification()
+
+        val taskBySelected = tasksRepository.selectBy(
+            listOf(ChildTaskSpec(task1), ActiveTaskSpec())
+        )
+
+        // Then task1 should not be selected via ChildTaskSpec
+        assertThat(taskBySelected).doesNotContain(task1)
+
+        // task2 should not be selected via ActiveTaskSpec
+        assertThat(taskBySelected).doesNotContain(task2)
+    }
+
+
 
     /**
      * Test Suite for fun querySpecification
@@ -193,36 +238,31 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
         assertThat(tasksRepository.querySpecification()).isInstanceOf(Error::class.java)
     }
 
-    /**
-     * Test Suite for fun selectBy
-     */
     @Test
-    fun `selectBy_return correct answer with empty Spec filter`() = runBlocking {
+    fun `querySpecification_return correct children by ChildTaskSpec filter`() = runBlocking {
         // Trigger the repository to load data, which loads from remote and caches
-        val initial = tasksRepository.querySpecification()
+        val taskBySelected =
+            tasksRepository.querySpecification(specs = listOf(ChildTaskSpec(task1))) as Success
 
+        // Then task1 should not be selected via ChildTaskSpec
+        assertThat(taskBySelected.data).doesNotContain(task1)
 
-        val taskBySelected = tasksRepository.selectBy(null)
-
-        // both task1 and task2 should be selected
-        assertThat(taskBySelected).contains(task1)
-        assertThat(taskBySelected).contains(task2)
-
+        // task2 should be selected via ChildTaskSpec
+        assertThat(taskBySelected.data).contains(task2)
     }
 
     @Test
-    fun `selectBy_return correct children by parent Spec filter`() = runBlocking {
+    fun `querySpecification_return correct answer by both ChildTaskSpec and ActiveTaskSpec filter`() = runBlocking {
         // Trigger the repository to load data, which loads from remote and caches
-        val initial = tasksRepository.querySpecification()
+        val taskBySelected = tasksRepository.querySpecification(
+            specs = listOf(ChildTaskSpec(task1), ActiveTaskSpec())
+        ) as Success
 
+        // Then task1 should not be selected via ChildTaskSpec
+        assertThat(taskBySelected.data).doesNotContain(task1)
 
-        val taskBySelected = tasksRepository.selectBy(listOf(ChildTaskSpec(task1)))
-
-        // Then task1 should not be selected
-        assertThat(taskBySelected).doesNotContain(task1)
-
-        // task2 should be selected via ChildTaskSpec
-        assertThat(taskBySelected).contains(task2)
+        // task2 should not be selected via ActiveTaskSpec
+        assertThat(taskBySelected.data).doesNotContain(task2)
     }
 
     /**
@@ -398,7 +438,7 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
      * Test Suite for fun initializeStartingTasks
      */
     @Test
-    fun `initializeStartingTasks_really add template tasks`()= runBlocking {
+    fun `initializeStartingTasks_really add template tasks`() = runBlocking {
         // Delete all tasks
         tasksRepository.removeAll()
 
@@ -414,7 +454,6 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
         // Verify tasks are empty now
         assertThat(afterInitTasks).isNotEmpty()
     }
-
 
 
 }

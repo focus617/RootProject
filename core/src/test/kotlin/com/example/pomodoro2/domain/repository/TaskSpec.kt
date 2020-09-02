@@ -6,3 +6,7 @@ import com.example.pomodoro2.platform.domain.BaseSpecification
 class ChildTaskSpec(private val parent: Task):BaseSpecification<Task>() {
     override fun isSatisfiedBy(t: Task) = (t.getParent() == this.parent)
 }
+
+class ActiveTaskSpec():BaseSpecification<Task>() {
+    override fun isSatisfiedBy(t: Task) = !(t.isCompleted)
+}
