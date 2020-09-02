@@ -5,6 +5,7 @@ import com.example.pomodoro2.platform.data.IRepository
 import com.example.pomodoro2.platform.data.InMemoryDataSource
 import com.example.pomodoro2.platform.data.IDbLikeDataSource
 import com.example.pomodoro2.platform.domain.BaseSpecification
+import com.example.pomodoro2.platform.domain.CompositeSpecification
 import com.example.pomodoro2.platform.functional.Result
 import com.example.pomodoro2.platform.functional.Result.Success
 import com.example.pomodoro2.platform.functional.Result.Error
@@ -28,31 +29,45 @@ class DefaultTaskRepository private constructor(
     // Domain Aggregate Root data in memory
     private var cachedTasks: ConcurrentHashMap<String, Task>? = null
 
-    private fun selectBy(specification: BaseSpecification<Task>): List<Task>{
+    /**
+     * 使用 Specification 模式对领域对象进行查询或校验，可以帮助分离领域层的逻辑与规则校验的逻辑
+     * 我们在Specifications里面定义更加复杂的查询条件
+     *
+     * @param specifications 此处举例：基于id批量查询
+     * @return
+     */
+    private fun selectBy(specifications: List<BaseSpecification<Task>>): List<Task>{
+        val spec:CompositeSpecification<Task> = CompositeSpecification(specifications)
         val foundTasks = arrayListOf<Task>()
+
         // Create if it doesn't exist.
         if (cachedTasks == null) {
             cachedTasks = ConcurrentHashMap()
         }
+
+        // 遍历每个Task
         val tasks = cachedTasks!!.iterator()
         while (tasks.hasNext()){
             val task = tasks.next().value
-            if(task.let { specification.isSatisfiedBy(it) })
+            
+            // 依次比对每个Specification
+            val specifications =spec.getSpec().iterator()
+            var satisfiesAllSpecs:Boolean = true
+
+            while (specifications.hasNext()) {
+                var taskSpec = specifications.next()
+                satisfiesAllSpecs = satisfiesAllSpecs && taskSpec.isSatisfiedBy(task)
+            }
+            // 如果满足全部Specification
+            if (satisfiesAllSpecs)
                 foundTasks.add(task)
         }
         return foundTasks
     }
 
-    /**
-     * 使用 Specification 模式对领域对象进行查询或校验，可以帮助分离领域层的逻辑与规则校验的逻辑
-     * 我们在Specification里面定义更加复杂的查询条件
-     *
-     * @param specification 此处举例：基于id批量查询
-     * @return
-     */
     override suspend fun querySpecification(
         forceUpdate: Boolean,
-        specification: BaseSpecification<Task>?
+        q: BaseSpecification<Task>?
     ): Result<List<Task>> {
 
         return withContext(ioDispatcher) {
