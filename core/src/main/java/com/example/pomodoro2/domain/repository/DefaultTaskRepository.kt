@@ -53,7 +53,7 @@ class DefaultTaskRepository private constructor(
             val task = tasks.next().value
 
             // 依次比对每个Specification
-            val specifications =spec.getSpec().iterator()
+            val specifications =spec.getSpecs().iterator()
             var satisfiesAllSpecs = true
 
             while (specifications.hasNext()) {
@@ -64,7 +64,7 @@ class DefaultTaskRepository private constructor(
             if (satisfiesAllSpecs)
                 foundTasks.add(task)
         }
-        return foundTasks
+        return foundTasks.sortedBy { it.priority }
     }
 
     override suspend fun querySpecification(
@@ -76,7 +76,7 @@ class DefaultTaskRepository private constructor(
             // Respond immediately with cache if available and not dirty
             if (!forceUpdate) {
                 cachedTasks?.let {
-                    return@withContext Success(selectBy(specs).sortedBy { it.priority })
+                    return@withContext Success(selectBy(specs))
                 }
             }
 
@@ -87,7 +87,7 @@ class DefaultTaskRepository private constructor(
             (newTasks as? Success)?.let { refreshCache(it.data) }
 
             cachedTasks?.values?.let {
-                return@withContext Success(selectBy(specs).sortedBy { it.priority })
+                return@withContext Success(selectBy(specs))
             }
 
             (newTasks as? Success)?.let {
