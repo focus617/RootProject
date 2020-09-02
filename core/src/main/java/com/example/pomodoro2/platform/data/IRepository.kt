@@ -18,7 +18,7 @@ interface IRepository<T: BaseAggregateRoot >{
 
     suspend fun remove(t: T)
 
-    suspend fun querySpecification(forceUpdate: Boolean = false, specs: List<BaseSpecification<T>>? = null): Result<List<T>>
+    suspend fun querySpecification(forceUpdate: Boolean = false, specs: BaseSpecification<T>? = null): Result<List<T>>
 
     fun setSelectedTask(t: T)
 

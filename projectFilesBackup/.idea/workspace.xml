@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidConfiguredLogFilters">
+    <filters>
+      <filter>
+        <option name="logLevel" value="verbose" />
+        <option name="logMessagePattern" value="" />
+        <option name="logTagPattern" value="pplication" />
+        <option name="name" value="Unnamed-0" />
+        <option name="packageNamePattern" value="" />
+        <option name="pid" value="" />
+      </filter>
+    </filters>
+  </component>
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="verbose" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Unnamed-0" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2ec2c4bf-3701-44ac-9be9-bd32355d53ea" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/com/example/pomodoro2/mock/FakeRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/com/example/pomodoro2/mock/FakeRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/com/example/pomodoro2/domain/repository/DefaultTaskRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/com/example/pomodoro2/domain/repository/DefaultTaskRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/com/example/pomodoro2/platform/data/IRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/com/example/pomodoro2/platform/data/IRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/com/example/pomodoro2/platform/domain/BaseSpecification.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/com/example/pomodoro2/platform/domain/BaseSpecification.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/test/kotlin/com/example/pomodoro2/data/FakeRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/test/kotlin/com/example/pomodoro2/data/FakeRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/test/kotlin/com/example/pomodoro2/domain/repository/DefaultTaskRepositoryTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/test/kotlin/com/example/pomodoro2/domain/repository/DefaultTaskRepositoryTest.kt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_3a_API_30_x86" />
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/core">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="RootProject" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="RootProject" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="RootProject" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="verification" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="valueResourceFile" />
+        <option value="layoutResourceFile" />
+        <option value="JUnit4 Test Class" />
+        <option value="Kotlin File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="SWAP_SIDES_IN_COMPARE_BRANCHES" value="true" />
+  </component>
+  <component name="ProjectId" id="1fXrhaihuLBpn1EdUm78Cf7W9Ol" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="android.sdk.path" value="D:/Android/Sdk" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
+    <property name="dynamic.classpath" value="true" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/test/java/com/example/pomodoro2/features" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="SDK Location" />
+    <property name="project.structure.proportion" value="0.17" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="preferences.language.Kotlin" />
+    <property name="show.do.not.copy.http.proxy.settings.to.gradle" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="com.example.pomodoro2.domain.repository" />
+      <recent name="com.example.pomodoro2.mock" />
+      <recent name="com.example.pomodoro2.platform.logging" />
+      <recent name="com.example.pomodoro2.domain.model" />
+      <recent name="com.example.pomodoro2.data" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.example.pomodoro2.features.tasks.presentation" />
+      <recent name="com.example.pomodoro2.domain.model" />
+      <recent name="com.example.pomodoro2.data" />
+      <recent name="com.example.pomodoro2.interactors" />
+      <recent name="com.example.pomodoro2.platform.functional" />
+    </key>
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="com.example.pomodoro2" />
+      <recent name="com.example.pomodoro2.data" />
+      <recent name="com.example.pomodoro2.platform.mockito" />
+      <recent name="com.example.pomodoro2.platform.interactor" />
+      <recent name="com.example.pomodoro2.platform.functional" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.example.pomodoro2.platform" />
+      <recent name="com.example.pomodoro2.domain" />
+      <recent name="com.example.pomodoro2.core" />
+      <recent name="com.example.pomodoro2.features" />
+      <recent name="com.example.pomodoro2" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\MyProject\AndroidStudioProjects\RootProject\app\src\main\res\values" />
+      <recent name="D:\MyProject\AndroidStudioProjects\RootProject\core\src\main\java\com\example\pomodoro2\platform\designpattern" />
+      <recent name="D:\MyProject\AndroidStudioProjects\RootProject\core\src\main\java\com\example\pomodoro2\designpattern\strategy" />
+      <recent name="D:\MyProject\AndroidStudioProjects\RootProject\core\src\main\java\com\example\pomodoro2\platform\functional" />
+      <recent name="D:\MyProject\AndroidStudioProjects\RootProject\app\src\main\java\com\example\pomodoro2\framework\platform" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.example.pomodoro2.features.infra.database" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\MyProject\AndroidStudioProjects\RootProject\core\src\main\java\com\example\pomodoro2\platform\designpattern" />
+      <recent name="D:\MyProject\AndroidStudioProjects\RootProject\core\src\main\java\com\example\pomodoro2\designpattern\utils" />
+      <recent name="D:\MyProject\AndroidStudioProjects\RootProject\core\src\test\kotlin\com\example\pomodoro2\domain\model\repository" />
+      <recent name="D:\MyProject\AndroidStudioProjects\RootProject\app\src\main\java\com\example\pomodoro2\framework\base" />
+      <recent name="D:\MyProject\AndroidStudioProjects\RootProject\core\src\test\kotlin\com\example\pomodoro2\platform\interactor" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Android JUnit.com.example.pomodoro2 in core">
+    <configuration name="All in core" type="AndroidJUnit" factoryName="Android JUnit" nameIsGenerated="true">
+      <module name="core" />
+      <shortenClasspath name="NONE" />
+      <useClassPathOnly />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
+      <shortenClasspath name="NONE" />
+      <useClassPathOnly />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="com.example.pomodoro2 in core" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="core" />
+      <shortenClasspath name="NONE" />
+      <useClassPathOnly />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.pomodoro2.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.pomodoro2" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="pomodoro2 in app" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="app" />
+      <useClassPathOnly />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="directory" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <dir value="$PROJECT_DIR$/app/src/test/java/com/example/pomodoro2" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="pomodoro2 in core" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="core" />
+      <shortenClasspath name="NONE" />
+      <useClassPathOnly />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="directory" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <dir value="$PROJECT_DIR$/core/src/test/kotlin/com/example/pomodoro2" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="app" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DefaultTaskRepositoryTest.selectBy_find correct task by both ChildTaskSpec and ActiveTaskSpec filter" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="core" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.pomodoro2.domain.repository.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.pomodoro2.domain.repository" />
+      <option name="MAIN_CLASS_NAME" value="com.example.pomodoro2.domain.repository.DefaultTaskRepositoryTest" />
+      <option name="METHOD_NAME" value="selectBy_find correct task by both ChildTaskSpec and ActiveTaskSpec filter" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DefaultTaskRepositoryTest.selectBy_return correct answer with null Spec filter" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="core" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.pomodoro2.domain.repository.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.pomodoro2.domain.repository" />
+      <option name="MAIN_CLASS_NAME" value="com.example.pomodoro2.domain.repository.DefaultTaskRepositoryTest" />
+      <option name="METHOD_NAME" value="selectBy_return correct answer with null Spec filter" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Android JUnit.com.example.pomodoro2 in core" />
+        <item itemvalue="Android JUnit.pomodoro2 in app" />
+        <item itemvalue="JUnit.DefaultTaskRepositoryTest.selectBy_find correct task by both ChildTaskSpec and ActiveTaskSpec filter" />
+        <item itemvalue="Android JUnit.pomodoro2 in core" />
+        <item itemvalue="JUnit.DefaultTaskRepositoryTest.selectBy_return correct answer with null Spec filter" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2ec2c4bf-3701-44ac-9be9-bd32355d53ea" name="Default Changelist" comment="" />
+      <created>1596375398930</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1596375398930</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="feature/navigation" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="feature/navigation" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="development" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1435" y="261" key="#&lt;template&gt;_of_Android_JUnit" timestamp="1596618327631">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1435" y="261" key="#&lt;template&gt;_of_Android_JUnit/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1596618327631" />
+    <state x="273" y="292" key="#ActivitiesViewModelTest" timestamp="1597982842587">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="273" y="292" key="#ActivitiesViewModelTest.startTimer_setStartTimerEvent" timestamp="1596618362091">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="273" y="292" key="#ActivitiesViewModelTest.startTimer_setStartTimerEvent/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1596618362091" />
+    <state x="273" y="292" key="#ActivitiesViewModelTest/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1597982842587" />
+    <state x="-1425" y="1162" key="#All_in_app" timestamp="1597922183932">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1425" y="1162" key="#All_in_app/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597922183932" />
+    <state x="-1425" y="1162" key="#All_in_app_(1)" timestamp="1597922223555">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1425" y="1162" key="#All_in_app_(1)/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597922223555" />
+    <state x="773" y="276" key="#Notifications" timestamp="1597306666202">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="773" y="276" key="#Notifications/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1597306666202" />
+    <state x="-1562" y="1252" key="#PSD" timestamp="1597979999799">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1562" y="1252" key="#PSD/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597979999799" />
+    <state x="417" y="298" key="#TasksViewModelTest" timestamp="1597982668498">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="417" y="298" key="#TasksViewModelTest/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1597982668498" />
+    <state x="-1297" y="1178" key="#Tests_in_'com.example.pomodoro2'" timestamp="1597922159459">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1297" y="1178" key="#Tests_in_'com.example.pomodoro2'/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597922159459" />
+    <state x="-1230" y="1333" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog" timestamp="1596782665331">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1230" y="1333" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1596782665331" />
+    <state x="414" y="168" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596550256001">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="414" y="168" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596550256001" />
+    <state x="-1290" y="1370" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1597747871937">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1290" y="1370" key="#com.intellij.fileTypes.FileTypeChooser/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597747871937" />
+    <state x="-1217" y="1233" key="#com.intellij.ide.util.MemberChooser" timestamp="1598421615704">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1217" y="1233" key="#com.intellij.ide.util.MemberChooser/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1598421615704" />
+    <state x="937" y="231" key="#com.intellij.ide.util.MemberChooser/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1597808330156" />
+    <state x="-1293" y="1309" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1597665450458">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1293" y="1309" key="#com.intellij.ide.util.PackageChooserDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597665450458" />
+    <state x="-1138" y="1388" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1598331416911">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1138" y="1388" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1598331416911" />
+    <state x="1042" y="443" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1596375610140" />
+    <state x="1258" y="612" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1598238904865">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="-1157" y="1511" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597664959339" />
+    <state x="1258" y="612" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1598238904865" />
+    <state x="516" y="566" width="630" height="279" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages" timestamp="1598238913793">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="-1533" y="1477" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597548468357" />
+    <state x="516" y="566" width="630" height="279" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1598238913793" />
+    <state x="-1920" y="1065" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1599060869145">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1920" y="1065" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1599060869145" />
+    <state x="133" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1598195079322" />
+    <state x="-1567" y="1352" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1597205046743">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1567" y="1352" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597205046743" />
+    <state x="471" y="394" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1596703886387" />
+    <state x="-1630" y="1279" width="623" height="600" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog" timestamp="1599036727575">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1630" y="1279" width="623" height="600" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1599036727575" />
+    <state x="387" y="294" width="725" height="823" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1597753577484" />
+    <state x="-1715" y="1277" key="#pomodoro2_in_app" timestamp="1599064034814">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1715" y="1277" key="#pomodoro2_in_app/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1599064034814" />
+    <state x="273" y="292" key="#pomodoro2_in_app/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1599053696926" />
+    <state x="-1380" y="1333" key="AndroidCreateResourceDirectoryDialog" timestamp="1596894179095">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1380" y="1333" key="AndroidCreateResourceDirectoryDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1596894179095" />
+    <state x="-1147" y="1511" key="AndroidCreateResourceFileDialog" timestamp="1597034065782">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1147" y="1511" key="AndroidCreateResourceFileDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597034065782" />
+    <state x="-1448" y="1428" key="AndroidCreateXmlResourceDialog" timestamp="1598497572722">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1448" y="1428" key="AndroidCreateXmlResourceDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1598497572722" />
+    <state x="629" y="498" key="AndroidCreateXmlResourceDialog/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1596678680949" />
+    <state x="-1422" y="1109" key="CommitChangelistDialog2" timestamp="1596795672284">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1422" y="1109" key="CommitChangelistDialog2/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1596795672284" />
+    <state width="689" height="582" key="DebuggerActiveHint" timestamp="1599052819640">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="689" height="582" key="DebuggerActiveHint/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1599052819640" />
+    <state x="417" y="313" width="1736" height="856" key="DiffContextDialog" timestamp="1597328952577">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="417" y="313" width="1736" height="856" key="DiffContextDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597328952577" />
+    <state x="417" y="313" width="1736" height="856" key="DiffContextDialog/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1597306860198" />
+    <state x="-798" y="1355" key="FileChooserDialogImpl" timestamp="1599016174138">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-798" y="1355" key="FileChooserDialogImpl/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1599016174138" />
+    <state x="1496" y="398" key="FileChooserDialogImpl/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1597990594731" />
+    <state width="2506" height="330" key="GridCell.Tab.0.bottom" timestamp="1599065507397">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state width="2506" height="330" key="GridCell.Tab.0.bottom/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1599065507397" />
+    <state width="2506" height="417" key="GridCell.Tab.0.bottom/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1599063760154" />
+    <state width="1865" height="268" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596550520759" />
+    <state width="2506" height="247" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1596968301444" />
+    <state width="2506" height="330" key="GridCell.Tab.0.center" timestamp="1599065507396">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state width="2506" height="330" key="GridCell.Tab.0.center/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1599065507396" />
+    <state width="2506" height="417" key="GridCell.Tab.0.center/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1599063760154" />
+    <state width="1865" height="268" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596550520759" />
+    <state width="2506" height="247" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1596968301444" />
+    <state width="2506" height="330" key="GridCell.Tab.0.left" timestamp="1599065507396">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state width="2506" height="330" key="GridCell.Tab.0.left/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1599065507396" />
+    <state width="2506" height="417" key="GridCell.Tab.0.left/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1599063760153" />
+    <state width="1865" height="268" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596550520759" />
+    <state width="2506" height="247" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1596968301444" />
+    <state width="2506" height="330" key="GridCell.Tab.0.right" timestamp="1599065507396">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state width="2506" height="330" key="GridCell.Tab.0.right/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1599065507396" />
+    <state width="2506" height="417" key="GridCell.Tab.0.right/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1599063760154" />
+    <state width="1865" height="268" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596550520759" />
+    <state width="2506" height="247" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1596968301444" />
+    <state width="2506" height="330" key="GridCell.Tab.1.bottom" timestamp="1599065507397">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state width="2506" height="330" key="GridCell.Tab.1.bottom/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1599065507397" />
+    <state width="2506" height="330" key="GridCell.Tab.1.bottom/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1599053138328" />
+    <state width="2506" height="330" key="GridCell.Tab.1.center" timestamp="1599065507397">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state width="2506" height="330" key="GridCell.Tab.1.center/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1599065507397" />
+    <state width="2506" height="330" key="GridCell.Tab.1.center/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1599053138328" />
+    <state width="2506" height="330" key="GridCell.Tab.1.left" timestamp="1599065507397">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state width="2506" height="330" key="GridCell.Tab.1.left/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1599065507397" />
+    <state width="2506" height="330" key="GridCell.Tab.1.left/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1599053138328" />
+    <state width="2506" height="330" key="GridCell.Tab.1.right" timestamp="1599065507397">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state width="2506" height="330" key="GridCell.Tab.1.right/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1599065507397" />
+    <state width="2506" height="330" key="GridCell.Tab.1.right/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1599053138328" />
+    <state x="9" y="0" width="2551" height="1400" key="MergeDialog" timestamp="1597307119756">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="9" y="0" width="2551" height="1400" key="MergeDialog/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1597307119756" />
+    <state x="922" y="347" key="MultipleFileMergeDialog" timestamp="1597307119760">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="922" y="347" key="MultipleFileMergeDialog/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1597307119760" />
+    <state x="-1409" y="1201" key="SettingsEditor" timestamp="1598322675057">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1409" y="1201" key="SettingsEditor/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1598322675057" />
+    <state x="681" y="376" key="SettingsEditor/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1596426623469" />
+    <state x="-1169" y="1313" key="chooseDestDirectoryDialog" timestamp="1597981488498">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1169" y="1313" key="chooseDestDirectoryDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597981488498" />
+    <state x="1001" y="340" key="chooseDestDirectoryDialog/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1596678383389" />
+    <state x="93" y="93" width="2375" height="1215" key="com.intellij.dvcs.ui.CompareBranchesDialog" timestamp="1597306860198">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="93" y="93" width="2375" height="1215" key="com.intellij.dvcs.ui.CompareBranchesDialog/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1597306860198" />
+    <state x="-1828" y="1157" width="1736" height="856" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1597330355457">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1828" y="1157" width="1736" height="856" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597330355457" />
+    <state x="195" y="422" width="1736" height="856" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1598193340407">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="195" y="422" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597980523195" />
+    <state x="195" y="422" width="1736" height="856" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1598193340407" />
+    <state x="-1558" y="1417" key="com.intellij.ide.util.TipDialog" timestamp="1598968815167">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1558" y="1417" key="com.intellij.ide.util.TipDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1598968815167" />
+    <state x="482" y="483" key="com.intellij.ide.util.TipDialog/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1596608871965" />
+    <state x="216" y="378" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1597825236119">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="216" y="378" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1597825236119" />
+    <state x="27" y="554" width="1516" height="709" key="dock-window-1" timestamp="1597151542019">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="27" y="554" width="1516" height="709" key="dock-window-1/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597151542019" />
+    <state x="-1234" y="1396" key="edit.logcat.filter.dialog.dimensions" timestamp="1597923044969">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1234" y="1396" key="edit.logcat.filter.dialog.dimensions/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597923044969" />
+    <state x="-1352" y="1214" width="955" height="654" key="find.popup" timestamp="1597364206542">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1352" y="1214" width="955" height="654" key="find.popup/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1597364206542" />
+    <state x="-971" y="1244" key="org.jetbrains.kotlin.idea.testIntegration.KotlinCreateTestDialog" timestamp="1597981488510">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-971" y="1244" key="org.jetbrains.kotlin.idea.testIntegration.KotlinCreateTestDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597981488510" />
+    <state x="863" y="207" key="org.jetbrains.kotlin.idea.testIntegration.KotlinCreateTestDialog/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1597754397013" />
+    <state x="-1278" y="1161" key="refactoring.ChangeSignatureDialog" timestamp="1597677443356">
+      <screen x="-1920" y="1065" width="1920" height="1020" />
+    </state>
+    <state x="-1278" y="1161" key="refactoring.ChangeSignatureDialog/-1920.1065.1920.1020/0.0.2560.1400@-1920.1065.1920.1020" timestamp="1597677443356" />
+    <state x="266" y="329" key="run.anything.popup" timestamp="1598235873154">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="266" y="329" key="run.anything.popup/-1920.1065.1920.1020/0.0.2560.1400@0.0.2560.1400" timestamp="1598235873154" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/RootProject$All_in_app.ic" NAME="All in app Coverage Results" MODIFIED="1597922171138" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/RootProject$All_in_core.ic" NAME="All in core Coverage Results" MODIFIED="1597922232867" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/RootProject$All_in_app__1_.ic" NAME="All in app (1) Coverage Results" MODIFIED="1597922190998" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>

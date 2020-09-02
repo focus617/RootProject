@@ -65,7 +65,7 @@ class FakeRepository : IRepository<Task> {
 
     override suspend fun querySpecification(
         forceUpdate: Boolean,
-        specs: List<BaseSpecification<Task>>?
+        specs: BaseSpecification<Task>?
     ): Result<List<Task>> {
         if (shouldReturnError) {
             return Error(Exception("Test exception"))
