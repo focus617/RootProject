@@ -1,12 +1,10 @@
 package com.example.pomodoro2.interactors
 
-import com.example.pomodoro2.platform.data.IRepository
 import com.example.pomodoro2.domain.model.Task
+import com.example.pomodoro2.interactors.TasksFilterType.*
+import com.example.pomodoro2.platform.data.IRepository
 import com.example.pomodoro2.platform.functional.Result
 import com.example.pomodoro2.platform.functional.Result.Success
-import com.example.pomodoro2.interactors.TasksFilterType.ALL_TASKS
-import com.example.pomodoro2.interactors.TasksFilterType.ACTIVE_TASKS
-import com.example.pomodoro2.interactors.TasksFilterType.COMPLETED_TASKS
 
 class GetTasksUseCase(
     private val taskRepository: IRepository<Task>

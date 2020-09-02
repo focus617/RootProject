@@ -23,7 +23,7 @@ class DefaultTaskRepository private constructor(
     private val tasksLocalDataSource: IDbLikeDataSource<Task>,
     private val inMemoryDataSource: InMemoryDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-) : IRepository<Task/*, BaseSpecification*/> {
+) : IRepository<Task> {
 
     // Domain Aggregate Root data in memory
     private var cachedTasks: ConcurrentHashMap<String, Task>? = null
@@ -51,8 +51,8 @@ class DefaultTaskRepository private constructor(
      * @return
      */
     override suspend fun querySpecification(
-        forceUpdate: Boolean
-        /*, specification: BaseSpecification*/
+        forceUpdate: Boolean,
+        specification: BaseSpecification<Task>?
     ): Result<List<Task>> {
 
         return withContext(ioDispatcher) {
