@@ -2,6 +2,7 @@ package com.example.pomodoro2.domain.model
 
 import com.example.pomodoro2.platform.domain.BaseAggregateRoot
 import java.io.Serializable
+import java.util.ArrayList
 import java.util.UUID
 
 /**
@@ -14,8 +15,35 @@ data class Task (
     var isCompleted: Boolean = false,
     var imageId: Int,
     var priority: Int,
-    var createTime: Long = System.currentTimeMillis()
+    var createTime: Long = System.currentTimeMillis(),
+    private var parent: Task? = null
 ): BaseAggregateRoot(), Serializable {
+
+    private lateinit var children: MutableList<Task>
+
+    private fun children(): MutableList<Task>{
+        if(children == null)
+            children = arrayListOf<Task>()
+        return children
+    }
+
+    private fun setParent(parent: Task){
+        this.parent = parent
+    }
+
+    fun addChild(task: Task){
+        task.setParent(this)
+        children().add(task)
+    }
+
+    fun removeChild(task: Task){
+        children().remove(task)
+    }
+
+    fun getParent(): Task?{
+        return parent
+    }
+
 
     val titleForList: String
         get() = if (title.isNotEmpty()) title else description
