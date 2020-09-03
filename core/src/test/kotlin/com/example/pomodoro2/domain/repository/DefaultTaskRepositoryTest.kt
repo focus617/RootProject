@@ -50,7 +50,7 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
         isCompleted = true,
         imageId = 2,
         priority = 2,
-        parent = task1
+        parentId = task1.id
     )
     private val task3 = Task(
         title = "title3",

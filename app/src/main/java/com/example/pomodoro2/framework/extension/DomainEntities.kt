@@ -16,7 +16,8 @@ fun Task.asDatabaseEntity(): TaskEntity {
             isCompleted = this.isCompleted,
             imageId = this.imageId,
             priority = this.priority,
-            createTime = this.createTime
+            createTime = this.createTime,
+            parentId = this.parentId?:""
         )
 }
 

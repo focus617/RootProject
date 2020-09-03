@@ -5,7 +5,8 @@ import com.example.pomodoro2.platform.logging.WithLogging
 // 持有当前状态，以及状态变迁已知条件的类
 class StateContext(var state: State) {
     companion object : WithLogging()
-
+    
+    // 一个用来计算状态切换条件的临时变量
     var count = 0
 
     fun request() {

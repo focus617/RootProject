@@ -39,7 +39,9 @@ data class NetworkTask(
     var isCompleted: Boolean,
     var imageId: Int,
     var priority: Int,
-    var createTime: Long)
+    var createTime: Long,
+    var parentId: String
+)
 
 @JsonClass(generateAdapter = true)
 data class Phone(
@@ -66,7 +68,8 @@ fun NetworkTaskContainer.asDomainModel(): List<Task> {
             isCompleted = it.isCompleted,
             imageId = it.imageId,
             priority = it.priority,
-            createTime = it.createTime
+            createTime = it.createTime,
+            parentId = it.parentId
         )
     }
 }
@@ -84,6 +87,8 @@ fun NetworkTaskContainer.asDatabaseModel(): List<TaskEntity> {
             isCompleted = it.isCompleted,
             imageId = it.imageId,
             priority = it.priority,
-            createTime = it.createTime)
+            createTime = it.createTime,
+            parentId = it.parentId
+        )
     }
 }

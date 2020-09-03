@@ -16,6 +16,7 @@ import com.example.pomodoro2.domain.model.Task
  * @param imageId     id of the task's icon
  * @param priority    displaying order the task
  * @param createTime  timestampe of task creation
+ * @param parentId    id of the parent task
  */
 @Entity(tableName = "TASK_TABLE")
 data class TaskEntity(
@@ -33,7 +34,7 @@ data class TaskEntity(
     @ColumnInfo(name = "completed")
     var isCompleted: Boolean,
 
-    @ColumnInfo(name = "imageID")
+    @ColumnInfo(name = "imageId")
     var imageId: Int,
 
     /* 显示的顺序 */
@@ -41,7 +42,10 @@ data class TaskEntity(
     var priority: Int,
 
     @ColumnInfo(name = "create_time")
-    var createTime: Long
+    var createTime: Long,
+
+    @ColumnInfo(name = "parentId")
+    var parentId: String
 )
 
 /**
@@ -55,7 +59,8 @@ fun TaskEntity.asDomainModel(): Task {
         isCompleted = this.isCompleted,
         imageId = this.imageId,
         priority = this.priority,
-        createTime = this.createTime
+        createTime = this.createTime,
+        parentId = this.parentId
     )
 }
 
@@ -71,7 +76,8 @@ fun List<TaskEntity>.asDomainModel(): List<Task> {
             isCompleted = it.isCompleted,
             imageId = it.imageId,
             priority = it.priority,
-            createTime = it.createTime
+            createTime = it.createTime,
+            parentId = it.parentId
         )
     }
 }

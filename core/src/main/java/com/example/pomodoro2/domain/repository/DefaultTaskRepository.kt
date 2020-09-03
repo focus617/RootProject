@@ -271,7 +271,7 @@ class DefaultTaskRepository private constructor(
     private fun cacheTask(task: Task): Task {
         val cachedTask = Task(
             task.id, task.title, task.description, task.isCompleted,
-            task.imageId, task.priority, task.createTime, task.getParent()
+            task.imageId, task.priority, task.createTime, task.parentId
         )
         // Create if it doesn't exist.
         if (cachedTasks == null) {

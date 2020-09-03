@@ -16,7 +16,7 @@ data class Task (
     var imageId: Int,
     var priority: Int,
     var createTime: Long = System.currentTimeMillis(),
-    private var parent: Task? = null
+    var parentId: String? = null
 ): BaseAggregateRoot(), Serializable {
 
     private lateinit var children: MutableList<Task>
@@ -27,23 +27,15 @@ data class Task (
         return children
     }
 
-    private fun setParent(parent: Task){
-        this.parent = parent
-    }
 
     fun addChild(task: Task){
-        task.setParent(this)
+        task.parentId = this.id
         children().add(task)
     }
 
     fun removeChild(task: Task){
         children().remove(task)
     }
-
-    fun getParent(): Task?{
-        return parent
-    }
-
 
     val titleForList: String
         get() = if (title.isNotEmpty()) title else description
