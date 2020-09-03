@@ -25,12 +25,16 @@ abstract class BaseSpecification<T> {
  * 可以进一步细化为 AndSpec, OrSpec 和 NotSpec(是否需要？)
  *
  * @usage:
+ * for example:  (Spec1 && Spec2) || not(Spec3)
+ *
  *  andSpecs = AndSpecification<Task>()
  *  andSpecs.add(ConcreteSpecification1())
  *  andSpecs.add(ConcreteSpecification2())
+ *
  *  orSpecs = OrSpecification<Task>()
  *  orSpecs.add(andSpecs)
- *  orSpecs.add(ConcreteSpecification3())
+ *  orSpecs.add(NotSpecification<Task>(ConcreteSpecification3()))
+ *
  *  orSpecs.isSatisfiedBy(t)
  *
  */
@@ -80,4 +84,12 @@ class OrSpecification<T>: BaseSpecification<T>() {
         }
         return satisfiesAllSpecs
     }
+}
+
+class NotSpecification<T>(private val specToNegate: BaseSpecification<T>): BaseSpecification<T>() {
+
+    override fun isSatisfiedBy(t: T): Boolean {
+        return ! specToNegate.isSatisfiedBy(t)
+    }
+
 }

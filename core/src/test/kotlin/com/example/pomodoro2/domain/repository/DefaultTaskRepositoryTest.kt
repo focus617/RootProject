@@ -5,6 +5,7 @@ import com.example.pomodoro2.data.AppInMemoryDataSource
 import com.example.pomodoro2.data.FakeDataSource
 import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.platform.domain.AndSpecification
+import com.example.pomodoro2.platform.domain.NotSpecification
 import com.example.pomodoro2.platform.domain.OrSpecification
 import com.example.pomodoro2.platform.functional.Result.Success
 import com.example.pomodoro2.platform.functional.Result.Error
@@ -107,7 +108,7 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
         val taskBySelected = tasksRepository.selectBy(null)
 
         // both task1 and task2 should be selected
-        assertEquals("found 2 tasks", 2, taskBySelected.size);
+        assertEquals("found 2 tasks", 2, taskBySelected.size)
         assertThat(taskBySelected).contains(task1)
         assertThat(taskBySelected).contains(task2)
 
@@ -120,11 +121,27 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
 
         val taskBySelected = tasksRepository.selectBy(ChildTaskSpec(task1))
 
-        assertEquals("found 1 tasks", 1, taskBySelected.size);
+        assertEquals("found 1 tasks", 1, taskBySelected.size)
         // Then task1 should not be selected via ChildTaskSpec
         assertThat(taskBySelected).doesNotContain(task1)
 
         // task2 should be selected via ChildTaskSpec
+        assertThat(taskBySelected).contains(task2)
+    }
+
+    @Test
+    fun `selectBy_find correct task by Not Spec filter`() = runBlocking {
+        // Trigger the repository to load data, which loads from remote and caches
+        tasksRepository.querySpecification()
+
+        // Build NotSpecification with ActiveTaskSpec
+        val spec = NotSpecification(ActiveTaskSpec())
+        val taskBySelected = tasksRepository.selectBy(spec)
+
+        assertEquals("found 1 tasks", 1, taskBySelected.size)
+        // Then task1 should not be selected
+        assertThat(taskBySelected).doesNotContain(task1)
+        // task2 should be selected
         assertThat(taskBySelected).contains(task2)
     }
 
@@ -141,7 +158,7 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
 
             val taskBySelected = tasksRepository.selectBy(spec)
 
-            assertEquals("None task can fulfilled both Spec.", 0, taskBySelected.size);
+            assertEquals("None task can fulfilled both Spec.", 0, taskBySelected.size)
             // Then task1 should not be selected via ChildTaskSpec
             assertThat(taskBySelected).doesNotContain(task1)
 
@@ -160,9 +177,9 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
             spec.add(ChildTaskSpec(task1))
             spec.add(ActiveTaskSpec())
 
-            var taskBySelected = tasksRepository.selectBy(spec)
+            val taskBySelected = tasksRepository.selectBy(spec)
 
-            assertEquals("both tasks should fit the Or Spec.", 2, taskBySelected.size);
+            assertEquals("both tasks should fit the Or Spec.", 2, taskBySelected.size)
             // Then task1 should be selected via ActiveTaskSpec
             assertThat(taskBySelected).contains(task1)
             // task2 should be selected via ChildTaskSpec
@@ -182,9 +199,9 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
             spec.add(ChildTaskSpec(task1))
             spec.add(ActiveTaskSpec())
 
-            var taskBySelected = tasksRepository.selectBy(spec)
+            val taskBySelected = tasksRepository.selectBy(spec)
 
-            assertEquals("Only task2 can fit the Or Spec.", 1, taskBySelected.size);
+            assertEquals("Only task2 can fit the Or Spec.", 1, taskBySelected.size)
             // Then task1 should not be selected via ActiveTaskSpec
             assertThat(taskBySelected).doesNotContain(task1)
             // task2 should be selected via ChildTaskSpec
