@@ -1,6 +1,7 @@
 package com.example.pomodoro2.platform.designpattern
 
 import com.example.pomodoro2.platform.logging.WithLogging
+import java.lang.reflect.Parameter
 
 /**
 * @description Command类用来声明执行操作的接口
@@ -10,6 +11,7 @@ abstract class Command constructor(val invoker: Invoker, val receiver: Receiver)
 
     /**
      * 执行操作
+     * TODO: refact with map-type parameter to execute() and Response class as its return value
      */
     abstract fun execute()
 }
@@ -18,7 +20,7 @@ abstract class Command constructor(val invoker: Invoker, val receiver: Receiver)
 /**
  * @description 具体的Command 将一个接收者对象绑定于一个动作，调用该接受者相应的操作
  */
-class ConcreteCommand1 constructor(invoker: Invoker, receiver: Receiver) : Command(invoker, receiver) {
+class ConcreteCommandHandler1 constructor(invoker: Invoker, receiver: Receiver) : Command(invoker, receiver) {
 
     override fun execute() {
         LOG.info("${this::class.java.simpleName}: 处理事件消息")
@@ -26,7 +28,7 @@ class ConcreteCommand1 constructor(invoker: Invoker, receiver: Receiver) : Comma
     }
 }
 
-class ConcreteCommand2 constructor(invoker: Invoker, receiver: Receiver) : Command(invoker, receiver) {
+class ConcreteCommandHandler2 constructor(invoker: Invoker, receiver: Receiver) : Command(invoker, receiver) {
 
     override fun execute() {
         LOG.info("${this::class.java.simpleName}: 处理事件消息")
@@ -80,9 +82,16 @@ class ClientCommand {
         fun main(vararg arg: String) {
             val invoker = Invoker()
             val receiver = Receiver()
+            // 动态构造事件/命令处理框架
+            invoker.addHandler("Event1", ConcreteCommandHandler1(invoker,receiver))
+            invoker.addHandler("Event2", ConcreteCommandHandler2(invoker,receiver))
 
-            invoker.addHandler("Event1", ConcreteCommand1(invoker,receiver))
-            invoker.addHandler("Event2", ConcreteCommand2(invoker,receiver))
+            invoker.executeCommand("Event1")
+            invoker.executeCommand("Event2")
+
+            invoker.removeHandler("Event2")
+            invoker.addHandler("Event2", ConcreteCommandHandler1(invoker,receiver))
+
             invoker.executeCommand("Event1")
             invoker.executeCommand("Event2")
         }
