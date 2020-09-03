@@ -19,6 +19,7 @@ data class Task (
     var parentId: String? = null
 ): BaseAggregateRoot(), Serializable {
 
+/*
     private lateinit var children: MutableList<Task>
 
     private fun children(): MutableList<Task>{
@@ -26,15 +27,16 @@ data class Task (
             children = arrayListOf<Task>()
         return children
     }
-
+*/
 
     fun addChild(task: Task){
         task.parentId = this.id
-        children().add(task)
+        //children().add(task)
     }
 
     fun removeChild(task: Task){
-        children().remove(task)
+        task.parentId = null
+        //children().remove(task)
     }
 
     val titleForList: String
@@ -47,7 +49,7 @@ data class Task (
         get() = title.isEmpty() || description.isEmpty()
 
     public fun testLogger(){
-        LOG.info("Kotlin-Logger: I'm a Task Domain Entity: ${this.title}.")
+        LOG.info("${this::class.java.simpleName}: Kotlin-Logger works well.")
     }
 
     companion object {
