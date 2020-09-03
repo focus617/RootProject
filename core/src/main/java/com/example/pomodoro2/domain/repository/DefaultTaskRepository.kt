@@ -157,8 +157,8 @@ class DefaultTaskRepository private constructor(
 
     override suspend fun completeTask(task: Task) {
         // Do in memory cache update to keep the app UI up to date
+        task.isCompleted = true
         cacheAndPerform(task) {
-            it.isCompleted = true
             coroutineScope {
                 launch { tasksRemoteDataSource.completeTask(it) }
                 launch { tasksLocalDataSource.completeTask(it) }
@@ -168,8 +168,8 @@ class DefaultTaskRepository private constructor(
 
     override suspend fun activateTask(task: Task) {
         // Do in memory cache update to keep the app UI up to date
+        task.isCompleted = false
         cacheAndPerform(task) {
-            it.isCompleted = false
             coroutineScope {
                 launch { tasksRemoteDataSource.activateTask(it) }
                 launch { tasksLocalDataSource.activateTask(it) }

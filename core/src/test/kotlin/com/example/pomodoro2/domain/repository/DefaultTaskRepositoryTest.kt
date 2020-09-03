@@ -4,17 +4,16 @@ import com.example.pomodoro2.BaseUnitTest
 import com.example.pomodoro2.data.AppInMemoryDataSource
 import com.example.pomodoro2.data.FakeDataSource
 import com.example.pomodoro2.domain.model.Task
-import com.example.pomodoro2.platform.domain.CompositeSpecification
+import com.example.pomodoro2.platform.domain.AndSpecification
+import com.example.pomodoro2.platform.domain.OrSpecification
 import com.example.pomodoro2.platform.functional.Result.Success
 import com.example.pomodoro2.platform.functional.Result.Error
 import com.google.common.truth.Truth.assertThat
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.*
-import org.amshove.kluent.shouldNotContain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import kotlin.test.assertTrue
 
 class DefaultTaskRepositorySpecialCaseTest : BaseUnitTest() {
 
@@ -130,13 +129,13 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
     }
 
     @Test
-    fun `selectBy_find correct task by both ChildTaskSpec and ActiveTaskSpec filter`() =
+    fun `selectBy_find correct task by ChildTaskSpec AND ActiveTaskSpec filter`() =
         runBlocking {
             // Trigger the repository to load data, which loads from remote and caches
             tasksRepository.querySpecification()
 
             // Build compositeSpecification with two spec
-            val spec = CompositeSpecification<Task>()
+            val spec = AndSpecification<Task>()
             spec.add(ChildTaskSpec(task1))
             spec.add(ActiveTaskSpec())
 
@@ -150,6 +149,47 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
             assertThat(taskBySelected).doesNotContain(task2)
         }
 
+    @Test
+    fun `selectBy_find correct task by ChildTaskSpec OR ActiveTaskSpec filter`() =
+        runBlocking {
+            // Trigger the repository to load data, which loads from remote and caches
+            tasksRepository.querySpecification()
+
+            // Build compositeSpecification with two spec
+            val spec = OrSpecification<Task>()
+            spec.add(ChildTaskSpec(task1))
+            spec.add(ActiveTaskSpec())
+
+            var taskBySelected = tasksRepository.selectBy(spec)
+
+            assertEquals("both tasks should fit the Or Spec.", 2, taskBySelected.size);
+            // Then task1 should be selected via ActiveTaskSpec
+            assertThat(taskBySelected).contains(task1)
+            // task2 should be selected via ChildTaskSpec
+            assertThat(taskBySelected).contains(task2)
+
+        }
+
+    @Test
+    fun `selectBy_bypass wrong task by ChildTaskSpec OR ActiveTaskSpec filter`() =
+        runBlocking {
+            // Trigger the repository to load data, which loads from remote and caches
+            tasksRepository.querySpecification()
+            tasksRepository.completeTask(task1)
+
+            // Build compositeSpecification with two spec
+            val spec = OrSpecification<Task>()
+            spec.add(ChildTaskSpec(task1))
+            spec.add(ActiveTaskSpec())
+
+            var taskBySelected = tasksRepository.selectBy(spec)
+
+            assertEquals("Only task2 can fit the Or Spec.", 1, taskBySelected.size);
+            // Then task1 should not be selected via ActiveTaskSpec
+            assertThat(taskBySelected).doesNotContain(task1)
+            // task2 should be selected via ChildTaskSpec
+            assertThat(taskBySelected).contains(task2)
+        }
 
     /**
      * Test Suite for fun querySpecification
@@ -265,7 +305,7 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
     fun `querySpecification_find correct task by both ChildTaskSpec and ActiveTaskSpec filter`() =
         runBlocking {
             // Build compositeSpecification with two spec
-            val spec = CompositeSpecification<Task>()
+            val spec = AndSpecification<Task>()
             spec.add(ChildTaskSpec(task1))
             spec.add(ActiveTaskSpec())
 
