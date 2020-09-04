@@ -1,7 +1,7 @@
 package com.example.pomodoro2.domain.repository
 
 import com.example.pomodoro2.domain.model.Task
-import com.example.pomodoro2.platform.data.IRepository
+import com.example.pomodoro2.domain.model.ITaskRepository
 import com.example.pomodoro2.platform.data.InMemoryDataSource
 import com.example.pomodoro2.platform.data.IDbLikeDataSource
 import com.example.pomodoro2.platform.domain.BaseSpecification
@@ -23,7 +23,7 @@ class DefaultTaskRepository private constructor(
     private val tasksLocalDataSource: IDbLikeDataSource<Task>,
     private val inMemoryDataSource: InMemoryDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-) : IRepository<Task> {
+) : ITaskRepository<Task> {
 
     // Domain Aggregate Root data in memory
     private var cachedTasks: ConcurrentHashMap<String, Task>? = null
@@ -157,7 +157,7 @@ class DefaultTaskRepository private constructor(
 
     override suspend fun completeTask(task: Task) {
         // Do in memory cache update to keep the app UI up to date
-        task.isCompleted = true
+        task.complete()
         cacheAndPerform(task) {
             coroutineScope {
                 launch { tasksRemoteDataSource.completeTask(it) }
@@ -168,7 +168,7 @@ class DefaultTaskRepository private constructor(
 
     override suspend fun activateTask(task: Task) {
         // Do in memory cache update to keep the app UI up to date
-        task.isCompleted = false
+        task.activate()
         cacheAndPerform(task) {
             coroutineScope {
                 launch { tasksRemoteDataSource.activateTask(it) }
@@ -270,7 +270,7 @@ class DefaultTaskRepository private constructor(
 
     private fun cacheTask(task: Task): Task {
         val cachedTask = Task(
-            task.id, task.title, task.description, task.isCompleted,
+            task.id, task.title, task.description, !(task.isActive),
             task.imageId, task.priority, task.createTime, task.parentId
         )
         // Create if it doesn't exist.

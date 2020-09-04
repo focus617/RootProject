@@ -44,7 +44,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:onClick="@{(view) -> viewmodel.completeTask(task, ((CompoundButton)view).isChecked())}"
-                android:checked="@{task.isCompleted}"/>
+                android:checked="@{!task.isActive}"/>
 
             <ImageView
                 android:id="@+id/item_image"

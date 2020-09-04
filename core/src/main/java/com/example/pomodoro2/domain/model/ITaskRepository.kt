@@ -1,4 +1,4 @@
-package com.example.pomodoro2.platform.data
+package com.example.pomodoro2.domain.model
 
 import com.example.pomodoro2.platform.domain.BaseAggregateRoot
 import com.example.pomodoro2.platform.domain.BaseSpecification
@@ -9,7 +9,7 @@ import com.example.pomodoro2.platform.functional.Result
  * @param [T] BaseAggregateRoot: 领域模型的基类
  * @param [Q] BaseSpecification: 适用于较为复杂的查询场景。
  */
-interface IRepository<T: BaseAggregateRoot >{
+interface ITaskRepository<T: BaseAggregateRoot >{
 
     // TODO: change id type from Long to String in case of DomainEntity supporting with UUID
     suspend fun ofId(id: String, forceUpdate: Boolean = false): Result<T>

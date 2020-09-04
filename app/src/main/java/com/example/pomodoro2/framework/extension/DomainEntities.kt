@@ -13,7 +13,7 @@ fun Task.asDatabaseEntity(): TaskEntity {
             id = this.id,
             title = this.title,
             description = this.description,
-            isCompleted = this.isCompleted,
+            isCompleted = !this.isActive,
             imageId = this.imageId,
             priority = this.priority,
             createTime = this.createTime,

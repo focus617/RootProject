@@ -20,14 +20,14 @@ import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.platform.functional.Result
 import com.example.pomodoro2.platform.functional.Result.Success
 import com.example.pomodoro2.platform.functional.Result.Error
-import com.example.pomodoro2.platform.data.IRepository
+import com.example.pomodoro2.domain.model.ITaskRepository
 import com.example.pomodoro2.platform.domain.BaseSpecification
 import java.util.LinkedHashMap
 
 /**
  * Implementation of a fake repository with static access to the data for easy testing on UseCases.
  */
-class FakeRepository : IRepository<Task> {
+class FakeRepository : ITaskRepository<Task> {
 
     private var tasksServiceData: LinkedHashMap<String, Task> = LinkedHashMap()
 
@@ -115,11 +115,9 @@ class FakeRepository : IRepository<Task> {
     }
 
     suspend fun clearCompletedTasks() {
-        tasksServiceData = tasksServiceData.filterValues {
-            !it.isCompleted
-        } as LinkedHashMap<String, Task>
+        tasksServiceData =
+            tasksServiceData.filterValues { it.isActive } as LinkedHashMap<String, Task>
     }
-
 
 
 }

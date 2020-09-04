@@ -10,7 +10,7 @@ import com.example.pomodoro2.platform.domain.OrSpecification
 import com.example.pomodoro2.platform.functional.Result.Success
 import com.example.pomodoro2.platform.functional.Result.Error
 import com.google.common.truth.Truth.assertThat
-import junit.framework.Assert.assertEquals
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.*
 import org.junit.After
 import org.junit.Before
@@ -463,13 +463,13 @@ class DefaultTaskRepositoryTest : BaseUnitTest() {
         tasksRepository.add(newTask)
 
         // Make sure it's active
-        assertThat((tasksRepository.ofId(newTask.id) as Success).data.isCompleted).isFalse()
+        assertThat((tasksRepository.ofId(newTask.id) as Success).data.isActive).isTrue()
 
         // Mark is as complete
         tasksRepository.completeTask(newTask)
 
         // Verify it's now completed
-        assertThat((tasksRepository.ofId(newTask.id) as Success).data.isCompleted).isTrue()
+        assertThat((tasksRepository.ofId(newTask.id) as Success).data.isActive).isFalse()
     }
 
     /**

@@ -2,12 +2,12 @@ package com.example.pomodoro2.interactors
 
 import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.interactors.TasksFilterType.*
-import com.example.pomodoro2.platform.data.IRepository
+import com.example.pomodoro2.domain.model.ITaskRepository
 import com.example.pomodoro2.platform.functional.Result
 import com.example.pomodoro2.platform.functional.Result.Success
 
 class GetTasksUseCase(
-    private val taskRepository: IRepository<Task>
+    private val taskRepository: ITaskRepository<Task>
 ) {
 
     suspend operator fun invoke(
@@ -28,7 +28,7 @@ class GetTasksUseCase(
                     ACTIVE_TASKS -> if (task.isActive) {
                         tasksToShow.add(task)
                     }
-                    COMPLETED_TASKS -> if (task.isCompleted) {
+                    COMPLETED_TASKS -> if (!task.isActive) {
                         tasksToShow.add(task)
                     }
                     else -> NotImplementedError()

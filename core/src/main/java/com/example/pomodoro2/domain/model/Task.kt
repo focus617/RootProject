@@ -12,7 +12,7 @@ data class Task (
     var id: String = UUID.randomUUID().toString(),
     var title: String,
     var description: String = "",
-    var isCompleted: Boolean = false,
+    private var isCompleted: Boolean = false,
     var imageId: Int,
     var priority: Int,
     var createTime: Long = System.currentTimeMillis(),
@@ -28,6 +28,16 @@ data class Task (
         return children
     }
 */
+    val isActive
+        get() = !isCompleted
+
+    fun complete(){
+        this.isCompleted = true
+    }
+
+    fun activate(){
+        this.isCompleted = false
+    }
 
     fun addChild(task: Task){
         task.parentId = this.id
@@ -41,9 +51,6 @@ data class Task (
 
     val titleForList: String
         get() = if (title.isNotEmpty()) title else description
-
-    val isActive
-        get() = !isCompleted
 
     val isEmpty
         get() = title.isEmpty() || description.isEmpty()

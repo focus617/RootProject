@@ -8,5 +8,5 @@ class ChildTaskSpec(private val parent: Task):BaseSpecification<Task>() {
 }
 
 class ActiveTaskSpec():BaseSpecification<Task>() {
-    override fun isSatisfiedBy(t: Task) = !(t.isCompleted)
+    override fun isSatisfiedBy(t: Task) = t.isActive
 }

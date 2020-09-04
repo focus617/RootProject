@@ -10,7 +10,7 @@ import com.example.pomodoro2.domain.model.Task
 @BindingAdapter("app:completedTask")
 fun TextView.setStyle(item: Task?) {
     item?.let {
-        paintFlags = if (item.isCompleted)  {
+        paintFlags = if (!item.isActive)  {
             paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         } else {
             paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()

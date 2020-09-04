@@ -49,17 +49,17 @@ class FakeDataSource(
     }
 
     override suspend fun completeTask(task: Task) {
-        tasks?.firstOrNull { it.id == task.id }?.let { it.isCompleted = true }
+        tasks?.firstOrNull { it.id == task.id }?.complete()
     }
 
 
     override suspend fun activateTask(task: Task) {
-        tasks?.firstOrNull { it.id == task.id }?.let { it.isCompleted = false }
+        tasks?.firstOrNull { it.id == task.id }?.activate()
     }
 
 
     override suspend fun clearCompletedTasks() {
-        tasks?.removeIf { it.isCompleted }
+        tasks?.removeIf { !it.isActive }
     }
 
     override suspend fun initializeTutorialTasks(): Result<List<Task>> {

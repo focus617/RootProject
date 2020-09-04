@@ -105,7 +105,7 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
 
     fun createNewTask(task: Task) {
         val newTask = Task(
-            task.id, task.title, task.description, task.isCompleted,
+            task.id, task.title, task.description, !task.isActive,
             task.imageId, task.priority, task.createTime
         )
         newTask.imageId = R.drawable.read_book

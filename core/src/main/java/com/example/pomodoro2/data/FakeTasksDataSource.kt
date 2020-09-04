@@ -71,7 +71,7 @@ object FakeTasksDataSource  : IDbLikeDataSource<Task> {
 
     override suspend fun clearCompletedTasks() {
         TASKS_SERVICE_DATA = TASKS_SERVICE_DATA.filterValues {
-            !it.isCompleted
+            it.isActive
         } as LinkedHashMap<String, Task>
     }
 
