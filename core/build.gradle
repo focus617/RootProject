@@ -30,12 +30,12 @@ dependencies {
     testImplementation "org.amshove.kluent:kluent:$kluent_version"
     testImplementation "org.hamcrest:hamcrest-all:$hamcrest_version"
     testImplementation "org.robolectric:robolectric:$robolectric_version"
+    testImplementation "com.google.truth:truth:$google_truth_version"
+
     // Espresso dependencies
     testImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     testImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
     testImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
-    testImplementation "com.google.truth:truth:$google_truth_version"
-
     testImplementation "androidx.arch.core:core-testing:$androidx_arch_core_testing_version"
 
     // AndroidX Test - JVM testing

@@ -5,12 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.pomodoro2.R
-import com.example.pomodoro2.framework.platform.SingleLiveEvent
 import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.framework.base.BaseViewModel
+import com.example.pomodoro2.framework.platform.SingleLiveEvent
+import com.example.pomodoro2.interactors.TasksFilterType
 import com.example.pomodoro2.platform.functional.Result
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * ViewModel for TaskFragment.
@@ -25,8 +27,9 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
      * To initialize the tasks variable as soon as possible
      */
     init {
-        refreshCacheFromRemote()
-        loadTasks()
+        //refreshCacheFromRemote()
+        setFiltering(TasksFilterType.ALL_TASKS)
+        loadTasks(true)
     }
 
 
@@ -80,20 +83,75 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
     private val _tasks: MutableLiveData<List<Task>> = MutableLiveData()
     val tasks : LiveData<List<Task>> = _tasks
 
+
+    private var _currentFiltering = TasksFilterType.ALL_TASKS
+
     /**
-     * @param forceUpdate   Pass in true to refresh the data in the [TasksDataSource]
+     * Sets the current task filtering type.
+     *
+     * @param requestType Can be [TasksFilterType.ALL_TASKS],
+     * [TasksFilterType.COMPLETED_TASKS], or
+     * [TasksFilterType.ACTIVE_TASKS]
      */
-    fun loadTasks() {
-        viewModelScope.launch {
-            val tasksResult = taskInteractors.getTasksUseCase()
-            if (tasksResult is Result.Success) {
-                _tasks.value = tasksResult.data
-            } else {
-                _tasks.value = emptyList()
-                showInSnackBar("Error while loading tasks")
+    fun setFiltering(requestType: TasksFilterType) {
+        _currentFiltering = requestType
+    /*
+        // Depending on the filter type, set the filtering label, icon drawables, etc.
+        when (requestType) {
+            TasksFilterType.ALL_TASKS -> {
+                setFilter(
+                    R.string.label_all, R.string.no_tasks_all,
+                    R.drawable.logo_no_fill, true
+                )
+            }
+            TasksFilterType.ACTIVE_TASKS -> {
+                setFilter(
+                    R.string.label_active, R.string.no_tasks_active,
+                    R.drawable.ic_check_circle_96dp, false
+                )
+            }
+            TasksFilterType.COMPLETED_TASKS -> {
+                setFilter(
+                    R.string.label_completed, R.string.no_tasks_completed,
+                    R.drawable.ic_verified_user_96dp, false
+                )
+            }
+        }
+    */
+    }
+/*
+    private fun setFilter(
+        @StringRes filteringLabelString: Int, @StringRes noTasksLabelString: Int,
+        @DrawableRes noTaskIconDrawable: Int, tasksAddVisible: Boolean
+    ) {
+        _currentFilteringLabel.value = filteringLabelString
+        _noTasksLabel.value = noTasksLabelString
+        _noTaskIconRes.value = noTaskIconDrawable
+        _tasksAddViewVisible.value = tasksAddVisible
+    }
+*/
+    private val _dataLoading = MutableLiveData<Boolean>()
+    val dataLoading: LiveData<Boolean> = _dataLoading
+    /**
+     * @param forceUpdate   Pass in true to refresh the data in the TasksDataSource
+     */
+    fun loadTasks(forceUpdate: Boolean) {
+        //_dataLoading.value = true
+        wrapEspressoIdlingResource {
+            viewModelScope.launch {
+                val tasksResult =
+                    taskInteractors.getTasksUseCase(forceUpdate, _currentFiltering)
+                if (tasksResult is Result.Success) {
+                    _tasks.value = tasksResult.data
+                } else {
+                    _tasks.value = emptyList()
+                    showInSnackBar("Error while loading tasks")
+                }
+                //_dataLoading.value = false
             }
         }
     }
+
     fun setSelectedTask(task: Task) {
         taskInteractors.setSelectedTaskUseCase(task)
     }
@@ -114,7 +172,7 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
                 taskInteractors.createNewTaskUseCase(newTask)
 
             // Refresh view model
-            loadTasks()
+            loadTasks(false)
         }
     }
 
@@ -134,7 +192,7 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
             taskInteractors.activateTaskUseCase(task)
         }
         // Refresh list to show the new state
-        loadTasks()
+        loadTasks(false)
     }
 
     /**
@@ -146,7 +204,7 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
             taskInteractors.removeAllTaskUseCase()
 
             // Refresh view model
-            loadTasks()
+            loadTasks(true)
         }
     }
 
@@ -158,7 +216,7 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
             taskInteractors.initStartingTasksUseCase()
 
             // Refresh view model
-            loadTasks()
+            loadTasks(true)
         }
     }
 
@@ -168,7 +226,6 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
      * Refresh data from the repository. Use a coroutine launch to run in a
      * background thread.
      */
-    private fun refreshCacheFromRemote() {}
 /*
     private fun refreshCacheFromRemote() {
         uiScope.launch {

@@ -3,13 +3,14 @@ package com.example.pomodoro2.features.tasks.presentation
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.pomodoro2.mock.FakeRepository
+import com.example.pomodoro2.LiveDataTestUtil
 import com.example.pomodoro2.MainCoroutineRule
 import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.features.tasks.domain.TaskInteractors
 import com.example.pomodoro2.interactors.*
+import com.example.pomodoro2.mock.FakeRepository
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -84,7 +85,27 @@ class TasksViewModelTest {
 
 
     @Test
-    fun loadTasks() {
-        assertTrue(true)
+    fun loadAllTasksFromRepository_loadingTogglesAndDataLoaded() {
+        // Pause dispatcher so we can verify initial values
+        mainCoroutineRule.pauseDispatcher()
+
+        // Given an initialized TasksViewModel with initialized tasks
+        // When loading of Tasks is requested
+        tasksViewModel.setFiltering(TasksFilterType.ALL_TASKS)
+
+        // Trigger loading of tasks
+        tasksViewModel.loadTasks(true)
+
+        // Then progress indicator is shown
+        //assertThat(LiveDataTestUtil.getValue(tasksViewModel.dataLoading)).isTrue()
+
+        // Execute pending coroutines actions
+        mainCoroutineRule.resumeDispatcher()
+
+        // Then progress indicator is hidden
+        //assertThat(LiveDataTestUtil.getValue(tasksViewModel.dataLoading)).isFalse()
+
+        // And data correctly loaded
+        assertThat(LiveDataTestUtil.getValue(tasksViewModel.tasks)).hasSize(3)
     }
 }
