@@ -84,6 +84,7 @@ class ConcreteElementB : Element() {
 
 /**
  * @description 对象结构
+ * 能枚举它的元素，可以提供一个高层的接口以允许访问者访问它的元素。
  */
 class ObjectStructure {
     private val elements = arrayListOf<Element>()
@@ -110,9 +111,10 @@ class ClientVisitor {
             val objectStructure = ObjectStructure()
             objectStructure.attach(ConcreteElementA())
             objectStructure.attach(ConcreteElementB())
-            //成功时的反应
+            
+            //VisitorA的遍历访问
             objectStructure.accept(ConcreteVisitorA())
-            //失败时的反应
+            //VisitorB的遍历访问
             objectStructure.accept(ConcreteVisitorB())
 
         }
