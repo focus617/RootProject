@@ -70,7 +70,7 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
     /**
      * ClickHandler for recyclerview item click
      */
-    fun onTaskSelected(task: Task){
+    fun onTaskSelected(task: Task) {
         showInSnackBar("Start Task(${task.title})")
         setSelectedTask(task)
         doNavigating(task)
@@ -81,7 +81,7 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
      */
     // Task list displayed on the screen
     private val _tasks: MutableLiveData<List<Task>> = MutableLiveData()
-    val tasks : LiveData<List<Task>> = _tasks
+    val tasks: LiveData<List<Task>> = _tasks
 
 
     private var _currentFiltering = TasksFilterType.ALL_TASKS
@@ -95,60 +95,60 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
      */
     fun setFiltering(requestType: TasksFilterType) {
         _currentFiltering = requestType
+        /*
+            // Depending on the filter type, set the filtering label, icon drawables, etc.
+            when (requestType) {
+                TasksFilterType.ALL_TASKS -> {
+                    setFilter(
+                        R.string.label_all, R.string.no_tasks_all,
+                        R.drawable.logo_no_fill, true
+                    )
+                }
+                TasksFilterType.ACTIVE_TASKS -> {
+                    setFilter(
+                        R.string.label_active, R.string.no_tasks_active,
+                        R.drawable.ic_check_circle_96dp, false
+                    )
+                }
+                TasksFilterType.COMPLETED_TASKS -> {
+                    setFilter(
+                        R.string.label_completed, R.string.no_tasks_completed,
+                        R.drawable.ic_verified_user_96dp, false
+                    )
+                }
+            }
+        */
+    }
+
     /*
-        // Depending on the filter type, set the filtering label, icon drawables, etc.
-        when (requestType) {
-            TasksFilterType.ALL_TASKS -> {
-                setFilter(
-                    R.string.label_all, R.string.no_tasks_all,
-                    R.drawable.logo_no_fill, true
-                )
-            }
-            TasksFilterType.ACTIVE_TASKS -> {
-                setFilter(
-                    R.string.label_active, R.string.no_tasks_active,
-                    R.drawable.ic_check_circle_96dp, false
-                )
-            }
-            TasksFilterType.COMPLETED_TASKS -> {
-                setFilter(
-                    R.string.label_completed, R.string.no_tasks_completed,
-                    R.drawable.ic_verified_user_96dp, false
-                )
-            }
+        private fun setFilter(
+            @StringRes filteringLabelString: Int, @StringRes noTasksLabelString: Int,
+            @DrawableRes noTaskIconDrawable: Int, tasksAddVisible: Boolean
+        ) {
+            _currentFilteringLabel.value = filteringLabelString
+            _noTasksLabel.value = noTasksLabelString
+            _noTaskIconRes.value = noTaskIconDrawable
+            _tasksAddViewVisible.value = tasksAddVisible
         }
     */
-    }
-/*
-    private fun setFilter(
-        @StringRes filteringLabelString: Int, @StringRes noTasksLabelString: Int,
-        @DrawableRes noTaskIconDrawable: Int, tasksAddVisible: Boolean
-    ) {
-        _currentFilteringLabel.value = filteringLabelString
-        _noTasksLabel.value = noTasksLabelString
-        _noTaskIconRes.value = noTaskIconDrawable
-        _tasksAddViewVisible.value = tasksAddVisible
-    }
-*/
     private val _dataLoading = MutableLiveData<Boolean>()
     val dataLoading: LiveData<Boolean> = _dataLoading
+
     /**
      * @param forceUpdate   Pass in true to refresh the data in the TasksDataSource
      */
     fun loadTasks(forceUpdate: Boolean) {
         //_dataLoading.value = true
-        wrapEspressoIdlingResource {
-            viewModelScope.launch {
-                val tasksResult =
-                    taskInteractors.getTasksUseCase(forceUpdate, _currentFiltering)
-                if (tasksResult is Result.Success) {
-                    _tasks.value = tasksResult.data
-                } else {
-                    _tasks.value = emptyList()
-                    showInSnackBar("Error while loading tasks")
-                }
-                //_dataLoading.value = false
+        viewModelScope.launch {
+            val tasksResult =
+                taskInteractors.getTasksUseCase(forceUpdate, _currentFiltering)
+            if (tasksResult is Result.Success) {
+                _tasks.value = tasksResult.data
+            } else {
+                _tasks.value = emptyList()
+                showInSnackBar("Error while loading tasks")
             }
+            //_dataLoading.value = false
         }
     }
 
@@ -167,9 +167,9 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
             task.imageId, task.priority, task.createTime
         )
         newTask.imageId = R.drawable.read_book
-        newTask.priority = (_tasks.value?.size ?: 0)+1
+        newTask.priority = (_tasks.value?.size ?: 0) + 1
         viewModelScope.launch {
-                taskInteractors.createNewTaskUseCase(newTask)
+            taskInteractors.createNewTaskUseCase(newTask)
 
             // Refresh view model
             loadTasks(false)
@@ -219,7 +219,6 @@ class TasksViewModel(application: Application, val taskInteractors: TaskInteract
             loadTasks(true)
         }
     }
-
 
 
     /**
