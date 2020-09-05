@@ -84,10 +84,10 @@ object Versions {
 
 object Dependencies {
     // classpath
-    const val kotlin_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin_version}"
     const val gradle_tools = "com.android.tools.build:gradle:${Versions.gradle_tools}"
-    const val hilt_gradle_plugin = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt_version}"
+    const val kotlin_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin_version}"
     const val nav_saft_arges = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.nav_saft_args_version}"
+    const val hilt_gradle_plugin = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt_version}"
 
     // Kotlin
     const val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin_version}"
@@ -163,6 +163,7 @@ object Dependencies {
     // 2. Unit/Integration tests dependencies
     const val test_runner = "androidx.test.runner.AndroidJUnitRunner"
     const val junit =  "junit:junit:${Versions.junit_version}"
+    const val kotlin_test =  "org.jetbrains.kotlin:kotlin-test:${Versions.kotlin_version}"
     const val kotlin_test_junit =  "org.jetbrains.kotlin:kotlin-test-junit:${Versions.kotlin_version}"
 
      // AndroidX Test Core library

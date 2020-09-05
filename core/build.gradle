@@ -6,8 +6,9 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation Dependencies.kotlin_stdlib_jdk8
-    implementation Dependencies.kotlinx_coroutines_core
     implementation Dependencies.kotlin_reflect
+
+    implementation Dependencies.kotlinx_coroutines_core
 
     implementation Dependencies.kotlin_logging
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
@@ -15,6 +16,7 @@ dependencies {
 
     // Dependencies for local unit tests
     testImplementation Dependencies.junit
+    testImplementation Dependencies.kotlin_test
     testImplementation Dependencies.kotlin_test_junit
     // Mockito for Unit Test
     testImplementation Dependencies.mockito_core

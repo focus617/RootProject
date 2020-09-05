@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: PluginTest
 
 android {
 
@@ -92,7 +93,7 @@ dependencies {
     implementation project(':core')
 
     // Kotlin
-    implementation Dependencies.kotlin_stdlib
+    implementation Dependencies.kotlin_stdlib_jdk8
 
     // Android KTX
     implementation Dependencies.androidx_core_ktx
@@ -158,6 +159,7 @@ dependencies {
 
     // 2. Unit/Integration tests dependencies
     testImplementation Dependencies.junit
+    testImplementation Dependencies.kotlin_test
     testImplementation Dependencies.kotlin_test_junit
     // Coroutines
     testImplementation Dependencies.kotlinx_coroutines_core
