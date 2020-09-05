@@ -1,85 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    // Define versions in a single place
+
     ext{
-        //Sdk and tools
-        compile_sdk_version = 28
-        target_sdk_version = 28
-        min_sdk_version = 21
-        build_tools_version = "30.0.1"
-
-        application_id = 'com.example.pomodoro2'
-        version_name = '1.0'
-        version_code = 1
-
-        //Gradle
-        gradle_tools = '4.0.1'
-
-        //kotlin
-        kotlin_version = "1.3.72"
-        core_ktx_version = "1.3.1"
-        coroutines_version = '1.3.9'
-        kotlin_reflect_version ='1.4.0'
-
-        //App dependencies
-        appcompat_version = '1.2.0'
-        fragment_version = '1.2.5'
-        constraintlayout_version = '1.1.3'
-        material_version = '1.2.0'
-        vectordrawable_version = "1.1.0"
-
-        // Jetpack
-        lifecycle_version = "2.2.0"
-        room_version = "2.2.5"
-        navigation_version = "2.3.0"
-        nav_saft_args_version = "2.3.0-alpha01"
-        recyclerview_version = '1.1.0'
-        recyclerview_selection_version = '1.1.0-rc01'
-
-        //Third party libraries
-        javaxAnnotations_version = '1.0'
-        javaxInject_version = '1'
-        google_gson_version = "2.8.5"
-        glide_version = '4.11.0'
-
-        // Log
-        timber_version = "4.7.1"
-        slf4j_version = "1.7.21"
-        kotlin_logging_version = "1.8.3"
-
-        // Network & Http
-        retrofit_version = '2.7.1'
-        moshi_version = "1.8.0"
-        retrofit_coroutines_adapter_version = "0.9.2"
-//        okhttp_version = '4.2.1'
-
-        // AndroidX Test
-        test_runner = 'androidx.test.runner.AndroidJUnitRunner'
-        androidx_test_core_version = "1.2.0"
-        androidx_test_core_kotlin_version = "1.2.0"
-        androidx_test_runner_version = "1.2.0"
-        androidx_test_rules_version = "1.2.0"
-        androidx_arch_core_testing_version = "2.1.0"
-
-        // Dagger 2
-        dagger_version = "2.16"
-        hilt_version = "2.28-alpha"
-
-        // Assertions
-        androidx_test_ext_junit_version = "1.1.1"
-        androidx_test_ext_junit_kotlin_version = "1.1.1"
-        androidx_test_ext_truth_version = "1.2.0"
-        google_truth_version = "1.0"
-
-        // 3rd party Testing
-        junit_version = "4.13"
-        mockito_version = "2.19.0"
-        mockito_kt_version = "1.5.0"
-        espresso_version = "3.3.0"
-        robolectric_version = "4.3.1"
-        kluent_version = "1.14"
-        hamcrest_version = "1.3"
-
     }
 
     repositories {
@@ -87,10 +9,10 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:$gradle_tools"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_saft_args_version"
-        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+        classpath Dependencies.gradle_tools
+        classpath Dependencies.kotlin_plugin
+        classpath Dependencies.nav_saft_arges
+        classpath Dependencies.hilt_gradle_plugin
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -108,7 +30,9 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-task runUnitTests(dependsOn: [':app:testDebugUnitTest']) {
+task runUnitTests(dependsOn:
+        [':core:compileJava',
+         ':core:testClasses']) {
     description 'Run all unit tests'
 }
 task runAcceptanceTests(dependsOn: [':app:connectedAndroidTest']) {
