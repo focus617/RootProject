@@ -111,7 +111,7 @@ class ClientVisitor {
             val objectStructure = ObjectStructure()
             objectStructure.attach(ConcreteElementA())
             objectStructure.attach(ConcreteElementB())
-            
+
             //VisitorA的遍历访问
             objectStructure.accept(ConcreteVisitorA())
             //VisitorB的遍历访问
