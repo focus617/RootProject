@@ -35,6 +35,7 @@ task runUnitTests(dependsOn:
          ':core:testClasses']) {
     description 'Run all unit tests'
 }
+
 task runAcceptanceTests(dependsOn: [':app:connectedAndroidTest']) {
     description 'Run all acceptance tests.'
 }

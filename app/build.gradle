@@ -1,10 +1,12 @@
+import com.example.pomodoro2.plugin.PluginTest
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
-apply plugin: PluginTest
+
 
 android {
 
