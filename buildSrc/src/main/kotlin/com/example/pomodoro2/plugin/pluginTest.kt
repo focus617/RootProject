@@ -21,7 +21,7 @@ class PluginTest : Plugin<Project> {
                 println("PluginTestTask doFirst invoke...")
                 println(description)
             }
-            doLast{
+            doLast {
                 println("PluginTestTask doLast invoke...")
             }
 
@@ -30,12 +30,12 @@ class PluginTest : Plugin<Project> {
         project.task("showProject") {
             doLast {
                 println("showProject doLast invoke...")
-                println("project:"+project.project)
-                println("name:"+project.name)
-                println("version:"+project.version)
-                println("path:"+project.path)
-                println("description:"+project.description)
-                println("buildDir:"+project.buildDir)
+                println(project.project)
+                println("name: " + project.name)
+                println("version: " + project.version)
+                println("path: " + project.path)
+                println("description: " + project.description)
+                println("buildDir: " + project.buildDir)
 
             }
         }
@@ -53,31 +53,30 @@ class PluginTest : Plugin<Project> {
             }
         }.dependsOn("PluginTestTask")
 
-        project.task("showDate"){
-            doFirst{
-                println("Current date is ${SimpleDateFormat(dateFormat).format(Date()) }")
+        project.task("showDate") {
+            doFirst {
+                println("Current date is ${SimpleDateFormat(dateFormat).format(Date())}")
             }
         }
 
-        project.task("showTime"){
-            doFirst{
-                println("Current time is ${SimpleDateFormat(timeFormat).format(Date()) }")
+        project.task("showTime") {
+            doFirst {
+                println("Current time is ${SimpleDateFormat(timeFormat).format(Date())}")
             }
         }
 
-        project.task("getSrcFileName"){
+        project.task("getSrcFileName") {
             inputs.dir("src")
-            //outputs.file("info.txt")
+            outputs.file("build/test-results/test/info.txt")
 
-            doFirst{
+            doFirst {
                 val srcDir = project.fileTree("src")
-                val infotxt = project.file("info.txt")
+                val infotxt = project.file("build/test-results/test/info.txt")
                 infotxt.writeText("")
 
-                srcDir.forEach{
-                    if(it.isFile)
-                        infotxt.appendText(it.absolutePath)
-                        infotxt.appendText("\r\n")
+                srcDir.filter { it.isFile }.forEach {
+                    infotxt.appendText(it.absolutePath)
+                    infotxt.appendText("\r\n")
                 }
             }
         }
