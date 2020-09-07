@@ -5,7 +5,7 @@ import org.gradle.api.Project
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PluginTest : Plugin<Project> {
+class StandAlonePlugin : Plugin<Project> {
     companion object DateAndTime {
         const val timeFormat = "MM/dd/yyyy HH:mm:ss.SSS"
         const val dateFormat = "yyyy-MM-dd"
@@ -27,7 +27,7 @@ class PluginTest : Plugin<Project> {
             dependsOn("task0")
 
             // dynamically add dependencies to a task, at runtime.
-            project.tasks.named("task0") {dependsOn("task3", "task2", "task1")}
+            project.tasks.named("task0") { dependsOn("task3", "task2", "task1") }
 
             doFirst {
                 println("\nPluginTestTask doFirst invoke...")
@@ -94,6 +94,34 @@ class PluginTest : Plugin<Project> {
                     infotxt.appendText("\r\n")
                 }
             }
+        }
+
+        lateinit var version: String
+
+        project.task("distribution") {
+            doLast {
+                println("We build the zip with version = $version")
+            }
+        }
+
+        project.tasks.register("release") {
+            dependsOn("distribution")
+            doFirst{
+                println("\nrelease doFirst invoke...")
+                project.gradle.taskGraph.allTasks.forEach{
+                    println("Task: ${it.name}")
+                }
+            }
+            doLast {
+                println("\nrelease doLast invoke...")
+                println("We release now")
+            }
+        }
+
+        project.gradle.taskGraph.whenReady {
+            version =
+                if (hasTask("release")) "1.0"
+                else "1.0-SNAPSHOT"
         }
     }
 }
