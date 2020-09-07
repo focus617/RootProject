@@ -1,4 +1,4 @@
-package com.example.pomodoro2.plugin
+package com.example.pomodoro2.buildSrcPlugin
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input

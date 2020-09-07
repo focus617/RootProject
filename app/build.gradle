@@ -1,4 +1,4 @@
-import com.example.pomodoro2.plugin.StandAlonePlugin
+import com.example.pomodoro2.standAlonePlugin.StandAlonePlugin
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
@@ -237,3 +237,4 @@ dependencies {
     androidTestImplementation Dependencies.uiautomator
 
 }
+

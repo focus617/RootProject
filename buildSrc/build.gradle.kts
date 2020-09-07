@@ -3,12 +3,9 @@
 plugins {
     kotlin("jvm") version "1.3.72"
     `kotlin-dsl`
-    application
-    // Apply the java-library plugin to add support for Java Library
-    `java-library`
+
 }
 
-application.mainClassName = "PluginTest"
 
 //设置项目的依赖库
 dependencies{
@@ -26,3 +23,5 @@ repositories {
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
 }
+
+apply(from = "gradle/integration-test.gradle.kts")

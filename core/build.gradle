@@ -1,7 +1,9 @@
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.example.pomodoro2.plugin'
+apply plugin: 'com.example.pomodoro2.standAlonePlugin'
+apply plugin: 'com.example.pomodoro2.buildSrcPlugin.BuildSrcPlugin'
+apply plugin:  'java-library-convention'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

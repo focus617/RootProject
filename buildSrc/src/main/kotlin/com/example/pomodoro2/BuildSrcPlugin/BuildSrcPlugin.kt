@@ -1,4 +1,4 @@
-package com.example.pomodoro2.plugin
+package com.example.pomodoro2.buildSrcPlugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -19,3 +19,4 @@ class BuildSrcPlugin : Plugin<Project> {
     }
 
 }
+

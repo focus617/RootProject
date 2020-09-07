@@ -1,7 +1,9 @@
-package com.example.pomodoro2.plugin
+package com.example.pomodoro2.standAlonePlugin
 
+import com.example.pomodoro2.buildSrcPlugin.GreetingTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -106,9 +108,9 @@ class StandAlonePlugin : Plugin<Project> {
 
         project.tasks.register("release") {
             dependsOn("distribution")
-            doFirst{
+            doFirst {
                 println("\nrelease doFirst invoke...")
-                project.gradle.taskGraph.allTasks.forEach{
+                project.gradle.taskGraph.allTasks.forEach {
                     println("Task: ${it.name}")
                 }
             }
@@ -123,6 +125,45 @@ class StandAlonePlugin : Plugin<Project> {
                 if (hasTask("release")) "1.0"
                 else "1.0-SNAPSHOT"
         }
+
+        // Call the build-in API
+        /*        project.tasks.create<Copy>("copy")){
+                   val description = "Copies sources to the dest directory"
+                   val group = "Custom"
+
+                   from("src")
+                   into("dest")
+               }*/
+
+        // A custom plugin extension
+        open class GreetingPluginExtension {
+            var message: String? = null
+            var greeter: String? = null
+        }
+
+        val extension = project.extensions.create<GreetingPluginExtension>("greeting")
+
+        // Configure the extension
+        //the<GreetingPluginExtension>().message("Hi from Gradle")
+
+        // Add a task that uses configuration from the extension object
+        project.task("greeting2") {
+            doFirst {
+                extension.message = "Hi from Gradle"
+                println(extension.message)
+            }
+
+            doLast{
+/*                // Configure the extension using a DSL block
+                configure<GreetingPluginExtension>{
+                    message = "Hello from GreetingPlugin"
+                    greeter = "Gradle"
+                }*/
+                extension.greeter = "Gradle"
+                println("${extension.message} from ${extension.greeter}")
+            }
+        }
+
     }
 }
 
