@@ -59,6 +59,7 @@ dependencies {
 
 }
 
+//设置 JDK 版本
 sourceCompatibility = "7"
 targetCompatibility = "7"
 

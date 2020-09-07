@@ -17,19 +17,32 @@ class PluginTest : Plugin<Project> {
         val testTask = project.task("PluginTestTask") {
             val description = "This is PluginTestTask."
 
+            repeat(4) { counter ->
+                project.tasks.register("task$counter") {
+                    doLast {
+                        println("task number $counter: doLast invoke...")
+                    }
+                }
+            }
+            dependsOn("task0")
+
+            // dynamically add dependencies to a task, at runtime.
+            project.tasks.named("task0") {dependsOn("task3", "task2", "task1")}
+
             doFirst {
-                println("PluginTestTask doFirst invoke...")
+                println("\nPluginTestTask doFirst invoke...")
                 println(description)
             }
+
             doLast {
-                println("PluginTestTask doLast invoke...")
+                println("\nPluginTestTask doLast invoke...")
             }
 
         }
 
         project.task("showProject") {
             doLast {
-                println("showProject doLast invoke...")
+                println("\nshowProject doLast invoke...")
                 println(project.project)
                 println("name: " + project.name)
                 println("version: " + project.version)
@@ -41,17 +54,19 @@ class PluginTest : Plugin<Project> {
         }
 
         project.task("showTasks") {
+
+            dependsOn("showProject")
+
             doLast {
-                println("showTasks doLast invoke...")
+                println("\nshowTasks doLast invoke...")
                 println(project.tasks.javaClass)
                 println(project.tasks.size)
                 //project.tasks.forEach{task -> println(task.name)}
 
                 testTask.description = "change to new description"
                 println(testTask.description)
-
             }
-        }.dependsOn("PluginTestTask")
+        }
 
         project.task("showDate") {
             doFirst {
@@ -82,4 +97,6 @@ class PluginTest : Plugin<Project> {
         }
     }
 }
+
+
 
