@@ -24,13 +24,15 @@ dependencies{
     implementation(gradleApi())
     implementation(kotlin("stdlib-jdk8"))
 
-
-    // Use JUnit test framework
     testImplementation(kotlin("stdlib-jdk8"))
+    testImplementation(gradleApi())
+    testImplementation(gradleKotlinDsl())
+    testImplementation(gradleTestKit())
+    // Use JUnit test framework
     testImplementation("junit:junit:4.13")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.3.72")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.3.72")
-    testImplementation(gradleTestKit())
+
 }
 
 //指定Jar中央仓库

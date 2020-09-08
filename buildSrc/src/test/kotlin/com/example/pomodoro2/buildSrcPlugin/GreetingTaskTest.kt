@@ -1,64 +1,62 @@
 package com.example.pomodoro2.buildSrcPlugin
 
-import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.gradle.util.ConfigureUtil.configure
+import org.junit.Assert.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
-import java.io.File
 
 
-class BuildSrcPluginTest {
-
-    @Rule @JvmField
-    val testProjectDir: TemporaryFolder = TemporaryFolder()
-    private lateinit var project: Project
-
-    private lateinit var settingsFile: File
-    private lateinit var buildFile: File
-
+class BuildSrcPluginTest : BasePluginTest() {
 
     @Before
-    fun setup(){
-        settingsFile = testProjectDir.newFile("settings.gradle.kts")
-        buildFile = testProjectDir.newFile("build.gradle.kts")
+    fun init(){
+        buildFile.writeText("""
+            plugins {
+                id("com.focus617.BuildSrcPlugin")
+            }
+        """.trimIndent())
     }
 
     @Test
     fun `BuildSrcPlugin_can Add GreetingTask to Project`() {
-        project = ProjectBuilder.builder().build()
+        val project = ProjectBuilder.builder().build()
         project.pluginManager.apply("com.focus617.BuildSrcPlugin")
         assertTrue(project.tasks.getByName("hello") is GreetingTask)
     }
 
     @Test
-    fun `BuildSrcPlugin_can run Task`() {
-        settingsFile.writeText("""
-            rootProject.name = "hello-world"
+    fun `BuildSrcPlugin_can run Task hello`() {
+        val result = runTask("hello")
+
+        assertEquals(TaskOutcome.SUCCESS, result.task(":hello")?.outcome)
+        assertTrue(result.output.contains("hello from GreetingTask"))
+    }
+
+    @Test
+    fun `BuildSrcPlugin_can run Task greeting`() {
+
+        val result = runTask("greeting")
+
+        assertEquals(TaskOutcome.SUCCESS, result.task(":greeting")?.outcome)
+        assertTrue(result.output.contains("greetings from GreetingTask"))
+    }
+
+    @Test
+    fun `BuildSrcPlugin_can run Task greeting2 with extension`() {
+        // Configure the extension using a DSL block
+        buildFile.appendText("""
+        configure<com.example.pomodoro2.buildSrcPlugin.GreetingPluginExtension> {
+            message = "Hello from GreetingPlugin"
+            greeter = "Gradle"
+        }
         """.trimIndent())
 
-        buildFile.writeText("""
-            tasks.register("helloWorld") {
-                doLast {
-                    println("Hello world!")
-                }
-            }
-        """.trimIndent())
+        val result = runTask("greeting2")
 
-        project = ProjectBuilder.builder().build()
-        project.pluginManager.apply("com.focus617.BuildSrcPlugin")
-
-        val result = GradleRunner.create()
-            .withProjectDir(testProjectDir.root)
-            .withArguments("hello")
-            .build()
-
-        assertTrue(result.output.contains("Hello world!"))
-        assertEquals(TaskOutcome.SUCCESS, result.task(":helloWorld")?.outcome)
+        assertEquals(TaskOutcome.SUCCESS, result.task(":greeting2")?.outcome)
+        assertTrue(result.output.contains("Gradle"))
+        assertTrue(result.output.contains("Hello from GreetingPlugin"))
     }
 }
