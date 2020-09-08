@@ -41,6 +41,7 @@ class BuildSrcPlugin : Plugin<Project> {
 
         project.tasks.register("sayGreeting") {
             dependsOn("greeting3")
+
             doLast {
                 var text = project.file(project.extra["greetingFile"]!!).readText()
                 println(text)

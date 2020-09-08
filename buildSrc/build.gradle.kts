@@ -1,8 +1,17 @@
 
 //第三方插件
 plugins {
-    kotlin("jvm") version "1.3.72"
+
     `kotlin-dsl`
+
+    kotlin("jvm") version "1.3.72"
+
+    // Apply the java-library plugin to add support for Java Library
+    `java-library`
+}
+
+kotlinDslPluginOptions {
+    experimentalWarning.set(false)
 }
 
 
