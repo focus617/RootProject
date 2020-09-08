@@ -71,12 +71,14 @@ compileTestKotlin {
 }
 
 // Below part is used for testing plug-in in buildSrc
+apply plugin:  'java-library-convention'
 apply plugin: 'com.focus617.standAlonePlugin'
 apply plugin: 'com.focus617.BuildSrcPlugin'
-apply plugin:  'java-library-convention'
 
-// Configure the extension
+// Configure the extension using a DSL Block
 greeting {
     message = "Hello from GreetingPlugin"
     greeter = "Gradle"
 }
+
+ext.greetingFile = "$buildDir/hello.txt"

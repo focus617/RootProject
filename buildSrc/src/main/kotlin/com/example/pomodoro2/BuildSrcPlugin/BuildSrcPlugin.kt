@@ -2,10 +2,7 @@ package com.example.pomodoro2.buildSrcPlugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.register
-import org.gradle.kotlin.dsl.task
+import org.gradle.kotlin.dsl.*
 
 // A custom plugin extension
 open class GreetingPluginExtension {
@@ -26,19 +23,31 @@ class BuildSrcPlugin : Plugin<Project> {
             greeting = "greetings from GreetingTask"
         }
 
-        // Add the 'greeting' extension object
+        // The extension object is added to the project with the name 'greeting',
+        // which can be configured in build.gradle
         val extension = project.extensions.create<GreetingPluginExtension>("greeting")
 
         // Add a task that uses configuration from the extension object
         project.task("greeting2") {
-            doFirst {
-                println(extension.message)
-            }
-
             doLast{
-                println("${extension.message} from ${extension.greeter}")
+                println("${extension.greeter} saying '${extension.message}.' ")
             }
         }
+
+
+        project.tasks.register<GreetingToFileTask>("greeting3") {
+            destination = { project.extra["greetingFile"]!! }
+        }
+
+        project.tasks.register("sayGreeting") {
+            dependsOn("greeting3")
+            doLast {
+                var text = project.file(project.extra["greetingFile"]!!).readText()
+                println(text)
+            }
+        }
+
+
     }
 
 }

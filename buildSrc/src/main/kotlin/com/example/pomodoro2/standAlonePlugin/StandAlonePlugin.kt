@@ -1,10 +1,9 @@
 package com.example.pomodoro2.standAlonePlugin
 
-import com.example.pomodoro2.buildSrcPlugin.GreetingTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
-import org.gradle.kotlin.dsl.*
+import org.gradle.kotlin.dsl.task
 import java.text.SimpleDateFormat
 import java.util.*
 
