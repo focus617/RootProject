@@ -5,6 +5,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
 open class GreetingTask : DefaultTask() {
+
     @get:Input
     var greeting = "hello from GreetingTask"
 

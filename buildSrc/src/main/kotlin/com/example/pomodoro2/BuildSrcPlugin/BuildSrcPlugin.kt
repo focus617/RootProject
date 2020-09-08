@@ -16,10 +16,16 @@ class BuildSrcPlugin : Plugin<Project> {
         project.plugins.apply(BasePlugin::class)
 
         // Use the default greeting task
-        project.task<GreetingTask>("hello")
+        project.task<GreetingTask>("hello"){
+            description = "Runs the default greeting task."
+            group = "pluginTest"
+        }
 
         // Customize the greeting task
         project.tasks.register<GreetingTask>("greeting") {
+            description = "Runs the Customized greeting task."
+            group = "pluginTest"
+
             greeting = "greetings from GreetingTask"
         }
 
@@ -29,18 +35,25 @@ class BuildSrcPlugin : Plugin<Project> {
 
         // Add a task that uses configuration from the extension object
         project.task("greeting2") {
+            description = "Runs the Customized greeting task to consume the extension object."
+            group = "pluginTest"
+
             doLast{
                 println("${extension.greeter} saying '${extension.message}.' ")
             }
         }
 
 
-        project.tasks.register<GreetingToFileTask>("greeting3") {
+        project.task<GreetingToFileTask>("greeting3") {
+            description = "Runs the Customized greeting task which write to file."
+            group = "pluginTest"
             destination = { project.extra["greetingFile"]!! }
         }
 
-        project.tasks.register("sayGreeting") {
+        project.task("sayGreeting") {
             dependsOn("greeting3")
+            description = "Runs the Customized greeting task which read the file."
+            group = "pluginTest"
 
             doLast {
                 var text = project.file(project.extra["greetingFile"]!!).readText()

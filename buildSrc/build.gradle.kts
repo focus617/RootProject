@@ -4,10 +4,14 @@ plugins {
 
     `kotlin-dsl`
 
-    kotlin("jvm") version "1.3.72"
+    //kotlin("jvm") version "1.3.72"
+    id("org.jetbrains.kotlin.jvm") version "1.3.72"
 
     // Apply the java-library plugin to add support for Java Library
     `java-library`
+
+    // Using the Plugin Development plugin for writing plugins
+    id("java-gradle-plugin")
 }
 
 kotlinDslPluginOptions {
@@ -22,9 +26,11 @@ dependencies{
 
 
     // Use JUnit test framework
+    testImplementation(kotlin("stdlib-jdk8"))
     testImplementation("junit:junit:4.13")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.3.72")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.3.72")
+    testImplementation(gradleTestKit())
 }
 
 //指定Jar中央仓库

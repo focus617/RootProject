@@ -1,5 +1,6 @@
 val sourceSets = the<SourceSetContainer>()
 
+// creation of a source set for integration tests
 sourceSets {
     create("integTest") {
         java.srcDir(file("src/integTest/kotlin"))
@@ -9,6 +10,7 @@ sourceSets {
     }
 }
 
+// For the purpose of test execution
 tasks.register<Test>("integTest") {
     description = "Runs the integration tests."
     group = "verification"
