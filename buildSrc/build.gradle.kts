@@ -3,13 +3,14 @@
 plugins {
     kotlin("jvm") version "1.3.72"
     `kotlin-dsl`
-
 }
 
 
 //设置项目的依赖库
 dependencies{
+    implementation(gradleApi())
     implementation(kotlin("stdlib-jdk8"))
+
 
     // Use JUnit test framework
     testImplementation("junit:junit:4.13")

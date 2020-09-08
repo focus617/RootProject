@@ -3,6 +3,7 @@ package com.example.pomodoro2.standAlonePlugin
 import com.example.pomodoro2.buildSrcPlugin.GreetingTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.Copy
 import org.gradle.kotlin.dsl.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -127,42 +128,14 @@ class StandAlonePlugin : Plugin<Project> {
         }
 
         // Call the build-in API
-        /*        project.tasks.create<Copy>("copy")){
-                   val description = "Copies sources to the dest directory"
-                   val group = "Custom"
+        project.task("myCopy", Copy::class) {
+            val description = "Copies sources to the dest directory"
+            val group = "Custom"
 
-                   from("src")
-                   into("dest")
-               }*/
-
-        // A custom plugin extension
-        open class GreetingPluginExtension {
-            var message: String? = null
-            var greeter: String? = null
+            from("src")
+            into("dest")
         }
 
-        val extension = project.extensions.create<GreetingPluginExtension>("greeting")
-
-        // Configure the extension
-        //the<GreetingPluginExtension>().message("Hi from Gradle")
-
-        // Add a task that uses configuration from the extension object
-        project.task("greeting2") {
-            doFirst {
-                extension.message = "Hi from Gradle"
-                println(extension.message)
-            }
-
-            doLast{
-/*                // Configure the extension using a DSL block
-                configure<GreetingPluginExtension>{
-                    message = "Hello from GreetingPlugin"
-                    greeter = "Gradle"
-                }*/
-                extension.greeter = "Gradle"
-                println("${extension.message} from ${extension.greeter}")
-            }
-        }
 
     }
 }
