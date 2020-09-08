@@ -1,17 +1,17 @@
 package com.example.pomodoro2.buildSrcPlugin
 
-import com.example.pomodoro2.buildSrcPlugin.GreetingTask
-import org.gradle.kotlin.dsl.create
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Assert.assertTrue
 import org.junit.Test
-import kotlin.test.assertTrue
 
-class GreetingTaskTest {
+
+class BuildSrcPluginTest {
 
     @Test
-    fun canAddTaskToProject() {
+    fun `BuildSrcPlugin_can Add GreetingTask to Project`() {
         val project = ProjectBuilder.builder().build()
-        val task = project.tasks.create<GreetingTask>("greeting")
-        assertTrue(task is GreetingTask)
+        project.pluginManager.apply("com.focus617.BuildSrcPlugin")
+
+        assertTrue(project.tasks.getByName("hello") is GreetingTask)
     }
 }
