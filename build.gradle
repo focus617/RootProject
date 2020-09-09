@@ -4,6 +4,8 @@ buildscript {
     repositories {
         google()
         jcenter()
+        // 阿里云的国内镜像仓库
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
     }
     dependencies {
         classpath Dependencies.gradle_tools
@@ -20,6 +22,9 @@ allprojects {
     repositories {
         google()
         jcenter()
+
+        // 阿里云的国内镜像仓库
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
     }
 }
 
@@ -28,7 +33,9 @@ task clean(type: Delete) {
 }
 
 task runUnitTests(dependsOn:
-        [':core:compileJava',
+        [':app:compileJava',
+         ':app:testClasses',
+         ':core:compileJava',
          ':core:testClasses']) {
     description 'Run all unit tests'
 }

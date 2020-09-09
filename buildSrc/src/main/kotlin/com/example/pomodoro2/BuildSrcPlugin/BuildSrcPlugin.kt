@@ -11,6 +11,7 @@ open class GreetingPluginExtension {
 }
 
 class BuildSrcPlugin : Plugin<Project> {
+
     override fun apply(project: Project) {
         // separate capabilities from conventions
         project.plugins.apply(BasePlugin::class)

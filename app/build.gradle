@@ -89,6 +89,14 @@ android {
 
 }
 
+sourceSets {
+    test{
+        java{
+            srcDirs += "src/test/kotlin"
+        }
+    }
+}
+
 dependencies {
     //1. Application dependencies
     implementation fileTree(dir: "libs", include: ["*.jar"])

@@ -152,19 +152,33 @@ class StandAlonePlugin : Plugin<Project> {
                 else "1.0-SNAPSHOT"
         }
 
-        // Call the build-in API
-        project.task("myCopy", Copy::class) {
+
+        //for including in the copy task
+        val dataContent = project.copySpec {
+            from("src/data")
+            include("*.data")
+        }
+
+        // Demonstrates the build-in 'typed task' declarations
+        project.task("initConfig", Copy::class) {
             group = "pluginTest"
 
             val description = "Copies sources to the dest directory"
             val group = "Custom"
 
-            from("src")
-            {
+            from("src") {
                 include("*.kts" )
                 into("copytest")
             }
+
+            from("src/main/languages") {
+                rename("EN_US_(.*)", "$1")
+            }
+
             into("build/test-results")
+            exclude("**/*.bak")
+            includeEmptyDirs = false
+            with(dataContent)
 
         }
 
