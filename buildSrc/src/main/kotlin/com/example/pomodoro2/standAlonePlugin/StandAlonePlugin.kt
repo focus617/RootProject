@@ -1,8 +1,10 @@
 package com.example.pomodoro2.standAlonePlugin
 
+import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
+import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.task
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,11 +18,15 @@ class StandAlonePlugin : Plugin<Project> {
     override fun apply(project: Project) {
 
         //定义一个 Task
-        val testTask = project.task("PluginTestTask") {
-            val description = "This is PluginTestTask."
+        val initTask = project.task<DefaultTask>("PluginTestTask") {
+            description = "This is PluginTestTask."
+            group = "pluginTest"
 
+            // dynamically create task, at runtime.
             repeat(4) { counter ->
-                project.tasks.register("task$counter") {
+                project.tasks.register<DefaultTask>("task$counter") {
+                    group = "pluginTest"
+
                     doLast {
                         println("task number $counter: doLast invoke...")
                     }
@@ -43,6 +49,8 @@ class StandAlonePlugin : Plugin<Project> {
         }
 
         project.task("showProject") {
+            group = "pluginTest"
+
             doLast {
                 println("\nshowProject doLast invoke...")
                 println(project.project)
@@ -56,7 +64,7 @@ class StandAlonePlugin : Plugin<Project> {
         }
 
         project.task("showTasks") {
-
+            group = "pluginTest"
             dependsOn("showProject")
 
             doLast {
@@ -65,24 +73,27 @@ class StandAlonePlugin : Plugin<Project> {
                 println(project.tasks.size)
                 //project.tasks.forEach{task -> println(task.name)}
 
-                testTask.description = "change to new description"
-                println(testTask.description)
+                initTask.description = "change to new description"
+                println(initTask.description)
             }
         }
 
         project.task("showDate") {
+            group = "pluginTest"
             doFirst {
                 println("Current date is ${SimpleDateFormat(dateFormat).format(Date())}")
             }
         }
 
         project.task("showTime") {
+            group = "pluginTest"
             doFirst {
                 println("Current time is ${SimpleDateFormat(timeFormat).format(Date())}")
             }
         }
 
         project.task("getSrcFileName") {
+            group = "pluginTest"
             inputs.dir("src")
             outputs.file("build/test-results/test/info.txt")
 
@@ -101,12 +112,14 @@ class StandAlonePlugin : Plugin<Project> {
         lateinit var version: String
 
         project.task("distribution") {
+            group = "pluginTest"
             doLast {
                 println("We build the zip with version = $version")
             }
         }
 
         project.tasks.register("release") {
+            group = "pluginTest"
             dependsOn("distribution")
             doFirst {
                 println("\nrelease doFirst invoke...")
@@ -128,13 +141,26 @@ class StandAlonePlugin : Plugin<Project> {
 
         // Call the build-in API
         project.task("myCopy", Copy::class) {
+            group = "pluginTest"
+
             val description = "Copies sources to the dest directory"
             val group = "Custom"
 
             from("src")
             into("dest")
         }
+/*
 
+        project.task("callJava"){
+        group = "pluginTest"
+        
+            project.javaexec {
+                main = "HelloWorld"
+                classpath(".")
+            }
+        }
+
+*/
 
     }
 }

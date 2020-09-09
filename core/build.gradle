@@ -70,8 +70,8 @@ compileTestKotlin {
     }
 }
 
-
+// Used for Java plugin in buildSrc
+apply plugin: 'java-library-convention'
 
 // Below part is used for testing plug-in in buildSrc
-apply plugin: 'java-library-convention'
-apply from:   'build.gradle.kts'
+apply from:   'plugin.gradle.kts'
