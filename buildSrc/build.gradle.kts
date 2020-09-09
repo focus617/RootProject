@@ -46,3 +46,11 @@ repositories {
 }
 
 apply(from = "gradle/integration-test.gradle.kts")
+
+sourceSets {
+    test{
+        java{
+            srcDirs("src/test/kotlin")
+        }
+    }
+}

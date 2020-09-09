@@ -21,7 +21,6 @@ abstract class BasePluginTest {
     protected lateinit var settingsFile: File
     protected lateinit var buildFile: File
 
-
     @Before
     fun setup(){
         settingsFile = testProjectDir.newFile("settings.gradle.kts")

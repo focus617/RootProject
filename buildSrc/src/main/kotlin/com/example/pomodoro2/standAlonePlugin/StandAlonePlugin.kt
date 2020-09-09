@@ -1,11 +1,15 @@
 package com.example.pomodoro2.standAlonePlugin
 
+import org.apache.tools.ant.taskdefs.Basename
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Copy
+import org.gradle.api.tasks.bundling.Zip
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.task
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,9 +37,16 @@ class StandAlonePlugin : Plugin<Project> {
                 }
             }
             dependsOn("task0")
+            finalizedBy("task3")
+            shouldRunAfter("showProject")
 
             // dynamically add dependencies to a task, at runtime.
-            project.tasks.named("task0") { dependsOn("task3", "task2", "task1") }
+            project.tasks.named("task0") {
+                dependsOn("task1", "task2")
+            }
+            project.tasks.named("task1"){
+                mustRunAfter("task2")
+            }
 
             doFirst {
                 println("\nPluginTestTask doFirst invoke...")
@@ -92,8 +103,10 @@ class StandAlonePlugin : Plugin<Project> {
             }
         }
 
+        // Incremental Builds
         project.task("getSrcFileName") {
             group = "pluginTest"
+
             inputs.dir("src")
             outputs.file("build/test-results/test/info.txt")
 
@@ -147,13 +160,35 @@ class StandAlonePlugin : Plugin<Project> {
             val group = "Custom"
 
             from("src")
-            into("dest")
+            {
+                include("*.kts" )
+                into("copytest")
+            }
+            into("build/test-results")
+
+        }
+
+        project.task("myZipCopy", Zip::class) {
+            group = "pluginTest"
+
+            val description = "Copies sources to the dest directory"
+            val group = "Custom"
+
+            archiveBaseName.set("kotlin")
+            destinationDirectory.set(project.file("build/test-results"))
+
+            from("src")
+            {
+                include("*.kts" )
+                into("copytest")
+            }
+
         }
 /*
 
         project.task("callJava"){
         group = "pluginTest"
-        
+
             project.javaexec {
                 main = "HelloWorld"
                 classpath(".")

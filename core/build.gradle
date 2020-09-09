@@ -73,3 +73,11 @@ apply plugin: 'java-library-convention'
 
 // Below part is used for testing plug-in in buildSrc
 apply from:   'plugin.gradle.kts'
+
+sourceSets {
+    test{
+        java{
+            srcDirs += "src/test/kotlin"
+        }
+    }
+}
