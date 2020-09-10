@@ -11,8 +11,9 @@ dependencies {
     implementation Dependencies.kotlinx_coroutines_core
 
     implementation Dependencies.kotlin_logging
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
-    implementation group: 'org.slf4j', name: 'slf4j-simple', version: Versions.slf4j_version
+
+    //implementation group: 'org.slf4j', name: 'slf4j-simple', version: Versions.slf4j_version
+    implementation Dependencies.slf4j
 
     // Dependencies for local unit tests
     testImplementation Dependencies.junit

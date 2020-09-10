@@ -45,7 +45,7 @@ object Versions {
 
     // Log
     const val timber_version = "4.7.1"
-    const val slf4j_version = "1.7.21"
+    const val slf4j_version = "1.7.30"
     const val kotlin_logging_version = "1.8.3"
 
     // Network & Http
@@ -141,6 +141,10 @@ object Dependencies {
 
     // Used for Log
     const val timber =  "com.jakewharton.timber:timber:${Versions.timber_version}"
+
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
+    const val slf4j = "org.slf4j:slf4j-simple:${Versions.slf4j_version}"
+
     const val kotlin_logging = "io.github.microutils:kotlin-logging:${Versions.kotlin_logging_version}"
 
     const val google_gson =  "com.google.code.gson:gson:${Versions.google_gson_version}"
