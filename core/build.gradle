@@ -69,7 +69,7 @@ compileTestKotlin {
     }
 }
 
-// Used for Java plugin in buildSrc
+// Applying the Java precompiled script plugin in buildSrc
 apply plugin: 'java-library-convention'
 
 // Below part is used for testing plug-in in buildSrc
@@ -82,3 +82,4 @@ sourceSets {
         }
     }
 }
+

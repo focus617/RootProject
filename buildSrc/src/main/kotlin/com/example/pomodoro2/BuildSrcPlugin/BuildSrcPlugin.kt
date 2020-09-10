@@ -28,11 +28,14 @@ class BuildSrcPlugin : Plugin<Project> {
             group = "pluginTest"
 
             greeting = "greetings from GreetingTask"
+            if(project.hasProperty("Output"))
+                println(greeting)
         }
 
         // The extension object is added to the project with the name 'greeting',
         // which can be configured in build.gradle
-        val extension = project.extensions.create<GreetingPluginExtension>("greeting")
+        val extension =
+            project.extensions.create<GreetingPluginExtension>("greeting")
 
         // Add a task that uses configuration from the extension object
         project.task("greeting2") {

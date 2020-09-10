@@ -8,9 +8,11 @@ configure<com.example.pomodoro2.buildSrcPlugin.GreetingPluginExtension> {
     greeter = "Gradle"
 }
 
+// Used for task "greeting" for using of extra properties
+extra["Output"] = "true"
+
 // Used for task "sayGreeting" for using of extra properties
 extra["greetingFile"] = "$buildDir/hello.txt"
-
 
 /**
  * demonstrates the use of extra properties
@@ -19,6 +21,7 @@ extra["greetingFile"] = "$buildDir/hello.txt"
 tasks {
 
     val myTask by creating {
+        group = "pluginTest"
 
         val foo by extra { 42 }
         val bar by extra<Int?>(null)
@@ -30,7 +33,7 @@ tasks {
     }
 
     val myTest by registering {
-
+        group = "pluginTest"
         dependsOn(myTask)
 
         doLast {

@@ -170,14 +170,15 @@ object Dependencies {
     const val kotlin_test =  "org.jetbrains.kotlin:kotlin-test:${Versions.kotlin_version}"
     const val kotlin_test_junit =  "org.jetbrains.kotlin:kotlin-test-junit:${Versions.kotlin_version}"
 
+    // Androidx JUnitRunner and JUnit Rules
+    const val androidx_test_runner =  "androidx.test:runner:${Versions.androidx_test_runner_version}"
+    const val androidx_test_rules =  "androidx.test:rules:${Versions.androidx_test_rules_version}"
      // AndroidX Test Core library
     const val androidx_test_core =  "androidx.test:core:${Versions.androidx_test_core_version}"
     const val androidx_test_core_ktx =  "androidx.test:core-ktx:${Versions.androidx_test_core_kotlin_version}"
     const val androidx_arch_core_testing =  "androidx.arch.core:core-testing:${Versions.androidx_arch_core_testing_version}"
 
-    // Androidx JUnitRunner and JUnit Rules
-    const val androidx_test_runner =  "androidx.test:runner:${Versions.androidx_test_runner_version}"
-    const val androidx_test_rules =  "androidx.test:rules:${Versions.androidx_test_rules_version}"
+    const val robolectric =  "org.robolectric:robolectric:${Versions.robolectric_version}"
 
     // Assertions
     const val androidx_test_ext_junit =  "androidx.test.ext:junit:${Versions.androidx_test_ext_junit_version}"
@@ -185,9 +186,7 @@ object Dependencies {
     const val androidx_test_ext_junit_ktx =  "androidx.test.ext:junit-ktx:${Versions.androidx_test_ext_junit_kotlin_version}"
 
     const val kluent =  "org.amshove.kluent:kluent:${Versions.kluent_version}"
-    const val robolectric =  "org.robolectric:robolectric:${Versions.robolectric_version}"
     const val google_truth =  "com.google.truth:truth:${Versions.google_truth_version}"
-
     const val hamcrest_all =  "org.hamcrest:hamcrest-all:${Versions.hamcrest_version}"
     // Optional -- Hamcrest library
     const val hamcrest_library =  "org.hamcrest:hamcrest-library:${Versions.hamcrest_version}"

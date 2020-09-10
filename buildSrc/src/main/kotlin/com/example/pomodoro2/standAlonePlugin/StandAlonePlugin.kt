@@ -126,6 +126,7 @@ class StandAlonePlugin : Plugin<Project> {
 
         project.task("distribution") {
             group = "pluginTest"
+
             doLast {
                 println("We build the zip with version = $version")
             }
@@ -134,6 +135,7 @@ class StandAlonePlugin : Plugin<Project> {
         project.tasks.register("release") {
             group = "pluginTest"
             dependsOn("distribution")
+
             doFirst {
                 println("\nrelease doFirst invoke...")
                 project.gradle.taskGraph.allTasks.forEach {

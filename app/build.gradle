@@ -7,7 +7,6 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 
-
 android {
 
     compileSdkVersion Versions.compile_sdk_version
@@ -211,6 +210,9 @@ dependencies {
     testImplementation Dependencies.room_testing
 
     // 3. Acceptance tests dependencies
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation Dependencies.androidx_test_runner
+    androidTestImplementation Dependencies.androidx_test_rules
     // Test Core library
     androidTestImplementation Dependencies.androidx_test_core
 
@@ -218,10 +220,6 @@ dependencies {
     //androidTestImplementation Dependencies.kotlinx_coroutines_core
     androidTestImplementation Dependencies.kotlinx_coroutines_test
     androidTestImplementation Dependencies.kotlinx_coroutines_android
-
-    // AndroidJUnitRunner and JUnit Rules
-    androidTestImplementation Dependencies.androidx_test_runner
-    androidTestImplementation Dependencies.androidx_test_rules
 
     // Assertions
     androidTestImplementation Dependencies.androidx_test_ext_junit
