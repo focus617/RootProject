@@ -17,20 +17,20 @@ class BuildSrcPlugin : Plugin<Project> {
         // separate capabilities from conventions
         project.plugins.apply(BasePlugin::class)
 
-        // Use the default greeting task
+        // actual task
         project.task<GreetingTask>("hello"){
-            description = "Runs the default greeting task."
-            group = "pluginTest"
+            // actual task provide value for the exposed properties of custom task
+            // to configure the behavior
+            greeting = "hello inherent from GreetingTask"
         }
 
-        // Customize the greeting task
+        // Actual task with Customized behavior of custom greeting task
         project.tasks.register<GreetingTask>("greeting") {
             description = "Runs the Customized greeting task."
-            group = "pluginTest"
-
             greeting = "greetings from GreetingTask"
+
             if(project.hasProperty("Output"))
-                println(greeting)
+                println(description)
         }
 
         // The extension object is added to the project with the name 'greeting',

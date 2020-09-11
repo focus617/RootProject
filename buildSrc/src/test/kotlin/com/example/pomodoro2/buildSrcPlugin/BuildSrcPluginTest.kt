@@ -31,7 +31,7 @@ class BuildSrcPluginTest : BasePluginTest() {
         val result = runTask("hello")
 
         assertEquals(TaskOutcome.SUCCESS, result.task(":hello")?.outcome)
-        assertTrue(result.output.contains("hello from GreetingTask"))
+        assertTrue(result.output.contains("hello inherent from GreetingTask"))
     }
 
     @Test
