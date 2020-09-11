@@ -28,25 +28,30 @@ open class GreetingToFileTask : DefaultTask() {
 
     @TaskAction
     fun greet() {
-        println("GreetingToFileTask: greet()")
+        logger.quiet("GreetingToFileTask: greet()")
         val file = getDestination()
         file.parentFile.mkdirs()
         file.writeText("Hello!")
     }
 
+
+
     private fun getPassword(){
-        if (project.file("private.properties").exists()) {
-            var properties = Properties()
-            properties.load(project.file("private.properties").inputStream())
+        logger.quiet("getPassword(): reading the private properties file")
+
+        val passwordFile = project.file("private.properties")
+        if (passwordFile.exists()) {
+            val properties = Properties()
+            properties.load(passwordFile.inputStream())
             password = properties.getProperty("release.password")
         }
     }
 
     @TaskAction
     fun printPassword(){
-        println("GreetingToFileTask: printPassword()")
+        logger.quiet("GreetingToFileTask: printPassword()")
         getPassword()
-        println("Retrieved password is '$password'")
+        logger.quiet("Retrieved password is '$password'")
     }
 }
 
