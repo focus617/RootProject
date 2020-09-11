@@ -8,6 +8,7 @@ import org.gradle.kotlin.dsl.*
 open class GreetingPluginExtension {
     var message: String? = null
     var greeter: String? = null
+    var callFunc: (String)->Unit = {}
 }
 
 class BuildSrcPlugin : Plugin<Project> {
@@ -38,24 +39,31 @@ class BuildSrcPlugin : Plugin<Project> {
             project.extensions.create<GreetingPluginExtension>("greeting")
 
         // Add a task that uses configuration from the extension object
-        project.task("greeting2") {
+        project.task("greetingWithExtension") {
             description = "Runs the Customized greeting task to consume the extension object."
             group = "pluginTest"
 
-            doLast{
+            doFirst(){
                 println("${extension.greeter} saying '${extension.message}.' ")
+            }
+
+            doLast{
+                var closure = extension.callFunc
+                if (closure != null) {
+                    closure("Called by greetingWithExtension.doLast()")
+                }
             }
         }
 
 
-        project.task<GreetingToFileTask>("greeting3") {
+        project.task<GreetingToFileTask>("greetingForSaveToFile") {
             description = "Runs the Customized greeting task which write to file."
             group = "pluginTest"
             destination = { project.extra["greetingFile"]!! }
         }
 
-        project.task("sayGreeting") {
-            dependsOn("greeting3")
+        project.task("greetingForDumpFile") {
+            dependsOn("greetingForSaveToFile")
             description = "Runs the Customized greeting task which read the file."
             group = "pluginTest"
 

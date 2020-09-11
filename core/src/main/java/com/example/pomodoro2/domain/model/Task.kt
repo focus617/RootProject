@@ -8,7 +8,7 @@ import java.util.UUID
 /**
  * 表示项目（目标）的数据类，用来存储创建的项目，并提供给ProjectFragment
  */
-data class Task (
+class Task (
     var id: String = UUID.randomUUID().toString(),
     var title: String,
     var description: String = "",

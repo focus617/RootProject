@@ -44,7 +44,7 @@ class BuildSrcPluginTest : BasePluginTest() {
     }
 
     @Test
-    fun `BuildSrcPlugin_can run Task greeting2 with extension`() {
+    fun `BuildSrcPlugin_can run Task greeting with extension`() {
         // Configure the extension using a DSL block
         buildFile.appendText("""
         configure<com.example.pomodoro2.buildSrcPlugin.GreetingPluginExtension> {
@@ -53,9 +53,9 @@ class BuildSrcPluginTest : BasePluginTest() {
         }
         """.trimIndent())
 
-        val result = runTask("greeting2")
+        val result = runTask("greetingWithExtension")
 
-        assertEquals(TaskOutcome.SUCCESS, result.task(":greeting2")?.outcome)
+        assertEquals(TaskOutcome.SUCCESS, result.task(":greetingWithExtension")?.outcome)
         assertTrue(result.output.contains("Gradle"))
         assertTrue(result.output.contains("Hello from GreetingPlugin"))
     }

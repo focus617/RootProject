@@ -2,10 +2,13 @@
 apply(plugin = "com.focus617.standAlonePlugin")
 apply(plugin = "com.focus617.BuildSrcPlugin")
 
+//import com.example.pomodoro2.buildSrcPlugin.GreetingPluginExtension
+
 // Configure the extension using a DSL block
 configure<com.example.pomodoro2.buildSrcPlugin.GreetingPluginExtension> {
     message = "Hello from GreetingPlugin"
     greeter = "Gradle"
+    callFunc = { name -> println("This is extension closure test: $name.") }
 }
 
 // Used for task "greeting" for using of extra properties

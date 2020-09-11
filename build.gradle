@@ -4,8 +4,6 @@ buildscript {
     repositories {
         google()
         jcenter()
-        // 阿里云的国内镜像仓库
-        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
     }
     dependencies {
         classpath Dependencies.gradle_tools
