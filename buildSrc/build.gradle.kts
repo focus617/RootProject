@@ -26,8 +26,9 @@ kotlinDslPluginOptions {
 dependencies {
     implementation(gradleApi())
     implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect"))
+    implementation(gradleKotlinDsl())
 
-    testImplementation(gradleKotlinDsl())
     testImplementation(gradleTestKit())
     // Use JUnit test framework
     testImplementation("junit:junit:4.13")
