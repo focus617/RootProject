@@ -1,6 +1,7 @@
-apply plugin: 'java-library'
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'java-library'
+apply plugin: 'application'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -59,14 +60,15 @@ dependencies {
 
 }
 
-repositories {
-    flatDir{
-        dirs 'libs'
-    }
-}
+version = '0.1.0'
+
 //设置 JDK 版本
 sourceCompatibility = "7"
 targetCompatibility = "7"
+
+application {
+    mainClassName = 'ToDoApp'
+}
 
 compileTestKotlin {
     kotlinOptions {

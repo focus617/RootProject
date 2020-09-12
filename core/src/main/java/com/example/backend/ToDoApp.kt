@@ -7,7 +7,8 @@ class ToDoApp {
 
     private val DEFAULT_INPUT = '\u0000'
 
-    fun mainTodo(vararg args: String) {
+    @JvmName("ToDoApp")
+    fun main(vararg args: String) {
         val commandLineInputHandler = CommandLineInputHandler()
         var command: Char = DEFAULT_INPUT
 
@@ -30,7 +31,7 @@ class ToDoApp {
         @JvmStatic
         fun main(args: Array<String>) {
             val app = ToDoApp()
-            app.mainTodo(args.toString())
+            app.main(args.toString())
         }
     }
 }
