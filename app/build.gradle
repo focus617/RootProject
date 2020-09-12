@@ -1,5 +1,3 @@
-import com.example.pomodoro2.standAlonePlugin.StandAlonePlugin
-
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'

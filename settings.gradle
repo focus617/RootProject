@@ -1,4 +1,3 @@
-include ':backEnd'
 include ':app'
 include ':core'
 rootProject.name = "RootProject"

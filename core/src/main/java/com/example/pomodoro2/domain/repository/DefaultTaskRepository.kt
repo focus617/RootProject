@@ -286,6 +286,15 @@ class DefaultTaskRepository private constructor(
         perform(cachedTask)
     }
 
+    // For util testing purpose
+    fun insert(task: Task): String{
+        return cacheTask(task).id
+    }
+
+    // For util testing purpose
+    fun delete(task: Task){
+        cachedTasks?.remove(task.id)
+    }
 
     companion object {
         /**

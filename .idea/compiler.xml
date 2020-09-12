@@ -43,6 +43,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="backEnd" target="1.7" />
       <module name="core" target="1.7" />
     </bytecodeTargetLevel>
   </component>

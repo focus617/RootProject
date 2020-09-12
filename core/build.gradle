@@ -59,6 +59,11 @@ dependencies {
 
 }
 
+repositories {
+    flatDir{
+        dirs 'libs'
+    }
+}
 //设置 JDK 版本
 sourceCompatibility = "7"
 targetCompatibility = "7"

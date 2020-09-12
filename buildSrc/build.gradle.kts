@@ -38,10 +38,13 @@ dependencies {
 
 //指定Jar中央仓库
 repositories {
+    // 阿里云的国内镜像仓库
+    maven(url="http://maven.aliyun.com/nexus/content/groups/public/")
+
     // Use jcenter for resolving dependencies.
-    // You can declare any Maven/Ivy/file repository here.
     jcenter()
     mavenLocal()
+    // You can declare any Maven/Ivy/file repository here.
 
 }
 

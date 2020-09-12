@@ -65,6 +65,11 @@ data class Task (
             imageId = 0,
             priority = 1
         )
+        fun create():Task = Task(
+            title = "unNamed",
+            imageId = 0,
+            priority = 1
+        )
     }
 }
 
