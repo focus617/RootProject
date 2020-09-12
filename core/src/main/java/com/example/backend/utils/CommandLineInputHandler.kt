@@ -76,7 +76,7 @@ class CommandLineInputHandler {
 
     private fun findTask(): Task? {
         val id = askForTaskId()
-        val toDoTask = toDoRepository.selectBy(ofIdTaskSpec(id))
+        val toDoTask = toDoRepository.selectBy(OfIdTaskSpec(id))
         if (toDoTask.isEmpty()) {
             System.err.println("To do task with ID $id could not be found.")
         }
