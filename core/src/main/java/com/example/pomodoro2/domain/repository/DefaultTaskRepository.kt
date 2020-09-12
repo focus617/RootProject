@@ -1,5 +1,6 @@
 package com.example.pomodoro2.domain.repository
 
+import androidx.annotation.VisibleForTesting
 import com.example.pomodoro2.domain.model.Task
 import com.example.pomodoro2.domain.model.ITaskRepository
 import com.example.pomodoro2.platform.data.InMemoryDataSource
@@ -287,11 +288,13 @@ class DefaultTaskRepository private constructor(
     }
 
     // For util testing purpose
+    @VisibleForTesting
     fun insert(task: Task): String{
         return cacheTask(task).id
     }
 
     // For util testing purpose
+    @VisibleForTesting
     fun delete(task: Task){
         cachedTasks?.remove(task.id)
     }

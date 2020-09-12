@@ -5,7 +5,7 @@ import com.example.backend.utils.CommandLineInputHandler
 
 class ToDoApp {
 
-    val DEFAULT_INPUT = '\u0000'
+    private val DEFAULT_INPUT = '\u0000'
 
     fun mainTodo(vararg args: String) {
         val commandLineInputHandler = CommandLineInputHandler()

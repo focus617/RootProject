@@ -13,15 +13,16 @@ enum class CommandLineInput(val shortCmd: Char) {
     companion object {
         private var INPUTS: MutableMap<Char, CommandLineInput>? = null
 
-        fun getCommandLineInputForInput(input: Char): CommandLineInput? {
-            return INPUTS!![input]
-        }
-
         init {
             INPUTS = HashMap()
             for (input in values()) {
                 (INPUTS as HashMap<Char, CommandLineInput>)[input.shortCmd] = input
             }
+        }
+
+
+        fun getCommandLineInputForInput(input: Char): CommandLineInput? {
+            return INPUTS!![input]
         }
     }
 
