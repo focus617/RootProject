@@ -22,8 +22,8 @@ class StandAlonePlugin : Plugin<Project> {
     override fun apply(project: Project) {
 
         //定义一个 Task
-        val initTask = project.task<DefaultTask>("PluginTestTask") {
-            description = "This is PluginTestTask."
+        val initTask = project.task<DefaultTask>("InitTask") {
+            description = "This is InitTask."
             group = "pluginTest"
 
             // dynamically create task, at runtime.
@@ -49,12 +49,12 @@ class StandAlonePlugin : Plugin<Project> {
             }
 
             doFirst {
-                println("\nPluginTestTask doFirst invoke...")
+                println("\n$name doFirst invoke...")
                 println(description)
             }
 
             doLast {
-                println("\nPluginTestTask doLast invoke...")
+                println("\n$name doLast invoke...")
             }
 
         }

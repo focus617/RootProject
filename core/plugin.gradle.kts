@@ -2,7 +2,6 @@
 apply(plugin = "com.focus617.standAlonePlugin")
 apply(plugin = "com.focus617.BuildSrcPlugin")
 
-//import com.example.pomodoro2.buildSrcPlugin.GreetingPluginExtension
 
 // Configure the extension using a DSL block
 configure<com.example.pomodoro2.buildSrcPlugin.GreetingPluginExtension> {

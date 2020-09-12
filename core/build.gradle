@@ -83,3 +83,5 @@ sourceSets {
     }
 }
 
+//test ant
+ant.echo("Hello")

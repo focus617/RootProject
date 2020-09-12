@@ -1,0 +1,24 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation Dependencies.kotlin_stdlib_jdk8
+    implementation Dependencies.kotlin_reflect
+    implementation Dependencies.slf4j
+
+    // Dependencies for local unit tests
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.kotlin_test
+    testImplementation Dependencies.kotlin_test_junit
+}
+
+//设置 JDK 版本
+sourceCompatibility = "7"
+targetCompatibility = "7"
+
+compileTestKotlin {
+    kotlinOptions {
+        languageVersion = "1.4"
+    }
+}
