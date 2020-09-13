@@ -8,6 +8,7 @@ import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.task
 import java.util.*
 
@@ -34,9 +35,10 @@ open class LoadVersionTask : DefaultTask() {
     var version: ProjectVersion = ProjectVersion(0, 1)
 
     fun readVersion(): ProjectVersion {
-        logger.quiet("Reading the version file")
+        val versionFileName = project.extra["versionFile"].toString()
+        logger.quiet("Reading from version file: $versionFileName")
 
-        val versionFile = project.file("version.properties")
+        val versionFile = project.file(versionFileName)
         if (!versionFile.exists()) {
             throw GradleException(
                 "Required version file does nto exist:" +
@@ -62,36 +64,3 @@ open class LoadVersionTask : DefaultTask() {
     }
 }
 
-class VersionsPlugin : Plugin<Project> {
-
-    private var projectVersion: ProjectVersion? = null
-
-    override fun apply(project: Project) {
-        // separate capabilities from conventions
-        project.plugins.apply(BasePlugin::class)
-
-        // general task
-        project.task("printVersion") {
-            group = "versioning"
-            description = "Prints project version."
-
-            doLast {
-                logger.quiet("\n$name: doLast()")
-                if (projectVersion != null)
-                    logger.quiet("Version: $projectVersion")
-                else
-                    logger.quiet("Version: hasn't been defined.")
-            }
-        }
-
-        // actual task
-        project.task<LoadVersionTask>("loadVersion") {
-            // actual task provide value for the exposed properties of custom task
-            // to configure the behavior
-
-            logger.quiet("\n$name: under configuration")
-            projectVersion = readVersion()
-        }
-    }
-
-}
