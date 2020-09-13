@@ -15,35 +15,37 @@ data class ProjectVersion(
     var major: Int,
     var minor: Int,
     var release: Boolean = false
-    ) {
+) {
 
     @Override
-    override fun toString() = "$major.$minor${if(release)"" else "-SNAPSHOT"}"
+    override fun toString() = "$major.$minor${if (release) "" else "-SNAPSHOT"}"
 }
 
-
+/**
+ * 将版本信息存储在外部文件中,并配置构建脚本来读取它
+ */
 open class LoadVersionTask : DefaultTask() {
     init {
-        group = "pluginTest"
-        description = "Retrieve the project version."
+        group = "versioning"
+        description = "Retrieve the project version for property file."
     }
 
     @Input
-    var version: ProjectVersion = ProjectVersion(0,1)
+    var version: ProjectVersion = ProjectVersion(0, 1)
 
-    private fun readVersion(): ProjectVersion{
+    fun readVersion(): ProjectVersion {
         logger.quiet("Reading the version file")
 
         val versionFile = project.file("version.properties")
         if (!versionFile.exists()) {
-            throw GradleException("Required version file does nto exist:" +
-                    versionFile.canonicalPath
+            throw GradleException(
+                "Required version file does nto exist:" +
+                        versionFile.canonicalPath
             )
-        }
-        else {
+        } else {
             val properties = Properties()
             properties.load(versionFile.inputStream())
-            
+
             return ProjectVersion(
                 properties.getProperty("major").toInt(),
                 properties.getProperty("minor").toInt(),
@@ -53,7 +55,7 @@ open class LoadVersionTask : DefaultTask() {
     }
 
     @TaskAction
-    fun loadVersion(){
+    fun loadVersion() {
         logger.quiet("\n$name: loadVersion()")
         version = readVersion()
         logger.quiet("Retrieved version is '$version'")
@@ -62,21 +64,33 @@ open class LoadVersionTask : DefaultTask() {
 
 class VersionsPlugin : Plugin<Project> {
 
-    lateinit var projectVersion: ProjectVersion
+    private var projectVersion: ProjectVersion? = null
 
     override fun apply(project: Project) {
         // separate capabilities from conventions
         project.plugins.apply(BasePlugin::class)
 
+        // general task
+        project.task("printVersion") {
+            group = "versioning"
+            description = "Prints project version."
+
+            doLast {
+                logger.quiet("\n$name: doLast()")
+                if (projectVersion != null)
+                    logger.quiet("Version: $projectVersion")
+                else
+                    logger.quiet("Version: hasn't been defined.")
+            }
+        }
+
         // actual task
-        project.task<LoadVersionTask>("loadVersion"){
+        project.task<LoadVersionTask>("loadVersion") {
             // actual task provide value for the exposed properties of custom task
             // to configure the behavior
 
-            doLast{
-                logger.quiet("\n$name: doLast()")
-                projectVersion = version
-            }
+            logger.quiet("\n$name: under configuration")
+            projectVersion = readVersion()
         }
     }
 
