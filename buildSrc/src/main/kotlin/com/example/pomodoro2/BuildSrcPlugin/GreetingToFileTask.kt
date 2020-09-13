@@ -2,6 +2,7 @@ package com.example.pomodoro2.buildSrcPlugin
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.File
@@ -18,8 +19,6 @@ import java.util.*
 open class GreetingToFileTask : DefaultTask() {
 
     var destination: Any? = null
-    @Input
-    var password: String? = "Default"
 
     @OutputFile
     fun getDestination(): File {
@@ -34,7 +33,8 @@ open class GreetingToFileTask : DefaultTask() {
         file.writeText("Hello!")
     }
 
-
+    @OutputFile
+    var password: String? = "Default"
 
     private fun getPassword(){
         logger.quiet("getPassword(): reading the private properties file")

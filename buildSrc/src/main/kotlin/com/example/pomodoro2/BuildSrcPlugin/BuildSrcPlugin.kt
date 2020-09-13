@@ -2,6 +2,7 @@ package com.example.pomodoro2.buildSrcPlugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.BasePlugin
 import org.gradle.kotlin.dsl.*
 
 // A custom plugin extension
@@ -48,10 +49,7 @@ class BuildSrcPlugin : Plugin<Project> {
             }
 
             doLast{
-                var closure = extension.callFunc
-                if (closure != null) {
-                    closure("Called by greetingWithExtension.doLast()")
-                }
+                extension.callFunc("Called by greetingWithExtension.doLast()")
             }
         }
 

@@ -1,6 +1,7 @@
 
 apply(plugin = "com.focus617.standAlonePlugin")
 apply(plugin = "com.focus617.BuildSrcPlugin")
+apply(plugin = "com.focus617.UtilsPlugin")
 
 
 // Configure the extension using a DSL block
