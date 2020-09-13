@@ -11,8 +11,9 @@ dependencies {
 
     implementation Dependencies.kotlinx_coroutines_core
 
-    implementation Dependencies.kotlin_logging
+    implementation Dependencies.commons_lang3
 
+    implementation Dependencies.kotlin_logging
     //implementation group: 'org.slf4j', name: 'slf4j-simple', version: Versions.slf4j_version
     implementation Dependencies.slf4j
 
@@ -60,7 +61,7 @@ dependencies {
 
 }
 
-version = '0.1.0'
+version = '0.1-SNAPSHOT'
 
 //设置 JDK 版本
 sourceCompatibility = "7"
@@ -68,6 +69,12 @@ targetCompatibility = "7"
 
 application {
     mainClassName = 'ToDoApp'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.example.backend.ToDoApp'
+    }
 }
 
 compileTestKotlin {

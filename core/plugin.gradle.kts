@@ -21,7 +21,6 @@ extra["greetingFile"] = "$buildDir/hello.txt"
  * (equivalent of the ext properties found in Gradle Script Groovy)
  */
 tasks {
-
     val myTask by creating {
         group = "pluginTest"
 

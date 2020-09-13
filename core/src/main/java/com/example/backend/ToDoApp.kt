@@ -2,6 +2,7 @@ package com.example.backend
 
 import com.example.backend.utils.CommandLineInput
 import com.example.backend.utils.CommandLineInputHandler
+import org.apache.commons.lang3.CharUtils
 
 class ToDoApp {
 
@@ -16,16 +17,14 @@ class ToDoApp {
             commandLineInputHandler.printOptions()
 
             val input: String = commandLineInputHandler.readInput()
-            val inputChars =
-                if (input.length == 1) input.toCharArray()
-                else charArrayOf(DEFAULT_INPUT)
+            command = CharUtils.toChar(input, DEFAULT_INPUT)
 
-            command = inputChars[0]
             val commandLineInput=
                 CommandLineInput.getCommandLineInputForInput(command)
             commandLineInputHandler.processInput(commandLineInput)
         }
     }
+
 
     companion object {
         @JvmStatic

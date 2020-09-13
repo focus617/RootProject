@@ -43,6 +43,8 @@ object Versions {
     const val google_gson_version = "2.8.5"
     const val glide_version = "4.11.0"
 
+    const val common_lang3_version = "3.11"
+
     // Log
     const val timber_version = "4.7.1"
     const val slf4j_version = "1.7.30"
@@ -163,6 +165,9 @@ object Dependencies {
 
 //    const val okhttp3 =  "com.squareup.okhttp3:okhttp:${Versions.okhttp_version}"
 //    const val okhttp3_logging_interceptor =  "com.squareup.okhttp3:logging-interceptor:${Versions.okhttp_version}"
+
+    // Core - TodoApp: CharUtils
+    const val commons_lang3 = "org.apache.commons:commons-lang3:${Versions.common_lang3_version}"
 
     // 2. Unit/Integration tests dependencies
     const val test_runner = "androidx.test.runner.AndroidJUnitRunner"
