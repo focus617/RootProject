@@ -89,11 +89,14 @@ ant.echo("Hello, testing ant.")
 // Applying the Java precompiled script plugin in buildSrc
 apply plugin: 'java-library-convention'
 
+
+// Below part is used for testing plug-in in buildSrc
+
+// Must define before plugin configuration
 ext{
     versionFile = "version.properties"
 }
 
-// Below part is used for testing plug-in in buildSrc
 apply from:   'plugin.gradle.kts'
 
 sourceSets {

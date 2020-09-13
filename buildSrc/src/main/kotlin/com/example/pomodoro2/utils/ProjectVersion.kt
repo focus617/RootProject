@@ -10,7 +10,9 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.task
+import java.io.File
 import java.util.*
+import kotlin.properties.Delegates
 
 data class ProjectVersion(
     var major: Int,
@@ -32,13 +34,27 @@ open class LoadVersionTask : DefaultTask() {
     }
 
     @Input
-    var version: ProjectVersion = ProjectVersion(0, 1)
+    var versionFileName = project.extra["versionFile"].toString()
 
-    fun readVersion(): ProjectVersion {
-        val versionFileName = project.extra["versionFile"].toString()
-        logger.quiet("Reading from version file: $versionFileName")
+    private var version: ProjectVersion = ProjectVersion(0, 1)
 
+    fun checkVersionFile(): File {
+        if (versionFileName == "") {
+            throw GradleException(
+                "Required version extension doesn't exist: $versionFileName"
+            )
+        }
         val versionFile = project.file(versionFileName)
+        if (!versionFile.exists()) {
+            throw GradleException(
+                "Required version file doesn't exist:" + versionFile.canonicalPath
+            )
+        }
+        logger.quiet("$name: version file '$versionFileName' exist")
+        return versionFile
+    }
+
+    fun readVersion(versionFile: File): ProjectVersion {
         if (!versionFile.exists()) {
             throw GradleException(
                 "Required version file does nto exist:" +
@@ -51,15 +67,16 @@ open class LoadVersionTask : DefaultTask() {
             return ProjectVersion(
                 properties.getProperty("major").toInt(),
                 properties.getProperty("minor").toInt(),
-                properties.getProperty("release").toBoolean()
+                properties.getProperty("release")!!.toBoolean()
             )
         }
     }
 
+
     @TaskAction
     fun loadVersion() {
         logger.quiet("\n$name: loadVersion()")
-        version = readVersion()
+        version = readVersion(checkVersionFile())
         logger.quiet("Retrieved version is '$version'")
     }
 }
