@@ -9,8 +9,6 @@ import java.io.File
 
 class VersioningPlugin : Plugin<Project> {
 
-    private var projectVersion: ProjectVersion? = null
-
     override fun apply(project: Project) {
         // separate capabilities from conventions
         project.plugins.apply(BasePlugin::class)
@@ -21,41 +19,26 @@ class VersioningPlugin : Plugin<Project> {
         project.task<LoadVersionTask>("loadVersion") {
             // actual task provide value for the exposed properties of custom task
             // to configure the behavior
-
-            logger.quiet("\n>> configure task: $name")
             versionFile = getVersionFile()
-            projectVersion = readVersion()
+            project.version = readVersion()
         }
 
         project.task("printVersion") {
             group = "versioning"
             description = "Prints project version."
+            //dependsOn("loadVersion")
 
             doLast {
                 logger.quiet("\n$name: doLast()")
-                if (projectVersion != null)
-                    logger.quiet("Version: $projectVersion")
-                else
-                    logger.quiet("Version: hasn't been defined.")
+                val projectVersion = project.version as ProjectVersion
+                logger.quiet("Version: $projectVersion")
             }
         }
 
-        project.task("makeReleaseVersion") {
-            group = "versioning"
-            description = "Makes project a release version."
+        project.task<ReleaseVersionTask>("makeReleaseVersion") {
             finalizedBy("printVersion")
-
-            inputs.property("release", projectVersion!!.prodReady)
-            outputs.file(versionFile)
-
-            doLast {
-                logger.quiet("\n$name: doLast()")
-                projectVersion?.prodReady = true
-
-                // How to modify properties file?
-                //ant.propertyfile(file: versionFile) {
-                //    entry(key: 'release', type: 'string', operation: '=', value: 'true')
-            }
+            release = (project.version as ProjectVersion).prodReady
+            destFile = versionFile
         }
     }
 
