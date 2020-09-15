@@ -1,17 +1,34 @@
 package com.example.pomodoro2.plugins.utils
 
+import com.example.pomodoro2.plugins.buildSrcPlugin.GreetingPluginExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.task
 import java.io.File
+
+// A custom plugin extension
+const val EXTENSION_NAME = "ProjectVersion"
+
+open class VersioningPluginExtension {
+    var versionFile: String? = null
+    var callFunc: (String)->Unit = {}
+}
 
 class VersioningPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         // separate capabilities from conventions
         project.plugins.apply(BasePlugin::class)
+
+        /**
+         * The extension object is added to the project with the name [EXTENSION_NAME],
+         * which can be configured in build.gradle
+         */
+        val extension =
+            project.extensions.create<VersioningPluginExtension>(EXTENSION_NAME)
 
         lateinit var versionFile: File
 

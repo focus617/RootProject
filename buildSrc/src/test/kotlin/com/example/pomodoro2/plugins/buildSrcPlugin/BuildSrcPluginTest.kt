@@ -1,9 +1,9 @@
 package com.example.pomodoro2.plugins.buildSrcPlugin
 
 import com.example.pomodoro2.buildSrcPlugin.GreetingTask
+import com.example.pomodoro2.plugins.base.BasePluginTest
 import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.testkit.runner.TaskOutcome
-import org.gradle.util.ConfigureUtil.configure
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
