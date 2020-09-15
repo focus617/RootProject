@@ -1,4 +1,4 @@
-package com.example.pomodoro2.buildSrcPlugin
+package com.example.pomodoro2.plugins.buildSrcPlugin
 
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder

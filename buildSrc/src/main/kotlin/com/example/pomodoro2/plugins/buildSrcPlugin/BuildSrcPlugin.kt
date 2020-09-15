@@ -1,5 +1,7 @@
-package com.example.pomodoro2.buildSrcPlugin
+package com.example.pomodoro2.plugins.buildSrcPlugin
 
+import com.example.pomodoro2.buildSrcPlugin.GreetingTask
+import com.example.pomodoro2.buildSrcPlugin.GreetingToFileTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.BasePlugin

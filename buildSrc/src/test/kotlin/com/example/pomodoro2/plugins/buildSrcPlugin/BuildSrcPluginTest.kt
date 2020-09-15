@@ -1,5 +1,6 @@
-package com.example.pomodoro2.buildSrcPlugin
+package com.example.pomodoro2.plugins.buildSrcPlugin
 
+import com.example.pomodoro2.buildSrcPlugin.GreetingTask
 import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.ConfigureUtil.configure
@@ -14,7 +15,7 @@ class BuildSrcPluginTest : BasePluginTest() {
     fun init(){
         buildFile.writeText("""
             plugins {
-                id("com.focus617.BuildSrcPlugin")
+                id("com.focus617.plugins.BuildSrcPlugin")
             }
         """.trimIndent())
     }
@@ -22,7 +23,7 @@ class BuildSrcPluginTest : BasePluginTest() {
     @Test
     fun `BuildSrcPlugin_can Add GreetingTask to Project`() {
         val project = ProjectBuilder.builder().build()
-        project.pluginManager.apply("com.focus617.BuildSrcPlugin")
+        project.pluginManager.apply("com.focus617.plugins.BuildSrcPlugin")
         assertTrue(project.tasks.getByName("hello") is GreetingTask)
     }
 
@@ -47,7 +48,7 @@ class BuildSrcPluginTest : BasePluginTest() {
     fun `BuildSrcPlugin_can run Task greeting with extension`() {
         // Configure the extension using a DSL block
         buildFile.appendText("""
-        configure<com.example.pomodoro2.buildSrcPlugin.GreetingPluginExtension> {
+        configure<com.example.pomodoro2.plugins.buildSrcPlugin.GreetingPluginExtension> {
             message = "Hello from GreetingPlugin"
             greeter = "Gradle"
         }

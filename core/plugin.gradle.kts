@@ -1,11 +1,10 @@
 
-apply(plugin = "com.focus617.standAlonePlugin")
-apply(plugin = "com.focus617.BuildSrcPlugin")
-apply(plugin = "com.focus617.UtilsPlugin")
+apply(plugin = "com.focus617.plugins.BuildSrcPlugin")
+apply(plugin = "com.focus617.plugins.UtilsPlugin")
 
 
 // Configure the extension using a DSL block
-configure<com.example.pomodoro2.buildSrcPlugin.GreetingPluginExtension> {
+configure<com.example.pomodoro2.plugins.buildSrcPlugin.GreetingPluginExtension> {
     message = "Hello from GreetingPlugin"
     greeter = "Gradle"
     callFunc = { name -> println("This is extension closure test: $name.") }

@@ -1,4 +1,4 @@
-package com.example.pomodoro2.standAlonePlugin
+package com.example.pomodoro2.plugins.standAlonePlugin
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
