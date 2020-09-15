@@ -23,8 +23,8 @@ class VersioningPlugin : Plugin<Project> {
             // to configure the behavior
 
             logger.quiet("\n>> configure task: $name")
-            versionFile = checkVersionFile()
-            projectVersion = readVersion(versionFile)
+            versionFile = getVersionFile()
+            projectVersion = readVersion()
         }
 
         project.task("printVersion") {
@@ -45,12 +45,12 @@ class VersioningPlugin : Plugin<Project> {
             description = "Makes project a release version."
             finalizedBy("printVersion")
 
-            inputs.property("release", projectVersion!!.release)
+            inputs.property("release", projectVersion!!.prodReady)
             outputs.file(versionFile)
 
             doLast {
                 logger.quiet("\n$name: doLast()")
-                projectVersion?.release = true
+                projectVersion?.prodReady = true
 
                 // How to modify properties file?
                 //ant.propertyfile(file: versionFile) {
