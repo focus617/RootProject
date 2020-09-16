@@ -27,7 +27,7 @@ class UtilsPluginTest: BasePluginTest() {
         assertNotNull(project.tasks.getByName("currentTime") )
     }
 
-/*    @Test
+/*     @Test
     fun `UtilsPlugin_task 'today' show correct date format`(){
         val result = runTask("today")
 
@@ -35,7 +35,7 @@ class UtilsPluginTest: BasePluginTest() {
         assertTrue(result.output.contains("Today is 2020-"))
     }
 
-    @Test
+   @Test
     fun `UtilsPlugin_task 'currentTime' show correct time format`(){
         val result = runTask("currentTime")
 

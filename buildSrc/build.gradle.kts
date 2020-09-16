@@ -1,4 +1,4 @@
-//第三方插件
+
 plugins {
 
     `kotlin-dsl`
@@ -29,21 +29,24 @@ dependencies {
     implementation(kotlin("reflect"))
     implementation(gradleKotlinDsl())
 
-    testImplementation(gradleTestKit())
     // Use JUnit test framework
     testImplementation("junit:junit:4.13")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.3.72")
     testImplementation("org.jetbrains.kotlin", "kotlin-test-junit", "1.3.72")
+    testImplementation(gradleTestKit())
 }
 
 //指定Jar中央仓库
 repositories {
-    // 阿里云的国内镜像仓库
-    maven(url="http://maven.aliyun.com/nexus/content/groups/public/")
-
+    maven {
+        url = uri("https://repo.gradle.org/gradle/libs")
+    }
     // Use jcenter for resolving dependencies.
     jcenter()
-    mavenLocal()
+
+    // 阿里云的国内镜像仓库
+    //maven(url="http://maven.aliyun.com/nexus/content/groups/public/")
+    //mavenLocal()
     // You can declare any Maven/Ivy/file repository here.
 
 }
@@ -72,6 +75,11 @@ gradlePlugin {
 }
 
 publishing {
+    publications.create<MavenPublication>("mavenJava") {
+        artifactId = project.name
+        from(components["java"])
+    }
+
     repositories {
         maven {
             url = uri("$buildDir/repository")
