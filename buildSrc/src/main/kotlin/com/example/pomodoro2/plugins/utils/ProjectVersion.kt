@@ -3,11 +3,12 @@ package com.example.pomodoro2.plugins.utils
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.extra
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
+import java.nio.file.Path
 import java.util.*
 
 data class ProjectVersion(
@@ -21,100 +22,36 @@ data class ProjectVersion(
 
 }
 
-/**
- * 将版本信息存储在外部文件中,并配置构建脚本来读取它
- */
-open class LoadVersionTask : DefaultTask() {
-    @Input
-    var property: String = "versionFile"
+data class VersionFile(private val fileName: Path) {
 
-    @InputFile
-    private lateinit var versionFile: File
-    fun getVersionFile() = versionFile
+    private val file: File = fileName.toFile()
+    private val props = Properties()
 
     init {
-        group = "versioning"
-        description = "Retrieve the project version for property file."
-
-        logger.quiet("\n>> configure task: $name")
-        checkVersionFile()
-//        if (checkVersionFile())
-//            project.version = readVersion()
-    }
-
-    private fun checkVersionFile(): Boolean {
-
-        logger.quiet("$name: retrieve version file name from property:  '$property'")
-        val versionFileName = project.extra[property].toString()
-
-        if (versionFileName == "") {
+        if (!file.exists()) {
             throw GradleException(
-                "Required version extension doesn't exist: ${project.extra[property]}"
+                "Required version file doesn't exist:" + file.canonicalPath
             )
         }
-        versionFile = project.file(versionFileName)
-        if (!versionFile.exists()) {
-            throw GradleException(
-                "Required version file doesn't exist:" + versionFile.canonicalPath
-            )
-        }
-        logger.quiet("$name: version file '$versionFileName' exist.")
-        return true
+        props.load(file.inputStream())
     }
 
-    fun readVersion(): ProjectVersion {
-        if (!versionFile.exists()) {
-            throw GradleException(
-                "Required version file does nto exist:" +
-                        versionFile.canonicalPath
-            )
-        } else {
-            val versionProps = Properties()
-            versionProps.load(versionFile.inputStream())
+    fun getVersionFile() = file
 
-            return ProjectVersion(
-                versionProps.getProperty("major").toInt(),
-                versionProps.getProperty("minor").toInt(),
-                versionProps.getProperty("release")!!.toBoolean()
-            )
-        }
+    fun getVersion(): ProjectVersion {
+        return ProjectVersion(
+            props.getProperty("major").toInt(),
+            props.getProperty("minor").toInt(),
+            props.getProperty("release")!!.toBoolean()
+        )
     }
 
+    fun updateVersion(version: ProjectVersion) {
+        props.setProperty("major", version.major.toString())
+        props.setProperty("minor", version.minor.toString())
+        props.setProperty("release", version.prodReady.toString())
 
-    @TaskAction
-    fun loadVersion() {
-        logger.quiet("\n$name: loadVersion()")
-        if (checkVersionFile())
-            project.version = readVersion()
-        logger.quiet("Retrieved version is '${project.version}'")
-    }
-}
-
-
-open class ReleaseVersionTask : DefaultTask() {
-    @Input
-    var release: Boolean = false
-
-    @OutputFile
-    lateinit var destFile: File
-
-    init {
-        group = "versioning"
-        description = "Makes project a release version."
+        props.store(FileOutputStream(file), "")
     }
 
-    @TaskAction
-    fun start()
-    {
-        with(project.version as ProjectVersion){
-            prodReady = true
-        }
-
-        // TODO: check how to enable ant.propertyfile()
-        /*
-        ant.propertyfile(file: destFile) {
-            entry(key: "release", type: "string", operation: "=", value: "true")
-        }
-        */
-    }
 }

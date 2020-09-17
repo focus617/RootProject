@@ -30,7 +30,7 @@ class VersioningPlugin : Plugin<Project> {
         val extension =
             project.extensions.create<VersioningPluginExtension>(EXTENSION_NAME)
 
-        lateinit var versionFile: File
+        lateinit var versionFile: VersionFile
 
         // actual task
         project.task<LoadVersionTask>("loadVersion") {
@@ -56,6 +56,9 @@ class VersioningPlugin : Plugin<Project> {
             finalizedBy("printVersion")
             release = (project.version as ProjectVersion).prodReady
             destFile = versionFile
+        }
+
+        project.task<GitVersionTask>("getVersionFromGitTag") {
         }
     }
 

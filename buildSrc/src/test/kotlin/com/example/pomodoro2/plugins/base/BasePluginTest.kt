@@ -61,8 +61,8 @@ class BuildLogicFunctionalTest : BasePluginTest() {
 
     @Test
     fun `BasePlugin_Test basic task functionality`(){
-//        val result = runTask("helloWorld")
-//        assertEquals(TaskOutcome.SUCCESS, result.task(":helloWorld")?.outcome)
-//        assertTrue(result.output.contains("Hello world!"))
+        //val result = runTask("helloWorld")
+        //assertEquals(TaskOutcome.SUCCESS, result.task(":helloWorld")?.outcome)
+        //assertTrue(result.output.contains("Hello world!"))
     }
 }
