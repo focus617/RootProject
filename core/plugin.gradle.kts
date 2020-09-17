@@ -2,6 +2,7 @@
 apply(plugin = "com.focus617.plugins.BuildSrcPlugin")
 apply(plugin = "com.focus617.plugins.UtilsPlugin")
 apply(plugin = "com.focus617.plugins.VersioningPlugin")
+apply(plugin = "com.focus617.plugins.GitPlugin")
 
 // Configure the extension using a DSL block
 configure<com.example.pomodoro2.plugins.buildSrcPlugin.GreetingPluginExtension> {

@@ -67,9 +67,6 @@ class VersioningPlugin : Plugin<Project> {
             }
 
         }
-
-        project.task<GitVersionTask>("getVersionFromGitTag") {
-        }
     }
 
 
