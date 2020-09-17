@@ -25,9 +25,16 @@ kotlinDslPluginOptions {
 //设置项目的依赖库
 dependencies {
     implementation(gradleApi())
+    implementation(kotlin("stdlib"))
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
     implementation(gradleKotlinDsl())
+
+    // Git
+    implementation("org.eclipse.jgit:org.eclipse.jgit:5.6.1.202002131546-r")
+    implementation("com.jcraft:jsch.agentproxy.jsch:0.0.9")
+    implementation("com.jcraft:jsch.agentproxy.usocket-jna:0.0.9")
+    implementation("com.jcraft:jsch.agentproxy.sshagent:0.0.9")
 
     // Use JUnit test framework
     testImplementation("junit:junit:4.13")

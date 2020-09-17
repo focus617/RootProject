@@ -44,7 +44,6 @@ class VersioningPlugin : Plugin<Project> {
             //dependsOn("loadVersion")
 
             doLast {
-                logger.quiet("\n$name: doLast()")
                 val projectVersion = project.version as ProjectVersion
                 logger.quiet("Version: $projectVersion")
             }
@@ -54,6 +53,19 @@ class VersioningPlugin : Plugin<Project> {
             finalizedBy("printVersion")
             release = (project.version as ProjectVersion).prodReady
             destFile = versionFile
+        }
+
+        project.task("createNewMinorRelease"){
+            group = "versioning"
+            description = "Update project release with increased minor number."
+            finalizedBy("printVersion")
+
+            doLast{
+                val version = project.version as ProjectVersion
+                version.newMinorRelease()
+                versionFile.updateVersion(version)
+            }
+
         }
 
         project.task<GitVersionTask>("getVersionFromGitTag") {

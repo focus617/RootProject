@@ -25,6 +25,11 @@ data class ProjectVersion(
             throw InvalidMajorMinorVersion(version)
         }
     }
+
+    fun newMinorRelease(): ProjectVersion{
+        this.minor += 1
+        return this
+    }
 }
 
 

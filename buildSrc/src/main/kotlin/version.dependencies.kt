@@ -51,6 +51,8 @@ object Versions {
     const val slf4j_version = "1.7.30"
     const val log4j_version = "2.13.1"
 
+    // JGit
+    const val jgit_version = "5.6.1.202002131546-r"
 
     // Network & Http
     const val retrofit_version = "2.7.1"
@@ -153,6 +155,8 @@ object Dependencies {
 //    const val log4j_core = "org.apache.logging.log4j:log4j-core:${Versions.log4j_version}"
 //    const val slf4j_over_log4j = "org.apache.logging.log4j:log4j-slf4j-impl:${Versions.log4j_version}"
 
+    // JGit
+    const val jgit = "org.eclipse.jgit:org.eclipse.jgit:${Versions.jgit_version}"
 
     // GSON
     const val google_gson =  "com.google.code.gson:gson:${Versions.google_gson_version}"
