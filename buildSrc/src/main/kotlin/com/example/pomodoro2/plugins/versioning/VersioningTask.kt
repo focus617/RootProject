@@ -1,4 +1,4 @@
-package com.example.pomodoro2.plugins.utils
+package com.example.pomodoro2.plugins.versioning
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
@@ -6,6 +6,8 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.extra
 import java.io.ByteArrayOutputStream
+
+import com.example.pomodoro2.plugins.userInteractor.GradleUserInteractor
 
 
 /**
@@ -19,28 +21,34 @@ open class LoadVersionTask : DefaultTask() {
     private lateinit var versionFile: VersionFile
     fun getVersionFile() = versionFile
 
+    private val userInteractor = GradleUserInteractor(project)
+
     init {
         group = "versioning"
         description = "Retrieve the project version for property file."
 
-        logger.quiet("\n>> configure task: $name")
+        userInteractor.info("\n>> configure task: $name")
         checkVersionFile()
-//        if (checkVersionFile())
-//            project.version = readVersion()
     }
 
     private fun checkVersionFile(): Boolean {
 
-        logger.quiet("$name: retrieve version file name from property:  '$property'")
+        userInteractor.info("$name: retrieve version file name from property:  '$property'")
         val versionFileName = project.extra[property].toString()
 
         if (versionFileName == "") {
-            throw GradleException(
+            val exc = GradleException(
                 "Required version extension doesn't exist: ${project.extra[property]}"
             )
+            userInteractor.error(exc.message?:"")
+            throw exc
         }
-        versionFile = VersionFile(project.file(versionFileName).toPath())
-        logger.quiet("$name: version file '$versionFileName' exist.")
+        try {
+            versionFile = VersionFile(project.file(versionFileName).toPath())
+        } catch (exc: Exception){
+            userInteractor.error(exc.message ?: "")
+            throw exc
+        }
         return true
     }
 
@@ -48,10 +56,10 @@ open class LoadVersionTask : DefaultTask() {
 
     @TaskAction
     fun loadVersion() {
-        logger.quiet("\n$name: loadVersion()")
+        userInteractor.info("\n$name: loadVersion()")
         if (checkVersionFile())
             project.version = readVersion()
-        logger.quiet("Retrieved version is '${project.version}'")
+        userInteractor.info("Retrieved version is '${project.version}'")
     }
 }
 
@@ -59,8 +67,11 @@ open class LoadVersionTask : DefaultTask() {
 open class ReleaseVersionTask : DefaultTask() {
     @Input
     var release: Boolean = false
+
     @Input
     var destFile: VersionFile? = null
+
+    private val userInteractor = GradleUserInteractor(project)
 
     init {
         group = "versioning"
@@ -68,9 +79,8 @@ open class ReleaseVersionTask : DefaultTask() {
     }
 
     @TaskAction
-    fun start()
-    {
-        with(project.version as ProjectVersion){
+    fun start() {
+        with(project.version as ProjectVersion) {
             prodReady = true
         }
 
@@ -80,15 +90,17 @@ open class ReleaseVersionTask : DefaultTask() {
             entry(key: "release", type: "string", operation: "=", value: "true")
         }
         */
-        if(destFile == null) {
+        if (destFile == null) {
             val property = "versionFile"
-            logger.quiet("$name: retrieve version file name from property: '$property'")
+            userInteractor.info("$name: retrieve version file name from property: '$property'")
             val versionFileName = project.extra[property].toString()
 
             if (versionFileName == "") {
-                throw GradleException(
+                val exc = GradleException(
                     "Required version extension doesn't exist: ${project.extra[property]}"
                 )
+                userInteractor.error(exc.message?:"")
+                throw exc
             }
             destFile = VersionFile(project.file(versionFileName).toPath())
         }
@@ -101,6 +113,8 @@ open class ReleaseVersionTask : DefaultTask() {
 
 
 open class GitVersionTask : DefaultTask() {
+    private val userInteractor = GradleUserInteractor(project)
+
     init {
         group = "versioning"
         description = "Retrieve App version from Git tag."
@@ -133,10 +147,9 @@ open class GitVersionTask : DefaultTask() {
     }
 
     @TaskAction
-    fun start()
-    {
-        logger.quiet("VersionName from Git tag: ${getGitTag()}")
+    fun start() {
+        userInteractor.info("VersionName from Git tag: ${getGitTag()}")
 
-        logger.quiet("VersionCode from Git tag: ${getGitTagNumber()}")
+        userInteractor.info("VersionCode from Git tag: ${getGitTagNumber()}")
     }
 }

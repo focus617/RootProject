@@ -1,13 +1,11 @@
-package com.example.pomodoro2.plugins.utils
+package com.example.pomodoro2.plugins.versioning
 
-import com.example.pomodoro2.plugins.buildSrcPlugin.GreetingPluginExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.task
-import java.io.File
 
 // A custom plugin extension
 const val EXTENSION_NAME = "ProjectVersion"
