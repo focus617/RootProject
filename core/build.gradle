@@ -64,8 +64,11 @@ dependencies {
 version = '0.1-SNAPSHOT'
 
 //设置 JDK 版本
-sourceCompatibility = "7"
-targetCompatibility = "7"
+//sourceCompatibility = "7"
+//targetCompatibility = "7"
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
 
 application {
     mainClassName = 'ToDoApp'
@@ -86,8 +89,8 @@ compileTestKotlin {
 //test ant
 ant.echo("Hello, testing ant.")
 
-// Applying the Java precompiled script plugin in buildSrc
-apply plugin: 'java-library-convention'
+// Test: applying the Java precompiled script plugin in buildSrc
+//apply plugin: 'java-library-convention'
 
 
 // Below part is used for testing plug-in in buildSrc

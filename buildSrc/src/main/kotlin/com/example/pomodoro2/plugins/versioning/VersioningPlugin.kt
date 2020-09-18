@@ -1,11 +1,19 @@
-package com.example.pomodoro2.plugins.utils
+package com.example.pomodoro2.plugins.versioning
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.task
-import java.io.File
+
+// A custom plugin extension
+const val EXTENSION_NAME = "ProjectVersion"
+
+open class VersioningPluginExtension {
+    var versionFile: String? = null
+    var callFunc: (String)->Unit = {}
+}
 
 class VersioningPlugin : Plugin<Project> {
 
@@ -13,7 +21,14 @@ class VersioningPlugin : Plugin<Project> {
         // separate capabilities from conventions
         project.plugins.apply(BasePlugin::class)
 
-        lateinit var versionFile: File
+        /**
+         * The extension object is added to the project with the name [EXTENSION_NAME],
+         * which can be configured in build.gradle
+         */
+        val extension =
+            project.extensions.create<VersioningPluginExtension>(EXTENSION_NAME)
+
+        lateinit var versionFile: VersionFile
 
         // actual task
         project.task<LoadVersionTask>("loadVersion") {
@@ -29,7 +44,6 @@ class VersioningPlugin : Plugin<Project> {
             //dependsOn("loadVersion")
 
             doLast {
-                logger.quiet("\n$name: doLast()")
                 val projectVersion = project.version as ProjectVersion
                 logger.quiet("Version: $projectVersion")
             }
@@ -39,6 +53,19 @@ class VersioningPlugin : Plugin<Project> {
             finalizedBy("printVersion")
             release = (project.version as ProjectVersion).prodReady
             destFile = versionFile
+        }
+
+        project.task("createNewMinorRelease"){
+            group = "versioning"
+            description = "Update project release with increased minor number."
+            finalizedBy("printVersion")
+
+            doLast{
+                val version = project.version as ProjectVersion
+                version.newMinorRelease()
+                versionFile.updateVersion(version)
+            }
+
         }
     }
 

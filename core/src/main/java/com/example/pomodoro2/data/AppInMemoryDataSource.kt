@@ -1,14 +1,14 @@
 package com.example.pomodoro2.data
 
 import com.example.pomodoro2.platform.data.InMemoryDataSource
-import com.example.pomodoro2.domain.model.Activity
+import com.example.pomodoro2.domain.model.Action
 import com.example.pomodoro2.domain.model.Task
 
 class AppInMemoryDataSource :
     InMemoryDataSource {
 
     private var _selectedTask : Task = Task.DefaultTask
-    private var _selectedActivity : Activity? = null
+    private var _selectedAction : Action? = null
 
     override fun setSelectedTask(task: Task) {
         _selectedTask = task
@@ -17,10 +17,10 @@ class AppInMemoryDataSource :
     override fun getSelectedTask() = _selectedTask
 
 
-    override fun setSelectedActivity(activity: Activity) {
-        _selectedActivity = activity
+    override fun setSelectedActivity(action: Action) {
+        _selectedAction = action
     }
 
-    override fun getSelectedActivity(): Activity? = _selectedActivity
+    override fun getSelectedActivity(): Action? = _selectedAction
 
 }

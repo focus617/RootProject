@@ -1,12 +1,9 @@
-package com.example.pomodoro2.plugins.buildSrcPlugin
+package com.example.pomodoro2.plugins.base
 
-import org.gradle.api.Project
-import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -46,5 +43,26 @@ abstract class BasePluginTest {
             .withArguments(task, "--stacktrace")
             .withPluginClasspath()
             .buildAndFail()
+    }
+}
+
+class BuildLogicFunctionalTest : BasePluginTest() {
+
+    @Before
+    fun init(){
+        buildFile.writeText("""
+            tasks.register("helloWorld") {
+                doLast {
+                    println("Hello world!")
+                }
+            }
+        """.trimIndent())
+    }
+
+    @Test
+    fun `BasePlugin_Test basic task functionality`(){
+        //val result = runTask("helloWorld")
+        //assertEquals(TaskOutcome.SUCCESS, result.task(":helloWorld")?.outcome)
+        //assertTrue(result.output.contains("Hello world!"))
     }
 }

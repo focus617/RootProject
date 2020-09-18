@@ -13,7 +13,7 @@ import androidx.room.RoomDatabase
  * so you can reuse it.
  */
 @Database(
-    entities = [TaskEntity::class, ActivityEntity::class],
+    entities = [TaskEntity::class, ActionEntity::class],
     version = 1,
     exportSchema = false
 )
@@ -23,7 +23,7 @@ abstract class AppDatabase : RoomDatabase() {
      * Connects the database to the DAO.
      */
     abstract val taskDao: TaskDao
-    abstract val activityDao: ActivityDao
+    abstract val actionDao: ActionDao
 
     /**
      * Define a companion object, this allows us to add functions on the Entities class.
