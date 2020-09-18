@@ -1,8 +1,8 @@
 package com.example.pomodoro2.framework.extension
 
-import com.example.pomodoro2.domain.model.Activity
+import com.example.pomodoro2.domain.model.Action
 import com.example.pomodoro2.domain.model.Task
-import com.example.pomodoro2.features.data.database.ActivityEntity
+import com.example.pomodoro2.features.data.database.ActionEntity
 import com.example.pomodoro2.features.data.database.TaskEntity
 
 /**
@@ -21,8 +21,8 @@ fun Task.asDatabaseEntity(): TaskEntity {
         )
 }
 
-fun Activity.asDatabaseEntity(): ActivityEntity {
-    return ActivityEntity(
+fun Action.asDatabaseEntity(): ActionEntity {
+    return ActionEntity(
             id = this.id,
             title = this.title,
             focusDuration = this.focusDuration,

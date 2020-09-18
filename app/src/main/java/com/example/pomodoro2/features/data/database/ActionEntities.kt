@@ -3,14 +3,14 @@ package com.example.pomodoro2.features.data.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.pomodoro2.domain.model.Activity
+import com.example.pomodoro2.domain.model.Action
 
 /**
  * DatabaseTask represents a task entity in the database.
  * 表示活动的数据类，用来存储任务执行的各项活动，并提供给ActivitiesFragment
  */
-@Entity(tableName = "ACTIVITY_TABLE")
-data class ActivityEntity(
+@Entity(tableName = "ACTION_TABLE")
+data class ActionEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0L,
 
@@ -41,9 +41,9 @@ data class ActivityEntity(
 /**
  * Map DatabaseVideos to domain entities
  */
-fun List<ActivityEntity>.asDomainModel(): List<Activity> {
+fun List<ActionEntity>.asDomainModel(): List<Action> {
     return map {
-        Activity(
+        Action(
             id = it.id,
             title = it.title,
             focusDuration = it.focusDuration,

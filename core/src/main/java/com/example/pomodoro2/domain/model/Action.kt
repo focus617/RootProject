@@ -6,7 +6,7 @@ import com.example.pomodoro2.platform.domain.BaseEntity
  * Data Class represents activity to finish task.
  * 表示活动的数据类，代表任务执行的各项活动，并提供给ActivitiesFragment
  */
-data class Activity(
+data class Action(
     var id: Long = 0L,
     /* 如果希望与成员变量的名称不同，请通过name指定列的名称。*/
     var title: String,

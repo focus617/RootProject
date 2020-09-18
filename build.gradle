@@ -9,7 +9,7 @@ buildscript {
     }
     dependencies {
         classpath Dependencies.gradle_tools
-        classpath Dependencies.kotlin_plugin
+        classpath Dependencies.kotlin_gradle_plugin
         classpath Dependencies.nav_saft_arges
         classpath Dependencies.hilt_gradle_plugin
 

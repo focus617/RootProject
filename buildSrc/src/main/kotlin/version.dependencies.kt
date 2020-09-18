@@ -91,7 +91,7 @@ object Versions {
 object Dependencies {
     // classpath
     const val gradle_tools = "com.android.tools.build:gradle:${Versions.gradle_tools}"
-    const val kotlin_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin_version}"
+    const val kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin_version}"
     const val nav_saft_arges = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.nav_saft_args_version}"
     const val hilt_gradle_plugin = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt_version}"
 

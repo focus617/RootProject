@@ -1,6 +1,6 @@
 package com.example.pomodoro2.platform.data
 
-import com.example.pomodoro2.domain.model.Activity
+import com.example.pomodoro2.domain.model.Action
 import com.example.pomodoro2.domain.model.Task
 
 interface InMemoryDataSource {
@@ -9,8 +9,8 @@ interface InMemoryDataSource {
 
     fun getSelectedTask(): Task
 
-    fun setSelectedActivity(activity: Activity)
+    fun setSelectedActivity(action: Action)
 
-    fun getSelectedActivity(): Activity?
+    fun getSelectedActivity(): Action?
 
 }
