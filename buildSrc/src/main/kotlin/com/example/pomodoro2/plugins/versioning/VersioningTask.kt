@@ -36,7 +36,7 @@ open class LoadVersionTask : DefaultTask() {
         userInteractor.info("$name: retrieve version file name from property:  '$property'")
         val versionFileName = project.extra[property].toString()
 
-        if (versionFileName == "") {
+        if (versionFileName.isEmpty()) {
             val exc = GradleException(
                 "Required version extension doesn't exist: ${project.extra[property]}"
             )
@@ -95,7 +95,7 @@ open class ReleaseVersionTask : DefaultTask() {
             userInteractor.info("$name: retrieve version file name from property: '$property'")
             val versionFileName = project.extra[property].toString()
 
-            if (versionFileName == "") {
+            if (versionFileName.isEmpty()) {
                 val exc = GradleException(
                     "Required version extension doesn't exist: ${project.extra[property]}"
                 )

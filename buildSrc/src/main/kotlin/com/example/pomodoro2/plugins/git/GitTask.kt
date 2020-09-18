@@ -1,13 +1,9 @@
 package com.example.pomodoro2.plugins.git
 
-import org.gradle.api.DefaultTask
-import org.gradle.api.GradleException
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.extra
-import java.io.ByteArrayOutputStream
-
 import com.example.pomodoro2.plugins.userInteractor.GradleUserInteractor
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.TaskAction
+import java.io.ByteArrayOutputStream
 
 
 /**
@@ -47,18 +43,9 @@ open class GitVersionTask : DefaultTask() {
         return stdout.toString().split("\n").size
     }
 
-    fun openGitRepository(): GitRepository {
-        val repo = GitRepository.openExisting(
-            project.projectDir,
-            GitCredentialsProvider(project, userInteractor))
-        userInteractor.info("Found git repository at: ${repo.directory}")
-        return repo
-    }
-
     @TaskAction
     fun start() {
         userInteractor.info("VersionName from Git tag: ${getGitTag()}")
         userInteractor.info("VersionCode from Git tag: ${getGitTagNumber()}")
-        openGitRepository()
     }
 }

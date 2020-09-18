@@ -10,8 +10,9 @@ import com.example.pomodoro2.plugins.userInteractor.UserInteractor
 
 
 class GitCredentialsProvider(
-        private val project: Project,
-        private val userInteractor: UserInteractor) : CredentialsProvider() {
+    private val project: Project,
+    private val userInteractor: UserInteractor
+) : CredentialsProvider() {
 
     private val login by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { resolveLogin() }
     private val password by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { resolvePassword() }
@@ -20,7 +21,7 @@ class GitCredentialsProvider(
         return true
     }
 
-    fun resolveLogin(): String {
+    private fun resolveLogin(): String {
         project.logger.lifecycle("Looking for gradle/system property ${PluginProperties.GIT_LOGIN}")
         if (project.hasProperty(PluginProperties.GIT_LOGIN)) {
             val propertyLogin = project.property(PluginProperties.GIT_LOGIN).toString()
@@ -35,7 +36,7 @@ class GitCredentialsProvider(
         return userInteractor.promptQuestion("Please, enter your login: ")
     }
 
-    fun resolvePassword(): CharArray {
+    private fun resolvePassword(): CharArray {
         project.logger.lifecycle("Looking for gradle/system property ${PluginProperties.GIT_PASSWORD}")
         if (project.hasProperty(PluginProperties.GIT_PASSWORD)) {
             val propertyPassword = project.property(PluginProperties.GIT_PASSWORD).toString()
@@ -62,7 +63,10 @@ class GitCredentialsProvider(
                 credentialItem.value = password
                 continue
             }
-            throw UnsupportedCredentialItem(uri, credentialItem.javaClass.name + ":" + credentialItem.promptText)
+            throw UnsupportedCredentialItem(
+                uri,
+                credentialItem.javaClass.name + ":" + credentialItem.promptText
+            )
         }
         return true
     }

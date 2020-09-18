@@ -19,17 +19,21 @@ import java.io.File
 import java.io.FileInputStream
 
 class GitRepositoryNotFound(searchPath: File) :
-        Exception("Can not find git repository with search path: $searchPath")
+    Exception("Can not find git repository with search path: $searchPath")
 
 class GitRepository(
-        private val credentialsProvider: GitCredentialsProvider,
-        private val jGit: Git) : AutoCloseable {
+    private val credentialsProvider: GitCredentialsProvider,
+    private val jGit: Git
+) : AutoCloseable {
 
     companion object {
-        fun openExisting(pathUnderGitControl: File, credentialsProvider: GitCredentialsProvider): GitRepository {
+        fun openExisting(
+            pathUnderGitControl: File,
+            credentialsProvider: GitCredentialsProvider
+        ): GitRepository {
             val repoBuilder = FileRepositoryBuilder()
-                    .readEnvironment()
-                    .findGitDir(pathUnderGitControl)
+                .readEnvironment()
+                .findGitDir(pathUnderGitControl)
 
             if (repoBuilder.gitDir != null || repoBuilder.workTree != null) {
                 val jGit = Git(repoBuilder.build())
@@ -117,6 +121,17 @@ class GitRepository(
         }
     }
 
+    fun createTag(name: String, comment: String): Ref {
+
+        logger.lifecycle("Creating tag $name with comment $comment")
+
+        return jGit
+            .tag()
+            .setAnnotated(true)
+            .setName(name)
+            .setMessage(comment)
+            .call()
+    }
 
     fun fetchTags() {
         logger.lifecycle("Fetching tags")
@@ -136,111 +151,99 @@ class GitRepository(
     }
 
 
-    fun listTags(): List<String> {
-        return jGit
-                .tagList()
-                .call()
-                .mapNotNull { it.name }
-                .map { it.replace("refs/tags/", "") }
-    }
-
-
-    fun getCurrentBranch(): String = jGit.repository.branch
-
-    fun checkoutLocalBranch(branch: String) {
-        logger.lifecycle("Checkout local branch $branch")
-        jGit.checkout()
-                .setName(branch).call()
-    }
-
-    fun checkoutRemoteBranch(branch: String) {
-        logger.lifecycle("Checkout remote branch $branch")
-        jGit.checkout()
-                .setCreateBranch(true)
-                .setName(branch)
-                .setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.SET_UPSTREAM)
-                .setStartPoint("origin/$branch")
-                .call()
-
-    }
-
-
     fun pushTag(tagRef: Ref) {
-
         logger.lifecycle("Pushing tag $tagRef to remote repository")
-
         try {
-
             jGit.push()
-                    .apply { setupTransport(this) }
-                    .add(tagRef)
-                    .call()
+                .apply { setupTransport(this) }
+                .add(tagRef)
+                .call()
         } catch (exc: Exception) {
-            logger.lifecycle("Failed to push tag $tagRef to remote repository.\n" +
-                    "Release tag is created locally, but not propagated to remote repository.\n" +
-                    "You have to manually push changes to remote repository.\n" +
-                    "You can use 'git push --tags'\n" +
-                    "Push failed due to: ${exc.message}\n" +
-                    "You can run gradle with --debug logging level to see details.")
+            logger.lifecycle(
+                "Failed to push tag $tagRef to remote repository.\n" +
+                        "Release tag is created locally, but not propagated to remote repository.\n" +
+                        "You have to manually push changes to remote repository.\n" +
+                        "You can use 'git push --tags'\n" +
+                        "Push failed due to: ${exc.message}\n" +
+                        "You can run gradle with --debug logging level to see details."
+            )
             logger.log(LogLevel.DEBUG, exc.message, exc)
         }
-    }
-
-    fun deleteBranch(name: String) {
-        logger.lifecycle("Deleting branch $name")
-        jGit
-                .branchDelete()
-                .setBranchNames(name)
-                .setForce(true)
-                .call()
     }
 
     fun checkoutTag(tag: String) {
         logger.lifecycle("Checkout $tag tag")
         jGit.checkout()
-                .setCreateBranch(true)
-                .setName("tags/$tag")
-                .call()
+            .setCreateBranch(true)
+            .setName("tags/$tag")
+            .call()
     }
 
-    fun createTag(name: String, comment: String): Ref {
-
-        logger.lifecycle("Creating tag $name with comment $comment")
-
+    fun listTags(): List<String> {
         return jGit
-                .tag()
-                .setAnnotated(true)
-                .setName(name)
-                .setMessage(comment)
-                .call()
+            .tagList()
+            .call()
+            .mapNotNull { it.name }
+            .map { it.replace("refs/tags/", "") }
     }
 
-    fun commitFilesInIndex(commitMessage: String) {
-        logger.lifecycle("Committing files.")
 
-        jGit.add().addFilepattern(".")
-                .call()
-        jGit.commit()
-                .setMessage(commitMessage)
-                .call()
 
-    }
 
     fun createBranch(branch: String, checkout: Boolean = false) {
         logger.lifecycle("Creating branch $branch ${if (checkout) "and checkout" else ""}")
         jGit.branchCreate().setName(branch).call()
         if (checkout) {
             jGit
-                    .checkout()
-                    .setName(branch)
-                    .call()
+                .checkout()
+                .setName(branch)
+                .call()
         }
+    }
+
+    fun deleteBranch(name: String) {
+        logger.lifecycle("Deleting branch $name")
+        jGit
+            .branchDelete()
+            .setBranchNames(name)
+            .setForce(true)
+            .call()
+    }
+
+    fun getCurrentBranch(): String = jGit.repository.branch
+
+    fun checkoutLocalBranch(branch: String) {
+        logger.lifecycle("Checkout local branch $branch")
+        jGit.checkout()
+            .setName(branch).call()
+    }
+
+    fun checkoutRemoteBranch(branch: String) {
+        logger.lifecycle("Checkout remote branch $branch")
+        jGit.checkout()
+            .setCreateBranch(true)
+            .setName(branch)
+            .setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.SET_UPSTREAM)
+            .setStartPoint("origin/$branch")
+            .call()
+
+    }
+
+    fun commitFilesInIndex(commitMessage: String) {
+        logger.lifecycle("Committing files.")
+
+        jGit.add().addFilepattern(".")
+            .call()
+        jGit.commit()
+            .setMessage(commitMessage)
+            .call()
+
     }
 
     fun isLocalBranchExists(branch: String): Boolean {
         return jGit.branchList().call()
-                .stream().filter { "refs/heads/$branch" == it.name }
-                .findAny().isPresent
+            .stream().filter { "refs/heads/$branch" == it.name }
+            .findAny().isPresent
     }
 
     fun isUncommittedChangesExist(): Boolean {
