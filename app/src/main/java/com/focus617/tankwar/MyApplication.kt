@@ -1,8 +1,10 @@
 package com.focus617.tankwar
 
 import com.focus617.platform.uicontroller.BaseApplication
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+@HiltAndroidApp
 class MyApplication : BaseApplication() {
 
     /**

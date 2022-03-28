@@ -1,24 +1,29 @@
 package com.focus617.tankwar.ui.game
 
 import android.os.Bundle
-import android.view.*
-import androidx.lifecycle.Observer
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.focus617.platform.uicontroller.BaseFragment
 import com.focus617.tankwar.R
 import com.focus617.tankwar.databinding.FragmentGameBinding
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class GameFragment : BaseFragment() {
+    private lateinit var viewModel: GameViewModel
+
+    @Inject
+    lateinit var scene: IDraw
 
     private var _binding: FragmentGameBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
-    private lateinit var viewModel: GameViewModel
-    val scene: IDraw = MyTestDrawer()
 
     override fun onCreateView(
         inflater: LayoutInflater,

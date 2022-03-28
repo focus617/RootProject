@@ -1,10 +1,12 @@
-package com.focus617.tankwar.ui.game
+package com.focus617.tankwar.di
 
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import com.focus617.tankwar.ui.game.IDraw
+import javax.inject.Inject
 
-class MyTestDrawer : IDraw {
+class MyTestDrawer @Inject constructor() : IDraw {
     private var step: Float = 0F
 
     override fun draw(canvas: Canvas) {

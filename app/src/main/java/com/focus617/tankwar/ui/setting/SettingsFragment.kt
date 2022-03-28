@@ -6,9 +6,10 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.focus617.tankwar.R
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
-
+@AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat() {
 
     private var themePreference: SwitchPreferenceCompat? = null
