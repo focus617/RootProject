@@ -1,4 +1,4 @@
-package com.focus617.tankwar.di
+package com.focus617.tankwar.di.scene
 
 import com.focus617.tankwar.ui.game.IDraw
 import dagger.Binds
@@ -10,5 +10,5 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 abstract class SceneModule {
     @Binds
-    abstract fun bindScene(scene: MyTestDrawer): IDraw
+    abstract fun bindScene(scene: MyTestScene): IDraw
 }

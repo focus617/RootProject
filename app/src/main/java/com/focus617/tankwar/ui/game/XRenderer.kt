@@ -9,7 +9,7 @@ const val SLEEP_INTERVAL = 50L
 
 class XRenderer(
     var surfaceView: SurfaceView,
-    var drawer: IDraw
+    var scene: IDraw
 ) : SurfaceHolder.Callback, Runnable {
 
     init {
@@ -55,8 +55,8 @@ class XRenderer(
             // 初始化画布并设置画布背景
             canvas.drawColor(Color.BLACK)
 
-            //在画布上画一些东西
-            drawer.draw(canvas)
+            //在画布上画出场景
+            scene.draw(canvas)
 
         } catch (e: Exception) {
         } finally {
