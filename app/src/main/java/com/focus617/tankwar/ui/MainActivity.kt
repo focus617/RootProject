@@ -1,4 +1,4 @@
-package com.focus617.tankwar
+package com.focus617.tankwar.ui
 
 import android.os.Bundle
 import android.view.View
@@ -10,6 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
 import com.focus617.platform.uicontroller.BaseActivity
+import com.focus617.tankwar.R
 import com.focus617.tankwar.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
