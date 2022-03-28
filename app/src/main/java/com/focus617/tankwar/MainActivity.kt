@@ -52,7 +52,9 @@ class MainActivity : BaseActivity() {
         // trial: make gameFragment as no_action_bar mode
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.nav_game_view -> binding.appBarMain.appBar.visibility = View.GONE
+                R.id.nav_game_view ->{
+                    binding.appBarMain.appBar.visibility = View.GONE
+                }
                 else -> {
                     binding.appBarMain.appBar.visibility = View.VISIBLE
                 }
