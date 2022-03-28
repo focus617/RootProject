@@ -30,14 +30,14 @@ class GameFragment : BaseFragment() {
         val root: View = binding.root
 
         viewModel = ViewModelProvider(this)[GameViewModel::class.java]
-        viewModel.snackbarText.observe(this.viewLifecycleOwner, Observer { event ->
+        viewModel.snackbarText.observe(this.viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 Snackbar.make(root, it, Snackbar.LENGTH_SHORT).show()
             }
-        })
+        }
         viewModel.showSnackbarMessage(R.string.WelcomeMessage)
 
-        setupXRenderer()
+        initXRenderer()
         return root
     }
 
@@ -46,11 +46,8 @@ class GameFragment : BaseFragment() {
         _binding = null
     }
 
-    private fun setupXRenderer() {
-        val surfaceView = binding.surfaceView
-        renderer = XRenderer(requireContext(), surfaceView)
-
+    private fun initXRenderer() {
+        renderer = XRenderer(binding.surfaceView, MyTestDrawer())
     }
-
 
 }
