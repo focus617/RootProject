@@ -10,4 +10,9 @@
         android:name="com.focus617.tankwar.ui.game.GameFragment"
         android:label="@string/menu_game"/>
 
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.focus617.tankwar.ui.setting.SettingsFragment"
+        android:label="@string/title_settings" />
+
 </navigation>
