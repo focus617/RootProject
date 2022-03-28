@@ -1,21 +1,17 @@
 package com.focus617.tankwar
 
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
-import androidx.navigation.NavController
 import com.focus617.platform.uicontroller.BaseActivity
 import com.focus617.tankwar.databinding.ActivityMainBinding
+import com.google.android.material.navigation.NavigationView
 
 class MainActivity : BaseActivity() {
 
@@ -28,7 +24,6 @@ class MainActivity : BaseActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setNavigation()
     }
 
@@ -52,7 +47,7 @@ class MainActivity : BaseActivity() {
         // trial: make gameFragment as no_action_bar mode
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.nav_game_view ->{
+                R.id.nav_game_view -> {
                     binding.appBarMain.appBar.visibility = View.GONE
                 }
                 else -> {

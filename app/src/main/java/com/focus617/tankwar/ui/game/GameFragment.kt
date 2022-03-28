@@ -18,8 +18,7 @@ class GameFragment : BaseFragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: GameViewModel
-    private lateinit var renderer: XRenderer
-
+    val scene: IDraw = MyTestDrawer()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +46,7 @@ class GameFragment : BaseFragment() {
     }
 
     private fun initXRenderer() {
-        renderer = XRenderer(binding.surfaceView, MyTestDrawer())
+        XRenderer(binding.surfaceView, scene)
     }
 
 }
