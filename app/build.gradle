@@ -51,6 +51,7 @@ android {
 }
 
 dependencies {
+    api project(':myAndroidLibrary')
 
     implementation(Jetpack.ANDROIDX_CORE)
     implementation(Jetpack.APPCOMPAT)
