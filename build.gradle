@@ -15,3 +15,12 @@ plugins {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+task("PrjPropertyList"){
+    doFirst {
+        project.properties.forEach{
+            t,any ->
+                println("$t : $any")
+        }
+    }
+}

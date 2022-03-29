@@ -19,6 +19,7 @@ class MyTestScene @Inject constructor() : IDraw {
             paint.color = Color.RED           //设置画笔颜色
             paint.style = Paint.Style.FILL    //设置填充样式
             paint.strokeWidth = 5F            //设置画笔宽度
+            paint.isAntiAlias = true
             rotate(step, (width / 2).toFloat(), (height / 2).toFloat())
             drawLine(
                 (width / 2).toFloat(),

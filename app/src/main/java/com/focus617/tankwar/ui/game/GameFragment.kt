@@ -1,9 +1,7 @@
 package com.focus617.tankwar.ui.game
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.lifecycle.ViewModelProvider
 import com.focus617.platform.uicontroller.BaseFragment
 import com.focus617.tankwar.R

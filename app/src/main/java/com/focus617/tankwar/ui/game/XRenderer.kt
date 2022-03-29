@@ -63,4 +63,5 @@ class XRenderer(
             surfaceView.holder.unlockCanvasAndPost(canvas)
         }
     }
+
 }
