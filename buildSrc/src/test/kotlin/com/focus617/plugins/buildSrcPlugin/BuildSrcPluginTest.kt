@@ -2,7 +2,7 @@ package com.focus617.plugins.buildSrcPlugin
 
 import com.focus617.plugins.base.BasePluginTest
 import org.gradle.testfixtures.ProjectBuilder
-import org.junit.Assert.*
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 

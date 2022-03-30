@@ -1,12 +1,12 @@
 package com.focus617.tankwar.di.scene
 
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.content.Context
+import android.graphics.*
 import com.focus617.tankwar.ui.game.IDraw
-import javax.inject.Inject
 
-class MyTestScene @Inject constructor() : IDraw {
+class MyTestScene(context: Context) : IDraw {
+
+    private val resource = context.resources
     private var step: Float = 0F
 
     override fun draw(canvas: Canvas) {
@@ -32,5 +32,21 @@ class MyTestScene @Inject constructor() : IDraw {
 
             step += 1F
         }
+    }
+
+    private fun drawBitmap(
+        canvas: Canvas,
+        bitmap: Bitmap,
+        left: Float,
+        top: Float
+    ) {
+        val paint = Paint()
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR);
+        canvas.drawPaint(paint);
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC);
+        paint.isAntiAlias = true;
+        paint.style = Paint.Style.STROKE;
+
+        canvas.drawBitmap(bitmap, left, top, paint)
     }
 }

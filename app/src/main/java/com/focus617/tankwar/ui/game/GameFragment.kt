@@ -1,11 +1,14 @@
 package com.focus617.tankwar.ui.game
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.focus617.platform.uicontroller.BaseFragment
 import com.focus617.tankwar.R
 import com.focus617.tankwar.databinding.FragmentGameBinding
+import com.focus617.tankwar.di.scene.TestScene
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -14,6 +17,7 @@ import javax.inject.Inject
 class GameFragment : BaseFragment() {
     private lateinit var viewModel: GameViewModel
 
+    @TestScene
     @Inject
     lateinit var scene: IDraw
 

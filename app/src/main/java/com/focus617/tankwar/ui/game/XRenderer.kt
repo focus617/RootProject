@@ -2,6 +2,7 @@ package com.focus617.tankwar.ui.game
 
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.PixelFormat
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 
@@ -12,20 +13,38 @@ class XRenderer(
     var scene: IDraw
 ) : SurfaceHolder.Callback, Runnable {
 
+    private var holder: SurfaceHolder? = null
+    private lateinit var canvas: Canvas     // 用于绘图的canvas
+
+    private var thread: Thread? = null      // 刷新子线程
+    private var isDrawing: Boolean = false
+
     init {
-        surfaceView.holder.addCallback(this)
-        surfaceView.run {
+        with(surfaceView) {
             isFocusable = true
             isFocusableInTouchMode = true
             keepScreenOn = true
+
+            // 设置透明背景:
+            // setZOrderOnTop(true) 必须在holder.setFormat方法之前，
+            // 不然png的透明效果不生效
+//            setZOrderOnTop(true)
         }
+
+        // 初始化一个 SurfaceHolder 对象并注册 SurfaceHolder 的回调方法
+        holder = surfaceView.holder
+        holder!!.addCallback(this)
+        holder!!.setFormat(PixelFormat.TRANSLUCENT);
     }
 
-    private var isDrawing: Boolean = false
 
     override fun surfaceCreated(holder: SurfaceHolder) {
+        // 清除未停止的线程
+        thread?.interrupt()
+
+        thread = Thread(this)
         isDrawing = true
-        Thread(this).start()
+        thread!!.start()
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
@@ -33,11 +52,22 @@ class XRenderer(
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         isDrawing = false
+        onDestroy()
+    }
+
+    /**
+     * 防止内存泄漏
+     */
+    private fun onDestroy() {
+        // 当surfaceView销毁时, 停止线程的运行.
+        // 避免surfaceView销毁之后，线程还在运行而报错.
+        thread?.interrupt()
+        thread = null
     }
 
     override fun run() {
         while (isDrawing) {
-            draw()
+            drawView()
             //通过线程休眠以控制刷新速度
             try {
                 Thread.sleep(SLEEP_INTERVAL)
@@ -47,20 +77,24 @@ class XRenderer(
         }
     }
 
-    private lateinit var canvas: Canvas
-    private fun draw() {
-        try {
-            canvas = surfaceView.holder.lockCanvas()
+    private fun drawView() {
+        val surfaceHolder = surfaceView.holder
 
-            // 初始化画布并设置画布背景
-            canvas.drawColor(Color.BLACK)
+        // 锁定画布
+        synchronized(surfaceHolder) {
+            try {
+                canvas = surfaceHolder.lockCanvas()
 
-            //在画布上画出场景
-            scene.draw(canvas)
+                // 初始化画布并设置画布背景
+                canvas.drawColor(Color.BLACK)
 
-        } catch (e: Exception) {
-        } finally {
-            surfaceView.holder.unlockCanvasAndPost(canvas)
+                //在画布上画出场景
+                scene.draw(canvas)
+
+            } catch (e: Exception) {
+            } finally {
+                surfaceHolder.unlockCanvasAndPost(canvas)
+            }
         }
     }
 
