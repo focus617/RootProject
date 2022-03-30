@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import com.focus617.tankwar.scene.base.IDraw
 
 const val SLEEP_INTERVAL = 50L
 

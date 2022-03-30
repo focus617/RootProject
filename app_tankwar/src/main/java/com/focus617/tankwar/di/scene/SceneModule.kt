@@ -1,7 +1,7 @@
 package com.focus617.tankwar.di.scene
 
 import android.content.Context
-import com.focus617.tankwar.ui.game.IDraw
+import com.focus617.tankwar.scene.base.IDraw
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

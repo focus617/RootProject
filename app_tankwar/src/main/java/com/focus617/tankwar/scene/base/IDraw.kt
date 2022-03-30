@@ -1,4 +1,4 @@
-package com.focus617.tankwar.ui.game
+package com.focus617.tankwar.scene.base
 
 import android.graphics.Canvas
 

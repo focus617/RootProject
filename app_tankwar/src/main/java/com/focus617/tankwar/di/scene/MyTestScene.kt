@@ -2,37 +2,25 @@ package com.focus617.tankwar.di.scene
 
 import android.content.Context
 import android.graphics.*
-import com.focus617.tankwar.ui.game.IDraw
+import com.focus617.tankwar.scene.base.IDraw
+import com.focus617.tankwar.scene.base.RootNode
+import com.focus617.tankwar.scene.components.ClockPin
+import com.focus617.tankwar.scene.components.XRect
 
 class MyTestScene(context: Context) : IDraw {
 
     private val resource = context.resources
-    private var step: Float = 0F
+    private val rootNode = RootNode("Scene")
 
-    override fun draw(canvas: Canvas) {
-        val paint = Paint()    // 画笔
-        canvas.run {
-            paint.color = Color.BLUE          //设置画笔颜色
-            drawRect(0F, 0F, 100F, 100F, paint)
-
-            save()
-            paint.color = Color.RED           //设置画笔颜色
-            paint.style = Paint.Style.FILL    //设置填充样式
-            paint.strokeWidth = 5F            //设置画笔宽度
-            paint.isAntiAlias = true
-            rotate(step, (width / 2).toFloat(), (height / 2).toFloat())
-            drawLine(
-                (width / 2).toFloat(),
-                (height / 2).toFloat(),
-                (width / 2).toFloat(),
-                height.toFloat(),
-                paint
-            )
-            restore()
-
-            step += 1F
+    init {
+        with(rootNode) {
+            add(ClockPin("clock"))
+            add(XRect("BlueRect"))
         }
+
     }
+
+    override fun draw(canvas: Canvas) = rootNode.draw(canvas)
 
     private fun drawBitmap(
         canvas: Canvas,
