@@ -6,7 +6,7 @@ import com.focus617.tankwar.R
 import com.focus617.tankwar.scene.base.IDraw
 import com.focus617.tankwar.scene.base.RootNode
 import com.focus617.tankwar.scene.components.ClockPin
-import com.focus617.tankwar.scene.components.XBitmap
+import com.focus617.tankwar.scene.components.Tank
 import com.focus617.tankwar.scene.components.XRect
 
 class MyTestScene(context: Context) : IDraw {
@@ -17,11 +17,9 @@ class MyTestScene(context: Context) : IDraw {
         with(rootNode) {
             add(ClockPin("clock"))
             add(XRect("BlueRect"))
-            add(XBitmap("Tank", context, R.drawable.ic_tank_good))
+            add(Tank("Tank", context))
         }
-
     }
 
     override fun draw(canvas: Canvas) = rootNode.draw(canvas)
-
 }

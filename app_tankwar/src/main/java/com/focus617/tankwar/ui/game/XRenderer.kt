@@ -6,6 +6,7 @@ import android.graphics.PixelFormat
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.focus617.tankwar.scene.base.IDraw
+import timber.log.Timber
 
 const val SLEEP_INTERVAL = 50L
 
@@ -85,6 +86,7 @@ class XRenderer(
         synchronized(surfaceHolder) {
             try {
                 canvas = surfaceHolder.lockCanvas()
+                Timber.d("W:${canvas.width},H:${canvas.height}")
 
                 // 初始化画布并设置画布背景
                 canvas.drawColor(Color.BLACK)

@@ -1,21 +1,30 @@
 package com.focus617.tankwar.scene.base
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
+import android.content.res.Resources
+import android.graphics.*
+import com.focus617.tankwar.scene.GameConfig
 
-abstract class Node(name: String, context: Context) :Leaf(name){
-
-    protected val resource = context.resources
-    protected lateinit var bitmap: Bitmap
+abstract class Node(name: String, context: Context) : Leaf(name) {
 
     // bitmap的参考坐标
     protected var x: Int = 0
     protected var y: Int = 0
 
-    protected val paint = Paint()    // 画笔
+    private val paint = Paint()    // 画笔
+    private val resource: Resources = context.resources
+    private lateinit var bitmap: Bitmap
 
-    abstract override fun draw(canvas: Canvas)
+    protected fun initBitmap(bitmapId: Int) {
+        bitmap = BitmapFactory.decodeResource(resource, bitmapId)
+    }
+
+    override fun draw(canvas: Canvas) {
+        with(canvas) {
+            val srcRect = Rect(0, 0, bitmap.width, bitmap.height)
+            val destRect = Rect(x, y, x + GameConfig.BLOCK_WIDTH, y + GameConfig.BLOCK_WIDTH)
+            drawBitmap(bitmap, srcRect, destRect, paint)
+        }
+    }
 
 }
