@@ -1,4 +1,4 @@
-package com.example.pomodoro2.platform.designpattern
+package com.focus617.mylib.designpattern
 
 import com.focus617.mylib.logging.WithLogging
 
@@ -64,7 +64,7 @@ class Invoker {
         handlers.remove(eventName)
     }
 
-    private fun lookupHandlerBy(eventName: String):Command? = handlers.get(eventName)
+    private fun lookupHandlerBy(eventName: String): Command? = handlers.get(eventName)
 
     fun executeCommand(eventName: String) {
         lookupHandlerBy(eventName)?.execute()

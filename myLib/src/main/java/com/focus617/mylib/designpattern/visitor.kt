@@ -1,4 +1,4 @@
-package com.example.pomodoro2.platform.designpattern
+package com.focus617.mylib.designpattern
 
 import com.focus617.mylib.logging.WithLogging
 
@@ -52,7 +52,7 @@ abstract class Element {
 /**
  * @description 具体元素A
  */
-class ConcreteElementA:Element() {
+class ConcreteElementA: Element() {
     override fun accept(visitor: Visitor) {
         visitor.visitorConcreteElementA(this)
     }

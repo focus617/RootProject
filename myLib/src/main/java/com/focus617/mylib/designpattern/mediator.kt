@@ -1,4 +1,4 @@
-package com.example.pomodoro2.platform.designpattern
+package com.focus617.mylib.designpattern
 
 import com.focus617.mylib.logging.WithLogging
 
