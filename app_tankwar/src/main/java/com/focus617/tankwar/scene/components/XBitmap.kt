@@ -1,23 +1,21 @@
 package com.focus617.tankwar.scene.components
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Rect
 import com.focus617.tankwar.scene.base.Node
 
 class XBitmap(
     name: String,
     context: Context,
     private val bitmapId: Int
-) : Node(name) {
-
-    private val resource = context.resources
-    private val paint = Paint()    // 画笔
-    private lateinit var bitmap: Bitmap
-    private var x: Int = 0
-    private var y: Int = 1600
+) : Node(name, context) {
 
     init {
         initBitmap()
+        x = 0
+        y = 1600
     }
 
     private fun initBitmap() {
@@ -32,14 +30,18 @@ class XBitmap(
 //            isAntiAlias = true
         }
 
-        with(canvas){
+        with(canvas) {
 
             val srcRect = Rect(0, 0, bitmap.width, bitmap.height)
-            val destRect = Rect(x, y, x+TANK_UNIT, y+TANK_UNIT)
+            val destRect = Rect(x, y, x + TANK_UNIT, y + TANK_UNIT)
             drawBitmap(bitmap, srcRect, destRect, paint)
         }
 
-        y -= TANK_UNIT/10
+        y -= TANK_UNIT / 10
+        if (y <= 0) {
+            y = canvas.height
+            x += TANK_UNIT
+        }
     }
 
     companion object {

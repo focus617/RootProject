@@ -29,13 +29,13 @@ class XRenderer(
             // 设置透明背景:
             // setZOrderOnTop(true) 必须在holder.setFormat方法之前，
             // 不然png的透明效果不生效
-//            setZOrderOnTop(true)
+            setZOrderOnTop(false)
         }
 
         // 初始化一个 SurfaceHolder 对象并注册 SurfaceHolder 的回调方法
         holder = surfaceView.holder
         holder!!.addCallback(this)
-        holder!!.setFormat(PixelFormat.TRANSLUCENT);
+        holder!!.setFormat(PixelFormat.TRANSLUCENT)
     }
 
 

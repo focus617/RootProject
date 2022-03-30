@@ -9,7 +9,7 @@ import android.graphics.Canvas
 /**
  * @description 叶子节点对象，叶子节点没有子节点
  */
-abstract class Node(var name: String) : IDraw {
+abstract class Leaf(var name: String) : IDraw {
 
     abstract override fun draw(canvas: Canvas)
 
@@ -20,7 +20,7 @@ abstract class Node(var name: String) : IDraw {
  */
 abstract class Composite(var name: String) : IDraw {
 
-    private val children = arrayListOf<IDraw>()
+    protected val children = arrayListOf<IDraw>()
 
     // 添加部件
     open fun add(component: IDraw) {
@@ -35,7 +35,8 @@ abstract class Composite(var name: String) : IDraw {
     abstract fun drawComposite(canvas: Canvas)
 
     override fun draw(canvas: Canvas) {
-        drawComposite(canvas)
+        this.drawComposite(canvas)
+
         for (child in children) {//遍历其孩子
             child.draw(canvas)
         }

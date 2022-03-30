@@ -3,9 +3,9 @@ package com.focus617.tankwar.scene.components
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import com.focus617.tankwar.scene.base.Node
+import com.focus617.tankwar.scene.base.Leaf
 
-class XRect(name: String) : Node(name) {
+class XRect(name: String) : Leaf(name) {
 
     private val paint = Paint()    // 画笔
     private var x: Float = 0F

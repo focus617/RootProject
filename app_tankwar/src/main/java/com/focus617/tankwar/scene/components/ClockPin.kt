@@ -1,11 +1,11 @@
-package com.focus617.tankwar.scene.components;
+package com.focus617.tankwar.scene.components
 
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import com.focus617.tankwar.scene.base.Node
+import com.focus617.tankwar.scene.base.Leaf
 
-class ClockPin(name: String) : Node(name) {
+class ClockPin(name: String) : Leaf(name) {
 
     private val paint = Paint()    // 画笔
     private var step: Float = 0F
