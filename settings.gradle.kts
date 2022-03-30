@@ -14,4 +14,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "TankWar"
 include(":app")
+include(":core")
 include(":myAndroidLibrary")
+include(":myLib")
