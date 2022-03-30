@@ -1,0 +1,100 @@
+if(ModuleConfig.isModule) {
+    apply plugin: "com.android.application"
+}else {
+    apply plugin: "com.android.library"
+}
+
+apply plugin: "org.jetbrains.kotlin.android"
+apply plugin: "kotlin-kapt"
+apply plugin: "dagger.hilt.android.plugin"
+
+android {
+    compileSdk = BuildConfig.COMPILE_SDK
+
+    defaultConfig {
+        if(ModuleConfig.isModule)  applicationId = "com.focus617.login"
+
+        minSdk = BuildConfig.MIN_SDK
+        targetSdk = BuildConfig.TARGET_SDK
+        versionCode = BuildConfig.versionCodeMobile
+        versionName = BuildConfig.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    sourceSets {
+        main {
+            // 应用和库的AndroidManifest文件区分
+            if(ModuleConfig.isModule) {
+                manifest.srcFile 'src/main/module/AndroidManifest.xml'
+            }else {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+                java {
+                    //排除java/module文件夹下的所有文件
+                    exclude '*module'
+                }
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility = BuildConfig.javaVersion
+        targetCompatibility = BuildConfig.javaVersion
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation project(':core')
+    api project(':myAndroidLibrary')
+
+    implementation(Jetpack.ANDROIDX_CORE)
+    implementation(Jetpack.APPCOMPAT)
+    implementation(Jetpack.MATERIAL)
+    implementation(Jetpack.CONSTRAINTLAYOUT)
+
+    // Timber log
+    implementation(Libs.TIMBER)
+
+    // Hilt
+    implementation(Kotlin.HILT_ANDROID)
+    kapt(Kotlin.HILT_ANDROID_COMPILER)
+
+    // Test
+    testImplementation(Testing.JUNIT)
+    testImplementation(Testing.MOCKITO)
+    testImplementation(Testing.ROBOLECTRIC)
+
+    // AndroidX Test - JVM testing
+    testImplementation(Testing.ANDROIDX_TEST_CORE)
+
+    // AndroidJUnitRunner and JUnit Rules
+    testImplementation(Testing.ANDROIDX_TEST_RUNNER)
+    testImplementation(Testing.ANDROIDX_TEST_RULE)
+
+    // Assertions
+    testImplementation(Testing.ANDROIDX_TEST_JUNIT)
+    testImplementation(Testing.ANDROIDX_TEST_TRUTH)
+    testImplementation(Testing.HAMCREST)
+
+    // Core library
+    androidTestImplementation(Testing.ANDROIDX_TEST_CORE)
+
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation(Testing.ANDROIDX_TEST_RULE)
+
+    // Assertions
+    androidTestImplementation(Testing.ANDROIDX_TEST_JUNIT)
+    androidTestImplementation(Testing.ANDROIDX_TEST_TRUTH)
+
+    // Espresso dependencies
+    androidTestImplementation(Testing.ANDROIDX_TEST_ESPRESSO)
+}

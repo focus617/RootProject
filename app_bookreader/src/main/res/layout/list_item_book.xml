@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="book"
+            type="com.focus617.core.domain.Book" />
+        
+        <variable
+            name="clickListener"
+            type="com.focus617.bookreader.ui.home.BookListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:onClick="@{() -> clickListener.onClick(book)}">
+
+        <ImageView
+            android:id="@+id/book_image"
+            android:layout_width="@dimen/image_width"
+            android:layout_height="@dimen/image_height"
+            android:layout_marginStart="@dimen/image_margin"
+            android:layout_marginTop="@dimen/image_margin"
+            android:layout_marginBottom="@dimen/image_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_book_temp"
+            tools:srcCompat="@drawable/ic_book_temp"
+            android:contentDescription="@string/image_description" />
+
+        <TextView
+            android:id="@+id/book_title"
+            style="@style/text_standard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/book_image"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/book_image"
+            app:layout_constraintTop_toBottomOf="@+id/book_image"
+            app:setBookTitleFormatted="@{book}"
+            tools:text="Book Title" />
+
+        <TextView
+            android:id="@+id/book_author"
+            style="@style/text_standard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/book_image"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/book_image"
+            app:layout_constraintTop_toBottomOf="@+id/book_title"
+            app:setBookAuthorFormatted="@{book}"
+            tools:text="Frank" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,172 @@
+plugins {
+    id("com.android.application")
+    id("kotlin-android")
+    id("kotlin-kapt")
+    id("kotlin-parcelize")
+    id("androidx.navigation.safeargs")
+    id("dagger.hilt.android.plugin")
+}
+
+kapt {
+    correctErrorTypes = true
+}
+
+android {
+    compileSdk = Versions.COMPILE_SDK
+
+    defaultConfig {
+        applicationId = "com.focus617.bookreader"
+        minSdk = Versions.MIN_SDK
+        targetSdk = Versions.TARGET_SDK
+        versionCode = Versions.versionCodeMobile
+        versionName = Versions.versionName
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+
+    val sharedTestDir: String = "src/sharedTest/java"
+//    java.sourceSets["test"].java{
+//        srcDir(sharedTestDir)
+//    }
+
+//    sourceSets {
+//        val sharedTestDir: String = "src/sharedTest/java"
+//        test {
+//            java {
+//                srcDir(sharedTestDir)
+//            }
+//        }
+//
+//        androidTest {
+//            java {
+//                srcDir(sharedTestDir)
+//            }
+//        }
+//    }
+
+    compileOptions {
+        sourceCompatibility = Versions.javaVersion
+        targetCompatibility = Versions.javaVersion
+    }
+
+    kotlinOptions {
+        jvmTarget = Versions.javaVersion.toString()
+    }
+
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
+    }
+}
+
+
+dependencies {
+    implementation(project(":core"))
+
+    implementation(Libs.LEGACY_SUPPORT)
+
+    implementation(Libs.ANDROIDX_CORE)
+    implementation(Libs.APPCOMPAT)
+    implementation(Libs.MATERIAL)
+    implementation(Libs.CONSTRAINTLAYOUT)
+
+    // ViewModel and LiveData
+    implementation(Libs.LIFECYCLE_LIVEDATA_KTX)
+    implementation(Libs.LIFECYCLE_VIEWMODEL_KTX)
+    // ViewModel utilities for Compose
+    implementation(Libs.LIFECYCLE_VIEWMODEL_COMPOSE)
+    // Saved state module for ViewModel
+    implementation(Libs.LIFECYCLE_VIEWMODEL_SAVEDSTATE)
+
+    // Navigation
+    implementation(Libs.NAVIGATION_FRAGMENT_KTX)
+    implementation(Libs.NAVIGATION_UI_KTX)
+
+    // Room
+    implementation(Libs.ROOM_RUNTIME)
+    kapt(Libs.ROOM_COMPILER)
+    // Kotlin Extensions and Coroutines support for Room
+    implementation(Libs.ROOM_KTX)
+    // optional - Test helpers
+    testImplementation(Libs.ROOM_TESTING)
+
+    // Coroutines
+    implementation(Libs.COROUTINES_CORE)
+    implementation(Libs.COROUTINES_ANDROID)
+
+    // Timber log
+    implementation(Libs.TIMBER)
+
+    // Glide
+    implementation(Libs.GLIDE)
+
+    // Moshi
+    implementation(Libs.MOSHI)
+    implementation(Libs.MOSHI_KOTLIN)
+    // Retrofit with Moshi Converter
+    implementation(Libs.RETROFIT2_MOSHI_CONVERTER)
+    // Retrofit library that integrates coroutines.
+    implementation(Libs.RETROFIT2_KOTLIN_COROUTINES_ADAPTER)
+
+    // WorkManager
+    implementation(Libs.WORK_RUNTIME_KTX)
+
+    // Hilt
+    implementation(Libs.HILT_ANDROID)
+    kapt(Libs.HILT_ANDROID_COMPILER)
+
+    // Hilt for ViewModel
+    implementation(Libs.HILT_ANDROIDX_LIFECYCLE_VIEWMODEL)
+    kapt(Libs.HILT_ANDROIDX_COMPILER)
+
+    // Test
+    testImplementation(Libs.JUNIT)
+    testImplementation(Libs.MOCKITO)
+    testImplementation(Libs.ROBOLECTRIC)
+
+    // AndroidX Test - JVM testing
+    testImplementation(Libs.ANDROIDX_TEST_CORE)
+
+    // AndroidJUnitRunner and JUnit Rules
+    testImplementation(Libs.ANDROIDX_TEST_RUNNER)
+    testImplementation(Libs.ANDROIDX_TEST_RULE)
+
+    // Coroutines
+    testImplementation(Libs.COROUTINES_TEST)
+
+    // Assertions
+    testImplementation(Libs.ANDROIDX_TEST_JUNIT)
+    testImplementation(Libs.ANDROIDX_TEST_TRUTH)
+    testImplementation(Libs.HAMCREST)
+
+    //Hilt
+    testImplementation(Libs.HILT_ANDROID_TESTING)
+    kaptTest(Libs.HILT_COMPILER)
+
+    // Core library
+    androidTestImplementation(Libs.ANDROIDX_TEST_CORE)
+
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation(Libs.ANDROIDX_TEST_RULE)
+
+    // Assertions
+    androidTestImplementation(Libs.ANDROIDX_TEST_JUNIT)
+    androidTestImplementation(Libs.ANDROIDX_TEST_TRUTH)
+
+    // Espresso dependencies
+    androidTestImplementation(Libs.ANDROIDX_TEST_ESPRESSO)
+
+    // Coroutines
+    androidTestImplementation(Libs.COROUTINES_TEST)
+}
+

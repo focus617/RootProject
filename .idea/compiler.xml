@@ -2,9 +2,19 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
+      <module name="MyApp.app_bookreader" target="11" />
+      <module name="MyApp.app_tankwar" target="11" />
+      <module name="MyApp.login" target="11" />
+      <module name="MyApp.myAndroidLibrary" target="11" />
       <module name="RootProject.buildSrc" target="11" />
-      <module name="TankWar.app" target="11" />
+      <module name="TankWar.app_bookreader" target="11" />
+      <module name="TankWar.app_tankwar" target="11" />
+      <module name="TankWar.login" target="11" />
       <module name="TankWar.myAndroidLibrary" target="11" />
+      <module name="XApp.app_bookreader" target="11" />
+      <module name="XApp.app_tankwar" target="11" />
+      <module name="XApp.login" target="11" />
+      <module name="XApp.myAndroidLibrary" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

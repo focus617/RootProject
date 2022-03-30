@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="note"
+            type="com.focus617.core.domain.Note" />
+
+        <variable
+            name="clickListener"
+            type="com.focus617.bookreader.ui.gallery.NoteListener" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/note_cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="5dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> clickListener.onClick(note)}"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/note_content"
+                style="@style/text_standard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="start|center_vertical"
+                android:text="@{note.content}"
+                android:textAlignment="textStart"
+                android:textSize="@dimen/title_text_size"
+                app:layout_constraintBottom_toTopOf="@id/note_timestamp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Note's content" />
+
+            <TextView
+                android:id="@+id/note_timestamp"
+                style="@style/text_standard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@{note.timestamp}"
+                android:textAlignment="textStart"
+                android:textSize="@dimen/text_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/note_content"
+                app:layout_constraintStart_toStartOf="@id/note_content"
+                app:layout_constraintTop_toBottomOf="@id/note_content"
+                tools:text="2000-1-1 12:00:00" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

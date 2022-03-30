@@ -12,8 +12,10 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "TankWar"
-include(":app")
+rootProject.name = "XApp"
+include(":app_tankwar")
+include(":app_bookreader")
+include(":login")
 include(":core")
 include(":myAndroidLibrary")
 include(":myLib")

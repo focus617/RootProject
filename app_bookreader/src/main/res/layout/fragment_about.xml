@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.focus617.bookreader.ui.about.AboutViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/plant_detail_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".AboutFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/start_grid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/text_margin_large" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/end_grid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="@dimen/text_margin_large" />
+
+            <TextView
+                android:id="@+id/title_about"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin_large"
+                android:gravity="center_horizontal"
+                android:text="@string/about_fruit"
+                android:textAppearance="?textAppearanceHeadline6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/end_grid"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@id/start_grid"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Apple" />
+
+            <TextView
+                android:id="@+id/intro_text_about"
+                style="?android:attr/textAppearanceMedium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin_standard"
+                android:text="@string/about_description_bullets"
+                app:layout_constraintEnd_toStartOf="@id/end_grid"
+                app:layout_constraintStart_toStartOf="@id/start_grid"
+                app:layout_constraintTop_toBottomOf="@id/title_about"
+                tools:text="Details about the plant" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>
