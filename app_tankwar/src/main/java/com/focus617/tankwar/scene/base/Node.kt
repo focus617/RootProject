@@ -19,8 +19,8 @@ abstract class Node(name: String, context: Context) : Leaf(name) {
     private val resource: Resources = context.resources
     private val paint = Paint()           // 画笔
 
-    protected var x: Int = 0
-    protected var y: Int = 0
+    var x: Int = 0
+    var y: Int = 0
 
     override fun draw(canvas: Canvas) {
         findBitmap()

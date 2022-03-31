@@ -1,6 +1,7 @@
 package com.focus617.tankwar.scene.components
 
 import android.content.Context
+import android.graphics.Rect
 import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.GameConstant
 import com.focus617.tankwar.scene.base.Dir
@@ -33,10 +34,27 @@ class Bullet(
         if ((xPos < 0) || (xPos > GameConfig.BLOCK_NUM_W - 1) ||
             (yPos < 0) || (yPos > GameConfig.BLOCK_NUM_H - 1)
         ) {
-            live = false
+            this.die()
         }
 
+        // 测试炮弹是否打中坦克
+        val tankList = scene.rootNode.getTanks()
+        for(tank in tankList) collideWith(tank)
+
+        // 销毁死亡的炮弹
         super.checkDir()
+    }
+
+    fun collideWith(tank: Tank) {
+        val rect1 =Rect(this.x, this.y,
+            this.x + GameConfig.BLOCK_WIDTH, this.y + GameConfig.BLOCK_WIDTH)
+        val rect2 =Rect(tank.x, tank.y,
+            tank.x + GameConfig.BLOCK_WIDTH, tank.y + GameConfig.BLOCK_WIDTH)
+
+        if(rect1.intersect(rect2)){
+            tank.die()
+            this.die()
+        }
     }
 
 }

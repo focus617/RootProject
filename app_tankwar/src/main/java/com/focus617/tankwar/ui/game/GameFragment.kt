@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.focus617.platform.uicontroller.BaseFragment
 import com.focus617.tankwar.R
 import com.focus617.tankwar.databinding.FragmentGameBinding
+import com.focus617.tankwar.di.scene.RealScene
 import com.focus617.tankwar.di.scene.TestScene
 import com.focus617.tankwar.scene.base.IfDraw
 import com.google.android.material.snackbar.Snackbar
@@ -18,7 +19,7 @@ import javax.inject.Inject
 class GameFragment : BaseFragment() {
     private lateinit var viewModel: GameViewModel
 
-    @TestScene
+    @RealScene
     @Inject
     lateinit var scene: IfDraw
 

@@ -4,10 +4,13 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import com.focus617.tankwar.scene.GameConfig
+import com.focus617.tankwar.scene.components.Tank
 
 class RootNode(name: String) : Composite(name) {
 
     private val paint = Paint()    // 画笔
+
+    fun getTanks() = children.filterIsInstance<Tank>()
 
     override fun drawComposite(canvas: Canvas) {
 

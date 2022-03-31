@@ -20,7 +20,7 @@ abstract class MovableNode(name: String, context: Context, val scene: IfScene) :
     abstract var speed: Int
 
     // 移动目标是否仍有效（未出边界，未爆炸）？
-    protected var live: Boolean = true
+    protected var isAlive: Boolean = true
 
     // 移动方向上的偏移
     private var xDelta: Int = 0
@@ -29,10 +29,14 @@ abstract class MovableNode(name: String, context: Context, val scene: IfScene) :
     private val mapWidth = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_W
     private val mapHeight = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_H
 
+    fun die(){
+        this.isAlive = false
+    }
+
     // 本类只负责检查和销毁无效对象
     // 子类需要负责实现自己移动到边界和障碍后的处理操作
     open fun checkDir() {
-        if (!this.live) scene.rootNode.remove(this)
+        if (!this.isAlive) scene.rootNode.remove(this)
     }
 
     override fun draw(canvas: Canvas) {

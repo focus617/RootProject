@@ -17,6 +17,7 @@ class GameScene(context: Context) : IfScene, IfDraw {
 
     // 被绘制的对象集合
     override val rootNode = RootNode("Scene")
+
     // 绘制对象所用的Bitmap仓库
     override val bitmapRepository: LinkedHashMap<String, Bitmap> = LinkedHashMap()
 
@@ -25,11 +26,22 @@ class GameScene(context: Context) : IfScene, IfDraw {
     init {
         loadBitmap(context)
 
-        rootNode.add(Tank("myTank", context, this))
         rootNode.add(
             Tank(
-                "enemyTank", context, this,
+                "myTank", context, this,
+                0, GameConfig.BLOCK_NUM_H / 2, Dir.RIGHT
+            )
+        )
+        rootNode.add(
+            Tank(
+                "enemyTank1", context, this,
                 GameConfig.BLOCK_NUM_W / 2, GameConfig.BLOCK_NUM_H - 1, Dir.UP
+            )
+        )
+        rootNode.add(
+            Tank(
+                "enemyTank2", context, this,
+                GameConfig.BLOCK_NUM_W / 4, GameConfig.BLOCK_NUM_H/4, Dir.UP
             )
         )
 
@@ -88,7 +100,11 @@ class GameScene(context: Context) : IfScene, IfDraw {
 
         var matrix = Matrix()
         //设置旋转角度
-        matrix.setRotate(90F, (bulletBitmap.width / 2).toFloat(), (bulletBitmap.height / 2).toFloat())
+        matrix.setRotate(
+            90F,
+            (bulletBitmap.width / 2).toFloat(),
+            (bulletBitmap.height / 2).toFloat()
+        )
         //通过待旋转的图片和角度生成新的图片
         var newBulletBitmap = Bitmap.createBitmap(
             bulletBitmap, 0, 0,
@@ -98,7 +114,11 @@ class GameScene(context: Context) : IfScene, IfDraw {
 
         matrix = Matrix()
         //设置旋转角度
-        matrix.setRotate(180F, (bulletBitmap.width / 2).toFloat(), (bulletBitmap.height / 2).toFloat())
+        matrix.setRotate(
+            180F,
+            (bulletBitmap.width / 2).toFloat(),
+            (bulletBitmap.height / 2).toFloat()
+        )
         //通过待旋转的图片和角度生成新的图片
         newBulletBitmap = Bitmap.createBitmap(
             bulletBitmap, 0, 0,
@@ -108,7 +128,11 @@ class GameScene(context: Context) : IfScene, IfDraw {
 
         matrix = Matrix()
         //设置旋转角度
-        matrix.setRotate(270F, (bulletBitmap.width / 2).toFloat(), (bulletBitmap.height / 2).toFloat())
+        matrix.setRotate(
+            270F,
+            (bulletBitmap.width / 2).toFloat(),
+            (bulletBitmap.height / 2).toFloat()
+        )
         //通过待旋转的图片和角度生成新的图片
         newBulletBitmap = Bitmap.createBitmap(
             bulletBitmap, 0, 0,

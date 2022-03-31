@@ -1,13 +1,11 @@
 package com.focus617.tankwar.scene.components
 
 import android.content.Context
-import com.focus617.tankwar.R
 import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.GameConstant
 import com.focus617.tankwar.scene.base.Dir
 import com.focus617.tankwar.scene.base.IfScene
 import com.focus617.tankwar.scene.base.MovableNode
-import com.focus617.tankwar.scene.base.RootNode
 
 class Tank(
     name: String,
@@ -30,9 +28,9 @@ class Tank(
         }
     }
 
-    // 检查坦克转向规则
+
     override fun checkDir() {
-        // 如果坦克碰到边界，就掉头
+        // 检查坦克转向规则：如果坦克碰到边界，就掉头
         if ((xPos < 1) && (Dir.LEFT == dir)) {
             dir = Dir.RIGHT
             xPos = 0
@@ -52,12 +50,19 @@ class Tank(
             yPos = GameConfig.BLOCK_NUM_H - 1
             fire()
         }
-        // 测试发射炮弹
-        if (yPos == GameConfig.BLOCK_NUM_H / 2) fire()
+
+        // 销毁死亡的坦克
+        super.checkDir()
     }
 
     // 开炮
     fun fire() {
-        scene.rootNode.add(Bullet("bullet", context, scene, xPos, yPos, dir))
+        when (dir) {
+            Dir.UP -> scene.rootNode.add(Bullet("bullet", context, scene, xPos, yPos - 1, dir))
+            Dir.DOWN -> scene.rootNode.add(Bullet("bullet", context, scene, xPos, yPos + 1, dir))
+            Dir.LEFT -> scene.rootNode.add(Bullet("bullet", context, scene, xPos - 1, yPos, dir))
+            Dir.RIGHT -> scene.rootNode.add(Bullet("bullet", context, scene, xPos + 1, yPos, dir))
+        }
+
     }
 }

@@ -21,7 +21,7 @@ abstract class Leaf(var name: String) : IfDraw {
  */
 abstract class Composite(var name: String) : IfDraw {
 
-    private val children = arrayListOf<IfDraw>()
+    protected val children = arrayListOf<IfDraw>()
 
     // 添加部件
     open fun add(component: IfDraw) {
