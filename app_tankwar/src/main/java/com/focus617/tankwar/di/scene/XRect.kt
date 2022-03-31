@@ -1,4 +1,4 @@
-package com.focus617.tankwar.scene.components
+package com.focus617.tankwar.di.scene
 
 import android.graphics.Canvas
 import android.graphics.Color

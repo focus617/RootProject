@@ -4,8 +4,6 @@ import android.content.Context
 import android.graphics.Canvas
 import com.focus617.tankwar.scene.base.IDraw
 import com.focus617.tankwar.scene.base.RootNode
-import com.focus617.tankwar.scene.components.ClockPin
-import com.focus617.tankwar.scene.components.XRect
 
 class GameScene(context: Context) : IDraw {
 

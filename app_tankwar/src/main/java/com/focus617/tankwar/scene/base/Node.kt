@@ -7,7 +7,6 @@ import com.focus617.tankwar.scene.GameConfig
 
 abstract class Node(name: String, context: Context) : Leaf(name) {
 
-    // bitmap的参考坐标
     protected var x: Int = 0
     protected var y: Int = 0
 
@@ -20,11 +19,9 @@ abstract class Node(name: String, context: Context) : Leaf(name) {
     }
 
     override fun draw(canvas: Canvas) {
-        with(canvas) {
-            val srcRect = Rect(0, 0, bitmap.width, bitmap.height)
-            val destRect = Rect(x, y, x + GameConfig.BLOCK_WIDTH, y + GameConfig.BLOCK_WIDTH)
-            drawBitmap(bitmap, srcRect, destRect, paint)
-        }
+        val srcRect = Rect(0, 0, bitmap.width, bitmap.height)
+        val destRect = Rect(x, y, x + GameConfig.BLOCK_WIDTH, y + GameConfig.BLOCK_WIDTH)
+        canvas.drawBitmap(bitmap, srcRect, destRect, paint)
     }
 
 }
