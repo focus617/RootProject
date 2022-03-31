@@ -6,8 +6,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import com.focus617.tankwar.R
-import com.focus617.tankwar.scene.base.Dir
 import com.focus617.tankwar.scene.GameConfig
+import com.focus617.tankwar.scene.base.Dir
 import com.focus617.tankwar.scene.base.IDraw
 import com.focus617.tankwar.scene.base.RootNode
 import com.focus617.tankwar.scene.components.Bullet
@@ -24,15 +24,13 @@ class MyTestScene(context: Context) : IDraw {
         with(rootNode) {
             add(ClockPin("clock"))
             add(XRect("BlueRect"))
-            add(Tank("myTank", context))
+            add(Tank("myTank", context, this))
             add(
                 Tank(
-                    "enemyTank", context, GameConfig.BLOCK_NUM_W / 2,
-                    GameConfig.BLOCK_NUM_H - 1, Dir.UP
+                    "enemyTank", context, this,
+                    GameConfig.BLOCK_NUM_W / 2, GameConfig.BLOCK_NUM_H - 1, Dir.UP
                 )
             )
-            add(Bullet("bullet", context,GameConfig.BLOCK_NUM_W / 2,
-                GameConfig.BLOCK_NUM_H - 1, Dir.UP ))
         }
     }
 

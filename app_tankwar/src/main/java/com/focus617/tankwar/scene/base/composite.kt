@@ -1,6 +1,7 @@
 package com.focus617.tankwar.scene.base
 
 import android.graphics.Canvas
+import timber.log.Timber
 
 /**
  * @description 组合对象实现IDraw接口，抽象所有类成员共有的默认行为
@@ -20,16 +21,18 @@ abstract class Leaf(var name: String) : IDraw {
  */
 abstract class Composite(var name: String) : IDraw {
 
-    protected val children = arrayListOf<IDraw>()
+    private val children = arrayListOf<IDraw>()
 
     // 添加部件
     open fun add(component: IDraw) {
         children.add(component)
+        Timber.d("add--${children.size} in list")
     }
 
     // 移除部件
     open fun remove(component: IDraw) {
         children.remove(component)
+        Timber.d("remove--${children.size} in list")
     }
 
     abstract fun drawComposite(canvas: Canvas)

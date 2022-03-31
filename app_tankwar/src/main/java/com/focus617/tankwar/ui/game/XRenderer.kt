@@ -86,7 +86,6 @@ class XRenderer(
         synchronized(surfaceHolder) {
             try {
                 canvas = surfaceHolder.lockCanvas()
-                Timber.d("W:${canvas.width},H:${canvas.height}")
 
                 // 初始化画布并设置画布背景
                 canvas.drawColor(Color.BLACK)

@@ -4,15 +4,20 @@ import android.content.Context
 import android.graphics.Canvas
 import com.focus617.tankwar.scene.GameConfig
 
-abstract class MovableNode(name: String, context: Context) : Node(name, context) {
+abstract class MovableNode(name: String, context: Context, val scene: RootNode) :
+    Node(name, context) {
     //在游戏棋盘上的坐标
     abstract var xPos: Int
     abstract var yPos: Int
 
     //移动方向
     abstract var dir: Dir
+
     //移动速度
     abstract var speed: Int
+
+    // 移动目标是否仍有效（未出边界，未爆炸）？
+    protected var live: Boolean = true
 
     // 移动方向上的偏移
     private var xDelta: Int = 0
@@ -22,7 +27,9 @@ abstract class MovableNode(name: String, context: Context) : Node(name, context)
     private val mapHeight = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_H
 
     // 子类需要负责实现移动到边界的处理操作
-    abstract fun checkDir()
+    open fun checkDir() {
+        if (!this.live) scene.remove(this)
+    }
 
     override fun draw(canvas: Canvas) {
         val xBias = (canvas.width - mapWidth) / 2
