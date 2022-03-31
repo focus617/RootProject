@@ -32,6 +32,7 @@ class GameSceneTest {
 
     @Test
     fun initBitmap_bitmapCanLoadCorrect() {
+        scene.bitmapRepository.clear()
         assertEquals(0, scene.bitmapRepository.size)
 
         val resource: Resources = context.resources
@@ -45,10 +46,10 @@ class GameSceneTest {
     @Test
     fun loadBitmap_LoadCorrect() {
         // When
-        scene.loadBitmap()
+        scene.loadBitmap(context)
 
         // Then
-        assertEquals(4, scene.bitmapRepository.size)
+        assertEquals(8, scene.bitmapRepository.size)
     }
 
 }

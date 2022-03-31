@@ -4,6 +4,9 @@ import android.content.Context
 import android.graphics.Canvas
 import com.focus617.tankwar.scene.GameConfig
 
+/*
+ * MovableNode类的主要职责是负责管理可移动对象的移动方向，速度，变向，以及被消灭等规则
+ */
 abstract class MovableNode(name: String, context: Context, val scene: IfScene) :
     Node(name, context) {
     //在游戏棋盘上的坐标
@@ -26,12 +29,11 @@ abstract class MovableNode(name: String, context: Context, val scene: IfScene) :
     private val mapWidth = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_W
     private val mapHeight = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_H
 
-    // 子类需要负责实现移动到边界的处理操作
+    // 本类只负责检查和销毁无效对象
+    // 子类需要负责实现自己移动到边界和障碍后的处理操作
     open fun checkDir() {
         if (!this.live) scene.rootNode.remove(this)
     }
-
-    open fun findBitmap(){}
 
     override fun draw(canvas: Canvas) {
         val xBias = (canvas.width - mapWidth) / 2
@@ -39,7 +41,6 @@ abstract class MovableNode(name: String, context: Context, val scene: IfScene) :
         x = xBias + xPos * GameConfig.BLOCK_WIDTH + xDelta
         y = yBias + yPos * GameConfig.BLOCK_WIDTH + yDelta
 
-        findBitmap()
         super.draw(canvas)
         move()
         checkDir()
