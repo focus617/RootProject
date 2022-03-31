@@ -2,6 +2,7 @@ package com.focus617.tankwar.scene.base
 
 import android.content.Context
 import android.graphics.Canvas
+import com.focus617.tankwar.scene.GameConfig
 
 abstract class MovableNode(name: String, context: Context) : Node(name, context) {
     //在游戏棋盘上的坐标
@@ -10,6 +11,8 @@ abstract class MovableNode(name: String, context: Context) : Node(name, context)
 
     //移动方向
     abstract var dir: Dir
+    //移动速度
+    abstract var speed: Int
 
     // 移动方向上的偏移
     private var xDelta: Int = 0
@@ -17,6 +20,9 @@ abstract class MovableNode(name: String, context: Context) : Node(name, context)
 
     private val mapWidth = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_W
     private val mapHeight = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_H
+
+    // 子类需要负责实现移动到边界的处理操作
+    abstract fun checkDir()
 
     override fun draw(canvas: Canvas) {
         val xBias = (canvas.width - mapWidth) / 2
@@ -30,38 +36,19 @@ abstract class MovableNode(name: String, context: Context) : Node(name, context)
         checkDir()
     }
 
-    open fun checkDir() {
-        if ((xPos < 1) && (Dir.LEFT == dir)) {
-            dir = Dir.RIGHT
-            xPos = 0
-        } else if ((xPos > GameConfig.BLOCK_NUM_W - 2) && (Dir.RIGHT == dir)) {
-            dir = Dir.LEFT
-            xPos = GameConfig.BLOCK_NUM_W - 1
-        }
-
-        if ((yPos < 1) && (Dir.UP == dir)) {
-            dir = Dir.DOWN
-            yPos = 0
-        } else if ((yPos > GameConfig.BLOCK_NUM_H - 2) && (Dir.DOWN == dir)){
-            dir = Dir.UP
-            yPos = GameConfig.BLOCK_NUM_H - 1
-        }
-
-    }
-
     private fun move() {
         when (dir) {
             Dir.UP -> {
-                yDelta -= GameConfig.TANK_SPEED
+                yDelta -= speed
             }
             Dir.DOWN -> {
-                yDelta += GameConfig.TANK_SPEED
+                yDelta += speed
             }
             Dir.LEFT -> {
-                xDelta -= GameConfig.TANK_SPEED
+                xDelta -= speed
             }
             Dir.RIGHT -> {
-                xDelta += GameConfig.TANK_SPEED
+                xDelta += speed
             }
         }
 
@@ -80,7 +67,6 @@ abstract class MovableNode(name: String, context: Context) : Node(name, context)
             yPos--
             yDelta = 0
         }
-
     }
 
 }

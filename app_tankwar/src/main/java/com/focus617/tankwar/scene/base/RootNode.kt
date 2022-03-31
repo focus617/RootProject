@@ -3,6 +3,7 @@ package com.focus617.tankwar.scene.base
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import com.focus617.tankwar.scene.GameConfig
 
 class RootNode(name: String) : Composite(name) {
 
