@@ -15,7 +15,9 @@ import com.focus617.tankwar.scene.components.Tank
 
 class GameScene(context: Context) : IfScene, IfDraw {
 
+    // 被绘制的对象集合
     override val rootNode = RootNode("Scene")
+    // 绘制对象所用的Bitmap仓库
     override val bitmapRepository: LinkedHashMap<String, Bitmap> = LinkedHashMap()
 
     private val resource = context.resources
