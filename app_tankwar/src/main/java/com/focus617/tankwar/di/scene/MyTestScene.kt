@@ -8,30 +8,28 @@ import android.graphics.Canvas
 import com.focus617.tankwar.R
 import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.base.Dir
-import com.focus617.tankwar.scene.base.IDraw
+import com.focus617.tankwar.scene.base.IfDraw
+import com.focus617.tankwar.scene.base.IfScene
 import com.focus617.tankwar.scene.base.RootNode
-import com.focus617.tankwar.scene.components.Bullet
 import com.focus617.tankwar.scene.components.Tank
 
-class MyTestScene(context: Context) : IDraw {
+class MyTestScene(context: Context) : IfScene, IfDraw {
 
-    private val rootNode = RootNode("Scene")
-    private val bitmapRepository: LinkedHashMap<String, Bitmap> = LinkedHashMap()
+    override val rootNode = RootNode("Scene")
+    override val bitmapRepository: LinkedHashMap<String, Bitmap> = LinkedHashMap()
 
     init {
         loadBitmap(context)
 
-        with(rootNode) {
-            add(ClockPin("clock"))
-            add(XRect("BlueRect"))
-            add(Tank("myTank", context, this))
-            add(
-                Tank(
-                    "enemyTank", context, this,
-                    GameConfig.BLOCK_NUM_W / 2, GameConfig.BLOCK_NUM_H - 1, Dir.UP
-                )
+        rootNode.add(ClockPin("clock"))
+        rootNode.add(XRect("BlueRect"))
+        rootNode.add(Tank("myTank", context, this))
+        rootNode.add(
+            Tank(
+                "enemyTank", context, this,
+                GameConfig.BLOCK_NUM_W / 2, GameConfig.BLOCK_NUM_H - 1, Dir.UP
             )
-        }
+        )
     }
 
     override fun draw(canvas: Canvas) = rootNode.draw(canvas)

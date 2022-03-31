@@ -4,13 +4,14 @@ import android.content.Context
 import com.focus617.tankwar.R
 import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.base.Dir
+import com.focus617.tankwar.scene.base.IfScene
 import com.focus617.tankwar.scene.base.MovableNode
 import com.focus617.tankwar.scene.base.RootNode
 
 class Tank(
     name: String,
     val context: Context,
-    scene: RootNode,
+    scene: IfScene,
     override var xPos: Int = 0,
     override var yPos: Int = 0,
     override var dir: Dir = Dir.RIGHT
@@ -24,7 +25,7 @@ class Tank(
 
     // 开炮
     fun fire() {
-        scene.add(Bullet("bullet", context, scene, xPos, yPos, dir))
+        scene.rootNode.add(Bullet("bullet", context, scene, xPos, yPos, dir))
     }
 
     // 如果坦克碰到边界，就掉头
@@ -47,7 +48,7 @@ class Tank(
             fire()
         }
         // 测试发射炮弹
-        if(yPos == GameConfig.BLOCK_NUM_H/2) fire()
+        if (yPos == GameConfig.BLOCK_NUM_H / 2) fire()
     }
 
 

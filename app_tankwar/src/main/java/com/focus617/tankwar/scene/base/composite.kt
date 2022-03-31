@@ -10,7 +10,7 @@ import timber.log.Timber
 /**
  * @description 叶子节点对象，叶子节点没有子节点
  */
-abstract class Leaf(var name: String) : IDraw {
+abstract class Leaf(var name: String) : IfDraw {
 
     abstract override fun draw(canvas: Canvas)
 
@@ -19,18 +19,18 @@ abstract class Leaf(var name: String) : IDraw {
 /**
  * @description 有枝节点对象，用来存储子部件
  */
-abstract class Composite(var name: String) : IDraw {
+abstract class Composite(var name: String) : IfDraw {
 
-    private val children = arrayListOf<IDraw>()
+    private val children = arrayListOf<IfDraw>()
 
     // 添加部件
-    open fun add(component: IDraw) {
+    open fun add(component: IfDraw) {
         children.add(component)
         Timber.d("add--${children.size} in list")
     }
 
     // 移除部件
-    open fun remove(component: IDraw) {
+    open fun remove(component: IfDraw) {
         children.remove(component)
         Timber.d("remove--${children.size} in list")
     }

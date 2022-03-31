@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import com.focus617.tankwar.scene.GameConfig
 
-abstract class MovableNode(name: String, context: Context, val scene: RootNode) :
+abstract class MovableNode(name: String, context: Context, val scene: IfScene) :
     Node(name, context) {
     //在游戏棋盘上的坐标
     abstract var xPos: Int
@@ -28,8 +28,10 @@ abstract class MovableNode(name: String, context: Context, val scene: RootNode) 
 
     // 子类需要负责实现移动到边界的处理操作
     open fun checkDir() {
-        if (!this.live) scene.remove(this)
+        if (!this.live) scene.rootNode.remove(this)
     }
+
+    open fun findBitmap(){}
 
     override fun draw(canvas: Canvas) {
         val xBias = (canvas.width - mapWidth) / 2
@@ -37,8 +39,8 @@ abstract class MovableNode(name: String, context: Context, val scene: RootNode) 
         x = xBias + xPos * GameConfig.BLOCK_WIDTH + xDelta
         y = yBias + yPos * GameConfig.BLOCK_WIDTH + yDelta
 
+        findBitmap()
         super.draw(canvas)
-
         move()
         checkDir()
     }

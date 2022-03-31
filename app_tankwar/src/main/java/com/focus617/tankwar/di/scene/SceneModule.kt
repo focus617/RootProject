@@ -1,7 +1,7 @@
 package com.focus617.tankwar.di.scene
 
 import android.content.Context
-import com.focus617.tankwar.scene.base.IDraw
+import com.focus617.tankwar.scene.base.IfDraw
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +15,7 @@ object SceneModule {
 
     @TestScene
     @Provides
-    fun bindTestScene(@ApplicationContext context: Context): IDraw = MyTestScene(context)
+    fun bindTestScene(@ApplicationContext context: Context): IfDraw = MyTestScene(context)
 
     // TODO: check why qualifier can't work
 //    @RealScene

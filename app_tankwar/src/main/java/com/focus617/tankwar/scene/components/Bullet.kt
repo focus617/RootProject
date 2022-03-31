@@ -4,13 +4,14 @@ import android.content.Context
 import com.focus617.tankwar.R
 import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.base.Dir
+import com.focus617.tankwar.scene.base.IfScene
 import com.focus617.tankwar.scene.base.MovableNode
 import com.focus617.tankwar.scene.base.RootNode
 
 class Bullet(
     name: String,
     context: Context,
-    scene: RootNode,
+    scene: IfScene,
     override var xPos: Int,
     override var yPos: Int,
     override var dir: Dir
