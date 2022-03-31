@@ -32,27 +32,34 @@ class Tank(
     override fun checkDir() {
         // 检查坦克转向规则：如果坦克碰到边界，就掉头
         if ((xPos < 1) && (Dir.LEFT == dir)) {
-            dir = Dir.RIGHT
+            dir = Dir.DOWN  //RIGHT
             xPos = 0
             fire()
         } else if ((xPos > GameConfig.BLOCK_NUM_W - 2) && (Dir.RIGHT == dir)) {
-            dir = Dir.LEFT
+            dir = Dir.UP    //LEFT
             xPos = GameConfig.BLOCK_NUM_W - 1
             fire()
         }
 
         if ((yPos < 1) && (Dir.UP == dir)) {
-            dir = Dir.DOWN
+            dir = Dir.LEFT  //DOWN
             yPos = 0
             fire()
         } else if ((yPos > GameConfig.BLOCK_NUM_H - 2) && (Dir.DOWN == dir)) {
-            dir = Dir.UP
+            dir = Dir.RIGHT //UP
             yPos = GameConfig.BLOCK_NUM_H - 1
             fire()
         }
 
-        // 销毁死亡的坦克
-        super.checkDir()
+    }
+
+    override fun die() {
+        super.die()
+        explodeHere()
+    }
+
+    private fun explodeHere() {
+        scene.rootNode.add(Explode("explode", context, scene, xPos, yPos))
     }
 
     // 开炮
@@ -63,6 +70,5 @@ class Tank(
             Dir.LEFT -> scene.rootNode.add(Bullet("bullet", context, scene, xPos - 1, yPos, dir))
             Dir.RIGHT -> scene.rootNode.add(Bullet("bullet", context, scene, xPos + 1, yPos, dir))
         }
-
     }
 }

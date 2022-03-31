@@ -41,11 +41,9 @@ class Bullet(
         val tankList = scene.rootNode.getTanks()
         for(tank in tankList) collideWith(tank)
 
-        // 销毁死亡的炮弹
-        super.checkDir()
     }
 
-    fun collideWith(tank: Tank) {
+    private fun collideWith(tank: Tank) {
         val rect1 =Rect(this.x, this.y,
             this.x + GameConfig.BLOCK_WIDTH, this.y + GameConfig.BLOCK_WIDTH)
         val rect2 =Rect(tank.x, tank.y,
