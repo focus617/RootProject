@@ -3,7 +3,6 @@ package com.focus617.tankwar.scene.base
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
-import com.focus617.tankwar.scene.GameConfig
 
 abstract class Node(name: String, context: Context) : Leaf(name) {
 
