@@ -32,7 +32,7 @@ abstract class MovableNode(name: String, context: Context, scene: IfScene) :
         y = yBias + yPos * GameConfig.BLOCK_WIDTH + yDelta
     }
 
-    private fun move() {
+    open fun move() {
         when (dir) {
             Dir.UP -> yDelta -= speed
             Dir.DOWN -> yDelta += speed
