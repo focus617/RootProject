@@ -26,8 +26,22 @@ class GameScene(val context: Context) : IfScene, IfDraw {
     private val resource = context.resources
 
     init {
+        loadGameConfig()
         loadBitmap()
         initNodes()
+    }
+
+    // 从Properties读取游戏棋盘的配置，例如大小
+    private fun loadGameConfig(){
+        // 游戏方格的宽度
+        GameConfig.BLOCK_WIDTH =
+            PropertiesUtil.loadProperties(context)?.getProperty(GameConstant.KEY_BLOCK_WIDTH)?.toInt() ?: 10
+        // 游戏场地横向方格的个数
+        GameConfig.BLOCK_NUM_W =
+            PropertiesUtil.loadProperties(context)?.getProperty(GameConstant.KEY_BLOCK_NUM_W)?.toInt() ?: 10
+        // 游戏场地纵向方格的个数
+        GameConfig.BLOCK_NUM_H =
+            PropertiesUtil.loadProperties(context)?.getProperty(GameConstant.KEY_BLOCK_NUM_H)?.toInt() ?: 10
     }
 
     // 初始化场景中的对象
