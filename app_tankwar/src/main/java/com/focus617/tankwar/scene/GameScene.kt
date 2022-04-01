@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Matrix
+import com.focus617.platform.helper.BitmapHelper.rotate
 import com.focus617.tankwar.R
 import com.focus617.tankwar.scene.base.Dir
 import com.focus617.tankwar.scene.base.IfDraw
@@ -24,7 +25,7 @@ class GameScene(context: Context) : IfScene, IfDraw {
     private val resource = context.resources
 
     init {
-        loadBitmap(context)
+        loadBitmap()
 
         rootNode.add(
             Tank(
@@ -54,101 +55,29 @@ class GameScene(context: Context) : IfScene, IfDraw {
 
     override fun draw(canvas: Canvas) = rootNode.draw(canvas)
 
-    fun loadBitmap(context: Context) {
-        loadTankBitmap(context)
-        loadBulletBitmap(context)
-        loadExplodesBitmap(context)
+    fun loadBitmap() {
+        loadTankBitmap()
+        loadBulletBitmap()
+        loadExplodesBitmap()
     }
 
-    private fun loadTankBitmap(context: Context) {
-        val resource: Resources = context.resources
-
-        val tankBitmap = BitmapFactory.decodeResource(resource, R.drawable.ic_tank_good_up)
-        bitmapRepository[GameConstant.TANK_GOOD_UP] = tankBitmap
-
-        var matrix = Matrix()
-        //设置旋转角度
-        matrix.setRotate(90F, (tankBitmap.width / 2).toFloat(), (tankBitmap.height / 2).toFloat())
-        //通过待旋转的图片和角度生成新的图片
-        var newTankBitmap = Bitmap.createBitmap(
-            tankBitmap, 0, 0,
-            tankBitmap.width, tankBitmap.height, matrix, true
-        )
-        bitmapRepository[GameConstant.TANK_GOOD_RIGHT] = newTankBitmap
-
-        matrix = Matrix()
-        //设置旋转角度
-        matrix.setRotate(180F, (tankBitmap.width / 2).toFloat(), (tankBitmap.height / 2).toFloat())
-        //通过待旋转的图片和角度生成新的图片
-        newTankBitmap = Bitmap.createBitmap(
-            tankBitmap, 0, 0,
-            tankBitmap.width, tankBitmap.height, matrix, true
-        )
-        bitmapRepository[GameConstant.TANK_GOOD_DOWN] = newTankBitmap
-
-        matrix = Matrix()
-        //设置旋转角度
-        matrix.setRotate(270F, (tankBitmap.width / 2).toFloat(), (tankBitmap.height / 2).toFloat())
-        //通过待旋转的图片和角度生成新的图片
-        newTankBitmap = Bitmap.createBitmap(
-            tankBitmap, 0, 0,
-            tankBitmap.width, tankBitmap.height, matrix, true
-        )
-        bitmapRepository[GameConstant.TANK_GOOD_LEFT] = newTankBitmap
+    private fun loadTankBitmap() {
+        val bitmap = BitmapFactory.decodeResource(resource, R.drawable.ic_tank_good_up)
+        bitmapRepository[GameConstant.TANK_GOOD_UP] = bitmap
+        bitmapRepository[GameConstant.TANK_GOOD_RIGHT] = bitmap.rotate(90F)
+        bitmapRepository[GameConstant.TANK_GOOD_DOWN] = bitmap.rotate(180F)
+        bitmapRepository[GameConstant.TANK_GOOD_LEFT] = bitmap.rotate(270F)
     }
 
-    private fun loadBulletBitmap(context: Context) {
-        val resource: Resources = context.resources
-
-        val bulletBitmap = BitmapFactory.decodeResource(resource, R.drawable.ic_bullet_up)
-        bitmapRepository[GameConstant.BULLET_UP] = bulletBitmap
-
-        var matrix = Matrix()
-        //设置旋转角度
-        matrix.setRotate(
-            90F,
-            (bulletBitmap.width / 2).toFloat(),
-            (bulletBitmap.height / 2).toFloat()
-        )
-        //通过待旋转的图片和角度生成新的图片
-        var newBulletBitmap = Bitmap.createBitmap(
-            bulletBitmap, 0, 0,
-            bulletBitmap.width, bulletBitmap.height, matrix, true
-        )
-        bitmapRepository[GameConstant.BULLET_RIGHT] = newBulletBitmap
-
-        matrix = Matrix()
-        //设置旋转角度
-        matrix.setRotate(
-            180F,
-            (bulletBitmap.width / 2).toFloat(),
-            (bulletBitmap.height / 2).toFloat()
-        )
-        //通过待旋转的图片和角度生成新的图片
-        newBulletBitmap = Bitmap.createBitmap(
-            bulletBitmap, 0, 0,
-            bulletBitmap.width, bulletBitmap.height, matrix, true
-        )
-        bitmapRepository[GameConstant.BULLET_DOWN] = newBulletBitmap
-
-        matrix = Matrix()
-        //设置旋转角度
-        matrix.setRotate(
-            270F,
-            (bulletBitmap.width / 2).toFloat(),
-            (bulletBitmap.height / 2).toFloat()
-        )
-        //通过待旋转的图片和角度生成新的图片
-        newBulletBitmap = Bitmap.createBitmap(
-            bulletBitmap, 0, 0,
-            bulletBitmap.width, bulletBitmap.height, matrix, true
-        )
-        bitmapRepository[GameConstant.BULLET_LEFT] = newBulletBitmap
+    private fun loadBulletBitmap() {
+        val bitmap = BitmapFactory.decodeResource(resource, R.drawable.ic_bullet_up)
+        bitmapRepository[GameConstant.BULLET_UP] = bitmap
+        bitmapRepository[GameConstant.BULLET_RIGHT] = bitmap.rotate(90F)
+        bitmapRepository[GameConstant.BULLET_DOWN] = bitmap.rotate(180F)
+        bitmapRepository[GameConstant.BULLET_LEFT] = bitmap.rotate(270F)
     }
 
-    private fun loadExplodesBitmap(context: Context) {
-        val resource: Resources = context.resources
-
+    private fun loadExplodesBitmap() {
         bitmapRepository[GameConstant.EXPLODE_1] =
             BitmapFactory.decodeResource(resource, R.drawable.e1)
         bitmapRepository[GameConstant.EXPLODE_2] =
