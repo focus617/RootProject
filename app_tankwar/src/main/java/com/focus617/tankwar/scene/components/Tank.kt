@@ -10,7 +10,7 @@ import com.focus617.tankwar.scene.GameScene
 import com.focus617.tankwar.scene.base.Dir
 import com.focus617.tankwar.scene.base.IfScene
 import com.focus617.tankwar.scene.base.MovableNode
-import kotlin.random.Random
+import java.util.Random
 
 class Tank(
     name: String,
@@ -22,7 +22,7 @@ class Tank(
     override var dir: Dir = Dir.RIGHT
 ) : MovableNode(name, context, scene) {
 
-    private val random = Random(100)
+    private val random = Random()
 
     override var speed: Int =
         PropertiesUtil.loadProperties(context)?.getProperty(KEY_TANK_SPEED)?.toInt() ?: 10
@@ -54,7 +54,6 @@ class Tank(
 
     // 检查坦克转向规则：如果坦克碰到边界，就掉头，同时开火
     private fun checkReachBorder() {
-
         if ((xPos < 1) && (Dir.LEFT == dir)) {
             dir = Dir.RIGHT
             xPos = 0
@@ -74,6 +73,16 @@ class Tank(
             yPos = GameConfig.BLOCK_NUM_H - 1
             fire()
         }
+    }
+
+    private fun checkReachBorderNew() {
+        if (x < 2) x = 20
+        if (y < GameConfig.BLOCK_WIDTH) y = GameConfig.BLOCK_WIDTH
+
+        if (x > (GameConfig.BLOCK_NUM_W - 1) * GameConfig.BLOCK_WIDTH - 20)
+            x = (GameConfig.BLOCK_NUM_W - 1) * GameConfig.BLOCK_WIDTH
+        if (y > GameConfig.BLOCK_NUM_H * GameConfig.BLOCK_WIDTH - 20)
+            y = (GameConfig.BLOCK_NUM_H - 1) * GameConfig.BLOCK_WIDTH
     }
 
     // 测试坦克碰撞规则: 如果碰到障碍物，例如其它坦克,就随机改变方向
