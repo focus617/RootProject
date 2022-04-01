@@ -40,14 +40,11 @@ class Explode(
     }
 
     override fun draw(canvas: Canvas) {
-        val xBias = (canvas.width - mapWidth) / 2
-        val yBias = (canvas.height - mapHeight) / 2
-        x = xBias + xPos * GameConfig.BLOCK_WIDTH
-        y = yBias + yPos * GameConfig.BLOCK_WIDTH
-
         super.draw(canvas)
-
         paintTimes++
+    }
+
+    override fun checkStrategy() {
         if((paintTimes)>16) this.die()
     }
 }

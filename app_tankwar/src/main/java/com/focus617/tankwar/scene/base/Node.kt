@@ -14,14 +14,8 @@ abstract class Node(name: String, context: Context, val scene: IfScene) : Leaf(n
     abstract var xPos: Int
     abstract var yPos: Int
 
-    protected lateinit var bitmap: Bitmap
-
-    // 由各实现具体类，负责找到自己在Scene中的Bitmap
-    // 本函数将在每次draw之前被调用，以便根据移动方向，变换相应的Bitmap
-    abstract fun findBitmap()
-
     // 被绘制对象是否仍有效（未出边界，未被摧毁）？
-    protected var isAlive: Boolean = true
+    private var isAlive: Boolean = true
 
     open fun die(){
         this.isAlive = false
@@ -36,15 +30,40 @@ abstract class Node(name: String, context: Context, val scene: IfScene) : Leaf(n
     var y: Int = 0
 
     override fun draw(canvas: Canvas) {
+        // 重新计算自己当前的位置坐标(x,y)
+        calculateCurrentPosition(canvas)
+
+        // 执行策略检查
+        checkStrategy()
+
         // 检查和销毁无效对象
         if (!this.isAlive){
             scene.rootNode.remove(this)
             return
         }
 
+        // 找到自己此时合适的Bitmap
         findBitmap()
+
         // 在绘制以前，坐标(x,y)将由具体实现类进行计算更新
         bitmap.draw(canvas,x, y, x + GameConfig.BLOCK_WIDTH, y + GameConfig.BLOCK_WIDTH )
+
     }
+
+    // 实现子类需要负责在每次draw前重新计算自己当前的位置坐标(x,y)
+    open fun calculateCurrentPosition(canvas: Canvas){
+        val xBias = (canvas.width - mapWidth) / 2
+        val yBias = (canvas.height - mapHeight) / 2
+        x = xBias + xPos * GameConfig.BLOCK_WIDTH
+        y = yBias + yPos * GameConfig.BLOCK_WIDTH
+    }
+
+    protected lateinit var bitmap: Bitmap
+    // 实现子类需要负责在Scene中的BitmapRepository找到自己当时合适的Bitmap
+    // 本函数将在每次draw之前被调用，以便根据移动方向，变换相应的Bitmap
+    abstract fun findBitmap()
+
+    // 实现子类需要负责实现自己的各项策略，比如移动到边界，或碰到障碍后的处理操作
+    abstract fun checkStrategy()
 
 }

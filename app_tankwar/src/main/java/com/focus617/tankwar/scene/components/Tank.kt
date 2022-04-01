@@ -30,7 +30,7 @@ class Tank(
     }
 
 
-    override fun checkDir() {
+    override fun checkStrategy() {
         // 检查坦克转向规则：如果坦克碰到边界，就掉头
         if ((xPos < 1) && (Dir.LEFT == dir)) {
             dir = Dir.DOWN  //RIGHT

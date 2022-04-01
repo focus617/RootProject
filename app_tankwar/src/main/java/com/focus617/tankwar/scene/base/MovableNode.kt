@@ -20,17 +20,12 @@ abstract class MovableNode(name: String, context: Context, scene: IfScene) :
     private var xDelta: Int = 0
     private var yDelta: Int = 0
 
-    // 子类需要负责实现自己移动到边界和障碍后的处理操作
-    abstract fun checkDir()
-
     override fun draw(canvas: Canvas) {
-        reCalculateXY(canvas)
-        super.draw(canvas)
         move()
-        checkDir()
+        super.draw(canvas)
     }
 
-    private fun reCalculateXY(canvas: Canvas) {
+    override fun calculateCurrentPosition(canvas: Canvas) {
         val xBias = (canvas.width - mapWidth) / 2
         val yBias = (canvas.height - mapHeight) / 2
         x = xBias + xPos * GameConfig.BLOCK_WIDTH + xDelta
@@ -39,18 +34,10 @@ abstract class MovableNode(name: String, context: Context, scene: IfScene) :
 
     private fun move() {
         when (dir) {
-            Dir.UP -> {
-                yDelta -= speed
-            }
-            Dir.DOWN -> {
-                yDelta += speed
-            }
-            Dir.LEFT -> {
-                xDelta -= speed
-            }
-            Dir.RIGHT -> {
-                xDelta += speed
-            }
+            Dir.UP -> yDelta -= speed
+            Dir.DOWN -> yDelta += speed
+            Dir.LEFT -> xDelta -= speed
+            Dir.RIGHT -> xDelta += speed
         }
 
         if (xDelta >= GameConfig.BLOCK_WIDTH) {
