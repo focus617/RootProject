@@ -1,8 +1,12 @@
 package com.focus617.platform.helper
 
+import android.content.res.Resources
 import android.graphics.*
 
 object BitmapHelper {
+
+    fun bitmapLoader(resource: Resources, resourceId: Int): Bitmap =
+        BitmapFactory.decodeResource(resource, resourceId)
 
     //Bitmap,degrees: 待旋转的图片和角度
     fun Bitmap.rotate(degrees: Float): Bitmap {

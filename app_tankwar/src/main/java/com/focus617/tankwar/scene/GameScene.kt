@@ -1,11 +1,9 @@
 package com.focus617.tankwar.scene
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
-import android.graphics.Matrix
+import com.focus617.platform.helper.BitmapHelper.bitmapLoader
 import com.focus617.platform.helper.BitmapHelper.rotate
 import com.focus617.tankwar.R
 import com.focus617.tankwar.scene.base.Dir
@@ -30,6 +28,7 @@ class GameScene(val context: Context) : IfScene, IfDraw {
         loadBitmap()
         initNodes()
     }
+
     // 初始化场景中的对象
     private fun initNodes() {
         rootNode.add(
@@ -66,7 +65,7 @@ class GameScene(val context: Context) : IfScene, IfDraw {
     }
 
     private fun loadTankBitmap() {
-        val bitmap = BitmapFactory.decodeResource(resource, R.drawable.ic_tank_good_up)
+        val bitmap = bitmapLoader(resource, R.drawable.ic_tank_good_up)
         bitmapRepository[GameConstant.TANK_GOOD_UP] = bitmap
         bitmapRepository[GameConstant.TANK_GOOD_RIGHT] = bitmap.rotate(90F)
         bitmapRepository[GameConstant.TANK_GOOD_DOWN] = bitmap.rotate(180F)
@@ -74,7 +73,7 @@ class GameScene(val context: Context) : IfScene, IfDraw {
     }
 
     private fun loadBulletBitmap() {
-        val bitmap = BitmapFactory.decodeResource(resource, R.drawable.ic_bullet_up)
+        val bitmap = bitmapLoader(resource, R.drawable.ic_bullet_up)
         bitmapRepository[GameConstant.BULLET_UP] = bitmap
         bitmapRepository[GameConstant.BULLET_RIGHT] = bitmap.rotate(90F)
         bitmapRepository[GameConstant.BULLET_DOWN] = bitmap.rotate(180F)
@@ -82,47 +81,31 @@ class GameScene(val context: Context) : IfScene, IfDraw {
     }
 
     private fun loadExplodesBitmap() {
-        bitmapRepository[GameConstant.EXPLODE_1] =
-            BitmapFactory.decodeResource(resource, R.drawable.e1)
-        bitmapRepository[GameConstant.EXPLODE_2] =
-            BitmapFactory.decodeResource(resource, R.drawable.e2)
-        bitmapRepository[GameConstant.EXPLODE_3] =
-            BitmapFactory.decodeResource(resource, R.drawable.e3)
-        bitmapRepository[GameConstant.EXPLODE_4] =
-            BitmapFactory.decodeResource(resource, R.drawable.e4)
-        bitmapRepository[GameConstant.EXPLODE_5] =
-            BitmapFactory.decodeResource(resource, R.drawable.e5)
-        bitmapRepository[GameConstant.EXPLODE_6] =
-            BitmapFactory.decodeResource(resource, R.drawable.e6)
-        bitmapRepository[GameConstant.EXPLODE_7] =
-            BitmapFactory.decodeResource(resource, R.drawable.e7)
-        bitmapRepository[GameConstant.EXPLODE_8] =
-            BitmapFactory.decodeResource(resource, R.drawable.e8)
-        bitmapRepository[GameConstant.EXPLODE_9] =
-            BitmapFactory.decodeResource(resource, R.drawable.e9)
-        bitmapRepository[GameConstant.EXPLODE_10] =
-            BitmapFactory.decodeResource(resource, R.drawable.e10)
-        bitmapRepository[GameConstant.EXPLODE_11] =
-            BitmapFactory.decodeResource(resource, R.drawable.e11)
-        bitmapRepository[GameConstant.EXPLODE_12] =
-            BitmapFactory.decodeResource(resource, R.drawable.e12)
-        bitmapRepository[GameConstant.EXPLODE_13] =
-            BitmapFactory.decodeResource(resource, R.drawable.e13)
-        bitmapRepository[GameConstant.EXPLODE_14] =
-            BitmapFactory.decodeResource(resource, R.drawable.e14)
-        bitmapRepository[GameConstant.EXPLODE_15] =
-            BitmapFactory.decodeResource(resource, R.drawable.e15)
-        bitmapRepository[GameConstant.EXPLODE_16] =
-            BitmapFactory.decodeResource(resource, R.drawable.e16)
+        bitmapRepository[GameConstant.EXPLODE_1] = bitmapLoader(resource, R.drawable.e1)
+        bitmapRepository[GameConstant.EXPLODE_2] = bitmapLoader(resource, R.drawable.e2)
+        bitmapRepository[GameConstant.EXPLODE_3] = bitmapLoader(resource, R.drawable.e3)
+        bitmapRepository[GameConstant.EXPLODE_4] = bitmapLoader(resource, R.drawable.e4)
+        bitmapRepository[GameConstant.EXPLODE_5] = bitmapLoader(resource, R.drawable.e5)
+        bitmapRepository[GameConstant.EXPLODE_6] = bitmapLoader(resource, R.drawable.e6)
+        bitmapRepository[GameConstant.EXPLODE_7] = bitmapLoader(resource, R.drawable.e7)
+        bitmapRepository[GameConstant.EXPLODE_8] = bitmapLoader(resource, R.drawable.e8)
+        bitmapRepository[GameConstant.EXPLODE_9] = bitmapLoader(resource, R.drawable.e9)
+        bitmapRepository[GameConstant.EXPLODE_10] = bitmapLoader(resource, R.drawable.e10)
+        bitmapRepository[GameConstant.EXPLODE_11] = bitmapLoader(resource, R.drawable.e11)
+        bitmapRepository[GameConstant.EXPLODE_12] = bitmapLoader(resource, R.drawable.e12)
+        bitmapRepository[GameConstant.EXPLODE_13] = bitmapLoader(resource, R.drawable.e13)
+        bitmapRepository[GameConstant.EXPLODE_14] = bitmapLoader(resource, R.drawable.e14)
+        bitmapRepository[GameConstant.EXPLODE_15] = bitmapLoader(resource, R.drawable.e15)
+        bitmapRepository[GameConstant.EXPLODE_16] = bitmapLoader(resource, R.drawable.e16)
     }
 
     override fun draw(canvas: Canvas) = rootNode.draw(canvas)
 
-    fun addBullet(xPos: Int, yPos: Int, dir: Dir){
+    fun addBullet(xPos: Int, yPos: Int, dir: Dir) {
         rootNode.add(Bullet("bullet", context, this, xPos, yPos, dir))
     }
 
-    fun addExplode(xPos: Int, yPos: Int){
+    fun addExplode(xPos: Int, yPos: Int) {
         rootNode.add(Explode("explode", context, this, xPos, yPos))
     }
 }
