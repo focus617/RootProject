@@ -57,7 +57,17 @@ class Tank(
     //坦克被炮弹击中后爆炸
     override fun die() {
         super.die()
-        (scene as GameScene).addExplode(xPos, yPos)
+        explode()
+    }
+
+    // 开炮
+   private fun explode() {
+        when (dir) {
+            Dir.UP -> (scene as GameScene).addExplode(xPos, yPos - 1)
+            Dir.DOWN -> (scene as GameScene).addExplode(xPos, yPos + 1)
+            Dir.LEFT -> (scene as GameScene).addExplode(xPos - 1, yPos)
+            Dir.RIGHT -> (scene as GameScene).addExplode(xPos + 1, yPos)
+        }
     }
 
     // 开炮
