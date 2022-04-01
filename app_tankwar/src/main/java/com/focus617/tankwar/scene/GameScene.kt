@@ -12,9 +12,11 @@ import com.focus617.tankwar.scene.base.Dir
 import com.focus617.tankwar.scene.base.IfDraw
 import com.focus617.tankwar.scene.base.IfScene
 import com.focus617.tankwar.scene.base.RootNode
+import com.focus617.tankwar.scene.components.Bullet
+import com.focus617.tankwar.scene.components.Explode
 import com.focus617.tankwar.scene.components.Tank
 
-class GameScene(context: Context) : IfScene, IfDraw {
+class GameScene(val context: Context) : IfScene, IfDraw {
 
     // 被绘制的对象集合
     override val rootNode = RootNode("Scene")
@@ -26,7 +28,10 @@ class GameScene(context: Context) : IfScene, IfDraw {
 
     init {
         loadBitmap()
-
+        initNodes()
+    }
+    // 初始化场景中的对象
+    private fun initNodes() {
         rootNode.add(
             Tank(
                 "myTank", context, this,
@@ -53,8 +58,7 @@ class GameScene(context: Context) : IfScene, IfDraw {
         )
     }
 
-    override fun draw(canvas: Canvas) = rootNode.draw(canvas)
-
+    // 构造绘制对象的Bitmap仓库
     fun loadBitmap() {
         loadTankBitmap()
         loadBulletBitmap()
@@ -110,5 +114,15 @@ class GameScene(context: Context) : IfScene, IfDraw {
             BitmapFactory.decodeResource(resource, R.drawable.e15)
         bitmapRepository[GameConstant.EXPLODE_16] =
             BitmapFactory.decodeResource(resource, R.drawable.e16)
+    }
+
+    override fun draw(canvas: Canvas) = rootNode.draw(canvas)
+
+    fun addBullet(xPos: Int, yPos: Int, dir: Dir){
+        rootNode.add(Bullet("bullet", context, this, xPos, yPos, dir))
+    }
+
+    fun addExplode(xPos: Int, yPos: Int){
+        rootNode.add(Explode("explode", context, this, xPos, yPos))
     }
 }

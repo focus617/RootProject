@@ -3,6 +3,7 @@ package com.focus617.tankwar.scene.components
 import android.content.Context
 import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.GameConstant
+import com.focus617.tankwar.scene.GameScene
 import com.focus617.tankwar.scene.base.Dir
 import com.focus617.tankwar.scene.base.IfScene
 import com.focus617.tankwar.scene.base.MovableNode
@@ -53,22 +54,19 @@ class Tank(
 
     }
 
+    //坦克被炮弹击中后爆炸
     override fun die() {
         super.die()
-        explodeHere()
-    }
-
-    private fun explodeHere() {
-        scene.rootNode.add(Explode("explode", context, scene, xPos, yPos))
+        (scene as GameScene).addExplode(xPos, yPos)
     }
 
     // 开炮
     fun fire() {
         when (dir) {
-            Dir.UP -> scene.rootNode.add(Bullet("bullet", context, scene, xPos, yPos - 1, dir))
-            Dir.DOWN -> scene.rootNode.add(Bullet("bullet", context, scene, xPos, yPos + 1, dir))
-            Dir.LEFT -> scene.rootNode.add(Bullet("bullet", context, scene, xPos - 1, yPos, dir))
-            Dir.RIGHT -> scene.rootNode.add(Bullet("bullet", context, scene, xPos + 1, yPos, dir))
+            Dir.UP -> (scene as GameScene).addBullet(xPos, yPos - 1, dir)
+            Dir.DOWN -> (scene as GameScene).addBullet(xPos, yPos + 1, dir)
+            Dir.LEFT -> (scene as GameScene).addBullet(xPos - 1, yPos, dir)
+            Dir.RIGHT -> (scene as GameScene).addBullet(xPos + 1, yPos, dir)
         }
     }
 }
