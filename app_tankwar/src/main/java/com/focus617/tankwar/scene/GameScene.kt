@@ -32,8 +32,14 @@ class GameScene(val context: Context) : IfScene, IfDraw {
     private fun initNodes() {
         rootNode.add(
             Tank(
-                "myTank", context, this, false,
+                "myTank1", context, this, false,
                 0, GameConfig.BLOCK_NUM_H / 2, Dir.RIGHT
+            )
+        )
+        rootNode.add(
+            Tank(
+                "myTank2", context, this, false,
+                GameConfig.BLOCK_NUM_H / 3, GameConfig.BLOCK_NUM_H / 2, Dir.DOWN
             )
         )
         rootNode.add(

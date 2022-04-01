@@ -40,16 +40,7 @@ class Bullet(
     }
 
     private fun collideWith(tank: Tank) {
-        val rect1 = Rect(
-            this.x, this.y,
-            this.x + GameConfig.BLOCK_WIDTH, this.y + GameConfig.BLOCK_WIDTH
-        )
-        val rect2 = Rect(
-            tank.x, tank.y,
-            tank.x + GameConfig.BLOCK_WIDTH, tank.y + GameConfig.BLOCK_WIDTH
-        )
-
-        if (rect1.intersect(rect2)) {
+        if (this.rectangle.intersect(tank.rectangle)) {
             tank.die()
             this.die()
         }

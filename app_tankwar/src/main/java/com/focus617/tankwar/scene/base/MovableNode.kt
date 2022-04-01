@@ -2,6 +2,7 @@ package com.focus617.tankwar.scene.base
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Rect
 import com.focus617.tankwar.scene.GameConfig
 
 /*
@@ -20,6 +21,9 @@ abstract class MovableNode(name: String, context: Context, scene: IfScene) :
     private var xDelta: Int = 0
     private var yDelta: Int = 0
 
+    // 碰撞检测需要的Rect
+    val rectangle = Rect()
+
     override fun draw(canvas: Canvas) {
         move()
         super.draw(canvas)
@@ -30,6 +34,13 @@ abstract class MovableNode(name: String, context: Context, scene: IfScene) :
         val yBias = (canvas.height - mapHeight) / 2
         x = xBias + xPos * GameConfig.BLOCK_WIDTH + xDelta
         y = yBias + yPos * GameConfig.BLOCK_WIDTH + yDelta
+
+        with(rectangle) {
+            left = x
+            right = x + GameConfig.BLOCK_WIDTH
+            top = y
+            bottom = y + GameConfig.BLOCK_WIDTH
+        }
     }
 
     open fun move() {

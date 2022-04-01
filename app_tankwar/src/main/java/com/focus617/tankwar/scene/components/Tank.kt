@@ -21,6 +21,8 @@ class Tank(
     override var dir: Dir = Dir.RIGHT
 ) : MovableNode(name, context, scene) {
 
+    private val random = Random(100)
+
     override var speed: Int = GameConfig.TANK_SPEED
 
     // 通过对象类型，找到Scene中的Bitmap
@@ -31,12 +33,18 @@ class Tank(
         }
     }
 
+    override fun move() {
+        // 检查坦克转向规则：3%概率随机改变方向
+        if (random.nextInt(100) > 97) {
+            this.randomDir()
+        }
+
+        super.move()
+    }
+
     override fun checkStrategy() {
         // 如果碰到其它坦克,随机改变方向
         checkCollideWithOtherTanks()
-
-        // 如果走了一定距离,随机改变方向
-        checkRandomDir()
 
         // 如果坦克碰到边界，就掉头
         checkReachBorder()
@@ -68,22 +76,12 @@ class Tank(
 
     // 测试坦克碰撞规则: 如果碰到障碍物，例如其它坦克,就随机改变方向
     private fun checkCollideWithOtherTanks() {
-
         val tankList = scene.rootNode.getTanks()
         for (tank in tankList) {
             if ((this != tank) && this.collideWith(tank)) {
                 this.randomDir()
                 return
             }
-        }
-    }
-
-    private val random = Random(100)
-
-    // 检查坦克转向规则：3%概率随机改变方向
-    private fun checkRandomDir() {
-        if (random.nextInt(100) > 97) {
-            this.randomDir()
         }
     }
 
@@ -119,18 +117,6 @@ class Tank(
         }
     }
 
-    private fun collideWith(tank: Tank): Boolean {
-
-        val rect1 = Rect(
-            this.x, this.y,
-            this.x + GameConfig.BLOCK_WIDTH, this.y + GameConfig.BLOCK_WIDTH
-        )
-        val rect2 = Rect(
-            tank.x, tank.y,
-            tank.x + GameConfig.BLOCK_WIDTH, tank.y + GameConfig.BLOCK_WIDTH
-        )
-
-        return rect1.intersect(rect2)
-    }
+    private fun collideWith(tank: Tank): Boolean = this.rectangle.intersect(tank.rectangle)
 
 }
