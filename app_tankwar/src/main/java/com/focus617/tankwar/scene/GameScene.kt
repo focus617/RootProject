@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import com.focus617.platform.helper.BitmapHelper.bitmapLoader
-import com.focus617.platform.helper.BitmapHelper.rotate
 import com.focus617.tankwar.R
 import com.focus617.tankwar.scene.base.Dir
 import com.focus617.tankwar.scene.base.IfDraw
@@ -33,25 +32,25 @@ class GameScene(val context: Context) : IfScene, IfDraw {
     private fun initNodes() {
         rootNode.add(
             Tank(
-                "myTank", context, this,
+                "myTank", context, this, false,
                 0, GameConfig.BLOCK_NUM_H / 2, Dir.RIGHT
             )
         )
         rootNode.add(
             Tank(
-                "enemyTank1", context, this,
+                "enemyTank1", context, this, true,
                 GameConfig.BLOCK_NUM_W / 2, GameConfig.BLOCK_NUM_H - 1, Dir.UP
             )
         )
         rootNode.add(
             Tank(
-                "enemyTank2", context, this,
+                "enemyTank2", context, this, true,
                 GameConfig.BLOCK_NUM_W / 4, GameConfig.BLOCK_NUM_H / 4, Dir.UP
             )
         )
         rootNode.add(
             Tank(
-                "enemyTank3", context, this,
+                "enemyTank3", context, this, true,
                 GameConfig.BLOCK_NUM_W - 2, GameConfig.BLOCK_NUM_H / 4, Dir.DOWN
             )
         )
@@ -65,19 +64,16 @@ class GameScene(val context: Context) : IfScene, IfDraw {
     }
 
     private fun loadTankBitmap() {
-        val bitmap = bitmapLoader(resource, R.drawable.ic_tank_good_up)
-        bitmapRepository[GameConstant.TANK_GOOD_UP] = bitmap
-        bitmapRepository[GameConstant.TANK_GOOD_RIGHT] = bitmap.rotate(90F)
-        bitmapRepository[GameConstant.TANK_GOOD_DOWN] = bitmap.rotate(180F)
-        bitmapRepository[GameConstant.TANK_GOOD_LEFT] = bitmap.rotate(270F)
+        bitmapRepository[GameConstant.TANK_MINE] =
+            bitmapLoader(resource, R.drawable.ic_tank_good_up)
+        bitmapRepository[GameConstant.TANK_ENEMY_1] =
+            bitmapLoader(resource, R.drawable.ic_tank_enemy_1_up)
+        bitmapRepository[GameConstant.TANK_ENEMY_2] =
+            bitmapLoader(resource, R.drawable.ic_tank_enemy_2_up)
     }
 
     private fun loadBulletBitmap() {
-        val bitmap = bitmapLoader(resource, R.drawable.ic_bullet_up)
-        bitmapRepository[GameConstant.BULLET_UP] = bitmap
-        bitmapRepository[GameConstant.BULLET_RIGHT] = bitmap.rotate(90F)
-        bitmapRepository[GameConstant.BULLET_DOWN] = bitmap.rotate(180F)
-        bitmapRepository[GameConstant.BULLET_LEFT] = bitmap.rotate(270F)
+        bitmapRepository[GameConstant.BULLET] = bitmapLoader(resource, R.drawable.ic_bullet_up)
     }
 
     private fun loadExplodesBitmap() {

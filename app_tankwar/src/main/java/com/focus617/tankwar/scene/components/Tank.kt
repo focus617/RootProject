@@ -2,6 +2,7 @@ package com.focus617.tankwar.scene.components
 
 import android.content.Context
 import android.graphics.Rect
+import com.focus617.platform.helper.BitmapHelper.rotate
 import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.GameConstant
 import com.focus617.tankwar.scene.GameScene
@@ -14,6 +15,7 @@ class Tank(
     name: String,
     val context: Context,
     scene: IfScene,
+    private val isEnemy: Boolean = true,
     override var xPos: Int = 0,
     override var yPos: Int = 0,
     override var dir: Dir = Dir.RIGHT
@@ -23,11 +25,9 @@ class Tank(
 
     // 通过对象类型，找到Scene中的Bitmap
     override fun findBitmap() {
-        bitmap = when (dir) {
-            Dir.UP -> scene.bitmapRepository[GameConstant.TANK_GOOD_UP]!!
-            Dir.DOWN -> scene.bitmapRepository[GameConstant.TANK_GOOD_DOWN]!!
-            Dir.LEFT -> scene.bitmapRepository[GameConstant.TANK_GOOD_LEFT]!!
-            Dir.RIGHT -> scene.bitmapRepository[GameConstant.TANK_GOOD_RIGHT]!!
+        bitmap = when (isEnemy) {
+            true -> scene.bitmapRepository[GameConstant.TANK_ENEMY_1]!!.rotate(dir.rotateDegrees)
+            false -> scene.bitmapRepository[GameConstant.TANK_MINE]!!.rotate(dir.rotateDegrees)
         }
     }
 
@@ -81,8 +81,8 @@ class Tank(
     private val random = Random(100)
 
     // 检查坦克转向规则：3%概率随机改变方向
-    private fun checkRandomDir(){
-        if(random.nextInt(100) > 97){
+    private fun checkRandomDir() {
+        if (random.nextInt(100) > 97) {
             this.randomDir()
         }
     }

@@ -10,15 +10,10 @@ object GameConfig {
 }
 
 object GameConstant {
-    const val TANK_GOOD_UP = "Tank_Good_Up"
-    const val TANK_GOOD_DOWN = "Tank_Good_Down"
-    const val TANK_GOOD_LEFT = "Tank_Good_Left"
-    const val TANK_GOOD_RIGHT = "Tank_Good_Right"
-
-    const val BULLET_UP = "Bullet_Up"
-    const val BULLET_DOWN = "Bullet_Down"
-    const val BULLET_LEFT = "Bullet_Left"
-    const val BULLET_RIGHT = "Bullet_Right"
+    const val TANK_MINE = "Tank_Mine"
+    const val TANK_ENEMY_1 = "Tank_Enemy_1"
+    const val TANK_ENEMY_2 = "Tank_Enemy_2"
+    const val BULLET = "Bullet"
 
     const val EXPLODE_1 = "Explode_1"
     const val EXPLODE_2 = "Explode_2"

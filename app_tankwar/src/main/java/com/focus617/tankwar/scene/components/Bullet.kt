@@ -2,6 +2,7 @@ package com.focus617.tankwar.scene.components
 
 import android.content.Context
 import android.graphics.Rect
+import com.focus617.platform.helper.BitmapHelper.rotate
 import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.GameConstant
 import com.focus617.tankwar.scene.base.Dir
@@ -21,12 +22,7 @@ class Bullet(
 
     // 通过对象类型，找到Scene中的Bitmap
     override fun findBitmap() {
-        bitmap = when (dir) {
-            Dir.UP -> scene.bitmapRepository[GameConstant.BULLET_UP]!!
-            Dir.DOWN -> scene.bitmapRepository[GameConstant.BULLET_DOWN]!!
-            Dir.LEFT -> scene.bitmapRepository[GameConstant.BULLET_LEFT]!!
-            Dir.RIGHT -> scene.bitmapRepository[GameConstant.BULLET_RIGHT]!!
-        }
+        bitmap = scene.bitmapRepository[GameConstant.BULLET]!!.rotate(dir.rotateDegrees)
     }
 
     // 如果炮弹打出边界，就从集合中删除
@@ -39,17 +35,21 @@ class Bullet(
 
         // 测试炮弹是否打中坦克
         val tankList = scene.rootNode.getTanks()
-        for(tank in tankList) collideWith(tank)
+        for (tank in tankList) collideWith(tank)
 
     }
 
     private fun collideWith(tank: Tank) {
-        val rect1 =Rect(this.x, this.y,
-            this.x + GameConfig.BLOCK_WIDTH, this.y + GameConfig.BLOCK_WIDTH)
-        val rect2 =Rect(tank.x, tank.y,
-            tank.x + GameConfig.BLOCK_WIDTH, tank.y + GameConfig.BLOCK_WIDTH)
+        val rect1 = Rect(
+            this.x, this.y,
+            this.x + GameConfig.BLOCK_WIDTH, this.y + GameConfig.BLOCK_WIDTH
+        )
+        val rect2 = Rect(
+            tank.x, tank.y,
+            tank.x + GameConfig.BLOCK_WIDTH, tank.y + GameConfig.BLOCK_WIDTH
+        )
 
-        if(rect1.intersect(rect2)){
+        if (rect1.intersect(rect2)) {
             tank.die()
             this.die()
         }
