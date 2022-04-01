@@ -3,6 +3,7 @@ package com.focus617.tankwar.scene
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import com.focus617.platform.config_util.PropertiesUtil
 import com.focus617.platform.helper.BitmapHelper.bitmapLoader
 import com.focus617.tankwar.R
 import com.focus617.tankwar.scene.base.Dir
@@ -12,6 +13,7 @@ import com.focus617.tankwar.scene.base.RootNode
 import com.focus617.tankwar.scene.components.Bullet
 import com.focus617.tankwar.scene.components.Explode
 import com.focus617.tankwar.scene.components.Tank
+import java.util.*
 
 class GameScene(val context: Context) : IfScene, IfDraw {
 
@@ -30,36 +32,32 @@ class GameScene(val context: Context) : IfScene, IfDraw {
 
     // 初始化场景中的对象
     private fun initNodes() {
-        rootNode.add(
-            Tank(
-                "myTank1", context, this, false,
-                0, GameConfig.BLOCK_NUM_H / 2, Dir.RIGHT
+        loadTankFromProperties(GameConstant.KEY_FRIEND)
+        loadTankFromProperties(GameConstant.KEY_ENEMY)
+    }
+
+    private fun loadTankFromProperties(key: String) {
+        val random = Random()
+
+        val isEnemy: Boolean = when (key) {
+            GameConstant.KEY_FRIEND -> false
+            GameConstant.KEY_ENEMY -> true
+            else -> return
+        }
+
+        val tankCount = PropertiesUtil
+            .loadProperties(context)?.getProperty(key)?.toInt() ?: 4
+
+        for (i in 1..tankCount) {
+            rootNode.add(
+                Tank(
+                    "Tank", context, this, isEnemy,
+                    random.nextInt(GameConfig.BLOCK_NUM_W),
+                    random.nextInt(GameConfig.BLOCK_NUM_H),
+                    Dir.values()[random.nextInt(Dir.values().size)]
+                )
             )
-        )
-        rootNode.add(
-            Tank(
-                "myTank2", context, this, false,
-                GameConfig.BLOCK_NUM_H / 3, GameConfig.BLOCK_NUM_H / 2, Dir.DOWN
-            )
-        )
-        rootNode.add(
-            Tank(
-                "enemyTank1", context, this, true,
-                GameConfig.BLOCK_NUM_W / 2, GameConfig.BLOCK_NUM_H - 1, Dir.UP
-            )
-        )
-        rootNode.add(
-            Tank(
-                "enemyTank2", context, this, true,
-                GameConfig.BLOCK_NUM_W / 4, GameConfig.BLOCK_NUM_H / 4, Dir.UP
-            )
-        )
-        rootNode.add(
-            Tank(
-                "enemyTank3", context, this, true,
-                GameConfig.BLOCK_NUM_W - 2, GameConfig.BLOCK_NUM_H / 4, Dir.DOWN
-            )
-        )
+        }
     }
 
     // 构造绘制对象的Bitmap仓库

@@ -10,6 +10,9 @@ object GameConfig {
 }
 
 object GameConstant {
+    const val KEY_ENEMY = "initEnemyTankCount"
+    const val KEY_FRIEND = "initFriendTankCount"
+
     const val TANK_MINE = "Tank_Mine"
     const val TANK_ENEMY_1 = "Tank_Enemy_1"
     const val TANK_ENEMY_2 = "Tank_Enemy_2"
