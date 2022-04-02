@@ -54,7 +54,7 @@ abstract class Node(name: String, context: Context, val scene: IfScene) : Leaf(n
         y = yBias + yPos * GameConfig.BLOCK_WIDTH
     }
 
-    protected lateinit var bitmap: Bitmap
+    lateinit var bitmap: Bitmap
     // 实现子类需要负责在Scene中的BitmapRepository找到自己当时合适的Bitmap
     // 本函数将在每次draw之前被调用，以便根据移动方向，变换相应的Bitmap
     abstract fun findBitmap()

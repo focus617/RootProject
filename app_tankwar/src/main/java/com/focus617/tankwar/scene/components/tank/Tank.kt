@@ -1,17 +1,19 @@
-package com.focus617.tankwar.scene.components
+package com.focus617.tankwar.scene.components.tank
 
 import android.content.Context
 import com.focus617.platform.config_util.PropertiesUtil
 import com.focus617.platform.helper.BitmapHelper.rotate
 import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.GameConstant
+import com.focus617.tankwar.scene.GameConstant.KEY_ENEMY_FIRE_STRATEGY
+import com.focus617.tankwar.scene.GameConstant.KEY_FRIEND_FIRE_STRATEGY
 import com.focus617.tankwar.scene.GameConstant.KEY_TANK_SPEED
 import com.focus617.tankwar.scene.GameScene
 import com.focus617.tankwar.scene.base.Dir
 import com.focus617.tankwar.scene.base.IfScene
 import com.focus617.tankwar.scene.base.MovableNode
 import timber.log.Timber
-import java.util.Random
+import java.util.*
 
 class Tank(
     name: String,
@@ -131,14 +133,30 @@ class Tank(
         }
     }
 
+    var fs: FireStrategy = DefaultFireStrategy()
+
+    init {
+        // 从配置文件中读取FireStrategy
+        val key = if (isEnemy) KEY_ENEMY_FIRE_STRATEGY else KEY_FRIEND_FIRE_STRATEGY
+
+        var fsName = PropertiesUtil.loadProperties(context)?.getProperty(key)?.toString()
+        Timber.i("Tank.init(): load $fsName")
+
+        if (fsName == null) {
+            fsName = "com.focus617.tankwar.scene.components.tank.DefaultFireStrategy"
+        }
+
+        try {
+            fs = Class.forName(fsName).newInstance() as FireStrategy
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
     // 开炮
     fun fire() {
-        when (dir) {
-            Dir.UP -> (scene as GameScene).addBullet(xPos, yPos - 1, dir)
-            Dir.DOWN -> (scene as GameScene).addBullet(xPos, yPos + 1, dir)
-            Dir.LEFT -> (scene as GameScene).addBullet(xPos - 1, yPos, dir)
-            Dir.RIGHT -> (scene as GameScene).addBullet(xPos + 1, yPos, dir)
-        }
+        fs.fire(this)
     }
 
     private fun collideWith(tank: Tank): Boolean = this.rectangle.intersect(tank.rectangle)

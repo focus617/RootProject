@@ -9,7 +9,7 @@ import com.focus617.tankwar.R
 import com.focus617.tankwar.scene.base.*
 import com.focus617.tankwar.scene.components.Bullet
 import com.focus617.tankwar.scene.components.Explode
-import com.focus617.tankwar.scene.components.Tank
+import com.focus617.tankwar.scene.components.tank.Tank
 import java.util.*
 
 object GameConfig {

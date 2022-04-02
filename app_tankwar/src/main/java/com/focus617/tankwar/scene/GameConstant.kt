@@ -1,13 +1,17 @@
 package com.focus617.tankwar.scene
 
 object GameConstant {
+
+    const val KEY_BLOCK_WIDTH = "blockWidth"            // 游戏方格的宽度
+    const val KEY_BLOCK_NUM_W = "blockNumberWidth"      // 游戏场地横向方格的个数
+    const val KEY_BLOCK_NUM_H = "blockNumberHeight"     // 游戏场地纵向方格的个数
+
     const val KEY_ENEMY = "initEnemyTankCount"
     const val KEY_FRIEND = "initFriendTankCount"
     const val KEY_TANK_SPEED = "tankSpeed"
     const val KEY_BULLET_SPEED = "bulletSpeed"
-    const val KEY_BLOCK_WIDTH = "blockWidth"            // 游戏方格的宽度
-    const val KEY_BLOCK_NUM_W = "blockNumberWidth"      // 游戏场地横向方格的个数
-    const val KEY_BLOCK_NUM_H = "blockNumberHeight"     // 游戏场地纵向方格的个数
+    const val KEY_FRIEND_FIRE_STRATEGY = "friendFS"
+    const val KEY_ENEMY_FIRE_STRATEGY = "enemyFS"
 
     const val STATIC_AGGREGATE_NODE = "staticAggregateNode"   //静止的可绘制对象集合的名称
     const val TANK_AGGREGATE_NODE = "tankAggregateNode"       //可移动的坦克集合的名称

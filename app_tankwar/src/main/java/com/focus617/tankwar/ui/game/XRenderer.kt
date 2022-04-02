@@ -107,6 +107,8 @@ class XRenderer(
                 //在画布上画出场景
                 scene.draw(canvas)
 
+                //TODO: Can we separate two i/f into two threads? How to avoid concurrency problem?
+                //刷新各个对象
                 scene.refreshData()
 
             } catch (e: Exception) {

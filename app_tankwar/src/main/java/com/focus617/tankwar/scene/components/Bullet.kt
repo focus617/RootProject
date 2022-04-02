@@ -10,6 +10,7 @@ import com.focus617.tankwar.scene.GameScene
 import com.focus617.tankwar.scene.base.Dir
 import com.focus617.tankwar.scene.base.IfScene
 import com.focus617.tankwar.scene.base.MovableNode
+import com.focus617.tankwar.scene.components.tank.Tank
 
 class Bullet(
     name: String,
