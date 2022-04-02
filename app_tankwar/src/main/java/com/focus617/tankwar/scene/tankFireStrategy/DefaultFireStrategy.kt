@@ -1,7 +1,8 @@
-package com.focus617.tankwar.scene.components.tank
+package com.focus617.tankwar.scene.tankFireStrategy
 
 import com.focus617.tankwar.scene.GameScene
 import com.focus617.tankwar.scene.base.Dir
+import com.focus617.tankwar.scene.components.Tank
 
 class DefaultFireStrategy: FireStrategy {
 

@@ -1,4 +1,6 @@
-package com.focus617.tankwar.scene.components.tank
+package com.focus617.tankwar.scene.tankFireStrategy
+
+import com.focus617.tankwar.scene.components.Tank
 
 interface FireStrategy {
 

@@ -9,7 +9,7 @@ import com.focus617.tankwar.R
 import com.focus617.tankwar.scene.base.*
 import com.focus617.tankwar.scene.components.Bullet
 import com.focus617.tankwar.scene.components.Explode
-import com.focus617.tankwar.scene.components.tank.Tank
+import com.focus617.tankwar.scene.components.Tank
 import java.util.*
 
 object GameConfig {
@@ -22,20 +22,17 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
 
     // 被绘制的对象集合
     override val rootNode = RootNode("Scene")
-    private lateinit var aggregateStatic: AggregateNode
-    private lateinit var aggregateTank: AggregateNode
-    private lateinit var aggregateBullet: AggregateNode
 
     // 绘制对象所用的Bitmap仓库
     override val bitmapRepository: LinkedHashMap<String, Bitmap> = LinkedHashMap()
 
     private val resource = context.resources
+    // 配置属性
     val properties: Properties? = PropertiesUtil.loadProperties(context)
 
     init {
         loadGameConfig()
         loadGameResource()
-        initAggregateNode()
         initNodes()
     }
 
@@ -91,19 +88,7 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
         bitmapRepository[GameConstant.EXPLODE_16] = bitmapLoader(resource, R.drawable.e16)
     }
 
-    // 初始化场景中的集合对象
-    private fun initAggregateNode(){
-        aggregateStatic = AggregateNode(GameConstant.STATIC_AGGREGATE_NODE)
-        aggregateTank = AggregateNode(GameConstant.TANK_AGGREGATE_NODE)
-        aggregateBullet = AggregateNode(GameConstant.BULLET_AGGREGATE_NODE)
-        with(rootNode){
-            add(aggregateStatic)
-            add(aggregateTank)
-            add(aggregateBullet)
-        }
-    }
-
-    // 初始化场景中的对象(必须在initAggregateNode()之后调用)
+    // 初始化场景中的对象
     private fun initNodes() {
         loadTankFromProperties(GameConstant.KEY_FRIEND)
         loadTankFromProperties(GameConstant.KEY_ENEMY)
@@ -122,7 +107,7 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
             .loadProperties(context)?.getProperty(key)?.toInt() ?: 4
 
         for (i in 1..tankCount) {
-            aggregateTank.add(
+            rootNode.add(
                 Tank(
                     "Tank", this, isEnemy,
                     random.nextInt(GameConfig.BLOCK_NUM_W),
@@ -133,26 +118,28 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
         }
     }
 
-    fun getTanks(): List<Tank> = aggregateTank.getChildren() as List<Tank>
+    override fun draw(canvas: Canvas) = rootNode.draw(canvas)
+
+    override fun refreshData() = rootNode.refreshData()
 
     fun removeTank(tank: Tank){
-        aggregateTank.remove(tank)
+        rootNode.remove(tank)
     }
 
     fun addBullet(xPos: Int, yPos: Int, dir: Dir) {
-        aggregateBullet.add(Bullet("bullet", this, xPos, yPos, dir))
+        rootNode.add(Bullet("bullet", this, xPos, yPos, dir))
     }
 
     fun removeBullet(bullet: Bullet){
-        aggregateBullet.remove(bullet)
+        rootNode.remove(bullet)
     }
 
     fun addExplode(xPos: Int, yPos: Int) {
-        aggregateStatic.add(Explode("explode", this, xPos, yPos))
+        rootNode.add(Explode("explode", this, xPos, yPos))
     }
 
-    override fun draw(canvas: Canvas) = rootNode.draw(canvas)
-    override fun refreshData() = rootNode.refreshData()
-
+    fun removeExplode(explode: Explode){
+        rootNode.remove(explode)
+    }
 
 }

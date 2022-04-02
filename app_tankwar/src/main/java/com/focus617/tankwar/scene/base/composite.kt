@@ -23,6 +23,7 @@ abstract class Leaf(var name: String) : IfRefresh {
 abstract class Composite(var name: String) : IfRefresh {
 
     protected val children = arrayListOf<IfRefresh>()
+    fun getChildren() = children.toList()
 
     // 添加部件
     open fun add(component: IfRefresh) {

@@ -11,6 +11,4 @@ class AggregateNode(name: String) : Composite(name) {
     override fun drawComposite(canvas: Canvas) {}
     override fun refreshCompositeData() {}
 
-    fun getChildren() = children.toList()
-
 }
