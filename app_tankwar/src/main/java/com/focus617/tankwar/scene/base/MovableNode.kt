@@ -18,8 +18,8 @@ abstract class MovableNode(name: String, context: Context, scene: IfScene) :
     abstract var speed: Int
 
     // 移动方向上的偏移
-    private var xDelta: Int = 0
-    private var yDelta: Int = 0
+    protected var xDelta: Int = 0
+    protected var yDelta: Int = 0
 
     // 碰撞检测需要的Rect
     val rectangle = Rect()
@@ -28,9 +28,11 @@ abstract class MovableNode(name: String, context: Context, scene: IfScene) :
         synchronized(this) {
             val xBias = (canvas.width - mapWidth) / 2
             val yBias = (canvas.height - mapHeight) / 2
-            x = xBias + xPos * GameConfig.BLOCK_WIDTH + xDelta
-            y = yBias + yPos * GameConfig.BLOCK_WIDTH + yDelta
+            val halfWidth = GameConfig.BLOCK_WIDTH / 2
+            x = xBias + xPos * GameConfig.BLOCK_WIDTH + xDelta + halfWidth
+            y = yBias + yPos * GameConfig.BLOCK_WIDTH + yDelta + halfWidth
 
+            // 刷新对象的Rect，用于动态碰撞检测
             with(rectangle) {
                 left = x
                 right = x + GameConfig.BLOCK_WIDTH

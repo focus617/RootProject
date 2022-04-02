@@ -39,11 +39,12 @@ class Tank(
     }
 
     override fun move() {
-        // 检查坦克转向规则：3%概率随机改变方向
-        if (random.nextInt(100) > 97) {
-            this.randomDir()
+        if ((xDelta == 0) || (yDelta == 0)) {
+            // 检查坦克转向规则：10%概率随机改变方向
+            if (random.nextInt(100) > 90) {
+                this.randomDir()
+            }
         }
-
         super.move()
     }
 
