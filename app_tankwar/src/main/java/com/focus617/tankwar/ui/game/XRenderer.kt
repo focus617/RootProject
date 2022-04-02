@@ -5,19 +5,20 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import com.focus617.tankwar.scene.base.IfDraw
+import com.focus617.tankwar.scene.base.IfRefresh
 
 const val SLEEP_INTERVAL = 50L
 
 class XRenderer(
     var surfaceView: SurfaceView,
-    var scene: IfDraw
+    var scene: IfRefresh
 ) : SurfaceHolder.Callback, Runnable {
 
     private var holder: SurfaceHolder? = null
     private lateinit var canvas: Canvas     // 用于绘图的canvas
 
-    private var thread: Thread? = null      // 刷新子线程
+    private var threadDrawing: Thread? = null      // 刷新绘图子线程
+    private var threadRefreshData: Thread? = null  // 刷新数据子线程
     private var isDrawing: Boolean = false
 
     init {
@@ -38,14 +39,26 @@ class XRenderer(
         holder!!.setFormat(PixelFormat.TRANSLUCENT)
     }
 
-
     override fun surfaceCreated(holder: SurfaceHolder) {
         // 清除未停止的线程
-        thread?.interrupt()
+        threadDrawing?.interrupt()
+        threadRefreshData?.interrupt()
 
-        thread = Thread(this)
+        threadDrawing = Thread(this)
+        threadRefreshData = Thread {
+            while (isDrawing) {
+                scene.refreshData()
+                //通过线程休眠以控制刷新速度
+                try {
+                    Thread.sleep(SLEEP_INTERVAL)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+            }
+        }
         isDrawing = true
-        thread!!.start()
+        threadDrawing!!.start()
+//        threadRefreshData!!.start()
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
@@ -62,8 +75,10 @@ class XRenderer(
     private fun onDestroy() {
         // 当surfaceView销毁时, 停止线程的运行.
         // 避免surfaceView销毁之后，线程还在运行而报错.
-        thread?.interrupt()
-        thread = null
+        threadDrawing?.interrupt()
+        threadDrawing = null
+        threadRefreshData?.interrupt()
+        threadRefreshData = null
     }
 
     override fun run() {
@@ -91,6 +106,8 @@ class XRenderer(
 
                 //在画布上画出场景
                 scene.draw(canvas)
+
+                scene.refreshData()
 
             } catch (e: Exception) {
             } finally {

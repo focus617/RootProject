@@ -2,7 +2,7 @@ package com.focus617.tankwar.di.scene
 
 import android.content.Context
 import com.focus617.tankwar.scene.GameScene
-import com.focus617.tankwar.scene.base.IfDraw
+import com.focus617.tankwar.scene.base.IfRefresh
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,5 +20,5 @@ object SceneModule {
 
     @RealScene
     @Provides
-    fun bindGameScene(@ApplicationContext context: Context): IfDraw = GameScene(context)
+    fun bindGameScene(@ApplicationContext context: Context): IfRefresh = GameScene(context)
 }

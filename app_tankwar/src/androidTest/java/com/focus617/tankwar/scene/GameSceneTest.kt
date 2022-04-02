@@ -46,10 +46,10 @@ class GameSceneTest {
     @Test
     fun loadBitmap_LoadCorrect() {
         // When
-        scene.loadBitmap(context)
+        scene.loadGameResource()
 
         // Then
-        assertEquals(8, scene.bitmapRepository.size)
+        assertEquals(20, scene.bitmapRepository.size)
     }
 
 }

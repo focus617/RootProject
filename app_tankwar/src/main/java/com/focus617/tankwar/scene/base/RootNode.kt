@@ -10,8 +10,6 @@ class RootNode(name: String) : Composite(name) {
 
     private val paint = Paint()    // 画笔
 
-    fun getTanks() = children.filterIsInstance<Tank>()
-
     override fun drawComposite(canvas: Canvas) {
 
         with(paint) {
@@ -34,5 +32,8 @@ class RootNode(name: String) : Composite(name) {
                 paint
             )
         }
+    }
+
+    override fun refreshCompositeData() {
     }
 }

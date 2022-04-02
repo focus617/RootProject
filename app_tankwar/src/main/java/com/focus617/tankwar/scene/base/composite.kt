@@ -10,27 +10,28 @@ import timber.log.Timber
 /**
  * @description 叶子节点对象，叶子节点没有子节点
  */
-abstract class Leaf(var name: String) : IfDraw {
+abstract class Leaf(var name: String) : IfRefresh {
 
     abstract override fun draw(canvas: Canvas)
 
+    abstract override fun refreshData()
 }
 
 /**
  * @description 有枝节点对象，用来存储子部件
  */
-abstract class Composite(var name: String) : IfDraw {
+abstract class Composite(var name: String) : IfRefresh {
 
-    protected val children = arrayListOf<IfDraw>()
+    protected val children = arrayListOf<IfRefresh>()
 
     // 添加部件
-    open fun add(component: IfDraw) {
+    open fun add(component: IfRefresh) {
         children.add(component)
         Timber.d("add--${children.size} in list")
     }
 
     // 移除部件
-    open fun remove(component: IfDraw) {
+    open fun remove(component: IfRefresh) {
         children.remove(component)
         Timber.d("remove--${children.size} in list")
     }
@@ -42,6 +43,16 @@ abstract class Composite(var name: String) : IfDraw {
 
         for (child in children) {//遍历其孩子
             child.draw(canvas)
+        }
+    }
+
+    abstract fun refreshCompositeData()
+
+    override fun refreshData(){
+        this.refreshCompositeData()
+
+        for (child in children) {//遍历其孩子
+            child.refreshData()
         }
     }
 

@@ -24,47 +24,51 @@ abstract class MovableNode(name: String, context: Context, scene: IfScene) :
     // 碰撞检测需要的Rect
     val rectangle = Rect()
 
-    override fun draw(canvas: Canvas) {
-        move()
-        super.draw(canvas)
+    override fun calculateCurrentPosition(canvas: Canvas) {
+        synchronized(this) {
+            val xBias = (canvas.width - mapWidth) / 2
+            val yBias = (canvas.height - mapHeight) / 2
+            x = xBias + xPos * GameConfig.BLOCK_WIDTH + xDelta
+            y = yBias + yPos * GameConfig.BLOCK_WIDTH + yDelta
+
+            with(rectangle) {
+                left = x
+                right = x + GameConfig.BLOCK_WIDTH
+                top = y
+                bottom = y + GameConfig.BLOCK_WIDTH
+            }
+        }
     }
 
-    override fun calculateCurrentPosition(canvas: Canvas) {
-        val xBias = (canvas.width - mapWidth) / 2
-        val yBias = (canvas.height - mapHeight) / 2
-        x = xBias + xPos * GameConfig.BLOCK_WIDTH + xDelta
-        y = yBias + yPos * GameConfig.BLOCK_WIDTH + yDelta
-
-        with(rectangle) {
-            left = x
-            right = x + GameConfig.BLOCK_WIDTH
-            top = y
-            bottom = y + GameConfig.BLOCK_WIDTH
-        }
+    override fun refreshData() {
+        move()
+        super.refreshData()
     }
 
     open fun move() {
-        when (dir) {
-            Dir.UP -> yDelta -= speed
-            Dir.DOWN -> yDelta += speed
-            Dir.LEFT -> xDelta -= speed
-            Dir.RIGHT -> xDelta += speed
-        }
+        synchronized(this) {
+            when (dir) {
+                Dir.UP -> yDelta -= speed
+                Dir.DOWN -> yDelta += speed
+                Dir.LEFT -> xDelta -= speed
+                Dir.RIGHT -> xDelta += speed
+            }
 
-        if (xDelta >= GameConfig.BLOCK_WIDTH) {
-            xPos++
-            xDelta = 0
-        } else if (xDelta <= -(GameConfig.BLOCK_WIDTH)) {
-            xPos--
-            xDelta = 0
-        }
+            if (xDelta >= GameConfig.BLOCK_WIDTH) {
+                xPos++
+                xDelta = 0
+            } else if (xDelta <= -(GameConfig.BLOCK_WIDTH)) {
+                xPos--
+                xDelta = 0
+            }
 
-        if (yDelta >= GameConfig.BLOCK_WIDTH) {
-            yPos++
-            yDelta = 0
-        } else if (yDelta <= -(GameConfig.BLOCK_WIDTH)) {
-            yPos--
-            yDelta = 0
+            if (yDelta >= GameConfig.BLOCK_WIDTH) {
+                yPos++
+                yDelta = 0
+            } else if (yDelta <= -(GameConfig.BLOCK_WIDTH)) {
+                yPos--
+                yDelta = 0
+            }
         }
     }
 

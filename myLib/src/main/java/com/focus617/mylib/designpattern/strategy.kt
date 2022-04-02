@@ -3,7 +3,6 @@ package com.focus617.mylib.designpattern
 import com.focus617.mylib.logging.WithLogging
 import com.focus617.mylib.logging.unwrapCompanionClass
 import java.util.*
-import kotlin.collections.ArrayList
 
 // 抽象方法类
 abstract class Strategy {
@@ -102,7 +101,11 @@ class ClientStrategy {
                 try {
                     val sc = Scanner(System.`in`)
                     when (val select = sc.nextLine()) {
-                        "A", "B", "C", "a", "b", "c" -> context.newStrategyInstance(select.toUpperCase())
+                        "A", "B", "C", "a", "b", "c" -> context.newStrategyInstance(
+                            select.uppercase(
+                                Locale.getDefault()
+                            )
+                        )
                         "Q", "q" -> break@loop
                         else -> println("你输入有错, 请重新输入")
                     }

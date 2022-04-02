@@ -34,4 +34,8 @@ class ClockPin(name: String) : Leaf(name) {
             step += 1F
         }
     }
+
+    override fun refreshData() {
+
+    }
 }

@@ -10,6 +10,7 @@ import com.focus617.tankwar.scene.GameScene
 import com.focus617.tankwar.scene.base.Dir
 import com.focus617.tankwar.scene.base.IfScene
 import com.focus617.tankwar.scene.base.MovableNode
+import timber.log.Timber
 import java.util.Random
 
 class Tank(
@@ -45,11 +46,23 @@ class Tank(
     }
 
     override fun checkStrategy() {
+        // 检查和销毁无效对象
+        if (!checkAlive()) return
+
         // 如果碰到其它坦克,随机改变方向
         checkCollideWithOtherTanks()
 
         // 如果坦克碰到边界，就掉头
         checkReachBorder()
+    }
+
+    // 检查和销毁无效对象
+    private fun checkAlive(): Boolean {
+        if (!this.isAlive) {
+            (scene as GameScene).removeTank(this)
+            return false
+        }
+        return true
     }
 
     // 检查坦克转向规则：如果坦克碰到边界，就掉头，同时开火
@@ -87,7 +100,7 @@ class Tank(
 
     // 测试坦克碰撞规则: 如果碰到障碍物，例如其它坦克,就随机改变方向
     private fun checkCollideWithOtherTanks() {
-        val tankList = scene.rootNode.getTanks()
+        val tankList = (scene as GameScene).getTanks()
         for (tank in tankList) {
             if ((this != tank) && this.collideWith(tank)) {
                 this.randomDir()

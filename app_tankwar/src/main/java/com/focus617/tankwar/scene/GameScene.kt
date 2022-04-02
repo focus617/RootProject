@@ -6,10 +6,7 @@ import android.graphics.Canvas
 import com.focus617.platform.config_util.PropertiesUtil
 import com.focus617.platform.helper.BitmapHelper.bitmapLoader
 import com.focus617.tankwar.R
-import com.focus617.tankwar.scene.base.Dir
-import com.focus617.tankwar.scene.base.IfDraw
-import com.focus617.tankwar.scene.base.IfScene
-import com.focus617.tankwar.scene.base.RootNode
+import com.focus617.tankwar.scene.base.*
 import com.focus617.tankwar.scene.components.Bullet
 import com.focus617.tankwar.scene.components.Explode
 import com.focus617.tankwar.scene.components.Tank
@@ -21,10 +18,13 @@ object GameConfig {
     var BLOCK_NUM_H: Int = 0        // 游戏场地纵向方格的个数
 }
 
-class GameScene(val context: Context) : IfScene, IfDraw {
+class GameScene(val context: Context) : IfScene, IfRefresh {
 
     // 被绘制的对象集合
     override val rootNode = RootNode("Scene")
+    private lateinit var aggregateStatic: AggregateNode
+    private lateinit var aggregateTank: AggregateNode
+    private lateinit var aggregateBullet: AggregateNode
 
     // 绘制对象所用的Bitmap仓库
     override val bitmapRepository: LinkedHashMap<String, Bitmap> = LinkedHashMap()
@@ -33,7 +33,8 @@ class GameScene(val context: Context) : IfScene, IfDraw {
 
     init {
         loadGameConfig()
-        loadBitmap()
+        loadGameResource()
+        initAggregateNode()
         initNodes()
     }
 
@@ -50,38 +51,8 @@ class GameScene(val context: Context) : IfScene, IfDraw {
             PropertiesUtil.loadProperties(context)?.getProperty(GameConstant.KEY_BLOCK_NUM_H)?.toInt() ?: 10
     }
 
-    // 初始化场景中的对象
-    private fun initNodes() {
-        loadTankFromProperties(GameConstant.KEY_FRIEND)
-        loadTankFromProperties(GameConstant.KEY_ENEMY)
-    }
-
-    private fun loadTankFromProperties(key: String) {
-        val random = Random()
-
-        val isEnemy: Boolean = when (key) {
-            GameConstant.KEY_FRIEND -> false
-            GameConstant.KEY_ENEMY -> true
-            else -> return
-        }
-
-        val tankCount = PropertiesUtil
-            .loadProperties(context)?.getProperty(key)?.toInt() ?: 4
-
-        for (i in 1..tankCount) {
-            rootNode.add(
-                Tank(
-                    "Tank", context, this, isEnemy,
-                    random.nextInt(GameConfig.BLOCK_NUM_W),
-                    random.nextInt(GameConfig.BLOCK_NUM_H),
-                    Dir.values()[random.nextInt(Dir.values().size)]
-                )
-            )
-        }
-    }
-
-    // 构造绘制对象的Bitmap仓库
-    fun loadBitmap() {
+    // 加载游戏资源，例如构造绘制对象的Bitmap仓库
+    fun loadGameResource() {
         loadTankBitmap()
         loadBulletBitmap()
         loadExplodesBitmap()
@@ -119,13 +90,68 @@ class GameScene(val context: Context) : IfScene, IfDraw {
         bitmapRepository[GameConstant.EXPLODE_16] = bitmapLoader(resource, R.drawable.e16)
     }
 
-    override fun draw(canvas: Canvas) = rootNode.draw(canvas)
+    // 初始化场景中的集合对象
+    private fun initAggregateNode(){
+        aggregateStatic = AggregateNode(GameConstant.STATIC_AGGREGATE_NODE)
+        aggregateTank = AggregateNode(GameConstant.TANK_AGGREGATE_NODE)
+        aggregateBullet = AggregateNode(GameConstant.BULLET_AGGREGATE_NODE)
+        with(rootNode){
+            add(aggregateStatic)
+            add(aggregateTank)
+            add(aggregateBullet)
+        }
+    }
+
+    // 初始化场景中的对象(必须在initAggregateNode()之后调用)
+    private fun initNodes() {
+        loadTankFromProperties(GameConstant.KEY_FRIEND)
+        loadTankFromProperties(GameConstant.KEY_ENEMY)
+    }
+
+    private fun loadTankFromProperties(key: String) {
+        val random = Random()
+
+        val isEnemy: Boolean = when (key) {
+            GameConstant.KEY_FRIEND -> false
+            GameConstant.KEY_ENEMY -> true
+            else -> return
+        }
+
+        val tankCount = PropertiesUtil
+            .loadProperties(context)?.getProperty(key)?.toInt() ?: 4
+
+        for (i in 1..tankCount) {
+            aggregateTank.add(
+                Tank(
+                    "Tank", context, this, isEnemy,
+                    random.nextInt(GameConfig.BLOCK_NUM_W),
+                    random.nextInt(GameConfig.BLOCK_NUM_H),
+                    Dir.values()[random.nextInt(Dir.values().size)]
+                )
+            )
+        }
+    }
+
+    fun getTanks(): List<Tank> = aggregateTank.getChildren() as List<Tank>
+
+    fun removeTank(tank: Tank){
+        aggregateTank.remove(tank)
+    }
 
     fun addBullet(xPos: Int, yPos: Int, dir: Dir) {
-        rootNode.add(Bullet("bullet", context, this, xPos, yPos, dir))
+        aggregateBullet.add(Bullet("bullet", context, this, xPos, yPos, dir))
+    }
+
+    fun removeBullet(bullet: Bullet){
+        aggregateBullet.remove(bullet)
     }
 
     fun addExplode(xPos: Int, yPos: Int) {
-        rootNode.add(Explode("explode", context, this, xPos, yPos))
+        aggregateStatic.add(Explode("explode", context, this, xPos, yPos))
     }
+
+    override fun draw(canvas: Canvas) = rootNode.draw(canvas)
+    override fun refreshData() = rootNode.refreshData()
+
+
 }

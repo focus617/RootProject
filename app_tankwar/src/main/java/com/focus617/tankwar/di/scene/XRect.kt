@@ -26,4 +26,7 @@ class XRect(name: String) : Leaf(name) {
         x++
         y++
     }
+
+    override fun refreshData() {}
+
 }

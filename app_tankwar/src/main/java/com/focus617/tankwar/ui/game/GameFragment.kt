@@ -9,8 +9,7 @@ import com.focus617.platform.uicontroller.BaseFragment
 import com.focus617.tankwar.R
 import com.focus617.tankwar.databinding.FragmentGameBinding
 import com.focus617.tankwar.di.scene.RealScene
-import com.focus617.tankwar.di.scene.TestScene
-import com.focus617.tankwar.scene.base.IfDraw
+import com.focus617.tankwar.scene.base.IfRefresh
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -21,7 +20,7 @@ class GameFragment : BaseFragment() {
 
     @RealScene
     @Inject
-    lateinit var scene: IfDraw
+    lateinit var scene: IfRefresh
 
     private var _binding: FragmentGameBinding? = null
 

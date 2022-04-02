@@ -9,6 +9,10 @@ object GameConstant {
     const val KEY_BLOCK_NUM_W = "blockNumberWidth"      // 游戏场地横向方格的个数
     const val KEY_BLOCK_NUM_H = "blockNumberHeight"     // 游戏场地纵向方格的个数
 
+    const val STATIC_AGGREGATE_NODE = "staticAggregateNode"   //静止的可绘制对象集合的名称
+    const val TANK_AGGREGATE_NODE = "tankAggregateNode"       //可移动的坦克集合的名称
+    const val BULLET_AGGREGATE_NODE = "bulletAggregateNode"   //可移动的炮弹集合的名称
+
     const val TANK_MINE = "Tank_Mine"
     const val TANK_ENEMY_1 = "Tank_Enemy_1"
     const val TANK_ENEMY_2 = "Tank_Enemy_2"

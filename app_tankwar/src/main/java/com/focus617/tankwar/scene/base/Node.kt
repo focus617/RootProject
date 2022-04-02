@@ -15,7 +15,7 @@ abstract class Node(name: String, context: Context, val scene: IfScene) : Leaf(n
     abstract var yPos: Int
 
     // 被绘制对象是否仍有效（未出边界，未被摧毁）？
-    private var isAlive: Boolean = true
+    protected var isAlive: Boolean = true
 
     open fun die(){
         this.isAlive = false
@@ -33,21 +33,17 @@ abstract class Node(name: String, context: Context, val scene: IfScene) : Leaf(n
         // 重新计算自己当前的位置坐标(x,y)
         calculateCurrentPosition(canvas)
 
-        // 执行策略检查
-        checkStrategy()
-
-        // 检查和销毁无效对象
-        if (!this.isAlive){
-            scene.rootNode.remove(this)
-            return
-        }
-
         // 找到自己此时合适的Bitmap
         findBitmap()
 
         // 在绘制以前，坐标(x,y)将由具体实现类进行计算更新
         bitmap.draw(canvas,x, y, x + GameConfig.BLOCK_WIDTH, y + GameConfig.BLOCK_WIDTH )
 
+    }
+
+    override fun refreshData() {
+        // 执行策略检查
+        checkStrategy()
     }
 
     // 实现子类需要负责在每次draw前重新计算自己当前的位置坐标(x,y)
