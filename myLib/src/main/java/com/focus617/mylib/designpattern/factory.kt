@@ -13,23 +13,16 @@ abstract class AbstractProduct {
     }
 }
 
+// 产品类A
+class ProductA : AbstractProduct()
+class ProductB : AbstractProduct()
+class ProductC : AbstractProduct()
+
 // 简单工厂
 interface ISimpleFactory {
     // 提供一个创建产品的方法
     fun make(productType: String): AbstractProduct?
 }
-
-// 抽象工厂
-interface IFactory {
-    // 提供一个创建产品的方法
-    fun makeProduct(): AbstractProduct
-}
-
-
-// 产品类A
-class ProductA : AbstractProduct()
-class ProductB : AbstractProduct()
-class ProductC : AbstractProduct()
 
 // 简单工厂
 class SimpleFactory : ISimpleFactory {
@@ -47,6 +40,12 @@ class SimpleFactory : ISimpleFactory {
         else -> null
     }
 
+}
+
+// 工厂方法
+interface IFactory {
+    // 提供一个创建产品的方法
+    fun makeProduct(): AbstractProduct
 }
 
 // 产品A的工厂
@@ -72,6 +71,48 @@ class ProductBFactory : IFactory {
 
 }
 
+// 抽象工厂
+// 产品族One
+class ProductAFamilyOne : AbstractProduct()
+class ProductBFamilyOne : AbstractProduct()
+class ProductCFamilyOne : AbstractProduct()
+
+// 产品族Two
+class ProductAFamilyTwo : AbstractProduct()
+class ProductBFamilyTwo : AbstractProduct()
+class ProductCFamilyTwo : AbstractProduct()
+
+class FamilyOneFactory : ISimpleFactory {
+    companion object : WithLogging()
+
+    init {
+        LOG.info("构建工厂：${unwrapCompanionClass(this.javaClass).simpleName}")
+    }
+
+    // 每次需要更改此处，以添加新产品
+    override fun make(productType: String): AbstractProduct? = when (productType) {
+        "A" -> ProductAFamilyOne()
+        "B" -> ProductBFamilyOne()
+        "C" -> ProductCFamilyOne()
+        else -> null
+    }
+}
+
+class FamilyTwoFactory : ISimpleFactory {
+    companion object : WithLogging()
+
+    init {
+        LOG.info("构建工厂：${unwrapCompanionClass(this.javaClass).simpleName}")
+    }
+
+    // 每次需要更改此处，以添加新产品
+    override fun make(productType: String): AbstractProduct? = when (productType) {
+        "A" -> ProductAFamilyTwo()
+        "B" -> ProductBFamilyTwo()
+        "C" -> ProductCFamilyTwo()
+        else -> null
+    }
+}
 
 class ClientFactory {
     companion object : WithLogging() {
@@ -84,10 +125,29 @@ class ClientFactory {
             val productB = factory.make("B")
             val productC = factory.make("C")
 
-            // 测试抽象工厂
+            LOG.info("\n")
+
+            // 测试工厂方法
             // 添加新产品的责任赋予了Client
             val productA1 = ProductAFactory().makeProduct()
             val productB1 = ProductBFactory().makeProduct()
+
+            LOG.info("\n")
+
+            // 测试抽象工厂
+            var factoryNew: ISimpleFactory = FamilyOneFactory()
+            factoryNew.make("A")
+            factoryNew.make("B")
+            factoryNew.make("C")
+
+            LOG.info("\n")
+
+            LOG.info("切换到新主题")
+            // 更改产品族，只需要改下面这一行
+            factoryNew = FamilyTwoFactory()
+            factoryNew.make("A")
+            factoryNew.make("B")
+            factoryNew.make("C")
         }
     }
 }
