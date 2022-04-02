@@ -9,11 +9,10 @@ import com.focus617.tankwar.scene.base.Node
 
 class Explode(
     name: String,
-    context: Context,
     scene: IfScene,
     override var xPos: Int,
     override var yPos: Int
-) : Node(name, context, scene) {
+) : Node(name, scene) {
 
     private var paintTimes: Int = 1
 

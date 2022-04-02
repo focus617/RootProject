@@ -14,15 +14,14 @@ import com.focus617.tankwar.scene.components.tank.Tank
 
 class Bullet(
     name: String,
-    context: Context,
     scene: IfScene,
     override var xPos: Int,
     override var yPos: Int,
     override var dir: Dir
-) : MovableNode(name, context, scene) {
+) : MovableNode(name, scene) {
 
     override var speed: Int =
-        PropertiesUtil.loadProperties(context)?.getProperty(KEY_BULLET_SPEED)?.toInt() ?: 10
+        (scene as GameScene).properties?.getProperty(KEY_BULLET_SPEED)?.toInt() ?: 10
 
     // 通过对象类型，找到Scene中的Bitmap
     override fun findBitmap() {

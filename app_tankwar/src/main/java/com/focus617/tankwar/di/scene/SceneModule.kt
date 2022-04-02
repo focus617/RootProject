@@ -16,7 +16,7 @@ object SceneModule {
     // TODO: check why qualifier can't work
 //    @TestScene
 //    @Provides
-//    fun bindTestScene(@ApplicationContext context: Context): IfDraw = MyTestScene(context)
+//    fun bindTestScene(@ApplicationContext context: Context): IfRefresh = MyTestScene(context)
 
     @RealScene
     @Provides

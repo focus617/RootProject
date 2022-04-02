@@ -30,6 +30,7 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
     override val bitmapRepository: LinkedHashMap<String, Bitmap> = LinkedHashMap()
 
     private val resource = context.resources
+    val properties: Properties? = PropertiesUtil.loadProperties(context)
 
     init {
         loadGameConfig()
@@ -123,7 +124,7 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
         for (i in 1..tankCount) {
             aggregateTank.add(
                 Tank(
-                    "Tank", context, this, isEnemy,
+                    "Tank", this, isEnemy,
                     random.nextInt(GameConfig.BLOCK_NUM_W),
                     random.nextInt(GameConfig.BLOCK_NUM_H),
                     Dir.values()[random.nextInt(Dir.values().size)]
@@ -139,7 +140,7 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
     }
 
     fun addBullet(xPos: Int, yPos: Int, dir: Dir) {
-        aggregateBullet.add(Bullet("bullet", context, this, xPos, yPos, dir))
+        aggregateBullet.add(Bullet("bullet", this, xPos, yPos, dir))
     }
 
     fun removeBullet(bullet: Bullet){
@@ -147,7 +148,7 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
     }
 
     fun addExplode(xPos: Int, yPos: Int) {
-        aggregateStatic.add(Explode("explode", context, this, xPos, yPos))
+        aggregateStatic.add(Explode("explode", this, xPos, yPos))
     }
 
     override fun draw(canvas: Canvas) = rootNode.draw(canvas)

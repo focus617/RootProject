@@ -17,18 +17,17 @@ import java.util.*
 
 class Tank(
     name: String,
-    val context: Context,
     scene: IfScene,
     private val isEnemy: Boolean = true,
     override var xPos: Int = 0,
     override var yPos: Int = 0,
     override var dir: Dir = Dir.RIGHT
-) : MovableNode(name, context, scene) {
+) : MovableNode(name, scene) {
 
     private val random = Random()
 
     override var speed: Int =
-        PropertiesUtil.loadProperties(context)?.getProperty(KEY_TANK_SPEED)?.toInt() ?: 10
+        (scene as GameScene).properties?.getProperty(KEY_TANK_SPEED)?.toInt() ?: 10
 
     // 通过对象类型，找到Scene中的Bitmap
     override fun findBitmap() {
@@ -140,7 +139,7 @@ class Tank(
         // 从配置文件中读取FireStrategy
         val key = if (isEnemy) KEY_ENEMY_FIRE_STRATEGY else KEY_FRIEND_FIRE_STRATEGY
 
-        var fsName = PropertiesUtil.loadProperties(context)?.getProperty(key)?.toString()
+        var fsName = (scene as GameScene).properties?.getProperty(key)?.toString()
         Timber.i("Tank.init(): load $fsName")
 
         if (fsName == null) {

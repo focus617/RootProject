@@ -9,7 +9,7 @@ import com.focus617.tankwar.scene.GameConfig
 /*
  * Node类的主要职责是负责在SurfaceView上绘制Bitmap
  */
-abstract class Node(name: String, context: Context, val scene: IfScene) : Leaf(name) {
+abstract class Node(name: String, val scene: IfScene) : Leaf(name) {
     //在游戏棋盘上的坐标
     abstract var xPos: Int
     abstract var yPos: Int
@@ -20,8 +20,6 @@ abstract class Node(name: String, context: Context, val scene: IfScene) : Leaf(n
     open fun die(){
         this.isAlive = false
     }
-
-    private val resource: Resources = context.resources
 
     protected val mapWidth = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_W
     protected val mapHeight = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_H
