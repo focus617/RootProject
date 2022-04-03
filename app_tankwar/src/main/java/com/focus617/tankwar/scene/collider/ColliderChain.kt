@@ -1,4 +1,4 @@
-package com.focus617.tankwar.scene.cor
+package com.focus617.tankwar.scene.collider
 
 import com.focus617.tankwar.scene.base.Node
 import java.util.*
