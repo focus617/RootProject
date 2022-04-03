@@ -12,8 +12,8 @@ import com.focus617.tankwar.scene.base.MovableNode
 class Bullet(
     name: String,
     scene: IfScene,
-    override var xPos: Int,
-    override var yPos: Int,
+    override var x: Int,
+    override var y: Int,
     override var dir: Dir
 ) : MovableNode(name, scene) {
 
@@ -26,28 +26,31 @@ class Bullet(
     }
 
     override fun checkStrategy() {
+        val mapTop = (scene as GameScene).rootNode.rect.top
+        val mapBottom = scene.rootNode.rect.bottom
+        val mapLeft = scene.rootNode.rect.left
+        val mapRight = scene.rootNode.rect.right
+
         // 如果炮弹打出边界,就爆炸并标记需要销毁
-        if ((xPos < 0) || (xPos > GameConfig.BLOCK_NUM_W - 1) ||
-            (yPos < 0) || (yPos > GameConfig.BLOCK_NUM_H - 1)
+        if ((x < mapLeft) || (x > mapRight - GameConfig.BLOCK_WIDTH) ||
+            (y < mapTop) || (y > mapBottom - GameConfig.BLOCK_WIDTH)
         ) {
             this.die()
-            this.explode()
+
+            // 爆炸
+            when (dir) {
+                Dir.UP -> scene.addExplode(x, mapTop)
+                Dir.DOWN -> scene.addExplode(x, mapBottom - GameConfig.BLOCK_WIDTH)
+                Dir.LEFT -> scene.addExplode(mapLeft, y)
+                Dir.RIGHT -> scene.addExplode(mapRight - GameConfig.BLOCK_WIDTH, y)
+            }
         }
 
         // 检查和销毁无效对象，爆炸并将炮弹从集合中删除
         if (!this.isAlive) {
-            (scene as GameScene).removeBullet(this)
+            scene.removeBullet(this)
             return
         }
     }
 
-    // 爆炸
-    private fun explode() {
-        when (dir) {
-            Dir.UP -> (scene as GameScene).addExplode(xPos, 0)
-            Dir.DOWN -> (scene as GameScene).addExplode(xPos, GameConfig.BLOCK_NUM_H - 1)
-            Dir.LEFT -> (scene as GameScene).addExplode(0, yPos)
-            Dir.RIGHT -> (scene as GameScene).addExplode(GameConfig.BLOCK_NUM_W - 1, yPos)
-        }
-    }
 }

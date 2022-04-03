@@ -34,4 +34,13 @@ object BitmapHelper {
         canvas.drawBitmap(this, srcRect, destRect, paint)
     }
 
+    fun Bitmap.draw(canvas: Canvas, destRect: Rect) {
+        // 画笔
+        val paint = Paint()
+
+        // 在绘制以前，坐标(x,y)将由具体实现类进行计算更新
+        val srcRect = Rect(0, 0, this.width, this.height)
+        canvas.drawBitmap(this, srcRect, destRect, paint)
+    }
+
 }

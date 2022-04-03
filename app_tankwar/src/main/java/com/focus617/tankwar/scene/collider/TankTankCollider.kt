@@ -8,7 +8,7 @@ class TankTankCollider() : Collider {
 
     override fun collide(node1: Node, node2: Node): Boolean {
         if ((node1 is Tank) && (node2 is Tank)) {
-            if (node1.rectangle.intersect(node2.rectangle)) {
+            if (node1.rect.intersect(node2.rect)) {
                 node1.randomDir()
             }
         }

@@ -1,41 +1,48 @@
 package com.focus617.tankwar.scene.base
 
-import android.content.Context
-import android.content.res.Resources
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Rect
 import com.focus617.platform.helper.BitmapHelper.draw
 import com.focus617.tankwar.scene.GameConfig
+import com.focus617.tankwar.scene.GameScene
 
 /*
  * Node类的主要职责是负责在SurfaceView上绘制Bitmap
  */
 abstract class Node(name: String, val scene: IfScene) : Leaf(name) {
+
     //在游戏棋盘上的坐标
-    abstract var xPos: Int
-    abstract var yPos: Int
+    open var x: Int = (scene as GameScene).rootNode.rect.left
+    open var y: Int = (scene as GameScene).rootNode.rect.top
+
+    // 每个对象在地图上占用的区块，可用于碰撞检测
+    val rect = Rect()
+
+    lateinit var bitmap: Bitmap
 
     // 被绘制对象是否仍有效（未出边界，未被摧毁）？
     protected var isAlive: Boolean = true
 
-    open fun die(){
+    open fun die() {
         this.isAlive = false
     }
 
-    protected val mapWidth = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_W
-    protected val mapHeight = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_H
-
-    var x: Int = 0
-    var y: Int = 0
 
     override fun draw(canvas: Canvas) {
-        // 重新计算自己当前的位置坐标(x,y)
-        calculateCurrentPosition(canvas)
-
         // 找到自己此时合适的Bitmap
         findBitmap()
 
+        // 刷新对象的Rect，用于绘制和动态碰撞检测
+        with(rect) {
+            left = x
+            right = x + GameConfig.BLOCK_WIDTH
+            top = y
+            bottom = y + GameConfig.BLOCK_WIDTH
+        }
+
         // 在绘制以前，坐标(x,y)将由具体实现类进行计算更新
-        bitmap.draw(canvas,x, y, x + GameConfig.BLOCK_WIDTH, y + GameConfig.BLOCK_WIDTH )
+        bitmap.draw(canvas, rect)
 
     }
 
@@ -44,15 +51,6 @@ abstract class Node(name: String, val scene: IfScene) : Leaf(name) {
         checkStrategy()
     }
 
-    // 实现子类需要负责在每次draw前重新计算自己当前的位置坐标(x,y)
-    open fun calculateCurrentPosition(canvas: Canvas){
-        val xBias = (canvas.width - mapWidth) / 2
-        val yBias = (canvas.height - mapHeight) / 2
-        x = xBias + xPos * GameConfig.BLOCK_WIDTH
-        y = yBias + yPos * GameConfig.BLOCK_WIDTH
-    }
-
-    lateinit var bitmap: Bitmap
     // 实现子类需要负责在Scene中的BitmapRepository找到自己当时合适的Bitmap
     // 本函数将在每次draw之前被调用，以便根据移动方向，变换相应的Bitmap
     abstract fun findBitmap()

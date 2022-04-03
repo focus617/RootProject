@@ -19,9 +19,9 @@ class Tank(
     name: String,
     scene: IfScene,
     private val isEnemy: Boolean = true,
-    override var xPos: Int = 0,
-    override var yPos: Int = 0,
-    override var dir: Dir = Dir.RIGHT
+    override var x: Int,
+    override var y: Int,
+    override var dir: Dir
 ) : MovableNode(name, scene) {
 
     private val random = Random()
@@ -38,63 +38,47 @@ class Tank(
     }
 
     override fun move() {
-        if ((xDelta == 0) || (yDelta == 0)) {
-            // 检查坦克转向规则：10%概率随机改变方向
-            if (random.nextInt(100) > 90) {
-                this.randomDir()
-            }
+        // 坦克转向规则：7%概率随机改变方向
+        if (random.nextInt(100) > 93) {
+            this.randomDir()
         }
+
+        if (random.nextInt(100) > 97) {
+            this.fire()
+        }
+
         super.move()
     }
 
     override fun checkStrategy() {
         // 检查和销毁无效对象
-        if (!checkAlive()) return
+        if (!this.isAlive) {
+            (scene as GameScene).removeTank(this)
+            return
+        }
 
         // 如果坦克碰到边界，就掉头
         checkReachBorder()
     }
 
-    // 检查和销毁无效对象
-    private fun checkAlive(): Boolean {
-        if (!this.isAlive) {
-            (scene as GameScene).removeTank(this)
-            return false
-        }
-        return true
-    }
-
-    // 检查坦克转向规则：如果坦克碰到边界，就掉头，同时开火
+    // 检查坦克转向规则：如果坦克碰到边界，就停下来，等待变向
     private fun checkReachBorder() {
-        if ((xPos < 1) && (Dir.LEFT == dir)) {
-            dir = Dir.RIGHT
-            xPos = 0
-            fire()
-        } else if ((xPos > GameConfig.BLOCK_NUM_W - 2) && (Dir.RIGHT == dir)) {
-            dir = Dir.LEFT
-            xPos = GameConfig.BLOCK_NUM_W - 1
-            fire()
+        val mapTop = (scene as GameScene).rootNode.rect.top
+        val mapBottom = scene.rootNode.rect.bottom
+        val mapLeft = scene.rootNode.rect.left
+        val mapRight = scene.rootNode.rect.right
+
+        if (x < mapLeft) {
+            x = mapLeft
+        } else if (x > mapRight - GameConfig.BLOCK_WIDTH) {
+            x = mapRight - GameConfig.BLOCK_WIDTH
         }
 
-        if ((yPos < 1) && (Dir.UP == dir)) {
-            dir = Dir.DOWN
-            yPos = 0
-            fire()
-        } else if ((yPos > GameConfig.BLOCK_NUM_H - 2) && (Dir.DOWN == dir)) {
-            dir = Dir.UP
-            yPos = GameConfig.BLOCK_NUM_H - 1
-            fire()
+        if (y < mapTop)  {
+            y = mapTop
+        } else if (y > mapBottom - GameConfig.BLOCK_WIDTH)  {
+            y = mapBottom - GameConfig.BLOCK_WIDTH
         }
-    }
-
-    private fun checkReachBorderNew() {
-        if (x < 2) x = 20
-        if (y < GameConfig.BLOCK_WIDTH) y = GameConfig.BLOCK_WIDTH
-
-        if (x > (GameConfig.BLOCK_NUM_W - 1) * GameConfig.BLOCK_WIDTH - 20)
-            x = (GameConfig.BLOCK_NUM_W - 1) * GameConfig.BLOCK_WIDTH
-        if (y > GameConfig.BLOCK_NUM_H * GameConfig.BLOCK_WIDTH - 20)
-            y = (GameConfig.BLOCK_NUM_H - 1) * GameConfig.BLOCK_WIDTH
     }
 
     // 随机改变方向
@@ -106,17 +90,7 @@ class Tank(
     //坦克被炮弹击中后爆炸
     override fun die() {
         super.die()
-        explode()
-    }
-
-    // 爆炸
-    private fun explode() {
-        when (dir) {
-            Dir.UP -> (scene as GameScene).addExplode(xPos, yPos - 1)
-            Dir.DOWN -> (scene as GameScene).addExplode(xPos, yPos + 1)
-            Dir.LEFT -> (scene as GameScene).addExplode(xPos - 1, yPos)
-            Dir.RIGHT -> (scene as GameScene).addExplode(xPos + 1, yPos)
-        }
+        (scene as GameScene).addExplode(x, y)
     }
 
     var fs: FireStrategy = DefaultFireStrategy()

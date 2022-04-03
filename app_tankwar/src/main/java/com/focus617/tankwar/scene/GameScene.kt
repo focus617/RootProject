@@ -27,11 +27,18 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
     override val bitmapRepository: LinkedHashMap<String, Bitmap> = LinkedHashMap()
 
     private val resource = context.resources
+
     // 配置属性
     val properties: Properties? = PropertiesUtil.loadProperties(context)
+    // 地图大小
+    var mapWidth: Int = 0
+    var mapHeight: Int = 0
 
     init {
         loadGameConfig()
+        mapWidth = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_W
+        mapHeight = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_H
+
         loadGameResource()
         initNodes()
     }
@@ -110,8 +117,8 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
             rootNode.add(
                 Tank(
                     "Tank", this, isEnemy,
-                    random.nextInt(GameConfig.BLOCK_NUM_W),
-                    random.nextInt(GameConfig.BLOCK_NUM_H),
+                    random.nextInt(mapWidth),
+                    random.nextInt(mapHeight),
                     Dir.values()[random.nextInt(Dir.values().size)]
                 )
             )
@@ -126,16 +133,16 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
         rootNode.remove(tank)
     }
 
-    fun addBullet(xPos: Int, yPos: Int, dir: Dir) {
-        rootNode.add(Bullet("bullet", this, xPos, yPos, dir))
+    fun addBullet(x: Int, y: Int, dir: Dir) {
+        rootNode.add(Bullet("bullet", this, x, y, dir))
     }
 
     fun removeBullet(bullet: Bullet){
         rootNode.remove(bullet)
     }
 
-    fun addExplode(xPos: Int, yPos: Int) {
-        rootNode.add(Explode("explode", this, xPos, yPos))
+    fun addExplode(x: Int, y: Int) {
+        rootNode.add(Explode("explode", this, x, y))
     }
 
     fun removeExplode(explode: Explode){

@@ -1,7 +1,5 @@
 package com.focus617.tankwar.scene.base
 
-import android.graphics.Canvas
-import android.graphics.Rect
 import com.focus617.tankwar.scene.GameConfig
 
 /*
@@ -15,60 +13,17 @@ abstract class MovableNode(name: String, scene: IfScene) : Node(name, scene) {
     //移动速度
     abstract var speed: Int
 
-    // 移动方向上的偏移
-    protected var xDelta: Int = 0
-    protected var yDelta: Int = 0
-
-    // 碰撞检测需要的Rect
-    val rectangle = Rect()
-
-    override fun calculateCurrentPosition(canvas: Canvas) {
-        synchronized(this) {
-            val xBias = (canvas.width - mapWidth) / 2
-            val yBias = (canvas.height - mapHeight) / 2
-            val halfWidth = GameConfig.BLOCK_WIDTH / 2
-            x = xBias + xPos * GameConfig.BLOCK_WIDTH + xDelta + halfWidth
-            y = yBias + yPos * GameConfig.BLOCK_WIDTH + yDelta + halfWidth
-
-            // 刷新对象的Rect，用于动态碰撞检测
-            with(rectangle) {
-                left = x
-                right = x + GameConfig.BLOCK_WIDTH
-                top = y
-                bottom = y + GameConfig.BLOCK_WIDTH
-            }
-        }
-    }
-
     override fun refreshData() {
         move()
         super.refreshData()
     }
 
     open fun move() {
-        synchronized(this) {
-            when (dir) {
-                Dir.UP -> yDelta -= speed
-                Dir.DOWN -> yDelta += speed
-                Dir.LEFT -> xDelta -= speed
-                Dir.RIGHT -> xDelta += speed
-            }
-
-            if (xDelta >= GameConfig.BLOCK_WIDTH) {
-                xPos++
-                xDelta = 0
-            } else if (xDelta <= -(GameConfig.BLOCK_WIDTH)) {
-                xPos--
-                xDelta = 0
-            }
-
-            if (yDelta >= GameConfig.BLOCK_WIDTH) {
-                yPos++
-                yDelta = 0
-            } else if (yDelta <= -(GameConfig.BLOCK_WIDTH)) {
-                yPos--
-                yDelta = 0
-            }
+        when (dir) {
+            Dir.UP -> y -= speed
+            Dir.DOWN -> y += speed
+            Dir.LEFT -> x -= speed
+            Dir.RIGHT -> x += speed
         }
     }
 
