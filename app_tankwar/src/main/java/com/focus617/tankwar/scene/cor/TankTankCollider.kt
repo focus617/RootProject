@@ -12,7 +12,7 @@ class TankTankCollider() : Collider {
                 node1.randomDir()
             }
         }
-        return true
+        return false
     }
 
 }

@@ -2,6 +2,13 @@ package com.focus617.mylib.designpattern
 
 import com.focus617.mylib.logging.WithLogging
 
+/**
+ * 相较于 Type Two
+ * 优点：
+ * 缺点：
+ *  1）只有一条主链
+ *  2）要求每个具体类的模板写法：mSuccessor?.handlerRequest(requestCode)
+ */
 
 /**
  * @description Handler 处理者类
@@ -33,9 +40,9 @@ class ConcreteHandler1 : Handler() {
 
     override fun handlerRequest(requestCode: Int) {
         when (requestCode) {
-            in 0 until 10 -> LOG.info("${this::class.java.simpleName}: 可处理的{$requestCode}请求\n")
+            in 0 until 10 -> LOG.info("${this::class.java.simpleName}: 我来处理{$requestCode}请求\n")
             else -> {
-                LOG.info("${this::class.java.simpleName}: 无法处理的{$requestCode}请求，交给上级")
+                LOG.info("${this::class.java.simpleName}: 无法处理的{$requestCode}请求，交给上级\n")
                 mSuccessor?.handlerRequest(requestCode)
             }
         }
@@ -46,9 +53,9 @@ class ConcreteHandler2 : Handler() {
 
     override fun handlerRequest(requestCode: Int) {
         when (requestCode) {
-            in 10 until 20 -> LOG.info("${this::class.java.simpleName}: 可处理的{$requestCode}请求\n")
+            in 10 until 20 -> LOG.info("${this::class.java.simpleName}: 我来处理{$requestCode}请求\n")
             else -> {
-                LOG.info("${this::class.java.simpleName}: 无法处理的{$requestCode}请求，交给上级")
+                LOG.info("${this::class.java.simpleName}: 无法处理的{$requestCode}请求，交给上级\n")
                 mSuccessor?.handlerRequest(requestCode)
             }
         }
@@ -59,9 +66,9 @@ class ConcreteHandler3 : Handler() {
 
     override fun handlerRequest(requestCode: Int) {
         when (requestCode) {
-            in 20 until 30 -> LOG.info("${this::class.java.simpleName}: 可处理的{$requestCode}请求\n")
+            in 20 until 30 -> LOG.info("${this::class.java.simpleName}: 我来处理{$requestCode}请求\n")
             else -> {
-                LOG.info("${this::class.java.simpleName}: 无法处理的{$requestCode}请求，交给上级")
+                LOG.info("${this::class.java.simpleName}: 无法处理的{$requestCode}请求，交给上级\n")
                 mSuccessor?.handlerRequest(requestCode)
             }
         }
@@ -74,7 +81,7 @@ class ConcreteHandler3 : Handler() {
 class ConcreteFinalHandler : Handler() {
 
     override fun handlerRequest(requestCode: Int) {
-        LOG.info("${this::class.java.simpleName}: 是boss处理{$requestCode}请求\n")
+        LOG.info("${this::class.java.simpleName}: 我是boss，必须处理{$requestCode}请求\n")
     }
 }
 

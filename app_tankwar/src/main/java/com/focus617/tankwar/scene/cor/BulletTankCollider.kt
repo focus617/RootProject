@@ -13,16 +13,16 @@ class BulletTankCollider() : Collider {
             if (node1.rectangle.intersect(node2.rectangle)) {
                 node1.die()
                 node2.die()
-                return false
+                return true
             }
         } else if ((node1 is Tank) && (node2 is Bullet)) {
             if (node2.rectangle.intersect(node1.rectangle)) {
                 node1.die()
                 node2.die()
-                return false
+                return true
             }
         }
-        return true
+        return false
     }
 
 }

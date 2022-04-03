@@ -18,10 +18,10 @@ class ColliderChain : Collider {
 
     override fun collide(node1: Node, node2: Node): Boolean {
         for (collider in colliders) {
-            if(!collider.collide(node1, node2))
-                return false
+            if(collider.collide(node1, node2))
+                return true
         }
-        return true
+        return false
     }
 
 }
