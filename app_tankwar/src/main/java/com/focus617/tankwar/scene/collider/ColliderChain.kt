@@ -8,8 +8,11 @@ class ColliderChain : Collider {
     private val colliders = LinkedList<Collider>()
 
     init {
+        // TODO: move below to properties configuration
         this.add(BulletTankCollider())
         this.add(TankTankCollider())
+        this.add(BulletBorderCollider())
+        this.add(TankBorderCollider())
     }
 
     fun add(c: Collider) {

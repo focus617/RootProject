@@ -55,7 +55,12 @@ abstract class Node(name: String, val scene: IfScene) : Leaf(name) {
     // 本函数将在每次draw之前被调用，以便根据移动方向，变换相应的Bitmap
     abstract fun findBitmap()
 
-    // 实现子类需要负责实现自己的各项策略，比如移动到边界，或碰到障碍后的处理操作
-    abstract fun checkStrategy()
+    // 实现子类需要扩展自己的各项策略，比如移动到边界，或碰到障碍后的处理操作
+    open fun checkStrategy(){
+        // 检查和销毁无效对象
+        if (!this.isAlive) {
+            (scene as GameScene).removeObject(this)
+        }
+    }
 
 }

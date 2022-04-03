@@ -1,10 +1,7 @@
 package com.focus617.tankwar.scene.components
 
-import android.content.Context
 import android.graphics.Canvas
-import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.GameConstant
-import com.focus617.tankwar.scene.GameScene
 import com.focus617.tankwar.scene.base.IfScene
 import com.focus617.tankwar.scene.base.Node
 
@@ -45,9 +42,9 @@ class Explode(
     }
 
     override fun checkStrategy() {
-        if((paintTimes)>16){
+        if (paintTimes > 16) {
             this.die()
-            (scene as GameScene).removeExplode(this)
         }
+        super.checkStrategy()
     }
 }

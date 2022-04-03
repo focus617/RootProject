@@ -18,7 +18,7 @@ class Bullet(
 ) : MovableNode(name, scene) {
 
     override var speed: Int =
-        (scene as GameScene).properties?.getProperty(KEY_BULLET_SPEED)?.toInt() ?: 10
+        (scene as GameScene).properties?.getProperty(KEY_BULLET_SPEED)?.toInt() ?: 20
 
     // 通过对象类型，找到Scene中的Bitmap
     override fun findBitmap() {
@@ -26,31 +26,11 @@ class Bullet(
     }
 
     override fun checkStrategy() {
-        val mapTop = (scene as GameScene).rootNode.rect.top
-        val mapBottom = scene.rootNode.rect.bottom
-        val mapLeft = scene.rootNode.rect.left
-        val mapRight = scene.rootNode.rect.right
-
-        // 如果炮弹打出边界,就爆炸并标记需要销毁
-        if ((x < mapLeft) || (x > mapRight - GameConfig.BLOCK_WIDTH) ||
-            (y < mapTop) || (y > mapBottom - GameConfig.BLOCK_WIDTH)
-        ) {
-            this.die()
-
-            // 爆炸
-            when (dir) {
-                Dir.UP -> scene.addExplode(x, mapTop)
-                Dir.DOWN -> scene.addExplode(x, mapBottom - GameConfig.BLOCK_WIDTH)
-                Dir.LEFT -> scene.addExplode(mapLeft, y)
-                Dir.RIGHT -> scene.addExplode(mapRight - GameConfig.BLOCK_WIDTH, y)
-            }
-        }
-
         // 检查和销毁无效对象，爆炸并将炮弹从集合中删除
         if (!this.isAlive) {
-            scene.removeBullet(this)
-            return
+            (scene as GameScene).addExplode(x, y)      // 爆炸
         }
+        super.checkStrategy()
     }
 
 }

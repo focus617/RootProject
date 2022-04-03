@@ -53,11 +53,6 @@ class Tank(
 
     }
 
-    // 开炮
-    fun fire() {
-        fs.fire(this)
-    }
-
     // 通过对象类型，找到Scene中的Bitmap
     override fun findBitmap() {
         bitmap = when (isEnemy) {
@@ -79,47 +74,15 @@ class Tank(
         super.move()
     }
 
-    override fun checkStrategy() {
-        // 检查和销毁无效对象
-        if (!this.isAlive) {
-            (scene as GameScene).removeTank(this)
-            return
-        }
-
-        // 如果坦克碰到边界，就掉头
-        checkReachBorder()
-    }
-
-    // 检查坦克转向规则：如果坦克碰到边界，就停下来，等待变向
-    private fun checkReachBorder() {
-        val mapTop = (scene as GameScene).rootNode.rect.top
-        val mapBottom = scene.rootNode.rect.bottom
-        val mapLeft = scene.rootNode.rect.left
-        val mapRight = scene.rootNode.rect.right
-
-        if (x < mapLeft) {
-            x = mapLeft
-        } else if (x > mapRight - GameConfig.BLOCK_WIDTH) {
-            x = mapRight - GameConfig.BLOCK_WIDTH
-        }
-
-        if (y < mapTop)  {
-            y = mapTop
-        } else if (y > mapBottom - GameConfig.BLOCK_WIDTH)  {
-            y = mapBottom - GameConfig.BLOCK_WIDTH
-        }
+    // 开炮
+    private fun fire() {
+        fs.fire(this)
     }
 
     // 随机改变方向
-    fun randomDir() {
+    private fun randomDir() {
         val choiceNum = Dir.values().size
         this.dir = Dir.values()[random.nextInt(choiceNum)]
-    }
-
-    //坦克被炮弹击中后爆炸
-    override fun die() {
-        super.die()
-        (scene as GameScene).addExplode(x, y)
     }
 
 }

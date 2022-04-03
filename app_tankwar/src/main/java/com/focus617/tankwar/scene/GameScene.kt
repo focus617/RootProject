@@ -129,24 +129,16 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
 
     override fun refreshData() = rootNode.refreshData()
 
-    fun removeTank(tank: Tank){
-        rootNode.remove(tank)
-    }
-
     fun addBullet(x: Int, y: Int, dir: Dir) {
         rootNode.add(Bullet("bullet", this, x, y, dir))
-    }
-
-    fun removeBullet(bullet: Bullet){
-        rootNode.remove(bullet)
     }
 
     fun addExplode(x: Int, y: Int) {
         rootNode.add(Explode("explode", this, x, y))
     }
 
-    fun removeExplode(explode: Explode){
-        rootNode.remove(explode)
+    fun removeObject(obj: IfRefresh){
+        rootNode.remove(obj)
     }
 
 }
