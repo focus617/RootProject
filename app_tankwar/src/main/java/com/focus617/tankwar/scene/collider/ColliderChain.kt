@@ -9,10 +9,13 @@ class ColliderChain : Collider {
 
     init {
         // TODO: move below to properties configuration
-        this.add(BulletTankCollider())
-        this.add(TankTankCollider())
-        this.add(BulletBorderCollider())
-        this.add(TankBorderCollider())
+        add(BulletTankCollider())
+        add(BulletBrickWallCollider())
+        add(BulletStoneWallCollider())
+        add(BulletBorderCollider())
+        add(TankBorderCollider())
+        add(TankTankCollider())
+        add(TankWallCollider())
     }
 
     fun add(c: Collider) {

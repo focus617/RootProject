@@ -17,6 +17,8 @@ object GameConstant {
     const val TANK_ENEMY_1 = "Tank_Enemy_1"
     const val TANK_ENEMY_2 = "Tank_Enemy_2"
     const val BULLET = "Bullet"
+    const val BRICK_WALL = "BrickWall"
+    const val STONE_WALL = "StoneWall"
 
     const val EXPLODE_1 = "Explode_1"
     const val EXPLODE_2 = "Explode_2"

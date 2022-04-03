@@ -6,10 +6,11 @@ import android.graphics.Canvas
 import com.focus617.platform.config_util.PropertiesUtil
 import com.focus617.platform.helper.BitmapHelper.bitmapLoader
 import com.focus617.tankwar.R
-import com.focus617.tankwar.scene.base.*
-import com.focus617.tankwar.scene.components.Bullet
-import com.focus617.tankwar.scene.components.Explode
-import com.focus617.tankwar.scene.components.Tank
+import com.focus617.tankwar.scene.base.Dir
+import com.focus617.tankwar.scene.base.IfRefresh
+import com.focus617.tankwar.scene.base.IfScene
+import com.focus617.tankwar.scene.base.RootNode
+import com.focus617.tankwar.scene.components.*
 import java.util.*
 
 object GameConfig {
@@ -30,6 +31,7 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
 
     // 配置属性
     val properties: Properties? = PropertiesUtil.loadProperties(context)
+
     // 地图大小
     var mapWidth: Int = 0
     var mapHeight: Int = 0
@@ -44,16 +46,19 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
     }
 
     // 从Properties读取游戏棋盘的配置，例如大小
-    private fun loadGameConfig(){
+    private fun loadGameConfig() {
         // 游戏方格的宽度
         GameConfig.BLOCK_WIDTH =
-            PropertiesUtil.loadProperties(context)?.getProperty(GameConstant.KEY_BLOCK_WIDTH)?.toInt() ?: 10
+            PropertiesUtil.loadProperties(context)?.getProperty(GameConstant.KEY_BLOCK_WIDTH)
+                ?.toInt() ?: 10
         // 游戏场地横向方格的个数
         GameConfig.BLOCK_NUM_W =
-            PropertiesUtil.loadProperties(context)?.getProperty(GameConstant.KEY_BLOCK_NUM_W)?.toInt() ?: 10
+            PropertiesUtil.loadProperties(context)?.getProperty(GameConstant.KEY_BLOCK_NUM_W)
+                ?.toInt() ?: 10
         // 游戏场地纵向方格的个数
         GameConfig.BLOCK_NUM_H =
-            PropertiesUtil.loadProperties(context)?.getProperty(GameConstant.KEY_BLOCK_NUM_H)?.toInt() ?: 10
+            PropertiesUtil.loadProperties(context)?.getProperty(GameConstant.KEY_BLOCK_NUM_H)
+                ?.toInt() ?: 10
     }
 
     // 加载游戏资源，例如构造绘制对象的Bitmap仓库
@@ -61,6 +66,7 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
         loadTankBitmap()
         loadBulletBitmap()
         loadExplodesBitmap()
+        loadWallBitmap()
     }
 
     private fun loadTankBitmap() {
@@ -95,10 +101,16 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
         bitmapRepository[GameConstant.EXPLODE_16] = bitmapLoader(resource, R.drawable.e16)
     }
 
+    private fun loadWallBitmap() {
+        bitmapRepository[GameConstant.BRICK_WALL] = bitmapLoader(resource, R.drawable.ic_brickwall)
+        bitmapRepository[GameConstant.STONE_WALL] = bitmapLoader(resource, R.drawable.ic_stonewall)
+    }
+
     // 初始化场景中的对象
     private fun initNodes() {
         loadTankFromProperties(GameConstant.KEY_FRIEND)
         loadTankFromProperties(GameConstant.KEY_ENEMY)
+        loadBackground()
     }
 
     private fun loadTankFromProperties(key: String) {
@@ -117,12 +129,30 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
             rootNode.add(
                 Tank(
                     "Tank", this, isEnemy,
-                    random.nextInt(mapWidth),
-                    random.nextInt(mapHeight),
+                    random.nextInt(mapWidth-GameConfig.BLOCK_WIDTH),
+                    random.nextInt(mapHeight-GameConfig.BLOCK_WIDTH),
                     Dir.values()[random.nextInt(Dir.values().size)]
                 )
             )
         }
+    }
+
+    private fun loadBackground() {
+        val random = Random()
+        rootNode.add(
+            BrickWall(
+                "BrickWall", this,
+                random.nextInt(mapWidth-GameConfig.BLOCK_WIDTH),
+                random.nextInt(mapHeight-GameConfig.BLOCK_WIDTH)
+            )
+        )
+        rootNode.add(
+            StoneWall(
+                "StoneWall", this,
+                random.nextInt(mapWidth-GameConfig.BLOCK_WIDTH),
+                random.nextInt(mapHeight-GameConfig.BLOCK_WIDTH)
+            )
+        )
     }
 
     override fun draw(canvas: Canvas) = rootNode.draw(canvas)
@@ -137,7 +167,7 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
         rootNode.add(Explode("explode", this, x, y))
     }
 
-    fun removeObject(obj: IfRefresh){
+    fun removeObject(obj: IfRefresh) {
         rootNode.remove(obj)
     }
 

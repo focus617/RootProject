@@ -74,6 +74,12 @@ class Tank(
         super.move()
     }
 
+    // 退回移动之前的位置
+    fun back(){
+        x = previousX
+        y = previousY
+    }
+
     // 开炮
     private fun fire() {
         fs.fire(this)

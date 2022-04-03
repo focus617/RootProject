@@ -7,7 +7,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.focus617.tankwar.scene.base.IfRefresh
 
-const val SLEEP_INTERVAL = 50L
+const val SLEEP_INTERVAL = 40L
 
 class XRenderer(
     var surfaceView: SurfaceView,

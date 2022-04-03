@@ -13,8 +13,8 @@ import com.focus617.tankwar.scene.GameScene
 abstract class Node(name: String, val scene: IfScene) : Leaf(name) {
 
     //在游戏棋盘上的坐标
-    open var x: Int = (scene as GameScene).rootNode.rect.left
-    open var y: Int = (scene as GameScene).rootNode.rect.top
+    abstract var x: Int
+    abstract var y: Int
 
     // 每个对象在地图上占用的区块，可用于碰撞检测
     val rect = Rect()
@@ -35,10 +35,13 @@ abstract class Node(name: String, val scene: IfScene) : Leaf(name) {
 
         // 刷新对象的Rect，用于绘制和动态碰撞检测
         with(rect) {
-            left = x
-            right = x + GameConfig.BLOCK_WIDTH
-            top = y
-            bottom = y + GameConfig.BLOCK_WIDTH
+            val xBias = scene.rootNode.rect.left
+            val yBias = scene.rootNode.rect.top
+
+            left = xBias + x
+            right = xBias + x + GameConfig.BLOCK_WIDTH
+            top = yBias + y
+            bottom = yBias + y + GameConfig.BLOCK_WIDTH
         }
 
         // 在绘制以前，坐标(x,y)将由具体实现类进行计算更新
@@ -56,7 +59,7 @@ abstract class Node(name: String, val scene: IfScene) : Leaf(name) {
     abstract fun findBitmap()
 
     // 实现子类需要扩展自己的各项策略，比如移动到边界，或碰到障碍后的处理操作
-    open fun checkStrategy(){
+    open fun checkStrategy() {
         // 检查和销毁无效对象
         if (!this.isAlive) {
             (scene as GameScene).removeObject(this)
