@@ -9,7 +9,7 @@ class ColliderChain : Collider {
 
     init {
         this.add(BulletTankCollider())
-//        this.add(TankTankCollider())
+        this.add(TankTankCollider())
     }
 
     fun add(c: Collider) {

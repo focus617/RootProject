@@ -47,8 +47,8 @@ class RootNode(name: String) : Composite(name) {
     // 比较对象两两之间的互动
     private val chain: ColliderChain = ColliderChain()
     private fun checkCollide() {
-        for (i in 0 until children.size)
-            for (j in 0 until children.size) run {
+        for (i in 0 until children.size - 1)
+            for (j in 1 until children.size) run {
                 val o1: Node = children[i] as Node
                 val o2: Node = children[j] as Node
                 chain.collide(o1, o2)

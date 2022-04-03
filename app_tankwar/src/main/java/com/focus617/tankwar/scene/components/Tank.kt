@@ -29,6 +29,35 @@ class Tank(
     override var speed: Int =
         (scene as GameScene).properties?.getProperty(KEY_TANK_SPEED)?.toInt() ?: 10
 
+    var fs: FireStrategy = DefaultFireStrategy()
+
+    init {
+        previousX = x
+        previousY = y
+
+        // 从配置文件中读取FireStrategy
+        val key = if (isEnemy) KEY_ENEMY_FIRE_STRATEGY else KEY_FRIEND_FIRE_STRATEGY
+
+        var fsName = (scene as GameScene).properties?.getProperty(key)?.toString()
+        Timber.i("Tank.init(): load $fsName")
+
+        if (fsName == null) {
+            fsName = "com.focus617.tankwar.scene.components.tank.DefaultFireStrategy"
+        }
+
+        try {
+            fs = Class.forName(fsName).newInstance() as FireStrategy
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+    // 开炮
+    fun fire() {
+        fs.fire(this)
+    }
+
     // 通过对象类型，找到Scene中的Bitmap
     override fun findBitmap() {
         bitmap = when (isEnemy) {
@@ -91,32 +120,6 @@ class Tank(
     override fun die() {
         super.die()
         (scene as GameScene).addExplode(x, y)
-    }
-
-    var fs: FireStrategy = DefaultFireStrategy()
-
-    init {
-        // 从配置文件中读取FireStrategy
-        val key = if (isEnemy) KEY_ENEMY_FIRE_STRATEGY else KEY_FRIEND_FIRE_STRATEGY
-
-        var fsName = (scene as GameScene).properties?.getProperty(key)?.toString()
-        Timber.i("Tank.init(): load $fsName")
-
-        if (fsName == null) {
-            fsName = "com.focus617.tankwar.scene.components.tank.DefaultFireStrategy"
-        }
-
-        try {
-            fs = Class.forName(fsName).newInstance() as FireStrategy
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
-
-    // 开炮
-    fun fire() {
-        fs.fire(this)
     }
 
 }
