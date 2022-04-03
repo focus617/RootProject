@@ -13,10 +13,6 @@ object GameConstant {
     const val KEY_FRIEND_FIRE_STRATEGY = "friendFS"
     const val KEY_ENEMY_FIRE_STRATEGY = "enemyFS"
 
-    const val STATIC_AGGREGATE_NODE = "staticAggregateNode"   //静止的可绘制对象集合的名称
-    const val TANK_AGGREGATE_NODE = "tankAggregateNode"       //可移动的坦克集合的名称
-    const val BULLET_AGGREGATE_NODE = "bulletAggregateNode"   //可移动的炮弹集合的名称
-
     const val TANK_MINE = "Tank_Mine"
     const val TANK_ENEMY_1 = "Tank_Enemy_1"
     const val TANK_ENEMY_2 = "Tank_Enemy_2"

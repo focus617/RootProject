@@ -18,7 +18,7 @@ class Bullet(
 ) : MovableNode(name, scene) {
 
     override var speed: Int =
-        (scene as GameScene).properties?.getProperty(KEY_BULLET_SPEED)?.toInt() ?: 20
+        (scene as GameScene).properties?.getProperty(KEY_BULLET_SPEED)?.toInt() ?: 40
 
     // 通过对象类型，找到Scene中的Bitmap
     override fun findBitmap() {
