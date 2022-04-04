@@ -52,7 +52,7 @@ abstract class Observable : BaseObject() {
         eventHandler.remove(key)
     }
 
-    open fun notifyObservers() = eventHandler.forEach { it.value(eventWakeup) }
+    open fun notifyObservers(e: Event) = eventHandler.forEach { it.value(e) }
 
 }
 
@@ -173,11 +173,11 @@ class ClientObserver {
             // 在构造对象时，直接attach
             val observerD = ConcreteObserverD(subject)
 
-            subject.notifyObservers()
+            subject.notifyObservers(subject.startupWakeup)
 
             observerC.detach(subject)
 
-            subject.notifyObservers()
+            subject.notifyObservers(subject.eventWakeup)
         }
     }
 }
