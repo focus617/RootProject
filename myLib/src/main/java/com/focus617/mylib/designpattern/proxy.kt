@@ -128,22 +128,39 @@ class DynamicProxy(             //传入被代理类的实例引用
     companion object : WithLogging()
 
     // 访问权限
-    var isAllowed = false
+    private var isAllowed = true
+
+    private fun before(method: Method, args: Array<out Any>?) {
+        LOG.info("DynamicProxy: I can do something before RealSubject")
+        LOG.info("DynamicProxy: method ${method.name} will be invoked")
+        LOG.info("args: ${args.toString()} ")
+
+        // 这里可以分析被调用的method和参数，加入自己的代理逻辑(例如权限控制)
+        isAllowed = when (method.name) {
+            "requestB" -> false
+            else -> true
+        }
+    }
+
+    private fun after(method: Method, result: Any?) {
+        LOG.info("DynamicProxy: I can do something after RealSubject")
+        LOG.info("DynamicProxy: method ${method.name} has been invoked")
+        LOG.info("result: ${result.toString()} \n")
+    }
 
     @Throws(Throwable::class)
     override operator fun invoke(proxy: Any?, method: Method, args: Array<out Any>?): Any? {
-        LOG.info("DynamicProxy: method ${method.name} is invoked")
+        before(method, args)
 
-        // 这里可以分析被调用的method和参数，加入自己的代理逻辑
-        return when (method.name) {
-            "requestB" ->
-                return if (isAllowed) method.invoke(`object`, *(args ?: emptyArray()))
-                else {
-                    LOG.info("很抱歉，你还没有取得访问权限。")
-                    null
-                }
-            else -> method.invoke(`object`, *(args ?: emptyArray()))
-        }
+        val result =
+            if (isAllowed) method.invoke(`object`, *(args ?: emptyArray()))
+            else {
+                LOG.info("很抱歉，你还没有取得访问权限。")
+                "Failed"
+            }
+
+        after(method, result)
+        return result
     }
 }
 
