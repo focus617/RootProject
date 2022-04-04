@@ -52,6 +52,7 @@ android {
 
 dependencies {
     api project(':myAndroidLibrary')
+    api project(':myLib')
 
     implementation(Jetpack.ANDROIDX_CORE)
     implementation(Jetpack.APPCOMPAT)
@@ -73,6 +74,7 @@ dependencies {
     // Room
     implementation(Jetpack.ROOM_RUNTIME)
     implementation 'androidx.preference:preference:1.1.1'
+    implementation project(path: ':myLib')
     kapt(Jetpack.ROOM_COMPILER)
     // Kotlin Extensions and Coroutines support for Room
     implementation(Jetpack.ROOM_KTX)

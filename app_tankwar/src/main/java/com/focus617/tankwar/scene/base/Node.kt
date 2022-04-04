@@ -1,8 +1,6 @@
 package com.focus617.tankwar.scene.base
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Rect
+import android.graphics.*
 import com.focus617.platform.helper.BitmapHelper.draw
 import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.GameScene
@@ -47,6 +45,26 @@ abstract class Node(name: String, val scene: IfScene) : Leaf(name) {
         // 在绘制以前，坐标(x,y)将由具体实现类进行计算更新
         bitmap.draw(canvas, rect)
 
+        drawMask(canvas)
+    }
+
+    private fun drawMask(canvas: Canvas) {
+        val paint = Paint()
+
+        with(paint) {
+            color = Color.RED           //设置画笔颜色
+            style = Paint.Style.STROKE    //设置填充样式
+            strokeWidth = 1F            //设置画笔宽度
+            isAntiAlias = true
+        }
+        canvas.drawLine(
+            rect.left.toFloat(), rect.top.toFloat(),
+            rect.right.toFloat(), rect.top.toFloat(), paint
+        )
+        canvas.drawLine(
+            rect.left.toFloat(), rect.bottom.toFloat(),
+            rect.right.toFloat(), rect.bottom.toFloat(), paint
+        )
     }
 
     override fun refreshData() {

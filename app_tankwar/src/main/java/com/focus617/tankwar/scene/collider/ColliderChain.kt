@@ -14,8 +14,8 @@ class ColliderChain : Collider {
         add(BulletStoneWallCollider())
         add(BulletBorderCollider())
         add(TankBorderCollider())
-        add(TankTankCollider())
         add(TankWallCollider())
+//        add(TankTankCollider())
     }
 
     fun add(c: Collider) {

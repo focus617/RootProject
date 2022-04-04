@@ -8,6 +8,7 @@ import com.focus617.tankwar.scene.GameScene
 import com.focus617.tankwar.scene.base.Dir
 import com.focus617.tankwar.scene.base.IfScene
 import com.focus617.tankwar.scene.base.MovableNode
+import timber.log.Timber
 
 class Bullet(
     name: String,
@@ -19,6 +20,10 @@ class Bullet(
 
     override var speed: Int =
         (scene as GameScene).properties?.getProperty(KEY_BULLET_SPEED)?.toInt() ?: 40
+
+    init {
+        Timber.i("$name.speed = $speed")
+    }
 
     // 通过对象类型，找到Scene中的Bitmap
     override fun findBitmap() {

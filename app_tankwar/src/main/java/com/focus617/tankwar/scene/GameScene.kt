@@ -129,8 +129,8 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
             rootNode.add(
                 Tank(
                     "Tank", this, isEnemy,
-                    random.nextInt(mapWidth-GameConfig.BLOCK_WIDTH),
-                    random.nextInt(mapHeight-GameConfig.BLOCK_WIDTH),
+                    random.nextInt(mapWidth - GameConfig.BLOCK_WIDTH),
+                    random.nextInt(mapHeight - GameConfig.BLOCK_WIDTH),
                     Dir.values()[random.nextInt(Dir.values().size)]
                 )
             )
@@ -142,15 +142,15 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
         rootNode.add(
             BrickWall(
                 "BrickWall", this,
-                random.nextInt(mapWidth-GameConfig.BLOCK_WIDTH),
-                random.nextInt(mapHeight-GameConfig.BLOCK_WIDTH)
+                random.nextInt(mapWidth - GameConfig.BLOCK_WIDTH),
+                random.nextInt(mapHeight - GameConfig.BLOCK_WIDTH)
             )
         )
         rootNode.add(
             StoneWall(
                 "StoneWall", this,
-                random.nextInt(mapWidth-GameConfig.BLOCK_WIDTH),
-                random.nextInt(mapHeight-GameConfig.BLOCK_WIDTH)
+                random.nextInt(mapWidth - GameConfig.BLOCK_WIDTH),
+                random.nextInt(mapHeight - GameConfig.BLOCK_WIDTH)
             )
         )
     }
