@@ -164,6 +164,9 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
     }
 
     fun addExplode(x: Int, y: Int) {
+        //TODO: how to solve RectDecorator removing when explode died?
+//        rootNode.add(RectDecorator(Explode("explode", this, x, y)))
+
         rootNode.add(Explode("explode", this, x, y))
     }
 
