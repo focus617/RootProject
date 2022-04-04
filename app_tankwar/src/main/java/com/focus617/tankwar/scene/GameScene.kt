@@ -108,9 +108,9 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
 
     // 初始化场景中的对象
     private fun initNodes() {
+        loadBackground()
         loadTankFromProperties(GameConstant.KEY_FRIEND)
         loadTankFromProperties(GameConstant.KEY_ENEMY)
-        loadBackground()
     }
 
     private fun loadTankFromProperties(key: String) {

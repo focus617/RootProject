@@ -8,7 +8,7 @@ import com.focus617.tankwar.scene.components.Tank
 class DefaultFireStrategy : FireStrategy {
 
     override fun fire(tank: Tank) {
-        val gap = GameConfig.BLOCK_WIDTH + 20
+        val gap = GameConfig.BLOCK_WIDTH + 50
 
         when (tank.dir) {
             Dir.UP -> (tank.scene as GameScene).addBullet(tank.x, tank.y - gap, tank.dir)

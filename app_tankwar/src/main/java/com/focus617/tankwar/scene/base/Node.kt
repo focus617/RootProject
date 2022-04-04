@@ -20,7 +20,7 @@ abstract class Node(val scene: IfScene) : Leaf() {
     lateinit var bitmap: Bitmap
 
     // 被绘制对象是否仍有效（未出边界，未被摧毁）？
-    protected var isAlive: Boolean = true
+    var isAlive: Boolean = true
 
     open fun die() {
         this.isAlive = false
