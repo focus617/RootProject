@@ -19,14 +19,14 @@ open class RealSubject : ICommonAct {
     override fun requestA() {
         LOG.info(
             "${unwrapCompanionClass(this.javaClass).simpleName}:" +
-                    "收到请求a，开始真实的操作"
+                    "收到请求a，开始真实的操作\n"
         )
     }
 
     override fun requestB() {
         LOG.info(
             "${unwrapCompanionClass(this.javaClass).simpleName}:" +
-                    "收到请求b，开始真实的操作"
+                    "收到请求b，开始真实的操作\n"
         )
     }
 
@@ -91,7 +91,7 @@ class Proxy2(private val realSubject: RealSubject) : ICommonAct by realSubject {
     // 其它未变更的方法将会直接调用被代理对象的相应方法，这个非常方便
     override fun requestB() {
         if (isAllowed) realSubject.requestB()
-        else LOG.info("很抱歉，你还没有取得访问权限。")
+        else LOG.info("很抱歉，你还没有取得访问权限。\n")
     }
 
 }
@@ -105,13 +105,13 @@ class Proxy3(private val subject: ICommonAct) : ICommonAct {
 
     override fun requestA() {
         if (isAllowed) subject.requestA()
-        else LOG.info("很抱歉，你还没有取得访问权限。")
+        else LOG.info("很抱歉，你还没有取得访问权限。\n")
     }
 
     override fun requestB() {
         LOG.info("Proxy3 logging: start requestB")
         subject.requestB()
-        LOG.info("Proxy3 logging: end requestB")
+        LOG.info("Proxy3 logging: end requestB\n")
     }
 
 }
@@ -125,10 +125,25 @@ class DynamicProxy(             //传入被代理类的实例引用
     private val `object`: Any   //被代理类的引用
 ) : InvocationHandler {
 
+    companion object : WithLogging()
+
+    // 访问权限
+    var isAllowed = false
+
     @Throws(Throwable::class)
     override operator fun invoke(proxy: Any?, method: Method, args: Array<out Any>?): Any? {
-        // 这里还未完成
-        return method.invoke(`object`, *(args ?: emptyArray()))
+        LOG.info("DynamicProxy: method ${method.name} is invoked")
+
+        // 这里可以分析被调用的method和参数，加入自己的代理逻辑
+        return when (method.name) {
+            "requestB" ->
+                return if (isAllowed) method.invoke(`object`, *(args ?: emptyArray()))
+                else {
+                    LOG.info("很抱歉，你还没有取得访问权限。")
+                    null
+                }
+            else -> method.invoke(`object`, *(args ?: emptyArray()))
+        }
     }
 }
 
@@ -141,21 +156,27 @@ class ClientProxy {
             // 测试第一种代理方法
             val proxy1 = Proxy1()
             // 通过代理，访问真实对象
+            LOG.info("Proxy1 start requestA")
             proxy1.requestA()
             // 测试第二次操作
+            LOG.info("Proxy1 start requestB")
             proxy1.requestB()
 
             // 测试第二种代理方法
             Proxy2(subject).run {
                 isAllowed = false
+                LOG.info("Proxy2 start requestA")
                 requestA()
+                LOG.info("Proxy2 start requestB")
                 requestB()
             }
 
             // 测试第三种方法：嵌套Proxy1
             Proxy3(Proxy1()).run {
                 isAllowed = false
+                LOG.info("Proxy3 start requestA")
                 requestA()
+                LOG.info("Proxy3 start requestB")
                 requestB()
             }
 
