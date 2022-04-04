@@ -1,16 +1,24 @@
 package com.focus617.mylib.designpattern
 
+import com.focus617.mylib.designpattern.platform.BaseObject
+import com.focus617.mylib.designpattern.platform.Event
+import com.focus617.mylib.designpattern.platform.WakeupEvent
 import com.focus617.mylib.logging.WithLogging
 import com.focus617.mylib.logging.unwrapCompanionClass
+import java.text.SimpleDateFormat
+import java.util.*
 
 // 抽象被观察者
-abstract class Observable {
+abstract class Observable : BaseObject() {
     companion object : WithLogging()
 
     // 方式一：保存观察者的实例
     private val observers = arrayListOf<Observer>()
 
     var subjectState = "正常运行"
+    private var eventWakeup: Event =
+        WakeupEvent(this, System.currentTimeMillis(), subjectState)
+
 
     fun register(observer: Observer) {
         LOG.info("${unwrapCompanionClass(observer.javaClass).simpleName} Registered")
@@ -22,15 +30,17 @@ abstract class Observable {
         observers.remove(observer)
     }
 
-    fun notifySubscribers() = observers.forEach { it.update() }
+    fun notifySubscribers() = observers.forEach {
+        it.update(eventWakeup)
+    }
 
 
     // 方式二：保存观察者的更新方法
     private var eventHandler = HashMap<Int, () -> Unit>()
 
-    fun attach(key: Int, event: () -> Unit) {
+    fun attach(key: Int, handler: () -> Unit) {
         LOG.info("$key Attached")
-        eventHandler[key] = event
+        eventHandler[key] = handler
     }
 
     fun detach(key: Int) {
@@ -43,10 +53,10 @@ abstract class Observable {
 }
 
 // 抽象观察者
-abstract class Observer {
+abstract class Observer : BaseObject() {
     companion object : WithLogging()
 
-    abstract fun update()
+    abstract fun update(e: Event)
 }
 
 
@@ -61,10 +71,14 @@ class ConcreteObserverA(private val subject: Observable) : Observer() {
     }
 
     // 方式一：注册实例
-    override fun update() = LOG.info(
+    override fun update(e: Event) = LOG.info(
         unwrapCompanionClass(this.javaClass).simpleName +
-                " receive update from ${unwrapCompanionClass(subject.javaClass).simpleName}:" +
-                " subjectState=${subject.subjectState}"
+                " receive event from ${unwrapCompanionClass(e.source.javaClass).simpleName}:\n" +
+                "\tevent\t\t\t=\t${unwrapCompanionClass(e.javaClass).simpleName}\n" +
+                "\ttimeStamp\t\t=\t${
+                    SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(e.timestamp)
+                }\n" +
+                "\tsubjectState\t=\t${e.loc}"
     )
 }
 
@@ -74,12 +88,15 @@ class ConcreteObserverB(private val subject: Observable) : Observer() {
     }
 
     // 方式一：注册实例
-    override fun update() = LOG.info(
+    override fun update(e: Event) = LOG.info(
         unwrapCompanionClass(this.javaClass).simpleName +
-                " receive update from ${unwrapCompanionClass(subject.javaClass).simpleName}:" +
-                " subjectState=${subject.subjectState}"
+                " receive event from ${unwrapCompanionClass(e.source.javaClass).simpleName}:\n" +
+                "\tevent\t\t\t=\t${unwrapCompanionClass(e.javaClass).simpleName}\n" +
+                "\ttimeStamp\t\t=\t${
+                    SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(e.timestamp)
+                }\n" +
+                "\tsubjectState\t=\t${e.loc}"
     )
-
 }
 
 class ConcreteObserverC(private val subject: Observable) {
