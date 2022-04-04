@@ -22,7 +22,7 @@ class Tank(
     override var x: Int,
     override var y: Int,
     override var dir: Dir
-) : MovableNode(name, scene) {
+) : MovableNode(scene) {
 
     private val random = Random()
 

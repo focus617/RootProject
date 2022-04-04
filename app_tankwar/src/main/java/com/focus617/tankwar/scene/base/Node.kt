@@ -8,7 +8,7 @@ import com.focus617.tankwar.scene.GameScene
 /*
  * Node类的主要职责是负责在SurfaceView上绘制Bitmap
  */
-abstract class Node(name: String, val scene: IfScene) : Leaf(name) {
+abstract class Node(val scene: IfScene) : Leaf() {
 
     //在游戏棋盘上的坐标
     abstract var x: Int

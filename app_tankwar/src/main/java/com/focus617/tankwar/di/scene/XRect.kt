@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import com.focus617.tankwar.scene.base.Leaf
 
-class XRect(name: String) : Leaf(name) {
+class XRect() : Leaf() {
 
     private val paint = Paint()    // 画笔
     private var x: Float = 0F

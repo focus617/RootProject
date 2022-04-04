@@ -22,7 +22,7 @@ object GameConfig {
 class GameScene(val context: Context) : IfScene, IfRefresh {
 
     // 被绘制的对象集合
-    override val rootNode = RootNode("Scene")
+    override val rootNode = RootNode()
 
     // 绘制对象所用的Bitmap仓库
     override val bitmapRepository: LinkedHashMap<String, Bitmap> = LinkedHashMap()

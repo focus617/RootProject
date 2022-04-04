@@ -3,7 +3,7 @@ package com.focus617.tankwar.scene.base
 /*
  * MovableNode类的主要职责是负责管理可移动对象的移动方向，速度，变向，以及被消灭等规则
  */
-abstract class MovableNode(name: String, scene: IfScene) : Node(name, scene) {
+abstract class MovableNode(scene: IfScene) : Node(scene) {
 
     //移动方向
     abstract var dir: Dir

@@ -10,7 +10,7 @@ class BrickWall(
     scene: IfScene,
     override var x: Int,
     override var y: Int
-) : Node(name, scene) {
+) : Node(scene) {
 
     // 通过对象类型，找到Scene中的Bitmap
     override fun findBitmap() {

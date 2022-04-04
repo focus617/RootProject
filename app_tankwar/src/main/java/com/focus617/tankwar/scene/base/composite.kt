@@ -12,7 +12,7 @@ import timber.log.Timber
 /**
  * @description 叶子节点对象，叶子节点没有子节点
  */
-abstract class Leaf(var name: String) : IfRefresh {
+abstract class Leaf : IfRefresh {
     // 提供 Logger
     companion object : WithLogging()
 
@@ -24,7 +24,7 @@ abstract class Leaf(var name: String) : IfRefresh {
 /**
  * @description 有枝节点对象，用来存储子部件
  */
-abstract class Composite(var name: String) : IfRefresh {
+abstract class Composite : IfRefresh {
     // 提供 Logger
     companion object : WithLogging()
 

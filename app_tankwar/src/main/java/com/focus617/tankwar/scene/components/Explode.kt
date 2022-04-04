@@ -10,7 +10,7 @@ class Explode(
     scene: IfScene,
     override var x: Int,
     override var y: Int
-) : Node(name, scene) {
+) : Node(scene) {
 
     private var paintTimes: Int = 1
 

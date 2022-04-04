@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import com.focus617.tankwar.scene.base.Leaf
 
-class ClockPin(name: String) : Leaf(name) {
+class ClockPin() : Leaf() {
 
     private val paint = Paint()    // 画笔
     private var step: Float = 0F

@@ -1,5 +1,6 @@
 package com.focus617.tankwar.scene.collider
 
+import com.focus617.mylib.logging.unwrapCompanionClass
 import com.focus617.tankwar.scene.base.Node
 import com.focus617.tankwar.scene.components.Tank
 import timber.log.Timber
@@ -12,7 +13,8 @@ class TankTankCollider() : Collider {
 
             // TODO: check why below intersect always true?
             if (node1.rect.intersect(node2.rect)) {
-                Timber.i("${node1.name} collided with ${node2.name}")
+                Timber.i("${unwrapCompanionClass(node1.javaClass).simpleName} " +
+                        "collided with ${unwrapCompanionClass(node2.javaClass).simpleName}")
                 node1.back()
                 node2.back()
             }

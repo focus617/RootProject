@@ -7,7 +7,7 @@ import android.graphics.Rect
 import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.collider.ColliderChain
 
-class RootNode(name: String) : Composite(name) {
+class RootNode : Composite() {
 
     private val paint = Paint()    // 画笔
 

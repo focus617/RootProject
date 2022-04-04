@@ -16,7 +16,7 @@ class Bullet(
     override var x: Int,
     override var y: Int,
     override var dir: Dir
-) : MovableNode(name, scene) {
+) : MovableNode(scene) {
 
     override var speed: Int =
         (scene as GameScene).properties?.getProperty(KEY_BULLET_SPEED)?.toInt() ?: 40
