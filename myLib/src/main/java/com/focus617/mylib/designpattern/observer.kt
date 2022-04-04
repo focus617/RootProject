@@ -34,12 +34,10 @@ abstract class Observable : BaseObject() {
         observers.remove(observer)
     }
 
-    fun notifySubscribers(e: Event) = observers.forEach {
-        it.update(e)
-    }
+    fun notifySubscribers(e: Event) = observers.forEach { it.update(e) }
 
 
-    // 方式二：保存观察者的抽象的更新方法
+    // 方式二：事件委托机制，保存观察者需执行的响应函数，耦合在抽象的方法，而不是观察者本身
     private var eventHandler = HashMap<Int, (e: Event) -> Unit>()
 
     fun attach(key: Int, handler: (e: Event) -> Unit) {
