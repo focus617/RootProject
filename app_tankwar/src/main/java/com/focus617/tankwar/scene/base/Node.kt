@@ -28,7 +28,7 @@ abstract class Node(val scene: IfScene) : Leaf() {
 
 
     override fun draw(canvas: Canvas) {
-        // 找到自己此时合适的Bitmap
+        // 找到自己此时合适的Bitmap,主要是应用于炸弹这类需要动画的场景
         findBitmap()
 
         // 刷新对象的Rect，用于绘制和动态碰撞检测

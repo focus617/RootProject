@@ -80,16 +80,38 @@ class Proxy1 : RealSubject() {
 }
 
 
-// //通过by关键字实现代理，省略大量的代理类中的样板代码
+//通过Kotlin by关键字实现代理，省略大量的代理类中的样板代码
 class Proxy2(private val realSubject: RealSubject) : ICommonAct by realSubject {
     companion object : WithLogging()
 
     // 访问权限
     var isAllowed = false
 
+    // 只需要重写需要改变的个别方法即可,
+    // 其它未变更的方法将会直接调用被代理对象的相应方法，这个非常方便
     override fun requestB() {
         if (isAllowed) realSubject.requestB()
         else LOG.info("很抱歉，你还没有取得访问权限。")
+    }
+
+}
+
+// 第三种方法支持嵌套
+class Proxy3(private val subject: ICommonAct) : ICommonAct {
+    companion object : WithLogging()
+
+    // 访问权限
+    var isAllowed = false
+
+    override fun requestA() {
+        if (isAllowed) subject.requestA()
+        else LOG.info("很抱歉，你还没有取得访问权限。")
+    }
+
+    override fun requestB() {
+        LOG.info("Proxy3 logging: start requestB")
+        subject.requestB()
+        LOG.info("Proxy3 logging: end requestB")
     }
 
 }
@@ -99,14 +121,14 @@ class Proxy2(private val realSubject: RealSubject) : ICommonAct by realSubject {
  * DynamicProxy类
  * 可以动态生成任意个代理对象，不需要开发者手动编写代理类代码。
  */
-internal class DynamicProxy(   //传入被代理类的实例引用
+class DynamicProxy(             //传入被代理类的实例引用
     private val `object`: Any   //被代理类的引用
 ) : InvocationHandler {
 
     @Throws(Throwable::class)
-    override operator fun invoke(proxy: Any?, method: Method, args: Array<Any?>?): Any {
+    override operator fun invoke(proxy: Any?, method: Method, args: Array<out Any>?): Any? {
         // 这里还未完成
-        return method.invoke(`object`, args)
+        return method.invoke(`object`, *(args ?: emptyArray()))
     }
 }
 
@@ -130,18 +152,34 @@ class ClientProxy {
                 requestB()
             }
 
-            // 测试动态代理
-            val invocationHandler  = DynamicProxy(subject)
+            // 测试第三种方法：嵌套Proxy1
+            Proxy3(Proxy1()).run {
+                isAllowed = false
+                requestA()
+                requestB()
+            }
 
-            // Proxy.newProxyInstance方法动态构造一个代理中介，
+            // 测试动态代理
+            val invocationHandler = DynamicProxy(subject)
+
+            // Proxy.newProxyInstance方法动态构造一个代理中介，拦截真实对象的操作
             // 需要传入被代理类的ClassLoader、共同接口集合和dynamicProxy实例对象
-            val proxy3 = Proxy.newProxyInstance(
+            // 采用Reflection机制，通过二进制字节码分析类的属性和方法
+            val proxy4 = Proxy.newProxyInstance(
                 subject.javaClass.classLoader,
-                RealSubject::class.java.interfaces,
+                arrayOf(ICommonAct::class.java),    //RealSubject::class.java.interfaces,
                 invocationHandler
             ) as ICommonAct
-            proxy3.requestA()
-            proxy3.requestB()
+
+            LOG.info("Proxy4 start requestA")
+            proxy4.requestA()
+            LOG.info("Proxy4 start requestB")
+            proxy4.requestB()
         }
     }
 }
+
+
+
+
+
