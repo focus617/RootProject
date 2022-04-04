@@ -1,5 +1,6 @@
 package com.focus617.mylib.designpattern
 
+import com.focus617.mylib.designpattern.platform.AppStartEvent
 import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.designpattern.platform.Event
 import com.focus617.mylib.designpattern.platform.WakeupEvent
@@ -16,9 +17,12 @@ abstract class Observable : BaseObject() {
     private val observers = arrayListOf<Observer>()
 
     var subjectState = "正常运行"
-    private var eventWakeup: Event =
+
+    var eventWakeup: Event =
         WakeupEvent(this, System.currentTimeMillis(), subjectState)
 
+    var startupWakeup: Event =
+        AppStartEvent(this, System.currentTimeMillis(), subjectState)
 
     fun register(observer: Observer) {
         LOG.info("${unwrapCompanionClass(observer.javaClass).simpleName} Registered")
@@ -30,15 +34,15 @@ abstract class Observable : BaseObject() {
         observers.remove(observer)
     }
 
-    fun notifySubscribers() = observers.forEach {
-        it.update(eventWakeup)
+    fun notifySubscribers(e: Event) = observers.forEach {
+        it.update(e)
     }
 
 
-    // 方式二：保存观察者的更新方法
-    private var eventHandler = HashMap<Int, () -> Unit>()
+    // 方式二：保存观察者的抽象的更新方法
+    private var eventHandler = HashMap<Int, (e: Event) -> Unit>()
 
-    fun attach(key: Int, handler: () -> Unit) {
+    fun attach(key: Int, handler: (e: Event) -> Unit) {
         LOG.info("$key Attached")
         eventHandler[key] = handler
     }
@@ -48,7 +52,7 @@ abstract class Observable : BaseObject() {
         eventHandler.remove(key)
     }
 
-    open fun notifyObservers() = eventHandler.forEach { it.value() }
+    open fun notifyObservers() = eventHandler.forEach { it.value(eventWakeup) }
 
 }
 
@@ -99,35 +103,50 @@ class ConcreteObserverB(private val subject: Observable) : Observer() {
     )
 }
 
-class ConcreteObserverC(private val subject: Observable) {
+class ConcreteObserverC() {
     companion object : WithLogging()
 
-    init {
-        subject.attach(this.hashCode()) { this.updateObserverC() }
+    fun attach(subject: Observable) {
+        subject.attach(this.hashCode()) { e ->      // 方式二：注册方法
+            LOG.info(
+                unwrapCompanionClass(this.javaClass).simpleName +
+                        " receive event from ${unwrapCompanionClass(e.source.javaClass).simpleName}:\n" +
+                        "\tevent\t\t\t=\t${unwrapCompanionClass(e.javaClass).simpleName}\n" +
+                        "\ttimeStamp\t\t=\t${
+                            SimpleDateFormat(
+                                "yyyy-MM-dd HH:mm:ss",
+                                Locale.CHINA
+                            ).format(e.timestamp)
+                        }\n" +
+                        "\tsubjectState\t=\t${e.loc}"
+            )
+        }
     }
 
-    // 方式二：注册方法
-    fun updateObserverC() = LOG.info(
-        unwrapCompanionClass(this.javaClass).simpleName +
-                " receive update from ${unwrapCompanionClass(subject.javaClass).simpleName}:" +
-                " subjectState=${subject.subjectState}"
-    )
+    fun detach(subject: Observable) {
+        subject.detach(this.hashCode())
+    }
 }
 
 class ConcreteObserverD(private val subject: Observable) {
     companion object : WithLogging()
 
     init {
-        subject.attach(this.hashCode()) { this.updateObserverD() }
+        subject.attach(this.hashCode()) { e ->      // 方式二：注册方法
+            LOG.info(
+                unwrapCompanionClass(this.javaClass).simpleName +
+                        " receive event from ${unwrapCompanionClass(e.source.javaClass).simpleName}:\n" +
+                        "\tevent\t\t\t=\t${unwrapCompanionClass(e.javaClass).simpleName}\n" +
+                        "\ttimeStamp\t\t=\t${
+                            SimpleDateFormat(
+                                "yyyy-MM-dd HH:mm:ss",
+                                Locale.CHINA
+                            ).format(e.timestamp)
+                        }\n" +
+                        "\tsubjectState\t=\t${e.loc}"
+            )
+        }
     }
-
-    // 方式二：注册方法
-    fun updateObserverD() = LOG.info(
-        unwrapCompanionClass(this.javaClass).simpleName +
-                " receive update from ${unwrapCompanionClass(subject.javaClass).simpleName}:" +
-                " subjectState=${subject.subjectState}"
-    )
-
 }
 
 // 测试程序
@@ -141,18 +160,23 @@ class ClientObserver {
             val observerA = ConcreteObserverA(subject)
             val observerB = ConcreteObserverB(subject)
 
-            subject.notifySubscribers()
+            subject.notifySubscribers(subject.startupWakeup)
 
             subject.unregister(observerA)
-            subject.notifySubscribers()
+            subject.notifySubscribers(subject.eventWakeup)
 
             // 方式二：注册方法
-            val observerC = ConcreteObserverC(subject)
+            // 测试两种attach策略
+            val observerC = ConcreteObserverC()
+            observerC.attach(subject)
+
+            // 在构造对象时，直接attach
             val observerD = ConcreteObserverD(subject)
 
             subject.notifyObservers()
 
-            subject.detach(observerD.hashCode())
+            observerC.detach(subject)
+
             subject.notifyObservers()
         }
     }
