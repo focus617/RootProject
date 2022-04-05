@@ -20,5 +20,9 @@ object SceneModule {
 
     @RealScene
     @Provides
-    fun bindGameScene(@ApplicationContext context: Context): IfRefresh = GameScene(context)
+    fun bindGameScene(@ApplicationContext context: Context): IfRefresh =
+        GameScene.TerrainBuilder(context)
+            .loadGameResource()     // 加载游戏资源
+            .buildNodes()           // 初始化场景中的对象
+            .build()
 }

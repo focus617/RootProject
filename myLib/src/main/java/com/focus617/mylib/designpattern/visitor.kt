@@ -108,6 +108,7 @@ class ClientVisitor {
     companion object : WithLogging() {
         @JvmStatic
         fun main(vararg args: String) {
+            // 构造内部稳定的结构
             val objectStructure = ObjectStructure()
             objectStructure.attach(ConcreteElementA())
             objectStructure.attach(ConcreteElementB())

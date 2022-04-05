@@ -40,9 +40,6 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
         loadGameConfig()
         mapWidth = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_W
         mapHeight = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_H
-
-        loadGameResource()
-        initNodes()
     }
 
     // 从Properties读取游戏棋盘的配置，例如大小
@@ -61,103 +58,115 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
                 ?.toInt() ?: 10
     }
 
-    // 加载游戏资源，例如构造绘制对象的Bitmap仓库
-    fun loadGameResource() {
-        loadTankBitmap()
-        loadBulletBitmap()
-        loadExplodesBitmap()
-        loadWallBitmap()
-    }
+    override fun draw(canvas: Canvas) = rootNode.draw(canvas)
 
-    private fun loadTankBitmap() {
-        bitmapRepository[GameConstant.TANK_MINE] =
-            bitmapLoader(resource, R.drawable.ic_tank_good_up)
-        bitmapRepository[GameConstant.TANK_ENEMY_1] =
-            bitmapLoader(resource, R.drawable.ic_tank_enemy_1_up)
-        bitmapRepository[GameConstant.TANK_ENEMY_2] =
-            bitmapLoader(resource, R.drawable.ic_tank_enemy_2_up)
-    }
+    override fun refreshData() = rootNode.refreshData()
 
-    private fun loadBulletBitmap() {
-        bitmapRepository[GameConstant.BULLET] = bitmapLoader(resource, R.drawable.ic_bullet_up)
-    }
+    class TerrainBuilder(context: Context) {
+        private val gameScene = GameScene(context)
 
-    private fun loadExplodesBitmap() {
-        bitmapRepository[GameConstant.EXPLODE_1] = bitmapLoader(resource, R.drawable.e1)
-        bitmapRepository[GameConstant.EXPLODE_2] = bitmapLoader(resource, R.drawable.e2)
-        bitmapRepository[GameConstant.EXPLODE_3] = bitmapLoader(resource, R.drawable.e3)
-        bitmapRepository[GameConstant.EXPLODE_4] = bitmapLoader(resource, R.drawable.e4)
-        bitmapRepository[GameConstant.EXPLODE_5] = bitmapLoader(resource, R.drawable.e5)
-        bitmapRepository[GameConstant.EXPLODE_6] = bitmapLoader(resource, R.drawable.e6)
-        bitmapRepository[GameConstant.EXPLODE_7] = bitmapLoader(resource, R.drawable.e7)
-        bitmapRepository[GameConstant.EXPLODE_8] = bitmapLoader(resource, R.drawable.e8)
-        bitmapRepository[GameConstant.EXPLODE_9] = bitmapLoader(resource, R.drawable.e9)
-        bitmapRepository[GameConstant.EXPLODE_10] = bitmapLoader(resource, R.drawable.e10)
-        bitmapRepository[GameConstant.EXPLODE_11] = bitmapLoader(resource, R.drawable.e11)
-        bitmapRepository[GameConstant.EXPLODE_12] = bitmapLoader(resource, R.drawable.e12)
-        bitmapRepository[GameConstant.EXPLODE_13] = bitmapLoader(resource, R.drawable.e13)
-        bitmapRepository[GameConstant.EXPLODE_14] = bitmapLoader(resource, R.drawable.e14)
-        bitmapRepository[GameConstant.EXPLODE_15] = bitmapLoader(resource, R.drawable.e15)
-        bitmapRepository[GameConstant.EXPLODE_16] = bitmapLoader(resource, R.drawable.e16)
-    }
+        fun build() = gameScene
 
-    private fun loadWallBitmap() {
-        bitmapRepository[GameConstant.BRICK_WALL] = bitmapLoader(resource, R.drawable.ic_brickwall)
-        bitmapRepository[GameConstant.STONE_WALL] = bitmapLoader(resource, R.drawable.ic_stonewall)
-    }
-
-    // 初始化场景中的对象
-    private fun initNodes() {
-        loadBackground()
-        loadTankFromProperties(GameConstant.KEY_FRIEND)
-        loadTankFromProperties(GameConstant.KEY_ENEMY)
-    }
-
-    private fun loadTankFromProperties(key: String) {
-        val random = Random()
-
-        val isEnemy: Boolean = when (key) {
-            GameConstant.KEY_FRIEND -> false
-            GameConstant.KEY_ENEMY -> true
-            else -> return
+        // 加载游戏资源，例如构造绘制对象的Bitmap仓库
+        fun loadGameResource(): TerrainBuilder {
+            loadTankBitmap()
+            loadBulletBitmap()
+            loadExplodesBitmap()
+            loadWallBitmap()
+            return this
         }
 
-        val tankCount = PropertiesUtil
-            .loadProperties(context)?.getProperty(key)?.toInt() ?: 4
+        // 初始化场景中的对象
+        fun buildNodes(): TerrainBuilder  {
+            loadBackground()
+            loadTankFromProperties(GameConstant.KEY_FRIEND)
+            loadTankFromProperties(GameConstant.KEY_ENEMY)
+            return this
+        }
 
-        for (i in 1..tankCount) {
-            rootNode.add(
-                Tank(
-                    "Tank", this, isEnemy,
-                    random.nextInt(mapWidth - GameConfig.BLOCK_WIDTH),
-                    random.nextInt(mapHeight - GameConfig.BLOCK_WIDTH),
-                    Dir.values()[random.nextInt(Dir.values().size)]
+        private fun loadTankBitmap() = gameScene.apply {
+            bitmapRepository[GameConstant.TANK_MINE] =
+                bitmapLoader(resource, R.drawable.ic_tank_good_up)
+            bitmapRepository[GameConstant.TANK_ENEMY_1] =
+                bitmapLoader(resource, R.drawable.ic_tank_enemy_1_up)
+            bitmapRepository[GameConstant.TANK_ENEMY_2] =
+                bitmapLoader(resource, R.drawable.ic_tank_enemy_2_up)
+        }
+
+        private fun loadBulletBitmap() = gameScene.apply {
+            bitmapRepository[GameConstant.BULLET] = bitmapLoader(resource, R.drawable.ic_bullet_up)
+        }
+
+        private fun loadExplodesBitmap() = gameScene.apply {
+            bitmapRepository[GameConstant.EXPLODE_1] = bitmapLoader(resource, R.drawable.e1)
+            bitmapRepository[GameConstant.EXPLODE_2] = bitmapLoader(resource, R.drawable.e2)
+            bitmapRepository[GameConstant.EXPLODE_3] = bitmapLoader(resource, R.drawable.e3)
+            bitmapRepository[GameConstant.EXPLODE_4] = bitmapLoader(resource, R.drawable.e4)
+            bitmapRepository[GameConstant.EXPLODE_5] = bitmapLoader(resource, R.drawable.e5)
+            bitmapRepository[GameConstant.EXPLODE_6] = bitmapLoader(resource, R.drawable.e6)
+            bitmapRepository[GameConstant.EXPLODE_7] = bitmapLoader(resource, R.drawable.e7)
+            bitmapRepository[GameConstant.EXPLODE_8] = bitmapLoader(resource, R.drawable.e8)
+            bitmapRepository[GameConstant.EXPLODE_9] = bitmapLoader(resource, R.drawable.e9)
+            bitmapRepository[GameConstant.EXPLODE_10] = bitmapLoader(resource, R.drawable.e10)
+            bitmapRepository[GameConstant.EXPLODE_11] = bitmapLoader(resource, R.drawable.e11)
+            bitmapRepository[GameConstant.EXPLODE_12] = bitmapLoader(resource, R.drawable.e12)
+            bitmapRepository[GameConstant.EXPLODE_13] = bitmapLoader(resource, R.drawable.e13)
+            bitmapRepository[GameConstant.EXPLODE_14] = bitmapLoader(resource, R.drawable.e14)
+            bitmapRepository[GameConstant.EXPLODE_15] = bitmapLoader(resource, R.drawable.e15)
+            bitmapRepository[GameConstant.EXPLODE_16] = bitmapLoader(resource, R.drawable.e16)
+        }
+
+        private fun loadWallBitmap() = gameScene.apply {
+            bitmapRepository[GameConstant.BRICK_WALL] =
+                bitmapLoader(resource, R.drawable.ic_brickwall)
+            bitmapRepository[GameConstant.STONE_WALL] =
+                bitmapLoader(resource, R.drawable.ic_stonewall)
+        }
+
+
+        private fun loadTankFromProperties(key: String) {
+            val random = Random()
+
+            val isEnemy: Boolean = when (key) {
+                GameConstant.KEY_FRIEND -> false
+                GameConstant.KEY_ENEMY -> true
+                else -> return
+            }
+
+            val tankCount = PropertiesUtil
+                .loadProperties(gameScene.context)?.getProperty(key)?.toInt() ?: 4
+
+            for (i in 1..tankCount) {
+                gameScene.rootNode.add(
+                    Tank(
+                        "Tank", gameScene, isEnemy,
+                        random.nextInt(gameScene.mapWidth - GameConfig.BLOCK_WIDTH),
+                        random.nextInt(gameScene.mapHeight - GameConfig.BLOCK_WIDTH),
+                        Dir.values()[random.nextInt(Dir.values().size)]
+                    )
+                )
+            }
+        }
+
+        private fun loadBackground() {
+            val random = Random()
+            gameScene.rootNode.add(
+                BrickWall(
+                    "BrickWall", gameScene,
+                    random.nextInt(gameScene.mapWidth - GameConfig.BLOCK_WIDTH),
+                    random.nextInt(gameScene.mapHeight - GameConfig.BLOCK_WIDTH)
+                )
+            )
+            gameScene.rootNode.add(
+                StoneWall(
+                    "StoneWall", gameScene,
+                    random.nextInt(gameScene.mapWidth - GameConfig.BLOCK_WIDTH),
+                    random.nextInt(gameScene.mapHeight - GameConfig.BLOCK_WIDTH)
                 )
             )
         }
     }
 
-    private fun loadBackground() {
-        val random = Random()
-        rootNode.add(
-            BrickWall(
-                "BrickWall", this,
-                random.nextInt(mapWidth - GameConfig.BLOCK_WIDTH),
-                random.nextInt(mapHeight - GameConfig.BLOCK_WIDTH)
-            )
-        )
-        rootNode.add(
-            StoneWall(
-                "StoneWall", this,
-                random.nextInt(mapWidth - GameConfig.BLOCK_WIDTH),
-                random.nextInt(mapHeight - GameConfig.BLOCK_WIDTH)
-            )
-        )
-    }
-
-    override fun draw(canvas: Canvas) = rootNode.draw(canvas)
-
-    override fun refreshData() = rootNode.refreshData()
 
     fun addBullet(x: Int, y: Int, dir: Dir) {
         rootNode.add(Bullet("bullet", this, x, y, dir))
