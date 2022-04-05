@@ -94,6 +94,7 @@ object Libs {
     const val RETROFIT2_KOTLIN_COROUTINES_ADAPTER = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
     const val SLF4J = "org.slf4j:slf4j-simple:1.7.30"
     const val TIMBER = "com.jakewharton.timber:timber:5.0.1"
+    const val CGLIB = "cglib:cglib:3.3.0"
 }
 
 object Testing {

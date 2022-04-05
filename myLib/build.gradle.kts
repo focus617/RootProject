@@ -28,6 +28,9 @@ dependencies {
     // TestApp: CharUtils
     implementation(Libs.COMMONS_LANG3)
 
+    // Code Generator for DynamicProxy
+    implementation(Libs.CGLIB)
+
     // Test
     testImplementation(Testing.JUNIT)
     testImplementation(Testing.MOCKITO)

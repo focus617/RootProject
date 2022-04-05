@@ -121,8 +121,8 @@ class Proxy3(private val subject: ICommonAct) : ICommonAct {
  * DynamicProxy类
  * 可以动态生成任意个代理对象，不需要开发者手动编写代理类代码。
  */
-class DynamicProxy(             //传入被代理类的实例引用
-    private val `object`: Any   //被代理类的引用
+class DynamicProxy(
+    private val `object`: Any   //传入被代理类的实例引用
 ) : InvocationHandler {
 
     companion object : WithLogging()
