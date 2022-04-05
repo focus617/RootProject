@@ -1,7 +1,6 @@
 package com.focus617.tankwar.scene.components
 
 import com.focus617.platform.helper.BitmapHelper.rotate
-import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.GameConstant
 import com.focus617.tankwar.scene.GameConstant.KEY_ENEMY_FIRE_STRATEGY
 import com.focus617.tankwar.scene.GameConstant.KEY_FRIEND_FIRE_STRATEGY
@@ -61,7 +60,7 @@ class Tank(
         }
     }
 
-    override fun move() {
+    override fun moveForward() {
         // 坦克转向规则：7%概率随机改变方向
         if (random.nextInt(100) > 93) {
             this.randomDir()
@@ -71,14 +70,9 @@ class Tank(
             this.fire()
         }
 
-        super.move()
+        super.moveForward()
     }
 
-    // 退回移动之前的位置
-    fun back(){
-        x = previousX
-        y = previousY
-    }
 
     // 开炮
     private fun fire() {

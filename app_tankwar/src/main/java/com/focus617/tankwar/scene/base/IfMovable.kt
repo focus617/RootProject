@@ -8,6 +8,11 @@ interface IfMovable {
     //移动速度
     var speed: Int
 
-    fun move()
+    var previousX: Int
+    var previousY: Int
+
+    fun moveForward()
+
+    fun back()
 
 }

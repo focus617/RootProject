@@ -11,15 +11,16 @@ abstract class MovableNode(scene: IfScene) : Node(scene), IfMovable {
     //移动速度
     abstract override var speed: Int
 
-    var previousX: Int = 0
-    var previousY: Int = 0
+    override var previousX: Int = 0
+    override var previousY: Int = 0
 
     override fun refreshData() {
-        move()
+        moveForward()
         super.refreshData()
     }
 
-    override fun move() {
+    override fun moveForward() {
+        // 记录上一次的位置
         previousX = x
         previousY = y
 
@@ -29,6 +30,12 @@ abstract class MovableNode(scene: IfScene) : Node(scene), IfMovable {
             Dir.LEFT -> x -= speed
             Dir.RIGHT -> x += speed
         }
+    }
+
+    // 退回移动之前,记录的上一次的位置
+    override fun back(){
+        x = previousX
+        y = previousY
     }
 
 }
