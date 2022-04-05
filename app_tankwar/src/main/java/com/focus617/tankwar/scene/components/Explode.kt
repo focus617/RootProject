@@ -6,7 +6,6 @@ import com.focus617.tankwar.scene.base.IfScene
 import com.focus617.tankwar.scene.base.Node
 
 class Explode(
-    name: String,
     scene: IfScene,
     override var x: Int,
     override var y: Int

@@ -77,7 +77,7 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
         }
 
         // 初始化场景中的对象
-        fun buildNodes(): TerrainBuilder  {
+        fun buildNodes(): TerrainBuilder {
             loadBackground()
             loadTankFromProperties(GameConstant.KEY_FRIEND)
             loadTankFromProperties(GameConstant.KEY_ENEMY)
@@ -123,7 +123,6 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
                 bitmapLoader(resource, R.drawable.ic_stonewall)
         }
 
-
         private fun loadTankFromProperties(key: String) {
             val random = Random()
 
@@ -139,7 +138,7 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
             for (i in 1..tankCount) {
                 gameScene.rootNode.add(
                     Tank(
-                        "Tank", gameScene, isEnemy,
+                        gameScene, isEnemy,
                         random.nextInt(gameScene.mapWidth - GameConfig.BLOCK_WIDTH),
                         random.nextInt(gameScene.mapHeight - GameConfig.BLOCK_WIDTH),
                         Dir.values()[random.nextInt(Dir.values().size)]
@@ -152,14 +151,14 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
             val random = Random()
             gameScene.rootNode.add(
                 BrickWall(
-                    "BrickWall", gameScene,
+                    gameScene,
                     random.nextInt(gameScene.mapWidth - GameConfig.BLOCK_WIDTH),
                     random.nextInt(gameScene.mapHeight - GameConfig.BLOCK_WIDTH)
                 )
             )
             gameScene.rootNode.add(
                 StoneWall(
-                    "StoneWall", gameScene,
+                    gameScene,
                     random.nextInt(gameScene.mapWidth - GameConfig.BLOCK_WIDTH),
                     random.nextInt(gameScene.mapHeight - GameConfig.BLOCK_WIDTH)
                 )
@@ -169,14 +168,14 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
 
 
     fun addBullet(x: Int, y: Int, dir: Dir) {
-        rootNode.add(Bullet("bullet", this, x, y, dir))
+        rootNode.add(Bullet(this, x, y, dir))
     }
 
     fun addExplode(x: Int, y: Int) {
         //TODO: how to solve RectDecorator removing when explode died?
 //        rootNode.add(RectDecorator(Explode("explode", this, x, y)))
 
-        rootNode.add(Explode("explode", this, x, y))
+        rootNode.add(Explode(this, x, y))
     }
 
     fun removeObject(obj: IfRefresh) {

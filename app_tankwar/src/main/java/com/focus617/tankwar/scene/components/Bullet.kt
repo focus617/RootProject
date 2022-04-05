@@ -1,7 +1,6 @@
 package com.focus617.tankwar.scene.components
 
 import com.focus617.platform.helper.BitmapHelper.rotate
-import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.GameConstant
 import com.focus617.tankwar.scene.GameConstant.KEY_BULLET_SPEED
 import com.focus617.tankwar.scene.GameScene
@@ -11,7 +10,6 @@ import com.focus617.tankwar.scene.base.MovableNode
 import timber.log.Timber
 
 class Bullet(
-    name: String,
     scene: IfScene,
     override var x: Int,
     override var y: Int,
@@ -22,7 +20,7 @@ class Bullet(
         (scene as GameScene).properties?.getProperty(KEY_BULLET_SPEED)?.toInt() ?: 40
 
     init {
-        Timber.i("$name.speed = $speed")
+        Timber.i("Bullet.speed = $speed")
     }
 
     // 通过对象类型，找到Scene中的Bitmap

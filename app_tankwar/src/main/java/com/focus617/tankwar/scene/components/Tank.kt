@@ -15,7 +15,6 @@ import timber.log.Timber
 import java.util.*
 
 class Tank(
-    name: String,
     scene: IfScene,
     private val isEnemy: Boolean = true,
     override var x: Int,
