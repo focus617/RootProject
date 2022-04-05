@@ -29,6 +29,9 @@ class Tank(
 
     var fs: FireStrategy = DefaultFireStrategy()
 
+    private var paintTimes: Int = 0
+    private var paintRed: Boolean = true
+
     init {
         previousX = x
         previousY = y
@@ -53,8 +56,21 @@ class Tank(
 
     // 通过对象类型，找到Scene中的Bitmap
     override fun findBitmap() {
+
+        if(++paintTimes > 50){
+            paintRed = !paintRed
+            paintTimes = 0
+        }
+
         bitmap = when (isEnemy) {
-            true -> scene.bitmapRepository[GameConstant.TANK_ENEMY_1]!!.rotate(dir.rotateDegrees)
+            true -> {
+                if (paintRed) {
+                    scene.bitmapRepository[GameConstant.TANK_ENEMY_1]!!.rotate(dir.rotateDegrees)
+                }
+                else{
+                    scene.bitmapRepository[GameConstant.TANK_ENEMY_2]!!.rotate(dir.rotateDegrees)
+                }
+            }
             false -> scene.bitmapRepository[GameConstant.TANK_MINE]!!.rotate(dir.rotateDegrees)
         }
     }
@@ -71,7 +87,6 @@ class Tank(
 
         super.moveForward()
     }
-
 
     // 开炮
     private fun fire() {

@@ -27,7 +27,7 @@ class RootNode : Composite() {
 
         canvas.run {
             // 初始化画布并设置画布背景
-            drawColor(Color.WHITE)
+            drawColor(Color.YELLOW)
 
             // 刷新对象的Rect，用于动态碰撞检测
             rect.left = width / 2 - halfWidth
