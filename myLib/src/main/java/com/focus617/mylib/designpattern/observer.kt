@@ -19,10 +19,10 @@ abstract class Observable : BaseObject() {
     var subjectState = "正常运行"
 
     var eventWakeup: Event =
-        WakeupEvent(this, System.currentTimeMillis(), subjectState)
+        WakeupEvent(this, subjectState)
 
     var startupWakeup: Event =
-        AppStartEvent(this, System.currentTimeMillis(), subjectState)
+        AppStartEvent(this, subjectState)
 
     fun register(observer: Observer) {
         LOG.info("${unwrapCompanionClass(observer.javaClass).simpleName} Registered")
