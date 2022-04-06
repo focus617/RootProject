@@ -35,6 +35,7 @@ object Jetpack {
     const val APPCOMPAT = "androidx.appcompat:appcompat:1.4.0"
     const val CONSTRAINTLAYOUT = "androidx.constraintlayout:constraintlayout:2.1.1"
     const val LEGACY_SUPPORT = "androidx.legacy:legacy-support-v4:1.0.0"
+    const val PREFERENCE = "androidx.preference:preference:1.1.1"
 
     const val COMPOSE_ANIMATION = "androidx.compose.animation:animation"
     const val COMPOSE_MATERIAL = "androidx.compose.material:material"
@@ -48,7 +49,8 @@ object Jetpack {
     const val LIFECYCLE_RUNTIME_KTX = "androidx.lifecycle:lifecycle-runtime-ktx"
     const val LIFECYCLE_VIEWMODEL_COMPOSE = "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
     const val LIFECYCLE_VIEWMODEL_KTX = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
-    const val LIFECYCLE_VIEWMODEL_SAVEDSTATE = "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.1"
+    const val LIFECYCLE_VIEWMODEL_SAVEDSTATE =
+        "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.1"
 
     const val NAVIGATION_FRAGMENT_KTX = "androidx.navigation:navigation-fragment-ktx:2.3.5"
     const val NAVIGATION_UI_KTX = "androidx.navigation:navigation-ui-ktx:2.3.5"
@@ -64,7 +66,7 @@ object Jetpack {
 
 object Kotlin {
     const val COROUTINES_CORE = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
-    const val COROUTINES_ANDROID ="org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
+    const val COROUTINES_ANDROID = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
     const val COROUTINES_TEST = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1"
     const val COROUTINES_PLAY_SERVICE = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services"
 
@@ -74,7 +76,8 @@ object Kotlin {
     const val HILT_ANDROID_COMPILER = "com.google.dagger:hilt-android-compiler:2.40"
     const val HILT_COMPILER = "com.google.dagger:hilt-compiler:2.40"
     const val HILT_ANDROIDX_COMPILER = "androidx.hilt:hilt-compiler:1.0.0-alpha03"
-    const val HILT_ANDROIDX_LIFECYCLE_VIEWMODEL = "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
+    const val HILT_ANDROIDX_LIFECYCLE_VIEWMODEL =
+        "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
     const val HILT_ANDROIDX_WORK = "androidx.hilt:hilt-work"
     const val HILT_NAVIGATION_COMPOSE = "androidx.hilt:hilt-navigation-compose"
 
@@ -87,14 +90,22 @@ object Kotlin {
 object Libs {
     const val COMMONS_LANG3 = "org.apache.commons:commons-lang3:3.11"
     const val DESUGAR_JDK = "com.android.tools:desugar_jdk_libs:1.1.5"
-    const val GLIDE = "com.github.bumptech.glide:glide:4.13.1"
-    const val MOSHI = "com.squareup.moshi:moshi:1.9.3"
-    const val MOSHI_KOTLIN = "com.squareup.moshi:moshi-kotlin:1.9.3"
-    const val RETROFIT2_MOSHI_CONVERTER = "com.squareup.retrofit2:converter-moshi:2.9.0"
-    const val RETROFIT2_KOTLIN_COROUTINES_ADAPTER = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
     const val SLF4J = "org.slf4j:slf4j-simple:1.7.30"
     const val TIMBER = "com.jakewharton.timber:timber:5.0.1"
     const val CGLIB = "cglib:cglib:3.3.0"
+
+    //Image
+    const val GLIDE = "com.github.bumptech.glide:glide:4.13.1"
+
+    //Web
+    const val MOSHI = "com.squareup.moshi:moshi:1.9.3"
+    const val MOSHI_KOTLIN = "com.squareup.moshi:moshi-kotlin:1.9.3"
+    const val RETROFIT2_MOSHI_CONVERTER = "com.squareup.retrofit2:converter-moshi:2.9.0"
+    const val RETROFIT2_KOTLIN_COROUTINES_ADAPTER =
+        "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
+
+    //Network
+    const val NETTY = "io.netty:netty-all:4.1.75.Final"
 }
 
 object Testing {

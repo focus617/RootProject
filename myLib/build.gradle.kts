@@ -17,7 +17,7 @@ dependencies {
     implementation(Kotlin.KOTLIN_STDLIB)
     implementation(Kotlin.KOTLIN_REFLECT)
 
-
+    // Log
     implementation(Kotlin.KOTLIN_LOGGING)
     implementation(Libs.SLF4J)
 

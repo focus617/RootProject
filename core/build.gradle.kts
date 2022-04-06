@@ -25,6 +25,10 @@ dependencies {
     implementation(Kotlin.HILT_CORE)
     kapt(Kotlin.HILT_COMPILER)
 
+    // Log
+    implementation(Kotlin.KOTLIN_LOGGING)
+    implementation(Libs.SLF4J)
+
     // Test
     testImplementation(Testing.JUNIT)
     testImplementation(Testing.MOCKITO)
