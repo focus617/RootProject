@@ -16,6 +16,7 @@
 
 package com.focus617.core.platform.event
 
+import com.focus617.core.platform.base.BaseEntity
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -23,7 +24,8 @@ typealias EventHandlers<T> = Set<@JvmSuppressWildcards EventHandler<T>>
 
 class EventDispatcher<T> @Inject constructor(
     private val handlers: Provider<EventHandlers<T>>
-) {
+): BaseEntity() {
+
     suspend fun dispatch(event: T) {
         handlers.get().forEach {
             it.handle(event)

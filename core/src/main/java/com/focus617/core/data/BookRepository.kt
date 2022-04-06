@@ -5,11 +5,15 @@ import com.focus617.core.data.dataSourceInterface.IfBookDataSource
 import com.focus617.core.data.dataSourceInterface.IfBookRepository
 import com.focus617.core.data.dataSourceInterface.IfOpenBookDataSource
 import com.focus617.core.domain.Book
+import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.base.BaseSpecification
 import com.focus617.core.platform.functional.Result
 import com.focus617.core.platform.functional.Result.Error
 import com.focus617.core.platform.functional.Result.Success
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
@@ -18,7 +22,7 @@ class BookRepository @Inject constructor(
     private val bookDataSource: IfBookDataSource,
     private val openBookDataSource: IfOpenBookDataSource,
     @IoDispatcher var ioDispatcher: CoroutineDispatcher
-) : IfBookRepository {
+) : BaseEntity(), IfBookRepository {
     // Domain Aggregate Root data in memory
     var cachedBooks: ConcurrentHashMap<String, Book> = ConcurrentHashMap()
 

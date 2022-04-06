@@ -4,7 +4,7 @@ package com.focus617.core.platform.base
 /**
  * @description 抽象规格类，声明接口，抽象所有类成员共有的默认行为
  */
-abstract class BaseSpecification<T> {
+abstract class BaseSpecification<T> : BaseEntity() {
 
     open fun isSatisfiedBy(t: T): Boolean = true
 }
@@ -37,13 +37,13 @@ abstract class BaseSpecification<T> {
  *  orSpecs.isSatisfiedBy(t)
  *
  */
-class AndSpecification<T>: BaseSpecification<T>() {
+class AndSpecification<T> : BaseSpecification<T>() {
 
     private val specs = arrayListOf<BaseSpecification<T>>()
 
     fun getSpecs() = specs.toList()
 
-    fun add(specification: BaseSpecification<T>){
+    fun add(specification: BaseSpecification<T>) {
         specs.add(specification)
     }
 
@@ -51,25 +51,25 @@ class AndSpecification<T>: BaseSpecification<T>() {
 
         // 依次比对每个Specification
         val specifications = getSpecs().iterator()
-        var satisfiesAllSpecs = true
+        val satisfiesAllSpecs = true
 
         while (specifications.hasNext()) {
             val specification = specifications.next()
 //            satisfiesAllSpecs = satisfiesAllSpecs && specification.isSatisfiedBy(t)
-            if(!specification.isSatisfiedBy(t))
+            if (!specification.isSatisfiedBy(t))
                 return false
         }
         return satisfiesAllSpecs
     }
 }
 
-class OrSpecification<T>: BaseSpecification<T>() {
+class OrSpecification<T> : BaseSpecification<T>() {
 
     private val specs = arrayListOf<BaseSpecification<T>>()
 
     fun getSpecs() = specs.toList()
 
-    fun add(specification: BaseSpecification<T>){
+    fun add(specification: BaseSpecification<T>) {
         specs.add(specification)
     }
 
@@ -77,22 +77,22 @@ class OrSpecification<T>: BaseSpecification<T>() {
 
         // 依次比对每个Specification
         val specifications = getSpecs().iterator()
-        var satisfiesAllSpecs = false
+        val satisfiesAllSpecs = false
 
         while (specifications.hasNext()) {
             val specification = specifications.next()
 //            satisfiesAllSpecs = satisfiesAllSpecs || specification.isSatisfiedBy(t)
-            if(specification.isSatisfiedBy(t))
+            if (specification.isSatisfiedBy(t))
                 return true
         }
         return satisfiesAllSpecs
     }
 }
 
-class NotSpecification<T>(private val specToNegate: BaseSpecification<T>): BaseSpecification<T>() {
+class NotSpecification<T>(private val specToNegate: BaseSpecification<T>) : BaseSpecification<T>() {
 
     override fun isSatisfiedBy(t: T): Boolean {
-        return ! specToNegate.isSatisfiedBy(t)
+        return !specToNegate.isSatisfiedBy(t)
     }
 
 }
