@@ -6,8 +6,9 @@ import android.graphics.Paint
 import android.graphics.Rect
 import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.collider.ColliderChain
+import java.io.Serializable
 
-class RootNode : Composite() {
+class RootNode : Composite(), Serializable {
 
     private val paint = Paint()    // 画笔
 

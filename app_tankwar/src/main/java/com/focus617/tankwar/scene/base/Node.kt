@@ -4,11 +4,12 @@ import android.graphics.*
 import com.focus617.platform.helper.BitmapHelper.draw
 import com.focus617.tankwar.scene.GameConfig
 import com.focus617.tankwar.scene.GameScene
+import java.io.Serializable
 
 /*
  * Node类的主要职责是负责在SurfaceView上绘制Bitmap
  */
-abstract class Node(val scene: IfScene) : Leaf() {
+abstract class Node(val scene: IfScene) : Leaf(), Serializable {
 
     //在游戏棋盘上的坐标
     abstract var x: Int
