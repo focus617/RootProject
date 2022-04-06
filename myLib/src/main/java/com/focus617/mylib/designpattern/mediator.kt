@@ -1,12 +1,12 @@
 package com.focus617.mylib.designpattern
 
+import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.logging.WithLogging
 
 /**
  * @description 抽象中介者
  */
-abstract class Mediator {
-    companion object : WithLogging()
+abstract class Mediator : BaseObject() {
     /**
      * 定义一个抽象的转发消息的方法，得到同事对象和转发消息
      */
@@ -17,8 +17,7 @@ abstract class Mediator {
  * @description 抽象同事类
  * 构造方法，得到中介者对象 [mediator]
  */
-abstract class Colleague(private val mediator: Mediator) {
-    companion object : WithLogging()
+abstract class Colleague(private val mediator: Mediator) : BaseObject() {
     /**
      * 发送消息
      */
@@ -72,7 +71,7 @@ class ConcreteColleagueA(private val mediator: Mediator) : Colleague(mediator) {
 
 /**
  * @description 具体同事B
-*/
+ */
 class ConcreteColleagueB(private val mediator: Mediator) : Colleague(mediator) {
 
     /**

@@ -6,8 +6,7 @@ import com.focus617.mylib.logging.WithLogging
 /**
  * @description Command类用来将一个请求封装为一个对象，并声明执行操作的接口
  */
-abstract class Command constructor(val invoker: Invoker, val receiver: Receiver) {
-    companion object : WithLogging()
+abstract class Command constructor(val invoker: Invoker, val receiver: Receiver) : BaseObject() {
 
     /**
      * 执行操作
@@ -43,8 +42,6 @@ class ConcreteCommandHandler2 constructor(invoker: Invoker, receiver: Receiver) 
  * @description Receiver类指定如何实施与执行一个请求相关的操作。任何一个类都可能成为一个接收者
  */
 class Receiver : BaseObject() {
-    companion object : WithLogging()
-
     /**
      * 接收者相应的操作
      */
@@ -60,7 +57,6 @@ class Receiver : BaseObject() {
  * @description Invoker类 要求该Command执行这个请求
  */
 class Invoker : BaseObject() {
-    companion object : WithLogging()
 
     private var handlers = HashMap<String, Command>()
 

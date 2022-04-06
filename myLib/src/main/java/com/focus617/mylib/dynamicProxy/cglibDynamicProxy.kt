@@ -1,5 +1,6 @@
 package com.focus617.mylib.dynamicProxy
 
+import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.logging.WithLogging
 import com.focus617.mylib.logging.unwrapCompanionClass
 import net.sf.cglib.proxy.Enhancer
@@ -7,9 +8,7 @@ import net.sf.cglib.proxy.MethodInterceptor
 import net.sf.cglib.proxy.MethodProxy
 import java.lang.reflect.Method
 
-open class RealObject {
-    companion object : WithLogging()
-
+open class RealObject : BaseObject() {
     fun requestA() {
         LOG.info(
             "${unwrapCompanionClass(this.javaClass).simpleName}:" +
@@ -25,8 +24,7 @@ open class RealObject {
     }
 }
 
-class TimeMethodInterceptor : MethodInterceptor {
-    companion object : WithLogging()
+class TimeMethodInterceptor :  BaseObject(), MethodInterceptor {
 
     @Throws(Throwable::class)
     override fun intercept(

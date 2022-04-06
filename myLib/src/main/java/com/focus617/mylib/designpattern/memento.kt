@@ -1,11 +1,12 @@
 package com.focus617.mylib.designpattern
 
+import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.logging.WithLogging
 
 /**
  * @description 发起人，负责创建备忘录，用以记录当前的对象状态，并可以使用该备忘录恢复状态。
  */
-class Originator {
+class Originator : BaseObject() {
     private var state: String = "on"//初始状态
     private var caretaker: Caretaker = Caretaker()
 
@@ -41,12 +42,12 @@ class Originator {
 /**
  * @description 备忘录，用来存储Originator需要保存的状态。
  */
-class Memento(val state: String)
+class Memento(val state: String) : BaseObject()
 
 /**
  * @description 备忘录管理者，负责存取备忘录。
  */
-class Caretaker {
+class Caretaker : BaseObject() {
     private var memento: Memento? = null
 
     fun setMemento(memento: Memento) {

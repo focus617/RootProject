@@ -1,12 +1,11 @@
 package com.focus617.mylib.designpattern
 
+import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.logging.WithLogging
 import com.focus617.mylib.logging.unwrapCompanionClass
 
 // 抽象被装饰类
-abstract class Component {
-    // 提供 Logger
-    companion object : WithLogging()
+abstract class Component : BaseObject() {    // BaseObject 提供 Logger
 
     // 将被装饰的抽象方法
     abstract fun operation()

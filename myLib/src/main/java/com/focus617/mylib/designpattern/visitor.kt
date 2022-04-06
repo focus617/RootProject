@@ -1,13 +1,13 @@
 package com.focus617.mylib.designpattern
 
+import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.logging.WithLogging
 
 
 /**
  * @description 抽象访问者
  */
-abstract class Visitor {
-    companion object : WithLogging()
+abstract class Visitor : BaseObject() {
     abstract fun visitorConcreteElementA(concreteElementA: ConcreteElementA)
     abstract fun visitorConcreteElementB(concreteElementB: ConcreteElementB)
 }
@@ -43,7 +43,7 @@ class ConcreteVisitorB : Visitor() {
 /**
  * @description 抽象元素
  */
-abstract class Element {
+abstract class Element : BaseObject() {
     //接受访问
     abstract fun accept(visitor: Visitor)
 }
@@ -52,14 +52,15 @@ abstract class Element {
 /**
  * @description 具体元素A
  */
-class ConcreteElementA: Element() {
+class ConcreteElementA : Element() {
     override fun accept(visitor: Visitor) {
         visitor.visitorConcreteElementA(this)
     }
+
     /**
      * 具体的其他方法
      */
-    fun operationA(){
+    fun operationA() {
 
     }
 }
@@ -76,7 +77,7 @@ class ConcreteElementB : Element() {
     /**
      * 具体的其他方法
      */
-    fun operationB(){
+    fun operationB() {
 
     }
 }
@@ -86,7 +87,7 @@ class ConcreteElementB : Element() {
  * @description 对象结构
  * 能枚举它的元素，可以提供一个高层的接口以允许访问者访问它的元素。
  */
-class ObjectStructure {
+class ObjectStructure : BaseObject() {
     private val elements = arrayListOf<Element>()
     fun attach(element: Element) {
         elements.add(element)
@@ -103,7 +104,7 @@ class ObjectStructure {
     }
 }
 
-    // 测试类
+// 测试类
 class ClientVisitor {
     companion object : WithLogging() {
         @JvmStatic

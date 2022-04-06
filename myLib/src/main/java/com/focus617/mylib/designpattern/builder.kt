@@ -1,11 +1,11 @@
 package com.focus617.mylib.designpattern
 
+import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.logging.WithLogging
 import com.focus617.mylib.logging.unwrapCompanionClass
 
 // 被构建的产品
-class Product {
-    companion object : WithLogging()
+class Product : BaseObject() {
 
     private val parts = ArrayList<String>()
 
@@ -23,8 +23,7 @@ class Product {
 }
 
 // 定义对各个部件的构建方法的抽象
-abstract class Builder {
-    companion object : WithLogging()
+abstract class Builder : BaseObject() {
 
     // 构建方法的抽象
     abstract fun buildPartA()
@@ -35,7 +34,7 @@ abstract class Builder {
 }
 
 // 对建造流程的抽象
-open class Director {
+open class Director : BaseObject() {
     fun construct(builder: Builder) {
         builder.buildPartA()
         builder.buildPartB()

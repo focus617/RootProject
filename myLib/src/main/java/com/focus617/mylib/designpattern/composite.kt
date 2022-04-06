@@ -1,11 +1,12 @@
 package com.focus617.mylib.designpattern
 
+import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.logging.WithLogging
 
 /**
  * @description 为组合对象声明接口，抽象所有类成员共有的默认行为
  */
-abstract class ComponentBase(val name: String)  {
+abstract class ComponentBase(val name: String) : BaseObject() {
     /**
      * 添加部件
      */
@@ -27,15 +28,15 @@ abstract class ComponentBase(val name: String)  {
  */
 class Leaf(name: String) : ComponentBase(name) {
     override fun add(component: ComponentBase) {
-        println("cannot add from a leaf")
+        LOG.info("cannot add from a leaf")
     }
 
     override fun remove(component: ComponentBase) {
-        println("cannot remove from a leaf")
+        LOG.info("cannot remove from a leaf")
     }
 
     override fun display(depth: Int) {
-        println(Array(depth) { "-" }.joinToString(" ") + name)
+        LOG.info(Array(depth) { "-" }.joinToString(" ") + name)
     }
 
 }
@@ -57,7 +58,7 @@ class Composite(name: String) : ComponentBase(name) {
     }
 
     override fun display(depth: Int) {
-        println(Array(depth) { "-" }.joinToString(" ") + name)//输出本身
+        LOG.info(Array(depth) { "-" }.joinToString(" ") + name)//输出本身
         for (child in children) {//遍历其孩子
             child.display(depth + 2)
         }

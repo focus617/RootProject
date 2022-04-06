@@ -1,16 +1,14 @@
 package com.focus617.mylib.designpattern
 
+import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.logging.WithLogging
 
 /**
  * @description 所有具体享元类的超类，通过这个接口，Flyweight可以接受并作用于外部状态
  * @param [extrinsicState] 外部状态
  */
-abstract class Flyweight {
-    companion object : WithLogging()
-
+abstract class Flyweight : BaseObject(){
     abstract fun operation(extrinsicState: String)
-
 }
 
 /**

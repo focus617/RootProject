@@ -11,7 +11,6 @@ import java.util.*
 
 // 抽象被观察者
 abstract class Observable : BaseObject() {
-    companion object : WithLogging()
 
     // 方式一：保存观察者的实例
     private val observers = arrayListOf<Observer>()
@@ -56,7 +55,6 @@ abstract class Observable : BaseObject() {
 
 // 抽象观察者
 abstract class Observer : BaseObject() {
-    companion object : WithLogging()
 
     abstract fun update(e: Event)
 }
@@ -101,8 +99,7 @@ class ConcreteObserverB(private val subject: Observable) : Observer() {
     )
 }
 
-class ConcreteObserverC() {
-    companion object : WithLogging()
+class ConcreteObserverC : BaseObject() {
 
     fun attach(subject: Observable) {
         subject.attach(this.hashCode()) { e ->      // 方式二：注册方法
@@ -126,8 +123,7 @@ class ConcreteObserverC() {
     }
 }
 
-class ConcreteObserverD(private val subject: Observable) {
-    companion object : WithLogging()
+class ConcreteObserverD(private val subject: Observable) : BaseObject() {
 
     init {
         subject.attach(this.hashCode()) { e ->      // 方式二：注册方法

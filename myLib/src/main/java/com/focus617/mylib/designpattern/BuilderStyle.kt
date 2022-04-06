@@ -1,9 +1,10 @@
 package com.focus617.mylib.designpattern
 
+import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.logging.WithLogging
 
 // 被构建的产品
-class NewProduct {
+class NewProduct : BaseObject() {
     var attrib1: Int = 0
     var attrib2: Int = 0
     var attrib3: Int = 0
@@ -19,7 +20,7 @@ class NewProduct {
                 "${attrib5},${attrib6},${attrib7},${attrib8},${attrib9})"
 
 
-    class ProductBuilder() {
+    class ProductBuilder() : BaseObject() {
         private val product = NewProduct()
 
         // 对属性分组，分别进行build

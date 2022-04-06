@@ -1,5 +1,6 @@
 package com.focus617.mylib.dynamicProxy
 
+import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.logging.WithLogging
 import com.focus617.mylib.logging.unwrapCompanionClass
 import java.lang.reflect.InvocationHandler
@@ -14,8 +15,7 @@ interface ExecutorInterface {
 }
 
 // 被代理对象
-open class Executor : ExecutorInterface {
-    companion object : WithLogging()
+open class Executor : BaseObject(), ExecutorInterface {
 
     override fun execute() {
         LOG.info(
@@ -35,8 +35,7 @@ open class Executor : ExecutorInterface {
 // DynamicProxy类
 class DynamicProxy(
     private val `object`: Any   //传入被代理类的实例引用
-) : InvocationHandler {
-    companion object : WithLogging()
+) : BaseObject(), InvocationHandler {
 
     @Throws(Throwable::class)
     override operator fun invoke(proxy: Any?, method: Method, args: Array<out Any>?): Any? {
@@ -77,7 +76,7 @@ class DynamicProxy(
 }
 
 // 如果Executor新增了任何方法，那么Invoker和DynamicProxy将不需要任何改动就可以支持新增方法
-class Invoker {
+class Invoker : BaseObject() {
     // Proxy.newProxyInstance方法动态构造一个代理中介，拦截真实对象的操作
     // 需要传入被代理类的ClassLoader、共同接口集合和dynamicProxy实例对象
     // 采用Reflection机制，通过二进制字节码分析Executor类的属性和方法

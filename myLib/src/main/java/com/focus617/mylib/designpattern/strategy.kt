@@ -1,23 +1,21 @@
 package com.focus617.mylib.designpattern
 
+import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.logging.WithLogging
 import com.focus617.mylib.logging.unwrapCompanionClass
 import java.util.*
 
 // 抽象方法类
-abstract class Strategy {
-    companion object : WithLogging()
+abstract class Strategy : BaseObject() {
 
     // 抽象算法方法
     abstract fun algorithmInterface(context: Context)
 }
 
 // 抽象Context类
-abstract class Context {
+abstract class Context: BaseObject()  {
 
     private var _strategies = ArrayList<Strategy>()
-
-    companion object : WithLogging()
 
     fun addStrategy(strategy: Strategy) {
         this._strategies.add(strategy)

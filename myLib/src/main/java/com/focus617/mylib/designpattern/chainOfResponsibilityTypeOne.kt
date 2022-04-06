@@ -1,5 +1,6 @@
 package com.focus617.mylib.designpattern
 
+import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.logging.WithLogging
 
 /**
@@ -13,8 +14,7 @@ import com.focus617.mylib.logging.WithLogging
 /**
  * @description Handler 处理者类
  */
-abstract class Handler {
-    companion object : WithLogging()
+abstract class Handler : BaseObject() {
 
     protected var mSuccessor: Handler? = null
 

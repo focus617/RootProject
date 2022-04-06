@@ -1,13 +1,12 @@
 package com.focus617.mylib.designpattern
 
+import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.logging.WithLogging
 import com.focus617.mylib.logging.unwrapCompanionClass
 
 
 // 抽象产品
-abstract class AbstractProduct {
-    companion object : WithLogging()
-
+abstract class AbstractProduct : BaseObject() {
     init {
         LOG.info("当前构建的产品是：${unwrapCompanionClass(this.javaClass).simpleName}")
     }
@@ -25,8 +24,7 @@ interface ISimpleFactory {
 }
 
 // 简单工厂
-class SimpleFactory : ISimpleFactory {
-    companion object : WithLogging()
+class SimpleFactory : BaseObject(), ISimpleFactory {
 
     init {
         LOG.info("构建工厂：${unwrapCompanionClass(this.javaClass).simpleName}")
@@ -49,8 +47,7 @@ interface IFactory {
 }
 
 // 产品A的工厂
-class ProductAFactory : IFactory {
-    companion object : WithLogging()
+class ProductAFactory : BaseObject(), IFactory {
 
     init {
         LOG.info("构建工厂：${unwrapCompanionClass(this.javaClass).simpleName}")
@@ -60,8 +57,7 @@ class ProductAFactory : IFactory {
 
 }
 
-class ProductBFactory : IFactory {
-    companion object : WithLogging()
+class ProductBFactory : BaseObject(), IFactory {
 
     init {
         LOG.info("构建工厂：${unwrapCompanionClass(this.javaClass).simpleName}")
@@ -82,8 +78,7 @@ class ProductAFamilyTwo : AbstractProduct()
 class ProductBFamilyTwo : AbstractProduct()
 class ProductCFamilyTwo : AbstractProduct()
 
-class FamilyOneFactory : ISimpleFactory {
-    companion object : WithLogging()
+class FamilyOneFactory : BaseObject(), ISimpleFactory {
 
     init {
         LOG.info("构建工厂：${unwrapCompanionClass(this.javaClass).simpleName}")
@@ -98,8 +93,7 @@ class FamilyOneFactory : ISimpleFactory {
     }
 }
 
-class FamilyTwoFactory : ISimpleFactory {
-    companion object : WithLogging()
+class FamilyTwoFactory : BaseObject(), ISimpleFactory {
 
     init {
         LOG.info("构建工厂：${unwrapCompanionClass(this.javaClass).simpleName}")

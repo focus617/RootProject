@@ -1,11 +1,10 @@
 package com.focus617.mylib.designpattern
 
+import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.logging.WithLogging
 
 // 持有当前状态，以及状态变迁已知条件的类
-class StateContext(var state: State) {
-    companion object : WithLogging()
-    
+class StateContext(var state: State) : BaseObject() {
     // 一个用来计算状态切换条件的临时变量
     var count = 0
 
@@ -17,9 +16,8 @@ class StateContext(var state: State) {
 }
 
 // 抽象对象：表示状态的类，定义状态类的基本接口
-abstract class State {
-    companion object : WithLogging()
-    init{
+abstract class State : BaseObject() {
+    init {
         LOG.info("进入${this::class.java.simpleName}状态")
     }
 
@@ -68,7 +66,6 @@ class ConcreteState3 : State() {
 }
 
 
-
 // 测试类
 class ClientState {
     companion object : WithLogging() {
@@ -79,7 +76,7 @@ class ClientState {
 
             //不断的请求，并改变状态
             var i = 0
-            while (i<10) {
+            while (i < 10) {
                 i++
                 context.request()
             }

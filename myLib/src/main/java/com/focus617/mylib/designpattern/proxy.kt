@@ -1,5 +1,6 @@
 package com.focus617.mylib.designpattern
 
+import com.focus617.mylib.designpattern.platform.BaseObject
 import com.focus617.mylib.logging.WithLogging
 import com.focus617.mylib.logging.unwrapCompanionClass
 import java.lang.reflect.InvocationHandler
@@ -13,8 +14,7 @@ interface ICommonAct {
     fun requestB()
 }
 
-open class RealSubject : ICommonAct {
-    companion object : WithLogging()
+open class RealSubject : BaseObject(), ICommonAct {
 
     override fun requestA() {
         LOG.info(
@@ -33,7 +33,6 @@ open class RealSubject : ICommonAct {
 }
 
 class Proxy1 : RealSubject() {
-    companion object : WithLogging()
 
     private lateinit var realSubject: RealSubject
 
@@ -81,8 +80,7 @@ class Proxy1 : RealSubject() {
 
 
 //通过Kotlin by关键字实现代理，省略大量的代理类中的样板代码
-class Proxy2(private val realSubject: RealSubject) : ICommonAct by realSubject {
-    companion object : WithLogging()
+class Proxy2(private val realSubject: RealSubject) : BaseObject(), ICommonAct by realSubject {
 
     // 访问权限
     var isAllowed = false
@@ -97,9 +95,7 @@ class Proxy2(private val realSubject: RealSubject) : ICommonAct by realSubject {
 }
 
 // 第三种方法支持嵌套
-class Proxy3(private val subject: ICommonAct) : ICommonAct {
-    companion object : WithLogging()
-
+class Proxy3(private val subject: ICommonAct) : BaseObject(), ICommonAct {
     // 访问权限
     var isAllowed = false
 
@@ -123,10 +119,7 @@ class Proxy3(private val subject: ICommonAct) : ICommonAct {
  */
 class DynamicProxy(
     private val `object`: Any   //传入被代理类的实例引用
-) : InvocationHandler {
-
-    companion object : WithLogging()
-
+) : BaseObject(), InvocationHandler {
     // 访问权限
     private var isAllowed = true
 

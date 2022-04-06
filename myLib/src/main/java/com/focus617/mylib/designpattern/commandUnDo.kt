@@ -10,7 +10,7 @@ import com.focus617.mylib.logging.WithLogging
 /**
  * @description CommandUndo类用来将一个命令执行封装为一个对象，并声明执行do、undo操作的接口
  */
-abstract class CommandUnDo(val event: Event) {
+abstract class CommandUnDo(val event: Event) : BaseObject() {
     open fun execute() {
         CommandChain.add(this)
     }
@@ -43,7 +43,7 @@ object CommandChain : ILoggable {
     }
 
     fun redo() {
-        if(cursor == commands.size){
+        if (cursor == commands.size) {
             LOG.info("${this::class.java.simpleName}: nothing to redo\n")
             return
         }
@@ -52,12 +52,11 @@ object CommandChain : ILoggable {
 }
 
 // 被操作对象
-object Content{
+object Content {
     var msg: String = "This is testing content."
 }
 
 class AppendCmd(event: Event) : CommandUnDo(event) {
-    companion object : WithLogging()
 
     val stringToAppend = "Append_Content"
 
@@ -75,7 +74,6 @@ class AppendCmd(event: Event) : CommandUnDo(event) {
 }
 
 class DeleteCmd(event: Event) : CommandUnDo(event) {
-    companion object : WithLogging()
 
     // Command负责记录和保存自己操作的变化量
     var stringToDelete = ""
@@ -98,7 +96,6 @@ class DeleteCmd(event: Event) : CommandUnDo(event) {
  * @description Invoker类 要求该Command执行这个请求
  */
 class InvokerUndo : BaseObject() {
-    companion object : WithLogging()
 }
 
 /**
