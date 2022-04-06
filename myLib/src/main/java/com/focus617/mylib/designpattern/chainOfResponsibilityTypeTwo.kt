@@ -21,7 +21,7 @@ interface IfHandler {
      * true，表示对象已被处理（销毁），也就没有必要再进行下一步处理
      * false，表示本次未完成处理，需要继续
      */
-    fun handlerRequest(requestCode: Int): Boolean
+    fun handleRequest(requestCode: Int): Boolean
 }
 
 /**
@@ -39,9 +39,9 @@ class HandlerChain : IfHandler {
         handlerChain.add(handler)
     }
 
-    override fun handlerRequest(requestCode: Int): Boolean {
+    override fun handleRequest(requestCode: Int): Boolean {
         for (handler in handlerChain) {
-            if(handler.handlerRequest(requestCode))
+            if(handler.handleRequest(requestCode))
                 // 如果某个handler具备处理该请求的能力，就可以退出
                 return true
         }
@@ -56,7 +56,7 @@ class HandlerChain : IfHandler {
 class ConcreteRespHandler1 : IfHandler {
     companion object : WithLogging()
 
-    override fun handlerRequest(requestCode: Int): Boolean = when (requestCode) {
+    override fun handleRequest(requestCode: Int): Boolean = when (requestCode) {
         in 0 until 10 -> {
             LOG.info("${this::class.java.simpleName}: 我来处理{$requestCode}请求\n")
             true
@@ -72,7 +72,7 @@ class ConcreteRespHandler1 : IfHandler {
 class ConcreteRespHandler2 : IfHandler {
     companion object : WithLogging()
 
-    override fun handlerRequest(requestCode: Int): Boolean = when (requestCode) {
+    override fun handleRequest(requestCode: Int): Boolean = when (requestCode) {
         in 10 until 20 -> {
             LOG.info("${this::class.java.simpleName}: 我来处理{$requestCode}请求\n")
             true
@@ -87,7 +87,7 @@ class ConcreteRespHandler2 : IfHandler {
 class ConcreteRespHandler3 : IfHandler {
     companion object : WithLogging()
 
-    override fun handlerRequest(requestCode: Int): Boolean = when (requestCode) {
+    override fun handleRequest(requestCode: Int): Boolean = when (requestCode) {
         in 20 until 30 -> {
             LOG.info("${this::class.java.simpleName}: 我来处理{$requestCode}请求\n")
             true
@@ -102,7 +102,7 @@ class ConcreteRespHandler3 : IfHandler {
 class ConcreteRespHandler4 : IfHandler {
     companion object : WithLogging()
 
-    override fun handlerRequest(requestCode: Int): Boolean = when (requestCode) {
+    override fun handleRequest(requestCode: Int): Boolean = when (requestCode) {
         in 30 until 40 -> {
             LOG.info("${this::class.java.simpleName}: 我来处理{$requestCode}请求\n")
             true
@@ -120,7 +120,7 @@ class ConcreteRespHandler4 : IfHandler {
 class ConcreteFinalRespHandler : IfHandler {
     companion object : WithLogging()
 
-    override fun handlerRequest(requestCode: Int): Boolean {
+    override fun handleRequest(requestCode: Int): Boolean {
         LOG.info("${this::class.java.simpleName}: 我是boss，必须处理{$requestCode}请求\n")
         return true
     }
@@ -148,7 +148,7 @@ class ClientChainOfResponsibilityTypeTwo {
 
             //构建一个请求数组并开始进行请求
             for (requestCode in 0..50 step 5)
-                handlerChain.handlerRequest(requestCode)
+                handlerChain.handleRequest(requestCode)
         }
 
     }
