@@ -128,6 +128,7 @@ class ClientCommandUndoTesting {
             // 测试redo
             CommandChain.redo()
             LOG.info(Content.msg + '\n')
+            //TODO: check why this step is failure?
             CommandChain.redo()
             LOG.info(Content.msg + '\n')
             CommandChain.redo()
