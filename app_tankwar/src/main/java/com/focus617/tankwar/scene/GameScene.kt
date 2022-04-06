@@ -19,14 +19,7 @@ object GameConfig {
     var BLOCK_NUM_H: Int = 0        // 游戏场地纵向方格的个数
 }
 
-class GameScene(val context: Context) : IfScene, IfRefresh {
-
-    // 被绘制的对象集合
-    override val rootNode = RootNode()
-
-    // 绘制对象所用的Bitmap仓库
-    override val bitmapRepository: LinkedHashMap<String, Bitmap> = LinkedHashMap()
-
+class GameScene private constructor(val context: Context) : IfScene, IfRefresh {
     private val resource = context.resources
 
     // 配置属性
@@ -36,27 +29,11 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
     var mapWidth: Int = 0
     var mapHeight: Int = 0
 
-    init {
-        loadGameConfig()
-        mapWidth = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_W
-        mapHeight = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_H
-    }
+    // 被绘制的对象集合
+    override val rootNode = RootNode()
 
-    // 从Properties读取游戏棋盘的配置，例如大小
-    private fun loadGameConfig() {
-        // 游戏方格的宽度
-        GameConfig.BLOCK_WIDTH =
-            PropertiesUtil.loadProperties(context)?.getProperty(GameConstant.KEY_BLOCK_WIDTH)
-                ?.toInt() ?: 10
-        // 游戏场地横向方格的个数
-        GameConfig.BLOCK_NUM_W =
-            PropertiesUtil.loadProperties(context)?.getProperty(GameConstant.KEY_BLOCK_NUM_W)
-                ?.toInt() ?: 10
-        // 游戏场地纵向方格的个数
-        GameConfig.BLOCK_NUM_H =
-            PropertiesUtil.loadProperties(context)?.getProperty(GameConstant.KEY_BLOCK_NUM_H)
-                ?.toInt() ?: 10
-    }
+    // 绘制对象所用的Bitmap仓库
+    override val bitmapRepository: LinkedHashMap<String, Bitmap> = LinkedHashMap()
 
     override fun draw(canvas: Canvas) = rootNode.draw(canvas)
 
@@ -66,6 +43,31 @@ class GameScene(val context: Context) : IfScene, IfRefresh {
         private val gameScene = GameScene(context)
 
         fun build() = gameScene
+
+        // 从Properties读取游戏棋盘的配置，例如大小
+        fun loadGameConfig(): TerrainBuilder {
+            gameScene.apply {
+                // 游戏方格的宽度
+                GameConfig.BLOCK_WIDTH =
+                    PropertiesUtil.loadProperties(context)
+                        ?.getProperty(GameConstant.KEY_BLOCK_WIDTH)
+                        ?.toInt() ?: 10
+                // 游戏场地横向方格的个数
+                GameConfig.BLOCK_NUM_W =
+                    PropertiesUtil.loadProperties(context)
+                        ?.getProperty(GameConstant.KEY_BLOCK_NUM_W)
+                        ?.toInt() ?: 10
+                // 游戏场地纵向方格的个数
+                GameConfig.BLOCK_NUM_H =
+                    PropertiesUtil.loadProperties(context)
+                        ?.getProperty(GameConstant.KEY_BLOCK_NUM_H)
+                        ?.toInt() ?: 10
+
+                mapWidth = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_W
+                mapHeight = GameConfig.BLOCK_WIDTH * GameConfig.BLOCK_NUM_H
+            }
+            return this
+        }
 
         // 加载游戏资源，例如构造绘制对象的Bitmap仓库
         fun loadGameResource(): TerrainBuilder {
