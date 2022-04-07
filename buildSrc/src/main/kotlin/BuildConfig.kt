@@ -82,7 +82,7 @@ object Kotlin {
     const val HILT_NAVIGATION_COMPOSE = "androidx.hilt:hilt-navigation-compose"
 
     const val KOTLIN_STDLIB = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10"
-    const val KOTLIN_REFLECT = "org.jetbrains.kotlin:kotlin-reflect:1.4.0"
+    const val KOTLIN_REFLECT = "org.jetbrains.kotlin:kotlin-reflect:1.6.10"
     const val KOTLIN_LOGGING = "io.github.microutils:kotlin-logging:1.8.3"
     const val KOTLINX_SERIALIZATION = "org.jetbrains.kotlinx:kotlinx-serialization-json"
 }

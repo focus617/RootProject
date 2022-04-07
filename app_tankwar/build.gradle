@@ -109,6 +109,10 @@ dependencies {
     // Netty
     api(Libs.NETTY)
 
+    // Log
+    implementation(Kotlin.KOTLIN_LOGGING)
+    implementation(Libs.SLF4J)
+
     // Test
     testImplementation(Testing.JUNIT)
     testImplementation(Testing.MOCKITO)

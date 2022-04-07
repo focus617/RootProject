@@ -27,7 +27,11 @@ class GameSceneTest {
     fun setUp() {
         // Context of the app under test.
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        scene = GameScene(context)
+        scene = GameScene.TerrainBuilder(context)
+            .loadGameConfig()
+            .loadGameResource()     // 加载游戏资源
+            .buildNodes()           // 初始化场景中的对象
+            .build()
     }
 
     @Test
@@ -45,9 +49,6 @@ class GameSceneTest {
 
     @Test
     fun loadBitmap_LoadCorrect() {
-        // When
-        scene.loadGameResource()
-
         // Then
         assertEquals(20, scene.bitmapRepository.size)
     }
