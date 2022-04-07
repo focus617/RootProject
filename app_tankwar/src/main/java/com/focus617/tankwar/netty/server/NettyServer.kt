@@ -2,7 +2,10 @@ package com.focus617.tankwar.netty.server
 
 import com.focus617.mylib.logging.WithLogging
 import io.netty.bootstrap.ServerBootstrap
-import io.netty.channel.*
+import io.netty.channel.ChannelFuture
+import io.netty.channel.ChannelInitializer
+import io.netty.channel.ChannelOption
+import io.netty.channel.EventLoopGroup
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.SocketChannel
 import io.netty.channel.socket.nio.NioServerSocketChannel
@@ -17,7 +20,7 @@ class NettyServer(val port: Int) : WithLogging() {
     // Port where chat server will listen for connections.
     private val PORT: Int = port
 
-    companion object{
+    companion object {
         @Throws(Exception::class)
         @JvmStatic
         fun main(args: Array<String>) {
@@ -48,14 +51,10 @@ class NettyServer(val port: Int) : WithLogging() {
                 .option(ChannelOption.SO_BACKLOG, 100)
                 .handler(LoggingHandler(LogLevel.INFO))
                 .childHandler(object : ChannelInitializer<SocketChannel>() {
-
                     @Throws(Exception::class)
                     public override fun initChannel(ch: SocketChannel) {
-                        val p: ChannelPipeline = ch.pipeline()
                         /** the communication happens in Byte Streams through the ByteBuf interface.*/
-                        p.addLast(StringDecoder())
-                        p.addLast(StringEncoder())
-                        p.addLast(serverHandler)
+                        ch.pipeline().addLast(StringDecoder(), StringEncoder(), serverHandler)
                     }
                 })
 

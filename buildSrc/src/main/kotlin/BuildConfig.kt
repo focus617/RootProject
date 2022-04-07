@@ -18,8 +18,8 @@ object ClassPath {
 }
 
 object Plugins {
-    const val gradle = "com.android.tools.build:gradle:4.0.1"
-    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72"
+    const val gradle = "com.android.tools.build:gradle:7.1.2"
+    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20"
     const val gradleVersions = "com.github.ben-manes:gradle-versions-plugin:0.27.0"
     const val ktlint = "com.pinterest:ktlint:0.37.2"
     const val safeargs = "androidx.navigation:navigation-safe-args-gradle-plugin:2.4.1"

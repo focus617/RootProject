@@ -74,6 +74,7 @@ class ServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
     // Handle Exception
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
         val incoming: Channel = ctx.channel()
+        cause.printStackTrace()
         LOG.info("Closing connection for client - ${incoming.remoteAddress()}")
         ctx.close()
     }
