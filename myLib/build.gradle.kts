@@ -31,6 +31,10 @@ dependencies {
     // Code Generator for DynamicProxy
     implementation(Libs.CGLIB)
 
+    // TODO:需要裁剪，留下有用的jar
+    // Netty
+    api(Libs.NETTY)
+
     // Test
     testImplementation(Testing.JUNIT)
     testImplementation(Testing.MOCKITO)

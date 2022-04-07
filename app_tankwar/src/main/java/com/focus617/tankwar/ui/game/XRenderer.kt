@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import com.focus617.tankwar.netty.client.NettyClient
+import com.focus617.mylib.netty.client.NettyClient
 import com.focus617.tankwar.scene.base.IfRefresh
 
 const val SLEEP_INTERVAL = 40L

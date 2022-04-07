@@ -1,4 +1,4 @@
-package com.focus617.tankwar.netty.client
+package com.focus617.mylib.netty.client
 
 import com.focus617.mylib.logging.WithLogging
 import io.netty.bootstrap.Bootstrap
