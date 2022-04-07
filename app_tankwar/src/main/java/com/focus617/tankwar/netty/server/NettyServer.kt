@@ -10,18 +10,31 @@ import io.netty.handler.codec.string.StringDecoder
 import io.netty.handler.codec.string.StringEncoder
 import io.netty.handler.logging.LogLevel
 import io.netty.handler.logging.LoggingHandler
+import java.net.InetSocketAddress
 
 
-object NettyServer : WithLogging() {
-    private const val TAG = "NettyServer"
-
+class NettyServer(val port: Int) : WithLogging() {
     // Port where chat server will listen for connections.
-    private val PORT = System.getProperty("port", "8888")!!.toInt()
+    private val PORT: Int = port
+
+    companion object{
+        @Throws(Exception::class)
+        @JvmStatic
+        fun main(args: Array<String>) {
+            val port: Int = when (args.size) {
+                0 -> System.getProperty("port", "8888")!!.toInt()
+                1 -> args[0].toInt()
+                else -> {
+                    System.err.println("Usage: ${NettyServer::class.java.simpleName} <port>")
+                    return
+                }
+            }
+            NettyServer(port).start()
+        }
+    }
 
     @Throws(Exception::class)
-    @JvmStatic
-    fun main(args: Array<String>) {
-
+    fun start() {
         // Configure the server.
         val bossGroup: EventLoopGroup = NioEventLoopGroup(1)
         val workerGroup: EventLoopGroup = NioEventLoopGroup()
@@ -31,6 +44,7 @@ object NettyServer : WithLogging() {
             val b = ServerBootstrap()
             b.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel::class.java) // Use NIO to accept new connections.
+                .localAddress(InetSocketAddress(PORT))
                 .option(ChannelOption.SO_BACKLOG, 100)
                 .handler(LoggingHandler(LogLevel.INFO))
                 .childHandler(object : ChannelInitializer<SocketChannel>() {
@@ -46,8 +60,11 @@ object NettyServer : WithLogging() {
                 })
 
             // Start the server.
-            val f: ChannelFuture = b.bind(PORT).sync()
-            LOG.info("${TAG}: started")
+            val f: ChannelFuture = b.bind().sync()
+            LOG.info(
+                "${NettyServer::class.java.simpleName}: started and listen on "
+                        + f.channel().localAddress()
+            );
 
             // Wait until the server socket is closed.
             f.channel().closeFuture().sync()

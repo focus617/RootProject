@@ -10,7 +10,7 @@ class ClientHandler : SimpleChannelInboundHandler<String>(), ILoggable {
 
     @Throws(Exception::class)
     override fun channelRead0(ctx: ChannelHandlerContext, msg: String) {
-        LOG.info("Message from Server: $msg")
+        LOG.info("Client received: $msg")
     }
 
 }
