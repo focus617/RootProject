@@ -1,4 +1,4 @@
-package com.focus617.mylib.netty.server
+package com.focus617.tankwar.netty.server
 
 import com.focus617.mylib.logging.ILoggable
 import io.netty.channel.Channel
@@ -18,7 +18,7 @@ class ServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
             LOG.info(msg)
 
             for (ch in channels) {
-                ch.writeAndFlush("[SERVER] - $msg")
+                ch.writeAndFlush("[SERVER] - $msg\n")
             }
             channels.add(incoming)
             LOG.info("total client: ${channels.size} ")
@@ -33,7 +33,7 @@ class ServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
             LOG.info(msg)
 
             for (ch in channels) {
-                ch.writeAndFlush("[SERVER] - $msg")
+                ch.writeAndFlush("[SERVER] - $msg\n")
             }
             channels.remove(incoming)
             LOG.info("total on-line client: ${channels.size} ")
@@ -48,9 +48,9 @@ class ServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
 
         for (ch in channels) {
             if (ch != incoming) {
-                ch.writeAndFlush("[${incoming.remoteAddress()}]: $msg")
+                ch.writeAndFlush("[${incoming.remoteAddress()}]: $msg\n")
             } else {
-                ch.writeAndFlush("[You]: $msg")
+                ch.writeAndFlush("[You]: $msg\n")
             }
         }
     }
@@ -74,8 +74,9 @@ class ServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
     // Handle Exception
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
         val incoming: Channel = ctx.channel()
+        LOG.info("connection to ${incoming.remoteAddress()} abnormal")
+        // 当出现异常就关闭连接
         cause.printStackTrace()
-        LOG.info("Closing connection for client - ${incoming.remoteAddress()}")
         ctx.close()
     }
 

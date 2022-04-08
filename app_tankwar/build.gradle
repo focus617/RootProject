@@ -109,6 +109,10 @@ dependencies {
     implementation(Kotlin.KOTLIN_LOGGING)
     implementation(Libs.SLF4J)
 
+    // TODO:需要裁剪，留下有用的jar
+    // Netty
+    api(Libs.NETTY)
+
     // Test
     testImplementation(Testing.JUNIT)
     testImplementation(Testing.MOCKITO)

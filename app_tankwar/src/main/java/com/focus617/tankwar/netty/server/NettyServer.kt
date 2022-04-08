@@ -1,6 +1,7 @@
 package com.focus617.mylib.netty.server
 
 import com.focus617.mylib.logging.WithLogging
+import com.focus617.tankwar.netty.server.ServerHandler
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel.ChannelFuture
 import io.netty.channel.ChannelInitializer
@@ -9,6 +10,8 @@ import io.netty.channel.EventLoopGroup
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.SocketChannel
 import io.netty.channel.socket.nio.NioServerSocketChannel
+import io.netty.handler.codec.DelimiterBasedFrameDecoder
+import io.netty.handler.codec.Delimiters
 import io.netty.handler.codec.string.StringDecoder
 import io.netty.handler.codec.string.StringEncoder
 import io.netty.handler.logging.LogLevel
@@ -54,7 +57,14 @@ class NettyServer(val port: Int) : WithLogging() {
                     @Throws(Exception::class)
                     public override fun initChannel(ch: SocketChannel) {
                         /** the communication happens in Byte Streams through the ByteBuf interface.*/
-                        ch.pipeline().addLast(StringDecoder(), StringEncoder(), serverHandler)
+                        ch.pipeline()
+                            .addLast(
+                                "framer",
+                                DelimiterBasedFrameDecoder(8192, *Delimiters.lineDelimiter())
+                            )
+                            .addLast("decoder", StringDecoder())
+                            .addLast("encoder", StringEncoder())
+                            .addLast("handler", serverHandler)
                     }
                 })
 

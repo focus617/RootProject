@@ -1,7 +1,5 @@
 package com.example.backend.utils
 
-import java.util.*
-
 enum class CommandLineInput(val shortCmd: Char) {
     FIND_ALL('a'),
     FIND_BY_ID('f'),
@@ -19,7 +17,6 @@ enum class CommandLineInput(val shortCmd: Char) {
                 (INPUTS as HashMap<Char, CommandLineInput>)[input.shortCmd] = input
             }
         }
-
 
         fun getCommandLineInputForInput(input: Char): CommandLineInput? {
             return INPUTS!![input]

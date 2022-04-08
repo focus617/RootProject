@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import com.focus617.mylib.netty.client.NettyClient
 import com.focus617.tankwar.scene.base.IfRefresh
 
 const val SLEEP_INTERVAL = 40L
@@ -39,7 +38,6 @@ class XRenderer(
         holder!!.addCallback(this)
         holder!!.setFormat(PixelFormat.TRANSLUCENT)
 
-        NettyClient().start()
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
@@ -50,7 +48,7 @@ class XRenderer(
         threadDrawing = Thread(this)
         threadRefreshData = Thread {
             while (isDrawing) {
-                scene.refreshData()
+//                scene.refreshData()
                 //通过线程休眠以控制刷新速度
                 try {
                     Thread.sleep(SLEEP_INTERVAL)

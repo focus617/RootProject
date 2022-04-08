@@ -5,12 +5,12 @@ import CommandLineInputHandler
 import com.example.backend.utils.CommandLineInput
 import org.apache.commons.lang3.CharUtils
 
-class TestApp {
+class CommandLine {
 
     private val DEFAULT_INPUT = '\u0000'
 
     @JvmName("TestApp")
-    fun main(vararg args: String) {
+    fun start() {
         val commandLineInputHandler = CommandLineInputHandler()
         var command: Char = DEFAULT_INPUT
 
@@ -30,8 +30,8 @@ class TestApp {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            val app = TestApp()
-            app.main(args.toString())
+            val app = CommandLine()
+            app.start()
         }
     }
 }

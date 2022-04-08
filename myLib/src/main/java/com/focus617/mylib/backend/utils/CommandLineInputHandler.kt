@@ -35,12 +35,12 @@ class CommandLineInputHandler {
             handleUnknownInput()
         } else {
             when (input) {
+                CommandLineInput.EXIT -> {}
 //                CommandLineInput.FIND_ALL -> printAllToDoTasks()
 //                CommandLineInput.FIND_BY_ID -> printToDoTask()
 //                CommandLineInput.INSERT -> insertToDoTask()
 //                CommandLineInput.UPDATE -> updateToDoTask()
 //                CommandLineInput.DELETE -> deleteToDoTask()
-                CommandLineInput.EXIT -> {}
                 else -> {}
             }
         }
