@@ -2,6 +2,7 @@ package com.focus617.bookreader.framework.database.book
 
 import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BookDao {
@@ -47,5 +48,8 @@ interface BookDao {
      */
     @Query("SELECT * FROM book_table ORDER BY uri DESC")
     suspend fun getAll(): List<BookEntity>
+
+    @Query("SELECT * FROM book_table ORDER BY uri DESC")
+    fun getAllByFlow(): Flow<List<BookEntity>>
 
 }

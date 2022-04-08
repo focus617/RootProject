@@ -2,6 +2,7 @@ package com.focus617.bookreader.di
 
 import com.focus617.bookreader.framework.datasource.InMemoryOpenBookDataSource
 import com.focus617.bookreader.framework.datasource.RoomBookDataSource
+import com.focus617.bookreader.framework.datasource.RoomBookDataSourceFlow
 import com.focus617.bookreader.framework.datasource.RoomBookmarkDataSource
 import com.focus617.core.data.BookRepository
 import com.focus617.core.data.BookmarkRepository
@@ -28,5 +29,8 @@ interface UseCaseModule {
 
     @Binds
     fun bookmarkRepository(repository: BookmarkRepository): IfBookmarkRepository
+
+    @Binds
+    fun bookDataSourceFlow(dataSource: RoomBookDataSourceFlow): IfBookDataSourceFlow
 
 }

@@ -2,6 +2,7 @@ package com.focus617.core.data
 
 import com.focus617.core.coroutine.IoDispatcher
 import com.focus617.core.data.dataSourceInterface.IfBookDataSource
+import com.focus617.core.data.dataSourceInterface.IfBookDataSourceFlow
 import com.focus617.core.data.dataSourceInterface.IfBookRepository
 import com.focus617.core.data.dataSourceInterface.IfOpenBookDataSource
 import com.focus617.core.domain.Book
@@ -12,6 +13,7 @@ import com.focus617.core.platform.functional.Result.Error
 import com.focus617.core.platform.functional.Result.Success
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.ConcurrentHashMap
@@ -20,6 +22,7 @@ import javax.inject.Inject
 
 class BookRepository @Inject constructor(
     private val bookDataSource: IfBookDataSource,
+    private val bookDataSourceFlow: IfBookDataSourceFlow,
     private val openBookDataSource: IfOpenBookDataSource,
     @IoDispatcher var ioDispatcher: CoroutineDispatcher
 ) : BaseEntity(), IfBookRepository {
@@ -104,4 +107,10 @@ class BookRepository @Inject constructor(
     override fun setOpenBook(book: Book) = openBookDataSource.setOpenBook(book)
 
     override fun getOpenBook() = openBookDataSource.getOpenBook()
+
+    override suspend fun getBooksByFlow(): Flow<List<Book>> {
+        return withContext(ioDispatcher) {
+            bookDataSourceFlow.getAllByFlow()
+        }
+    }
 }

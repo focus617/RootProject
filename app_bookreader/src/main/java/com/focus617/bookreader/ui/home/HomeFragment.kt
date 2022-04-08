@@ -5,16 +5,18 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.focus617.bookreader.R
 import com.focus617.bookreader.databinding.FragmentHomeBinding
 import com.focus617.bookreader.framework.MyViewModelFactory
-import com.focus617.platform.view_util.setupSnackbar
 import com.focus617.bookreader.ui.MainActivity
 import com.focus617.bookreader.ui.util.IntentUtil
 import com.focus617.core.domain.Book
+import com.focus617.platform.view_util.setupSnackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -47,11 +49,18 @@ class HomeFragment : Fragment() {
 
         val adapter = setupRecyclerView()
 
-        viewModel.books.observe(viewLifecycleOwner) {
-            it?.let {
+//        viewModel.books.observe(viewLifecycleOwner) {
+//            it?.let {
+//                adapter.addHeaderAndSubmitList(it)
+//            }
+//        }
+
+        lifecycle.coroutineScope.launch {
+            viewModel.loadBooksByFlow().collect() {
                 adapter.addHeaderAndSubmitList(it)
             }
         }
+
         viewModel.loadBooks()
 
         viewModel.navigateToSelectedBookEvent.observe(viewLifecycleOwner) { event ->

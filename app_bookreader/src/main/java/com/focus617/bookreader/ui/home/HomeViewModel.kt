@@ -12,8 +12,9 @@ import com.focus617.core.platform.functional.Result.Success
 import com.focus617.platform.event.Event
 import com.focus617.platform.uicontroller.BaseViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 
-class HomeViewModel(application: Application, val interactors: Interactors) :
+class HomeViewModel(application: Application, private val interactors: Interactors) :
     BaseViewModel(application) {
 
     // Declare Job() and cancel jobs in onCleared().
@@ -36,6 +37,8 @@ class HomeViewModel(application: Application, val interactors: Interactors) :
     init {
         loadBooks()
     }
+
+    suspend fun loadBooksByFlow(): Flow<List<Book>>  = interactors.getBooksByFlow()
 
     fun loadBooks() {
         uiScope.launch {
