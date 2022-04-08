@@ -105,10 +105,6 @@ dependencies {
     implementation(Kotlin.HILT_ANDROID)
     kapt(Kotlin.HILT_ANDROID_COMPILER)
 
-    // TODO:需要裁剪，留下有用的jar
-    // Netty
-    api(Libs.NETTY)
-
     // Log
     implementation(Kotlin.KOTLIN_LOGGING)
     implementation(Libs.SLF4J)
