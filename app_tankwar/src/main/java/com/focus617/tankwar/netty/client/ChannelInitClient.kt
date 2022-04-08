@@ -22,10 +22,10 @@ class ChannelInitClient : ChannelInitializer<SocketChannel>() {
 
         //添加心跳机制，每60s发送一次心跳
         pipeline.addLast(
-            "idleStateHandler",
+            "ping",
             IdleStateHandler(
-                60000, 60000,
-                60000, TimeUnit.MILLISECONDS
+                60, 60,
+                60, TimeUnit.SECONDS
             )
         )
 

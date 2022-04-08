@@ -18,7 +18,7 @@ class ClientHandler : SimpleChannelInboundHandler<String>(), ILoggable {
     @Throws(Exception::class)
     override fun userEventTriggered(ctx: ChannelHandlerContext?, evt: Any?) {
         if ((ctx != null) && (evt is IdleStateEvent)) {
-            if (evt.state() == IdleState.READER_IDLE) {
+            if (evt.state() == IdleState.WRITER_IDLE) {
                 sendHeartPkg(ctx)
             }
         } else {
@@ -30,9 +30,8 @@ class ClientHandler : SimpleChannelInboundHandler<String>(), ILoggable {
      * 发送心跳
      */
     private fun sendHeartPkg(ctx: ChannelHandlerContext) {
-        val bean = "心跳数据包"
-        ctx.channel().writeAndFlush(bean)
-        LOG.info("Client send heartbeat package")
+        val msg = "Send heartbeat package"
+        ctx.channel().writeAndFlush("$msg\n")
     }
 
 }

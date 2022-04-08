@@ -38,6 +38,7 @@ class XRenderer(
         holder!!.addCallback(this)
         holder!!.setFormat(PixelFormat.TRANSLUCENT)
 
+//        NettyClient.startup()
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {

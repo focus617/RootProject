@@ -19,12 +19,7 @@ import java.net.InetSocketAddress
  * Netty客户端
  * @author focus617
  * */
-class NettyClient private constructor(
-    host: String = "127.0.0.1",
-    /** 连接地址 */
-    port: Int = 8888
-    /** 监听端口 */
-) : WithLogging() {
+class NettyClient private constructor() : WithLogging() {
 
     private val TAG = "NettyClient"
 
@@ -34,8 +29,9 @@ class NettyClient private constructor(
      * 这样能够回避多线程下的数据同步问题。
      */
     private val group: EventLoopGroup = NioEventLoopGroup()
-    private val serverAddress = InetSocketAddress(host, port)
     private var channel: Channel? = null
+
+    private lateinit var serverAddress: InetSocketAddress
 
     // 重新连接的逻辑判断
     private var isConnected = false
@@ -54,12 +50,16 @@ class NettyClient private constructor(
             NettyClient.startup(host, port)
         }
 
-        fun startup(host: String, port: Int) {
+        fun startup(
+            host: String = "127.0.0.1",     // 连接地址
+            port: Int = 8888                // 监听端口
+        ) {
             LOG.info("$TAG: 启动...")
-            val client = NettyClient(host, port)
+            val client = NettyClient()
+            client.serverAddress = InetSocketAddress(host, port)
 
             // 需要在子线程中发起连接
-            Thread {
+            Thread(ThreadGroup("Netty-Client")){
                 client.connect()
 
                 // TODO：重新连接的逻辑是否正确？
@@ -93,19 +93,21 @@ class NettyClient private constructor(
              */
             val future: ChannelFuture = bootstrap.connect().sync()
             if (future.isSuccess) {
-                LOG.info("$TAG: 与服务器${serverAddress}连接成功")
+                LOG.info("$TAG: 与服务器${serverAddress} 成功建立连接")
                 channel = future.channel()
                 isConnected = true
+                reconnectNum = Int.MAX_VALUE
 
+            }
+
+            // TODO: how to connect with App's input?
+            val input = BufferedReader(InputStreamReader(System.`in`))
+            while (isConnected && (channel != null)) {
+                channel!!.writeAndFlush(input.readLine() + "\r\n")
             }
 
             // Wait until the connection is closed.
-//            channel?.closeFuture()?.sync()
-
-            val input = BufferedReader(InputStreamReader(System.`in`))
-            while(isConnected && (channel != null)) {
-                channel!!.writeAndFlush(input.readLine() + "\r\n")
-            }
+            channel?.closeFuture()?.sync()
 
         } catch (e: InterruptedException) {
             LOG.info("$TAG: 连接服务器出现异常，Exception=${e.message}")

@@ -16,10 +16,12 @@ import io.netty.handler.codec.string.StringDecoder
 import io.netty.handler.codec.string.StringEncoder
 import io.netty.handler.logging.LogLevel
 import io.netty.handler.logging.LoggingHandler
+import io.netty.handler.timeout.IdleStateHandler
 import java.net.InetSocketAddress
+import java.util.concurrent.TimeUnit
 
 
-class NettyServer(val port: Int) : WithLogging() {
+class NettyServer(port: Int) : WithLogging() {
     // Port where chat server will listen for connections.
     private val PORT: Int = port
 
@@ -52,12 +54,21 @@ class NettyServer(val port: Int) : WithLogging() {
                 .channel(NioServerSocketChannel::class.java) // Use NIO to accept new connections.
                 .localAddress(InetSocketAddress(PORT))
                 .option(ChannelOption.SO_BACKLOG, 100)
+                .childOption(ChannelOption.SO_KEEPALIVE, true)  //保持长连接状态
                 .handler(LoggingHandler(LogLevel.INFO))
                 .childHandler(object : ChannelInitializer<SocketChannel>() {
                     @Throws(Exception::class)
                     public override fun initChannel(ch: SocketChannel) {
                         /** the communication happens in Byte Streams through the ByteBuf interface.*/
                         ch.pipeline()
+                            //添加心跳机制，每60s发送一次心跳
+                            .addLast(
+                                "ping",
+                                IdleStateHandler(
+                                    60, 60,
+                                    60, TimeUnit.SECONDS
+                                )
+                            )
                             .addLast(
                                 "framer",
                                 DelimiterBasedFrameDecoder(8192, *Delimiters.lineDelimiter())
@@ -70,10 +81,7 @@ class NettyServer(val port: Int) : WithLogging() {
 
             // Start the server.
             val f: ChannelFuture = b.bind().sync()
-            LOG.info(
-                "${NettyServer::class.java.simpleName}: started and listen on "
-                        + f.channel().localAddress()
-            );
+            LOG.info("NettyServer started and listening on port:$PORT")
 
             // Wait until the server socket is closed.
             f.channel().closeFuture().sync()

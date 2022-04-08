@@ -5,6 +5,8 @@ import io.netty.channel.Channel
 import io.netty.channel.ChannelHandler.Sharable
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
+import io.netty.handler.timeout.IdleState
+import io.netty.handler.timeout.IdleStateEvent
 
 @Sharable
 class ServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
@@ -21,7 +23,7 @@ class ServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
                 ch.writeAndFlush("[SERVER] - $msg\n")
             }
             channels.add(incoming)
-            LOG.info("total client: ${channels.size} ")
+            LOG.info("total on-line client: ${channels.size} ")
         }
     }
 
@@ -78,6 +80,28 @@ class ServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
         // 当出现异常就关闭连接
         cause.printStackTrace()
         ctx.close()
+    }
+
+    @Throws(Exception::class)
+    override fun userEventTriggered(ctx: ChannelHandlerContext?, evt: Any?) {
+        if ((ctx != null) && (evt is IdleStateEvent)) {
+            if (evt.state() == IdleState.WRITER_IDLE) {
+                sendHeartPkg()
+            }
+        } else {
+            super.userEventTriggered(ctx, evt)
+        }
+    }
+
+    /**
+     * 发送心跳
+     */
+    private fun sendHeartPkg() {
+        val msg = "Send heartbeat package"
+
+        for (ch in channels) {
+            ch.writeAndFlush("[SERVER] - $msg\n")
+        }
     }
 
     companion object {
