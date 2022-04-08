@@ -19,10 +19,10 @@ import java.net.InetSocketAddress
  * Netty客户端
  * @author focus617
  * */
-class NettyClient(
-    private var host: String = "127.0.0.1",
+class NettyClient private constructor(
+    host: String = "127.0.0.1",
     /** 连接地址 */
-    private var port: Int = 8888
+    port: Int = 8888
     /** 监听端口 */
 ) : WithLogging() {
 
@@ -37,7 +37,12 @@ class NettyClient(
     private val serverAddress = InetSocketAddress(host, port)
     private var channel: Channel? = null
 
+    // 重新连接的逻辑判断
+    private var isConnected = false
+
     companion object : WithLogging() {
+        private val TAG = "NettyClient"
+
         @JvmStatic
         fun main(vararg args: String) {
             if (args.size != 2) {
@@ -46,27 +51,29 @@ class NettyClient(
             }
             val host = args[0]
             val port = args[1].toInt()
+            NettyClient.startup(host, port)
+        }
+
+        fun startup(host: String, port: Int) {
+            LOG.info("$TAG: 启动...")
             val client = NettyClient(host, port)
-            client.startup()
 
-            client.send("Test Message")
+            // 需要在子线程中发起连接
+            Thread {
+                client.connect()
 
+                // TODO：重新连接的逻辑是否正确？
+                if (!client.isConnected)
+                    client.reconnect()
+
+            }.start()
         }
     }
 
-    // 重新连接的逻辑判断
-    private var isConnected = false
-
-    fun startup() {
-        LOG.info("$TAG: 启动...")
-        connect()
-        // TODO：重新连接的逻辑是否正确？
-        if (!isConnected) reconnect()
-    }
 
     @Throws(Exception::class)
     fun connect() {
-        LOG.info("$TAG: 正在链接服务器${serverAddress}...")
+        LOG.info("$TAG: 正在连接服务器${serverAddress}...")
         try {
             /**
              * Bootstrap是开发netty客户端的辅助类，经过Bootstrap的connect方法来链接服务器端。
@@ -86,14 +93,10 @@ class NettyClient(
              */
             val future: ChannelFuture = bootstrap.connect().sync()
             if (future.isSuccess) {
-                LOG.info("$TAG: 成功链接到服务器")
+                LOG.info("$TAG: 与服务器${serverAddress}连接成功")
                 channel = future.channel()
                 isConnected = true
 
-            } else {
-                val cause: Throwable = future.cause()
-                cause.printStackTrace()
-                isConnected = false
             }
 
             // Wait until the connection is closed.
@@ -105,7 +108,7 @@ class NettyClient(
             }
 
         } catch (e: InterruptedException) {
-            LOG.info("$TAG: 链接服务器出现异常Exception=${e.message}")
+            LOG.info("$TAG: 连接服务器出现异常，Exception=${e.message}")
             e.printStackTrace()
 
         } finally {
@@ -128,7 +131,7 @@ class NettyClient(
         while (!isConnected && reconnectNum > 0) {
             reconnectNum--
             try {
-                Thread.sleep(reconnectIntervalTime);
+                Thread.sleep(reconnectIntervalTime)
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
