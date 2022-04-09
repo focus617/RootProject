@@ -28,6 +28,7 @@ import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 import javax.inject.Singleton
 
 private const val BASE_URL = "http://192.168.5.10/"
@@ -48,17 +49,19 @@ private val moshi = Moshi.Builder()
 
 
 /**
- * A public retrofit interface that exposes the [loadBooks] method
+ * A public retrofit interface that exposes the [loadBooksAsync] method
  */
 interface WebApiService {
     /**
-     * Returns a Coroutine [List] of [BookOldEntity] which can be fetched with await() if in a Coroutine scope.
+     * Returns a Coroutine [List] of [NetworkBook] which can be fetched with await() if in a Coroutine scope.
      * The @GET annotation indicates that the "books" endpoint will be requested with the GET
      * HTTP method
      */
     @GET("test.json")
-    suspend fun loadBooks(): Deferred<NetworkBookContainer>
-//    suspend fun loadBooks(@Query("filter") type: String): List<DatabaseBook>
+    suspend fun loadBooksAsync(): Deferred<NetworkBookContainer>
+
+    // Using for test Flow
+    suspend fun loadBooks(@Query("filter") type: String): NetworkBookContainer
 }
 
 /**

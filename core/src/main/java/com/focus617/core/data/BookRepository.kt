@@ -108,6 +108,9 @@ class BookRepository @Inject constructor(
 
     override fun getOpenBook() = openBookDataSource.getOpenBook()
 
+    /**
+     * Following functions is used for Flow testing
+     */
     override suspend fun getBooksByFlow(): Flow<List<Book>> {
         return withContext(ioDispatcher) {
             bookDataSourceFlow.getAllByFlow()

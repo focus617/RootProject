@@ -6,13 +6,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.focus617.bookreader.R
+import com.focus617.bookreader.framework.datasource.WebBookRemoteDataSource
 import com.focus617.bookreader.framework.interactors.Interactors
+import com.focus617.core.coroutine.ApplicationScope
 import com.focus617.core.domain.Book
 import com.focus617.core.platform.functional.Result.Success
 import com.focus617.platform.event.Event
 import com.focus617.platform.uicontroller.BaseViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import javax.inject.Inject
 
 class HomeViewModel(application: Application, private val interactors: Interactors) :
     BaseViewModel(application) {
@@ -37,8 +41,6 @@ class HomeViewModel(application: Application, private val interactors: Interacto
     init {
         loadBooks()
     }
-
-    suspend fun loadBooksByFlow(): Flow<List<Book>>  = interactors.getBooksByFlow()
 
     fun loadBooks() {
         uiScope.launch {
@@ -109,4 +111,34 @@ class HomeViewModel(application: Application, private val interactors: Interacto
         _navigateToSelectedBookEvent.value = Event(book)
     }
 
+    /**
+     * Following functions is used for Flow testing
+     */
+    /** 在Fragment中使用Flow直接更新UI */
+    suspend fun loadBooksByFlow(): Flow<List<Book>> = interactors.getBooksByFlow()
+
+    @Inject
+    @ApplicationScope
+    lateinit var booksWebDataSource: WebBookRemoteDataSource
+
+    /**
+     * 先将Flow转换为ViewModel的LiveData，在Fragment和ViewModel之间仍然保持LiveData
+      */
+    fun loadBooksByWeb() {
+        uiScope.launch {
+            // Trigger the flow and consume its elements using collect
+            booksWebDataSource.latestBooks
+                // Intermediate catch operator. If an exception is thrown,
+                // catch and update the UI
+                .catch { exception -> notifyError(exception) }
+                .collect {
+                    // Update View with the latest books
+                    _books.value = it
+                }
+        }
+    }
+
+    fun notifyError(exception: Throwable) {
+        exception.printStackTrace()
+    }
 }

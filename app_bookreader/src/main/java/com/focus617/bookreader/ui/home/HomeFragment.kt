@@ -16,6 +16,7 @@ import com.focus617.bookreader.ui.util.IntentUtil
 import com.focus617.core.domain.Book
 import com.focus617.platform.view_util.setupSnackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -56,9 +57,13 @@ class HomeFragment : Fragment() {
 //        }
 
         lifecycle.coroutineScope.launch {
-            viewModel.loadBooksByFlow().collect() {
-                adapter.addHeaderAndSubmitList(it)
-            }
+            viewModel.loadBooksByFlow()
+                // Intermediate catch operator. If an exception is thrown,
+                // catch and update the UI
+                .catch { exception -> viewModel.notifyError(exception) }
+                .collect() {
+                    adapter.addHeaderAndSubmitList(it)
+                }
         }
 
         viewModel.loadBooks()
