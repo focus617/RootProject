@@ -5,17 +5,19 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.focus617.bookreader.R
 import com.focus617.bookreader.framework.datasource.WebBookRemoteDataSource
 import com.focus617.bookreader.framework.interactors.Interactors
 import com.focus617.core.coroutine.ApplicationScope
 import com.focus617.core.domain.Book
+import com.focus617.core.platform.functional.Result
 import com.focus617.core.platform.functional.Result.Success
+import com.focus617.core.platform.functional.data
 import com.focus617.platform.event.Event
 import com.focus617.platform.uicontroller.BaseViewModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class HomeViewModel(application: Application, private val interactors: Interactors) :
@@ -39,7 +41,8 @@ class HomeViewModel(application: Application, private val interactors: Interacto
      * init{} is called immediately when this ViewModel is created.
      */
     init {
-        loadBooks()
+        loadBooksByFlow()
+        initBooksState()
     }
 
     fun loadBooks() {
@@ -115,15 +118,60 @@ class HomeViewModel(application: Application, private val interactors: Interacto
      * Following functions is used for Flow testing
      */
     /** 在Fragment中使用Flow直接更新UI */
-    suspend fun loadBooksByFlow(): Flow<List<Book>> = interactors.getBooksByFlow()
+    val booksByFlow: Flow<List<Book>> = flow {
+        val booksByFlow = interactors.getBooksUseCase(Unit).mapNotNull { it.data }
+    }
+
+
+    fun loadBooksByFlow() {
+        uiScope.launch {
+            interactors.getBooksUseCase(Unit).collect {
+                if (it is Success) {
+                    _books.value = it.data
+                } else {
+                    _books.value = emptyList()
+                    showSnackbarMessage(R.string.loading_books_error)
+                }
+            }
+        }
+    }
+
+
+    /** 使用 StateFlow */
+    // Backing property to avoid state updates from other classes
+    private val _booksState = MutableStateFlow(Result.Success<List<Book>>(emptyList()))
+
+    // The UI collects from this StateFlow to get its state updates
+    val booksState: StateFlow<Result<List<Book>>> = _booksState
+
+    private fun initBooksState() {
+        viewModelScope.launch {
+            interactors.getBooksUseCase(Unit)
+                // Update View with the latest books
+                // Writes to the value property of MutableStateFlow,
+                // adding a new element to the flow and updating all
+                // of its collectors
+                .collect {
+                    _booksState.value = it as Result.Success<List<Book>>
+                }
+        }
+    }
+
 
     @Inject
     @ApplicationScope
     lateinit var booksWebDataSource: WebBookRemoteDataSource
 
+    // 可以在UI中直接被collect的Flow
+//     val flowList: Flow<List<Book>> = booksWebDataSource.latestBooks
+
     /**
      * 先将Flow转换为ViewModel的LiveData，在Fragment和ViewModel之间仍然保持LiveData
-      */
+     */
+    // 可以在UI中直接被Observe的LiveData
+//     val liveDataList: LiveData<List<Book>> = booksWebDataSource.latestBooks.asLiveData()
+
+    // 或者支持异常处理的函数方法
     fun loadBooksByWeb() {
         uiScope.launch {
             // Trigger the flow and consume its elements using collect

@@ -21,6 +21,6 @@ interface IfBookRepository {
 
     fun getOpenBook(): Book
 
-    suspend fun getBooksByFlow(): Flow<List<Book>>
+    suspend fun getBooksByFlow(): Flow<Result<List<Book>>>
 
 }

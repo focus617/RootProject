@@ -92,7 +92,7 @@ dependencies {
 
     // Room
     implementation(Jetpack.ROOM_RUNTIME)
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation(Jetpack.PREFERENCE)
     kapt(Jetpack.ROOM_COMPILER)
     // Kotlin Extensions and Coroutines support for Room
     implementation(Jetpack.ROOM_KTX)

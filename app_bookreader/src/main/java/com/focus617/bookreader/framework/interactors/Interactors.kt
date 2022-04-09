@@ -14,5 +14,5 @@ data class Interactors @Inject constructor(
     val addBookmark: AddBookmark,
     val getBookmarks: GetBookmarks,
     val deleteBookmark: RemoveBookmark,
-    val getBooksByFlow: GetBooksByFlow
+    val getBooksUseCase: GetBooksUseCase
 )

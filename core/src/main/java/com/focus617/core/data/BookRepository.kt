@@ -14,6 +14,7 @@ import com.focus617.core.platform.functional.Result.Success
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.ConcurrentHashMap
@@ -45,7 +46,7 @@ class BookRepository @Inject constructor(
             (retrievedBooks as? Success)?.let { success ->
                 if (success.data.isEmpty()) {
                     return@withContext Success(success.data)
-                } else{
+                } else {
                     refreshBookCache(success.data)
                     return@withContext Success(success.data.sortedBy { it.title })
                 }
@@ -111,9 +112,17 @@ class BookRepository @Inject constructor(
     /**
      * Following functions is used for Flow testing
      */
-    override suspend fun getBooksByFlow(): Flow<List<Book>> {
+    override suspend fun getBooksByFlow(): Flow<Result<List<Book>>> {
         return withContext(ioDispatcher) {
-            bookDataSourceFlow.getAllByFlow()
+            val flowResult = bookDataSourceFlow.getAllByFlow()
+                .onEach {
+                    if (it is Success) {
+                        refreshBookCache(it.data)
+                    }
+                }
+
+            return@withContext flowResult
         }
     }
+
 }

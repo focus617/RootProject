@@ -26,6 +26,9 @@ object Plugins {
 }
 
 object Jetpack {
+    private const val lifecycle_version = "2.4.1"
+    private const val room_version = "2.4.1"
+
     const val MATERIAL = "com.google.android.material:material:1.4.0"
 
     const val ANDROIDX_CORE = "androidx.core:core-ktx:1.7.0"
@@ -45,20 +48,25 @@ object Jetpack {
     const val COMPOSE_UI = "androidx.compose.ui:ui"
     const val DATA_STORE_PREFERENCES = "androidx.datastore:datastore-preferences"
 
-    const val LIFECYCLE_LIVEDATA_KTX = "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
+    const val LIFECYCLE_LIVEDATA_KTX = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    // Lifecycles only (without ViewModel or LiveData)
     const val LIFECYCLE_RUNTIME_KTX = "androidx.lifecycle:lifecycle-runtime-ktx"
-    const val LIFECYCLE_VIEWMODEL_COMPOSE = "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
-    const val LIFECYCLE_VIEWMODEL_KTX = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
+    // ViewModel utilities for Compose
+    const val LIFECYCLE_VIEWMODEL_COMPOSE = "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
+    const val LIFECYCLE_VIEWMODEL_KTX = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    // Saved state module for ViewModel
     const val LIFECYCLE_VIEWMODEL_SAVEDSTATE =
-        "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.1"
+        "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+    // Annotation processor - if using Java8, use the following instead of lifecycle-compiler
+    const val LIFECYCLE_ANNOTATION = "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
     const val NAVIGATION_FRAGMENT_KTX = "androidx.navigation:navigation-fragment-ktx:2.3.5"
     const val NAVIGATION_UI_KTX = "androidx.navigation:navigation-ui-ktx:2.3.5"
 
-    const val ROOM_RUNTIME = "androidx.room:room-runtime:2.4.1"
-    const val ROOM_COMPILER = "androidx.room:room-compiler:2.4.1"
-    const val ROOM_KTX = "androidx.room:room-ktx:2.4.1"
-    const val ROOM_TESTING = "androidx.room:room-testing:2.4.1"
+    const val ROOM_RUNTIME = "androidx.room:room-runtime:$room_version"
+    const val ROOM_COMPILER = "androidx.room:room-compiler:$room_version"
+    const val ROOM_KTX = "androidx.room:room-ktx:$room_version"
+    const val ROOM_TESTING = "androidx.room:room-testing:$room_version"
 
     const val STARTUP = "androidx.startup:startup-runtime"
     const val WORK_RUNTIME_KTX = "androidx.work:work-runtime-ktx:2.7.1"
@@ -78,6 +86,7 @@ object Kotlin {
     const val HILT_ANDROIDX_COMPILER = "androidx.hilt:hilt-compiler:1.0.0-alpha03"
     const val HILT_ANDROIDX_LIFECYCLE_VIEWMODEL =
         "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
+
     const val HILT_ANDROIDX_WORK = "androidx.hilt:hilt-work"
     const val HILT_NAVIGATION_COMPOSE = "androidx.hilt:hilt-navigation-compose"
 
@@ -109,6 +118,8 @@ object Libs {
 }
 
 object Testing {
+    private const val arch_version = "2.1.0"
+
     const val JUNIT = "junit:junit:4.13.2"
     const val HAMCREST = "org.hamcrest:hamcrest-all:1.3"
     const val MOCKITO = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
@@ -116,7 +127,8 @@ object Testing {
     const val ROBOLECTRIC = "org.robolectric:robolectric:4.7.3"
     const val GOOGLE_TRUTH = "com.google.truth:truth:1.1.3"
 
-    const val ANDROIDX_CORE_TEST = "androidx.arch.core:core-testing:2.0.0"
+    // Test helpers for LiveData
+    const val ANDROIDX_CORE_TEST = "androidx.arch.core:core-testing:$arch_version"
     const val ANDROIDX_TEST_CORE = "androidx.test:core-ktx:1.4.0"
     const val ANDROIDX_TEST_MONITOR = "androidx.test:monitor:1.5.0"
     const val ANDROIDX_TEST_RUNNER = "androidx.test:runner:1.4.0"

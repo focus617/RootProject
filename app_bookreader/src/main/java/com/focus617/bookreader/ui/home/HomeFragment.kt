@@ -5,7 +5,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.focus617.bookreader.R
@@ -16,8 +16,6 @@ import com.focus617.bookreader.ui.util.IntentUtil
 import com.focus617.core.domain.Book
 import com.focus617.platform.view_util.setupSnackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,21 +48,23 @@ class HomeFragment : Fragment() {
 
         val adapter = setupRecyclerView()
 
-//        viewModel.books.observe(viewLifecycleOwner) {
-//            it?.let {
-//                adapter.addHeaderAndSubmitList(it)
-//            }
-//        }
-
-        lifecycle.coroutineScope.launch {
-            viewModel.loadBooksByFlow()
-                // Intermediate catch operator. If an exception is thrown,
-                // catch and update the UI
-                .catch { exception -> viewModel.notifyError(exception) }
-                .collect() {
-                    adapter.addHeaderAndSubmitList(it)
-                }
+        /******************  Flow Testing ******************************/
+        viewModel.books.observe(viewLifecycleOwner) {
+            it.let {
+                adapter.addHeaderAndSubmitList(it)
+            }
         }
+
+//        lifecycle.coroutineScope.launch {
+//            viewModel.booksByFlow
+//                // Intermediate catch operator. If an exception is thrown,
+//                // catch and update the UI
+//                .catch { exception -> viewModel.notifyError(exception) }
+//                .collect() {
+//                    adapter.addHeaderAndSubmitList(it)
+//                }
+//        }
+        /******************  Flow Testing ******************************/
 
         viewModel.loadBooks()
 
@@ -84,7 +84,10 @@ class HomeFragment : Fragment() {
 
     private fun setupFab() {
         binding.fabAddNewBook.setOnClickListener {
-            startActivityForResult(IntentUtil.createOpenIntent(), MainActivity.READ_REQUEST_CODE)
+            startActivityForResult(
+                IntentUtil.createOpenIntent(),
+                MainActivity.READ_REQUEST_CODE
+            )
             viewModel.showSnackbarMessage(R.string.AddNewBookMessage)
         }
     }
@@ -153,6 +156,5 @@ class HomeFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 
 }

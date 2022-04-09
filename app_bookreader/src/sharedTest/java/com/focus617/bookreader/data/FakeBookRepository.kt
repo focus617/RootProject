@@ -16,9 +16,12 @@
 package com.focus617.bookreader.data
 
 import androidx.annotation.VisibleForTesting
-import com.focus617.core.platform.functional.Result
 import com.focus617.core.data.dataSourceInterface.IfBookRepository
 import com.focus617.core.domain.Book
+import com.focus617.core.platform.functional.Result
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 /**
  * Implementation of a remote data source with static access to the data for easy testing.
@@ -77,19 +80,10 @@ class FakeBookRepository : IfBookRepository {
 
     override fun getOpenBook(): Book = openBook
 
-//    override suspend fun completeTask(task: Task) {
-//        val completedTask = Task(task.title, task.description, true, task.id)
-//        booksServiceData[task.id] = completedTask
-//    }
-//
-//    override suspend fun completeTask(taskId: String) {
-//        // Not required for the remote data source.
-//        throw NotImplementedError()
-//    }
-//
-//    override suspend fun clearCompletedTasks() {
-//        booksServiceData = booksServiceData.filterValues {
-//            !it.isCompleted
-//        } as LinkedHashMap<String, Task>
-//    }
+    override suspend fun getBooksByFlow(): Flow<List<Book>> = flow {
+        val refreshIntervalMs: Long = 5000
+        emit(booksServiceData.values.toList())  // Emits the result of the request to the flow
+        delay(refreshIntervalMs)		        // Suspends the coroutine for some time
+    }
+
 }
