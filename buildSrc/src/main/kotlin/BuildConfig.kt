@@ -17,14 +17,6 @@ object ClassPath {
     const val ANDROID_HILT = "com.google.dagger:hilt-android-gradle-plugin:2.41"
 }
 
-object Plugins {
-    const val gradle = "com.android.tools.build:gradle:7.1.2"
-    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20"
-    const val gradleVersions = "com.github.ben-manes:gradle-versions-plugin:0.27.0"
-    const val ktlint = "com.pinterest:ktlint:0.37.2"
-    const val safeargs = "androidx.navigation:navigation-safe-args-gradle-plugin:2.4.1"
-}
-
 object Jetpack {
     private const val lifecycle_version = "2.4.1"
     private const val room_version = "2.4.1"

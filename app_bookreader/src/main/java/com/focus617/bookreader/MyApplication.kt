@@ -1,6 +1,5 @@
 package com.focus617.bookreader
 
-import android.app.Application
 import android.os.Build
 import androidx.work.*
 import com.focus617.bookreader.framework.interactors.Interactors
@@ -42,10 +41,11 @@ class MyApplication : BaseApplication() {
 
         delayedInit()
 
-        eventHandle()
+        // 发布应用的启动事件
+        publishAppLaunchEvent()
     }
 
-    private fun eventHandle() {
+    private fun publishAppLaunchEvent() {
         applicationScope.launch {
             eventDispatcher.dispatch(AppLaunchedEvent(AppVariant.MOBILE))
         }

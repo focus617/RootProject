@@ -24,6 +24,7 @@ typealias EventHandlers<T> = Set<@JvmSuppressWildcards EventHandler<T>>
 
 class EventDispatcher<T> @Inject constructor(
     private val handlers: Provider<EventHandlers<T>>
+    // 使用Provider是为了避免循环依赖
 ): BaseEntity() {
 
     suspend fun dispatch(event: T) {
