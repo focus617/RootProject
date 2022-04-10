@@ -5,8 +5,11 @@ import io.netty.channel.Channel
 import io.netty.channel.ChannelHandler.Sharable
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
+import io.netty.channel.group.ChannelGroup
+import io.netty.channel.group.DefaultChannelGroup
 import io.netty.handler.timeout.IdleState
 import io.netty.handler.timeout.IdleStateEvent
+import io.netty.util.concurrent.GlobalEventExecutor
 
 @Sharable
 class ChatServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
@@ -19,11 +22,9 @@ class ChatServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
             val msg = "Client ${incoming.remoteAddress()} joined"
             LOG.info(msg)
 
-            for (ch in channels) {
-                ch.writeAndFlush("[SERVER] - $msg\n")
-            }
-            channels.add(incoming)
-            LOG.info("total on-line client: ${channels.size} ")
+            channelGroup.writeAndFlush("[SERVER] - $msg\n")
+            channelGroup.add(incoming)
+            LOG.info("total on-line client: ${channelGroup.size} ")
         }
     }
 
@@ -34,11 +35,11 @@ class ChatServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
             val msg = "Client ${incoming.remoteAddress()} left"
             LOG.info(msg)
 
-            for (ch in channels) {
-                ch.writeAndFlush("[SERVER] - $msg\n")
-            }
-            channels.remove(incoming)
-            LOG.info("total on-line client: ${channels.size} ")
+            channelGroup.writeAndFlush("[SERVER] - $msg\n")
+
+            // 下面这个步骤可以省略，因为channelGroup会自动完成
+//            channelGroup.remove(incoming)
+            LOG.info("total on-line client: ${channelGroup.size} ")
         }
     }
 
@@ -48,7 +49,7 @@ class ChatServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
         val incoming: Channel = ctx.channel()
         LOG.info("[${incoming.remoteAddress()}]: $msg")
 
-        for (ch in channels) {
+        channelGroup.forEach { ch ->
             if (ch != incoming) {
                 ch.writeAndFlush("[${incoming.remoteAddress()}]: $msg\n")
             } else {
@@ -62,6 +63,7 @@ class ChatServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
         ctx?.apply {
             val incoming: Channel = ctx.channel()
             LOG.info("${incoming.remoteAddress()} online")
+
             ctx.writeAndFlush("[SERVER] - Welcome!\n")
         }
     }
@@ -99,13 +101,11 @@ class ChatServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
      */
     private fun sendHeartPkg() {
         val msg = "Send heartbeat package"
-
-        for (ch in channels) {
-            ch.writeAndFlush("[SERVER] - $msg\n")
-        }
+        channelGroup.writeAndFlush("[SERVER] - $msg\n")
     }
 
     companion object {
-        val channels: MutableList<Channel> = ArrayList()
+//      val channelGroup: MutableList<Channel> = ArrayList()
+        val channelGroup: ChannelGroup = DefaultChannelGroup(GlobalEventExecutor.INSTANCE)
     }
 }
