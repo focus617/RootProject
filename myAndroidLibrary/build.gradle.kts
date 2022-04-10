@@ -43,6 +43,14 @@ dependencies {
     // Timber log
     implementation(Libs.TIMBER)
 
+    // Moshi
+    implementation(Libs.MOSHI)
+    implementation(Libs.MOSHI_KOTLIN)
+    // Retrofit with Moshi Converter
+    implementation(Libs.RETROFIT2_MOSHI_CONVERTER)
+    // Retrofit library that integrates coroutines.
+    implementation(Libs.RETROFIT2_KOTLIN_COROUTINES_ADAPTER)
+
     // Test
     testImplementation(Testing.JUNIT)
     testImplementation(Testing.MOCKITO)
