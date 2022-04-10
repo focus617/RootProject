@@ -1,6 +1,7 @@
 package com.focus617.core.data
 
 import com.focus617.core.data.dataSourceInterface.IfBookDataSource
+import com.focus617.core.data.dataSourceInterface.IfBookDataSourceFlow
 import com.focus617.core.data.dataSourceInterface.IfOpenBookDataSource
 import com.focus617.core.domain.Book
 import com.focus617.core.domain.OfIdBookSpec
@@ -23,7 +24,9 @@ class BookRepositoryTest {
     private lateinit var bookRepository: BookRepository
 
     private lateinit var bookDataSource: IfBookDataSource
+    private lateinit var bookDataSourceFlow: IfBookDataSourceFlow
     private lateinit var openBookDataSource: IfOpenBookDataSource
+
 
     private val book1 = Book(
         "Book_first", "", "", 0, "", "", ""
@@ -40,10 +43,16 @@ class BookRepositoryTest {
     @Before
     fun createRepository() {
         bookDataSource = FakeBookDataSource(initialBookList.toMutableList())
+        bookDataSourceFlow = FakeBookDataSourceFlow()
         openBookDataSource = FakeInMemoryOpenBookDataSource()
 
         // Get a reference to the class under test
-        bookRepository = BookRepository(bookDataSource, openBookDataSource, Dispatchers.Unconfined)
+        bookRepository = BookRepository(
+            bookDataSource,
+            bookDataSourceFlow,
+            openBookDataSource,
+            Dispatchers.Unconfined
+        )
     }
 
     @After
@@ -56,7 +65,7 @@ class BookRepositoryTest {
         // Given book list is empty
         val emptySource = FakeBookDataSource()
         val repositoryWithEmptyBook = BookRepository(
-            emptySource, openBookDataSource, Dispatchers.Unconfined
+            emptySource, bookDataSourceFlow, openBookDataSource, Dispatchers.Unconfined
         )
 
         // When books are requested from the books repository
@@ -72,7 +81,7 @@ class BookRepositoryTest {
         // Given book list is empty
         val emptySource = FakeBookDataSource()
         val repositoryWithEmptyBook = BookRepository(
-            emptySource, openBookDataSource, Dispatchers.Unconfined
+            emptySource, bookDataSourceFlow, openBookDataSource, Dispatchers.Unconfined
         )
 
         // When books are requested from the books repository
@@ -186,7 +195,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    fun `selectBy_OfIdBookSpec return correct item`(){
+    fun `selectBy_OfIdBookSpec return correct item`() {
         //Given initialBookList contains book1 and book2
         bookRepository.refreshBookCache(initialBookList)
 
@@ -200,7 +209,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    fun `selectBy_OrSpecification return correct items`(){
+    fun `selectBy_OrSpecification return correct items`() {
         //Given initialBookList contains book1 and book2
         bookRepository.refreshBookCache(initialBookList)
 
@@ -219,7 +228,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    fun `selectBy_AndSpecification return correct items`(){
+    fun `selectBy_AndSpecification return correct items`() {
         //Given initialBookList contains book1 and book2
         bookRepository.refreshBookCache(initialBookList)
 
@@ -236,7 +245,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    fun `selectBy_NotSpecification return correct item`(){
+    fun `selectBy_NotSpecification return correct item`() {
         //Given initialBookList contains book1 and book2
         bookRepository.refreshBookCache(initialBookList)
 

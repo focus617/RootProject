@@ -80,9 +80,9 @@ class FakeBookRepository : IfBookRepository {
 
     override fun getOpenBook(): Book = openBook
 
-    override suspend fun getBooksByFlow(): Flow<List<Book>> = flow {
+    override suspend fun getBooksByFlow(): Flow<Result<List<Book>>> = flow {
         val refreshIntervalMs: Long = 5000
-        emit(booksServiceData.values.toList())  // Emits the result of the request to the flow
+        emit(Result.Success(booksServiceData.values.toList()))  // Emits the result of the request to the flow
         delay(refreshIntervalMs)		        // Suspends the coroutine for some time
     }
 

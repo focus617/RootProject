@@ -10,6 +10,7 @@ import com.focus617.core.domain.Book
 import com.focus617.core.domain.Bookmark
 import com.focus617.core.usecases.*
 import com.nhaarman.mockito_kotlin.mock
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
@@ -65,7 +66,8 @@ class HomeViewModelTest {
                 SetOpenBook(bookRepository),
                 AddBookmark(bookmarkRepository),
                 GetBookmarks(bookmarkRepository),
-                RemoveBookmark(bookmarkRepository)
+                RemoveBookmark(bookmarkRepository),
+                GetBooksUseCase(bookRepository, Dispatchers.IO)
             )
         )
     }

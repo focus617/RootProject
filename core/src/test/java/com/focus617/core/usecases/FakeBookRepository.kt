@@ -16,9 +16,11 @@
 package com.focus617.core.usecases
 
 import androidx.annotation.VisibleForTesting
-import com.focus617.core.platform.functional.Result
 import com.focus617.core.data.dataSourceInterface.IfBookRepository
 import com.focus617.core.domain.Book
+import com.focus617.core.platform.functional.Result
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 /**
  * Implementation of a remote data source with static access to the data for easy testing.
@@ -77,19 +79,7 @@ class FakeBookRepository : IfBookRepository {
 
     override fun getOpenBook(): Book = openBook
 
-//    override suspend fun completeTask(task: Task) {
-//        val completedTask = Task(task.title, task.description, true, task.id)
-//        booksServiceData[task.id] = completedTask
-//    }
-//
-//    override suspend fun completeTask(taskId: String) {
-//        // Not required for the remote data source.
-//        throw NotImplementedError()
-//    }
-//
-//    override suspend fun clearCompletedTasks() {
-//        booksServiceData = booksServiceData.filterValues {
-//            !it.isCompleted
-//        } as LinkedHashMap<String, Task>
-//    }
+    override suspend fun getBooksByFlow(): Flow<Result<List<Book>>> =
+        flowOf(Result.Success(booksServiceData.values.toList()))
+
 }
