@@ -9,7 +9,7 @@ import io.netty.handler.timeout.IdleState
 import io.netty.handler.timeout.IdleStateEvent
 
 @Sharable
-class ServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
+class ChatServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
     val LOG = logger()
 
     @Throws(Exception::class)
