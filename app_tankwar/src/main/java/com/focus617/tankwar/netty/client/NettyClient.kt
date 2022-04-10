@@ -127,8 +127,6 @@ class NettyClient private constructor() : WithLogging() {
 
     private fun reconnect() {
         while (!isConnected && reconnectNum > 0) {
-            LOG.info("$TAG: 开始连接...")
-
             try {
                 connect()
                 Thread.sleep(reconnectIntervalTime)
@@ -136,7 +134,6 @@ class NettyClient private constructor() : WithLogging() {
                 e.printStackTrace()
             }
             reconnectNum--
-
         }
     }
 

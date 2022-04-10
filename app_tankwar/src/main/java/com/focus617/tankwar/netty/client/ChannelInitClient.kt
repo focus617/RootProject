@@ -1,5 +1,6 @@
 package com.focus617.tankwar.netty.client
 
+import com.focus617.mylib.logging.ILoggable
 import io.netty.channel.ChannelInitializer
 import io.netty.channel.socket.SocketChannel
 import io.netty.handler.codec.DelimiterBasedFrameDecoder
@@ -14,18 +15,30 @@ import java.util.concurrent.TimeUnit
  * Netty客户端数据收发线程
  * @author focus617
  * */
-class ChannelInitClient : ChannelInitializer<SocketChannel>() {
+class ChannelInitClient : ChannelInitializer<SocketChannel>(), ILoggable {
+    val LOG = logger()
+
+    enum class TestClient { ChatClient, WebSocketClient }
+
+    private val switch: TestClient = TestClient.ChatClient
 
     @Throws(Exception::class)
     override fun initChannel(ch: SocketChannel) {
+        when (switch) {
+            TestClient.ChatClient -> initChatClientPipeline(ch)
+            TestClient.WebSocketClient -> initChatClientPipeline(ch)
+        }
+    }
 
+    private fun initChatClientPipeline(ch: SocketChannel) {
+        LOG.info("Setup ChatClient...")
         ch.pipeline()
             //添加心跳机制，每60s发送一次心跳
             .addLast(
                 "ping",
                 IdleStateHandler(
-                    60, 60,
-                    60, TimeUnit.SECONDS
+                    40, 50,
+                    90, TimeUnit.SECONDS
                 )
             )
             .addLast(

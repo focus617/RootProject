@@ -88,9 +88,16 @@ class ChatServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
     @Throws(Exception::class)
     override fun userEventTriggered(ctx: ChannelHandlerContext?, evt: Any?) {
         if ((ctx != null) && (evt is IdleStateEvent)) {
-            if (evt.state() == IdleState.WRITER_IDLE) {
-                sendHeartPkg()
+            LOG.info("${ctx.channel().remoteAddress()} Trigger Idle Event(State=${evt.state()})")
+
+            when (evt.state()) {
+                IdleState.WRITER_IDLE -> sendHeartPkg()
+                // 在规定时间内没有收到客户端的上行数据, 主动断开连接
+                IdleState.READER_IDLE -> ctx.disconnect()
+                IdleState.ALL_IDLE -> {}
+                null -> {}
             }
+
         } else {
             super.userEventTriggered(ctx, evt)
         }
@@ -105,7 +112,7 @@ class ChatServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
     }
 
     companion object {
-//      val channelGroup: MutableList<Channel> = ArrayList()
+        //      val channelGroup: MutableList<Channel> = ArrayList()
         val channelGroup: ChannelGroup = DefaultChannelGroup(GlobalEventExecutor.INSTANCE)
     }
 }

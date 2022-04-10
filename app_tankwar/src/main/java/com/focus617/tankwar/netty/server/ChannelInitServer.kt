@@ -7,8 +7,10 @@ import io.netty.handler.codec.DelimiterBasedFrameDecoder
 import io.netty.handler.codec.Delimiters
 import io.netty.handler.codec.http.HttpObjectAggregator
 import io.netty.handler.codec.http.HttpServerCodec
+import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler
 import io.netty.handler.codec.string.StringDecoder
 import io.netty.handler.codec.string.StringEncoder
+import io.netty.handler.stream.ChunkedWriteHandler
 import io.netty.handler.timeout.IdleStateHandler
 import io.netty.util.CharsetUtil
 import java.util.concurrent.TimeUnit
@@ -20,15 +22,16 @@ import java.util.concurrent.TimeUnit
 class ChannelInitServer : ChannelInitializer<SocketChannel>(), ILoggable {
     val LOG = logger()
 
-    enum class TestServer { ChatServer, HttpServer }
+    enum class TestServer { ChatServer, HttpServer, WebSocketServer }
 
-    private val switch: TestServer = TestServer.ChatServer
+    private val switch: TestServer = TestServer.WebSocketServer
 
     @Throws(Exception::class)
     public override fun initChannel(ch: SocketChannel) {
         when (switch) {
             TestServer.ChatServer -> initChatServerPipeline(ch)
             TestServer.HttpServer -> initHttpServerPipeline(ch)
+            TestServer.WebSocketServer -> initWebSocketServerPipeline(ch)
         }
     }
 
@@ -40,8 +43,8 @@ class ChannelInitServer : ChannelInitializer<SocketChannel>(), ILoggable {
             .addLast(
                 "ping",
                 IdleStateHandler(
-                    60, 60,
-                    60, TimeUnit.SECONDS
+                    70, 50,
+                    100, TimeUnit.SECONDS
                 )
             )
             .addLast(
@@ -61,5 +64,16 @@ class ChannelInitServer : ChannelInitializer<SocketChannel>(), ILoggable {
             .addLast("httpServerCodec", HttpServerCodec())
             .addLast("aggregator", HttpObjectAggregator(1048576))
             .addLast("handler", HttpRequestHandler())
+    }
+
+    private fun initWebSocketServerPipeline(ch: SocketChannel) {
+        LOG.info("Setup WebSocketServer...")
+
+        ch.pipeline()
+            .addLast("httpServerCodec", HttpServerCodec())
+            .addLast("ChunkedWriter", ChunkedWriteHandler())
+            .addLast("aggregator", HttpObjectAggregator(1048576))
+            .addLast("webSocketHandShaker", WebSocketServerProtocolHandler("/ws"))
+            .addLast("handler", TextWebSocketFrameHandler())
     }
 }
