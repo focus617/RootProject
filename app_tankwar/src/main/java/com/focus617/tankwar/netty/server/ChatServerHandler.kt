@@ -62,6 +62,7 @@ class ChatServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
         ctx?.apply {
             val incoming: Channel = ctx.channel()
             LOG.info("${incoming.remoteAddress()} online")
+            ctx.writeAndFlush("[SERVER] - Welcome!\n")
         }
     }
 

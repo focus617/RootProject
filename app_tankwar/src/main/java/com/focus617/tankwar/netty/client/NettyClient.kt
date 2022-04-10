@@ -60,12 +60,8 @@ class NettyClient private constructor() : WithLogging() {
 
             // 需要在子线程中发起连接
             Thread(ThreadGroup("Netty-Client")){
-                client.connect()
-
+                client.reconnect()
                 // TODO：重新连接的逻辑是否正确？
-                if (!client.isConnected)
-                    client.reconnect()
-
             }.start()
         }
     }
@@ -131,15 +127,16 @@ class NettyClient private constructor() : WithLogging() {
 
     private fun reconnect() {
         while (!isConnected && reconnectNum > 0) {
-            reconnectNum--
+            LOG.info("$TAG: 开始连接...")
+
             try {
+                connect()
                 Thread.sleep(reconnectIntervalTime)
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
-            disconnect()
-            LOG.info("$TAG: 重新进行连接...")
-            connect()
+            reconnectNum--
+
         }
     }
 

@@ -18,6 +18,10 @@ class HttpRequestHandler : SimpleChannelInboundHandler<HttpObject>(), ILoggable 
 
     @Throws(Exception::class)
     override fun channelRead0(ctx: ChannelHandlerContext?, msg: HttpObject?) {
+        if ((ctx == null) || (msg == null)) {
+            return
+        }
+
         // 获取请求头
         val httpHeaders: HttpHeaders = (msg as HttpRequest).headers()
 
@@ -39,7 +43,7 @@ class HttpRequestHandler : SimpleChannelInboundHandler<HttpObject>(), ILoggable 
                 val getParameter
                         : Map<String, List<String>> = decoder.parameters()
                 LOG.info("GET：$getParameter")
-                responseMessage(ctx!!)
+                responseMessage(ctx)
             }
 
             HttpMethod.POST -> {

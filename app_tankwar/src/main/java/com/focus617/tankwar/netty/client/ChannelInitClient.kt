@@ -7,6 +7,7 @@ import io.netty.handler.codec.Delimiters
 import io.netty.handler.codec.string.StringDecoder
 import io.netty.handler.codec.string.StringEncoder
 import io.netty.handler.timeout.IdleStateHandler
+import io.netty.util.CharsetUtil
 import java.util.concurrent.TimeUnit
 
 /**
@@ -32,8 +33,8 @@ class ChannelInitClient : ChannelInitializer<SocketChannel>() {
                 DelimiterBasedFrameDecoder(8192, *Delimiters.lineDelimiter())
             )
             // 使用 pipeline.addLast()添加 Decoder、Encode和 Handler对象
-            .addLast("decoder", StringDecoder())
-            .addLast("encoder", StringEncoder())
+            .addLast("decoder", StringDecoder(CharsetUtil.UTF_8))
+            .addLast("encoder", StringEncoder(CharsetUtil.UTF_8))
 
             //添加自己的Handler，进行数据处理（接收、发送）
             .addLast("handler", ClientHandler())

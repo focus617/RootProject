@@ -10,6 +10,7 @@ import io.netty.handler.codec.http.HttpServerCodec
 import io.netty.handler.codec.string.StringDecoder
 import io.netty.handler.codec.string.StringEncoder
 import io.netty.handler.timeout.IdleStateHandler
+import io.netty.util.CharsetUtil
 import java.util.concurrent.TimeUnit
 
 /**
@@ -21,7 +22,7 @@ class ChannelInitServer : ChannelInitializer<SocketChannel>(), ILoggable {
 
     enum class TestServer { ChatServer, HttpServer }
 
-    private val switch: TestServer = TestServer.HttpServer
+    private val switch: TestServer = TestServer.ChatServer
 
     @Throws(Exception::class)
     public override fun initChannel(ch: SocketChannel) {
@@ -47,8 +48,8 @@ class ChannelInitServer : ChannelInitializer<SocketChannel>(), ILoggable {
                 "framer",
                 DelimiterBasedFrameDecoder(8192, *Delimiters.lineDelimiter())
             )
-            .addLast("decoder", StringDecoder())
-            .addLast("encoder", StringEncoder())
+            .addLast("decoder", StringDecoder(CharsetUtil.UTF_8))
+            .addLast("encoder", StringEncoder(CharsetUtil.UTF_8))
             .addLast("handler", ChatServerHandler())
     }
 
