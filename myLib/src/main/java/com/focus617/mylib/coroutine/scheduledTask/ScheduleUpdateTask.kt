@@ -10,7 +10,8 @@ import java.util.concurrent.CancellationException
  * 协程实现的定时轮询任务
  */
 class ScheduleUpdateTask(
-    private val updateApi: ScheduleUpdateApi,
+    private val updateApi: ScheduleUpdateApi?,
+    private val updateAsyncApi: ScheduleUpdateAsyncApi?,
     private val interval: Long = 1000L
 ) : WithLogging() {
 
@@ -20,7 +21,7 @@ class ScheduleUpdateTask(
             fun main(vararg args: String) {
 
                 // 测试动态代理
-                val invoker = ScheduleUpdateTask(ScheduledCoroutine())
+                val invoker = ScheduleUpdateTask(ScheduledCoroutine(), ScheduledCoroutineAsync())
 
                 LOG.info("Client requests execute()")
                 invoker.start()
@@ -44,13 +45,11 @@ class ScheduleUpdateTask(
         job = CoroutineScope(Dispatchers.Default).launch {
             LOG.info("Schedule Updating Coroutine is launched")
 
-            var result: String
-
             while (isActive) {
                 LOG.info("Schedule Updating Coroutine running on ${myDispatcher()}")
                 try {
-                    updateApi.scheduleUpdate().also(::println)
-                    updateApi.scheduleUpdateAsync().await().also(::println)
+                    updateApi?.scheduleUpdate().also(::println)
+                    updateAsyncApi?.scheduleUpdateAsync()?.await().also(::println)
                 } catch (e: Exception) {
                     e.printStackTrace()
                     if (e is CancellationException) throw e
@@ -88,6 +87,9 @@ class ScheduledCoroutine : WithLogging(), ScheduleUpdateApi {
             "Scheduled 1 Updating finish."
         }
     }
+}
+
+class ScheduledCoroutineAsync : WithLogging(), ScheduleUpdateAsyncApi {
 
     override suspend fun scheduleUpdateAsync(): Deferred<String> {
 
