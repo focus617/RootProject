@@ -5,14 +5,6 @@ import com.focus617.mylib.logging.WithLogging
 import kotlinx.coroutines.*
 import java.util.concurrent.CancellationException
 
-class ScheduledCoroutine : WithLogging(), ScheduleUpdateApi {
-
-    override suspend fun scheduleUpdate(): String {
-        delay(100L)
-        LOG.info("Producer run on ${myDispatcher()}")
-        return "Scheduled Updating finish."
-    }
-}
 
 /**
  * 协程实现的定时轮询任务
@@ -22,18 +14,43 @@ class ScheduleUpdateTask(
     private val interval: Long = 1000L
 ) : WithLogging() {
 
+    class Client {
+        companion object : WithLogging() {
+            @JvmStatic
+            fun main(vararg args: String) {
+
+                // 测试动态代理
+                val invoker = ScheduleUpdateTask(ScheduledCoroutine())
+
+                LOG.info("Client requests execute()")
+                invoker.start()
+
+                // 主线程执行3秒之后停止协程，观察协程的工作
+//                Thread.sleep(3000L)
+//                invoker.cancel()
+
+                // 连续执行
+                runBlocking {
+                    invoker.join()
+                }
+            }
+        }
+    }
+
     private var job: Job? = null
 
     fun start() {
         cancel()
-        job = CoroutineScope(Dispatchers.IO).launch {
+        job = CoroutineScope(Dispatchers.Default).launch {
             LOG.info("Schedule Updating Coroutine is launched")
-            LOG.info("Producer run on ${myDispatcher()}")
+
+            var result: String
 
             while (isActive) {
-                LOG.info("Schedule Updating Coroutine running")
+                LOG.info("Schedule Updating Coroutine running on ${myDispatcher()}")
                 try {
-                    updateApi.scheduleUpdate().let(::println)
+                    updateApi.scheduleUpdate().also(::println)
+                    updateApi.scheduleUpdateAsync().await().also(::println)
                 } catch (e: Exception) {
                     e.printStackTrace()
                     if (e is CancellationException) throw e
@@ -51,19 +68,38 @@ class ScheduleUpdateTask(
         job?.cancel().also { job = null }
     }
 
-    class Client {
-        companion object : WithLogging() {
-            @JvmStatic
-            fun main(vararg args: String) {
+    suspend fun join() {
+        job?.join().also {
+            LOG.info("Schedule Updating Coroutine is joined}")
+        }
+    }
 
-                // 测试动态代理
-                val invoker = ScheduleUpdateTask(ScheduledCoroutine())
+}
 
-                LOG.info("Client requests execute()")
-                invoker.start()
-                // 主线程Block，观察协程的工作
-                Thread.sleep(3000L)
-                invoker.cancel()
+
+class ScheduledCoroutine : WithLogging(), ScheduleUpdateApi {
+
+    override suspend fun scheduleUpdate(): String {
+        return withContext(Dispatchers.IO) {
+            LOG.info("Producer run on ${myDispatcher()}")
+            // 模拟耗时
+            delay(200)
+            // 返回一个值
+            "Scheduled 1 Updating finish."
+        }
+    }
+
+    override suspend fun scheduleUpdateAsync(): Deferred<String> {
+
+        // 开启一个IO模式的线程 并返回一个Deferred，用来获取返回值
+        return withContext(Dispatchers.IO) {
+            LOG.info("Producer run on ${myDispatcher()}")
+
+            async(Dispatchers.IO) {
+                // 模拟耗时
+                delay(200)
+                // 返回一个值
+                "Scheduled 2 Updating finish."
             }
         }
     }
