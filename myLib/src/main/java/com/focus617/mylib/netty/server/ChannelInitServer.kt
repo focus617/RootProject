@@ -1,4 +1,4 @@
-package com.focus617.tankwar.netty.server
+package com.focus617.mylib.netty.server
 
 import com.focus617.mylib.logging.ILoggable
 import io.netty.channel.ChannelInitializer
@@ -24,7 +24,7 @@ class ChannelInitServer : ChannelInitializer<SocketChannel>(), ILoggable {
 
     enum class TestServer { ChatServer, HttpServer, WebSocketServer }
 
-    private val switch: TestServer = TestServer.WebSocketServer
+    private val switch: TestServer = TestServer.ChatServer
 
     @Throws(Exception::class)
     public override fun initChannel(ch: SocketChannel) {

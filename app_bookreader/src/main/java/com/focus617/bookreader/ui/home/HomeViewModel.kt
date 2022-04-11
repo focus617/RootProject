@@ -119,15 +119,15 @@ class HomeViewModel(application: Application, private val interactors: Interacto
      */
     /** 在Fragment中使用Flow直接更新UI */
     val booksByFlow: Flow<List<Book>> = flow {
-        val booksByFlow = interactors.getBooksUseCase(Unit).mapNotNull { it.data }
+        interactors.getBooksUseCase(Unit).mapNotNull { it.data }
     }
 
 
     fun loadBooksByFlow() {
         uiScope.launch {
-            interactors.getBooksUseCase(Unit).collect {
-                if (it is Success) {
-                    _books.value = it.data
+            booksByFlow.collect {
+                if (it is Success<*>) {
+                    _books.value = it.data as List<Book>
                 } else {
                     _books.value = emptyList()
                     showSnackbarMessage(R.string.loading_books_error)

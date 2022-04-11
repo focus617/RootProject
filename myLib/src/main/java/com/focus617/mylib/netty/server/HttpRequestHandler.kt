@@ -1,4 +1,4 @@
-package com.focus617.tankwar.netty.server
+package com.focus617.mylib.netty.server
 
 import com.focus617.mylib.logging.ILoggable
 import io.netty.buffer.Unpooled
@@ -7,7 +7,6 @@ import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
 import io.netty.handler.codec.http.*
 import io.netty.util.CharsetUtil
-import org.json.JSONObject
 
 /**
  * Http服务器 Handler
@@ -75,17 +74,6 @@ class HttpRequestHandler : SimpleChannelInboundHandler<HttpObject>(), ILoggable 
 
     private fun buildStringContent(): String {
         return "Hello World!"
-    }
-
-    private fun buildJSONContent(): String {
-        val jsonRootObj = JSONObject()
-        val jsonUserInfo = JSONObject()
-        jsonUserInfo.put("id", 1)
-        jsonUserInfo.put("name", "张三")
-        jsonUserInfo.put("password", "123")
-        jsonRootObj.put("userInfo", jsonUserInfo)
-
-        return StringBuilder().append(jsonRootObj.toJSONArray(null)).toString()
     }
 
 }

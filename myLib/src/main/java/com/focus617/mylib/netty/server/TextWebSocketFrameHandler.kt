@@ -1,7 +1,5 @@
-package com.focus617.tankwar.netty.server
+package com.focus617.mylib.netty.server
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.focus617.mylib.logging.ILoggable
 import io.netty.channel.Channel
 import io.netty.channel.ChannelFutureListener
@@ -40,7 +38,6 @@ class TextWebSocketFrameHandler : SimpleChannelInboundHandler<TextWebSocketFrame
         ctx.close()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun channelRead0(ctx: ChannelHandlerContext?, msg: TextWebSocketFrame?) {
         if ((ctx == null) || (msg == null)) {
             return
@@ -52,12 +49,10 @@ class TextWebSocketFrameHandler : SimpleChannelInboundHandler<TextWebSocketFrame
     }
 
     // 服务端回应数据
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun responseMessage(ctx: ChannelHandlerContext) {
         val response = TextWebSocketFrame("Server Time: ${LocalDateTime.now()}")
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE)
     }
-
 
 
 }

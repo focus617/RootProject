@@ -34,6 +34,16 @@ dependencies {
     // Code Generator for DynamicProxy
     implementation(Libs.CGLIB)
 
+    // Network
+    implementation(Libs.MOSHI)
+    implementation(Libs.MOSHI_KOTLIN)
+    // Retrofit with Moshi Converter
+    implementation(Libs.RETROFIT2_MOSHI_CONVERTER)
+    // Retrofit library that integrates coroutines.
+    implementation(Libs.RETROFIT2_KOTLIN_COROUTINES_ADAPTER)
+    // Netty
+    implementation(Libs.NETTY)  // TODO:需要裁剪，留下有用的jar
+
     // Test
     testImplementation(Testing.JUNIT)
     testImplementation(Testing.MOCKITO)

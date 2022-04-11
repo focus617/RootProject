@@ -1,4 +1,4 @@
-package com.focus617.tankwar.netty.client
+package com.focus617.mylib.netty.client
 
 import com.focus617.mylib.logging.WithLogging
 import io.netty.bootstrap.Bootstrap
@@ -47,7 +47,7 @@ class NettyClient private constructor() : WithLogging() {
             }
             val host = args[0]
             val port = args[1].toInt()
-            NettyClient.startup(host, port)
+            startup(host, port)
         }
 
         fun startup(
