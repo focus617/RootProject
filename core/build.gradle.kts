@@ -19,7 +19,6 @@ dependencies {
 
     // Coroutines
     implementation(Kotlin.COROUTINES_CORE)
-    implementation(Kotlin.COROUTINES_ANDROID)
 
     // Hilt
     implementation(Kotlin.HILT_CORE)
