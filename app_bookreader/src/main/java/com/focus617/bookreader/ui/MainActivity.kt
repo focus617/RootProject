@@ -3,7 +3,6 @@ package com.focus617.bookreader.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
@@ -67,15 +66,15 @@ class MainActivity : BaseActivity() {
         collapsingToolbarLayout.setupWithNavController(toolbar, navController, appBarConfiguration)
 
         // trial: make slideshow fragment as no_action_bar mode
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.nav_slideshow -> binding.appBarMain.appBar.visibility = View.GONE
-                else -> {
-                    binding.appBarMain.appBar.visibility = View.VISIBLE
-                    binding.appBarMain.collapsingToolbar.visibility = View.VISIBLE
-                }
-            }
-        }
+//        navController.addOnDestinationChangedListener { _, destination, _ ->
+//            when (destination.id) {
+//                R.id.nav_slideshow -> binding.appBarMain.appBar.visibility = View.GONE
+//                else -> {
+//                    binding.appBarMain.appBar.visibility = View.VISIBLE
+//                    binding.appBarMain.collapsingToolbar.visibility = View.VISIBLE
+//                }
+//            }
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
