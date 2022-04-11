@@ -66,4 +66,5 @@ It is the national fruit of India, Pakistan, and the Philippines, and the nation
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="no_data">No Data</string>
+    <string name="textdemo">Demo for textView</string>
 </resources>
