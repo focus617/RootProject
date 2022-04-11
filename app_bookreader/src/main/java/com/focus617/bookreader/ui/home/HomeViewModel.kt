@@ -9,11 +9,11 @@ import androidx.lifecycle.viewModelScope
 import com.focus617.bookreader.R
 import com.focus617.bookreader.framework.datasource.WebBookRemoteDataSource
 import com.focus617.bookreader.framework.interactors.Interactors
-import com.focus617.core.coroutine.ApplicationScope
 import com.focus617.core.domain.Book
 import com.focus617.core.platform.functional.Result
 import com.focus617.core.platform.functional.Result.Success
 import com.focus617.core.platform.functional.data
+import com.focus617.mylib.coroutine.di.ApplicationScope
 import com.focus617.platform.event.Event
 import com.focus617.platform.uicontroller.BaseViewModel
 import kotlinx.coroutines.*

@@ -1,10 +1,10 @@
 package com.focus617.core.usecases
 
-import com.focus617.core.coroutine.IoDispatcher
 import com.focus617.core.data.dataSourceInterface.IfBookRepository
 import com.focus617.core.domain.Book
 import com.focus617.core.platform.functional.Result
 import com.focus617.core.platform.usecase.FlowUseCase
+import com.focus617.mylib.coroutine.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

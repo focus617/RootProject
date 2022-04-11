@@ -19,8 +19,6 @@ package com.focus617.bookreader.di
 import android.content.Context
 import androidx.room.Room
 import com.focus617.bookreader.framework.database.BookReaderDatabase
-import com.focus617.bookreader.framework.database.book.BookDao
-import com.focus617.bookreader.framework.database.bookmark.BookmarkDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

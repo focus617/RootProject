@@ -25,6 +25,10 @@ dependencies {
     implementation(Kotlin.COROUTINES_CORE)
     implementation(Kotlin.COROUTINES_ANDROID)
 
+    // Hilt
+    implementation(Kotlin.HILT_CORE)
+    kapt(Kotlin.HILT_COMPILER)
+
     // TestApp: CharUtils
     implementation(Libs.COMMONS_LANG3)
 

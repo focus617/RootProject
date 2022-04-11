@@ -1,4 +1,4 @@
-package com.focus617.core.coroutine
+package com.focus617.mylib.coroutine.di
 
 import javax.inject.Qualifier
 

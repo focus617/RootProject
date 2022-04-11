@@ -1,6 +1,5 @@
 package com.focus617.core.data
 
-import com.focus617.core.coroutine.IoDispatcher
 import com.focus617.core.data.dataSourceInterface.IfBookDataSource
 import com.focus617.core.data.dataSourceInterface.IfBookDataSourceFlow
 import com.focus617.core.data.dataSourceInterface.IfBookRepository
@@ -11,6 +10,7 @@ import com.focus617.core.platform.base.BaseSpecification
 import com.focus617.core.platform.functional.Result
 import com.focus617.core.platform.functional.Result.Error
 import com.focus617.core.platform.functional.Result.Success
+import com.focus617.mylib.coroutine.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow

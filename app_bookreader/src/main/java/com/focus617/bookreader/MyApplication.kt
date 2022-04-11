@@ -4,10 +4,10 @@ import android.os.Build
 import androidx.work.*
 import com.focus617.bookreader.framework.interactors.Interactors
 import com.focus617.bookreader.worker.RefreshDataWorker
-import com.focus617.core.coroutine.ApplicationScope
 import com.focus617.core.platform.event.AppLaunchedEvent
 import com.focus617.core.platform.event.AppVariant
 import com.focus617.core.platform.event.EventDispatcher
+import com.focus617.mylib.coroutine.di.ApplicationScope
 import com.focus617.platform.uicontroller.BaseApplication
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
