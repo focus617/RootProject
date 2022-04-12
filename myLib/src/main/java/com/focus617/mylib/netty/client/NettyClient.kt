@@ -10,9 +10,6 @@ import io.netty.channel.ChannelOption
 import io.netty.channel.EventLoopGroup
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioSocketChannel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.net.InetSocketAddress
 
 
@@ -70,7 +67,7 @@ class NettyClient : WithLogging() {
 
             // 需要在子线程中发起连接
             Thread(ThreadGroup("Netty-Client")) {
-                client.reconnect()
+                client.connect()
                 // TODO：重新连接的逻辑是否正确？
             }.start()
             return client
@@ -105,11 +102,9 @@ class NettyClient : WithLogging() {
                 LOG.info("$TAG: 与服务器${serverAddress} 成功建立连接")
                 channel = future.channel()
                 isConnected = true
-                reconnectNum = Int.MAX_VALUE
-
             }
 
-            // TODO: how to connect with App's input?
+            // 测试本地键盘输入
 //            val input = BufferedReader(InputStreamReader(System.`in`))
 //            while (isConnected && (channel != null)) {
 //                channel!!.writeAndFlush(input.readLine() + "\r\n")
@@ -127,7 +122,7 @@ class NettyClient : WithLogging() {
         }
     }
 
-    fun disconnect() {
+    private fun disconnect() {
         LOG.info("$TAG: 链接关闭,资源释放")
         // Shut down the event loop to terminate all threads.
         group.shutdownGracefully()
@@ -135,39 +130,13 @@ class NettyClient : WithLogging() {
         channel = null
     }
 
-    private var reconnectNum = Int.MAX_VALUE
-    private val reconnectIntervalTime: Long = 10000
-
-    private fun reconnect() {
-        while (!isConnected && reconnectNum > 0) {
-            try {
-                connect()
-                Thread.sleep(reconnectIntervalTime)
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-            }
-            reconnectNum--
-        }
-    }
-
-    fun closeConnect() {
-        this.send("__Bye__")
-    }
 
     @Throws(Exception::class)
-    private fun send(msg: String) {
-        if (!isConnected || (channel == null) || (uiChannel == null)) {
-            LOG.info("$TAG: 尚未建立与服务器的连接")
-            return
-        }
-//        val buf: ByteBuf = Unpooled.copiedBuffer(msg.toByteArray())
-//        channel!!.writeAndFlush(buf).addListener {
-//            LOG.info("$TAG: 发送消息成功")
-//        }
-        CoroutineScope(Dispatchers.IO).launch {
-            uiChannel!!.outboundChannel.send(msg)
-            LOG.info("$TAG: 发送消息")
-        }
+    fun closeConnect() {
+       if (isConnected && (channel != null)) {
+           channel!!.writeAndFlush("__Bye__" + "\r\n")
+           disconnect()
+       }
     }
 
 }
