@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.focus617.bookreader.MyApplication
 import com.focus617.bookreader.framework.interactors.Interactors
+import com.focus617.bookreader.ui.gallery.GalleryViewModel
 import com.focus617.bookreader.ui.home.HomeViewModel
 import com.focus617.bookreader.ui.slideshow.SlideshowViewModel
 import com.focus617.mylib.netty.api.IfNorthBoundChannel
@@ -20,6 +21,10 @@ class MyViewModelFactory @Inject constructor(
     override fun <T : ViewModel> create(modelClass: Class<T>): T = with(modelClass) {
         when {
             isAssignableFrom(HomeViewModel::class.java) ->
+                return modelClass.getConstructor(Application::class.java, Interactors::class.java)
+                    .newInstance(application, dependencies)
+
+            isAssignableFrom(GalleryViewModel::class.java) ->
                 return modelClass.getConstructor(Application::class.java, Interactors::class.java)
                     .newInstance(application, dependencies)
 
