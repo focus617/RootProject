@@ -1,5 +1,6 @@
 package com.focus617.mylib.netty.server
 
+import com.focus617.mylib.helper.DateHelper
 import com.focus617.mylib.logging.ILoggable
 import io.netty.channel.Channel
 import io.netty.channel.ChannelHandler.Sharable
@@ -107,7 +108,7 @@ class ChatServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
      * 发送心跳
      */
     private fun sendHeartPkg() {
-        val msg = "Send heartbeat package"
+        val msg = "Heartbeat Handshake: ${DateHelper.nowAsStr()}"
         channelGroup.writeAndFlush("[SERVER] - $msg\n")
     }
 

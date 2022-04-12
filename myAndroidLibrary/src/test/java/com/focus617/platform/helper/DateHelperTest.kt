@@ -19,16 +19,16 @@ class DateHelperTest {
 
     @Test
     fun timeStampAsStr(){
-        assertEquals("1998-09-04 17:23:59", DateHelper.timeStampAsStr(cal.timeInMillis))
+        assertEquals("1998-09-04 17:23:59", com.focus617.mylib.helper.DateHelper.timeStampAsStr(cal.timeInMillis))
     }
 
     @Test
     fun calendarToTimeStamp_convert_OK() {
-        assertEquals(cal.timeInMillis, DateHelper.calendarToTimeStamp(cal))
+        assertEquals(cal.timeInMillis, com.focus617.mylib.helper.DateHelper.calendarToTimeStamp(cal))
     }
 
     @Test
     fun timeStampToCalendar_convert_OK() {
-        assertEquals(DateHelper.timeStampToCalendar(cal.timeInMillis), cal)
+        assertEquals(com.focus617.mylib.helper.DateHelper.timeStampToCalendar(cal.timeInMillis), cal)
     }
 }

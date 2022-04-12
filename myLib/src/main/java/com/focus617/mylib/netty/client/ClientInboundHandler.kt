@@ -1,5 +1,6 @@
 package com.focus617.mylib.netty.client
 
+import com.focus617.mylib.helper.DateHelper
 import com.focus617.mylib.logging.ILoggable
 import com.focus617.mylib.netty.api.IfNorthBoundChannel
 import io.netty.channel.ChannelHandlerContext
@@ -11,17 +12,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /** SimpleChannelInboundHandler 会自动释放资源，而无需存储任何信息的引用。*/
-class ClientHandler : SimpleChannelInboundHandler<String>(), ILoggable {
+class ClientInboundHandler : SimpleChannelInboundHandler<String>(), ILoggable {
     val LOG = logger()
 
     private val uiChannel: IfNorthBoundChannel? = NettyClient.getNettyClient().uiChannel
 
     @Throws(Exception::class)
     override fun channelRead0(ctx: ChannelHandlerContext, msg: String) {
-        LOG.info("$msg")
+        LOG.info(msg)
+
+        val data: String = StringBuilder().append(msg).toString()
 
         CoroutineScope(Dispatchers.IO).launch {
-            uiChannel?.inboundChannel?.send(msg)
+            uiChannel?.inboundChannel?.send(data)
         }
     }
 
@@ -40,7 +43,7 @@ class ClientHandler : SimpleChannelInboundHandler<String>(), ILoggable {
      * 发送心跳
      */
     private fun sendHeartPkg(ctx: ChannelHandlerContext) {
-        val msg = "Send heartbeat package"
+        val msg = "Heartbeat Handshake: ${DateHelper.nowAsStr()}"
         ctx.channel().writeAndFlush("$msg\n")
     }
 

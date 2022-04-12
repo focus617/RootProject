@@ -50,6 +50,7 @@ class ChannelInitClient : ChannelInitializer<SocketChannel>(), ILoggable {
             .addLast("encoder", StringEncoder(CharsetUtil.UTF_8))
 
             //添加自己的Handler，进行数据处理（接收、发送）
-            .addLast("handler", ClientHandler())
+            .addLast("InboundHandler", ClientInboundHandler())
+            .addLast("OutboundHandler", ClientOutboundHandler())
     }
 }

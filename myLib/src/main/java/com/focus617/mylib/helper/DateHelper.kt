@@ -1,4 +1,4 @@
-package com.focus617.platform.helper
+package com.focus617.mylib.helper
 
 import java.text.SimpleDateFormat
 import java.util.*

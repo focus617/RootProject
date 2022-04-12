@@ -7,13 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.focus617.mylib.coroutine.platform.MyCoroutineLib
 import com.focus617.mylib.netty.api.IfNorthBoundChannel
 import com.focus617.platform.uicontroller.BaseViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class SlideshowViewModel(
     application: Application,
     private val northBound: IfNorthBoundChannel
-): BaseViewModel(application) {
+) : BaseViewModel(application) {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is slideshow Fragment\n"
@@ -23,6 +24,7 @@ class SlideshowViewModel(
     init {
 //        produceFakeChannelData()
         updateChannel()
+        SayHello()
     }
 
     private fun updateChannel() {
@@ -32,6 +34,18 @@ class SlideshowViewModel(
             for (data in northBound.inboundChannel) {
                 val str = text.value
                 _text.value = StringBuilder(str!!).append(data + '\n').toString()
+            }
+        }
+    }
+
+    private fun SayHello() {
+        viewModelScope.launch {
+            //启动一个生产者协程
+            for (i in 1..10) {   //模拟高速生产
+                val data = "Hello Server $i times"
+                northBound.outboundChannel.send(data)
+                Timber.i("$data sent")
+                delay(3000L)
             }
         }
     }
