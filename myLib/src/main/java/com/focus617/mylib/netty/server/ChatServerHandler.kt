@@ -50,11 +50,24 @@ class ChatServerHandler : SimpleChannelInboundHandler<String>(), ILoggable {
         val incoming: Channel = ctx.channel()
         LOG.info("[${incoming.remoteAddress()}]: $msg")
 
-        channelGroup.forEach { ch ->
-            if (ch != incoming) {
-                ch.writeAndFlush("[${incoming.remoteAddress()}]: $msg\n")
-            } else {
-                ch.writeAndFlush("[You]: $msg\n")
+        if ("__Bye__" in msg) {
+            val notice = "[SERVER] - ${incoming.remoteAddress()} requests quit"
+            LOG.info(notice)
+            ctx.close()
+
+            channelGroup.forEach { ch ->
+                if (ch != incoming) {
+                    ch.writeAndFlush("$notice\n")
+                }
+            }
+
+        } else {
+            channelGroup.forEach { ch ->
+                if (ch != incoming) {
+                    ch.writeAndFlush("[${incoming.remoteAddress()}]: $msg\n")
+                } else {
+                    ch.writeAndFlush("[You]: $msg\n")
+                }
             }
         }
     }

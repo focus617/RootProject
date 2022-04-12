@@ -2,15 +2,17 @@ package com.focus617.mylib.netty.client
 
 import com.focus617.mylib.logging.WithLogging
 import com.focus617.mylib.netty.api.IfNorthBoundChannel
+import com.focus617.mylib.netty.northbound.NorthBoundChannel
 import io.netty.bootstrap.Bootstrap
-import io.netty.buffer.ByteBuf
-import io.netty.buffer.Unpooled
 import io.netty.channel.Channel
 import io.netty.channel.ChannelFuture
 import io.netty.channel.ChannelOption
 import io.netty.channel.EventLoopGroup
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioSocketChannel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.net.InetSocketAddress
 
 
@@ -47,10 +49,13 @@ class NettyClient : WithLogging() {
             }
             val host = args[0]
             val port = args[1].toInt()
+
+            initChannel(NorthBoundChannel())
             startup(host, port)
+
         }
 
-        fun initChannel(northBound: IfNorthBoundChannel): ClientBuilder{
+        fun initChannel(northBound: IfNorthBoundChannel): ClientBuilder {
             client.uiChannel = northBound
             return this
         }
@@ -58,7 +63,7 @@ class NettyClient : WithLogging() {
         fun startup(
             host: String = "192.168.5.8",   // 连接地址
             port: Int = 8888,               // 监听端口
-        ): ClientBuilder {
+        ): NettyClient {
             LOG.info("$TAG: 启动...")
 
             client.serverAddress = InetSocketAddress(host, port)
@@ -68,7 +73,7 @@ class NettyClient : WithLogging() {
                 client.reconnect()
                 // TODO：重新连接的逻辑是否正确？
             }.start()
-            return this
+            return client
         }
 
         fun getNettyClient(): NettyClient = client
@@ -145,16 +150,25 @@ class NettyClient : WithLogging() {
         }
     }
 
+    fun closeConnect() {
+        this.send("__Bye__")
+    }
+
     @Throws(Exception::class)
-    fun send(msg: String) {
-        if (!isConnected || channel == null) {
+    private fun send(msg: String) {
+        if (!isConnected || (channel == null) || (uiChannel == null)) {
             LOG.info("$TAG: 尚未建立与服务器的连接")
             return
         }
-        val buf: ByteBuf = Unpooled.copiedBuffer(msg.toByteArray())
-        LOG.info("$TAG: 发送消息")
-        channel!!.writeAndFlush(buf).addListener {
-            LOG.info("$TAG: 发送消息成功")
+//        val buf: ByteBuf = Unpooled.copiedBuffer(msg.toByteArray())
+//        channel!!.writeAndFlush(buf).addListener {
+//            LOG.info("$TAG: 发送消息成功")
+//        }
+        CoroutineScope(Dispatchers.IO).launch {
+            uiChannel!!.outboundChannel.send(msg)
+            LOG.info("$TAG: 发送消息")
         }
     }
+
 }
+

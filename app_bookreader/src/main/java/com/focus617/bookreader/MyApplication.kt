@@ -34,6 +34,8 @@ class MyApplication : BaseApplication() {
     @Inject
     lateinit var eventDispatcher: EventDispatcher<AppLaunchedEvent>
 
+    lateinit var client: NettyClient
+
     /**
      * onCreate is called before the first screen is shown to the user.
      *
@@ -50,9 +52,14 @@ class MyApplication : BaseApplication() {
         publishAppLaunchEvent()
 
         // 创建Netty客户端，并连接服务器
-        NettyClient.ClientBuilder
+        client = NettyClient.ClientBuilder
             .initChannel(uiChannel)
             .startup()
+    }
+
+    override fun onTerminate() {
+        client.closeConnect()
+        super.onTerminate()
     }
 
     private fun publishAppLaunchEvent() {

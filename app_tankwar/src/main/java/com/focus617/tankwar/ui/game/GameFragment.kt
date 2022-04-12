@@ -10,13 +10,13 @@ import com.focus617.tankwar.R
 import com.focus617.tankwar.databinding.FragmentGameBinding
 import com.focus617.tankwar.di.scene.RealScene
 import com.focus617.tankwar.scene.base.IfRendererable
+import com.focus617.tankwar.ui.MyViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class GameFragment : BaseFragment() {
-    private lateinit var viewModel: GameViewModel
 
     @RealScene
     @Inject
@@ -28,6 +28,10 @@ class GameFragment : BaseFragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    @Inject
+    lateinit var viewModelFactory: MyViewModelFactory
+    private lateinit var viewModel: GameViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,7 +40,10 @@ class GameFragment : BaseFragment() {
         _binding = FragmentGameBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        viewModel = ViewModelProvider(this)[GameViewModel::class.java]
+        // Get the instance of ViewModel
+        viewModel =
+            ViewModelProvider(this, viewModelFactory)[GameViewModel::class.java]
+
         viewModel.snackbarText.observe(this.viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 Snackbar.make(root, it, Snackbar.LENGTH_SHORT).show()
