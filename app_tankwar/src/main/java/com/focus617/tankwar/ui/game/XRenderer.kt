@@ -5,13 +5,13 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import com.focus617.tankwar.scene.base.IfRefresh
+import com.focus617.tankwar.scene.base.IfRendererable
 
 const val SLEEP_INTERVAL = 40L
 
 class XRenderer(
     var surfaceView: SurfaceView,
-    var scene: IfRefresh
+    var scene: IfRendererable
 ) : SurfaceHolder.Callback, Runnable {
 
     private var holder: SurfaceHolder? = null

@@ -7,7 +7,7 @@ import com.focus617.platform.config_util.PropertiesUtil
 import com.focus617.platform.helper.BitmapHelper.bitmapLoader
 import com.focus617.tankwar.R
 import com.focus617.tankwar.scene.base.Dir
-import com.focus617.tankwar.scene.base.IfRefresh
+import com.focus617.tankwar.scene.base.IfRendererable
 import com.focus617.tankwar.scene.base.IfScene
 import com.focus617.tankwar.scene.base.RootNode
 import com.focus617.tankwar.scene.components.*
@@ -19,7 +19,7 @@ object GameConfig {
     var BLOCK_NUM_H: Int = 0        // 游戏场地纵向方格的个数
 }
 
-class GameScene private constructor(val context: Context) : IfScene, IfRefresh {
+class GameScene private constructor(val context: Context) : IfScene, IfRendererable {
     private val resource = context.resources
 
     // 配置属性
@@ -180,7 +180,7 @@ class GameScene private constructor(val context: Context) : IfScene, IfRefresh {
         rootNode.add(Explode(this, x, y))
     }
 
-    fun removeObject(obj: IfRefresh) {
+    fun removeObject(obj: IfRendererable) {
         rootNode.remove(obj)
     }
 

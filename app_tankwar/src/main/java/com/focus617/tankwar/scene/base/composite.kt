@@ -12,7 +12,7 @@ import timber.log.Timber
 /**
  * @description 叶子节点对象，叶子节点没有子节点
  */
-abstract class Leaf : IfRefresh {
+abstract class Leaf : IfRendererable {
     // 提供 Logger
     companion object : WithLogging()
 
@@ -24,22 +24,22 @@ abstract class Leaf : IfRefresh {
 /**
  * @description 有枝节点对象，用来存储子部件
  */
-abstract class Composite : IfRefresh {
+abstract class Composite : IfRendererable {
     // 提供 Logger
     companion object : WithLogging()
 
-    protected val children = arrayListOf<IfRefresh>()
+    protected val children = arrayListOf<IfRendererable>()
     fun getChildren() = children.toList()
 
     // 添加部件
-    open fun add(component: IfRefresh) {
+    open fun add(component: IfRendererable) {
         children.add(component)
         Timber.d("add ${unwrapCompanionClass(component.javaClass).simpleName}\n" +
                 "--now total ${children.size} in list")
     }
 
     // 移除部件
-    open fun remove(component: IfRefresh) {
+    open fun remove(component: IfRendererable) {
         children.remove(component)
         Timber.d("remove ${unwrapCompanionClass(component.javaClass).simpleName}\n" +
                 "--now total ${children.size} in list")
