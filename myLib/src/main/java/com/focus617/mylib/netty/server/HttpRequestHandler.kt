@@ -1,6 +1,7 @@
 package com.focus617.mylib.netty.server
 
 import com.focus617.mylib.logging.ILoggable
+import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
 import io.netty.channel.ChannelFutureListener
 import io.netty.channel.ChannelHandlerContext
@@ -21,37 +22,46 @@ class HttpRequestHandler : SimpleChannelInboundHandler<HttpObject>(), ILoggable 
             return
         }
 
-        // 获取请求头
-        val httpHeaders: HttpHeaders = (msg as HttpRequest).headers()
+        when(msg){
+            is HttpRequest -> {
+                val httpHeaders: HttpHeaders = msg.headers()
 
-        // 查看请求头的详细信息
-        LOG.info(httpHeaders.toString())
-        // 打印uri
-        LOG.info(msg.uri())
+                // 查看请求头的详细信息
+                LOG.info(httpHeaders.toString())
+                // 打印uri
+                LOG.info("Uri: ${msg.uri()}")
+                // 获取Content-Type信息
+                val strContentType = httpHeaders["Content-Type"]?.trim() ?: "null"
+                LOG.info("ContentType: $strContentType")
 
-        // 获取Content-Type信息
-        val strContentType = httpHeaders["Content-Type"]?.trim() ?: "null"
-        LOG.info("ContentType: $strContentType")
+                // 处理请求
+                val decoder = QueryStringDecoder(msg.uri())
+                when (msg.method()) {
 
-        // 处理get请求
-        val decoder = QueryStringDecoder(msg.uri())
-        when (msg.method()) {
+                    HttpMethod.GET -> {
+                        LOG.info("HttpMethod=GET")
+                        val getParameter
+                                : Map<String, List<String>> = decoder.parameters()
+                        LOG.info("GET：$getParameter")
+                        responseMessage(ctx)
+                    }
 
-            HttpMethod.GET -> {
-                LOG.info("HttpMethod=GET")
-                val getParameter
-                        : Map<String, List<String>> = decoder.parameters()
-                LOG.info("GET：$getParameter")
-                responseMessage(ctx)
-            }
-
-            HttpMethod.POST -> {
-                LOG.info("HttpMethod=POST")
-                if (strContentType.contains("application/json")) {
-                    val mapReturnData: Map<String, Any> = HashMap()
+                    HttpMethod.POST -> {
+                        LOG.info("HttpMethod=POST")
+                        if (strContentType.contains("application/json")) {
+                            val mapReturnData: Map<String, Any> = HashMap()
+                        }
+                    }
                 }
             }
+
+            is HttpContent -> {
+                val content: HttpContent = msg
+                val buf: ByteBuf = content.content()
+                LOG.info(buf.toString(CharsetUtil.UTF_8))
+            }
         }
+
 
     }
 

@@ -20,8 +20,10 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
-class HomeViewModel(application: Application, private val interactors: Interactors) :
-    BaseViewModel(application) {
+class HomeViewModel(
+    application: Application,
+    private val interactors: Interactors
+) : BaseViewModel(application) {
 
     // Declare Job() and cancel jobs in onCleared().
     private var viewModelJob = Job()

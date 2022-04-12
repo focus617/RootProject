@@ -8,6 +8,8 @@ import com.focus617.core.platform.event.AppLaunchedEvent
 import com.focus617.core.platform.event.AppVariant
 import com.focus617.core.platform.event.EventDispatcher
 import com.focus617.mylib.coroutine.di.ApplicationScope
+import com.focus617.mylib.netty.api.IfNorthBoundChannel
+import com.focus617.mylib.netty.client.NettyClient
 import com.focus617.platform.uicontroller.BaseApplication
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +29,9 @@ class MyApplication : BaseApplication() {
     lateinit var interactors: Interactors
 
     @Inject
+    lateinit var uiChannel: IfNorthBoundChannel
+
+    @Inject
     lateinit var eventDispatcher: EventDispatcher<AppLaunchedEvent>
 
     /**
@@ -43,6 +48,11 @@ class MyApplication : BaseApplication() {
 
         // 发布应用的启动事件
         publishAppLaunchEvent()
+
+        // 创建Netty客户端，并连接服务器
+        NettyClient.ClientBuilder
+            .initChannel(uiChannel)
+            .startup()
     }
 
     private fun publishAppLaunchEvent() {

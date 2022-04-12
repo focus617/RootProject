@@ -17,6 +17,10 @@ dependencies {
     api(project(":myLib"))
     implementation(Kotlin.KOTLIN_STDLIB)
 
+    // Log
+    implementation(Kotlin.KOTLIN_LOGGING)
+    implementation(Libs.SLF4J)
+
     // Coroutines
     implementation(Kotlin.COROUTINES_CORE)
 
@@ -24,9 +28,7 @@ dependencies {
     implementation(Kotlin.HILT_CORE)
     kapt(Kotlin.HILT_COMPILER)
 
-    // Log
-    implementation(Kotlin.KOTLIN_LOGGING)
-    implementation(Libs.SLF4J)
+
 
     // Test
     testImplementation(Testing.JUNIT)

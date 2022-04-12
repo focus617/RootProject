@@ -7,6 +7,8 @@ import com.focus617.bookreader.framework.datasource.RoomBookmarkDataSource
 import com.focus617.core.data.BookRepository
 import com.focus617.core.data.BookmarkRepository
 import com.focus617.core.data.dataSourceInterface.*
+import com.focus617.mylib.netty.api.IfNorthBoundChannel
+import com.focus617.mylib.netty.northbound.NorthBoundChannel
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -33,4 +35,6 @@ interface UseCaseModule {
     @Binds
     fun bookDataSourceFlow(dataSource: RoomBookDataSourceFlow): IfBookDataSourceFlow
 
+    @Binds
+    fun networkDataSourceFlow(dataSource: NorthBoundChannel): IfNorthBoundChannel
 }

@@ -1,18 +1,28 @@
 package com.focus617.mylib.netty.client
 
 import com.focus617.mylib.logging.ILoggable
+import com.focus617.mylib.netty.api.IfNorthBoundChannel
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
 import io.netty.handler.timeout.IdleState
 import io.netty.handler.timeout.IdleStateEvent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /** SimpleChannelInboundHandler 会自动释放资源，而无需存储任何信息的引用。*/
 class ClientHandler : SimpleChannelInboundHandler<String>(), ILoggable {
     val LOG = logger()
 
+    private val uiChannel: IfNorthBoundChannel? = NettyClient.getNettyClient().uiChannel
+
     @Throws(Exception::class)
     override fun channelRead0(ctx: ChannelHandlerContext, msg: String) {
         LOG.info("$msg")
+
+        CoroutineScope(Dispatchers.IO).launch {
+            uiChannel?.inboundChannel?.send(msg)
+        }
     }
 
     @Throws(Exception::class)

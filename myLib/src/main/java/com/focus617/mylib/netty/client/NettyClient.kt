@@ -1,6 +1,7 @@
 package com.focus617.mylib.netty.client
 
 import com.focus617.mylib.logging.WithLogging
+import com.focus617.mylib.netty.api.IfNorthBoundChannel
 import io.netty.bootstrap.Bootstrap
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
@@ -10,8 +11,6 @@ import io.netty.channel.ChannelOption
 import io.netty.channel.EventLoopGroup
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioSocketChannel
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.net.InetSocketAddress
 
 
@@ -19,8 +18,7 @@ import java.net.InetSocketAddress
  * Netty客户端
  * @author focus617
  * */
-class NettyClient private constructor() : WithLogging() {
-
+class NettyClient : WithLogging() {
     private val TAG = "NettyClient"
 
     /**
@@ -32,12 +30,14 @@ class NettyClient private constructor() : WithLogging() {
     private var channel: Channel? = null
 
     private lateinit var serverAddress: InetSocketAddress
+    var uiChannel: IfNorthBoundChannel? = null
 
     // 重新连接的逻辑判断
     private var isConnected = false
 
-    companion object : WithLogging() {
+    companion object ClientBuilder : WithLogging() {
         private val TAG = "NettyClient"
+        private val client = NettyClient()
 
         @JvmStatic
         fun main(vararg args: String) {
@@ -50,20 +50,28 @@ class NettyClient private constructor() : WithLogging() {
             startup(host, port)
         }
 
+        fun initChannel(northBound: IfNorthBoundChannel): ClientBuilder{
+            client.uiChannel = northBound
+            return this
+        }
+
         fun startup(
-            host: String = "127.0.0.1",     // 连接地址
-            port: Int = 8888                // 监听端口
-        ) {
+            host: String = "192.168.5.8",   // 连接地址
+            port: Int = 8888,               // 监听端口
+        ): ClientBuilder {
             LOG.info("$TAG: 启动...")
-            val client = NettyClient()
+
             client.serverAddress = InetSocketAddress(host, port)
 
             // 需要在子线程中发起连接
-            Thread(ThreadGroup("Netty-Client")){
+            Thread(ThreadGroup("Netty-Client")) {
                 client.reconnect()
                 // TODO：重新连接的逻辑是否正确？
             }.start()
+            return this
         }
+
+        fun getNettyClient(): NettyClient = client
     }
 
 
@@ -97,10 +105,10 @@ class NettyClient private constructor() : WithLogging() {
             }
 
             // TODO: how to connect with App's input?
-            val input = BufferedReader(InputStreamReader(System.`in`))
-            while (isConnected && (channel != null)) {
-                channel!!.writeAndFlush(input.readLine() + "\r\n")
-            }
+//            val input = BufferedReader(InputStreamReader(System.`in`))
+//            while (isConnected && (channel != null)) {
+//                channel!!.writeAndFlush(input.readLine() + "\r\n")
+//            }
 
             // Wait until the connection is closed.
             channel?.closeFuture()?.sync()

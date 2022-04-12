@@ -1,7 +1,8 @@
-package com.focus617.bookreader.framework.datasource
+package com.focus617.mylib.netty.northbound
 
-import com.focus617.bookreader.ui.slideshow.IfNetworkFlowDataSource
 import com.focus617.mylib.coroutine.platform.MyCoroutineLib
+import com.focus617.mylib.logging.ILoggable
+import com.focus617.mylib.netty.api.IfNorthBoundChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
@@ -11,36 +12,45 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
-import timber.log.Timber
+import javax.inject.Inject
 
 
-class NetworkFlowDataSource : IfNetworkFlowDataSource {
+class NorthBoundChannel @Inject constructor() : IfNorthBoundChannel, ILoggable {
+    val LOG = logger()
 
-    override val channel = Channel<String>(
+    override val inboundChannel = Channel<String>(
         capacity = 10,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
         onUndeliveredElement = { data ->
-            Timber.i("$data dropped")
+            LOG.info("$data dropped")
+        }
+    )
+    override val outboundChannel = Channel<String>(
+        capacity = 10,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        onUndeliveredElement =
+        { data ->
+            LOG.info("$data dropped")
         }
     )
 
     //启动一个Channel生产者协程
-    override suspend fun produceChannelData() {
+    suspend fun produceChannelData() {
         withContext(Dispatchers.IO) {
             (1..20).forEach {   //模拟高速生产
                 val data = "DATA$it"
-                channel.send(data)
-                Timber.i("Producer emit: $data")
+                inboundChannel.send(data)
+                LOG.info("Producer emit: $data")
                 delay(1000)      //模拟生产数据耗时
             }
         }
-        Timber.i("Producer finally.")
+        LOG.info("Producer finally.")
     }
 
 
     //启动一个Flow生产者协程
     var socketflow: Flow<String> = flow {
-        Timber.i("Flow Producer run on ${MyCoroutineLib.myDispatcher()}")
+        LOG.info("Flow Producer run on ${MyCoroutineLib.myDispatcher()}")
 
         (1..10).forEach {
             val data = "DATA$it"
@@ -48,8 +58,8 @@ class NetworkFlowDataSource : IfNetworkFlowDataSource {
             delay(5000)     //模拟生产
         }
     }
-        .onEach { Timber.i("Producer emit: $it") }
+        .onEach { LOG.info("Producer emit: $it") }
         .onCompletion {
-            Timber.i("Producer finally.")
+            LOG.info("Producer finally.")
         }
 }
