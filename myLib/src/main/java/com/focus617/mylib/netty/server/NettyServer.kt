@@ -9,14 +9,26 @@ import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioServerSocketChannel
 import io.netty.handler.logging.LogLevel
 import io.netty.handler.logging.LoggingHandler
+import io.netty.handler.ssl.SslContext
+import io.netty.handler.ssl.SslContextBuilder
+import io.netty.handler.ssl.util.SelfSignedCertificate
 import java.net.InetSocketAddress
 
+/**
+ * Netty服务器端
+ * @author focus617
+ * */
+class NettyServer private constructor() : WithLogging() {
+    // SSL for HttpServer
+    private var enableSSL: Boolean = true
 
-class NettyServer private constructor(port: Int) : WithLogging() {
     // Port where chat server will listen for connections.
-    private val PORT: Int = port
+    private var port: Int = 8888
 
-    companion object {
+    companion object ServerBuilder : WithLogging() {
+        private val TAG = "NettyServer"
+        private val server = NettyServer()
+
         @Throws(Exception::class)
         @JvmStatic
         fun main(args: Array<String>) {
@@ -28,12 +40,36 @@ class NettyServer private constructor(port: Int) : WithLogging() {
                     return
                 }
             }
-            NettyServer(port).start()
+            startup(port)
         }
+
+        fun startup(port: Int): NettyServer {
+            LOG.info("${TAG}: NettyServer start...")
+            server.port = port
+
+            // 需要在子线程中发起连接
+            Thread(ThreadGroup("Netty-Server")) {
+                server.start()
+            }.start()
+
+            return server
+        }
+
+        fun getNettyServer(): NettyServer = server
+
     }
 
     @Throws(Exception::class)
-    fun start() {
+    private fun start() {
+        // Configure SSL
+        val sslCtx: SslContext? =
+            if (enableSSL) {
+                val ssc = SelfSignedCertificate()
+                SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
+            } else {
+                null
+            }
+
         // Configure the server.
         val bossGroup: EventLoopGroup = NioEventLoopGroup(1)
         val workerGroup: EventLoopGroup = NioEventLoopGroup()
@@ -42,15 +78,15 @@ class NettyServer private constructor(port: Int) : WithLogging() {
             val b = ServerBootstrap()
             b.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel::class.java) // Use NIO to accept new connections.
-                .localAddress(InetSocketAddress(PORT))
+                .localAddress(InetSocketAddress(port))
                 .option(ChannelOption.SO_BACKLOG, 100)
                 .childOption(ChannelOption.SO_KEEPALIVE, true)  //保持长连接状态
                 .handler(LoggingHandler(LogLevel.INFO))
-                .childHandler(ChannelInitServer())
+                .childHandler(ChannelInitServer(sslCtx))
 
             // Start the server.
             val f: ChannelFuture = b.bind().sync()
-            LOG.info("NettyServer started and listening on port:$PORT")
+            LOG.info("NettyServer started and listening on port:$port")
 
             // Wait until the server socket is closed.
             f.channel().closeFuture().sync()
