@@ -20,7 +20,7 @@ import java.net.InetSocketAddress
  * */
 class NettyServer private constructor() : WithLogging() {
     // SSL for HttpServer
-    private var enableSSL: Boolean = true
+    private var enableSSL: Boolean = false
 
     // Port where chat server will listen for connections.
     private var port: Int = 8888
