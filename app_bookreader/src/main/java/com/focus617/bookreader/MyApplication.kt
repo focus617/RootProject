@@ -4,9 +4,9 @@ import android.os.Build
 import androidx.work.*
 import com.focus617.bookreader.framework.interactors.Interactors
 import com.focus617.bookreader.worker.RefreshDataWorker
-import com.focus617.core.platform.event.AppLaunchedEvent
-import com.focus617.core.platform.event.AppVariant
 import com.focus617.core.platform.event.EventDispatcher
+import com.focus617.core.platform.event.applicationEvent.AppLaunchedEvent
+import com.focus617.core.platform.event.applicationEvent.AppVariant
 import com.focus617.mylib.coroutine.di.ApplicationScope
 import com.focus617.mylib.netty.api.IfNorthBoundChannel
 import com.focus617.mylib.netty.client.NettyClient
@@ -64,7 +64,7 @@ class MyApplication : BaseApplication() {
 
     private fun publishAppLaunchEvent() {
         applicationScope.launch {
-            eventDispatcher.dispatch(AppLaunchedEvent(AppVariant.MOBILE))
+            eventDispatcher.dispatch(AppLaunchedEvent(AppVariant.MOBILE, this@MyApplication))
         }
     }
 
