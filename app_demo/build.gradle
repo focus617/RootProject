@@ -1,0 +1,161 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+kapt {
+    correctErrorTypes true
+}
+
+android {
+    compileSdk = BuildConfig.COMPILE_SDK
+
+    defaultConfig {
+        applicationId "com.focus617.app_demo"
+        minSdk = BuildConfig.MIN_SDK
+        targetSdk = BuildConfig.TARGET_SDK
+        versionCode = BuildConfig.versionCodeMobile
+        versionName = BuildConfig.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        String sharedTestDir = 'src/sharedTest/java'
+        test {
+            java.srcDir sharedTestDir
+        }
+        androidTest {
+            java.srcDir sharedTestDir
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+    }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/INDEX.LIST', 'META-INF/io.netty.versions.properties']
+        }
+    }
+}
+
+dependencies {
+    api project(':myAndroidLibrary')
+    api project(':core')
+
+    // Basic
+    implementation(
+            Jetpack.ANDROIDX_CORE,
+            Jetpack.APPCOMPAT,
+            Jetpack.MATERIAL,
+            Jetpack.CONSTRAINTLAYOUT,
+            Jetpack.PREFERENCE,
+
+            // Lifecycle
+            Jetpack.LIFECYCLE_LIVEDATA_KTX,           // ViewModel and LiveData,
+            Jetpack.LIFECYCLE_VIEWMODEL_KTX,
+            Jetpack.LIFECYCLE_VIEWMODEL_COMPOSE,      // ViewModel utilities for Compose
+            Jetpack.LIFECYCLE_VIEWMODEL_SAVEDSTATE,   // Saved state module for ViewModel
+
+            // Navigation
+            Jetpack.NAVIGATION_FRAGMENT_KTX,
+            Jetpack.NAVIGATION_UI_KTX,
+
+            // Coroutines
+            Kotlin.COROUTINES_CORE,
+            Kotlin.COROUTINES_ANDROID
+    )
+
+    // Hilt
+    implementation(Kotlin.HILT_ANDROID)
+    kapt(Kotlin.HILT_ANDROID_COMPILER)
+
+    // Room
+    implementation(Jetpack.ROOM_RUNTIME)
+    kapt(Jetpack.ROOM_COMPILER)
+    // Kotlin Extensions and Coroutines support for Room
+    implementation(Jetpack.ROOM_KTX)
+    // optional - Test helpers
+    testImplementation(Jetpack.ROOM_TESTING)
+
+    // Timber log
+    implementation(
+            Libs.TIMBER,
+            Kotlin.KOTLIN_LOGGING,
+            Libs.SLF4J
+    )
+
+    // Network
+    implementation(
+            Libs.MOSHI,
+            Libs.MOSHI_KOTLIN,
+            // Retrofit with Moshi Converter
+            Libs.RETROFIT2_MOSHI_CONVERTER,
+            // Retrofit library that integrates coroutines.
+            Libs.RETROFIT2_KOTLIN_COROUTINES_ADAPTER,
+            // Netty
+            //Libs.NETTY  // TODO:需要裁剪，留下有用的jar
+    )
+
+    // Test
+    testImplementation(
+            Testing.JUNIT,
+            Testing.MOCKITO,
+            Testing.ROBOLECTRIC,
+
+            // AndroidX Test - JVM testing
+            Testing.ANDROIDX_TEST_CORE,
+
+            // AndroidJUnitRunner and JUnit Rules
+            Testing.ANDROIDX_TEST_RUNNER,
+            Testing.ANDROIDX_TEST_RULE,
+
+            // Coroutines
+            Kotlin.COROUTINES_TEST,
+
+            // Assertions
+            Testing.ANDROIDX_TEST_JUNIT,
+            Testing.ANDROIDX_TEST_TRUTH,
+            Testing.HAMCREST,
+            Testing.GOOGLE_TRUTH
+    )
+
+    //Hilt
+    testImplementation(Kotlin.HILT_ANDROID_TESTING)
+    kaptTest(Kotlin.HILT_COMPILER)
+
+    // Core library
+    androidTestImplementation(
+            Testing.ANDROIDX_TEST_CORE,
+            Testing.ANDROIDX_CORE_TEST,
+
+            // AndroidJUnitRunner and JUnit Rules
+            Testing.ANDROIDX_TEST_RULE,
+
+            // Assertions
+            Testing.ANDROIDX_TEST_JUNIT,
+            Testing.ANDROIDX_TEST_TRUTH,
+
+            // Espresso dependencies
+            Testing.ANDROIDX_TEST_ESPRESSO,
+
+            // Coroutines
+            Kotlin.COROUTINES_TEST
+    )
+}

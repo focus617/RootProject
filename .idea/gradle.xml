@@ -12,8 +12,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app_bookreader" />
+            <option value="$PROJECT_DIR$/app_demo" />
             <option value="$PROJECT_DIR$/app_tankwar" />
-            <option value="$PROJECT_DIR$/app_xgame" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/login" />
