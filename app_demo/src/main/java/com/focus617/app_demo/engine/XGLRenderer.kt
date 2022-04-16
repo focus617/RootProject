@@ -4,6 +4,7 @@ import android.opengl.GLES30
 import android.opengl.GLES31
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
+import android.os.SystemClock
 import com.focus617.app_demo.objects.Triangle
 import timber.log.Timber
 import java.nio.IntBuffer
@@ -26,14 +27,14 @@ class XGLRenderer : GLSurfaceView.Renderer {
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
-        // 设置渲染的OpenGL场景（视口）的位置和大小
         Timber.d("width = $width, height = $height")
+
+        // 设置渲染的OpenGL场景（视口）的位置和大小
         GLES31.glViewport(0, 0, width, height)
 
         // 计算透视投影矩阵 (Project Matrix)，而后将应用于onDrawFrame（）方法中的对象坐标
-        val aspect: Float = width.toFloat() / height.toFloat()
-        Matrix.frustumM(mProjectionMatrix, 0, -aspect, aspect, -1f, 1f, 3f, 7f)
-
+        val ratio: Float = width.toFloat() / height.toFloat()
+        Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -55,8 +56,8 @@ class XGLRenderer : GLSurfaceView.Renderer {
 
     // 处理旋转
     private fun setupRotation() {
-//        val time = SystemClock.uptimeMillis() % 4000L
-//        val angle = 0.090f * time.toInt()
+        val time = SystemClock.uptimeMillis() % 4000L
+        val angle = 0.090f * time.toInt()
 
         // 进行旋转变换
         Matrix.rotateM(mViewMatrix, 0, getAngle(), 0f, 0f, 1.0f)

@@ -2,22 +2,31 @@ package com.focus617.app_demo.engine
 
 import android.content.Context
 import android.opengl.GLSurfaceView
-import android.util.AttributeSet
+import android.view.KeyEvent
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.WindowProps
 import com.focus617.core.platform.event.base.Event
 
 class AndroidWindow private constructor(
-    context: Context?,
-    attrs: AttributeSet? = null
-) : GLSurfaceView(context, attrs), IfWindow {
+    context: Context,
+) : GLSurfaceView(context), IfWindow {
     override val LOG = logger()
 
     private val mData = WindowData()
 
-    private var mRenderer: XGLRenderer? = null
+    private var mRenderer: XGLRenderer = XGLRenderer()
 
-    override fun setRenderer(renderer: Renderer?) {
+    // Check if the system supports OpenGL ES 3.0.
+    private fun isES3Supported(): Boolean = false
+
+    fun initView() {
+        if (isES3Supported()) {
+            // Request an OpenGL ES 3.0 compatible context.
+            setEGLContextClientVersion(3)
+        } else {
+            // Request an OpenGL ES 2.0 compatible context.
+            setEGLContextClientVersion(2)
+        }
         /**
          * 一个给定的Android设备可能支持多个EGLConfig渲染配置。
          * 可用的配置可能在有多少个数据通道和分配给每个数据通道的比特数上不同。
@@ -28,13 +37,13 @@ class AndroidWindow private constructor(
         setEGLConfigChooser(8, 8, 8, 8, 16, 0)
 
         // 设置渲染器（Renderer）以在GLSurfaceView上绘制
-        super.setRenderer(renderer)
-        mRenderer = renderer as XGLRenderer
+        setRenderer(mRenderer)
 
         // 仅在绘图数据发生更改时才渲染视图: 在该模式下当渲染内容变化时不会主动刷新效果，需要手动调用requestRender()
         renderMode = RENDERMODE_WHEN_DIRTY
         // renderMode = RENDERMODE_CONTINUOUSLY
     }
+
 
     override fun isVSync(): Boolean = mData.VSync
     override fun setVSync(enable: Boolean) {
@@ -52,6 +61,16 @@ class AndroidWindow private constructor(
         LOG.info("callback func is set")
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+            //queueEvent { mRenderer.handleDpadCenter() }
+            LOG.info("onKeyDown")
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+
     companion object {
         // 用来统一保存Engine对Window的信息需求
         class WindowData() {
@@ -64,11 +83,10 @@ class AndroidWindow private constructor(
         private var instance: AndroidWindow? = null
 
         private fun create(
-            context: Context?,
-            attrs: AttributeSet?,
+            context: Context,
             props: WindowProps
         ): AndroidWindow {
-            val window = AndroidWindow(context, attrs)
+            val window = AndroidWindow(context)
             with(window) {
                 mData.title = props.title
                 mData.width = props.width
@@ -78,12 +96,11 @@ class AndroidWindow private constructor(
         }
 
         fun createWindow(
-            context: Context?,
-            attrs: AttributeSet? = null,
+            context: Context,
             props: WindowProps = WindowProps()
         ): AndroidWindow =
             synchronized(this) {
-                (instance ?: create(context, attrs, props)).also { instance = it }
+                (instance ?: create(context, props)).also { instance = it }
             }
     }
 
