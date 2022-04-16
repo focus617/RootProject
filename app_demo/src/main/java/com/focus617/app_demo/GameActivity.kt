@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.focus617.app_demo.engine.AndroidWindow
 import com.focus617.app_demo.engine.Sandbox
-import com.focus617.app_demo.engine.XGLRender
+import com.focus617.app_demo.engine.XGLRenderer
 
 class GameActivity : AppCompatActivity() {
 
@@ -35,7 +35,7 @@ class GameActivity : AppCompatActivity() {
 //        }
 
         // 设置渲染器（Renderer）以在GLSurfaceView上绘制
-        mGLSurfaceView.setRenderer(XGLRender())
+        mGLSurfaceView.setRenderer(XGLRenderer())
 
         setContentView(mGLSurfaceView)
 

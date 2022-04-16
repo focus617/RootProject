@@ -10,7 +10,7 @@ import java.nio.IntBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class XGLRender : GLSurfaceView.Renderer {
+class XGLRenderer : GLSurfaceView.Renderer {
 
     private val mMVPMatrix = FloatArray(16)
 

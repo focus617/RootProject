@@ -1,7 +1,7 @@
 package com.focus617.app_demo.objects
 
 import android.opengl.GLES31
-import com.focus617.app_demo.engine.XGLRender
+import com.focus617.app_demo.engine.XGLRenderer
 import timber.log.Timber
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
@@ -41,7 +41,7 @@ class Triangle : DrawingObject() {
     private val mVBOIds: IntBuffer    // 顶点缓存对象
 
     init {
-        mProgramObject = XGLRender.buildProgram(vertexShaderCode, fragmentShaderCode)
+        mProgramObject = XGLRenderer.buildProgram(vertexShaderCode, fragmentShaderCode)
 
         // 创建缓存，并绑定缓存类型
         // mVBOIds[O] - used to store vertex attribute data

@@ -15,7 +15,7 @@ class AndroidWindow private constructor(
 
     private val mData = WindowData()
 
-    private var mRenderer: XGLRender? = null
+    private var mRenderer: XGLRenderer? = null
 
     override fun setRenderer(renderer: Renderer?) {
         /**
@@ -29,7 +29,7 @@ class AndroidWindow private constructor(
 
         // 设置渲染器（Renderer）以在GLSurfaceView上绘制
         super.setRenderer(renderer)
-        mRenderer = renderer as XGLRender
+        mRenderer = renderer as XGLRenderer
 
         // 仅在绘图数据发生更改时才渲染视图: 在该模式下当渲染内容变化时不会主动刷新效果，需要手动调用requestRender()
         renderMode = RENDERMODE_WHEN_DIRTY
