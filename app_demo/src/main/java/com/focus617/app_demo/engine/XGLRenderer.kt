@@ -23,7 +23,7 @@ class XGLRenderer : GLSurfaceView.Renderer {
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         // 设置重绘背景框架颜色
-        GLES30.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        GLES30.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
@@ -60,7 +60,7 @@ class XGLRenderer : GLSurfaceView.Renderer {
         val angle = 0.090f * time.toInt()
 
         // 进行旋转变换
-        Matrix.rotateM(mViewMatrix, 0, getAngle(), 0f, 0f, 1.0f)
+        Matrix.rotateM(mViewMatrix, 0, angle, 0f, 0f, 1.0f)
     }
 
     /**
@@ -81,7 +81,7 @@ class XGLRenderer : GLSurfaceView.Renderer {
 
     companion object {
         // Create the program object
-        fun buildProgram(vertexShaderCode: String, fragmentShaderCode: String):Int{
+        fun buildProgram(vertexShaderCode: String, fragmentShaderCode: String): Int {
             // 顶点着色器
             val vertexShader = loadShader(GLES31.GL_VERTEX_SHADER, vertexShaderCode)
 

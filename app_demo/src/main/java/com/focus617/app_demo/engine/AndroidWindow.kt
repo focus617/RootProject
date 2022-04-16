@@ -16,13 +16,12 @@ class AndroidWindow private constructor(
 
     private var mRenderer: XGLRenderer = XGLRenderer()
 
-    // Check if the system supports OpenGL ES 3.0.
-    private fun isES3Supported(): Boolean = false
 
-    fun initView() {
-        if (isES3Supported()) {
+    fun initView(isES3Supported: Boolean) {
+        // Check if the system supports OpenGL ES 3.0.
+        if (isES3Supported) {
             // Request an OpenGL ES 3.0 compatible context.
-            setEGLContextClientVersion(3)
+            setEGLContextClientVersion(2)
         } else {
             // Request an OpenGL ES 2.0 compatible context.
             setEGLContextClientVersion(2)
@@ -34,7 +33,10 @@ class AndroidWindow private constructor(
          * 安装一个ConfigChooser，它将至少具有指定的depthSize和stencilSize的配置，并精确指定redSize、
          * greenSize、blueSize和alphaSize(Alpha used for plane blending)。
          */
-        setEGLConfigChooser(8, 8, 8, 8, 16, 0)
+        //setEGLConfigChooser(8, 8, 8, 8, 16, 0)
+        setEGLConfigChooser(true)
+        requestFocus()                   //获取焦点
+        isFocusableInTouchMode = true    //设置为可触控
 
         // 设置渲染器（Renderer）以在GLSurfaceView上绘制
         setRenderer(mRenderer)
