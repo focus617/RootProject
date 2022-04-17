@@ -7,14 +7,14 @@ import com.focus617.core.platform.event.base.EventType
 /**
  * This event happens when view on screen is being touched
  */
-class ViewOnTouchEvent(
+class TouchMovedEvent(
     val x: Float,
     val y: Float,
     override val source: Any
 ) : Event() {
 
-    override val name: String = ViewOnTouchEvent::class.java.simpleName
-    override val eventType = EventType.ViewOnTouch
+    override val name: String = TouchMovedEvent::class.java.simpleName
+    override val eventType = EventType.TouchMoved
     override val category = setOf(
         EventCategory.EventCategoryScreenTouch,
         EventCategory.EventCategoryInput

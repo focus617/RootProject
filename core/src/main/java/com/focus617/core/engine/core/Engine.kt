@@ -4,6 +4,7 @@ import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.base.LayerEventDispatcher
+import com.focus617.core.platform.event.screenTouchEvents.TouchMovedEvent
 import com.focus617.mylib.helper.DateHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,21 +16,26 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
     private var threadCore: Thread? = null
     private var isRunning: Boolean = true
     private val mWindow: IfWindow = window
+    private val mLayerStack: LayerStack = LayerStack()
+
     private val eventDispatcher = LayerEventDispatcher()
 
     init {
         registerEventHandlers()
-        window.setEventCallbackFn { event: Event -> onEvent(event) }
-
+        window.setEventCallbackFn {
+            onEvent(it)
+        }
         threadCore = Thread(this)
         threadCore!!.start()
     }
 
     private fun registerEventHandlers() {
-        eventDispatcher.register(EventType.All) { event ->
-            LOG.info("${event.name} from ${event.source} received")
-            LOG.info("It's type is ${event.eventType}")
-            LOG.info("It's was submit at ${DateHelper.timeStampAsStr(event.timestamp)}")
+        eventDispatcher.register(EventType.TouchMoved) { event ->
+            val e: TouchMovedEvent = event as TouchMovedEvent
+            LOG.info("${e.name} from ${e.source} received")
+            LOG.info("It's type is ${e.eventType}")
+            LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
+            LOG.info("Current position is (${e.x}, ${e.y})")
             event.handleFinished()
             false
         }
@@ -43,12 +49,17 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
         threadCore = null
     }
 
-    private fun onEvent(event: Event) {
+    // 如果事件可以被本地处理，则返回true，否则false
+    private fun onEvent(event: Event): Boolean {
+        var result: Boolean = false
         CoroutineScope(Dispatchers.Default).launch {
-            if (!eventDispatcher.dispatch(event)) {
+            result = eventDispatcher.dispatch(event)
+            if (!result) {
                 LOG.info("No event handler for $event")
             }
         }
+
+        return result
     }
 
     override fun run() {
@@ -61,6 +72,16 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
                 e.printStackTrace()
             }
         }
+    }
+
+    fun pushLayer(layer: Layer) {
+        mLayerStack.PushLayer(layer)
+        layer.onAttach()
+    }
+
+    fun pushOverLayer(layer: Layer) {
+        mLayerStack.PushLayer(layer)
+        layer.onAttach()
     }
 
     companion object {

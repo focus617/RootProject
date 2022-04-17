@@ -1,19 +1,21 @@
 package com.focus617.core.engine.core
 
 import com.focus617.core.platform.event.base.Event
+import com.focus617.core.platform.event.base.EventHandler
 import com.focus617.mylib.logging.ILoggable
 import org.slf4j.Logger
 
+
 interface IfWindow : ILoggable {
-    abstract val LOG: Logger
+    val LOG: Logger
 
-    abstract fun setVSync(enable: Boolean)
-    abstract fun isVSync(): Boolean
+    fun setVSync(enable: Boolean)
+    fun isVSync(): Boolean
 
-    abstract fun getWindowWidth(): Int
-    abstract fun getWindowHeight(): Int
+    fun getWindowWidth(): Int
+    fun getWindowHeight(): Int
 
-    abstract fun onUpdate()
+    fun onUpdate()
 
-    abstract fun setEventCallbackFn(callback: (Event) -> Unit)
+    fun setEventCallbackFn(callback: EventHandler<Event>)
 }

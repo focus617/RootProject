@@ -1,17 +1,16 @@
 package com.focus617.core.platform.event.base
 
 import com.focus617.core.platform.base.BaseEntity
-import com.focus617.core.platform.event.base.Event
 
 // 如果事件被消耗，则返回true，否则false
-typealias XEventHandler<Event> = ((Event) -> Boolean)
+typealias EventHandler<Event> = ((Event) -> Boolean)
 
 class LayerEventDispatcher : BaseEntity() {
-    private val handlers = HashMap<EventType, XEventHandler<Event>>()
+    private val handlers = HashMap<EventType, EventHandler<Event>>()
 
     fun sizeForTest() = handlers.size
 
-    fun register(evType: EventType, handler: XEventHandler<Event>) {
+    fun register(evType: EventType, handler: EventHandler<Event>) {
         handlers[evType] = handler
     }
 
@@ -23,7 +22,7 @@ class LayerEventDispatcher : BaseEntity() {
     fun dispatch(event: Event): Boolean {
         var result: Boolean = false
 
-        val fn: XEventHandler<Event>? = handlers[event.eventType]
+        val fn: EventHandler<Event>? = handlers[event.eventType]
 
         fn?.apply {
             result = true
