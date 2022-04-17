@@ -24,7 +24,6 @@ class LayerEventDispatcherTest : WithLogging() {
             LOG.info("${event.name} from ${event.source} received")
             LOG.info("It's type is ${event.eventType}")
             LOG.info("It's was submit at ${DateHelper.timeStampAsStr(event.timestamp)}")
-            event.handleFinished()
             true
         }
     }
@@ -36,7 +35,6 @@ class LayerEventDispatcherTest : WithLogging() {
         // When
         dispatcher.register(EventType.AppUpdate) { event ->
             LOG.info("${event.name} from ${event.source} received")
-            event.handleFinished()
             true
         }
         // Then
@@ -55,7 +53,22 @@ class LayerEventDispatcherTest : WithLogging() {
     }
 
     @Test
-    fun `dispatch for registered event`() {
+    fun `dispatch for unregistered event`() {
+        // When
+        val event = AppUpdateEvent(AppVariant.MOBILE_DEMO, this)
+        assertThat(event.hasBeenHandled).isFalse()
+
+        LOG.info("dispatch for unregistered event")
+        val result: Boolean = dispatcher.dispatch(event)
+
+        // Then
+        assertThat(result).isFalse()
+        assertThat(event.hasBeenHandled).isFalse()
+
+    }
+
+    @Test
+    fun `dispatch for registered event and event can be consumed`() {
         // When
         val event = AppLaunchedEvent(AppVariant.MOBILE_DEMO, this)
         assertThat(event.hasBeenHandled).isFalse()
@@ -70,17 +83,23 @@ class LayerEventDispatcherTest : WithLogging() {
     }
 
     @Test
-    fun `dispatch for unregistered event`() {
+    fun `dispatch for registered event and event can't be consumed`() {
         // When
+        dispatcher.register(EventType.AppUpdate) { event ->
+            LOG.info("${event.name} from ${event.source} received")
+            false
+        }
+
         val event = AppUpdateEvent(AppVariant.MOBILE_DEMO, this)
         assertThat(event.hasBeenHandled).isFalse()
 
-        LOG.info("dispatch for unregistered event")
+        LOG.info("dispatch for registered event")
         val result: Boolean = dispatcher.dispatch(event)
 
         // Then
-        assertThat(result).isFalse()
-        assertThat(event.hasBeenHandled).isFalse()
+        assertThat(result).isTrue()                 // 可以找到Handler
+        assertThat(event.hasBeenHandled).isFalse()  // 但事件没有被消耗
 
     }
+
 }

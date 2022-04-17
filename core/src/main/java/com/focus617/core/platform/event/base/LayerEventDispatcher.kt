@@ -3,6 +3,7 @@ package com.focus617.core.platform.event.base
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 
+// 如果事件被消耗，则返回true，否则false
 typealias XEventHandler<Event> = ((Event) -> Boolean)
 
 class LayerEventDispatcher : BaseEntity() {
@@ -18,6 +19,7 @@ class LayerEventDispatcher : BaseEntity() {
         handlers.remove(evType)
     }
 
+    // 如果事件可以被本地处理，则返回true，否则false
     fun dispatch(event: Event): Boolean {
         var result: Boolean = false
 
@@ -25,7 +27,7 @@ class LayerEventDispatcher : BaseEntity() {
 
         fn?.apply {
             result = true
-            fn(event)
+            event.hasBeenHandled = fn(event)
         }
 
         return result

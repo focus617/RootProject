@@ -64,7 +64,7 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
     }
 
     companion object {
-        const val SLEEP_INTERVAL = 1000L
+        const val SLEEP_INTERVAL = 2000L
 
     }
 }
