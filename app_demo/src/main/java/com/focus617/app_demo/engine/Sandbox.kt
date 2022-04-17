@@ -6,24 +6,25 @@ import com.focus617.core.platform.event.base.Event
 
 class Sandbox(window: AndroidWindow) : Engine(window) {
     init{
-        pushLayer(ExampleLayer)
+        pushLayer(ExampleLayer("Example"))
+        pushOverLayer(ExampleLayer("OverlayExample"))
     }
 
-    companion object ExampleLayer: Layer("Example"){
+    inner class ExampleLayer(name: String): Layer(name){
         override fun onAttach() {
-            LOG.info("ExampleLayer::onAttach()")
+            LOG.info("${this.mDebugName} onAttach()")
         }
 
         override fun onDetach() {
-            LOG.info("ExampleLayer::onDetach")
+            LOG.info("${this.mDebugName} onDetach")
         }
 
         override fun onUpdate() {
-            LOG.info("ExampleLayer::onUpdate")
+            LOG.info("${this.mDebugName} onUpdate")
         }
 
         override fun onEvent(event: Event): Boolean {
-            LOG.info("ExampleLayer::onEvent $event")
+            LOG.info("${this.mDebugName} onEvent $event")
             return true
         }
 

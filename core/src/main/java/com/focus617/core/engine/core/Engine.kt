@@ -17,11 +17,11 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
     private var isRunning: Boolean = true
     private val mWindow: IfWindow = window
     private val mLayerStack: LayerStack = LayerStack()
+    private val mOverlayStack: LayerStack = LayerStack()
 
     private val eventDispatcher = LayerEventDispatcher()
 
     init {
-        registerEventHandlers()
         window.setEventCallbackFn {
             onEvent(it)
         }
@@ -29,7 +29,7 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
         threadCore!!.start()
     }
 
-    private fun registerEventHandlers() {
+    private fun testRegisterEventHandlers() {
         eventDispatcher.register(EventType.TouchMoved) { event ->
             val e: TouchMovedEvent = event as TouchMovedEvent
             LOG.info("${e.name} from ${e.source} received")
@@ -56,6 +56,10 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
         CoroutineScope(Dispatchers.Default).launch {
             result = eventDispatcher.dispatch(event)
         }
+        for(index in mOverlayStack.mLayers.size-1 downTo 0){
+            mOverlayStack.mLayers[index].onEvent(event)
+            if(event.hasBeenHandled) break
+        }
 
         for(index in mLayerStack.mLayers.size-1 downTo 0){
             mLayerStack.mLayers[index].onEvent(event)
@@ -70,7 +74,9 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
             for(layer in mLayerStack.mLayers){
                 layer.onUpdate()
             }
-
+            for(layer in mOverlayStack.mLayers){
+                layer.onUpdate()
+            }
             mWindow.onUpdate()
             //通过线程休眠以控制刷新速度
             try {
@@ -87,7 +93,7 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
     }
 
     fun pushOverLayer(layer: Layer) {
-        mLayerStack.PushLayer(layer)
+        mOverlayStack.PushLayer(layer)
         layer.onAttach()
     }
 

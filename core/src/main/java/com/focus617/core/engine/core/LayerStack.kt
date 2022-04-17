@@ -18,7 +18,4 @@ class LayerStack {
         mLayers.remove(layer)
     }
 
-//    fun PushOverlay(overlay: Layer) {}
-//    fun PopOverlay(overlay: Layer) {}
-
 }
