@@ -4,9 +4,9 @@ import android.os.Build
 import androidx.work.*
 import com.focus617.bookreader.framework.interactors.Interactors
 import com.focus617.bookreader.worker.RefreshDataWorker
-import com.focus617.core.platform.event.EventDispatcher
-import com.focus617.core.platform.event.applicationEvent.AppLaunchedEvent
-import com.focus617.core.platform.event.applicationEvent.AppVariant
+import com.focus617.core.platform.event.applicationEvents.AppLaunchedEvent
+import com.focus617.core.platform.event.applicationEvents.AppVariant
+import com.focus617.login.test_dispatcher.EventDispatcher
 import com.focus617.mylib.coroutine.di.ApplicationScope
 import com.focus617.mylib.netty.api.IfNorthBoundChannel
 import com.focus617.mylib.netty.client.NettyClient

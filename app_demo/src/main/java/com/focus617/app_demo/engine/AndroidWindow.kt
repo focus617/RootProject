@@ -3,9 +3,11 @@ package com.focus617.app_demo.engine
 import android.content.Context
 import android.opengl.GLSurfaceView
 import android.view.KeyEvent
+import android.view.MotionEvent
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.WindowProps
 import com.focus617.core.platform.event.base.Event
+import com.focus617.core.platform.event.screenTouchEvents.ViewOnTouchEvent
 
 class AndroidWindow private constructor(
     context: Context,
@@ -43,7 +45,7 @@ class AndroidWindow private constructor(
 
         // 仅在绘图数据发生更改时才渲染视图: 在该模式下当渲染内容变化时不会主动刷新效果，需要手动调用requestRender()
         renderMode = RENDERMODE_WHEN_DIRTY
-        // renderMode = RENDERMODE_CONTINUOUSLY
+        //renderMode = RENDERMODE_CONTINUOUSLY
     }
 
 
@@ -61,6 +63,7 @@ class AndroidWindow private constructor(
 
     override fun setEventCallbackFn(callback: (Event) -> Unit) {
         LOG.info("callback func is set")
+        mData.callback = callback
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -72,6 +75,26 @@ class AndroidWindow private constructor(
         return super.onKeyDown(keyCode, event)
     }
 
+    private var previousX: Float = 0f
+    private var previousY: Float = 0f
+
+    override fun onTouchEvent(e: MotionEvent): Boolean {
+        // MotionEvent reports input details from the touch screen
+        // and other input controls. In this case, you are only
+        // interested in events where the touch position changed.
+        when (e.action) {
+            MotionEvent.ACTION_MOVE -> {
+                LOG.info("onTouchEvent: ${e.action}(${e.x},${e.y})")
+                val event = ViewOnTouchEvent(e.x, e.y, this)
+                mData.callback?.let { it(event) }
+            }
+            else -> {
+                LOG.info("onTouchEvent: ${e.action}")
+            }
+        }
+        return super.onTouchEvent(e)
+    }
+
 
     companion object {
         // 用来统一保存Engine对Window的信息需求
@@ -80,6 +103,7 @@ class AndroidWindow private constructor(
             var width: Int = 0
             var height: Int = 0
             var VSync: Boolean = true
+            var callback: ((Event) -> Unit)? = null
         }
 
         private var instance: AndroidWindow? = null
@@ -104,6 +128,7 @@ class AndroidWindow private constructor(
             synchronized(this) {
                 (instance ?: create(context, props)).also { instance = it }
             }
+
     }
 
 }

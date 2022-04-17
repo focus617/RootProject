@@ -117,7 +117,7 @@ dependencies {
     testImplementation(Jetpack.ROOM_TESTING)
 
 
-    // Timber log
+    // Log
     implementation(
             Libs.TIMBER,
             Kotlin.KOTLIN_LOGGING,

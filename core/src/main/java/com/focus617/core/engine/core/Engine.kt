@@ -1,6 +1,11 @@
 package com.focus617.core.engine.core
 
 import com.focus617.core.platform.base.BaseEntity
+import com.focus617.core.platform.event.base.Event
+import com.focus617.core.platform.event.base.EventType
+import com.focus617.core.platform.event.base.LayerEventDispatcher
+import com.focus617.mylib.helper.DateHelper
+import kotlinx.coroutines.runBlocking
 
 open class Engine(window: IfWindow) : BaseEntity(), Runnable {
 
@@ -8,10 +13,24 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
     private var threadCore: Thread? = null
     private var isRunning: Boolean = true
     private val mWindow: IfWindow = window
+    private val eventDispatcher = LayerEventDispatcher()
 
     init {
+        registerEventHandlers()
+        window.setEventCallbackFn { event: Event -> onEvent(event) }
+
         threadCore = Thread(this)
         threadCore!!.start()
+    }
+
+    private fun registerEventHandlers() {
+        eventDispatcher.register(EventType.All) { event ->
+            LOG.info("${event.name} from ${event.source} received")
+            LOG.info("It's type is ${event.eventType}")
+            LOG.info("It's was submit at ${DateHelper.timeStampAsStr(event.timestamp)}")
+            event.handleFinished()
+            true
+        }
     }
 
     /**
@@ -20,6 +39,14 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
     fun onDestroy() {
         threadCore?.interrupt()
         threadCore = null
+    }
+
+    private fun onEvent(event: Event) {
+        runBlocking {
+            if (!eventDispatcher.dispatch(event)) {
+                LOG.info("No event handler for $event")
+            }
+        }
     }
 
     override fun run() {
@@ -33,8 +60,9 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
             }
         }
     }
-    
+
     companion object {
         const val SLEEP_INTERVAL = 1000L
+
     }
 }

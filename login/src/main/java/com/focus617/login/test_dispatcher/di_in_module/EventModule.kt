@@ -1,4 +1,4 @@
-package com.focus617.core.platform.event.di_in__module
+package com.focus617.login.test_dispatcher.di_in_module
 
 import dagger.Module
 import dagger.hilt.InstallIn

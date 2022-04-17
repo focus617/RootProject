@@ -1,7 +1,8 @@
-package com.focus617.core.platform.event.applicationEvent
+package com.focus617.core.platform.event.applicationEvents
 
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventCategory
+import com.focus617.core.platform.event.base.EventType
 
 /**
  * This event happens in onCreate of Application when all initializations completed
@@ -12,7 +13,7 @@ class AppLaunchedEvent(
 ) : Event() {
 
     override val name: String = AppLaunchedEvent::class.java.simpleName
-    override val eventType = Companion.EventType.AppLaunched
+    override val eventType = EventType.AppLaunched
     override val category = setOf(EventCategory.EventCategoryApplication)
 
 }

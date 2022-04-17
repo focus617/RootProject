@@ -1,4 +1,4 @@
-package com.focus617.core.platform.event.applicationEvent
+package com.focus617.core.platform.event.applicationEvents
 
 // 应用类型
 enum class AppVariant {

@@ -1,12 +1,12 @@
-package com.focus617.core.platform.event.di_in__module
+package com.focus617.login.test_dispatcher.di_in_module
 
-import com.focus617.core.platform.event.applicationEvent.AppLaunchedEvent
-import com.focus617.core.platform.event.base.EventHandler
+import com.focus617.core.platform.event.applicationEvents.AppLaunchedEvent
+import com.focus617.login.test_dispatcher.EventHandler
 import com.focus617.mylib.helper.DateHelper
 import com.focus617.mylib.logging.WithLogging
 import javax.inject.Inject
 
-class AppLaunchedEventHandlers @Inject constructor() : WithLogging() {
+class AppLaunchedEventHandler @Inject constructor() : WithLogging() {
 
     val appLaunchedHandler = EventHandler<AppLaunchedEvent> {
         LOG.info("${it.name} from ${it.source} received")
