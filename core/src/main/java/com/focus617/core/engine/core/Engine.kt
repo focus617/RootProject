@@ -5,7 +5,9 @@ import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.base.LayerEventDispatcher
 import com.focus617.mylib.helper.DateHelper
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 open class Engine(window: IfWindow) : BaseEntity(), Runnable {
 
@@ -29,7 +31,7 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
             LOG.info("It's type is ${event.eventType}")
             LOG.info("It's was submit at ${DateHelper.timeStampAsStr(event.timestamp)}")
             event.handleFinished()
-            true
+            false
         }
     }
 
@@ -42,7 +44,7 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
     }
 
     private fun onEvent(event: Event) {
-        runBlocking {
+        CoroutineScope(Dispatchers.Default).launch {
             if (!eventDispatcher.dispatch(event)) {
                 LOG.info("No event handler for $event")
             }
