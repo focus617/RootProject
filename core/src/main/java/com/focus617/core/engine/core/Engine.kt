@@ -47,6 +47,7 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
     fun onDestroy() {
         threadCore?.interrupt()
         threadCore = null
+
     }
 
     // 如果事件可以被本地处理，则返回true，否则false
@@ -54,9 +55,11 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
         var result: Boolean = false
         CoroutineScope(Dispatchers.Default).launch {
             result = eventDispatcher.dispatch(event)
-            if (!result) {
-                LOG.info("No event handler for $event")
-            }
+        }
+
+        for(index in mLayerStack.mLayers.size-1 downTo 0){
+            mLayerStack.mLayers[index].onEvent(event)
+            if(event.hasBeenHandled) break
         }
 
         return result
@@ -64,6 +67,10 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
 
     override fun run() {
         while (isRunning) {
+            for(layer in mLayerStack.mLayers){
+                layer.onUpdate()
+            }
+
             mWindow.onUpdate()
             //通过线程休眠以控制刷新速度
             try {
