@@ -89,12 +89,10 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
 
     fun pushLayer(layer: Layer) {
         mLayerStack.PushLayer(layer)
-        layer.onAttach()
     }
 
     fun pushOverLayer(layer: Layer) {
         mOverlayStack.PushLayer(layer)
-        layer.onAttach()
     }
 
     companion object {

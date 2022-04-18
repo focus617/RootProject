@@ -12,10 +12,12 @@ class LayerStack {
 
     fun PushLayer(layer: Layer) {
         mLayers.add(layer)
+        layer.onAttach()
     }
 
     fun PopLayer(layer: Layer) {
         mLayers.remove(layer)
+        layer.onDetach()
     }
 
 }
