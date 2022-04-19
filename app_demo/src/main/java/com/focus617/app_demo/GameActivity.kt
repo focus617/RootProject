@@ -13,7 +13,6 @@ import timber.log.Timber
 class GameActivity : AppCompatActivity() {
 
 
-
     private lateinit var mGLSurfaceView: AndroidWindow
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +21,6 @@ class GameActivity : AppCompatActivity() {
         // 创建一个GLSurfaceView实例,并将其设置为此Activity的ContentView。
         mGLSurfaceView = AndroidWindow.createWindow(this)
         mGLSurfaceView.initView(isES3Supported())
-
         setContentView(mGLSurfaceView)
     }
 
@@ -44,6 +42,11 @@ class GameActivity : AppCompatActivity() {
         mGLSurfaceView.onPause()
     }
 
+    fun toast(string: String) {
+        Toast.makeText(this, string, Toast.LENGTH_LONG).show()
+    }
+
+
     private fun isEmulator(): Boolean {
         return (Build.FINGERPRINT.startsWith("generic")
                 || Build.FINGERPRINT.lowercase().contains("vbox")
@@ -63,12 +66,9 @@ class GameActivity : AppCompatActivity() {
         val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
         val configurationInfo = activityManager.deviceConfigurationInfo
 
-        val supportsEs3 = if(isEmulator()){
+        val supportsEs3 = if (isEmulator()) {
             Timber.i("Program is running on Emulator")
-            Toast.makeText(
-                this, "Program is running on Emulator.",
-                Toast.LENGTH_LONG
-            ).show()
+            toast("Program is running on Emulator.")
             false
         }
         // Even though the latest emulator supports OpenGL ES 3.0,
@@ -105,10 +105,7 @@ class GameActivity : AppCompatActivity() {
                  * This hides our app from those devices which don't support OpenGL
                  * ES 3.0.
                  */
-            Toast.makeText(
-                this, "This device can't support OpenGL ES 3.0.",
-                Toast.LENGTH_LONG
-            ).show()
+            toast("This device can't support OpenGL ES 3.0.")
         }
         return supportsEs3
     }

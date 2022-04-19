@@ -1,5 +1,8 @@
 package com.focus617.app_demo.engine
 
+import android.opengl.GLES20.GL_VERSION
+import android.opengl.GLES20.glGetString
+import com.focus617.app_demo.GameActivity
 import com.focus617.core.engine.renderer.IfGraphicsContext
 import com.focus617.core.platform.base.BaseEntity
 
@@ -15,6 +18,9 @@ class XGLContext(private val windowHandle: AndroidWindow) : BaseEntity(), IfGrap
             // Request an OpenGL ES 2.0 compatible context.
             setEGLContextClientVersion(2)
         }
+        val openglVersion = "OpenGL Version: ${glGetString(GL_VERSION)}"
+        LOG.info(openglVersion)
+        (this.context as GameActivity).toast(openglVersion)
 
         /**
          * 一个给定的Android设备可能支持多个EGLConfig渲染配置。
