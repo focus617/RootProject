@@ -1,6 +1,8 @@
 package com.focus617.core.engine.core
 
-class LayerStack {
+import com.focus617.core.platform.base.BaseEntity
+
+class LayerStack : BaseEntity() {
     val mLayers = mutableListOf<Layer>()
 
     operator fun iterator(): Iterator<Layer> {
