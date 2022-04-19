@@ -1,5 +1,6 @@
 package com.focus617.app_demo
 
+import com.focus617.app_demo.engine.Sandbox
 import com.focus617.platform.uicontroller.BaseApplication
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -7,6 +8,8 @@ import timber.log.Timber
 @HiltAndroidApp
 class MyApplication : BaseApplication() {
 
+    // EntryPoint for XGame
+    lateinit var gameEngine: Sandbox
 
     /**
      * onCreate is called before the first screen is shown to the user.
@@ -17,6 +20,13 @@ class MyApplication : BaseApplication() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
+
+        // 初始化引擎
+        gameEngine = Sandbox()
     }
 
+    override fun onTerminate() {
+        gameEngine.onDestroy()
+        super.onTerminate()
+    }
 }

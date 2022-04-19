@@ -10,23 +10,33 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-open class Engine(window: IfWindow) : BaseEntity(), Runnable {
+open class Engine : BaseEntity(), Runnable {
 
     // Game线程
     private var threadCore: Thread? = null
     private var isRunning: Boolean = true
-    private val mWindow: IfWindow = window
+    private var mWindow: IfWindow? = null
     private val mLayerStack: LayerStack = LayerStack()
     private val mOverlayStack: LayerStack = LayerStack()
 
     private val eventDispatcher = LayerEventDispatcher()
 
     init {
-        window.setEventCallbackFn {
-            onEvent(it)
-        }
         threadCore = Thread(this)
         threadCore!!.start()
+    }
+
+    fun onAttachWindow(window: IfWindow){
+        LOG.info("Window Attached")
+        mWindow = window
+        mWindow!!.setEventCallbackFn {
+            onEvent(it)
+        }
+    }
+
+    fun onDetachWindow(){
+        LOG.info("Window Detached")
+        mWindow = null
     }
 
     private fun testRegisterEventHandlers() {
@@ -71,13 +81,17 @@ open class Engine(window: IfWindow) : BaseEntity(), Runnable {
 
     override fun run() {
         while (isRunning) {
+            // Update data
             for(layer in mLayerStack.mLayers){
                 layer.onUpdate()
             }
             for(layer in mOverlayStack.mLayers){
                 layer.onUpdate()
             }
-            mWindow.onUpdate()
+
+            // Render UI
+            mWindow?.onUpdate()
+
             //通过线程休眠以控制刷新速度
             try {
                 Thread.sleep(SLEEP_INTERVAL)

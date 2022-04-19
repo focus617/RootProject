@@ -4,10 +4,10 @@ import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.platform.event.base.Event
 
-class Sandbox(window: AndroidWindow) : Engine(window) {
+class Sandbox : Engine() {
     init{
-        pushLayer(ExampleLayer("Example"))
-        pushOverLayer(ExampleLayer("OverlayExample"))
+        pushLayer(ExampleLayer("ExampleLayer"))
+        pushOverLayer(ExampleLayer("ExampleOverlay"))
     }
 
     inner class ExampleLayer(name: String): Layer(name){

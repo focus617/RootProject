@@ -8,13 +8,11 @@ import android.telephony.TelephonyManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.focus617.app_demo.engine.AndroidWindow
-import com.focus617.app_demo.engine.Sandbox
 import timber.log.Timber
 
 class GameActivity : AppCompatActivity() {
 
-    // EntryPoint for XGame
-    private lateinit var game: Sandbox
+
 
     private lateinit var mGLSurfaceView: AndroidWindow
 
@@ -26,27 +24,25 @@ class GameActivity : AppCompatActivity() {
         mGLSurfaceView.initView(isES3Supported())
 
         setContentView(mGLSurfaceView)
-
-        // 以这个GLSurfaceView实例作为Sandbox的Window，初始化引擎
-        game = Sandbox(mGLSurfaceView)
     }
 
     override fun onResume() {
         super.onResume()
         mGLSurfaceView.onResume()
+
+        // 以这个GLSurfaceView实例作为Sandbox的Window, start render
+        (application as MyApplication).gameEngine.onAttachWindow(mGLSurfaceView)
     }
 
 
     override fun onPause() {
         super.onPause()
+
+        // Stop render window UI
+        (application as MyApplication).gameEngine.onDetachWindow()
+
         mGLSurfaceView.onPause()
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        game.onDestroy()
-    }
-
 
     private fun isEmulator(): Boolean {
         return (Build.FINGERPRINT.startsWith("generic")
