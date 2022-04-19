@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.WindowProps
+import com.focus617.core.engine.renderer.IfGraphicsContext
 import com.focus617.core.platform.event.applicationEvents.AppUpdateEvent
 import com.focus617.core.platform.event.applicationEvents.AppVariant
 import com.focus617.core.platform.event.base.Event
@@ -12,35 +13,21 @@ import com.focus617.core.platform.event.base.EventHandler
 import com.focus617.core.platform.event.screenTouchEvents.TouchMovedEvent
 
 class AndroidWindow private constructor(
-    context: Context,
+    context: Context
 ) : GLSurfaceView(context), IfWindow {
     override val LOG = logger()
 
     private val mData = WindowData()
 
     private var mRenderer: XGLRenderer = XGLRenderer()
-
+    var isES3Supported: Boolean = false
+    override val renderContext: IfGraphicsContext = XGLContext(this)
 
     fun initView(isES3Supported: Boolean) {
-        // Check if the system supports OpenGL ES 3.0.
-        if (isES3Supported) {
-            // Request an OpenGL ES 3.0 compatible context.
-            setEGLContextClientVersion(2)
-        } else {
-            // Request an OpenGL ES 2.0 compatible context.
-            setEGLContextClientVersion(2)
-        }
-        /**
-         * 一个给定的Android设备可能支持多个EGLConfig渲染配置。
-         * 可用的配置可能在有多少个数据通道和分配给每个数据通道的比特数上不同。
-         * 默认情况下，GLSurfaceView选择的EGLConfig有RGB_888像素格式，至少有16位深度缓冲和没有模板。
-         * 安装一个ConfigChooser，它将至少具有指定的depthSize和stencilSize的配置，并精确指定redSize、
-         * greenSize、blueSize和alphaSize(Alpha used for plane blending)。
-         */
-        //setEGLConfigChooser(8, 8, 8, 8, 16, 0)
-        setEGLConfigChooser(true)
-        requestFocus()                   //获取焦点
-        isFocusableInTouchMode = true    //设置为可触控
+        this.isES3Supported = isES3Supported
+
+        // 初始化Renderer Context
+        renderContext.init()
 
         // 设置渲染器（Renderer）以在GLSurfaceView上绘制
         setRenderer(mRenderer)
@@ -60,7 +47,7 @@ class AndroidWindow private constructor(
     override fun getWindowHeight(): Int = height
 
     override fun onUpdate() {
-        LOG.info("onUpdate")
+        renderContext.swapBuffers()
     }
 
     override fun setEventCallbackFn(callback: EventHandler<Event>) {

@@ -20,7 +20,6 @@ class Sandbox(window: AndroidWindow) : Engine(window) {
         }
 
         override fun onUpdate() {
-            LOG.info("${this.mDebugName} onUpdate")
         }
 
         override fun onEvent(event: Event): Boolean {
