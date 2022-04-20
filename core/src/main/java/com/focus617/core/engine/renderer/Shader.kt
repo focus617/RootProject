@@ -1,6 +1,7 @@
 package com.focus617.core.engine.renderer
 
 import com.focus617.core.platform.base.BaseEntity
+import java.io.Closeable
 
 /**
  * 着色器类 ShaderProgram
@@ -10,12 +11,11 @@ import com.focus617.core.platform.base.BaseEntity
 abstract class Shader(
     vertexShader: String,
     fragmentShader: String
-) : BaseEntity() {
+) : BaseEntity(), Closeable {
 
     abstract var mRendererId: Int
 
     abstract fun bind()
     abstract fun unbind()
-
 
 }

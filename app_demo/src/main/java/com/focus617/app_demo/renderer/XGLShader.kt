@@ -35,11 +35,15 @@ open class XGLShader constructor(
     override var mRendererId: Int = buildProgram(vertexShader, fragmentShader)
 
     override fun bind() {
-        TODO("Not yet implemented")
+        glUseProgram(mRendererId)
     }
 
     override fun unbind() {
-        TODO("Not yet implemented")
+        glUseProgram(0)
+    }
+
+    override fun close() {
+        glDeleteProgram(mRendererId)
     }
 
     companion object {
