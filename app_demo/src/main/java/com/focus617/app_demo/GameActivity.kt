@@ -1,10 +1,8 @@
 package com.focus617.app_demo
 
 import android.app.ActivityManager
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.telephony.TelephonyManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.focus617.app_demo.engine.AndroidWindow
@@ -46,27 +44,12 @@ class GameActivity : AppCompatActivity() {
         Toast.makeText(this, string, Toast.LENGTH_LONG).show()
     }
 
-
-    private fun isEmulator(): Boolean {
-        return (Build.FINGERPRINT.startsWith("generic")
-                || Build.FINGERPRINT.lowercase().contains("vbox")
-                || Build.FINGERPRINT.lowercase().contains("test-keys")
-                || Build.MODEL.contains("google_sdk")
-                || Build.MODEL.contains("Emulator")
-                || Build.MODEL.contains("Android SDK built for x86")
-                || Build.MANUFACTURER.contains("Genymotion")
-                || Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
-                || "google_sdk" == Build.PRODUCT
-                || (this.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager)
-            .networkOperatorName.lowercase() == "android")
-    }
-
     // Check if the system supports OpenGL ES 3.0.
     private fun isES3Supported(): Boolean {
         val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
         val configurationInfo = activityManager.deviceConfigurationInfo
 
-        val supportsEs3 = if (isEmulator()) {
+        val supportsEs3 = if ((application as MyApplication).isEmulator()) {
             Timber.i("Program is running on Emulator")
             toast("Program is running on Emulator.")
             false
