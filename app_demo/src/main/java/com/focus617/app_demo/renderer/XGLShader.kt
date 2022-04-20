@@ -133,15 +133,16 @@ open class XGLShader constructor(
 
             // Verify the compile status.
             if (compileStatus[0] == GL_FALSE) {
-                // If it failed, delete the shader object.
-                glDeleteShader(shaderObjectId)
                 // Print the shader info log to the Android log output.
                 LOG.error("Shader compilation failure.")
-                LOG.debug(
+                LOG.error(
                     "shader compilation result: ${compileStatus[0]}" +
                             glGetShaderInfoLog(shaderObjectId)
                 )
-                LOG.debug("Source Code: \n$shaderCode".trimIndent())
+
+                // If it failed, delete the shader object.
+                glDeleteShader(shaderObjectId)
+
                 return GL_FALSE
             }
 
@@ -154,7 +155,7 @@ open class XGLShader constructor(
          * Links a vertex shader and a fragment shader together into an OpenGL
          * program. Returns the OpenGL program object ID, or 0 if linking failed.
          */
-        fun linkProgram(vertexShaderId: Int, fragmentShaderId: Int): Int {
+        private fun linkProgram(vertexShaderId: Int, fragmentShaderId: Int): Int {
             // Create a new program object.
             val programObjectId = glCreateProgram()
             if (programObjectId == GL_FALSE) {
@@ -177,14 +178,16 @@ open class XGLShader constructor(
 
             // Verify the link status.
             if (linkStatus[0] == GL_FALSE) {
-                // If it failed, delete the program object.
-                glDeleteProgram(programObjectId)
                 LOG.error("Shader link failure!")
                 // Print the program info log to the Android log output.
-                LOG.debug(
+                LOG.error(
                     ("shader linking result:${linkStatus[0]}\n"
                             + "Log:${glGetProgramInfoLog(programObjectId)}").trimIndent()
                 )
+
+                // If it failed, delete the program object.
+                glDeleteProgram(programObjectId)
+
                 return GL_FALSE
             }
             LOG.debug("Shader linking success.")
@@ -196,7 +199,7 @@ open class XGLShader constructor(
          * Validates an OpenGL program. Should only be called when developing the
          * application.
          */
-        fun validateProgram(programObjectId: Int): Boolean {
+        private fun validateProgram(programObjectId: Int): Boolean {
             glValidateProgram(programObjectId)
 
             val validateStatus = IntArray(1)
