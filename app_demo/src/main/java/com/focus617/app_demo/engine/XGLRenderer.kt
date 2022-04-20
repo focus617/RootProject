@@ -7,7 +7,6 @@ import android.opengl.Matrix
 import android.os.SystemClock
 import com.focus617.app_demo.objects.Triangle
 import timber.log.Timber
-import java.nio.IntBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -57,7 +56,7 @@ class XGLRenderer : GLSurfaceView.Renderer {
     // 处理旋转
     private fun setupRotation() {
         val time = SystemClock.uptimeMillis() % 4000L
-        val angle = 0.090f * time.toInt()
+        val angle = 0.045f * time.toInt()
 
         // 进行旋转变换
         Matrix.rotateM(mViewMatrix, 0, angle, 0f, 0f, 1.0f)
@@ -76,69 +75,6 @@ class XGLRenderer : GLSurfaceView.Renderer {
 
     fun setAngle(angle: Float) {
         mAngle = angle
-    }
-
-
-    companion object {
-        // Create the program object
-        fun buildProgram(vertexShaderCode: String, fragmentShaderCode: String): Int {
-            // 顶点着色器
-            val vertexShader = loadShader(GLES31.GL_VERTEX_SHADER, vertexShaderCode)
-
-            // 片元着色器
-            val fragmentShader = loadShader(GLES31.GL_FRAGMENT_SHADER, fragmentShaderCode)
-
-            // 把着色器链接为一个着色器程序对象
-            var mProgramObject = GLES31.glCreateProgram()
-            GLES31.glAttachShader(mProgramObject, vertexShader)
-            GLES31.glAttachShader(mProgramObject, fragmentShader)
-            GLES31.glLinkProgram(mProgramObject)
-
-            val success: IntBuffer = IntBuffer.allocate(1)
-            GLES31.glGetProgramiv(mProgramObject, GLES31.GL_LINK_STATUS, success)
-            if (success.get(0) == 0) {
-                Timber.e(GLES31.glGetProgramInfoLog(mProgramObject))
-                GLES31.glDeleteProgram(mProgramObject)
-                mProgramObject = 0
-            } else {
-                Timber.d("GLProgram $mProgramObject is ready.")
-            }
-
-            // 销毁不再需要的着色器对象
-            GLES31.glDeleteShader(vertexShader)
-            GLES31.glDeleteShader(fragmentShader)
-            // 释放着色器编译器使用的资源
-            GLES31.glReleaseShaderCompiler()
-
-            return mProgramObject
-        }
-
-        /**
-         * 创建着色器：Create a shader object, load the shader source, and compile the shader
-         * @Parameter [type]顶点着色器类型（GLES31.GL_VERTEX_SHADER）或片段着色器类型（GLES31.GL_FRAGMENT_SHADER）
-         */
-        private fun loadShader(type: Int, shaderCode: String): Int {
-
-            // 创建一个着色器对象
-            var shader = GLES31.glCreateShader(type)
-            if (shader == 0) return 0
-
-            // 将源代码加载到着色器并进行编译
-            GLES31.glShaderSource(shader, shaderCode)
-            GLES31.glCompileShader(shader)
-
-            // 检查编译状态
-            val success: IntBuffer = IntBuffer.allocate(1)
-            GLES31.glGetShaderiv(shader, GLES31.GL_COMPILE_STATUS, success)
-            if (success.get(0) == 0) {
-                Timber.e(GLES31.glGetShaderInfoLog(shader))
-                GLES31.glDeleteShader(shader)
-                shader = 0
-            }
-
-            return shader
-        }
-
     }
 
 }

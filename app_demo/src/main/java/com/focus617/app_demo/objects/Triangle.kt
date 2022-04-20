@@ -1,7 +1,7 @@
 package com.focus617.app_demo.objects
 
 import android.opengl.GLES31
-import com.focus617.app_demo.engine.XGLRenderer
+import com.focus617.app_demo.renderer.XGLShader
 import timber.log.Timber
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
@@ -37,11 +37,12 @@ class Triangle : DrawingObject() {
                 "}"
 
 
-    private val mProgramObject: Int   // 着色器程序对象
+    private val mProgramObject: Int =
+        XGLShader.buildProgram(vertexShaderCode, fragmentShaderCode)   // 着色器程序对象
+
     private val mVBOIds: IntBuffer    // 顶点缓存对象
 
     init {
-        mProgramObject = XGLRenderer.buildProgram(vertexShaderCode, fragmentShaderCode)
 
         // 创建缓存，并绑定缓存类型
         // mVBOIds[O] - used to store vertex attribute data
@@ -100,13 +101,12 @@ class Triangle : DrawingObject() {
 
         // 查询 uniform ourColor的位置值
         val fragmentColorLocation = GLES31.glGetUniformLocation(mProgramObject, U_COLOR)
-        if(blink){
+        if (blink) {
             // 使用sin函数让颜色随时间在0.0到1.0之间改变
             val timeValue = System.currentTimeMillis()
             val greenValue = sin((timeValue / 300 % 50).toDouble()) / 2 + 0.5
             GLES31.glUniform4f(fragmentColorLocation, greenValue.toFloat(), 0.5f, 0.2f, 1.0f)
-        }
-        else{
+        } else {
             GLES31.glUniform4f(fragmentColorLocation, 1.0f, 0.5f, 0.2f, 1.0f)
         }
     }
