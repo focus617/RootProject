@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import timber.log.Timber
@@ -61,5 +62,9 @@ open class BaseActivity : AppCompatActivity() {
         val intent = Intent("com.focus617.bookreader.tester.FORCE_OFFLINE")
         intent.setPackage(packageName)
         sendBroadcast(intent)
+    }
+
+    fun toast(string: String) {
+        Toast.makeText(this, string, Toast.LENGTH_LONG).show()
     }
 }

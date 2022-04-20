@@ -3,12 +3,11 @@ package com.focus617.app_demo
 import android.app.ActivityManager
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.focus617.app_demo.engine.AndroidWindow
+import com.focus617.platform.uicontroller.BaseActivity
 import timber.log.Timber
 
-class GameActivity : AppCompatActivity() {
+class GameActivity : BaseActivity() {
 
 
     private lateinit var mGLSurfaceView: AndroidWindow
@@ -38,10 +37,6 @@ class GameActivity : AppCompatActivity() {
         (application as MyApplication).gameEngine.onDetachWindow()
 
         mGLSurfaceView.onPause()
-    }
-
-    fun toast(string: String) {
-        Toast.makeText(this, string, Toast.LENGTH_LONG).show()
     }
 
     // Check if the system supports OpenGL ES 3.0.
