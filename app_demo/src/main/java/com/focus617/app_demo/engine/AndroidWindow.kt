@@ -19,8 +19,9 @@ class AndroidWindow private constructor(
 
     private val mData = WindowData()
 
-    private var mRenderer: XGLRenderer = XGLRenderer()
+    private var mRenderer: XGLRenderer = XGLRenderer(this)
     var isES3Supported: Boolean = false
+
     override val renderContext: IfGraphicsContext = XGLContext(this)
 
     fun initView(isES3Supported: Boolean) {

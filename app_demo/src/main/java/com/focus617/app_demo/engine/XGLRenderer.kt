@@ -6,11 +6,12 @@ import android.opengl.GLSurfaceView
 import android.opengl.Matrix
 import android.os.SystemClock
 import com.focus617.app_demo.objects.Triangle
+import com.focus617.core.engine.core.IfWindow
 import timber.log.Timber
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class XGLRenderer : GLSurfaceView.Renderer {
+class XGLRenderer(private val window: IfWindow) : GLSurfaceView.Renderer {
 
     private val mMVPMatrix = FloatArray(16)
 
@@ -21,8 +22,13 @@ class XGLRenderer : GLSurfaceView.Renderer {
     private lateinit var mTriangle: Triangle
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
+        // 打印OpenGL Version，Vendor，etc
+        ((window as AndroidWindow).renderContext as XGLContext).getOpenGLInfo()
+
         // 设置重绘背景框架颜色
         GLES30.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
+
+        mTriangle = Triangle()
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
@@ -49,7 +55,6 @@ class XGLRenderer : GLSurfaceView.Renderer {
         // 视图转换：计算模型视图投影矩阵MVPMatrix，该矩阵可以将模型空间的坐标转换为归一化设备空间坐标
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0)
 
-        mTriangle = Triangle()
         mTriangle.draw(mMVPMatrix)
     }
 
