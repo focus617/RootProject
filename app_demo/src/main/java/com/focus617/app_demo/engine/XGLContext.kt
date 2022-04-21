@@ -6,6 +6,7 @@ import com.focus617.core.platform.base.BaseEntity
 
 
 class XGLContext(private val windowHandle: AndroidWindow) : BaseEntity(), IfGraphicsContext {
+    var isES3Supported: Boolean = false
 
     override fun init() = with(windowHandle) {
         // Check if the system supports OpenGL ES 3.0.

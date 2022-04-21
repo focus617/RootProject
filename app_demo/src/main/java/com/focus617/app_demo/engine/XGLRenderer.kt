@@ -23,7 +23,7 @@ class XGLRenderer(private val window: IfWindow) : GLSurfaceView.Renderer {
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         // 打印OpenGL Version，Vendor，etc
-        ((window as AndroidWindow).renderContext as XGLContext).getOpenGLInfo()
+        ((window as AndroidWindow).mRenderContext as XGLContext).getOpenGLInfo()
 
         // 设置重绘背景框架颜色
         GLES30.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)

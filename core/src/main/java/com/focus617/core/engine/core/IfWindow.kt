@@ -10,7 +10,7 @@ import org.slf4j.Logger
 interface IfWindow : ILoggable {
     val LOG: Logger
 
-    val renderContext: IfGraphicsContext
+    val mRenderContext: IfGraphicsContext
 
     fun setVSync(enable: Boolean)
     fun isVSync(): Boolean

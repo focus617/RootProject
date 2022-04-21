@@ -20,15 +20,13 @@ class AndroidWindow private constructor(
     private val mData = WindowData()
 
     private var mRenderer: XGLRenderer = XGLRenderer(this)
-    var isES3Supported: Boolean = false
-
-    override val renderContext: IfGraphicsContext = XGLContext(this)
+    override val mRenderContext: IfGraphicsContext = XGLContext(this)
 
     fun initView(isES3Supported: Boolean) {
-        this.isES3Supported = isES3Supported
+        (mRenderContext as XGLContext).isES3Supported = isES3Supported
 
         // 初始化Renderer Context
-        renderContext.init()
+        mRenderContext.init()
 
         // 设置渲染器（Renderer）以在GLSurfaceView上绘制
         setRenderer(mRenderer)
@@ -37,7 +35,6 @@ class AndroidWindow private constructor(
         renderMode = RENDERMODE_WHEN_DIRTY
         //renderMode = RENDERMODE_CONTINUOUSLY
     }
-
 
     override fun isVSync(): Boolean = mData.VSync
     override fun setVSync(enable: Boolean) {
@@ -48,7 +45,7 @@ class AndroidWindow private constructor(
     override fun getWindowHeight(): Int = height
 
     override fun onUpdate() {
-        renderContext.swapBuffers()
+        mRenderContext.swapBuffers()
     }
 
     override fun setEventCallbackFn(callback: EventHandler<Event>) {
