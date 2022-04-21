@@ -5,7 +5,7 @@ import java.io.Closeable
 
 /**
  * 着色器类 ShaderProgram
- * 1. 储存了着色器程序的ID [mRendererId]
+ * 1. 储存了着色器程序的ID [mHandle]
  * 2. 它的构造器需要顶点着色器和片段着色器的源代码
  */
 abstract class Shader(
@@ -13,7 +13,7 @@ abstract class Shader(
     fragmentShader: String
 ) : BaseEntity(), Closeable {
 
-    abstract var mRendererId: Int
+    abstract var mHandle: Int
 
     abstract fun bind()
     abstract fun unbind()

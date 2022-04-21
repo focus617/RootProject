@@ -31,10 +31,10 @@ open class XGLShader constructor(
         FileHelper.loadFromAssetsFile(context, "$path/$fragmentShaderFileName")
     )
 
-    override var mRendererId: Int = buildProgram(vertexShader, fragmentShader)
+    override var mHandle: Int = buildProgram(vertexShader, fragmentShader)
 
     override fun bind() {
-        glUseProgram(mRendererId)
+        glUseProgram(mHandle)
     }
 
     override fun unbind() {
@@ -42,7 +42,7 @@ open class XGLShader constructor(
     }
 
     override fun close() {
-        glDeleteProgram(mRendererId)
+        glDeleteProgram(mHandle)
     }
 
     companion object {

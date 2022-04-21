@@ -30,7 +30,7 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
 
-        mTriangle = Triangle()
+        mTriangle = Triangle(window.context)
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
@@ -74,6 +74,11 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         // 进行旋转变换
         Matrix.rotateM(mViewMatrix, 0, mAngle, 0f, 0f, 1.0f)
     }
+
+        /**
+     * 在 SurfaceView中通过触摸事件获取到要视图矩阵旋转的角度
+     * 由于渲染器代码在与应用程序的主用户界面线程在不同的线程上运行，因此必须将此公共变量声明为volatile。
+     */
 
     /**
      * 在 SurfaceView中通过触摸事件获取到要视图矩阵旋转的角度

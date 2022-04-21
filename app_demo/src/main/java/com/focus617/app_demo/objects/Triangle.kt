@@ -1,5 +1,6 @@
 package com.focus617.app_demo.objects
 
+import android.content.Context
 import android.opengl.GLES31
 import com.focus617.app_demo.engine.XGLRenderer
 import com.focus617.app_demo.renderer.*
@@ -9,36 +10,20 @@ import com.focus617.core.engine.renderer.ShaderDataType
 import kotlin.math.sin
 
 
-class Triangle : DrawingObject() {
+class Triangle(context: Context) : DrawingObject() {
 
     private val U_COLOR = "u_Color"
+    private val PATH = "Triangle"
+    private val VERTEX_FILE = "vertex_shader.glsl"
+    private val FRAGMENT_FILE = "fragment_shader.glsl"
 
-    // 定义顶点着色器
-    // [mMVPMatrix] 模型视图投影矩阵
-    private val vertexShaderCode =
-        "#version 300 es \n" +
-                "layout (location = 0) in vec3 aPos;" +
-                "uniform mat4 uMVPMatrix;" +
-                "void main() {" +
-                "   gl_Position = uMVPMatrix * vec4(aPos.x, aPos.y, aPos.z, 1.0);" +
-                "}"
-
-    // 定义片段着色器
-    private val fragmentShaderCode =
-        "#version 300 es \n " +
-                "#ifdef GL_ES\n" +
-                "precision highp float;\n" +
-                "#endif\n" +
-
-                "out vec4 FragColor; " +
-                "uniform vec4 u_Color; " +
-
-                "void main() {" +
-                "  FragColor = u_Color;" +
-                "}"
-
-
-    private val shader = XGLShader(vertexShaderCode, fragmentShaderCode)
+    private val shader = XGLShader(
+        context,
+        PATH,
+        VERTEX_FILE,
+        FRAGMENT_FILE
+    )
+//    private val shader = XGLShader(vertexShaderCode, fragmentShaderCode)
     private val vertexArray = XGLBufferBuilder.createVertexArray() as XGLVertexArray
 
 
@@ -75,7 +60,7 @@ class Triangle : DrawingObject() {
         shader.bind()
 
         // 获取模型视图投影矩阵的句柄
-        val mMVPMatrixHandle = GLES31.glGetUniformLocation(shader.mRendererId, "uMVPMatrix")
+        val mMVPMatrixHandle = GLES31.glGetUniformLocation(shader.mHandle, "uMVPMatrix")
         // 将模型视图投影矩阵传递给顶点着色器
         GLES31.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0)
 
@@ -91,7 +76,7 @@ class Triangle : DrawingObject() {
     private fun setupColor(blink: Boolean = false) {
 
         // 查询 uniform ourColor的位置值
-        val fragmentColorLocation = GLES31.glGetUniformLocation(shader.mRendererId, U_COLOR)
+        val fragmentColorLocation = GLES31.glGetUniformLocation(shader.mHandle, U_COLOR)
         if (blink) {
             // 使用sin函数让颜色随时间在0.0到1.0之间改变
             val timeValue = System.currentTimeMillis()
