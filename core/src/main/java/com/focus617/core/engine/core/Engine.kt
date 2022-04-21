@@ -1,5 +1,6 @@
 package com.focus617.core.engine.core
 
+import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventType
@@ -15,7 +16,10 @@ open class Engine : BaseEntity(), Runnable {
     // Game线程
     private var threadCore: Thread? = null
     private var isRunning: Boolean = true
+
     private var mWindow: IfWindow? = null
+    private var mRenderer: XRenderer? = null
+
     private val mLayerStack: LayerStack = LayerStack()
     private val mOverlayStack: LayerStack = LayerStack()
 
@@ -26,16 +30,18 @@ open class Engine : BaseEntity(), Runnable {
         threadCore!!.start()
     }
 
-    fun onAttachWindow(window: IfWindow){
+    fun onAttachWindow(window: IfWindow) {
         LOG.info("Window Attached")
         mWindow = window
         mWindow!!.setEventCallbackFn {
             onEvent(it)
         }
+        mRenderer = mWindow!!.mRenderer
     }
 
-    fun onDetachWindow(){
+    fun onDetachWindow() {
         LOG.info("Window Detached")
+        mRenderer = null
         mWindow = null
     }
 
@@ -66,14 +72,14 @@ open class Engine : BaseEntity(), Runnable {
         CoroutineScope(Dispatchers.Default).launch {
             result = eventDispatcher.dispatch(event)
         }
-        for(index in mOverlayStack.mLayers.size-1 downTo 0){
+        for (index in mOverlayStack.mLayers.size - 1 downTo 0) {
             mOverlayStack.mLayers[index].onEvent(event)
-            if(event.hasBeenHandled) break
+            if (event.hasBeenHandled) break
         }
 
-        for(index in mLayerStack.mLayers.size-1 downTo 0){
+        for (index in mLayerStack.mLayers.size - 1 downTo 0) {
             mLayerStack.mLayers[index].onEvent(event)
-            if(event.hasBeenHandled) break
+            if (event.hasBeenHandled) break
         }
 
         return result
@@ -82,10 +88,10 @@ open class Engine : BaseEntity(), Runnable {
     override fun run() {
         while (isRunning) {
             // Update data
-            for(layer in mLayerStack.mLayers){
+            for (layer in mLayerStack.mLayers) {
                 layer.onUpdate()
             }
-            for(layer in mOverlayStack.mLayers){
+            for (layer in mOverlayStack.mLayers) {
                 layer.onUpdate()
             }
 

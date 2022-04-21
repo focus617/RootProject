@@ -4,11 +4,12 @@ import android.opengl.GLES20.*
 import android.opengl.GLES31
 import com.focus617.core.engine.renderer.IfBuffer
 import com.focus617.core.engine.renderer.ShaderDataType
+import com.focus617.core.engine.renderer.VertexArray
 import com.focus617.mylib.logging.WithLogging
 import java.io.Closeable
 import java.nio.IntBuffer
 
-class XGLVertexArray : WithLogging(), IfBuffer, Closeable {
+class XGLVertexArray : VertexArray(), IfBuffer, Closeable {
     // Vertex Array handle
     private var mHandle: Int = 0
     private var mVAOBuf: IntBuffer = IntBuffer.allocate(1)
@@ -44,7 +45,7 @@ class XGLVertexArray : WithLogging(), IfBuffer, Closeable {
     fun addVertexBuffer(vertexBuffer: XGLVertexBuffer): Boolean {
         val layout = vertexBuffer.getLayout()
         val elements = vertexBuffer.getLayout()?.getElements()
-        if ((layout == null) || (elements == null) || (elements.size == 0)) {
+        if ((layout == null) || (elements == null) || (elements.isEmpty())) {
             LOG.warn("Vertex Buffer has no layout!")
             return false
         }
@@ -74,6 +75,8 @@ class XGLVertexArray : WithLogging(), IfBuffer, Closeable {
         indexBuffer.bind()
         mIndexBuffer = indexBuffer
     }
+
+    fun getIndexBuffer() = mIndexBuffer
 
     companion object : WithLogging() {
 

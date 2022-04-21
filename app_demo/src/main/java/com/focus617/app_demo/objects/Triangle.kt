@@ -1,6 +1,7 @@
 package com.focus617.app_demo.objects
 
 import android.opengl.GLES31
+import com.focus617.app_demo.engine.XGLRenderer
 import com.focus617.app_demo.renderer.*
 import com.focus617.core.engine.renderer.BufferElement
 import com.focus617.core.engine.renderer.BufferLayout
@@ -69,9 +70,8 @@ class Triangle : DrawingObject() {
         vertexArray.setIndexBuffer(indexBuffer)
     }
 
-    fun draw(mvpMatrix: FloatArray) {
+    fun draw(renderer: XGLRenderer, mvpMatrix: FloatArray) {
 
-        // 将程序添加到OpenGL ES环境
         shader.bind()
 
         // 获取模型视图投影矩阵的句柄
@@ -82,14 +82,10 @@ class Triangle : DrawingObject() {
         // 设置片元着色器使用的颜色
         setupColor(blink = true)
 
-        vertexArray.bind()
-
-        // 图元装配，绘制三角形
-        GLES31.glDrawElements(GLES31.GL_TRIANGLES, indices.size, GLES31.GL_UNSIGNED_SHORT, 0)
-
-        vertexArray.unbind()
+        renderer.submit(vertexArray)
 
         shader.unbind()
+
     }
 
     private fun setupColor(blink: Boolean = false) {

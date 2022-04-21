@@ -1,17 +1,18 @@
 package com.focus617.app_demo.engine
 
-import android.opengl.GLES30
 import android.opengl.GLES31
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
-import android.os.SystemClock
 import com.focus617.app_demo.objects.Triangle
+import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.core.IfWindow
+import com.focus617.core.engine.renderer.RenderCommand
+import com.focus617.core.engine.renderer.XRenderer
 import timber.log.Timber
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class XGLRenderer(private val window: IfWindow) : GLSurfaceView.Renderer {
+class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Renderer {
 
     private val mMVPMatrix = FloatArray(16)
 
@@ -26,7 +27,8 @@ class XGLRenderer(private val window: IfWindow) : GLSurfaceView.Renderer {
         ((window as AndroidWindow).mRenderContext as XGLContext).getOpenGLInfo()
 
         // 设置重绘背景框架颜色
-        GLES30.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
+        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
+        RenderCommand.clear()
 
         mTriangle = Triangle()
     }
@@ -44,7 +46,9 @@ class XGLRenderer(private val window: IfWindow) : GLSurfaceView.Renderer {
 
     override fun onDrawFrame(unused: GL10) {
         // 首先清理屏幕，重绘背景颜色
-        GLES31.glClear(GLES31.GL_COLOR_BUFFER_BIT)
+        RenderCommand.clear()
+
+        beginScene()
 
         // 设置相机的位置，进而计算出视图矩阵 (View Matrix)
         Matrix.setLookAtM(mViewMatrix, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
@@ -55,16 +59,20 @@ class XGLRenderer(private val window: IfWindow) : GLSurfaceView.Renderer {
         // 视图转换：计算模型视图投影矩阵MVPMatrix，该矩阵可以将模型空间的坐标转换为归一化设备空间坐标
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0)
 
-        mTriangle.draw(mMVPMatrix)
+        mTriangle.draw(this, mMVPMatrix)
+
+        endScene()
     }
 
     // 处理旋转
     private fun setupRotation() {
-        val time = SystemClock.uptimeMillis() % 4000L
-        val angle = 0.045f * time.toInt()
+//        val time = SystemClock.uptimeMillis() % 4000L
+//        val angle = 0.045f * time.toInt()
+
+        mAngle += 0.45F
 
         // 进行旋转变换
-        Matrix.rotateM(mViewMatrix, 0, angle, 0f, 0f, 1.0f)
+        Matrix.rotateM(mViewMatrix, 0, mAngle, 0f, 0f, 1.0f)
     }
 
     /**

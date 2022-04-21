@@ -4,23 +4,31 @@ import android.content.Context
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import com.focus617.app_demo.GameActivity
+import com.focus617.app_demo.renderer.XGLRendererAPI
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.WindowProps
 import com.focus617.core.engine.renderer.IfGraphicsContext
+import com.focus617.core.engine.renderer.RenderCommand
+import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.platform.event.applicationEvents.AppUpdateEvent
 import com.focus617.core.platform.event.applicationEvents.AppVariant
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventHandler
 import com.focus617.core.platform.event.screenTouchEvents.TouchMovedEvent
 
+/**
+ * 现在先借用 GLSurfaceView 来实现 IfWindow 定义的功能。
+ * 依靠 mRenderContext.swapBuffers() in onUpdate() 实现两种方案的连接
+ */
 class AndroidWindow private constructor(
     context: Context
 ) : GLSurfaceView(context), IfWindow {
     override val LOG = logger()
 
     private val mData = WindowData()
+    private val renderer: XGLRenderer = XGLRenderer(this)
 
-    private var mRenderer: XGLRenderer = XGLRenderer(this)
+    override var mRenderer: XRenderer = renderer
     override val mRenderContext: IfGraphicsContext = XGLContext(this)
 
     override fun isVSync(): Boolean = mData.VSync
@@ -61,7 +69,7 @@ class AndroidWindow private constructor(
         return super.onTouchEvent(e)
     }
 
-    private fun testCallback(){
+    private fun testCallback() {
         val event = AppUpdateEvent(AppVariant.MOBILE_DEMO, this)
         mData.callback?.let { it(event) }
     }
@@ -76,12 +84,10 @@ class AndroidWindow private constructor(
             var callback: EventHandler<Event>? = null
         }
 
+        // 保证Window的单例
         private var instance: AndroidWindow? = null
 
-        private fun create(
-            context: Context,
-            props: WindowProps
-        ): AndroidWindow {
+        private fun create(context: Context, props: WindowProps): AndroidWindow {
             val window = AndroidWindow(context)
             with(window) {
                 mData.title = props.title
@@ -98,11 +104,13 @@ class AndroidWindow private constructor(
             instance!!.mRenderContext.init()
 
             // 设置渲染器（Renderer）以在GLSurfaceView上绘制
-            instance!!.setRenderer(instance!!.mRenderer)
+            instance!!.setRenderer(instance!!.renderer)
 
             // 仅在绘图数据发生更改时才渲染视图: 在该模式下当渲染内容变化时不会主动刷新效果，需要手动调用requestRender()
             instance!!.renderMode = RENDERMODE_WHEN_DIRTY
             //instance!!.renderMode = RENDERMODE_CONTINUOUSLY
+
+            RenderCommand.sRendererAPI = XGLRendererAPI()
         }
 
         fun createWindow(

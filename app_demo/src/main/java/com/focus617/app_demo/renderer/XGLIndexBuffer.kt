@@ -16,7 +16,7 @@ class XGLIndexBuffer(indices: ShortArray, count: Int) : BaseEntity(), IfBuffer, 
     private var mVBOBuf: IntBuffer = IntBuffer.allocate(1)
 
     // Index count in buffer
-    private var mCount = count
+    var mCount = count
 
     init {
         // Generate VBO ID
