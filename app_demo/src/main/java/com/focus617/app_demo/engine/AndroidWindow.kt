@@ -22,20 +22,6 @@ class AndroidWindow private constructor(
     private var mRenderer: XGLRenderer = XGLRenderer(this)
     override val mRenderContext: IfGraphicsContext = XGLContext(this)
 
-    fun initView(isES3Supported: Boolean) {
-        (mRenderContext as XGLContext).isES3Supported = isES3Supported
-
-        // 初始化Renderer Context
-        mRenderContext.init()
-
-        // 设置渲染器（Renderer）以在GLSurfaceView上绘制
-        setRenderer(mRenderer)
-
-        // 仅在绘图数据发生更改时才渲染视图: 在该模式下当渲染内容变化时不会主动刷新效果，需要手动调用requestRender()
-        renderMode = RENDERMODE_WHEN_DIRTY
-        //renderMode = RENDERMODE_CONTINUOUSLY
-    }
-
     override fun isVSync(): Boolean = mData.VSync
     override fun setVSync(enable: Boolean) {
         mData.VSync = enable
@@ -104,12 +90,30 @@ class AndroidWindow private constructor(
             return window
         }
 
+        private fun initView(isES3Supported: Boolean) {
+            (instance!!.mRenderContext as XGLContext).isES3Supported = isES3Supported
+
+            // 初始化Renderer Context
+            instance!!.mRenderContext.init()
+
+            // 设置渲染器（Renderer）以在GLSurfaceView上绘制
+            instance!!.setRenderer(instance!!.mRenderer)
+
+            // 仅在绘图数据发生更改时才渲染视图: 在该模式下当渲染内容变化时不会主动刷新效果，需要手动调用requestRender()
+            instance!!.renderMode = RENDERMODE_WHEN_DIRTY
+            //instance!!.renderMode = RENDERMODE_CONTINUOUSLY
+        }
+
         fun createWindow(
             context: Context,
+            isES3Supported: Boolean,
             props: WindowProps = WindowProps()
         ): AndroidWindow =
             synchronized(this) {
-                (instance ?: create(context, props)).also { instance = it }
+                (instance ?: create(context, props)).also {
+                    instance = it
+                    initView(isES3Supported)
+                }
             }
 
     }

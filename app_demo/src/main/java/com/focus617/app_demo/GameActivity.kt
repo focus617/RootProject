@@ -16,8 +16,7 @@ class GameActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         // 创建一个GLSurfaceView实例,并将其设置为此Activity的ContentView。
-        mGLSurfaceView = AndroidWindow.createWindow(this)
-        mGLSurfaceView.initView(isES3Supported())
+        mGLSurfaceView = AndroidWindow.createWindow(this, isES3Supported())
         setContentView(mGLSurfaceView)
     }
 
