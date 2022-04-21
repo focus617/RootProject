@@ -85,7 +85,6 @@ class Triangle : DrawingObject() {
         vertexArray.bind()
 
         // 图元装配，绘制三角形
-        //GLES31.glDrawArrays(GLES31.GL_TRIANGLES, 0, vertexCount)
         GLES31.glDrawElements(GLES31.GL_TRIANGLES, indices.size, GLES31.GL_UNSIGNED_SHORT, 0)
 
         vertexArray.unbind()
