@@ -3,6 +3,7 @@ package com.focus617.app_demo.engine
 import android.content.Context
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
+import com.focus617.app_demo.GameActivity
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.WindowProps
 import com.focus617.core.engine.renderer.IfGraphicsContext
@@ -106,13 +107,12 @@ class AndroidWindow private constructor(
 
         fun createWindow(
             context: Context,
-            isES3Supported: Boolean,
             props: WindowProps = WindowProps()
         ): AndroidWindow =
             synchronized(this) {
                 (instance ?: create(context, props)).also {
                     instance = it
-                    initView(isES3Supported)
+                    initView((context as GameActivity).isES3Supported())
                 }
             }
 

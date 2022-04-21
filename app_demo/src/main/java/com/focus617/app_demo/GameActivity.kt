@@ -16,7 +16,7 @@ class GameActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         // 创建一个GLSurfaceView实例,并将其设置为此Activity的ContentView。
-        mGLSurfaceView = AndroidWindow.createWindow(this, isES3Supported())
+        mGLSurfaceView = AndroidWindow.createWindow(this)
         setContentView(mGLSurfaceView)
     }
 
@@ -39,7 +39,7 @@ class GameActivity : BaseActivity() {
     }
 
     // Check if the system supports OpenGL ES 3.0.
-    private fun isES3Supported(): Boolean {
+    fun isES3Supported(): Boolean {
         val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
         val configurationInfo = activityManager.deviceConfigurationInfo
 
