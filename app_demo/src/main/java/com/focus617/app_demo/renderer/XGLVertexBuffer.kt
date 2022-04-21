@@ -1,30 +1,39 @@
 package com.focus617.app_demo.renderer
 
+import android.opengl.GLES20
 import android.opengl.GLES20.GL_ARRAY_BUFFER
 import android.opengl.GLES20.glBindBuffer
 import android.opengl.GLES31
+import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.IfBuffer
+import com.focus617.core.engine.renderer.IfBufferLayout
+import com.focus617.core.platform.base.BaseEntity
+import java.io.Closeable
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
 
-class XGLVertexBuffer(vertices: FloatArray, size: Int) : IfBuffer {
+class XGLVertexBuffer(vertices: FloatArray, size: Int)
+    : BaseEntity(), IfBuffer, IfBufferLayout, Closeable {
     // Vertex Buffer handle
-    private var mVertexBufID: Int = 0
+    private var mHandle: Int = 0
+    private var mVBOBuf: IntBuffer = IntBuffer.allocate(1)
+
+    // Vertex Buffer layout
+    private var mLayout: BufferLayout? = null
 
     init {
         // Generate VBO ID
-        val mVBOBuf = IntBuffer.allocate(1)   // 顶点缓存对象
         GLES31.glGenBuffers(1, mVBOBuf)
         if (mVBOBuf.get(0) == 0) {
             throw RuntimeException("Could not create a new vertex buffer object.")
         }
 
-        mVertexBufID = mVBOBuf.get(0)
+        mHandle = mVBOBuf.get(0)
 
         // Bind VBO buffer
-        GLES31.glBindBuffer(GLES31.GL_ARRAY_BUFFER, mVertexBufID)
+        GLES31.glBindBuffer(GLES31.GL_ARRAY_BUFFER, mHandle)
 
         // Transfer data from native memory to the GPU buffer.
         GLES31.glBufferData(
@@ -32,12 +41,22 @@ class XGLVertexBuffer(vertices: FloatArray, size: Int) : IfBuffer {
         )
     }
 
+    override fun close() {
+        GLES20.glDeleteBuffers(1, mVBOBuf)
+    }
+
     override fun bind() {
-        glBindBuffer(GL_ARRAY_BUFFER, mVertexBufID)
+        glBindBuffer(GL_ARRAY_BUFFER, mHandle)
     }
 
     override fun unbind() {
         glBindBuffer(GL_ARRAY_BUFFER, 0)
+    }
+
+    override fun getLayout(): BufferLayout? = mLayout
+
+    override fun setLayout(layout: BufferLayout) {
+        mLayout = layout
     }
 
     // 提示：由于不同平台字节顺序不同，数据单元不是字节的一定要经过ByteBuffer转换，
@@ -47,5 +66,6 @@ class XGLVertexBuffer(vertices: FloatArray, size: Int) : IfBuffer {
         .order(ByteOrder.nativeOrder())         //设置字节顺序为本地操作系统顺序
         .asFloatBuffer()                        //转换为浮点(Float)型缓冲
         .put(vertices)                          //在缓冲区内写入数据
+
 
 }

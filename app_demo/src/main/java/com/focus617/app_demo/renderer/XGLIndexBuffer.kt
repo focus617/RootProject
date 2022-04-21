@@ -3,30 +3,32 @@ package com.focus617.app_demo.renderer
 import android.opengl.GLES20
 import android.opengl.GLES31
 import com.focus617.core.engine.renderer.IfBuffer
+import com.focus617.core.platform.base.BaseEntity
+import java.io.Closeable
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.IntBuffer
 import java.nio.ShortBuffer
 
-class XGLIndexBuffer(indices: ShortArray, count: Int) : IfBuffer {
+class XGLIndexBuffer(indices: ShortArray, count: Int) : BaseEntity(), IfBuffer, Closeable {
     // Index/Element Buffer handle
-    private var mElementBufId: Int = 0
+    private var mHandle: Int = 0
+    private var mVBOBuf: IntBuffer = IntBuffer.allocate(1)
 
     // Index count in buffer
     private var mCount = count
 
     init {
         // Generate VBO ID
-        val mVBOBuf = IntBuffer.allocate(1)   // 顶点缓存对象
         GLES31.glGenBuffers(mVBOBuf.capacity(), mVBOBuf)
         if (mVBOBuf.get(0) == 0) {
             throw RuntimeException("Could not create a new vertex buffer object.")
         }
 
-        mElementBufId = mVBOBuf.get(0)
+        mHandle = mVBOBuf.get(0)
 
         // Bind VBO buffer
-        GLES31.glBindBuffer(GLES31.GL_ELEMENT_ARRAY_BUFFER, mElementBufId)
+        GLES31.glBindBuffer(GLES31.GL_ELEMENT_ARRAY_BUFFER, mHandle)
 
         // Transfer data from native memory to the GPU buffer.
         GLES31.glBufferData(
@@ -37,8 +39,12 @@ class XGLIndexBuffer(indices: ShortArray, count: Int) : IfBuffer {
         )
     }
 
+    override fun close() {
+        GLES20.glDeleteBuffers(1, mVBOBuf)
+    }
+
     override fun bind() {
-        GLES20.glBindBuffer(GLES31.GL_ELEMENT_ARRAY_BUFFER, mElementBufId)
+        GLES20.glBindBuffer(GLES31.GL_ELEMENT_ARRAY_BUFFER, mHandle)
     }
 
     override fun unbind() {

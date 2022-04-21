@@ -1,3 +1,5 @@
 package com.focus617.app_demo.objects
 
-abstract class DrawingObject {}
+import com.focus617.core.platform.base.BaseEntity
+
+abstract class DrawingObject: BaseEntity() {}

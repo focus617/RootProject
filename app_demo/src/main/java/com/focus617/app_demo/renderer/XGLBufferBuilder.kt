@@ -6,6 +6,15 @@ import com.focus617.core.engine.renderer.Renderer
 import com.focus617.core.engine.renderer.RendererAPI
 
 object XGLBufferBuilder : BufferBuilder() {
+    override fun createVertexArray(): IfBuffer? {
+        return when (Renderer.getAPI()) {
+            RendererAPI.None -> {
+                LOG.error("RendererAPI::None is currently not supported!")
+                null
+            }
+            RendererAPI.OpenGLES -> XGLVertexArray()
+        }
+    }
 
     override fun createVertexBuffer(vertices: FloatArray, size: Int): IfBuffer? {
         return when (Renderer.getAPI()) {
@@ -17,13 +26,13 @@ object XGLBufferBuilder : BufferBuilder() {
         }
     }
 
-    override fun createIndexBuffer(indices: ShortArray, size: Int): IfBuffer? {
+    override fun createIndexBuffer(indices: ShortArray, count: Int): IfBuffer? {
         return when (Renderer.getAPI()) {
             RendererAPI.None -> {
                 LOG.error("RendererAPI::None is currently not supported!")
                 null
             }
-            RendererAPI.OpenGLES -> XGLIndexBuffer(indices, size)
+            RendererAPI.OpenGLES -> XGLIndexBuffer(indices, count)
         }
     }
 }
