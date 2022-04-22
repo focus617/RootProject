@@ -1,6 +1,5 @@
 package com.focus617.core.engine.math
 
-import com.focus617.core.engine.objects.Geometry
 
 /**
  * Vector math utilities.
@@ -11,7 +10,7 @@ import com.focus617.core.engine.objects.Geometry
  */
 class Vector(var x: Float, var y: Float, var z: Float) {
 
-    constructor(from: Geometry.Point, to: Geometry.Point) :
+    constructor(from: Point, to: Point) :
             this((to.x - from.x), (to.y - from.y), (to.z - from.z))
 
     constructor(from: Vector, to: Vector) :
@@ -58,7 +57,7 @@ class Vector(var x: Float, var y: Float, var z: Float) {
         // http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
         // Note that this formula treats Ray as if it extended infinitely past
         // either point.
-        fun distanceBetween(point: Geometry.Point, ray: Geometry.Ray): Float {
+        fun distanceBetween(point: Point, ray: Ray): Float {
             val p1ToPoint: Vector = vectorBetween(ray.point, point)
             val p2ToPoint: Vector =
                 vectorBetween(ray.point.translate(ray.vector), point)
@@ -77,7 +76,7 @@ class Vector(var x: Float, var y: Float, var z: Float) {
             return areaOfTriangleTimesTwo / lengthOfBase
         }
 
-        fun vectorBetween(from: Geometry.Point, to: Geometry.Point): Vector {
+        fun vectorBetween(from: Point, to: Point): Vector {
             return Vector(
                 to.x - from.x,
                 to.y - from.y,
@@ -86,14 +85,14 @@ class Vector(var x: Float, var y: Float, var z: Float) {
         }
 
         // 相交测试
-        fun intersects(sphere: Geometry.Sphere, ray: Geometry.Ray): Boolean {
+        fun intersects(sphere: Sphere, ray: Ray): Boolean {
             return distanceBetween(sphere.center, ray) < sphere.radius
         }
 
         // http://en.wikipedia.org/wiki/Line-plane_intersection
         // This also treats rays as if they were infinite. It will return a
         // point full of NaNs if there is no intersection point.
-        fun intersectionPoint(ray: Geometry.Ray, plane: Geometry.Plane): Geometry.Point {
+        fun intersectionPoint(ray: Ray, plane: Plane): Point {
             val rayToPlaneVector: Vector = vectorBetween(ray.point, plane.point)
 
             val scaleFactor = (rayToPlaneVector.dotProduct(plane.normal)

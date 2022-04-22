@@ -374,19 +374,6 @@ object Matrix {
     }
 
     /**
-     * Computes the length of a vector.
-     *
-     * @param x x coordinate of a vector
-     * @param y y coordinate of a vector
-     * @param z z coordinate of a vector
-     * @return the length of a vector
-     */
-    // TODO: reuse Vector module()
-    fun length(x: Float, y: Float, z: Float): Float {
-        return sqrt((x * x + y * y + z * z).toDouble()).toFloat()
-    }
-
-    /**
      * Sets matrix m to the identity matrix.
      *
      * @param sm returns the result
@@ -752,5 +739,18 @@ object Matrix {
         rm[rmOffset + 14] = 0.0f
         rm[rmOffset + 15] = 1.0f
         Matrix.translateM(rm, rmOffset, -eyeX, -eyeY, -eyeZ)
+    }
+
+    /**
+     * Computes the length of a vector.
+     *
+     * @param x x coordinate of a vector
+     * @param y y coordinate of a vector
+     * @param z z coordinate of a vector
+     * @return the length of a vector
+     */
+    // TODO: reuse Vector module()
+    fun length(x: Float, y: Float, z: Float): Float {
+        return sqrt((x * x + y * y + z * z).toDouble()).toFloat()
     }
 }
