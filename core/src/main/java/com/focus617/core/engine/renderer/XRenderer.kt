@@ -9,7 +9,7 @@ open class XRenderer: BaseEntity() {
     fun getAPI(): RendererAPI.API = RendererAPI.getAPI()
 
     open fun beginScene(camera: OrthographicCamera) {
-        SceneData.mViewProjectionMatrix = camera.getViewProjectionMatrix()
+        SceneData.sViewProjectionMatrix = camera.getViewProjectionMatrix()
     }
 
     open fun endScene() {
@@ -23,7 +23,7 @@ open class XRenderer: BaseEntity() {
     }
 
     companion object SceneData{
-        var mViewProjectionMatrix: FloatArray = FloatArray(16)
+        var sViewProjectionMatrix: FloatArray = FloatArray(16)
     }
 }
 

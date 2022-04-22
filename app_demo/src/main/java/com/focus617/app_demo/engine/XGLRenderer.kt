@@ -47,7 +47,7 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
     override fun submit(shader: Shader, vertexArray: VertexArray) {
         (shader as XGLShader).bind()
         // 将模型视图投影矩阵传递给顶点着色器
-        shader.uploadUniformMat4("u_ViewProjection", SceneData.mViewProjectionMatrix)
+        shader.uploadUniformMat4("u_ViewProjection", SceneData.sViewProjectionMatrix)
 
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)
