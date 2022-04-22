@@ -1,6 +1,7 @@
 package com.focus617.core.engine.core
 
-import com.focus617.core.engine.renderer.XRenderer
+import com.focus617.core.engine.baseDataType.Color
+import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventType
@@ -18,7 +19,6 @@ open class Engine : BaseEntity(), Runnable {
     private var isRunning: Boolean = true
 
     private var mWindow: IfWindow? = null
-    private var mRenderer: XRenderer? = null
 
     private val mLayerStack: LayerStack = LayerStack()
     private val mOverlayStack: LayerStack = LayerStack()
@@ -36,12 +36,10 @@ open class Engine : BaseEntity(), Runnable {
         mWindow!!.setEventCallbackFn {
             onEvent(it)
         }
-        mRenderer = mWindow!!.mRenderer
     }
 
     fun onDetachWindow() {
         LOG.info("Window Detached")
-        mRenderer = null
         mWindow = null
     }
 
@@ -95,8 +93,21 @@ open class Engine : BaseEntity(), Runnable {
                 layer.onUpdate()
             }
 
-            // Render UI
-            mWindow?.onUpdate()
+            // 清理屏幕，重绘背景颜色
+            RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
+            RenderCommand.clear()
+
+            mWindow?.mRenderer?.apply {
+                mCamera.setPosition(0.5F, 0.5F, 0F)
+                mCamera.setRotation(270.0F)
+
+                beginScene(mCamera)
+
+                // Render UI
+                mWindow!!.onUpdate()
+
+                endScene()
+            }
 
             //通过线程休眠以控制刷新速度
             try {

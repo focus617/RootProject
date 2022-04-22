@@ -10,14 +10,12 @@ import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Shader
 import com.focus617.core.engine.renderer.VertexArray
 import com.focus617.core.engine.renderer.XRenderer
-import com.focus617.core.engine.scene.OrthographicCamera
 import timber.log.Timber
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Renderer {
 
-    private val mCamera = OrthographicCamera(-1.0f, 1.0f, -1.0f, 1.0f)
     private lateinit var mTriangle: Triangle
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
@@ -43,18 +41,7 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
     }
 
     override fun onDrawFrame(unused: GL10) {
-        // 首先清理屏幕，重绘背景颜色
-        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
-        RenderCommand.clear()
-
-        mCamera.setPosition(0.5F, 0.5F, 0F)
-        //mCamera.setRotation(270.0F)
-
-        beginScene(mCamera)
-
         with(mTriangle) { submit(shader, vertexArray) }
-
-        endScene()
     }
 
     override fun submit(shader: Shader, vertexArray: VertexArray) {
@@ -65,7 +52,7 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)
 
-        //vertexArray.unbind()
-        //shader.unbind()
+        vertexArray.unbind()
+        shader.unbind()
     }
 }
