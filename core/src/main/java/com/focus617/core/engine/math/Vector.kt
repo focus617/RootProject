@@ -16,6 +16,8 @@ class Vector(var x: Float, var y: Float, var z: Float) {
     constructor(from: Vector, to: Vector) :
             this((to.x - from.x), (to.y - from.y), (to.z - from.z))
 
+    constructor(from: Point, to: Vector) :
+            this((to.x + from.x), (to.y + from.y), (to.z + from.z))
 
     override fun toString(): String = "($x, $y, $z)"
 
