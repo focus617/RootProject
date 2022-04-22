@@ -25,6 +25,10 @@ class OrthographicCamera(left: Float, right: Float, bottom: Float, top: Float) {
         mPosition = position
         reCalculateViewMatrix()
     }
+    fun setPosition(x: Float, y: Float, z: Float) {
+        mPosition = Point(x,y,z)
+        reCalculateViewMatrix()
+    }
 
     fun getRotation() = mRotation
     fun setRotation(rotation: Float) {
