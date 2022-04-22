@@ -1,23 +1,29 @@
 package com.focus617.core.engine.renderer
 
+import com.focus617.core.engine.scene.OrthographicCamera
 import com.focus617.core.platform.base.BaseEntity
 
 open class XRenderer: BaseEntity() {
 
     fun getAPI(): RendererAPI.API = RendererAPI.getAPI()
 
-    fun beginScene() {
+    open fun beginScene(camera: OrthographicCamera) {
+        SceneData.mViewProjectionMatrix = camera.getViewProjectionMatrix()
+    }
+
+    open fun endScene() {
 
     }
 
-    fun endScene() {
+    open fun submit(shader: Shader, vertexArray: VertexArray) {
+        shader.bind()
 
-    }
-
-    fun submit(vertexArray: VertexArray) {
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)
     }
 
+    companion object SceneData{
+        var mViewProjectionMatrix: FloatArray = FloatArray(16)
+    }
 }
 

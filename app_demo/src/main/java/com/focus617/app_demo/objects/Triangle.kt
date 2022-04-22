@@ -2,7 +2,6 @@ package com.focus617.app_demo.objects
 
 import android.content.Context
 import android.opengl.GLES31
-import com.focus617.app_demo.engine.XGLRenderer
 import com.focus617.app_demo.renderer.*
 import com.focus617.core.engine.renderer.BufferElement
 import com.focus617.core.engine.renderer.BufferLayout
@@ -17,14 +16,14 @@ class Triangle(context: Context) : DrawingObject() {
     private val VERTEX_FILE = "vertex_shader.glsl"
     private val FRAGMENT_FILE = "fragment_shader.glsl"
 
-    private val shader = XGLShader(
+    val shader = XGLShader(
         context,
         PATH,
         VERTEX_FILE,
         FRAGMENT_FILE
     )
 //    private val shader = XGLShader(vertexShaderCode, fragmentShaderCode)
-    private val vertexArray = XGLBufferBuilder.createVertexArray() as XGLVertexArray
+    val vertexArray = XGLBufferBuilder.createVertexArray() as XGLVertexArray
 
 
     init {
@@ -53,22 +52,6 @@ class Triangle(context: Context) : DrawingObject() {
         ) as XGLIndexBuffer
 
         vertexArray.setIndexBuffer(indexBuffer)
-    }
-
-    fun draw(renderer: XGLRenderer, mvpMatrix: FloatArray) {
-
-        shader.bind()
-
-        // 将模型视图投影矩阵传递给顶点着色器
-        shader.uploadUniformMat4("uMVPMatrix", mvpMatrix)
-
-        // 设置片元着色器使用的颜色
-        setupColor(blink = true)
-
-        renderer.submit(vertexArray)
-
-        shader.unbind()
-
     }
 
     private fun setupColor(blink: Boolean = false) {

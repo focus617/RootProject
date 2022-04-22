@@ -5,11 +5,14 @@ precision highp float;
 precision mediump float;
 #endif
 
-//in  vec4 v_Color;           //接收从顶点着色器过来的参数
-out vec4 FragColor;      //输出到的片元颜色
-uniform vec4 u_Color;
+layout(location = 0) out vec4 color;
+
+//接收从顶点着色器过来的参数
+in vec3 v_Position;
+in vec4 v_Color;
 
 void main()
 {
-    FragColor = u_Color; //给此片元颜色值
+    color = vec4(v_Position * 0.5 + 0.5, 1.0);
+    color = v_Color;
 }

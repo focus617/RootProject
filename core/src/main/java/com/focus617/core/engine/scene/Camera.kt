@@ -1,8 +1,8 @@
 package com.focus617.core.engine.scene
 
-import com.focus617.core.engine.math.Matrix
 import com.focus617.core.engine.math.Point
 import com.focus617.core.engine.math.Vector
+import com.focus617.core.engine.math.XMatrix
 
 class Camera(var x: Float, var y: Float, var z: Float) {
     private val worldUp = Vector(0.0f, 1.0f, 0.0f)
@@ -32,7 +32,7 @@ class Camera(var x: Float, var y: Float, var z: Float) {
         val mViewMatrix = FloatArray(16)
 
         // 设置相机的位置，进而计算出视图矩阵 (View Matrix)
-        Matrix.setLookAtM(mViewMatrix, 0,
+        XMatrix.setLookAtM(mViewMatrix, 0,
             mPosition.x, mPosition.y, mPosition.z,
             targetDir.x, targetDir.y, targetDir.z,
             directionUp.x, directionUp.y, directionUp.z)
