@@ -75,9 +75,9 @@ class Triangle(context: Context) : DrawingObject() {
         // 假定每个顶点有2个顶点属性一位置、颜色
         val vertices = floatArrayOf(
             // x,   y,  z,  R,  G,  B,  Alpha
-            0.0f, 0.622008459f, 0.0f, 1f, 1f, 1f, 0f,   // 上
-            -0.5f, -0.311004243f, 0.0f, 0f, 0f, 1f, 0f,   // 左下
-            0.5f, -0.311004243f, 0.0f, 0f, 1f, 0f, 0f    // 右下
+            0.0f, 0.622008459f, 0.0f, 1f, 0f, 0f, 0f,     // 上
+            -0.8f, -0.311004243f, 0.0f, 0f, 0f, 1f, 0f,   // 左下
+            0.8f, -0.311004243f, 0.0f, 0f, 1f, 0f, 0f     // 右下
         )
 
         internal var indices = shortArrayOf(
