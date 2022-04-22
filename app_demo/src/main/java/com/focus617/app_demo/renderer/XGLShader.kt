@@ -45,6 +45,11 @@ open class XGLShader constructor(
         glDeleteProgram(mHandle)
     }
 
+    fun uploadUniformMat4(name: String, matrix: FloatArray) {
+        val location = glGetUniformLocation(mHandle, name)
+        glUniformMatrix4fv(location, 1, false, matrix, 0)
+    }
+
     companion object {
         val TAG = "XGLShader"
 

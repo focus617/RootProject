@@ -59,10 +59,8 @@ class Triangle(context: Context) : DrawingObject() {
 
         shader.bind()
 
-        // 获取模型视图投影矩阵的句柄
-        val mMVPMatrixHandle = GLES31.glGetUniformLocation(shader.mHandle, "uMVPMatrix")
         // 将模型视图投影矩阵传递给顶点着色器
-        GLES31.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0)
+        shader.uploadUniformMat4("uMVPMatrix", mvpMatrix)
 
         // 设置片元着色器使用的颜色
         setupColor(blink = true)

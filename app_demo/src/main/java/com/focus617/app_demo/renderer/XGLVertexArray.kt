@@ -9,6 +9,9 @@ import com.focus617.mylib.logging.WithLogging
 import java.io.Closeable
 import java.nio.IntBuffer
 
+/**
+ * VertexArray is used to link VertexBuffer with data layout
+ */
 class XGLVertexArray : VertexArray(), IfBuffer, Closeable {
     // Vertex Array handle
     private var mHandle: Int = 0
