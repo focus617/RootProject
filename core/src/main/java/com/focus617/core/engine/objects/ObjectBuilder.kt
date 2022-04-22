@@ -10,6 +10,7 @@ class ObjectBuilder: WithLogging() {
     private val indexList = ArrayList<Short>()
     private var index: Short = 0    // Vertex index
 
+
     fun appendCircle(radius: Float, numPoints: Int, y: Float = 0f, UNIT_SIZE: Float = 1f) {
 
         var startVertexIndex = index

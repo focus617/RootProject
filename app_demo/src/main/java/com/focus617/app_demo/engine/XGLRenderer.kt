@@ -6,6 +6,7 @@ import com.focus617.app_demo.objects.Triangle
 import com.focus617.app_demo.renderer.XGLShader
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.core.IfWindow
+import com.focus617.core.engine.math.Point
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Shader
 import com.focus617.core.engine.renderer.VertexArray
@@ -46,6 +47,9 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         // 首先清理屏幕，重绘背景颜色
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
+
+        mCamera.setPosition(Point(0.5F, 0.5F, 0F))
+        mCamera.setRotation(270.0F)
 
         beginScene(mCamera)
 

@@ -43,7 +43,7 @@ class OrthographicCamera(left: Float, right: Float, bottom: Float, top: Float) {
         }
         // 计算相机的旋转
         val rotateMatrix = FloatArray(16)
-        XMatrix.rotateM(rotateMatrix, 0, mRotation, 0f, 0f, 1.0f)
+        XMatrix.setRotateM(rotateMatrix, 0, mRotation, 0f, 0f, 1.0f)
 
         val transformMatrix = FloatArray(16)
         XMatrix.xMultiplyMM(transformMatrix, 0, translateMatrix, 0, rotateMatrix, 0)
