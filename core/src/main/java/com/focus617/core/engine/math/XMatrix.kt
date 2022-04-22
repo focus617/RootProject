@@ -1,11 +1,13 @@
 package com.focus617.core.engine.math
 
+import com.focus617.mylib.logging.WithLogging
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
 /**
  * Matrix math utilities, import from android.opengl package.
+ * 因为 Core 无法使用 Android Library.
  * These methods operate on OpenGL ES format
  * matrices and vectors stored in float arrays.
  *
@@ -25,16 +27,17 @@ import kotlin.math.sqrt
  * v[offset + 2]
  * v[offset + 3]</pre>
  */
-object Matrix {
-    /** Temporary memory for operations that need temporary matrix data.  */
+object XMatrix: WithLogging() {
+    /** Temporary memory for operations that need temporary Matrix data.  */
     private val sTemp = FloatArray(32)
+    private fun I(i: Int, j: Int) = i + (j * 4)
 
     /**
      * Multiplies two 4x4 matrices together and stores the result in a third 4x4
-     * matrix. In matrix notation: result = lhs x rhs. Due to the way
-     * matrix multiplication works, the result matrix will have the same
-     * effect as first multiplying by the rhs matrix, then multiplying by
-     * the lhs matrix. This is the opposite of what you might expect.
+     * Matrix. In Matrix notation: result = lhs x rhs. Due to the way
+     * Matrix multiplication works, the result Matrix will have the same
+     * effect as first multiplying by the rhs Matrix, then multiplying by
+     * the lhs Matrix. This is the opposite of what you might expect.
      *
      *
      * The same float array may be passed for result, lhs, and/or rhs. However,
@@ -44,23 +47,49 @@ object Matrix {
      * @param result The float array that holds the result.
      * @param resultOffset The offset into the result array where the result is
      * stored.
-     * @param lhs The float array that holds the left-hand-side matrix.
+     * @param lhs The float array that holds the left-hand-side Matrix.
      * @param lhsOffset The offset into the lhs array where the lhs is stored
-     * @param rhs The float array that holds the right-hand-side matrix.
+     * @param rhs The float array that holds the right-hand-side Matrix.
      * @param rhsOffset The offset into the rhs array where the rhs is stored.
      *
      * @throws IllegalArgumentException if result, lhs, or rhs are null, or if
      * resultOffset + 16 > result.length or lhsOffset + 16 > lhs.length or
      * rhsOffset + 16 > rhs.length.
      */
-    external fun multiplyMM(
+//    external fun multiplyMM(
+//        result: FloatArray, resultOffset: Int,
+//        lhs: FloatArray, lhsOffset: Int, rhs: FloatArray, rhsOffset: Int
+//    )
+
+    fun xMultiplyMM(
         result: FloatArray, resultOffset: Int,
         lhs: FloatArray, lhsOffset: Int, rhs: FloatArray, rhsOffset: Int
-    )
+    ) {
+        synchronized(result) {
+            for (i in 0..3) {
+                val rhs_i0: Float = rhs[rhsOffset + I(i, 0)]
+                var ri0: Float = lhs[lhsOffset + I(0, 0)] * rhs_i0
+                var ri1: Float = lhs[lhsOffset + I(0, 1)] * rhs_i0
+                var ri2: Float = lhs[lhsOffset + I(0, 2)] * rhs_i0
+                var ri3: Float = lhs[lhsOffset + I(0, 3)] * rhs_i0
+                for (j in 1..3) {
+                    val rhs_ij: Float = rhs[rhsOffset + I(i, j)]
+                    ri0 += lhs[lhsOffset + I(j, 0)] * rhs_ij
+                    ri1 += lhs[lhsOffset + I(j, 1)] * rhs_ij
+                    ri2 += lhs[lhsOffset + I(j, 2)] * rhs_ij
+                    ri3 += lhs[lhsOffset + I(j, 3)] * rhs_ij
+                }
+                result[I(i, 0)] = ri0
+                result[I(i, 1)] = ri1
+                result[I(i, 2)] = ri2
+                result[I(i, 3)] = ri3
+            }
+        }
+    }
 
     /**
-     * Multiplies a 4 element vector by a 4x4 matrix and stores the result in a
-     * 4-element column vector. In matrix notation: result = lhs x rhs
+     * Multiplies a 4 element vector by a 4x4 Matrix and stores the result in a
+     * 4-element column vector. In Matrix notation: result = lhs x rhs
      *
      *
      * The same float array may be passed for resultVec, lhsMat, and/or rhsVec.
@@ -70,7 +99,7 @@ object Matrix {
      * @param resultVec The float array that holds the result vector.
      * @param resultVecOffset The offset into the result array where the result
      * vector is stored.
-     * @param lhsMat The float array that holds the left-hand-side matrix.
+     * @param lhsMat The float array that holds the left-hand-side Matrix.
      * @param lhsMatOffset The offset into the lhs array where the lhs is stored
      * @param rhsVec The float array that holds the right-hand-side vector.
      * @param rhsVecOffset The offset into the rhs vector where the rhs vector
@@ -88,16 +117,16 @@ object Matrix {
     )
 
     /**
-     * Transposes a 4 x 4 matrix.
+     * Transposes a 4 x 4 Matrix.
      * 矩阵的转置操作
      *
      * mTrans and m must not overlap.
      *
-     * @param mTrans the array that holds the output transposed matrix(转置矩阵)
-     * @param mTransOffset an offset into mTrans where the transposed matrix is
+     * @param mTrans the array that holds the output transposed Matrix(转置矩阵)
+     * @param mTransOffset an offset into mTrans where the transposed Matrix is
      * stored.
      * @param m the input array
-     * @param mOffset an offset into m where the input matrix is stored.
+     * @param mOffset an offset into m where the input Matrix is stored.
      */
     fun transposeM(
         mTrans: FloatArray, mTransOffset: Int, m: FloatArray,
@@ -113,25 +142,25 @@ object Matrix {
     }
 
     /**
-     * Inverts a 4 x 4 matrix.
+     * Inverts a 4 x 4 Matrix.
      * 矩阵的逆操作
      *
      * mInv and m must not overlap.
      *
-     * @param mInv the array that holds the output inverted matrix(逆矩阵)
-     * @param mInvOffset an offset into mInv where the inverted matrix is
+     * @param mInv the array that holds the output inverted Matrix(逆矩阵)
+     * @param mInvOffset an offset into mInv where the inverted Matrix is
      * stored.
      * @param m the input array
-     * @param mOffset an offset into m where the input matrix is stored.
-     * @return true if the matrix could be inverted, false if it could not.
+     * @param mOffset an offset into m where the input Matrix is stored.
+     * @return true if the Matrix could be inverted, false if it could not.
      */
     fun invertM(
         mInv: FloatArray, mInvOffset: Int, m: FloatArray,
         mOffset: Int
     ): Boolean {
-        // Invert a 4 x 4 matrix using Cramer's Rule
+        // Invert a 4 x 4 Matrix using Cramer's Rule
 
-        // transpose matrix
+        // transpose Matrix
         val src0 = m[mOffset + 0]
         val src4 = m[mOffset + 1]
         val src8 = m[mOffset + 2]
@@ -219,7 +248,7 @@ object Matrix {
             return false
         }
 
-        // calculate matrix inverse
+        // calculate Matrix inverse
         val invdet = 1.0f / det
         mInv[mInvOffset] = dst0 * invdet
         mInv[1 + mInvOffset] = dst1 * invdet
@@ -241,7 +270,7 @@ object Matrix {
     }
 
     /**
-     * Computes an orthographic projection matrix(正交投影矩阵).
+     * Computes an orthographic projection Matrix(正交投影矩阵).
      *
      * @param m returns the result
      * @param mOffset
@@ -288,11 +317,11 @@ object Matrix {
     }
 
     /**
-     * Defines a projection matrix in terms of six clip planes.
+     * Defines a projection Matrix in terms of six clip planes.
      *
-     * @param m the float array that holds the output perspective matrix
+     * @param m the float array that holds the output perspective Matrix
      * @param offset the offset into float array m where the perspective
-     * matrix data is written
+     * Matrix data is written
      * @param left
      * @param right
      * @param bottom
@@ -338,12 +367,12 @@ object Matrix {
     }
 
     /**
-     * Defines a projection matrix in terms of a field of view angle, an
+     * Defines a projection Matrix in terms of a field of view angle, an
      * aspect ratio, and z clip planes.
      *
-     * @param m the float array that holds the perspective matrix
+     * @param m the float array that holds the perspective Matrix
      * @param offset the offset into float array m where the perspective
-     * matrix data is written
+     * Matrix data is written
      * @param fovy field of view in y direction, in degrees
      * @param aspect width to height aspect ratio of the viewport
      * @param zNear
@@ -374,10 +403,10 @@ object Matrix {
     }
 
     /**
-     * Sets matrix m to the identity matrix.
+     * Sets Matrix m to the identity Matrix.
      *
      * @param sm returns the result
-     * @param smOffset index into sm where the result matrix starts
+     * @param smOffset index into sm where the result Matrix starts
      */
     fun setIdentityM(sm: FloatArray, smOffset: Int) {
         for (i in 0..15) {
@@ -391,15 +420,15 @@ object Matrix {
     }
 
     /**
-     * Scales matrix m by x, y, and z, putting the result in sm.
+     * Scales Matrix m by x, y, and z, putting the result in sm.
      *
      *
      * m and sm must not overlap.
      *
      * @param sm returns the result
-     * @param smOffset index into sm where the result matrix starts
-     * @param m source matrix
-     * @param mOffset index into m where the source matrix starts
+     * @param smOffset index into sm where the result Matrix starts
+     * @param m source Matrix
+     * @param mOffset index into m where the source Matrix starts
      * @param x scale factor x
      * @param y scale factor y
      * @param z scale factor z
@@ -420,10 +449,10 @@ object Matrix {
     }
 
     /**
-     * Scales matrix m in place by sx, sy, and sz.
+     * Scales Matrix m in place by sx, sy, and sz.
      *
-     * @param m matrix to scale
-     * @param mOffset index into m where the matrix starts
+     * @param m Matrix to scale
+     * @param mOffset index into m where the Matrix starts
      * @param x scale factor x
      * @param y scale factor y
      * @param z scale factor z
@@ -441,15 +470,15 @@ object Matrix {
     }
 
     /**
-     * Translates matrix m by x, y, and z, putting the result in tm.
+     * Translates Matrix m by x, y, and z, putting the result in tm.
      *
      *
      * m and tm must not overlap.
      *
      * @param tm returns the result
-     * @param tmOffset index into sm where the result matrix starts
-     * @param m source matrix
-     * @param mOffset index into m where the source matrix starts
+     * @param tmOffset index into sm where the result Matrix starts
+     * @param m source Matrix
+     * @param mOffset index into m where the source Matrix starts
      * @param x translation factor x
      * @param y translation factor y
      * @param z translation factor z
@@ -471,10 +500,10 @@ object Matrix {
     }
 
     /**
-     * Translates matrix m by x, y, and z in place.
+     * Translates Matrix m by x, y, and z in place.
      *
-     * @param m matrix
-     * @param mOffset index into m where the matrix starts
+     * @param m Matrix
+     * @param mOffset index into m where the Matrix starts
      * @param x translation factor x
      * @param y translation factor y
      * @param z translation factor z
@@ -490,15 +519,15 @@ object Matrix {
     }
 
     /**
-     * Rotates matrix m by angle a (in degrees) around the axis (x, y, z).
+     * Rotates Matrix m by angle a (in degrees) around the axis (x, y, z).
      *
      *
      * m and rm must not overlap.
      *
      * @param rm returns the result
-     * @param rmOffset index into rm where the result matrix starts
-     * @param m source matrix
-     * @param mOffset index into m where the source matrix starts
+     * @param rmOffset index into rm where the result Matrix starts
+     * @param m source Matrix
+     * @param mOffset index into m where the source Matrix starts
      * @param a angle to rotate in degrees
      * @param x X axis component
      * @param y Y axis component
@@ -509,18 +538,18 @@ object Matrix {
         m: FloatArray, mOffset: Int,
         a: Float, x: Float, y: Float, z: Float
     ) {
-        synchronized(Matrix.sTemp) {
-            Matrix.setRotateM(Matrix.sTemp, 0, a, x, y, z)
-            Matrix.multiplyMM(rm, rmOffset, m, mOffset, Matrix.sTemp, 0)
+        synchronized(XMatrix.sTemp) {
+            XMatrix.setRotateM(XMatrix.sTemp, 0, a, x, y, z)
+            XMatrix.xMultiplyMM(rm, rmOffset, m, mOffset, XMatrix.sTemp, 0)
         }
     }
 
     /**
-     * Rotates matrix m in place by angle a (in degrees)
+     * Rotates Matrix m in place by angle a (in degrees)
      * around the axis (x, y, z).
      *
-     * @param m source matrix
-     * @param mOffset index into m where the matrix starts
+     * @param m source Matrix
+     * @param mOffset index into m where the Matrix starts
      * @param a angle to rotate in degrees
      * @param x X axis component
      * @param y Y axis component
@@ -530,15 +559,15 @@ object Matrix {
         m: FloatArray, mOffset: Int,
         a: Float, x: Float, y: Float, z: Float
     ) {
-        synchronized(Matrix.sTemp) {
-            Matrix.setRotateM(Matrix.sTemp, 0, a, x, y, z)
-            Matrix.multiplyMM(Matrix.sTemp, 16, m, mOffset, Matrix.sTemp, 0)
-            System.arraycopy(Matrix.sTemp, 16, m, mOffset, 16)
+        synchronized(XMatrix.sTemp) {
+            XMatrix.setRotateM(XMatrix.sTemp, 0, a, x, y, z)
+            XMatrix.xMultiplyMM(XMatrix.sTemp, 16, m, mOffset, XMatrix.sTemp, 0)
+            System.arraycopy(XMatrix.sTemp, 16, m, mOffset, 16)
         }
     }
 
     /**
-     * Creates a matrix for rotation by angle a (in degrees)
+     * Creates a Matrix for rotation by angle a (in degrees)
      * around the axis (x, y, z).
      *
      *
@@ -546,20 +575,20 @@ object Matrix {
      * (e.g. x=1.0f y=0.0f z=0.0f).
      *
      * @param rm returns the result
-     * @param rmOffset index into rm where the result matrix starts
-     * @param a angle to rotate in degrees
-     * @param x X axis component
-     * @param y Y axis component
-     * @param z Z axis component
+     * @param rmOffset index into rm where the result Matrix starts
+     * @param angle angle to rotate in degrees
+     * @param xAxis X axis component
+     * @param yAxis Y axis component
+     * @param zAxis Z axis component
      */
     fun setRotateM(
         rm: FloatArray, rmOffset: Int,
-        a: Float, x: Float, y: Float, z: Float
+        angle: Float, xAxis: Float, yAxis: Float, zAxis: Float
     ) {
-        var a = a
-        var x = x
-        var y = y
-        var z = z
+        var a = angle
+        var x = xAxis
+        var y = yAxis
+        var z = zAxis
         rm[rmOffset + 3] = 0f
         rm[rmOffset + 7] = 0f
         rm[rmOffset + 11] = 0f
@@ -601,7 +630,7 @@ object Matrix {
             rm[rmOffset + 9] = 0f
             rm[rmOffset + 10] = 1f
         } else {
-            val len: Float = Matrix.length(x, y, z)
+            val len: Float = XMatrix.length(x, y, z)
             if (1.0f != len) {
                 val recipLen = 1.0f / len
                 x *= recipLen
@@ -628,10 +657,10 @@ object Matrix {
     }
 
     /**
-     * Converts Euler angles to a rotation matrix.
+     * Converts Euler angles to a rotation Matrix.
      *
      * @param rm returns the result
-     * @param rmOffset index into rm where the result matrix starts
+     * @param rmOffset index into rm where the result Matrix starts
      * @param x angle of rotation, in degrees
      * @param y angle of rotation, in degrees
      * @param z angle of rotation, in degrees
@@ -640,18 +669,18 @@ object Matrix {
         rm: FloatArray, rmOffset: Int,
         x: Float, y: Float, z: Float
     ) {
-        var x = x
-        var y = y
-        var z = z
-        x *= (Math.PI / 180.0f).toFloat()
-        y *= (Math.PI / 180.0f).toFloat()
-        z *= (Math.PI / 180.0f).toFloat()
-        val cx = Math.cos(x.toDouble()).toFloat()
-        val sx = Math.sin(x.toDouble()).toFloat()
-        val cy = Math.cos(y.toDouble()).toFloat()
-        val sy = Math.sin(y.toDouble()).toFloat()
-        val cz = Math.cos(z.toDouble()).toFloat()
-        val sz = Math.sin(z.toDouble()).toFloat()
+        var xAxis = x
+        var yAxis = y
+        var zAxis = z
+        xAxis *= (Math.PI / 180.0f).toFloat()
+        yAxis *= (Math.PI / 180.0f).toFloat()
+        zAxis *= (Math.PI / 180.0f).toFloat()
+        val cx = Math.cos(xAxis.toDouble()).toFloat()
+        val sx = Math.sin(xAxis.toDouble()).toFloat()
+        val cy = Math.cos(yAxis.toDouble()).toFloat()
+        val sy = Math.sin(yAxis.toDouble()).toFloat()
+        val cz = Math.cos(zAxis.toDouble()).toFloat()
+        val sz = Math.sin(zAxis.toDouble()).toFloat()
         val cxsy = cx * sy
         val sxsy = sx * sy
         rm[rmOffset + 0] = cy * cz
@@ -677,7 +706,7 @@ object Matrix {
      * view, and an up vector.
      *
      * @param rm returns the result
-     * @param rmOffset index into rm where the result matrix starts
+     * @param rmOffset index into rm where the result Matrix starts
      * @param eyeX eye point X
      * @param eyeY eye point Y
      * @param eyeZ eye point Z
@@ -702,7 +731,7 @@ object Matrix {
         var fz = centerZ - eyeZ
 
         // Normalize f
-        val rlf: Float = 1.0f / Matrix.length(fx, fy, fz)
+        val rlf: Float = 1.0f / XMatrix.length(fx, fy, fz)
         fx *= rlf
         fy *= rlf
         fz *= rlf
@@ -713,7 +742,7 @@ object Matrix {
         var sz = fx * upY - fy * upX
 
         // and normalize s
-        val rls: Float = 1.0f / Matrix.length(sx, sy, sz)
+        val rls: Float = 1.0f / XMatrix.length(sx, sy, sz)
         sx *= rls
         sy *= rls
         sz *= rls
@@ -738,7 +767,7 @@ object Matrix {
         rm[rmOffset + 13] = 0.0f
         rm[rmOffset + 14] = 0.0f
         rm[rmOffset + 15] = 1.0f
-        Matrix.translateM(rm, rmOffset, -eyeX, -eyeY, -eyeZ)
+        XMatrix.translateM(rm, rmOffset, -eyeX, -eyeY, -eyeZ)
     }
 
     /**
@@ -752,5 +781,17 @@ object Matrix {
     // TODO: reuse Vector module()
     fun length(x: Float, y: Float, z: Float): Float {
         return sqrt((x * x + y * y + z * z).toDouble()).toFloat()
+    }
+
+    fun toString(m: FloatArray, mOffset: Int): String {
+        return StringBuilder().apply {
+            for (i in 0..3)
+                append(
+                    "(${m[mOffset + i]}," +
+                    "${m[mOffset + i + 4]}," +
+                    "${m[mOffset + i + 8]}," +
+                    "${m[mOffset + i + 12]})\n"
+                )
+        }.toString()
     }
 }
