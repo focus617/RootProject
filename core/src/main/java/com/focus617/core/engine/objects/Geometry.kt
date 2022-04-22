@@ -1,5 +1,7 @@
 package com.focus617.core.engine.objects
 
+import com.focus617.core.engine.math.Vector
+
 
 class Geometry {
 
@@ -9,7 +11,7 @@ class Geometry {
             return Point(x, y + distance, z)
         }
 
-        fun translate(vector: com.focus617.core.engine.objects.Vector): Point {
+        fun translate(vector: Vector): Point {
             return Point(
                 x + vector.x,
                 y + vector.y,
@@ -27,14 +29,14 @@ class Geometry {
     }
 
     // 三维
-    class Ray(val point: Point, val vector: com.focus617.core.engine.objects.Vector)
+    class Ray(val point: Point, val vector: Vector)
 
     // 顶点顺序按逆时针
     class Triangle(private val point0: Point, private val point1: Point, private val point2: Point){
         // 三角形构成的平面的法线
         fun normal()  =
-            com.focus617.core.engine.objects.Vector(point0, point1)
-                .crossProduct(com.focus617.core.engine.objects.Vector(point0, point2)).normalize()
+            Vector(point0, point1)
+                .crossProduct(Vector(point0, point2)).normalize()
 
     }
 
@@ -42,7 +44,7 @@ class Geometry {
 
     class Sphere(val center: Point, val radius: Float)
 
-    class Plane(val point: Point, val normal: com.focus617.core.engine.objects.Vector)
+    class Plane(val point: Point, val normal: Vector)
 
 }
 

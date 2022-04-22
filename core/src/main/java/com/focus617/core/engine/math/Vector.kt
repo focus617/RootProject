@@ -1,5 +1,14 @@
-package com.focus617.core.engine.objects
+package com.focus617.core.engine.math
 
+import com.focus617.core.engine.objects.Geometry
+
+/**
+ * Vector math utilities.
+ *
+ * @param x x coordinate of a vector
+ * @param y y coordinate of a vector
+ * @param z z coordinate of a vector
+ */
 class Vector(var x: Float, var y: Float, var z: Float) {
 
     constructor(from: Geometry.Point, to: Geometry.Point) :
@@ -10,10 +19,11 @@ class Vector(var x: Float, var y: Float, var z: Float) {
 
 
     override fun toString(): String = "($x, $y, $z)"
-    fun toFloatArray() = floatArrayOf(x,y,z)
+
+    fun toFloatArray() = floatArrayOf(x, y, z)
 
     //求向量的模的方法
-    fun module(): Float = kotlin.math.sqrt(x * x + y * y + z * z)
+    fun module(): Float = kotlin.math.sqrt((x * x + y * y + z * z).toDouble()).toFloat()
 
     //向量规格化的方法
     fun normalize(): Vector = scale(1f / module())
@@ -43,7 +53,7 @@ class Vector(var x: Float, var y: Float, var z: Float) {
     )
 
 
-    companion object{
+    companion object {
 
         // http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
         // Note that this formula treats Ray as if it extended infinitely past

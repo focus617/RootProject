@@ -1,6 +1,6 @@
 package com.focus617.core.engine.objects
 
-import com.focus617.core.engine.objects.Vector.Companion.calConeNormal
+import com.focus617.core.engine.math.Vector.Companion.calConeNormal
 import com.focus617.mylib.logging.WithLogging
 import kotlin.math.cos
 import kotlin.math.sin
