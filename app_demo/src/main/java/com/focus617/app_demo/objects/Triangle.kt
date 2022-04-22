@@ -1,16 +1,14 @@
 package com.focus617.app_demo.objects
 
 import android.content.Context
-import android.opengl.GLES31
 import com.focus617.app_demo.renderer.*
 import com.focus617.core.engine.renderer.BufferElement
 import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.ShaderDataType
-import kotlin.math.sin
 
 
 class Triangle(context: Context) : DrawingObject() {
-
+//    private val shader = XGLShader(vertexShaderCode, fragmentShaderCode)
     private val U_COLOR = "u_Color"
     private val PATH = "Triangle"
     private val VERTEX_FILE = "vertex_shader.glsl"
@@ -22,9 +20,8 @@ class Triangle(context: Context) : DrawingObject() {
         VERTEX_FILE,
         FRAGMENT_FILE
     )
-//    private val shader = XGLShader(vertexShaderCode, fragmentShaderCode)
-    val vertexArray = XGLBufferBuilder.createVertexArray() as XGLVertexArray
 
+    val vertexArray = XGLBufferBuilder.createVertexArray() as XGLVertexArray
 
     init {
         setupVertices()
@@ -52,20 +49,6 @@ class Triangle(context: Context) : DrawingObject() {
         ) as XGLIndexBuffer
 
         vertexArray.setIndexBuffer(indexBuffer)
-    }
-
-    private fun setupColor(blink: Boolean = false) {
-
-        // 查询 uniform ourColor的位置值
-        val fragmentColorLocation = GLES31.glGetUniformLocation(shader.mHandle, U_COLOR)
-        if (blink) {
-            // 使用sin函数让颜色随时间在0.0到1.0之间改变
-            val timeValue = System.currentTimeMillis()
-            val greenValue = sin((timeValue / 300 % 50).toDouble()) / 2 + 0.5
-            GLES31.glUniform4f(fragmentColorLocation, greenValue.toFloat(), 0.5f, 0.2f, 1.0f)
-        } else {
-            GLES31.glUniform4f(fragmentColorLocation, 1.0f, 0.5f, 0.2f, 1.0f)
-        }
     }
 
     // 顶点数据集，及其属性
