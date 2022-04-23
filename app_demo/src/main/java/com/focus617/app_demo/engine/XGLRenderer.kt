@@ -26,6 +26,8 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
 
+        // TODO: How to create objects in Sandbox layer?
+        // 当前的问题：必须在opengl线程才能调用opengl api，无法在主线程调用。
         mTriangle = Triangle(window.context)
     }
 

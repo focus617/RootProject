@@ -4,6 +4,7 @@ import android.content.Context
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.Layer
+import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventType
@@ -32,7 +33,7 @@ class Sandbox(context: Context) : Engine() {
             LOG.info("${this.mDebugName} onDetach")
         }
 
-        override fun onUpdate() {
+        override fun onUpdate(timeStep: TimeStep) {
             // 清理屏幕，重绘背景颜色
             RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
             RenderCommand.clear()

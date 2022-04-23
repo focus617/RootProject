@@ -12,6 +12,7 @@ open class Engine : BaseEntity(), Runnable {
     // Game线程
     private var threadCore: Thread? = null
     private var isRunning: Boolean = true
+    private var mLastFrameTime: Long = 0
 
     protected var mWindow: IfWindow? = null
 
@@ -68,12 +69,21 @@ open class Engine : BaseEntity(), Runnable {
 
     override fun run() {
         while (isRunning) {
+            // 全平台通用的封装的API, OpenGL上就是glfwGetTime();
+            // 虽然不同机器执行一次Loop函数的用时不同，但只要把每一帧里的运动，
+            // 跟该帧所经历的时间相乘，就能抵消因为帧率导致的数据不一致的问题。
+            // 注意, 这里time - m_LastFrameTIme, 正好算的应该是当前帧所经历的时间,
+            // 而不是上一帧经历的时间
+            val time: Long = System.currentTimeMillis()
+            val timeStep: TimeStep = TimeStep(time - mLastFrameTime)
+            mLastFrameTime = time
+
             // Update data
             for (layer in mLayerStack.mLayers) {
-                layer.onUpdate()
+                layer.onUpdate(timeStep)
             }
             for (layer in mOverlayStack.mLayers) {
-                layer.onUpdate()
+                layer.onUpdate(timeStep)
             }
 
             //通过线程休眠以控制刷新速度

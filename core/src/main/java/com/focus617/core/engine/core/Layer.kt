@@ -10,7 +10,7 @@ abstract class Layer(
     abstract fun onDetach()
 
     // 负责更新Layer
-    abstract fun onUpdate()
+    abstract fun onUpdate(timeStep: TimeStep)
 
     // 负责接收事件，并完成对应的转发
     abstract fun onEvent(event: Event): Boolean
