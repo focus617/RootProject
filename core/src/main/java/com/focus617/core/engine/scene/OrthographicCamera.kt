@@ -1,11 +1,11 @@
 package com.focus617.core.engine.scene
 
-import com.focus617.core.engine.math.Point
+import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.XMatrix
 
 class OrthographicCamera(left: Float, right: Float, bottom: Float, top: Float) {
 
-    private var mPosition: Point = Point(0f, 0f, 0f)
+    private var mPosition: Point3D = Point3D(0f, 0f, 0f)
     private var mRotation: Float = 0F
 
     private var mProjectionMatrix = FloatArray(16)
@@ -21,12 +21,12 @@ class OrthographicCamera(left: Float, right: Float, bottom: Float, top: Float) {
     }
 
     fun getPosition() = mPosition
-    fun setPosition(position: Point) {
+    fun setPosition(position: Point3D) {
         mPosition = position
         reCalculateViewMatrix()
     }
     fun setPosition(x: Float, y: Float, z: Float) {
-        mPosition = Point(x,y,z)
+        mPosition = Point3D(x,y,z)
         reCalculateViewMatrix()
     }
 

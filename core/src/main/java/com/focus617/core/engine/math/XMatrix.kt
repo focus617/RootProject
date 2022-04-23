@@ -661,26 +661,26 @@ object XMatrix: WithLogging() {
      *
      * @param rm returns the result
      * @param rmOffset index into rm where the result Matrix starts
-     * @param x angle of rotation, in degrees
-     * @param y angle of rotation, in degrees
-     * @param z angle of rotation, in degrees
+     * @param pitch angle of rotation in x axis, in degrees
+     * @param yaw angle of rotation in y axis, in degrees
+     * @param roll angle of rotation in z axis, in degrees
      */
     fun setRotateEulerM(
         rm: FloatArray, rmOffset: Int,
-        x: Float, y: Float, z: Float
+        pitch: Float, yaw: Float, roll: Float
     ) {
-        var xAxis = x
-        var yAxis = y
-        var zAxis = z
-        xAxis *= (Math.PI / 180.0f).toFloat()
-        yAxis *= (Math.PI / 180.0f).toFloat()
-        zAxis *= (Math.PI / 180.0f).toFloat()
-        val cx = Math.cos(xAxis.toDouble()).toFloat()
-        val sx = Math.sin(xAxis.toDouble()).toFloat()
-        val cy = Math.cos(yAxis.toDouble()).toFloat()
-        val sy = Math.sin(yAxis.toDouble()).toFloat()
-        val cz = Math.cos(zAxis.toDouble()).toFloat()
-        val sz = Math.sin(zAxis.toDouble()).toFloat()
+        var x = pitch
+        var y = yaw
+        var z = roll
+        x *= (Math.PI / 180.0f).toFloat()
+        y *= (Math.PI / 180.0f).toFloat()
+        z *= (Math.PI / 180.0f).toFloat()
+        val cx = cos(x.toDouble()).toFloat()
+        val sx = sin(x.toDouble()).toFloat()
+        val cy = cos(y.toDouble()).toFloat()
+        val sy = sin(y.toDouble()).toFloat()
+        val cz = cos(z.toDouble()).toFloat()
+        val sz = sin(z.toDouble()).toFloat()
         val cxsy = cx * sy
         val sxsy = sx * sy
         rm[rmOffset + 0] = cy * cz

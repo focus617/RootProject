@@ -1,23 +1,10 @@
 package com.focus617.core.engine.math
 
 
-class Point(var x: Float, var y: Float, var z: Float) {
-
-    fun translateY(distance: Float): Point {
-        return Point(x, y + distance, z)
-    }
-
-    fun translate(vector: Vector): Point {
-        return Point(
-            x + vector.x,
-            y + vector.y,
-            z + vector.z
-        )
-    }
-}
-
 // 二维
-class Circle(val center: Point, val radius: Float) {
+class Triangle2D(val point0: Point2D, val point1: Point2D, val point2: Point2D)
+
+class Circle(val center: Point3D, val radius: Float) {
 
     fun scale(scale: Float): Circle {
         return Circle(center, radius * scale)
@@ -25,22 +12,22 @@ class Circle(val center: Point, val radius: Float) {
 }
 
 // 三维
-class Ray(val point: Point, val vector: Vector)
+class Ray(val point: Point3D, val vector: Vector3)
 
 // 顶点顺序按逆时针
-class Triangle(private val point0: Point, private val point1: Point, private val point2: Point) {
+class Triangle3D(val point0: Point3D, val point1: Point3D, val point2: Point3D) {
     // 三角形构成的平面的法线
     fun normal() =
-        Vector(point0, point1)
-            .crossProduct(Vector(point0, point2)).normalize()
+        Vector3(point0, point1)
+            .crossProduct(Vector3(point0, point2)).normalize()
 
 }
 
-class Cylinder(val center: Point, val radius: Float, val height: Float)
+class Cylinder(val center: Point3D, val radius: Float, val height: Float)
 
-class Sphere(val center: Point, val radius: Float)
+class Sphere(val center: Point3D, val radius: Float)
 
-class Plane(val point: Point, val normal: Vector)
+class Plane(val point: Point3D, val normal: Vector3)
 
 
 
