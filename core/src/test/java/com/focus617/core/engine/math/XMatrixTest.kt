@@ -71,9 +71,39 @@ class XMatrixTest {
         assertThat(result).isEqualTo(lhs)
     }
 
+    @Test
+    fun `test invertM`() {
+        //Given
+        val origin: FloatArray = listOf(
+            1.0F, 0.0F, 0.0F, 0.0F,
+            0.0F, 1.0F, 0.0F, 0.0F,
+            0.0F, 0.0F, 1.0F, 0.0F,
+            0.5F, 0.5F, 0.0F, 1.0F
+        ).toFloatArray()
+        var str = XMatrix.toString(origin, 0)
+        println(str)
+
+        val result: FloatArray = FloatArray(16)
+        //When
+        val v:Boolean = XMatrix.invertM(result,0,origin,0)
+        //Then
+        assertThat(v).isTrue()
+        str = XMatrix.toString(result, 0)
+        println(str)
+
+        val verification: FloatArray = FloatArray(16)
+        XMatrix.xMultiplyMM(verification, 0, origin, 0, result, 0)
+
+        val identityMatrix: FloatArray = FloatArray(16)
+        setIdentityM(identityMatrix, 0)
+        assertThat(verification).isEqualTo(identityMatrix)
+    }
+
+    @Test
     fun template() {
         //Given
         //When
         //Then
     }
+
 }

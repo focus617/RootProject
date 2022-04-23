@@ -155,8 +155,7 @@ object XMatrix: WithLogging() {
      * @return true if the Matrix could be inverted, false if it could not.
      */
     fun invertM(
-        mInv: FloatArray, mInvOffset: Int, m: FloatArray,
-        mOffset: Int
+        mInv: FloatArray, mInvOffset: Int, m: FloatArray, mOffset: Int
     ): Boolean {
         // Invert a 4 x 4 Matrix using Cramer's Rule
 

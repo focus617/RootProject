@@ -2,8 +2,9 @@ package com.focus617.core.engine.scene
 
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.XMatrix
+import com.focus617.core.platform.base.BaseEntity
 
-class OrthographicCamera(left: Float, right: Float, bottom: Float, top: Float) {
+class OrthographicCamera(left: Float, right: Float, bottom: Float, top: Float) : BaseEntity() {
 
     private var mPosition: Point3D = Point3D(0f, 0f, 0f)
     private var mRotation: Float = 0F
@@ -25,8 +26,9 @@ class OrthographicCamera(left: Float, right: Float, bottom: Float, top: Float) {
         mPosition = position
         reCalculateViewMatrix()
     }
+
     fun setPosition(x: Float, y: Float, z: Float) {
-        mPosition = Point3D(x,y,z)
+        mPosition = Point3D(x, y, z)
         reCalculateViewMatrix()
     }
 
@@ -45,7 +47,7 @@ class OrthographicCamera(left: Float, right: Float, bottom: Float, top: Float) {
         with(mPosition) {
             XMatrix.translateM(translateMatrix, 0, x, y, z)
         }
-        // 计算相机的旋转
+        // 计算相机的旋转(绕Z轴)
         val rotateMatrix = FloatArray(16)
         XMatrix.setRotateM(rotateMatrix, 0, mRotation, 0f, 0f, 1.0f)
 
