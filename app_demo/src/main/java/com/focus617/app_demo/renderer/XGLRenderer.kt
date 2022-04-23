@@ -1,9 +1,10 @@
-package com.focus617.app_demo.engine
+package com.focus617.app_demo.renderer
 
 import android.opengl.GLES31
 import android.opengl.GLSurfaceView
+import com.focus617.app_demo.engine.AndroidWindow
+import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.objects.Triangle
-import com.focus617.app_demo.renderer.XGLShader
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.renderer.RenderCommand

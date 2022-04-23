@@ -1,10 +1,6 @@
-package com.focus617.app_demo.engine
+package com.focus617.app_demo.renderer
 
 import android.content.Context
-import com.focus617.app_demo.renderer.XGLIndexBuffer
-import com.focus617.app_demo.renderer.XGLShader
-import com.focus617.app_demo.renderer.XGLVertexArray
-import com.focus617.app_demo.renderer.XGLVertexBuffer
 import com.focus617.core.engine.renderer.IfBuffer
 import com.focus617.core.engine.renderer.RendererAPI
 import com.focus617.core.engine.renderer.Shader

@@ -4,6 +4,7 @@ import android.content.Context
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import com.focus617.app_demo.GameActivity
+import com.focus617.app_demo.renderer.XGLRenderer
 import com.focus617.app_demo.renderer.XGLRendererAPI
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.WindowProps

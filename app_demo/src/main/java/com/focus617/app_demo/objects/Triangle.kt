@@ -1,7 +1,7 @@
 package com.focus617.app_demo.objects
 
-import com.focus617.app_demo.engine.XGLShaderBuilder
 import com.focus617.app_demo.renderer.XGLIndexBuffer
+import com.focus617.app_demo.renderer.XGLShaderBuilder
 import com.focus617.app_demo.renderer.XGLVertexArray
 import com.focus617.app_demo.renderer.XGLVertexBuffer
 import com.focus617.core.engine.math.XMatrix
