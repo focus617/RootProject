@@ -16,6 +16,11 @@ import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Renderer {
 
+    private val PATH = "Triangle"
+    private val VERTEX_FILE = "vertex_shader.glsl"
+    private val FRAGMENT_FILE = "fragment_shader.glsl"
+    private lateinit var shader: XGLShader
+
     private lateinit var mTriangle: Triangle
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
@@ -28,7 +33,15 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
 
         // TODO: How to create objects in Sandbox layer?
         // 当前的问题：必须在opengl线程才能调用opengl api，无法在主线程调用。
-        mTriangle = Triangle(window.context)
+        // shader = XGLShader(vertexShaderCode, fragmentShaderCode)
+        shader = XGLShaderBuilder.createShader(
+            window.context,
+            PATH,
+            VERTEX_FILE,
+            FRAGMENT_FILE
+        ) as XGLShader
+
+        mTriangle = Triangle()
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
@@ -47,7 +60,7 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
 
-        with(mTriangle) { submit(shader, vertexArray, transform) }
+        submit(shader, mTriangle.vertexArray, mTriangle.transform)
     }
 
     override fun submit(
@@ -63,6 +76,8 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)
 
+        // 下面这两行可以省略，以节约GPU的运行资源；
+        // 在下个submit，会bind其它handle，自然会实现unbind
         vertexArray.unbind()
         shader.unbind()
     }

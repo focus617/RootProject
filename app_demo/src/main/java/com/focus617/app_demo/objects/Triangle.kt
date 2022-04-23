@@ -1,28 +1,18 @@
 package com.focus617.app_demo.objects
 
-import android.content.Context
-import com.focus617.app_demo.renderer.*
+import com.focus617.app_demo.engine.XGLShaderBuilder
+import com.focus617.app_demo.renderer.XGLIndexBuffer
+import com.focus617.app_demo.renderer.XGLVertexArray
+import com.focus617.app_demo.renderer.XGLVertexBuffer
 import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.renderer.BufferElement
 import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.ShaderDataType
 
 
-class Triangle(context: Context) : DrawingObject() {
-//    private val shader = XGLShader(vertexShaderCode, fragmentShaderCode)
-    private val U_COLOR = "u_Color"
-    private val PATH = "Triangle"
-    private val VERTEX_FILE = "vertex_shader.glsl"
-    private val FRAGMENT_FILE = "fragment_shader.glsl"
+class Triangle : DrawingObject() {
 
-    val shader = XGLShader(
-        context,
-        PATH,
-        VERTEX_FILE,
-        FRAGMENT_FILE
-    )
-
-    val vertexArray = XGLBufferBuilder.createVertexArray() as XGLVertexArray
+    val vertexArray = XGLShaderBuilder.createVertexArray() as XGLVertexArray
 
     var transform: FloatArray = FloatArray(16)
 
@@ -33,7 +23,7 @@ class Triangle(context: Context) : DrawingObject() {
     }
 
     private fun setupVertices() {
-        val vertexBuffer = XGLBufferBuilder.createVertexBuffer(
+        val vertexBuffer = XGLShaderBuilder.createVertexBuffer(
             vertices, vertices.size * Float.SIZE_BYTES
         ) as XGLVertexBuffer
 
@@ -48,7 +38,7 @@ class Triangle(context: Context) : DrawingObject() {
     }
 
     private fun setupIndices() {
-        val indexBuffer = XGLBufferBuilder.createIndexBuffer(
+        val indexBuffer = XGLShaderBuilder.createIndexBuffer(
             indices, indices.size
         ) as XGLIndexBuffer
 

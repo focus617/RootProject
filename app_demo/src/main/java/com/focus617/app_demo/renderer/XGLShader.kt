@@ -2,13 +2,16 @@ package com.focus617.app_demo.renderer
 
 import android.content.Context
 import android.opengl.GLES31.*
+import com.focus617.core.engine.math.Vector2
+import com.focus617.core.engine.math.Vector3
+import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.renderer.Shader
 import com.focus617.platform.helper.FileHelper
 
 open class XGLShader constructor(
-    vertexShader: String,
-    fragmentShader: String
-) : Shader(vertexShader, fragmentShader) {
+    vertexShaderSrc: String,
+    fragmentShaderSrc: String
+) : Shader(vertexShaderSrc, fragmentShaderSrc) {
 
     /** 基于Resource/raw中的文件构造 */
     constructor(
@@ -31,7 +34,7 @@ open class XGLShader constructor(
         FileHelper.loadFromAssetsFile(context, "$path/$fragmentShaderFileName")
     )
 
-    override var mHandle: Int = buildProgram(vertexShader, fragmentShader)
+    override var mHandle: Int = buildProgram(vertexShaderSrc, fragmentShaderSrc)
 
     override fun bind() {
         glUseProgram(mHandle)
@@ -43,6 +46,46 @@ open class XGLShader constructor(
 
     override fun close() {
         glDeleteProgram(mHandle)
+    }
+
+    /**
+     * uniform工具函数
+     * 所有的函数能够查询一个uniform的位置句柄，并设置它的值。
+     */
+    fun uploadUniformBool(name: String, bool: Boolean) {
+        val value = if (bool) 1 else 0
+        val location = glGetUniformLocation(mHandle, name)
+        glUniform1i(location, value)
+    }
+
+    fun uploadUniformInt(name: String, value: Int) {
+        val location = glGetUniformLocation(mHandle, name)
+        glUniform1i(location, value)
+    }
+
+    fun uploadUniformFloat(name: String, value: Float) {
+        val location = glGetUniformLocation(mHandle, name)
+        glUniform1f(location, value)
+    }
+
+    fun uploadUniformFloat2(name: String, value: Vector2) {
+        val location = glGetUniformLocation(mHandle, name)
+        glUniform2f(location, value.x, value.y)
+    }
+
+    fun uploadUniformFloat3(name: String, value: Vector3) {
+        val location = glGetUniformLocation(mHandle, name)
+        glUniform3f(location, value.x, value.y, value.z)
+    }
+
+    fun uploadUniformFloat4(name: String, value: Vector4) {
+        val location = glGetUniformLocation(mHandle, name)
+        glUniform4f(location, value.x, value.y, value.z, value.w)
+    }
+
+    fun uploadUniformMat3(name: String, matrix: FloatArray) {
+        val location = glGetUniformLocation(mHandle, name)
+        glUniformMatrix3fv(location, 1, false, matrix, 0)
     }
 
     fun uploadUniformMat4(name: String, matrix: FloatArray) {
