@@ -22,7 +22,7 @@ class MyApplication : BaseApplication() {
         Timber.plant(Timber.DebugTree())
 
         // 初始化引擎
-        gameEngine = Sandbox()
+        gameEngine = Sandbox(this)
     }
 
     override fun onTerminate() {
