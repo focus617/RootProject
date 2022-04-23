@@ -43,6 +43,10 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
     }
 
     override fun onDrawFrame(unused: GL10) {
+        // 清理屏幕，重绘背景颜色
+        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
+        RenderCommand.clear()
+
         with(mTriangle) { submit(shader, vertexArray) }
     }
 
