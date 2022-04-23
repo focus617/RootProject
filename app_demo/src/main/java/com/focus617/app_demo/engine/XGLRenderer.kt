@@ -47,13 +47,18 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
 
-        with(mTriangle) { submit(shader, vertexArray) }
+        with(mTriangle) { submit(shader, vertexArray, transform) }
     }
 
-    override fun submit(shader: Shader, vertexArray: VertexArray) {
+    override fun submit(
+        shader: Shader,
+        vertexArray: VertexArray,
+        transform: FloatArray
+    ) {
         (shader as XGLShader).bind()
         // 将模型视图投影矩阵传递给顶点着色器
         shader.uploadUniformMat4("u_ViewProjection", SceneData.sViewProjectionMatrix)
+        shader.uploadUniformMat4("u_Transform", transform)
 
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)

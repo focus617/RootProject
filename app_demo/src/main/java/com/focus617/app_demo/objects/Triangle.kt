@@ -2,6 +2,7 @@ package com.focus617.app_demo.objects
 
 import android.content.Context
 import com.focus617.app_demo.renderer.*
+import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.renderer.BufferElement
 import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.ShaderDataType
@@ -23,9 +24,12 @@ class Triangle(context: Context) : DrawingObject() {
 
     val vertexArray = XGLBufferBuilder.createVertexArray() as XGLVertexArray
 
+    var transform: FloatArray = FloatArray(16)
+
     init {
         setupVertices()
         setupIndices()
+        XMatrix.setIdentityM(transform, 0)
     }
 
     private fun setupVertices() {

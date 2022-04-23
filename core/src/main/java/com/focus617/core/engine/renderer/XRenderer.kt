@@ -16,10 +16,12 @@ open class XRenderer: BaseEntity() {
 
     }
 
-    open fun submit(shader: Shader, vertexArray: VertexArray) {
-        shader.bind()
-        vertexArray.bind()
-        RenderCommand.drawIndexed(vertexArray)
+    open fun submit(
+        shader: Shader,
+        vertexArray: VertexArray,
+        transform: FloatArray
+    ) {
+
     }
 
     companion object SceneData{
