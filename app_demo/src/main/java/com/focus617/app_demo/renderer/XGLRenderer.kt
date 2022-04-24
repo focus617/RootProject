@@ -4,7 +4,7 @@ import android.opengl.GLES31
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.AndroidWindow
 import com.focus617.app_demo.engine.XGLContext
-import com.focus617.app_demo.objects.Triangle
+import com.focus617.app_demo.objects.d2.Square
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.renderer.RenderCommand
@@ -17,12 +17,15 @@ import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Renderer {
 
-    private val PATH = "Triangle"
+    private val PATH = "SquareWithTexture"
     private val VERTEX_FILE = "vertex_shader.glsl"
     private val FRAGMENT_FILE = "fragment_shader.glsl"
-    private lateinit var shader: XGLShader
+    private val TEXTURE_FILE = "Checkerboard.png"
+    private lateinit var mShader: XGLShader
+    private var mTexture: XGLTexture? = null
 
-    private lateinit var mTriangle: Triangle
+    //private lateinit var mTriangle: Triangle
+    private lateinit var mSquare: Square
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         // 打印OpenGL Version，Vendor，etc
@@ -35,14 +38,20 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         // TODO: How to create objects in Sandbox layer?
         // 当前的问题：必须在opengl线程才能调用opengl api，无法在主线程调用。
         // shader = XGLShader(vertexShaderCode, fragmentShaderCode)
-        shader = XGLShaderBuilder.createShader(
+        mShader = XGLShaderBuilder.createShader(
             window.context,
             PATH,
             VERTEX_FILE,
             FRAGMENT_FILE
         ) as XGLShader
 
-        mTriangle = Triangle()
+        mTexture = XGLTextureBuilder.createTexture(
+            window.context,
+            "$PATH/$TEXTURE_FILE"
+        )
+
+        //mTriangle = Triangle()
+        mSquare = Square()
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
@@ -52,7 +61,7 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         GLES31.glViewport(0, 0, width, height)
 
         // 计算透视投影矩阵 (Project Matrix)，而后将应用于onDrawFrame（）方法中的对象坐标
-        //val ratio: Float = width.toFloat() / height.toFloat()
+        val ratio: Float = width.toFloat() / height.toFloat()
         //Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
     }
 
@@ -61,7 +70,10 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
 
-        submit(shader, mTriangle.vertexArray, mTriangle.transform)
+        mTexture?.bind()
+
+        //submit(shader, mTriangle.vertexArray, mTriangle.transform)
+        submit(mShader, mSquare.vertexArray, mSquare.transform)
     }
 
     override fun submit(
@@ -73,6 +85,8 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         // 将模型视图投影矩阵传递给顶点着色器
         shader.uploadUniformMat4("u_ViewProjection", SceneData.sViewProjectionMatrix)
         shader.uploadUniformMat4("u_Transform", transform)
+
+        shader.uploadUniformTexture("u_Texture", 0)
 
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)

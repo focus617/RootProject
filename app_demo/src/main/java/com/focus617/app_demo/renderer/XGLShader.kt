@@ -8,7 +8,12 @@ import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.renderer.Shader
 import com.focus617.platform.helper.FileHelper
 
-open class XGLShader constructor(
+/**
+ * OpenGL纹理类 XGLShader
+ * 1. 储存了着色器程序的句柄 [mHandle]
+ * 2. 它的构造器需要顶点着色器和片段着色器的源代码
+ */
+class XGLShader constructor(
     vertexShaderSrc: String,
     fragmentShaderSrc: String
 ) : Shader(vertexShaderSrc, fragmentShaderSrc) {
@@ -91,6 +96,10 @@ open class XGLShader constructor(
     fun uploadUniformMat4(name: String, matrix: FloatArray) {
         val location = glGetUniformLocation(mHandle, name)
         glUniformMatrix4fv(location, 1, false, matrix, 0)
+    }
+
+    fun uploadUniformTexture(name: String, value: Int) {
+        uploadUniformInt(name, value)
     }
 
     companion object {

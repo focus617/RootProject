@@ -1,5 +1,6 @@
-package com.focus617.app_demo.objects
+package com.focus617.app_demo.objects.d2
 
+import com.focus617.app_demo.objects.DrawingObject
 import com.focus617.app_demo.renderer.XGLBufferBuilder
 import com.focus617.app_demo.renderer.XGLIndexBuffer
 import com.focus617.app_demo.renderer.XGLVertexArray
@@ -10,7 +11,7 @@ import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.ShaderDataType
 
 
-class Triangle : DrawingObject() {
+class Square : DrawingObject() {
 
     val vertexArray = XGLBufferBuilder.createVertexArray() as XGLVertexArray
 
@@ -29,8 +30,8 @@ class Triangle : DrawingObject() {
 
         val layout = BufferLayout(
             listOf(
-                BufferElement("a_position", ShaderDataType.Float3, true),
-                BufferElement("a_color", ShaderDataType.Float4, true)
+                BufferElement("a_Position", ShaderDataType.Float3, true),
+                BufferElement("a_TexCoord", ShaderDataType.Float2, true)
             )
         )
         vertexBuffer.setLayout(layout)
@@ -49,16 +50,17 @@ class Triangle : DrawingObject() {
     companion object {
         private const val UNIT_SIZE = 0.20f
 
-        // 假定每个顶点有2个顶点属性一位置、颜色
+        // 每个顶点有2个顶点属性一位置、纹理
         val vertices = floatArrayOf(
-            // x,   y,  z,  R,  G,  B,  Alpha
-            0.0f, 0.622008459f, 0.0f, 1f, 0f, 0f, 0f,     // 上
-            -0.8f, -0.311004243f, 0.0f, 0f, 0f, 1f, 0f,   // 左下
-            0.8f, -0.311004243f, 0.0f, 0f, 1f, 0f, 0f     // 右下
+            // x,   y,     z,  TextureX, TextureY
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+            0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+            0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f
         )
 
         internal var indices = shortArrayOf(
-            0, 1, 2
+            0, 1, 2, 2, 3, 0
         )
 
     }
