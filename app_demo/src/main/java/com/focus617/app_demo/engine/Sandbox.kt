@@ -31,8 +31,8 @@ class Sandbox(context: Context) : Engine() {
             LOG.info("${this.mDebugName} onDetach")
         }
 
-        private var mCameraRotation: Float = 0F
-        private var mCameraRotationSpeed: Float = 0.04F
+        private var mCameraRotation: Float = 90F
+        private var mCameraRotationSpeed: Float = 0.001F
         override fun onUpdate(timeStep: TimeStep) {
             mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed
 

@@ -7,6 +7,7 @@ import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.objects.d2.Square
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.core.IfWindow
+import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Shader
 import com.focus617.core.engine.renderer.VertexArray
@@ -16,9 +17,10 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Renderer {
+    private val mProjectionMatrix = FloatArray(16)
 
     private val PATH = "SquareWithTexture"
-    private val VERTEX_FILE = "vertex_shader.glsl"
+    private val VERTEX_FILE = "vertex_shader2.glsl"
     private val FRAGMENT_FILE = "fragment_shader.glsl"
     private val TEXTURE_FILE = "Checkerboard.png"
     private lateinit var mShader: XGLShader
@@ -62,7 +64,7 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
 
         // 计算透视投影矩阵 (Project Matrix)，而后将应用于onDrawFrame（）方法中的对象坐标
         val ratio: Float = width.toFloat() / height.toFloat()
-        //Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
+        XMatrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -83,8 +85,9 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
     ) {
         (shader as XGLShader).bind()
         // 将模型视图投影矩阵传递给顶点着色器
-        shader.uploadUniformMat4("u_ViewProjection", SceneData.sViewProjectionMatrix)
-        shader.uploadUniformMat4("u_Transform", transform)
+        shader.uploadUniformMat4("u_ProjectionMatrix", mProjectionMatrix)
+        shader.uploadUniformMat4("u_ViewMatrix", SceneData.sViewMatrix)
+        shader.uploadUniformMat4("u_ModelMatrix", transform)
 
         shader.uploadUniformTexture("u_Texture", 0)
 
