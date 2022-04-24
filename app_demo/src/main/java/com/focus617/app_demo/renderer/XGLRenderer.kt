@@ -20,7 +20,7 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
     private val mProjectionMatrix = FloatArray(16)
 
     private val PATH = "SquareWithTexture"
-    private val VERTEX_FILE = "vertex_shader2.glsl"
+    private val VERTEX_FILE = "vertex_shader_mvp.glsl"
     private val FRAGMENT_FILE = "fragment_shader.glsl"
     private val TEXTURE_FILE = "Checkerboard.png"
     private lateinit var mShader: XGLShader
