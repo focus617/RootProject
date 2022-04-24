@@ -154,8 +154,8 @@ class XGLTexture private constructor() : Texture2D() {
             GLES31.glBindSampler(0, samplers[0])
 
             // Set filtering: a default must be set, or the texture will be black.
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 
 
             // Load the bitmap into the bound texture.
