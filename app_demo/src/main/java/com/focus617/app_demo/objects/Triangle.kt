@@ -1,7 +1,7 @@
 package com.focus617.app_demo.objects
 
+import com.focus617.app_demo.renderer.XGLBufferBuilder
 import com.focus617.app_demo.renderer.XGLIndexBuffer
-import com.focus617.app_demo.renderer.XGLShaderBuilder
 import com.focus617.app_demo.renderer.XGLVertexArray
 import com.focus617.app_demo.renderer.XGLVertexBuffer
 import com.focus617.core.engine.math.XMatrix
@@ -12,7 +12,7 @@ import com.focus617.core.engine.renderer.ShaderDataType
 
 class Triangle : DrawingObject() {
 
-    val vertexArray = XGLShaderBuilder.createVertexArray() as XGLVertexArray
+    val vertexArray = XGLBufferBuilder.createVertexArray() as XGLVertexArray
 
     var transform: FloatArray = FloatArray(16)
 
@@ -23,7 +23,7 @@ class Triangle : DrawingObject() {
     }
 
     private fun setupVertices() {
-        val vertexBuffer = XGLShaderBuilder.createVertexBuffer(
+        val vertexBuffer = XGLBufferBuilder.createVertexBuffer(
             vertices, vertices.size * Float.SIZE_BYTES
         ) as XGLVertexBuffer
 
@@ -38,7 +38,7 @@ class Triangle : DrawingObject() {
     }
 
     private fun setupIndices() {
-        val indexBuffer = XGLShaderBuilder.createIndexBuffer(
+        val indexBuffer = XGLBufferBuilder.createIndexBuffer(
             indices, indices.size
         ) as XGLIndexBuffer
 
