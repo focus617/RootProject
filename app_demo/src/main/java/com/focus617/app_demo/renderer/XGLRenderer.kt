@@ -21,8 +21,7 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
     private val mProjectionMatrix = FloatArray(16)
 
     private val PATH = "SquareWithTexture"
-    private val VERTEX_FILE = "vertex_shader_mvp.glsl"
-    private val FRAGMENT_FILE = "fragment_shader.glsl"
+    private val SHADER_FILE = "shader.glsl"
     private val TEXTURE_FILE = "Checkerboard.png"
     private val TEXTURE_LOGO_FILE = "Logo.png"
     private lateinit var mShader: XGLShader
@@ -45,13 +44,11 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         this.init()
 
         // TODO: How to create objects in Sandbox layer?
-        // shader = XGLShader(vertexShaderCode, fragmentShaderCode)
         mShader = XGLShaderBuilder.createShader(
             window.context,
             "MyShader",
             PATH,
-            VERTEX_FILE,
-            FRAGMENT_FILE
+            SHADER_FILE
         ) as XGLShader
 
         mTexture = XGLTextureBuilder.createTexture(

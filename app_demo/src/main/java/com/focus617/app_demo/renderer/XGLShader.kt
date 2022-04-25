@@ -2,11 +2,13 @@ package com.focus617.app_demo.renderer
 
 import android.content.Context
 import android.opengl.GLES31.*
+import android.text.TextUtils
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.renderer.Shader
 import com.focus617.platform.helper.FileHelper
+import java.util.*
 
 /**
  * OpenGL纹理类 XGLShader
@@ -109,6 +111,59 @@ class XGLShader constructor(
 
     companion object {
         val TAG = "XGLShader"
+
+        enum class ShaderType {
+            None,
+            VERTEX_SHADER,
+            FRAGMENT_SHADER
+        }
+
+        var mode: ShaderType = ShaderType.None
+        val shaderSources = HashMap<ShaderType, String>()
+
+        fun parseShaderSource(context: Context, filePath: String) {
+            val typeToken = "#type"
+
+            LOG.info("$TAG: parse shader source: $filePath")
+
+            if (filePath.isEmpty() or TextUtils.isEmpty(filePath)) {
+                LOG.error("Shader file doesn't exist")
+            }
+
+            try {
+                val scanner = Scanner(context.assets.open(filePath))
+                while (scanner.hasNextLine()) {
+                    val line = scanner.nextLine().trim()
+
+                    when {
+                        line.startsWith(typeToken) -> switchMode(line)
+                        else -> appendLine(line)
+                    }
+                }
+                scanner.close()
+            } catch (e: Exception) {
+                LOG.error(e.message.toString())
+            }
+        }
+
+        private fun switchMode(line: String) {
+            val DELIMITER = Regex("[ ]+")    // 分隔符
+            val VERTEX = "VERTEX"
+            val FRAGMENT = "FRAGMENT"
+
+            val items = line.split(DELIMITER).toTypedArray()
+            if (items.size != 2) return
+            mode = when (items[1].uppercase(Locale.getDefault())) {
+                VERTEX -> ShaderType.VERTEX_SHADER
+                FRAGMENT -> ShaderType.FRAGMENT_SHADER
+                else -> ShaderType.None
+            }
+        }
+
+        private fun appendLine(line: String) {
+            val str = shaderSources[mode] ?: StringBuilder().toString()
+            shaderSources[mode] = StringBuilder(str).append(line + '\n').toString()
+        }
 
         /**
          * Helper function that compiles the shaders, links and validates the

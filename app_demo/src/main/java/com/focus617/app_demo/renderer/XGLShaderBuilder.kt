@@ -62,4 +62,33 @@ object XGLShaderBuilder : ShaderBuilder() {
             )
         }
     }
+
+    /** 基于Assets中的单一glsl文件构造 */
+    fun createShader(
+        context: Context,
+        name: String,
+        path: String,
+        shaderFileName: String
+    ): Shader? {
+        return when (RendererAPI.getAPI()) {
+            RendererAPI.API.None -> {
+                LOG.error("RendererAPI::None is currently not supported!")
+                null
+            }
+            RendererAPI.API.OpenGLES -> {
+                XGLShader.parseShaderSource(context, "$path/$shaderFileName")
+
+                val vertexShaderSrc =
+                    XGLShader.shaderSources[XGLShader.Companion.ShaderType.VERTEX_SHADER]!!
+                val fragmentShaderSrc =
+                    XGLShader.shaderSources[XGLShader.Companion.ShaderType.FRAGMENT_SHADER]!!
+
+                return XGLShader(
+                    name,
+                    vertexShaderSrc,
+                    fragmentShaderSrc
+                )
+            }
+        }
+    }
 }

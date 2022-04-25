@@ -140,7 +140,7 @@ class XGLTexture2D private constructor() : Texture2D() {
 
 
     companion object TextureHelper {
-
+        val TAG = "XGLShader"
         private var samplers = IntArray(1) //存放Samplers id的成员变量数组
 
         init {
@@ -180,7 +180,7 @@ class XGLTexture2D private constructor() : Texture2D() {
          * @return
          */
         private fun loadTextureFromResource(context: Context, resourceId: Int): Bitmap? {
-            LOG.info("loadTexture($resourceId)")
+            LOG.info("${TAG}: load texture from file: $resourceId")
 
             var bitmap: Bitmap? = null
             val options = BitmapFactory.Options()
@@ -205,8 +205,7 @@ class XGLTexture2D private constructor() : Texture2D() {
          * @return
          */
         private fun loadTextureFromFile(context: Context, filePath: String): Bitmap? {
-
-            LOG.info("loadTextureFromFile(): $filePath")
+            LOG.info("${TAG}: load texture from file: $filePath")
 
             var bitmap: Bitmap? = null
 
