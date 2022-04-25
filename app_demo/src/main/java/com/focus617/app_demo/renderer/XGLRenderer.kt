@@ -87,9 +87,8 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         //submit(shader, mTriangle.vertexArray, mTriangle.transform)
         submit(mShader, mSquare.vertexArray, mSquare.transform)
 
+        // This texture has transparent alpha for part of image
         mTextureLogo?.bind()
-
-        //submit(shader, mTriangle.vertexArray, mTriangle.transform)
         submit(mShader, mSquare.vertexArray, mSquare.transform)
     }
 
