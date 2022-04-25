@@ -66,9 +66,7 @@ object XGLShaderBuilder : ShaderBuilder() {
     /** 基于Assets中的单一glsl文件构造 */
     fun createShader(
         context: Context,
-        name: String,
-        path: String,
-        shaderFileName: String
+        filePath: String
     ): Shader? {
         return when (RendererAPI.getAPI()) {
             RendererAPI.API.None -> {
@@ -76,7 +74,7 @@ object XGLShaderBuilder : ShaderBuilder() {
                 null
             }
             RendererAPI.API.OpenGLES -> {
-                XGLShader.parseShaderSource(context, "$path/$shaderFileName")
+                XGLShader.parseShaderSource(context, filePath)
 
                 val vertexShaderSrc =
                     XGLShader.shaderSources[XGLShader.Companion.ShaderType.VERTEX_SHADER]!!
@@ -84,7 +82,7 @@ object XGLShaderBuilder : ShaderBuilder() {
                     XGLShader.shaderSources[XGLShader.Companion.ShaderType.FRAGMENT_SHADER]!!
 
                 return XGLShader(
-                    name,
+                    XGLShader.name,
                     vertexShaderSrc,
                     fragmentShaderSrc
                 )

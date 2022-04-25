@@ -119,6 +119,7 @@ class XGLShader constructor(
         }
 
         var mode: ShaderType = ShaderType.None
+        var name: String = ""
         val shaderSources = HashMap<ShaderType, String>()
 
         fun parseShaderSource(context: Context, filePath: String) {
@@ -129,6 +130,9 @@ class XGLShader constructor(
             if (filePath.isEmpty() or TextUtils.isEmpty(filePath)) {
                 LOG.error("Shader file doesn't exist")
             }
+            name = if (filePath.contains('/'))
+                filePath.substring(filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('.'))
+            else filePath
 
             try {
                 val scanner = Scanner(context.assets.open(filePath))
