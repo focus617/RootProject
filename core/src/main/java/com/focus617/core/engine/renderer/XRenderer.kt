@@ -9,6 +9,10 @@ open class XRenderer: BaseEntity() {
 
     fun getAPI(): RendererAPI.API = RendererAPI.getAPI()
 
+    open fun init(){
+        RenderCommand.init()
+    }
+
     open fun beginScene(camera: Camera) {
         SceneData.sViewMatrix = camera.getViewMatrix()
     }

@@ -27,9 +27,9 @@ class AndroidWindow private constructor(
     override val LOG = logger()
 
     private val mData = WindowData()
-    private val renderer: XGLRenderer = XGLRenderer(this)
+    private lateinit var renderer: XGLRenderer
 
-    override var mRenderer: XRenderer = renderer
+    override lateinit var mRenderer: XRenderer  // Used for Engine
     override val mRenderContext: IfGraphicsContext = XGLContext(this)
 
     override fun isVSync(): Boolean = mData.VSync
@@ -99,18 +99,23 @@ class AndroidWindow private constructor(
         }
 
         private fun initView(isES3Supported: Boolean) {
-            (instance!!.mRenderContext as XGLContext).isES3Supported = isES3Supported
+            with(instance!!){
+                // 初始化Renderer Context
+                (mRenderContext as XGLContext).isES3Supported = isES3Supported
+                mRenderContext.init()
 
-            // 初始化Renderer Context
-            instance!!.mRenderContext.init()
+                // 创建并设置渲染器（Renderer）以在GLSurfaceView上绘制
+                renderer = XGLRenderer(this)
+                setRenderer(renderer)
+                mRenderer = renderer
 
-            // 设置渲染器（Renderer）以在GLSurfaceView上绘制
-            instance!!.setRenderer(instance!!.renderer)
+                // 仅在绘图数据发生更改时才渲染视图: 在该模式下当渲染内容变化时不会主动刷新效果，需要手动调用requestRender()
+                renderMode = RENDERMODE_WHEN_DIRTY
+                //renderMode = RENDERMODE_CONTINUOUSLY
+            }
+        }
 
-            // 仅在绘图数据发生更改时才渲染视图: 在该模式下当渲染内容变化时不会主动刷新效果，需要手动调用requestRender()
-            instance!!.renderMode = RENDERMODE_WHEN_DIRTY
-            //instance!!.renderMode = RENDERMODE_CONTINUOUSLY
-
+        private fun initRendererCommand(){
             RenderCommand.sRendererAPI = XGLRendererAPI()
         }
 
@@ -121,7 +126,12 @@ class AndroidWindow private constructor(
             synchronized(this) {
                 (instance ?: create(context, props)).also {
                     instance = it
-                    initView((context as GameActivity).isES3Supported())
+
+                    initRendererCommand()
+
+                    initView(
+                        (context as GameActivity).isES3Supported()
+                    )
                 }
             }
 

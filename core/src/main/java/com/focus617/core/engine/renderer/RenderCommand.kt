@@ -6,6 +6,10 @@ import com.focus617.core.platform.base.BaseEntity
 object RenderCommand: BaseEntity() {
     var sRendererAPI: RendererAPI? = null
 
+    fun init(){
+        sRendererAPI?.init()
+    }
+
     fun clear(){
         sRendererAPI?.clear()
     }

@@ -1,11 +1,24 @@
 package com.focus617.app_demo.renderer
 
+import android.opengl.GLES20.*
 import android.opengl.GLES31
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.renderer.RendererAPI
 import com.focus617.core.engine.renderer.VertexArray
 
 class XGLRendererAPI : RendererAPI() {
+
+    override fun init() {
+        LOG.info("Enable Blend.")
+        // 这个函数用于决定, 在pixel绘制时, 如果已经有绘制的pixel了, 那么新pixel的权重是其alpha值,
+        // 原本的pixel的权重值是1-alpha值
+        glEnable(GL_BLEND)
+
+        //source权重值用其alpha值，destination权重值为1-source权重值
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+
+    }
+
     override fun clear() {
         // 清理屏幕，重绘背景颜色
         GLES31.glClear(GLES31.GL_COLOR_BUFFER_BIT or GLES31.GL_DEPTH_BUFFER_BIT)
