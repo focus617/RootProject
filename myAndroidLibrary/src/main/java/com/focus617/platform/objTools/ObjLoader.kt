@@ -6,6 +6,7 @@ import com.focus617.myopengldemo.utils.objTools.ObjInfo
 import com.focus617.myopengldemo.utils.objTools.ObjNormal
 import com.focus617.myopengldemo.utils.objTools.ObjTexture
 import com.focus617.myopengldemo.utils.objTools.ObjVertex
+import com.focus617.platform.helper.FileHelper
 import com.focus617.platform.objTools.Vector.Companion.calTriangleNormal
 import timber.log.Timber
 import java.util.*
@@ -50,10 +51,7 @@ object ObjLoader {
             Timber.w("Obj File doesn't exist")
         }
 
-        directory =
-            if (objFilePathName.contains('/'))
-                objFilePathName.substring(0, objFilePathName.lastIndexOf('/'))
-            else "."
+        directory = FileHelper.getPath(objFilePathName)
 
         parse(context, objFilePathName)
 

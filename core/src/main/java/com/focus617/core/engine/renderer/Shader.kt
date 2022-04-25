@@ -17,6 +17,8 @@ abstract class Shader(
     protected abstract var mHandle: Int
     protected var nName: String = name
 
+    fun getName() = nName
+
     abstract fun bind()
     abstract fun unbind()
 

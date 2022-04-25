@@ -9,10 +9,7 @@ import com.focus617.app_demo.objects.d2.Square
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.math.XMatrix
-import com.focus617.core.engine.renderer.RenderCommand
-import com.focus617.core.engine.renderer.Shader
-import com.focus617.core.engine.renderer.VertexArray
-import com.focus617.core.engine.renderer.XRenderer
+import com.focus617.core.engine.renderer.*
 import timber.log.Timber
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -24,7 +21,8 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
     private val SHADER_FILE = "shader_square.glsl"
     private val TEXTURE_FILE = "Checkerboard.png"
     private val TEXTURE_LOGO_FILE = "Logo.png"
-    private lateinit var mShader: XGLShader
+
+    private val mShaderLibrary = ShaderLibrary()
     private var mTexture: XGLTexture2D? = null
     private var mTextureLogo: XGLTexture2D? = null
 
@@ -44,10 +42,12 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         this.init()
 
         // TODO: How to create objects in Sandbox layer?
-        mShader = XGLShaderBuilder.createShader(
+        val mShader = XGLShaderBuilder.createShader(
             window.context,
             "$PATH/$SHADER_FILE"
         ) as XGLShader
+
+        mShaderLibrary.add(mShader)
 
         mTexture = XGLTextureBuilder.createTexture(
             window.context,
@@ -78,14 +78,17 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
 
-        mTexture?.bind()
+        val shader = mShaderLibrary.get(SHADER_FILE)
+        shader?.apply {
+            mTexture?.bind()
 
-        //submit(shader, mTriangle.vertexArray, mTriangle.transform)
-        submit(mShader, mSquare.vertexArray, mSquare.transform)
+            //submit(shader, mTriangle.vertexArray, mTriangle.transform)
+            submit(shader, mSquare.vertexArray, mSquare.transform)
 
-        // This texture has transparent alpha for part of image
-        mTextureLogo?.bind()
-        submit(mShader, mSquare.vertexArray, mSquare.transform)
+            // This texture has transparent alpha for part of image
+            mTextureLogo?.bind()
+            submit(shader, mSquare.vertexArray, mSquare.transform)
+        }
     }
 
     override fun submit(

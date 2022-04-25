@@ -8,6 +8,17 @@ import java.io.*
 
 object FileHelper {
 
+    fun getPath(filePath: String): String =
+        if (filePath.contains('/'))
+            filePath.substring(0, filePath.lastIndexOf('/'))
+        else "."
+
+    fun getFileName(filePath: String): String =
+        if (filePath.contains('/'))
+            filePath.substring(filePath.lastIndexOf('/') + 1, filePath.length)
+        else filePath
+
+
     private const val DATA_FILE_NAME = "data"
 
     fun save(context: Context, inputText: String, fileName: String = DATA_FILE_NAME) {

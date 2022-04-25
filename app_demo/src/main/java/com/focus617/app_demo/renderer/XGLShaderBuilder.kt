@@ -64,10 +64,7 @@ object XGLShaderBuilder : ShaderBuilder() {
     }
 
     /** 基于Assets中的单一glsl文件构造 */
-    fun createShader(
-        context: Context,
-        filePath: String
-    ): Shader? {
+    fun createShader(context: Context, filePath: String): Shader? {
         return when (RendererAPI.getAPI()) {
             RendererAPI.API.None -> {
                 LOG.error("RendererAPI::None is currently not supported!")

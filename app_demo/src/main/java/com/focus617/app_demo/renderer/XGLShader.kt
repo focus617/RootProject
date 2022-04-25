@@ -130,9 +130,7 @@ class XGLShader constructor(
             if (filePath.isEmpty() or TextUtils.isEmpty(filePath)) {
                 LOG.error("Shader file doesn't exist")
             }
-            name = if (filePath.contains('/'))
-                filePath.substring(filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('.'))
-            else filePath
+            name = FileHelper.getFileName(filePath)
 
             try {
                 val scanner = Scanner(context.assets.open(filePath))
