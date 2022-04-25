@@ -3,7 +3,7 @@ package com.focus617.core.engine.math
 class Vector2(var x: Float, var y: Float) {
     constructor(from: Point2D, to: Point2D) : this(to.x - from.x, to.y - from.y)
 
-    override fun toString(): String = "($x, $y)"
+    override fun toString(): String = "Vector($x, $y)"
 
     override fun equals(other: Any?): Boolean =
         if (other !is Vector2) false

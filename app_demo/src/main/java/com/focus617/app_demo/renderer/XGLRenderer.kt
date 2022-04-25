@@ -24,7 +24,7 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
     private val FRAGMENT_FILE = "fragment_shader.glsl"
     private val TEXTURE_FILE = "Checkerboard.png"
     private lateinit var mShader: XGLShader
-    private var mTexture: XGLTexture? = null
+    private var mTexture: XGLTexture2D? = null
 
     //private lateinit var mTriangle: Triangle
     private lateinit var mSquare: Square

@@ -18,7 +18,7 @@ class Vector3(var x: Float, var y: Float, var z: Float) {
     constructor(from: Vector3, to: Vector3) :
             this((to.x - from.x), (to.y - from.y), (to.z - from.z))
 
-    override fun toString(): String = "($x, $y, $z)"
+    override fun toString(): String = "Vector($x, $y, $z)"
 
     override fun equals(other: Any?): Boolean =
         if(other !is Vector3) false

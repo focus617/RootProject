@@ -15,7 +15,7 @@ import java.io.IOException
  * 1. 储存了纹理的基本属性 [mWidth] [mHeight]
  * 2. 它的构造器需要纹理的图片资源或文件
  */
-class XGLTexture private constructor() : Texture2D() {
+class XGLTexture2D private constructor() : Texture2D() {
     private val textureObjectIdBuf = IntArray(1)
     private var textureObjectId: Int = 0
 
@@ -36,7 +36,20 @@ class XGLTexture private constructor() : Texture2D() {
         when (slot) {
             0 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE0)
             1 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE1)
-            else -> GLES31.glActiveTexture(GLES31.GL_TEXTURE2)
+            2 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE2)
+            3 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE3)
+            4 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE4)
+            5 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE5)
+            6 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE6)
+            7 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE7)
+            8 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE8)
+            9 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE9)
+            10 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE10)
+            11 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE11)
+            12 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE12)
+            13 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE13)
+            14 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE14)
+            else -> GLES31.glActiveTexture(GLES31.GL_TEXTURE15)
         }
 
         // Bind to the texture in OpenGL

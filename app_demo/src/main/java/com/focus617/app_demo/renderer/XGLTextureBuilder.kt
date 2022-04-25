@@ -6,24 +6,24 @@ import com.focus617.mylib.logging.WithLogging
 
 object XGLTextureBuilder : WithLogging() {
     /** 基于Assets中的文件构造 */
-    fun createTexture(context: Context, filePath: String): XGLTexture? {
+    fun createTexture(context: Context, filePath: String): XGLTexture2D? {
         return when (RendererAPI.getAPI()) {
             RendererAPI.API.None -> {
                 LOG.error("RendererAPI::None is currently not supported!")
                 null
             }
-            RendererAPI.API.OpenGLES -> XGLTexture(context, filePath)
+            RendererAPI.API.OpenGLES -> XGLTexture2D(context, filePath)
         }
     }
 
     /** 基于Resource/raw中的文件构造 */
-    fun createTexture(context: Context, resourceId: Int): XGLTexture? {
+    fun createTexture(context: Context, resourceId: Int): XGLTexture2D? {
         return when (RendererAPI.getAPI()) {
             RendererAPI.API.None -> {
                 LOG.error("RendererAPI::None is currently not supported!")
                 null
             }
-            RendererAPI.API.OpenGLES -> XGLTexture(context, resourceId)
+            RendererAPI.API.OpenGLES -> XGLTexture2D(context, resourceId)
         }
     }
 }

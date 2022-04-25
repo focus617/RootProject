@@ -1,10 +1,11 @@
 package com.focus617.core.engine.math
 
 import com.focus617.core.engine.math.Vector3.Companion.angleBetween
+import com.focus617.mylib.logging.WithLogging
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
-class VectorTest {
+class Vector3Test : WithLogging() {
     @Test
     fun test_equals(){
         // Given
