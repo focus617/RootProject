@@ -55,7 +55,7 @@ object FileHelper {
      */
     fun loadFromResourceFile(context: Context, resourceId: Int): String {
 
-        Timber.d("loadFromResourceFile($resourceId)")
+        Timber.d("loadFromResourceFile(): $resourceId")
 
         val body = StringBuilder()
 
@@ -82,7 +82,7 @@ object FileHelper {
      * text.
      */
     fun loadFromAssetsFile(context: Context, filePath: String): String {
-        Timber.d("loadFromAssetsFile($filePath)")
+        Timber.d("loadFromAssetsFile(): $filePath")
 
         if (filePath.isEmpty() or TextUtils.isEmpty(filePath)) {
             Timber.w("$filePath doesn't exist")

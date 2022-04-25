@@ -198,8 +198,8 @@ class XGLShader constructor(
                 // Print the shader info log to the Android log output.
                 LOG.error("$TAG: Shader compilation failure.")
                 LOG.error(
-                    "$TAG: shader compilation result: ${compileStatus[0]}" +
-                            glGetShaderInfoLog(shaderObjectId)
+                    ("$TAG: shader compilation result: ${compileStatus[0]}" +
+                            "Log: ${glGetShaderInfoLog(shaderObjectId)}").trimIndent()
                 )
 
                 // If it failed, delete the shader object.
@@ -244,7 +244,7 @@ class XGLShader constructor(
                 // Print the program info log to the Android log output.
                 LOG.error(
                     ("$TAG: shader linking result:${linkStatus[0]}\n"
-                            + "Log:${glGetProgramInfoLog(programObjectId)}").trimIndent()
+                            + "Log: ${glGetProgramInfoLog(programObjectId)}").trimIndent()
                 )
 
                 // If it failed, delete the program object.
@@ -273,7 +273,7 @@ class XGLShader constructor(
                 LOG.error("$TAG: Shader validation failure!")
                 LOG.error(
                     ("$TAG: shader validation result: ${validateStatus[0]}\n"
-                            + "Log:${glGetProgramInfoLog(programObjectId)}").trimIndent()
+                            + "Log: ${glGetProgramInfoLog(programObjectId)}").trimIndent()
                 )
                 return false
             }
