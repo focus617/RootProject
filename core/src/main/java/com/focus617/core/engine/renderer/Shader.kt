@@ -9,11 +9,13 @@ import java.io.Closeable
  * 2. 它的构造器需要顶点着色器和片段着色器的源代码
  */
 abstract class Shader(
+    name: String,
     vertexShader: String,
     fragmentShader: String
 ) : BaseEntity(), Closeable {
 
     protected abstract var mHandle: Int
+    protected var nName: String = name
 
     abstract fun bind()
     abstract fun unbind()

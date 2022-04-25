@@ -48,6 +48,7 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         // shader = XGLShader(vertexShaderCode, fragmentShaderCode)
         mShader = XGLShaderBuilder.createShader(
             window.context,
+            "MyShader",
             PATH,
             VERTEX_FILE,
             FRAGMENT_FILE

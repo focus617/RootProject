@@ -14,16 +14,19 @@ import com.focus617.platform.helper.FileHelper
  * 2. 它的构造器需要顶点着色器和片段着色器的源代码
  */
 class XGLShader constructor(
+    name: String,
     vertexShaderSrc: String,
     fragmentShaderSrc: String
-) : Shader(vertexShaderSrc, fragmentShaderSrc) {
+) : Shader(name, vertexShaderSrc, fragmentShaderSrc) {
 
     /** 基于Resource/raw中的文件构造 */
     constructor(
         context: Context,
+        name: String,
         vertexShaderResourceId: Int,
         fragmentShaderResourceId: Int
     ) : this(
+        name,
         FileHelper.loadFromResourceFile(context, vertexShaderResourceId),
         FileHelper.loadFromResourceFile(context, fragmentShaderResourceId)
     )
@@ -31,10 +34,12 @@ class XGLShader constructor(
     /** 基于Assets中的文件构造 */
     constructor(
         context: Context,
+        name: String,
         path: String,
         vertexShaderFileName: String,
         fragmentShaderFileName: String
     ) : this(
+        name,
         FileHelper.loadFromAssetsFile(context, "$path/$vertexShaderFileName"),
         FileHelper.loadFromAssetsFile(context, "$path/$fragmentShaderFileName")
     )

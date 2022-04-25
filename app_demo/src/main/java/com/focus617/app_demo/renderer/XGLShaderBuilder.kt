@@ -7,18 +7,23 @@ import com.focus617.core.engine.renderer.ShaderBuilder
 
 object XGLShaderBuilder : ShaderBuilder() {
 
-    override fun createShader(vertexShaderSrc: String, fragmentShaderSrc: String): Shader? {
+    override fun createShader(
+        name: String,
+        vertexShaderSrc: String,
+        fragmentShaderSrc: String
+    ): Shader? {
         return when (RendererAPI.getAPI()) {
             RendererAPI.API.None -> {
                 LOG.error("RendererAPI::None is currently not supported!")
                 null
             }
-            RendererAPI.API.OpenGLES -> XGLShader(vertexShaderSrc, fragmentShaderSrc)
+            RendererAPI.API.OpenGLES -> XGLShader(name, vertexShaderSrc, fragmentShaderSrc)
         }
     }
 
     fun createShader(
         context: Context,
+        name: String,
         vertexShaderResourceId: Int,
         fragmentShaderResourceId: Int
     ): Shader? {
@@ -29,6 +34,7 @@ object XGLShaderBuilder : ShaderBuilder() {
             }
             RendererAPI.API.OpenGLES -> XGLShader(
                 context,
+                name,
                 vertexShaderResourceId,
                 fragmentShaderResourceId
             )
@@ -37,6 +43,7 @@ object XGLShaderBuilder : ShaderBuilder() {
 
     fun createShader(
         context: Context,
+        name: String,
         path: String,
         vertexShaderFileName: String,
         fragmentShaderFileName: String
@@ -48,6 +55,7 @@ object XGLShaderBuilder : ShaderBuilder() {
             }
             RendererAPI.API.OpenGLES -> XGLShader(
                 context,
+                name,
                 path,
                 vertexShaderFileName,
                 fragmentShaderFileName
