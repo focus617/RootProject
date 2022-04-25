@@ -2,6 +2,7 @@ package com.focus617.platform.helper
 
 import android.content.Context
 import android.content.res.Resources
+import android.text.TextUtils
 import timber.log.Timber
 import java.io.*
 
@@ -26,10 +27,15 @@ object FileHelper {
      * Reads in text from a file in disk and returns a String containing the
      * text.
      */
-    fun load(context: Context, fileName: String = DATA_FILE_NAME): String {
+    fun load(context: Context, filePath: String = DATA_FILE_NAME): String {
+
+        if (filePath.isEmpty() or TextUtils.isEmpty(filePath)) {
+            Timber.w("$filePath doesn't exist")
+        }
+
         val content = StringBuilder()
         try {
-            val input = context.openFileInput(fileName)
+            val input = context.openFileInput(filePath)
             val reader = BufferedReader(InputStreamReader(input))
             reader.use {
                 reader.forEachLine {
@@ -76,20 +82,23 @@ object FileHelper {
      * text.
      */
     fun loadFromAssetsFile(context: Context, filePath: String): String {
-
         Timber.d("loadFromAssetsFile($filePath)")
+
+        if (filePath.isEmpty() or TextUtils.isEmpty(filePath)) {
+            Timber.w("$filePath doesn't exist")
+        }
 
         val body = StringBuilder()
 
         try {
             val inputStream = context.resources.assets.open(filePath)
-            val inputStreamReader = InputStreamReader(inputStream)
-            val bufferedReader = BufferedReader(inputStreamReader)
-            var nextLine: String?
+            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
 
-            while (bufferedReader.readLine().also { nextLine = it } != null) {
-                body.append(nextLine)
-                body.append('\n')
+            bufferedReader.use {
+                bufferedReader.forEachLine {
+                    body.append(it)
+                    body.append("\n")
+                }
             }
         } catch (e: IOException) {
             throw RuntimeException("Could not open shader file: $filePath $ e")
