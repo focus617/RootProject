@@ -4,11 +4,13 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.opengl.GLES20.*
+import android.opengl.GLES30
 import android.opengl.GLES31
 import android.opengl.GLUtils
 import com.focus617.core.engine.renderer.Texture2D
 import timber.log.Timber
 import java.io.IOException
+import java.nio.ByteBuffer
 
 /**
  * OpenGL纹理类 XGLTexture
@@ -24,12 +26,24 @@ class XGLTexture2D private constructor() : Texture2D() {
 
     /** 基于Assets中的文件构造 */
     constructor(context: Context, filePath: String) : this() {
-        loadTextureFromFile(context, filePath)
+        val bitmap = loadTextureFromFile(context, filePath)
+        bitmap?.apply { initTexture(bitmap) }
     }
 
     /** 基于Resource/raw中的文件构造 */
     constructor(context: Context, resourceId: Int) : this() {
-        loadTexture(context, resourceId)
+        val bitmap = loadTextureFromResource(context, resourceId)
+        bitmap?.apply { initTexture(bitmap) }
+    }
+
+    private fun initTexture(bitmap: Bitmap) {
+        bitmap.apply {
+            mWidth = bitmap.width
+            mHeight = bitmap.height
+            loadImageIntoTexture(bitmap)
+        }
+        // Recycle the bitmap, since its data has been loaded into OpenGL.
+        bitmap.recycle()
     }
 
     override fun bind(slot: Int) {
@@ -61,16 +75,13 @@ class XGLTexture2D private constructor() : Texture2D() {
     }
 
     /**
-     * Loads a texture from a resource ID, returning the OpenGL ID for that
+     * Loads a texture from a file, returning the OpenGL ID for that
      * texture. Returns 0 if the load failed.
      *
-     * @param context
-     * @param resourceId
-     * @return
+     * @param bitmap
+     * @return textureObjectId
      */
-    private fun loadTexture(context: Context, resourceId: Int): Int {
-
-        LOG.info("loadTexture($resourceId)")
+    private fun loadImageIntoTexture(bitmap: Bitmap): Int {
 
         GLES31.glGenTextures(1, textureObjectIdBuf, 0)
         if (textureObjectIdBuf[0] == 0) {
@@ -79,33 +90,37 @@ class XGLTexture2D private constructor() : Texture2D() {
         }
         textureObjectId = textureObjectIdBuf[0]
 
-        val options = BitmapFactory.Options()
-        options.inScaled = false
-
-        // Read in the resource
-        val bitmap = BitmapFactory.decodeResource(
-            context.resources, resourceId, options
-        )
-        if (bitmap == null) {
-            LOG.error("Resource ID $resourceId could not be decoded.")
-            GLES31.glDeleteTextures(1, textureObjectIdBuf, 0)
-            return 0
-        }
-        mWidth = bitmap.width
-        mHeight = bitmap.height
-
         // Bind to the texture in OpenGL
         GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, textureObjectId)
 
         //绑定纹理单元与sampler
         GLES31.glBindSampler(0, samplers[0])
 
+        // Set
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+
         // Set filtering: a default must be set, or the texture will be black.
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 
+        val byteBuf = ByteBuffer.allocate(bitmap.width * bitmap.height * 4)
+        bitmap.copyPixelsToBuffer(byteBuf)
+        byteBuf.position(0)
+
         // Load the bitmap into the bound texture.
-        GLUtils.texImage2D(GLES31.GL_TEXTURE_2D, 0, bitmap, 0)
+        GLES31.glTexImage2D(
+            GLES30.GL_TEXTURE_2D,
+            0,
+            GLES30.GL_RGBA,
+            bitmap.width,
+            bitmap.height,
+            0,
+            GLES30.GL_RGBA,
+            GLES30.GL_UNSIGNED_BYTE,
+            byteBuf
+        )
+        //  GLUtils.texImage2D(GLES31.GL_TEXTURE_2D, 0, bitmap, 0)
 
         // Note: Following code may cause an error to be reported in the
         // ADB log as follows: E/IMGSRV(20095): :0: HardwareMipGen:
@@ -116,86 +131,13 @@ class XGLTexture2D private constructor() : Texture2D() {
         // and mipmap generation will work.
         GLES31.glGenerateMipmap(GLES31.GL_TEXTURE_2D)
 
-        // Recycle the bitmap, since its data has been loaded into
-        // OpenGL.
-        bitmap.recycle()
-
         // Unbind from the texture.
         GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, 0)
 
         return textureObjectId
     }
 
-    /**
-     * Loads a texture from a file, returning the OpenGL ID for that
-     * texture. Returns 0 if the load failed.
-     *
-     * @param context
-     * @param filePath
-     * @return
-     */
-    private fun loadTextureFromFile(context: Context, filePath: String): Int {
 
-        LOG.info("loadTextureFromFile(): $filePath")
-
-        GLES31.glGenTextures(1, textureObjectIdBuf, 0)
-        if (textureObjectIdBuf[0] == 0) {
-            LOG.error("Could not generate a new OpenGL texture object.")
-            return 0
-        }
-        textureObjectId = textureObjectIdBuf[0]
-
-        val options = BitmapFactory.Options()
-        options.inScaled = false
-
-        try {
-            val inputStream = context.resources.assets.open(filePath)
-            // Read in the resource
-            val bitmap = BitmapFactory.decodeStream(inputStream)
-            if (bitmap == null) {
-                LOG.error("$filePath could not be decoded.")
-                GLES31.glDeleteTextures(1, textureObjectIdBuf, 0)
-                return 0
-            }
-            mWidth = bitmap.width
-            mHeight = bitmap.height
-
-            // Bind to the texture in OpenGL
-            GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, textureObjectId)
-
-            //绑定纹理单元与sampler
-            GLES31.glBindSampler(0, samplers[0])
-
-            // Set filtering: a default must be set, or the texture will be black.
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-
-
-            // Load the bitmap into the bound texture.
-            GLUtils.texImage2D(GLES31.GL_TEXTURE_2D, 0, bitmap, 0)
-
-            // Note: Following code may cause an error to be reported in the
-            // ADB log as follows: E/IMGSRV(20095): :0: HardwareMipGen:
-            // Failed to generate texture mipmap levels (error=3)
-            // No OpenGL error will be encountered (glGetError() will return
-            // 0). If this happens, just squash the source image to be
-            // square. It will look the same because of texture coordinates,
-            // and mipmap generation will work.
-            GLES31.glGenerateMipmap(GLES31.GL_TEXTURE_2D)
-
-            // Recycle the bitmap, since its data has been loaded into
-            // OpenGL.
-            bitmap.recycle()
-
-        } catch (e: IOException) {
-            throw RuntimeException("Could not open shader file: $filePath $ e")
-        }
-
-        // Unbind from the texture.
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, 0)
-
-        return textureObjectId
-    }
 
     companion object TextureHelper {
 
@@ -227,6 +169,61 @@ class XGLTexture2D private constructor() : Texture2D() {
                 GLES31.GL_TEXTURE_WRAP_T,
                 GLES31.GL_REPEAT.toFloat()
             ) //设置T轴拉伸方式
+        }
+
+        /**
+         * Loads a texture from a resource ID, returning the OpenGL ID for that
+         * texture. Returns 0 if the load failed.
+         *
+         * @param context
+         * @param resourceId
+         * @return
+         */
+        private fun loadTextureFromResource(context: Context, resourceId: Int): Bitmap? {
+            LOG.info("loadTexture($resourceId)")
+
+            var bitmap: Bitmap? = null
+            val options = BitmapFactory.Options()
+            options.inScaled = false
+
+            // Read in the resource
+            bitmap = BitmapFactory.decodeResource(
+                context.resources, resourceId, options
+            )
+            if (bitmap == null) {
+                LOG.error("Resource ID $resourceId could not be decoded.")
+            }
+            return bitmap
+        }
+
+        /**
+         * Loads a texture from a file, returning the OpenGL ID for that
+         * texture. Returns 0 if the load failed.
+         *
+         * @param context
+         * @param filePath
+         * @return
+         */
+        private fun loadTextureFromFile(context: Context, filePath: String): Bitmap? {
+
+            LOG.info("loadTextureFromFile(): $filePath")
+
+            var bitmap: Bitmap? = null
+
+            val options = BitmapFactory.Options()
+            options.inScaled = false
+
+            try {
+                val inputStream = context.resources.assets.open(filePath)
+                // Read in the resource
+                bitmap = BitmapFactory.decodeStream(inputStream)
+                if (bitmap == null) {
+                    LOG.error("$filePath could not be decoded.")
+                }
+            } catch (e: IOException) {
+                throw RuntimeException("Could not open shader file: $filePath $ e")
+            }
+            return bitmap
         }
 
         /**

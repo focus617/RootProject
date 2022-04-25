@@ -1,5 +1,6 @@
 package com.focus617.app_demo.renderer
 
+import android.opengl.GLES30
 import android.opengl.GLES31
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.AndroidWindow
@@ -23,8 +24,10 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
     private val VERTEX_FILE = "vertex_shader_mvp.glsl"
     private val FRAGMENT_FILE = "fragment_shader.glsl"
     private val TEXTURE_FILE = "Checkerboard.png"
+    private val TEXTURE_LOGO_FILE = "Logo.png"
     private lateinit var mShader: XGLShader
     private var mTexture: XGLTexture2D? = null
+    private var mTextureLogo: XGLTexture2D? = null
 
     //private lateinit var mTriangle: Triangle
     private lateinit var mSquare: Square
@@ -54,6 +57,10 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
             window.context,
             "$PATH/$TEXTURE_FILE"
         )
+        mTextureLogo = XGLTextureBuilder.createTexture(
+            window.context,
+            "$PATH/$TEXTURE_LOGO_FILE"
+        )
 
         //mTriangle = Triangle()
         mSquare = Square()
@@ -79,6 +86,11 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
 
         //submit(shader, mTriangle.vertexArray, mTriangle.transform)
         submit(mShader, mSquare.vertexArray, mSquare.transform)
+
+        mTextureLogo?.bind()
+
+        //submit(shader, mTriangle.vertexArray, mTriangle.transform)
+        submit(mShader, mSquare.vertexArray, mSquare.transform)
     }
 
     override fun submit(
@@ -101,5 +113,14 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         // 在下个submit，会bind其它handle，自然会实现unbind
         vertexArray.unbind()
         shader.unbind()
+    }
+
+    fun checkGLError() {
+        val error = GLES30.glGetError()
+        if (error != GLES30.GL_NO_ERROR) {
+            val hexErrorCode = Integer.toHexString(error)
+            LOG.error("glError: $hexErrorCode")
+            throw RuntimeException("GLError")
+        }
     }
 }
