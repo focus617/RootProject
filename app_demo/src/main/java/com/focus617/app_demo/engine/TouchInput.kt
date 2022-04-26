@@ -12,25 +12,48 @@ import com.focus617.mylib.logging.WithLogging
  * interested in events where the touch position changed.
  */
 class TouchInput(private val window: AndroidWindow) : WithLogging(), View.OnTouchListener {
+    private var isZooming: Boolean = false
+    private var zoomStartX: Float = 0f
+    private var zoomStartY: Float = 0f
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         var hasConsumed: Boolean = false
 
         if (event != null) {
-            LOG.info("onTouchEvent: ${event.action}(${event.x},${event.y})")
             when (event.action) {
+                // 在第一个点被按下时触发
                 MotionEvent.ACTION_DOWN -> {
-                    val event = TouchPressEvent(event.x, event.y, this)
-                    window.mData.callback?.let { hasConsumed = it(event) }
+                    LOG.info("MotionEvent.ACTION_DOWN Event: ${event.action}(${event.x},${event.y})")
+                    val nativeEvent = TouchPressEvent(event.x, event.y, this)
+                    window.mData.callback?.let { hasConsumed = it(nativeEvent) }
+                }
+
+                // 当屏幕上已经有一个点被按住，此时再按下其他点时触发
+                MotionEvent.ACTION_POINTER_DOWN -> {
+                    LOG.info("MotionEvent.ACTION_POINTER_DOWN Event: ${event.action}(${event.x},${event.y})")
+                    isZooming = true
+                    zoomStartX = event.x
+                    zoomStartY = event.y
+                }
+
+                // 当屏幕上有多个点被按住，松开其中一个点时触发（即非最后一个点被放开时）
+                MotionEvent.ACTION_POINTER_UP -> {
+                    LOG.info("MotionEvent.ACTION_POINTER_UP Event: ${event.action}(${event.x},${event.y})")
+                    isZooming = false
                 }
 
                 MotionEvent.ACTION_MOVE -> {
-                    val event = TouchDragEvent(event.x, event.y, this)
-                    window.mData.callback?.let { hasConsumed = it(event) }
+                    LOG.info("MotionEvent.ACTION_MOVE Event: ${event.action}(${event.x},${event.y})")
+                    if (isZooming) {
+
+                    } else {
+                        val nativeEvent = TouchDragEvent(event.x, event.y, this)
+                        window.mData.callback?.let { hasConsumed = it(nativeEvent) }
+                    }
                 }
 
                 else -> {
-                    LOG.info("onTouchEvent: ${event.action}")
+                    LOG.info("MotionEvent.${event.action}")
                 }
             }
         }

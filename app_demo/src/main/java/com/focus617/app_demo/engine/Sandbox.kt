@@ -9,7 +9,6 @@ import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.base.LayerEventDispatcher
 import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
 import com.focus617.core.platform.event.screenTouchEvents.TouchPressEvent
-import com.focus617.mylib.helper.DateHelper
 
 class Sandbox(context: Context) : Engine() {
     init {
@@ -45,7 +44,7 @@ class Sandbox(context: Context) : Engine() {
         }
 
         override fun onEvent(event: Event): Boolean {
-            LOG.info("${this.mDebugName} onEvent $event")
+//            LOG.info("${this.mDebugName} onEvent $event")
             return eventDispatcher.dispatch(event)
         }
 
@@ -53,9 +52,9 @@ class Sandbox(context: Context) : Engine() {
             eventDispatcher.register(EventType.TouchDrag) { event ->
                 val e: TouchDragEvent = event as TouchDragEvent
                 LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
-                LOG.info("It's type is ${e.eventType}")
-                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
-                LOG.info("Current position is (${e.x}, ${e.y})")
+//                LOG.info("It's type is ${e.eventType}")
+//                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
+//                LOG.info("Current position is (${e.x}, ${e.y})\n")
                 event.handleFinished()
                 true
             }
@@ -63,9 +62,9 @@ class Sandbox(context: Context) : Engine() {
             eventDispatcher.register(EventType.TouchPress) { event ->
                 val e: TouchPressEvent = event as TouchPressEvent
                 LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
-                LOG.info("It's type is ${e.eventType}")
-                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
-                LOG.info("Current position is (${e.x}, ${e.y})")
+//                LOG.info("It's type is ${e.eventType}")
+//                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
+//                LOG.info("Current position is (${e.x}, ${e.y})\n")
                 event.handleFinished()
                 true
             }

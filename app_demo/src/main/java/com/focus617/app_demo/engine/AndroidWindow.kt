@@ -1,5 +1,6 @@
 package com.focus617.app_demo.engine
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.GameActivity
@@ -108,6 +109,7 @@ class AndroidWindow private constructor(
             RenderCommand.sRendererAPI = XGLRendererAPI()
         }
 
+        @SuppressLint("ClickableViewAccessibility")
         private fun setOnTouchListener(window: AndroidWindow) {
             window.setOnTouchListener(TouchInput(window))
         }
