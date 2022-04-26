@@ -2,7 +2,6 @@ package com.focus617.app_demo.engine
 
 import android.content.Context
 import android.opengl.GLSurfaceView
-import android.view.MotionEvent
 import com.focus617.app_demo.GameActivity
 import com.focus617.app_demo.renderer.XGLRenderer2D
 import com.focus617.app_demo.renderer.XGLRendererAPI
@@ -11,11 +10,8 @@ import com.focus617.core.engine.core.WindowProps
 import com.focus617.core.engine.renderer.IfGraphicsContext
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.XRenderer
-import com.focus617.core.platform.event.applicationEvents.AppUpdateEvent
-import com.focus617.core.platform.event.applicationEvents.AppVariant
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventHandler
-import com.focus617.core.platform.event.screenTouchEvents.TouchMovedEvent
 
 /**
  * 现在先借用 GLSurfaceView 来实现 IfWindow 定义的功能。
@@ -26,7 +22,7 @@ class AndroidWindow private constructor(
 ) : GLSurfaceView(context), IfWindow {
     override val LOG = logger()
 
-    private val mData = WindowData()
+    val mData = WindowData()
     private lateinit var renderer: XRenderer
 
     override lateinit var mRenderer: XRenderer  // Used for Engine
@@ -49,32 +45,6 @@ class AndroidWindow private constructor(
         mData.callback = callback
     }
 
-    override fun performClick(): Boolean {
-        return super.performClick()
-    }
-
-    override fun onTouchEvent(e: MotionEvent): Boolean {
-        // MotionEvent reports input details from the touch screen
-        // and other input controls. In this case, you are only
-        // interested in events where the touch position changed.
-        when (e.action) {
-            MotionEvent.ACTION_MOVE -> {
-                LOG.info("onTouchEvent: ${e.action}(${e.x},${e.y})")
-                val event = TouchMovedEvent(e.x, e.y, this)
-                mData.callback?.let { it(event) }
-            }
-            else -> {
-                LOG.info("onTouchEvent: ${e.action}")
-            }
-        }
-        return super.onTouchEvent(e)
-    }
-
-    private fun testCallback() {
-        val event = AppUpdateEvent(AppVariant.MOBILE_DEMO, this)
-        mData.callback?.let { it(event) }
-    }
-
     companion object {
         // 用来统一保存Engine对Window的信息需求
         class WindowData() {
@@ -88,6 +58,24 @@ class AndroidWindow private constructor(
         // 保证Window的单例
         private var instance: AndroidWindow? = null
 
+        fun createWindow(
+            context: Context,
+            props: WindowProps = WindowProps()
+        ): AndroidWindow =
+            synchronized(this) {
+                (instance ?: create(context, props)).also {
+                    instance = it
+
+                    initRendererCommand()
+
+                    initView(
+                        (context as GameActivity).isES3Supported()
+                    )
+
+                    setOnTouchListener(instance!!)
+                }
+            }
+
         private fun create(context: Context, props: WindowProps): AndroidWindow {
             val window = AndroidWindow(context)
             with(window) {
@@ -99,7 +87,7 @@ class AndroidWindow private constructor(
         }
 
         private fun initView(isES3Supported: Boolean) {
-            with(instance!!){
+            with(instance!!) {
                 // 初始化Renderer Context
                 (mRenderContext as XGLContext).isES3Supported = isES3Supported
                 mRenderContext.init()
@@ -116,26 +104,13 @@ class AndroidWindow private constructor(
             }
         }
 
-        private fun initRendererCommand(){
+        private fun initRendererCommand() {
             RenderCommand.sRendererAPI = XGLRendererAPI()
         }
 
-        fun createWindow(
-            context: Context,
-            props: WindowProps = WindowProps()
-        ): AndroidWindow =
-            synchronized(this) {
-                (instance ?: create(context, props)).also {
-                    instance = it
-
-                    initRendererCommand()
-
-                    initView(
-                        (context as GameActivity).isES3Supported()
-                    )
-                }
-            }
-
+        private fun setOnTouchListener(window: AndroidWindow) {
+            window.setOnTouchListener(TouchInput(window))
+        }
     }
 
 }

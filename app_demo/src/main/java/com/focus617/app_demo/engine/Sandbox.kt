@@ -7,7 +7,7 @@ import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.base.LayerEventDispatcher
-import com.focus617.core.platform.event.screenTouchEvents.TouchMovedEvent
+import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
 import com.focus617.mylib.helper.DateHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +33,7 @@ class Sandbox(context: Context) : Engine() {
 
         override fun onUpdate(timeStep: TimeStep) {
             mWindow?.mRenderer?.apply {
-
+                // Update Camera
                 mCameraController.onUpdate(timeStep)
 
                 // Render UI
@@ -53,8 +53,8 @@ class Sandbox(context: Context) : Engine() {
         }
 
         private fun testRegisterEventHandlers() {
-            eventDispatcher.register(EventType.TouchMoved) { event ->
-                val e: TouchMovedEvent = event as TouchMovedEvent
+            eventDispatcher.register(EventType.TouchDrag) { event ->
+                val e: TouchDragEvent = event as TouchDragEvent
                 LOG.info("${e.name} from ${e.source} received")
                 LOG.info("It's type is ${e.eventType}")
                 LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")

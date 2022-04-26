@@ -2,7 +2,7 @@ package com.focus617.login.test_dispatcher.di_in_module
 
 import com.focus617.core.platform.event.applicationEvents.AppLaunchedEvent
 import com.focus617.core.platform.event.applicationEvents.AppUpdateEvent
-import com.focus617.core.platform.event.screenTouchEvents.TouchMovedEvent
+import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
 import com.focus617.login.test_dispatcher.EventHandler
 import dagger.Module
 import dagger.Provides
@@ -33,5 +33,5 @@ object EventHandlerModule {
     @IntoSet
     fun viewOnTouchEventHandler(
         handlers: ViewOnTouchEventHandlers
-    ): EventHandler<TouchMovedEvent> = handlers.viewOnTouchEventHandler
+    ): EventHandler<TouchDragEvent> = handlers.viewOnTouchEventHandler
 }
