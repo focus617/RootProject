@@ -1,11 +1,12 @@
 package com.focus617.core.engine.renderer
 
 import com.focus617.core.engine.scene.Camera
+import com.focus617.core.engine.scene.PerspectiveCamera
 import com.focus617.core.platform.base.BaseEntity
 
 open class XRenderer: BaseEntity() {
-    //val mCamera = OrthographicCamera(-1.0f, 1.0f, -1.0f, 1.0f)
-    val mCamera = Camera()
+    //val mCamera = OrthographicCamera()
+    val mCamera: Camera = PerspectiveCamera()
 
     fun getAPI(): RendererAPI.API = RendererAPI.getAPI()
 
@@ -14,6 +15,7 @@ open class XRenderer: BaseEntity() {
     }
 
     open fun beginScene(camera: Camera) {
+        SceneData.sProjectionMatrix = camera.getProjectionMatrix()
         SceneData.sViewMatrix = camera.getViewMatrix()
     }
 
@@ -30,6 +32,7 @@ open class XRenderer: BaseEntity() {
     }
 
     companion object SceneData{
+        var sProjectionMatrix: FloatArray = FloatArray(16)
         var sViewMatrix: FloatArray = FloatArray(16)
     }
 }

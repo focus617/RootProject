@@ -8,7 +8,6 @@ import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.objects.d2.Square
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.core.IfWindow
-import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.renderer.*
 import timber.log.Timber
 import javax.microedition.khronos.egl.EGLConfig
@@ -68,9 +67,7 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
         // 设置渲染的OpenGL场景（视口）的位置和大小
         GLES31.glViewport(0, 0, width, height)
 
-        // 计算透视投影矩阵 (Project Matrix)，而后将应用于onDrawFrame（）方法中的对象坐标
-        val ratio: Float = width.toFloat() / height.toFloat()
-        XMatrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
+        mCamera.setProjectionMatrix(width, height)
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -98,7 +95,7 @@ class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Ren
     ) {
         (shader as XGLShader).bind()
         // 将模型视图投影矩阵传递给顶点着色器
-        shader.uploadUniformMat4("u_ProjectionMatrix", mProjectionMatrix)
+        shader.uploadUniformMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
         shader.uploadUniformMat4("u_ViewMatrix", SceneData.sViewMatrix)
         shader.uploadUniformMat4("u_ModelMatrix", transform)
 
