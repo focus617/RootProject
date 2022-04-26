@@ -19,7 +19,7 @@ class PerspectiveCamera : Camera() {
     private lateinit var directionRight: Vector3
 
     init {
-        reCalculateViewMatrix()
+        setRotation(mRotationZAxis)
     }
 
     fun getDistance() = mTargetDistance
@@ -48,12 +48,6 @@ class PerspectiveCamera : Camera() {
         directionUp = directionRight.crossProduct(directionFront).normalize()
 
         reCalculateViewMatrix()
-    }
-
-    override fun setProjectionMatrix(width: Int, height: Int){
-        // 计算透视投影矩阵 (Project Matrix)
-        val ratio: Float = width.toFloat() / height.toFloat()
-        XMatrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
     }
 
     override fun reCalculateViewMatrix() {

@@ -1,20 +1,25 @@
 package com.focus617.core.engine.renderer
 
 import com.focus617.core.engine.scene.Camera
+import com.focus617.core.engine.scene.CameraController
 import com.focus617.core.platform.base.BaseEntity
 
-abstract class XRenderer: BaseEntity() {
-    abstract val mCamera: Camera
+abstract class XRenderer : BaseEntity() {
+    abstract val mCameraController: CameraController
 
     fun getAPI(): RendererAPI.API = RendererAPI.getAPI()
 
-    open fun init(){
+    open fun init() {
         RenderCommand.init()
     }
 
     open fun beginScene(camera: Camera) {
-        SceneData.sProjectionMatrix = camera.getProjectionMatrix()
-        SceneData.sViewMatrix = camera.getViewMatrix()
+        // 在多线程渲染里，会把BeginScene函数放在RenderCommandQueue里执行
+        // camera在多线程渲染的时候不能保证主线程是否正在更改Camera的相关信息
+        synchronized(camera) {
+            SceneData.sProjectionMatrix = camera.getProjectionMatrix()
+            SceneData.sViewMatrix = camera.getViewMatrix()
+        }
     }
 
     open fun endScene() {
@@ -29,7 +34,7 @@ abstract class XRenderer: BaseEntity() {
 
     }
 
-    companion object SceneData{
+    companion object SceneData {
         var sProjectionMatrix: FloatArray = FloatArray(16)
         var sViewMatrix: FloatArray = FloatArray(16)
     }

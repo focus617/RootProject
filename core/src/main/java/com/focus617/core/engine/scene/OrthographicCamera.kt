@@ -6,30 +6,15 @@ import com.focus617.core.engine.math.XMatrix
 class OrthographicCamera : Camera() {
 
     override var mPosition: Point3D = Point3D(0f, 0f, 0f)
-    private var mRotation: Float = 0F
+    override var mRotationZAxis: Float = 0F
 
     init {
         reCalculateViewMatrix()
     }
 
-    fun getRotation() = mRotation
     override fun setRotation(rollZ: Float) {
-        mRotation = rollZ
+        mRotationZAxis = rollZ
         reCalculateViewMatrix()
-    }
-
-    override fun setProjectionMatrix(width: Int, height: Int) {
-        // 计算正交投影矩阵 (Project Matrix)
-
-        if (width > height) {
-            // Landscape
-            val ratio: Float = width.toFloat() / height.toFloat()
-            XMatrix.orthoM(mProjectionMatrix, 0, -ratio, ratio, -1.0f, 1.0f, -1.0f, 1.0f)
-        } else {
-            // Portrait or Square
-            val ratio: Float = height.toFloat() / width.toFloat()
-            XMatrix.orthoM(mProjectionMatrix, 0, -1.0f, 1.0f, -ratio, ratio, -1.0f, 1.0f)
-        }
     }
 
     override fun reCalculateViewMatrix() {
@@ -41,11 +26,12 @@ class OrthographicCamera : Camera() {
         }
         // 计算相机的旋转(绕Z轴)
         val rotateMatrix = FloatArray(16)
-        XMatrix.setRotateM(rotateMatrix, 0, mRotation, 0f, 0f, 1.0f)
+        XMatrix.setRotateM(rotateMatrix, 0, mRotationZAxis, 0f, 0f, 1.0f)
 
         val transformMatrix = FloatArray(16)
         XMatrix.xMultiplyMM(transformMatrix, 0, translateMatrix, 0, rotateMatrix, 0)
 
+        // 通过记录相机的transformation矩阵，然后取逆矩阵，就可以得到对应的View矩阵
         XMatrix.invertM(mViewMatrix, 0, transformMatrix, 0)
     }
 

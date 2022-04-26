@@ -9,13 +9,14 @@ import com.focus617.app_demo.objects.d2.Square
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.renderer.*
+import com.focus617.core.engine.scene.CameraController
 import com.focus617.core.engine.scene.OrthographicCamera
 import timber.log.Timber
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer2D(private val window: IfWindow) : XRenderer(), GLSurfaceView.Renderer {
-    override val mCamera = OrthographicCamera()
+    override val mCameraController = CameraController(OrthographicCamera())
 
     private val PATH = "SquareWithTexture"
     private val SHADER_FILE = "shader_square.glsl"
@@ -68,7 +69,7 @@ class XGLRenderer2D(private val window: IfWindow) : XRenderer(), GLSurfaceView.R
         // 设置渲染的OpenGL场景（视口）的位置和大小
         GLES31.glViewport(0, 0, width, height)
 
-        mCamera.setProjectionMatrix(width, height)
+        mCameraController.onWindowSizeChange(width, height)
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -76,13 +77,11 @@ class XGLRenderer2D(private val window: IfWindow) : XRenderer(), GLSurfaceView.R
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
 
-        beginScene(mCamera)
+        beginScene(mCameraController.getCamera())
 
         val shader = mShaderLibrary.get(SHADER_FILE)
         shader?.apply {
             mTexture?.bind()
-
-            //submit(shader, mTriangle.vertexArray, mTriangle.transform)
             submit(shader, mSquare.vertexArray, mSquare.transform)
 
             // This texture has transparent alpha for part of image
