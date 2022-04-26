@@ -51,7 +51,7 @@ class PerspectiveCamera : Camera() {
     }
 
     override fun setProjectionMatrix(width: Int, height: Int){
-        // 计算透视投影矩阵 (Project Matrix)，而后将应用于onDrawFrame（）方法中的对象坐标
+        // 计算透视投影矩阵 (Project Matrix)
         val ratio: Float = width.toFloat() / height.toFloat()
         XMatrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
     }

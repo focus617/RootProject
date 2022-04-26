@@ -20,16 +20,17 @@ class OrthographicCamera : Camera() {
     }
 
     override fun setProjectionMatrix(width: Int, height: Int) {
-        XMatrix.orthoM(
-            mProjectionMatrix,
-            0,
-            (-width / 2).toFloat(),
-            (width / 2).toFloat(),
-            (-height / 2).toFloat(),
-            (height / 2).toFloat(),
-            -1.0f,
-            1.0f
-        )
+        // 计算正交投影矩阵 (Project Matrix)
+
+        if (width > height) {
+            // Landscape
+            val ratio: Float = width.toFloat() / height.toFloat()
+            XMatrix.orthoM(mProjectionMatrix, 0, -ratio, ratio, -1.0f, 1.0f, -1.0f, 1.0f)
+        } else {
+            // Portrait or Square
+            val ratio: Float = height.toFloat() / width.toFloat()
+            XMatrix.orthoM(mProjectionMatrix, 0, -1.0f, 1.0f, -ratio, ratio, -1.0f, 1.0f)
+        }
     }
 
     override fun reCalculateViewMatrix() {
