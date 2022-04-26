@@ -3,9 +3,6 @@ package com.focus617.core.engine.core
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.LayerEventDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 open class Engine : BaseEntity(), Runnable {
 
@@ -48,23 +45,22 @@ open class Engine : BaseEntity(), Runnable {
 
     }
 
-    // 如果事件可以被本地处理，则返回true，否则false
+    // 如果事件可以被本地消费，则返回true，否则false
     private fun onEvent(event: Event): Boolean {
-        var result: Boolean = false
-        CoroutineScope(Dispatchers.Default).launch {
-            result = eventDispatcher.dispatch(event)
-        }
+        eventDispatcher.dispatch(event)
+        if (event.hasBeenHandled) return true
+
         for (index in mOverlayStack.mLayers.size - 1 downTo 0) {
             mOverlayStack.mLayers[index].onEvent(event)
             if (event.hasBeenHandled) break
         }
+        if (event.hasBeenHandled) return true
 
         for (index in mLayerStack.mLayers.size - 1 downTo 0) {
             mLayerStack.mLayers[index].onEvent(event)
             if (event.hasBeenHandled) break
         }
-
-        return result
+        return event.hasBeenHandled
     }
 
     override fun run() {

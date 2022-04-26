@@ -25,8 +25,7 @@ class LayerEventDispatcher : BaseEntity() {
         val fn: EventHandler<Event>? = handlers[event.eventType]
 
         fn?.apply {
-            result = true
-            event.hasBeenHandled = fn(event)
+            result = fn(event)
         }
 
         return result
