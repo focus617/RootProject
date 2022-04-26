@@ -9,12 +9,14 @@ import com.focus617.app_demo.objects.d2.Square
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.renderer.*
+import com.focus617.core.engine.scene.Camera
+import com.focus617.core.engine.scene.PerspectiveCamera
 import timber.log.Timber
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class XGLRenderer(private val window: IfWindow) : XRenderer(), GLSurfaceView.Renderer {
-    private val mProjectionMatrix = FloatArray(16)
+class XGLRenderer3D(private val window: IfWindow) : XRenderer(), GLSurfaceView.Renderer {
+    override val mCamera: Camera = PerspectiveCamera()
 
     private val PATH = "SquareWithTexture"
     private val SHADER_FILE = "shader_square.glsl"

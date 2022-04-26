@@ -9,7 +9,6 @@ class OrthographicCamera : Camera() {
     private var mRotation: Float = 0F
 
     init {
-        //XMatrix.setIdentityM(mViewMatrix, 0)
         reCalculateViewMatrix()
     }
 

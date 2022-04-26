@@ -4,7 +4,7 @@ import android.content.Context
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import com.focus617.app_demo.GameActivity
-import com.focus617.app_demo.renderer.XGLRenderer
+import com.focus617.app_demo.renderer.XGLRenderer2D
 import com.focus617.app_demo.renderer.XGLRendererAPI
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.WindowProps
@@ -27,7 +27,7 @@ class AndroidWindow private constructor(
     override val LOG = logger()
 
     private val mData = WindowData()
-    private lateinit var renderer: XGLRenderer
+    private lateinit var renderer: XRenderer
 
     override lateinit var mRenderer: XRenderer  // Used for Engine
     override val mRenderContext: IfGraphicsContext = XGLContext(this)
@@ -105,8 +105,8 @@ class AndroidWindow private constructor(
                 mRenderContext.init()
 
                 // 创建并设置渲染器（Renderer）以在GLSurfaceView上绘制
-                renderer = XGLRenderer(this)
-                setRenderer(renderer)
+                renderer = XGLRenderer2D(this)
+                setRenderer(renderer as Renderer)
                 mRenderer = renderer
 
                 // 仅在绘图数据发生更改时才渲染视图: 在该模式下当渲染内容变化时不会主动刷新效果，需要手动调用requestRender()

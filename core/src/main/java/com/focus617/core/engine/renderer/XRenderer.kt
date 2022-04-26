@@ -1,12 +1,10 @@
 package com.focus617.core.engine.renderer
 
 import com.focus617.core.engine.scene.Camera
-import com.focus617.core.engine.scene.OrthographicCamera
 import com.focus617.core.platform.base.BaseEntity
 
-open class XRenderer: BaseEntity() {
-    val mCamera = OrthographicCamera()
-    //val mCamera: Camera = PerspectiveCamera()
+abstract class XRenderer: BaseEntity() {
+    abstract val mCamera: Camera
 
     fun getAPI(): RendererAPI.API = RendererAPI.getAPI()
 
