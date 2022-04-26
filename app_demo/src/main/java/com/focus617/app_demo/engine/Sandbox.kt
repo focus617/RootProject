@@ -44,12 +44,8 @@ class Sandbox(context: Context) : Engine() {
                 //mCamera.setPosition(0.5F, 0.5F, 0F)
                 mCamera.setRotation(mCameraRotation)
 
-                beginScene(mCamera)
-
                 // Render UI
                 mWindow!!.onUpdate()
-
-                endScene()
             }
 
         }

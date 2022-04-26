@@ -76,6 +76,8 @@ class XGLRenderer2D(private val window: IfWindow) : XRenderer(), GLSurfaceView.R
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
 
+        beginScene(mCamera)
+
         val shader = mShaderLibrary.get(SHADER_FILE)
         shader?.apply {
             mTexture?.bind()
@@ -87,6 +89,8 @@ class XGLRenderer2D(private val window: IfWindow) : XRenderer(), GLSurfaceView.R
             mTextureLogo?.bind()
             submit(shader, mSquare.vertexArray, mSquare.transform)
         }
+
+        endScene()
     }
 
     override fun submit(
