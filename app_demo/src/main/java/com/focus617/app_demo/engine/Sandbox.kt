@@ -7,8 +7,7 @@ import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.base.LayerEventDispatcher
-import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
-import com.focus617.core.platform.event.screenTouchEvents.TouchPressEvent
+import com.focus617.core.platform.event.screenTouchEvents.*
 
 class Sandbox(context: Context) : Engine() {
     init {
@@ -65,6 +64,36 @@ class Sandbox(context: Context) : Engine() {
 //                LOG.info("It's type is ${e.eventType}")
 //                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
 //                LOG.info("Current position is (${e.x}, ${e.y})\n")
+                event.handleFinished()
+                true
+            }
+
+            eventDispatcher.register(EventType.PinchStart) { event ->
+                val e: PinchStartEvent = event as PinchStartEvent
+                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
+//                LOG.info("It's type is ${e.eventType}")
+//                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
+                LOG.info("Length is ${e.length}")
+                event.handleFinished()
+                true
+            }
+
+            eventDispatcher.register(EventType.PinchEnd) { event ->
+                val e: PinchEndEvent = event as PinchEndEvent
+                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
+//                LOG.info("It's type is ${e.eventType}")
+//                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
+                LOG.info("Length is ${e.length}")
+                event.handleFinished()
+                true
+            }
+
+            eventDispatcher.register(EventType.Pinch) { event ->
+                val e: PinchEvent = event as PinchEvent
+                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
+//                LOG.info("It's type is ${e.eventType}")
+//                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
+                LOG.info("Length is ${e.length}")
                 event.handleFinished()
                 true
             }
