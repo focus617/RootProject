@@ -17,8 +17,8 @@ abstract class XRenderer : BaseEntity() {
         // 在多线程渲染里，会把BeginScene函数放在RenderCommandQueue里执行
         // camera在多线程渲染的时候不能保证主线程是否正在更改Camera的相关信息
         synchronized(camera) {
-            SceneData.sProjectionMatrix = camera.getProjectionMatrix()
-            SceneData.sViewMatrix = camera.getViewMatrix()
+            System.arraycopy(camera.getProjectionMatrix(), 0, SceneData.sProjectionMatrix, 0, 16)
+            System.arraycopy(camera.getViewMatrix(), 0, SceneData.sViewMatrix, 0, 16)
         }
     }
 
