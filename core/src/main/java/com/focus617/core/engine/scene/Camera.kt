@@ -27,11 +27,6 @@ abstract class Camera : BaseEntity() {
         reCalculateViewMatrix()
     }
 
-    open fun setPosition(x: Float, y: Float, z: Float) {
-        mPosition = Point3D(x, y, z)
-        reCalculateViewMatrix()
-    }
-
     // 相机位置不动，旋转directionUp
     abstract fun setRotation(rollZ: Float = 90f)
     fun getRotation() = mRotationZAxis

@@ -31,18 +31,10 @@ class Sandbox(context: Context) : Engine() {
             LOG.info("${this.mDebugName} onDetach")
         }
 
-        private var mCameraRotation: Float = 90F
-        private var mCameraRotationSpeed: Float = 0.001F
         override fun onUpdate(timeStep: TimeStep) {
-            mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed
-
-            // 清理屏幕，重绘背景颜色
-            //RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
-            //RenderCommand.clear()
-
             mWindow?.mRenderer?.apply {
-                //mCamera.setPosition(0.5F, 0.5F, 0F)
-                mCameraController.getCamera().setRotation(mCameraRotation)
+
+                mCameraController.onUpdate(timeStep)
 
                 // Render UI
                 mWindow!!.onUpdate()
