@@ -60,6 +60,11 @@ class OrthographicCameraController(private val mCamera: OrthographicCamera) : Ca
         val mCameraRotationSpeed: Float = 0.001F
 
         mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed
+        if (mCameraRotation > 180.0f)
+            mCameraRotation -= 360.0f;
+        else if (mCameraRotation <= -180.0f)
+            mCameraRotation += 360.0f;
+
         setRotation(mCameraRotation)
     }
 
