@@ -1,9 +1,17 @@
 package com.focus617.core.engine.core
 
 import com.focus617.core.platform.base.BaseEntity
+import java.io.Closeable
 
-class LayerStack : BaseEntity() {
+class LayerStack : BaseEntity(), Closeable {
     val mLayers = mutableListOf<Layer>()
+
+    override fun close() {
+        mLayers.forEach {
+            it.onDetach()
+            it.close()
+        }
+    }
 
     operator fun iterator(): Iterator<Layer> {
         return mLayers.iterator()

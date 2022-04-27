@@ -1,12 +1,17 @@
 package com.focus617.core.platform.event.base
 
 import com.focus617.core.platform.base.BaseEntity
+import java.io.Closeable
 
 // 如果事件被消耗，则返回true，否则false
 typealias EventHandler<Event> = ((Event) -> Boolean)
 
-class EventDispatcher : BaseEntity() {
+class EventDispatcher : BaseEntity(), Closeable {
     private val handlers = HashMap<EventType, EventHandler<Event>>()
+
+    override fun close() {
+        handlers.clear()
+    }
 
     fun sizeForTest() = handlers.size
 
@@ -30,4 +35,5 @@ class EventDispatcher : BaseEntity() {
 
         return result
     }
+
 }
