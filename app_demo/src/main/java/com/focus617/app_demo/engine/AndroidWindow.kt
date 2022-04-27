@@ -11,6 +11,7 @@ import com.focus617.core.engine.core.WindowProps
 import com.focus617.core.engine.renderer.IfGraphicsContext
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.XRenderer
+import com.focus617.core.engine.scene.Scene
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventHandler
 
@@ -65,6 +66,7 @@ class AndroidWindow private constructor(
 
         fun createWindow(
             context: Context,
+            scene: Scene,
             props: WindowProps = WindowProps()
         ): AndroidWindow =
             synchronized(this) {
@@ -73,7 +75,8 @@ class AndroidWindow private constructor(
                     instance = create(context, props)
                     initRendererCommand()
                     initView(
-                        (context as GameActivity).isES3Supported()
+                        (context as GameActivity).isES3Supported(),
+                        scene
                     )
                     setOnTouchListener(instance!!)
 
@@ -91,7 +94,7 @@ class AndroidWindow private constructor(
             return window
         }
 
-        private fun initView(isES3Supported: Boolean) {
+        private fun initView(isES3Supported: Boolean, scene: Scene) {
             with(instance!!) {
                 // 初始化Renderer Context
                 (mRenderContext as XGLContext).isES3Supported = isES3Supported
@@ -99,7 +102,7 @@ class AndroidWindow private constructor(
 
                 // 创建并设置渲染器（Renderer）以在GLSurfaceView上绘制
                 // 此处是选择2D，或3D 渲染的关键点
-                renderer = XGLRenderer2D(this)
+                renderer = XGLRenderer2D(instance!!, scene)
                 setRenderer(renderer as Renderer)
                 mRenderer = renderer
 

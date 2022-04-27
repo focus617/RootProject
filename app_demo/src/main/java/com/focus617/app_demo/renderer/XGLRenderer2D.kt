@@ -11,16 +11,21 @@ import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.renderer.*
 import com.focus617.core.engine.scene.OrthographicCamera
 import com.focus617.core.engine.scene.OrthographicCameraController
+import com.focus617.core.engine.scene.Scene
 import timber.log.Timber
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class XGLRenderer2D(private val window: IfWindow) : XRenderer(), GLSurfaceView.Renderer {
+class XGLRenderer2D(
+    private val window: IfWindow,
+    private val scene: Scene
+) : XRenderer(), GLSurfaceView.Renderer {
 
-    //TODO: Camera should NOT owned by CameraController, same for other Game objects.
+    //TODO: Game objects should NOT owned by Renderer .
     // It should be injected from Engine's Scene, since GlSurfaceView/Renderer is always recreated
     // in case of configuration change, etc.
-    override val mCameraController = OrthographicCameraController(OrthographicCamera())
+    override val mCameraController =
+        OrthographicCameraController(scene.mCamera as OrthographicCamera)
 
     private val PATH = "SquareWithTexture"
     private val SHADER_FILE = "shader_square.glsl"
@@ -81,7 +86,7 @@ class XGLRenderer2D(private val window: IfWindow) : XRenderer(), GLSurfaceView.R
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
 
-        beginScene(mCameraController.getCamera())
+        beginScene(scene.mCamera)
 
         val shader = mShaderLibrary.get(SHADER_FILE)
         shader?.apply {

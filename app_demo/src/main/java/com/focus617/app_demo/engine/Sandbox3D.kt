@@ -1,15 +1,18 @@
 package com.focus617.app_demo.engine
 
-import android.content.Context
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
+import com.focus617.core.engine.scene.PerspectiveCamera
+import com.focus617.core.engine.scene.Scene
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.screenTouchEvents.*
 
-class Sandbox(context: Context) : Engine() {
+class Sandbox3D: Engine() {
+    val scene = Scene(PerspectiveCamera())
+
     init {
         pushLayer(ExampleLayer("ExampleLayer"))
         pushOverLayer(ExampleLayer("ExampleOverlay"))

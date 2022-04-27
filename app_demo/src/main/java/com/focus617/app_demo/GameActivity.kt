@@ -9,14 +9,16 @@ import timber.log.Timber
 
 class GameActivity : BaseActivity() {
 
-
     private lateinit var mGLSurfaceView: AndroidWindow
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // 创建一个GLSurfaceView实例,并将其设置为此Activity的ContentView。
-        mGLSurfaceView = AndroidWindow.createWindow(this)
+        mGLSurfaceView = AndroidWindow.createWindow(
+            this,
+            (application as MyApplication).gameEngine.scene
+        )
         setContentView(mGLSurfaceView)
     }
 
