@@ -8,7 +8,7 @@ import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.screenTouchEvents.*
 import com.focus617.mylib.helper.DateHelper
 
-class CameraController(private var mCamera: Camera) : BaseEntity() {
+class CameraController(private val mCamera: Camera) : BaseEntity() {
     private val mProjectionMatrix = FloatArray(16)
     private var mZoomLevel: Float = 1.0f
     private var mWidth: Int = 0
@@ -22,9 +22,18 @@ class CameraController(private var mCamera: Camera) : BaseEntity() {
 
     fun getZoomLevel() = mZoomLevel
     fun setZoomLevel(level: Float) {
-        mZoomLevel = level
-        reCalculateOrthoGraphicProjectionMatrix()
-        mCamera.setProjectionMatrix(mProjectionMatrix)
+        when (mCamera) {
+            is OrthographicCamera -> {
+                mZoomLevel = level
+                reCalculateOrthoGraphicProjectionMatrix()
+                mCamera.setProjectionMatrix(mProjectionMatrix)
+            }
+
+            is PerspectiveCamera -> {}
+
+            else -> {}
+        }
+
     }
 
     fun setRotation(rollZ: Float = 90f) {
@@ -70,6 +79,7 @@ class CameraController(private var mCamera: Camera) : BaseEntity() {
             }
 
             is PinchStartEvent -> {
+                LOG.info("CameraController: on PinchStart event")
                 // 记录下本轮缩放操作的基准
                 previoudZoomLevel = mZoomLevel
                 previousSpan = event.span
@@ -78,16 +88,17 @@ class CameraController(private var mCamera: Camera) : BaseEntity() {
             }
 
             is PinchEvent -> {
-                if(mode == ControllerWorkingMode.Zoom){
+                if (mode == ControllerWorkingMode.Zoom) {
                     // 根据双指间距的变化，计算相对变化量
-                    val scaleFactor = previousSpan/event.span
+                    val scaleFactor = previousSpan / event.span
                     LOG.info("CameraController: on Pinch event, ZoomLevel=$scaleFactor")
-                    setZoomLevel(previoudZoomLevel*scaleFactor)
+                    setZoomLevel(previoudZoomLevel * scaleFactor)
                 }
                 event.handleFinished()
             }
 
             is PinchEndEvent -> {
+                LOG.info("CameraController: on PinchEnd event")
                 mode = ControllerWorkingMode.Scroll
                 event.handleFinished()
             }

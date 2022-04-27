@@ -43,7 +43,6 @@ class Sandbox(context: Context) : Engine() {
         }
 
         override fun onEvent(event: Event): Boolean {
-//            LOG.info("${this.mDebugName} onEvent $event")
             return eventDispatcher.dispatch(event)
         }
 
@@ -61,34 +60,24 @@ class Sandbox(context: Context) : Engine() {
 
             eventDispatcher.register(EventType.TouchPress) { event ->
                 val e: TouchPressEvent = event as TouchPressEvent
-//                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
-//                LOG.info("It's type is ${e.eventType}")
-//                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
-//                LOG.info("Current position is (${e.x}, ${e.y})\n")
                 val hasConsumed =  mWindow?.mRenderer?.mCameraController?.onEvent(event) ?: false
                 hasConsumed
             }
 
             eventDispatcher.register(EventType.PinchStart) { event ->
                 val e: PinchStartEvent = event as PinchStartEvent
-//                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
-
                 val hasConsumed =  mWindow?.mRenderer?.mCameraController?.onEvent(event) ?: false
                 hasConsumed
             }
 
             eventDispatcher.register(EventType.PinchEnd) { event ->
                 val e: PinchEndEvent = event as PinchEndEvent
-//                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
-
                 val hasConsumed =  mWindow?.mRenderer?.mCameraController?.onEvent(event) ?: false
                 hasConsumed
             }
 
             eventDispatcher.register(EventType.Pinch) { event ->
                 val e: PinchEvent = event as PinchEvent
-//                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
-
                 val hasConsumed =  mWindow?.mRenderer?.mCameraController?.onEvent(event) ?: false
                 hasConsumed
             }
