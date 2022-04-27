@@ -78,8 +78,12 @@ open class Engine : BaseEntity(), Runnable {
             for (layer in mLayerStack.mLayers) {
                 layer.onUpdate(timeStep)
             }
-            for (layer in mOverlayStack.mLayers) {
-                layer.onUpdate(timeStep)
+
+            // 如果Window处于onDetach状态时，不再更新UI Overlay
+            mWindow?.apply {
+                for (layer in mOverlayStack.mLayers) {
+                    layer.onUpdate(timeStep)
+                }
             }
 
             //通过线程休眠以控制刷新速度
