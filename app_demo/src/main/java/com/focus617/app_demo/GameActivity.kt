@@ -38,6 +38,11 @@ class GameActivity : BaseActivity() {
         mGLSurfaceView.onPause()
     }
 
+    override fun onDestroy() {
+        AndroidWindow.destroyWindow()
+        super.onDestroy()
+    }
+
     // Check if the system supports OpenGL ES 3.0.
     fun isES3Supported(): Boolean {
         val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager

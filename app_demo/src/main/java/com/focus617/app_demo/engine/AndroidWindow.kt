@@ -59,21 +59,25 @@ class AndroidWindow private constructor(
         // 保证Window的单例
         private var instance: AndroidWindow? = null
 
+        fun destroyWindow(){
+            instance = null
+        }
+
         fun createWindow(
             context: Context,
             props: WindowProps = WindowProps()
         ): AndroidWindow =
             synchronized(this) {
-                (instance ?: create(context, props)).also {
-                    instance = it
-
+                return if (instance != null) instance!!
+                else {
+                    instance = create(context, props)
                     initRendererCommand()
-
                     initView(
                         (context as GameActivity).isES3Supported()
                     )
-
                     setOnTouchListener(instance!!)
+
+                    return instance as AndroidWindow
                 }
             }
 

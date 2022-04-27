@@ -129,6 +129,8 @@ companion object {
 
         LOG.info("$TAG: parse shader source: $filePath")
 
+        shaderSources.clear()
+
         if (filePath.isEmpty() or TextUtils.isEmpty(filePath)) {
             LOG.error("Shader file doesn't exist")
         }
