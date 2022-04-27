@@ -29,6 +29,7 @@ class Sandbox(context: Context) : Engine() {
 
         override fun onDetach() {
             LOG.info("${this.mDebugName} onDetach")
+            unRegisterEventHandlers()
         }
 
         override fun onUpdate(timeStep: TimeStep) {
@@ -44,6 +45,11 @@ class Sandbox(context: Context) : Engine() {
 
         override fun onEvent(event: Event): Boolean {
             return eventDispatcher.dispatch(event)
+        }
+
+        override fun close() {
+            LOG.info("${this.mDebugName} closed")
+            eventDispatcher.close()
         }
 
         private fun registerEventHandlers() {
@@ -81,6 +87,14 @@ class Sandbox(context: Context) : Engine() {
                 val hasConsumed =  mWindow?.mRenderer?.mCameraController?.onEvent(event) ?: false
                 hasConsumed
             }
+        }
+
+        private fun unRegisterEventHandlers() {
+            eventDispatcher.unRegister(EventType.TouchDrag)
+            eventDispatcher.unRegister(EventType.TouchPress)
+            eventDispatcher.unRegister(EventType.PinchStart)
+            eventDispatcher.unRegister(EventType.PinchEnd)
+            eventDispatcher.unRegister(EventType.Pinch)
         }
 
     }
