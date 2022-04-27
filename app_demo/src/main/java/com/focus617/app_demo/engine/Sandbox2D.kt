@@ -14,11 +14,11 @@ class Sandbox2D : Engine() {
     val scene: Scene = Scene(OrthographicCamera())
 
     init {
-        pushLayer(ExampleLayer("ExampleLayer"))
-        pushOverLayer(ExampleLayer("ExampleOverlay"))
+        pushLayer(Layer2D("ExampleLayer"))
+        //pushOverLayer(Layer2D("ExampleOverlay"))
     }
 
-    inner class ExampleLayer(name: String) : Layer(name) {
+    inner class Layer2D(name: String) : Layer(name) {
         private val eventDispatcher = EventDispatcher()
 
         init {
