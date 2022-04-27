@@ -215,6 +215,8 @@ companion object {
         // Always detach shaders after a successful link.
         glDetachShader(program, vertexShader)
         glDetachShader(program, fragmentShader)
+        glDeleteShader(vertexShader)
+        glDeleteShader(fragmentShader)
 
         // 释放着色器编译器使用的资源
         glReleaseShaderCompiler()
