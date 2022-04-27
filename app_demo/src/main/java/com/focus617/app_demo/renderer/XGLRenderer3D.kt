@@ -40,7 +40,7 @@ class XGLRenderer3D(private val window: IfWindow) : XRenderer(), GLSurfaceView.R
 
         // TODO: 当前的问题是，必须在opengl线程才能调用opengl api，无法在主线程调用。
         // 调用XRenderer.init, 因为涉及opengl api, 只好在这里调用
-        this.init()
+        this.initRenderer()
 
         // TODO: How to create objects in Sandbox layer?
         val mShader = XGLShaderBuilder.createShader(

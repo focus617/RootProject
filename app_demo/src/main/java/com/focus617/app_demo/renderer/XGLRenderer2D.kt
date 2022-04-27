@@ -16,6 +16,10 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer2D(private val window: IfWindow) : XRenderer(), GLSurfaceView.Renderer {
+
+    //TODO: Camera should NOT owned by CameraController, same for other Game objects.
+    // It should be injected from Engine's Scene, since GlSurfaceView/Renderer is always recreated
+    // in case of configuration change, etc.
     override val mCameraController = OrthographicCameraController(OrthographicCamera())
 
     private val PATH = "SquareWithTexture"
@@ -39,8 +43,8 @@ class XGLRenderer2D(private val window: IfWindow) : XRenderer(), GLSurfaceView.R
         RenderCommand.clear()
 
         // TODO: 当前的问题是，必须在opengl线程才能调用opengl api，无法在主线程调用。
-        // 调用XRenderer.init, 因为涉及opengl api, 只好在这里调用
-        this.init()
+        // 调用XRenderer.initRenderer, 因为涉及opengl api, 只好在这里调用
+        this.initRenderer()
 
         // TODO: How to create objects in Sandbox layer?
         val mShader = XGLShaderBuilder.createShader(
