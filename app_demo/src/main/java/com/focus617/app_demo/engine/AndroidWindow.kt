@@ -111,7 +111,7 @@ class AndroidWindow private constructor(
 
         @SuppressLint("ClickableViewAccessibility")
         private fun setOnTouchListener(window: AndroidWindow) {
-            window.setOnTouchListener(TouchInput(window))
+            window.setOnTouchListener(GestureInput(window))
         }
     }
 

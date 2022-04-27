@@ -5,7 +5,7 @@ import com.focus617.core.platform.base.BaseEntity
 // 如果事件被消耗，则返回true，否则false
 typealias EventHandler<Event> = ((Event) -> Boolean)
 
-class LayerEventDispatcher : BaseEntity() {
+class EventDispatcher : BaseEntity() {
     private val handlers = HashMap<EventType, EventHandler<Event>>()
 
     fun sizeForTest() = handlers.size

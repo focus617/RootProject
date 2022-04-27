@@ -3,28 +3,29 @@ package com.focus617.core.platform.event
 import com.focus617.core.platform.event.applicationEvents.AppLaunchedEvent
 import com.focus617.core.platform.event.applicationEvents.AppUpdateEvent
 import com.focus617.core.platform.event.applicationEvents.AppVariant
+import com.focus617.core.platform.event.base.EventDispatcher
 import com.focus617.core.platform.event.base.EventType
-import com.focus617.core.platform.event.base.LayerEventDispatcher
 import com.focus617.mylib.helper.DateHelper
 import com.focus617.mylib.logging.WithLogging
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 
-class LayerEventDispatcherTest : WithLogging() {
+class EventDispatcherTest : WithLogging() {
 
-    lateinit var dispatcher: LayerEventDispatcher
+    lateinit var dispatcher: EventDispatcher
 
     @Before
     fun setUp() {
         // Given: only AppLaunchedHandler registered in dispatcher
-        dispatcher = LayerEventDispatcher()
+        dispatcher = EventDispatcher()
 
         dispatcher.register(EventType.AppLaunched) { event ->
             LOG.info("${event.name} from ${event.source} received")
             LOG.info("It's type is ${event.eventType}")
             LOG.info("It's was submit at ${DateHelper.timeStampAsStr(event.timestamp)}")
-            true
+            event.handleFinished()
+            event.hasBeenHandled
         }
     }
 
@@ -87,7 +88,7 @@ class LayerEventDispatcherTest : WithLogging() {
         // When
         dispatcher.register(EventType.AppUpdate) { event ->
             LOG.info("${event.name} from ${event.source} received")
-            false
+            event.hasBeenHandled
         }
 
         val event = AppUpdateEvent(AppVariant.MOBILE_DEMO, this)
@@ -96,9 +97,9 @@ class LayerEventDispatcherTest : WithLogging() {
         LOG.info("dispatch for registered event")
         val result: Boolean = dispatcher.dispatch(event)
 
-        // Then
-        assertThat(result).isTrue()                 // 可以找到Handler
-        assertThat(event.hasBeenHandled).isFalse()  // 但事件没有被消耗
+        // Then：事件没有被消耗
+        assertThat(result).isFalse()
+        assertThat(event.hasBeenHandled).isFalse()
 
     }
 

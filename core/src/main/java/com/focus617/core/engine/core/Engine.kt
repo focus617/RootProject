@@ -2,7 +2,7 @@ package com.focus617.core.engine.core
 
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
-import com.focus617.core.platform.event.base.LayerEventDispatcher
+import com.focus617.core.platform.event.base.EventDispatcher
 
 open class Engine : BaseEntity(), Runnable {
 
@@ -16,7 +16,7 @@ open class Engine : BaseEntity(), Runnable {
     private val mLayerStack: LayerStack = LayerStack()
     private val mOverlayStack: LayerStack = LayerStack()
 
-    private val eventDispatcher = LayerEventDispatcher()
+    private val eventDispatcher = EventDispatcher()
 
     init {
         threadCore = Thread(this)

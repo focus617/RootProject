@@ -8,7 +8,7 @@ import com.focus617.core.platform.event.base.EventType
  * This event happens when view on screen is being touched
  */
 class PinchEvent(
-    val length: Float,
+    val span: Float,
     override val source: Any
 ) : Event() {
 

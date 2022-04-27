@@ -5,8 +5,8 @@ import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.platform.event.base.Event
+import com.focus617.core.platform.event.base.EventDispatcher
 import com.focus617.core.platform.event.base.EventType
-import com.focus617.core.platform.event.base.LayerEventDispatcher
 import com.focus617.core.platform.event.screenTouchEvents.*
 
 class Sandbox(context: Context) : Engine() {
@@ -16,15 +16,15 @@ class Sandbox(context: Context) : Engine() {
     }
 
     inner class ExampleLayer(name: String) : Layer(name) {
-        private val eventDispatcher = LayerEventDispatcher()
+        private val eventDispatcher = EventDispatcher()
 
         init {
-            testRegisterEventHandlers()
+            registerEventHandlers()
         }
 
         override fun onAttach() {
             LOG.info("${this.mDebugName} onAttach()")
-            testRegisterEventHandlers()
+            registerEventHandlers()
         }
 
         override fun onDetach() {
@@ -47,55 +47,50 @@ class Sandbox(context: Context) : Engine() {
             return eventDispatcher.dispatch(event)
         }
 
-        private fun testRegisterEventHandlers() {
+        private fun registerEventHandlers() {
+
             eventDispatcher.register(EventType.TouchDrag) { event ->
                 val e: TouchDragEvent = event as TouchDragEvent
-                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
+//                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
 //                LOG.info("It's type is ${e.eventType}")
 //                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
 //                LOG.info("Current position is (${e.x}, ${e.y})\n")
-                event.handleFinished()
-                true
+                val hasConsumed =  mWindow?.mRenderer?.mCameraController?.onEvent(event) ?: false
+                hasConsumed
             }
 
             eventDispatcher.register(EventType.TouchPress) { event ->
                 val e: TouchPressEvent = event as TouchPressEvent
-                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
+//                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
 //                LOG.info("It's type is ${e.eventType}")
 //                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
 //                LOG.info("Current position is (${e.x}, ${e.y})\n")
-                event.handleFinished()
-                true
+                val hasConsumed =  mWindow?.mRenderer?.mCameraController?.onEvent(event) ?: false
+                hasConsumed
             }
 
             eventDispatcher.register(EventType.PinchStart) { event ->
                 val e: PinchStartEvent = event as PinchStartEvent
-                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
-//                LOG.info("It's type is ${e.eventType}")
-//                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
-                LOG.info("Length is ${e.length}")
-                event.handleFinished()
-                true
+//                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
+
+                val hasConsumed =  mWindow?.mRenderer?.mCameraController?.onEvent(event) ?: false
+                hasConsumed
             }
 
             eventDispatcher.register(EventType.PinchEnd) { event ->
                 val e: PinchEndEvent = event as PinchEndEvent
-                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
-//                LOG.info("It's type is ${e.eventType}")
-//                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
-                LOG.info("Length is ${e.length}")
-                event.handleFinished()
-                true
+//                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
+
+                val hasConsumed =  mWindow?.mRenderer?.mCameraController?.onEvent(event) ?: false
+                hasConsumed
             }
 
             eventDispatcher.register(EventType.Pinch) { event ->
                 val e: PinchEvent = event as PinchEvent
-                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
-//                LOG.info("It's type is ${e.eventType}")
-//                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
-                LOG.info("Length is ${e.length}")
-                event.handleFinished()
-                true
+//                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
+
+                val hasConsumed =  mWindow?.mRenderer?.mCameraController?.onEvent(event) ?: false
+                hasConsumed
             }
         }
 

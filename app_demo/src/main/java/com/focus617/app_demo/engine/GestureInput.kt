@@ -11,7 +11,7 @@ import com.focus617.mylib.logging.WithLogging
  * and other input controls. In this case, you are only
  * interested in events where the touch position changed.
  */
-class TouchInput(private val window: AndroidWindow) : WithLogging(), View.OnTouchListener {
+class GestureInput(private val window: AndroidWindow) : WithLogging(), View.OnTouchListener {
     private var isZooming: Boolean = false
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -24,11 +24,13 @@ class TouchInput(private val window: AndroidWindow) : WithLogging(), View.OnTouc
                     LOG.info("MotionEvent.ACTION_DOWN Event: ${event.action}(${event.x},${event.y})")
                     val nativeEvent = TouchPressEvent(event.x, event.y, window)
                     window.mData.callback?.let { hasConsumed = it(nativeEvent) }
+                    hasConsumed = true
                 }
 
                 // 在第一个点被按下后，再松开时触发
                 MotionEvent.ACTION_UP -> {
                     LOG.info("MotionEvent.ACTION_UP Event: ${event.action}(${event.x},${event.y})")
+                    hasConsumed = true
                 }
 
                 // 当屏幕上已经有一个点被按住，此时再按下其他点时触发
@@ -38,9 +40,10 @@ class TouchInput(private val window: AndroidWindow) : WithLogging(), View.OnTouc
 
                     val zoomStart1 = Point2D(event.getX(0),event.getY(0))
                     val zoomStart2 = Point2D(event.getX(1),event.getY(1))
-                    val distance = (zoomStart2 - zoomStart1).length()
-                    val nativeEvent = PinchStartEvent(distance, window)
+                    val span = (zoomStart2 - zoomStart1).length()
+                    val nativeEvent = PinchStartEvent(span, window)
                     window.mData.callback?.let { hasConsumed = it(nativeEvent) }
+                    hasConsumed = true
                 }
 
                 // 当屏幕上有多个点被按住，松开其中一个点时触发（即非最后一个点被放开时）
@@ -50,9 +53,10 @@ class TouchInput(private val window: AndroidWindow) : WithLogging(), View.OnTouc
 
                     val zoomStart1 = Point2D(event.getX(0),event.getY(0))
                     val zoomStart2 = Point2D(event.getX(1),event.getY(1))
-                    val distance = (zoomStart2 - zoomStart1).length()
-                    val nativeEvent = PinchEndEvent(distance, window)
+                    val span = (zoomStart2 - zoomStart1).length()
+                    val nativeEvent = PinchEndEvent(span, window)
                     window.mData.callback?.let { hasConsumed = it(nativeEvent) }
+                    hasConsumed = true
                 }
 
                 MotionEvent.ACTION_MOVE -> {
@@ -61,13 +65,14 @@ class TouchInput(private val window: AndroidWindow) : WithLogging(), View.OnTouc
 
                         val zoomStart1 = Point2D(event.getX(0),event.getY(0))
                         val zoomStart2 = Point2D(event.getX(1),event.getY(1))
-                        val distance = (zoomStart2 - zoomStart1).length()
-                        val nativeEvent = PinchEvent(distance, window)
+                        val span = (zoomStart2 - zoomStart1).length()
+                        val nativeEvent = PinchEvent(span, window)
                         window.mData.callback?.let { hasConsumed = it(nativeEvent) }
                     } else {
                         val nativeEvent = TouchDragEvent(event.x, event.y, window)
                         window.mData.callback?.let { hasConsumed = it(nativeEvent) }
                     }
+                    hasConsumed = true
                 }
 
                 else -> {
