@@ -9,14 +9,14 @@ import com.focus617.app_demo.objects.d2.Square
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.renderer.*
-import com.focus617.core.engine.scene.CameraController
 import com.focus617.core.engine.scene.OrthographicCamera
+import com.focus617.core.engine.scene.OrthographicCameraController
 import timber.log.Timber
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer2D(private val window: IfWindow) : XRenderer(), GLSurfaceView.Renderer {
-    override val mCameraController = CameraController(OrthographicCamera())
+    override val mCameraController = OrthographicCameraController(OrthographicCamera())
 
     private val PATH = "SquareWithTexture"
     private val SHADER_FILE = "shader_square.glsl"

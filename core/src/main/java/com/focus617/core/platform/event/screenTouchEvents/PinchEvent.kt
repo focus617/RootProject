@@ -8,7 +8,9 @@ import com.focus617.core.platform.event.base.EventType
  * This event happens when view on screen is being touched
  */
 class PinchEvent(
-    val span: Float,
+    val focusX: Float,      // 两指之间中心点的坐标
+    val focusY: Float,
+    val span: Float,        // 两指之间的距离
     override val source: Any
 ) : Event() {
 

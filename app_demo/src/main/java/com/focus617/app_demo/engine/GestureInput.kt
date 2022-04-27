@@ -38,23 +38,21 @@ class GestureInput(private val window: AndroidWindow) : WithLogging(), View.OnTo
                     LOG.info("MotionEvent.ACTION_POINTER_DOWN Event: ${event.action}(${event.x},${event.y})")
                     isZooming = true
 
-                    val zoomStart1 = Point2D(event.getX(0),event.getY(0))
-                    val zoomStart2 = Point2D(event.getX(1),event.getY(1))
+                    val zoomStart1 = Point2D(event.getX(0), event.getY(0))
+                    val zoomStart2 = Point2D(event.getX(1), event.getY(1))
+                    val focus = zoomStart1 + zoomStart2
                     val span = (zoomStart2 - zoomStart1).length()
-                    val nativeEvent = PinchStartEvent(span, window)
+                    val nativeEvent = PinchStartEvent(focus.x, focus.y, span, window)
                     window.mData.callback?.let { hasConsumed = it(nativeEvent) }
                     hasConsumed = true
                 }
 
                 // 当屏幕上有多个点被按住，松开其中一个点时触发（即非最后一个点被放开时）
                 MotionEvent.ACTION_POINTER_UP -> {
-                    LOG.info("MotionEvent.ACTION_POINTER_UP Event: ${event.action}(${event.x},${event.y})")
+                    LOG.info("MotionEvent.ACTION_POINTER_UP Event: ${event.action}")
                     isZooming = false
 
-                    val zoomStart1 = Point2D(event.getX(0),event.getY(0))
-                    val zoomStart2 = Point2D(event.getX(1),event.getY(1))
-                    val span = (zoomStart2 - zoomStart1).length()
-                    val nativeEvent = PinchEndEvent(span, window)
+                    val nativeEvent = PinchEndEvent(window)
                     window.mData.callback?.let { hasConsumed = it(nativeEvent) }
                     hasConsumed = true
                 }
@@ -63,10 +61,11 @@ class GestureInput(private val window: AndroidWindow) : WithLogging(), View.OnTo
                     if (isZooming) {
                         LOG.info("MotionEvent.ACTION_MOVE_WHEN_PINCH Event: ${event.action}(${event.x},${event.y})")
 
-                        val zoomStart1 = Point2D(event.getX(0),event.getY(0))
-                        val zoomStart2 = Point2D(event.getX(1),event.getY(1))
+                        val zoomStart1 = Point2D(event.getX(0), event.getY(0))
+                        val zoomStart2 = Point2D(event.getX(1), event.getY(1))
+                        val focus = zoomStart1 + zoomStart2
                         val span = (zoomStart2 - zoomStart1).length()
-                        val nativeEvent = PinchEvent(span, window)
+                        val nativeEvent = PinchEvent(focus.x, focus.y, span, window)
                         window.mData.callback?.let { hasConsumed = it(nativeEvent) }
                     } else {
                         val nativeEvent = TouchDragEvent(event.x, event.y, window)

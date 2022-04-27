@@ -20,8 +20,8 @@ abstract class Camera : BaseEntity() {
     }
 
     fun getViewMatrix(): FloatArray = mViewMatrix
-    fun getPosition() = mPosition
 
+    fun getPosition() = mPosition
     open fun setPosition(position: Point3D) {
         mPosition = position
         reCalculateViewMatrix()

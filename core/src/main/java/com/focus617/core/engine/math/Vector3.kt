@@ -48,6 +48,12 @@ class Vector3(var x: Float, var y: Float, var z: Float) {
         z - other.z
     )
 
+    operator fun times(other: Float) = Vector3(
+        (x*other).toFloat(),
+        (y*other).toFloat(),
+        (z*other).toFloat(),
+    )
+
     //求向量叉积的方法
     // http://en.wikipedia.org/wiki/Cross_product
     fun crossProduct(other: Vector3) = Vector3(
