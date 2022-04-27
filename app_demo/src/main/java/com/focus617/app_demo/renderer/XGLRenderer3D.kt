@@ -11,12 +11,21 @@ import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.renderer.*
 import com.focus617.core.engine.scene.PerspectiveCamera
 import com.focus617.core.engine.scene.PerspectiveCameraController
+import com.focus617.core.engine.scene.Scene
 import timber.log.Timber
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class XGLRenderer3D(private val window: IfWindow) : XRenderer(), GLSurfaceView.Renderer {
-    override val mCameraController = PerspectiveCameraController(PerspectiveCamera())
+class XGLRenderer3D(
+    private val window: IfWindow,
+    private val scene: Scene
+) : XRenderer(), GLSurfaceView.Renderer {
+
+    //TODO: Game objects should NOT owned by Renderer .
+    // It should be injected from Engine's Scene, since GlSurfaceView/Renderer is always recreated
+    // in case of configuration change, etc.
+    override val mCameraController =
+        PerspectiveCameraController(scene.mCamera as PerspectiveCamera)
 
     private val PATH = "SquareWithTexture"
     private val SHADER_FILE = "shader_square.glsl"
