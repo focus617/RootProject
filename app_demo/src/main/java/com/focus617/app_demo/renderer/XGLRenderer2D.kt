@@ -6,6 +6,7 @@ import com.focus617.app_demo.engine.XGLContext
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.math.*
 import com.focus617.core.engine.renderer.*
+import com.focus617.core.engine.scene.Camera
 import com.focus617.core.engine.scene.OrthographicCamera
 import com.focus617.core.engine.scene.OrthographicCameraController
 import com.focus617.core.engine.scene.Scene
@@ -26,11 +27,44 @@ class XGLRenderer2D(
 
     override fun initRenderer() {
         RenderCommand.init()
+        initStaticData(context)     // 初始化本Render的静态数据
+    }
 
-        // 初始化本Render的静态数据
-        initShader(context)
-        initVertexArray()
-        XMatrix.setIdentityM(transform, 0)
+    override fun close() {
+        quadVertexArray.close()
+        flatColorShader.close()
+        //textureShader.close()
+        //whiteTexture.close()
+    }
+
+    override fun beginScene(camera: Camera) {
+        // 在多线程渲染里，会把BeginScene函数放在RenderCommandQueue里执行
+        // camera在多线程渲染的时候不能保证主线程是否正在更改Camera的相关信息
+        synchronized(camera) {
+            System.arraycopy(camera.getProjectionMatrix(), 0, SceneData.sProjectionMatrix, 0, 16)
+            System.arraycopy(camera.getViewMatrix(), 0, SceneData.sViewMatrix, 0, 16)
+        }
+
+        flatColorShader.bind()
+        flatColorShader.uploadUniformMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
+        flatColorShader.uploadUniformMat4("u_ViewMatrix", SceneData.sViewMatrix)
+        flatColorShader.uploadUniformMat4("u_ModelMatrix", transform)
+    }
+
+    override fun endScene() {
+
+    }
+
+    fun drawQuad(position: Point3D, size: Vector2, color: Vector4) {
+        flatColorShader.bind()
+        flatColorShader.uploadUniformFloat4("u_Color", color)
+
+        quadVertexArray.bind()
+        RenderCommand.drawIndexed(quadVertexArray)
+    }
+
+    fun drawQuad(position: Point2D, size: Vector2, color: Vector4) {
+        drawQuad(Point3D(position.x, position.y, 0.0f), size, color)
     }
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
@@ -62,52 +96,9 @@ class XGLRenderer2D(
         RenderCommand.clear()
 
         beginScene(scene.mCamera)
-        flatColorShader.bind()
-        flatColorShader.uploadUniformFloat4("u_Color", mColor)
-        submit(flatColorShader, quadVertexArray, transform)
+        drawQuad(Point3D(0f,0f,0f), Vector2(0f,0f), mColor)
         endScene()
     }
-
-    override fun submit(
-        shader: Shader,
-        vertexArray: VertexArray,
-        transform: FloatArray
-    ) {
-        (shader as XGLShader).bind()
-        // 将模型视图投影矩阵传递给顶点着色器
-        shader.uploadUniformMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
-        shader.uploadUniformMat4("u_ViewMatrix", SceneData.sViewMatrix)
-        shader.uploadUniformMat4("u_ModelMatrix", transform)
-
-        vertexArray.bind()
-        RenderCommand.drawIndexed(vertexArray)
-
-        // 下面这两行可以省略，以节约GPU的运行资源；
-        // 在下个submit，会bind其它handle，自然会实现unbind
-        vertexArray.unbind()
-        shader.unbind()
-    }
-
-    override fun close() {
-        quadVertexArray.close()
-        flatColorShader.close()
-        //textureShader.close()
-        //whiteTexture.close()
-    }
-
-    fun drawQuad(position: Point3D, size: Vector2, color: Vector4) {
-        flatColorShader.bind()
-        flatColorShader.uploadUniformFloat4("u_Color", color)
-
-        quadVertexArray.bind()
-        RenderCommand.drawIndexed(quadVertexArray)
-    }
-
-    fun drawQuad(position: Point2D, size: Vector2, color: Vector4) {
-        drawQuad(Point3D(position.x, position.y, 0.0f), size, color)
-    }
-
-
 
     companion object Renderer2DStorage {
 
@@ -120,6 +111,12 @@ class XGLRenderer2D(
         private val SHADER_FILE = "FlatColor.glsl"
         private var transform: FloatArray = FloatArray(16)
         private val mColor = Vector4(0.2f, 0.3f, 0.8f, 1.0f)
+
+        fun initStaticData(context: Context) {
+            initShader(context)
+            initVertexArray()
+            XMatrix.setIdentityM(transform, 0)
+        }
 
         private fun initShader(context: Context) {
             flatColorShader = XGLShaderBuilder.createShader(
