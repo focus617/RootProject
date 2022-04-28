@@ -56,6 +56,22 @@ class XGLShader constructor(
         glUseProgram(0)
     }
 
+    override fun setInt(name: String, value: Int) {
+        uploadUniformInt(name, value)
+    }
+
+    override fun setFloat3(name: String, value: Vector3) {
+        uploadUniformFloat3(name, value)
+    }
+
+    override fun setFloat4(name: String, value: Vector4) {
+        uploadUniformFloat4(name, value)
+    }
+
+    override fun setMat4(name: String, matrix: FloatArray) {
+        uploadUniformMat4(name, matrix)
+    }
+
     override fun close() {
         glDeleteProgram(mHandle)
     }

@@ -46,9 +46,9 @@ class XGLRenderer2D(
         }
 
         flatColorShader.bind()
-        flatColorShader.uploadUniformMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
-        flatColorShader.uploadUniformMat4("u_ViewMatrix", SceneData.sViewMatrix)
-        flatColorShader.uploadUniformMat4("u_ModelMatrix", transform)
+        flatColorShader.setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
+        flatColorShader.setMat4("u_ViewMatrix", SceneData.sViewMatrix)
+        flatColorShader.setMat4("u_ModelMatrix", transform)
     }
 
     override fun endScene() {
@@ -57,7 +57,7 @@ class XGLRenderer2D(
 
     fun drawQuad(position: Point3D, size: Vector2, color: Vector4) {
         flatColorShader.bind()
-        flatColorShader.uploadUniformFloat4("u_Color", color)
+        flatColorShader.setFloat4("u_Color", color)
 
         quadVertexArray.bind()
         RenderCommand.drawIndexed(quadVertexArray)
@@ -110,7 +110,7 @@ class XGLRenderer2D(
         private val PATH = "SquareWithTexture"
         private val SHADER_FILE = "FlatColor.glsl"
         private var transform: FloatArray = FloatArray(16)
-        private val mColor = Vector4(0.2f, 0.3f, 0.8f, 1.0f)
+        private val mColor = Vector4(0.8f, 0.3f, 0.2f, 1.0f)
 
         fun initStaticData(context: Context) {
             initShader(context)
