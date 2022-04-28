@@ -498,6 +498,14 @@ object XMatrix: WithLogging() {
         }
     }
 
+    fun translateM(
+        tm: FloatArray, tmOffset: Int,
+        m: FloatArray, mOffset: Int,
+        delta: Vector3
+    ) {
+        translateM(tm, tmOffset, m, mOffset, delta.x, delta.y, delta.z)
+    }
+
     /**
      * Translates Matrix m by x, y, and z in place.
      *
@@ -515,6 +523,13 @@ object XMatrix: WithLogging() {
             val mi = mOffset + i
             m[12 + mi] += m[mi] * x + m[4 + mi] * y + m[8 + mi] * z
         }
+    }
+
+    fun translateM(
+        m: FloatArray, mOffset: Int,
+        delta: Vector3
+    ) {
+        translateM(m, mOffset, delta.x, delta.y, delta.z)
     }
 
     /**
