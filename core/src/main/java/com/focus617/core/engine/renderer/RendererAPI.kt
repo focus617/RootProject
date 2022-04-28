@@ -12,6 +12,7 @@ abstract class RendererAPI : WithLogging() {
     abstract fun init()
     abstract fun clear()
     abstract fun setClearColor(color: Color)
+    abstract fun setViewport(x: Int, y: Int, width: Int, height: Int)
     abstract fun drawIndexed(vertexArray: VertexArray)
 
     companion object {

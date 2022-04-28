@@ -43,7 +43,6 @@ class Sandbox2D : Engine() {
                 // Render UI
                 mWindow!!.onUpdate()
             }
-
         }
 
         override fun onEvent(event: Event): Boolean {

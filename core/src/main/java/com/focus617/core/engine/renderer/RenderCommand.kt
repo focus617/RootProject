@@ -18,6 +18,10 @@ object RenderCommand: BaseEntity() {
         sRendererAPI?.setClearColor(color)
     }
 
+    fun setViewport(x: Int, y: Int, width: Int, height: Int){
+        sRendererAPI?.setViewport(x, y, width, height)
+    }
+
     fun drawIndexed(vertexArray: VertexArray){
         sRendererAPI?.drawIndexed(vertexArray)
     }

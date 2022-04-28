@@ -102,7 +102,7 @@ class AndroidWindow private constructor(
 
                 // 创建并设置渲染器（Renderer）以在GLSurfaceView上绘制
                 // 此处是选择2D，或3D 渲染的关键点
-                renderer = XGLRenderer2D(instance!!, scene)
+                renderer = XGLRenderer2D(instance!!.context, scene)
                 setRenderer(renderer as Renderer)
                 mRenderer = renderer
 

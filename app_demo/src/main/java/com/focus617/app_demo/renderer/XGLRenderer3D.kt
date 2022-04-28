@@ -1,13 +1,11 @@
 package com.focus617.app_demo.renderer
 
+import android.content.Context
 import android.opengl.GLES30
-import android.opengl.GLES31
 import android.opengl.GLSurfaceView
-import com.focus617.app_demo.engine.AndroidWindow
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.objects.d2.Square
 import com.focus617.core.engine.baseDataType.Color
-import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.renderer.*
 import com.focus617.core.engine.scene.PerspectiveCamera
 import com.focus617.core.engine.scene.PerspectiveCameraController
@@ -17,7 +15,7 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer3D(
-    private val window: IfWindow,
+    private val context: Context,
     private val scene: Scene
 ) : XRenderer(), GLSurfaceView.Renderer {
 
@@ -41,7 +39,7 @@ class XGLRenderer3D(
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         // 打印OpenGL Version，Vendor，etc
-        ((window as AndroidWindow).mRenderContext as XGLContext).getOpenGLInfo()
+        XGLContext.getOpenGLInfo()
 
         // 设置重绘背景框架颜色
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
@@ -53,18 +51,18 @@ class XGLRenderer3D(
 
         // TODO: How to create objects in Sandbox layer?
         val mShader = XGLShaderBuilder.createShader(
-            window.context,
+            context,
             "$PATH/$SHADER_FILE"
         ) as XGLShader
 
         mShaderLibrary.add(mShader)
 
         mTexture = XGLTextureBuilder.createTexture(
-            window.context,
+            context,
             "$PATH/$TEXTURE_FILE"
         )
         mTextureLogo = XGLTextureBuilder.createTexture(
-            window.context,
+            context,
             "$PATH/$TEXTURE_LOGO_FILE"
         )
 
@@ -76,7 +74,7 @@ class XGLRenderer3D(
         Timber.d("width = $width, height = $height")
 
         // 设置渲染的OpenGL场景（视口）的位置和大小
-        GLES31.glViewport(0, 0, width, height)
+        RenderCommand.setViewport(0, 0, width, height)
 
         mCameraController.onWindowSizeChange(width, height)
     }

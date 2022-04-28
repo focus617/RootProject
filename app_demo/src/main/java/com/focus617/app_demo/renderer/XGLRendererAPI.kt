@@ -28,6 +28,11 @@ class XGLRendererAPI : RendererAPI() {
         GLES31.glClearColor(color.r, color.g, color.b, color.a)
     }
 
+    override fun setViewport(x: Int, y: Int, width: Int, height: Int) {
+        // 设置渲染的OpenGL场景（视口）的位置和大小
+        GLES31.glViewport(x, y, width, height)
+    }
+
     override fun drawIndexed(vertexArray: VertexArray) {
         // 图元装配，绘制三角形
         GLES31.glDrawElements(
