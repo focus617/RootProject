@@ -27,7 +27,7 @@ import kotlin.math.sqrt
  * v[offset + 2]
  * v[offset + 3]</pre>
  */
-object XMatrix: WithLogging() {
+object XMatrix : WithLogging() {
     /** Temporary memory for operations that need temporary Matrix data.  */
     private val sTemp = FloatArray(32)
     private fun I(i: Int, j: Int) = i + (j * 4)
@@ -797,14 +797,15 @@ object XMatrix: WithLogging() {
         return sqrt((x * x + y * y + z * z).toDouble()).toFloat()
     }
 
-    fun toString(m: FloatArray, mOffset: Int): String {
-        return StringBuilder().apply {
+    fun toString(m: FloatArray, mOffset: Int = 0): String {
+        return StringBuilder("\nMatrix dump:\n").apply {
             for (i in 0..3)
                 append(
-                    "(${m[mOffset + i]}," +
-                    "${m[mOffset + i + 4]}," +
-                    "${m[mOffset + i + 8]}," +
-                    "${m[mOffset + i + 12]})\n"
+                    "\t(" +
+                            String.format("%6.2f", m[mOffset + i]) + "," +
+                            String.format("%6.2f", m[mOffset + i + 4]) + "," +
+                            String.format("%6.2f", m[mOffset + i + 8]) + "," +
+                            String.format("%6.2f", m[mOffset + i + 12]) + " )\n"
                 )
         }.toString()
     }
