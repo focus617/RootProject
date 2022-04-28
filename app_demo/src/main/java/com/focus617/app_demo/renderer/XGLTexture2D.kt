@@ -5,11 +5,13 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.opengl.GLES20.*
 import android.opengl.GLES30
+import android.opengl.GLES30.GL_RGBA8
 import android.opengl.GLES31
 import android.opengl.GLUtils
 import com.focus617.core.engine.renderer.Texture2D
 import timber.log.Timber
 import java.io.IOException
+import java.nio.Buffer
 import java.nio.ByteBuffer
 
 /**
@@ -20,6 +22,9 @@ import java.nio.ByteBuffer
 class XGLTexture2D private constructor() : Texture2D() {
     private val textureObjectIdBuf = IntArray(1)
     private var textureObjectId: Int = 0
+
+    private var mInternalFormat: Int = GL_RGBA8
+    private var mDataFormat: Int = GL_RGBA
 
     override var mWidth: Int = 0
     override var mHeight: Int = 0
@@ -36,6 +41,33 @@ class XGLTexture2D private constructor() : Texture2D() {
         bitmap?.apply { initTexture(bitmap) }
     }
 
+    /** 程序编程构造 */
+    constructor(width: Int, height: Int) : this() {
+        mWidth = width
+        mHeight = height
+
+        mInternalFormat = GL_RGBA8
+        mDataFormat = GL_RGBA
+
+        GLES31.glGenTextures(1, textureObjectIdBuf, 0)
+        if (textureObjectIdBuf[0] == 0) {
+            LOG.error("Could not generate a new OpenGL texture object.")
+        }
+        textureObjectId = textureObjectIdBuf[0]
+
+        // Bind to the texture in OpenGL
+        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, textureObjectId)
+
+        // Allocate texture storage
+        GLES31.glTexStorage2D(GL_TEXTURE_2D, 1, mInternalFormat, mWidth, mHeight)
+
+        glTexParameteri(textureObjectId, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+        glTexParameteri(textureObjectId, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+
+        glTexParameteri(textureObjectId, GL_TEXTURE_WRAP_S, GL_REPEAT)
+        glTexParameteri(textureObjectId, GL_TEXTURE_WRAP_T, GL_REPEAT)
+    }
+
     private fun initTexture(bitmap: Bitmap) {
         bitmap.apply {
             mWidth = bitmap.width
@@ -44,6 +76,27 @@ class XGLTexture2D private constructor() : Texture2D() {
         }
         // Recycle the bitmap, since its data has been loaded into OpenGL.
         bitmap.recycle()
+    }
+
+    override fun setData(data: Buffer, size: Int) {
+        val bpp = if (mDataFormat == GL_RGBA) 4 else 3
+        require(size == (mWidth * mHeight * bpp)) { "Data must be entire texture!" }
+
+        // Bind to the texture in OpenGL
+        glBindTexture(GL_TEXTURE_2D, textureObjectId)
+        glTexSubImage2D(
+            GL_TEXTURE_2D,
+            0,
+            0,
+            0,
+            mWidth,
+            mHeight,
+            mDataFormat,
+            GL_UNSIGNED_BYTE,
+            data
+        )
+        // Unbind from the texture.
+        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, 0)
     }
 
     override fun bind(slot: Int) {
@@ -97,8 +150,8 @@ class XGLTexture2D private constructor() : Texture2D() {
         GLES31.glBindSampler(0, samplers[0])
 
         // Set
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
 
         // Set filtering: a default must be set, or the texture will be black.
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
@@ -136,7 +189,6 @@ class XGLTexture2D private constructor() : Texture2D() {
 
         return textureObjectId
     }
-
 
 
     companion object TextureHelper {

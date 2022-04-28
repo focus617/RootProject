@@ -2,6 +2,7 @@ package com.focus617.core.engine.renderer
 
 import com.focus617.core.platform.base.BaseEntity
 import java.io.Closeable
+import java.nio.Buffer
 
 /**
  * 纹理类 Texture
@@ -11,6 +12,9 @@ import java.io.Closeable
 abstract class Texture : BaseEntity(), Closeable {
     protected abstract var mWidth: Int
     protected abstract var mHeight: Int
+
+    // 向GPU传递数据
+    abstract fun setData(data: Buffer, size: Int)
 
     abstract fun bind(slot: Int = 0)
 }

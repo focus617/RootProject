@@ -14,6 +14,7 @@ import com.focus617.core.engine.scene.OrthographicCamera
 import com.focus617.core.engine.scene.OrthographicCameraController
 import com.focus617.core.engine.scene.Scene
 import java.io.Closeable
+import java.nio.LongBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -35,7 +36,6 @@ class XGLRenderer2D(
 
     override fun close() {
         quadVertexArray.close()
-        flatColorShader.close()
         textureShader.close()
         //whiteTexture.close()
     }
@@ -48,10 +48,6 @@ class XGLRenderer2D(
             System.arraycopy(camera.getViewMatrix(), 0, SceneData.sViewMatrix, 0, 16)
         }
 
-        flatColorShader.bind()
-        flatColorShader.setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
-        flatColorShader.setMat4("u_ViewMatrix", SceneData.sViewMatrix)
-
         textureShader.bind()
         textureShader.setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
         textureShader.setMat4("u_ViewMatrix", SceneData.sViewMatrix)
@@ -62,13 +58,14 @@ class XGLRenderer2D(
     }
 
     fun drawQuad(position: Vector3, size: Vector2, color: Vector4) {
-        flatColorShader.bind()
-        flatColorShader.setFloat4("u_Color", color)
+        textureShader.setFloat4("u_Color", color)
+        // Bind white texture here
+        whiteTexture.bind()
 
         XMatrix.setIdentityM(transform, 0)
         XMatrix.scaleM(transform,0, size.x, size.y, 1.0f)
         XMatrix.translateM(transform,0, position)
-        flatColorShader.setMat4("u_ModelMatrix", transform)
+        textureShader.setMat4("u_ModelMatrix", transform)
 
         quadVertexArray.bind()
         RenderCommand.drawIndexed(quadVertexArray)
@@ -79,14 +76,13 @@ class XGLRenderer2D(
     }
 
     fun drawQuad(position: Vector3, size: Vector2, texture: Texture2D) {
-        textureShader.bind()
+        textureShader.setFloat4("u_Color", WHITE)
+        texture.bind()
 
         XMatrix.setIdentityM(transform, 0)
         XMatrix.scaleM(transform,0, size.x, size.y, 1.0f)
         XMatrix.translateM(transform,0, position)
         textureShader.setMat4("u_ModelMatrix", transform)
-
-        texture.bind()
 
         quadVertexArray.bind()
         RenderCommand.drawIndexed(quadVertexArray)
@@ -135,15 +131,15 @@ class XGLRenderer2D(
     companion object Renderer2DStorage {
 
         lateinit var quadVertexArray: XGLVertexArray    // 一个Mesh, 代表Quad
-        lateinit var flatColorShader: XGLShader            // 两个Shader
-        lateinit var textureShader: XGLShader
-        //lateinit var whiteTexture: XGLTexture2D            // 一个默认贴图, 用于Blend等
+        lateinit var textureShader: XGLShader           // Shader
+        lateinit var whiteTexture: XGLTexture2D         // 一个默认贴图, 用于Blend等
 
         private val PATH = "SquareWithTexture"
         private val FLAT_SHADER_FILE = "FlatColor.glsl"
         private val TEXTURE_SHADER_FILE = "Texture.glsl"
         private val TEXTURE_FILE = "Checkerboard.png"
 
+        val WHITE = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
         val RED = Vector4(0.8f, 0.3f, 0.2f, 1.0f)
         val BLUE = Vector4(0.2f, 0.3f, 0.8f, 1.0f)
 
@@ -159,11 +155,6 @@ class XGLRenderer2D(
         }
 
         private fun initShader(context: Context) {
-            flatColorShader = XGLShaderBuilder.createShader(
-                context,
-                "$PATH/$FLAT_SHADER_FILE"
-            ) as XGLShader
-
             textureShader = XGLShaderBuilder.createShader(
                 context,
                 "$PATH/$TEXTURE_SHADER_FILE"
@@ -212,6 +203,10 @@ class XGLRenderer2D(
                 context,
                 "$PATH/$TEXTURE_FILE"
             )!!
+
+            whiteTexture = XGLTextureBuilder.createTexture(1,1)!!
+            val whiteTextureData = longArrayOf(0xffffffff)
+            whiteTexture.setData(LongBuffer.wrap(whiteTextureData), Int.SIZE_BYTES )
         }
     }
 

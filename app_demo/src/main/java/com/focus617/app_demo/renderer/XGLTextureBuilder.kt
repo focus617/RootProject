@@ -26,4 +26,15 @@ object XGLTextureBuilder : WithLogging() {
             RendererAPI.API.OpenGLES -> XGLTexture2D(context, resourceId)
         }
     }
+
+    /** 程序编程构造 */
+    fun createTexture(width: Int, height: Int): XGLTexture2D? {
+        return when (RendererAPI.getAPI()) {
+            RendererAPI.API.None -> {
+                LOG.error("RendererAPI::None is currently not supported!")
+                null
+            }
+            RendererAPI.API.OpenGLES -> XGLTexture2D(width, height)
+        }
+    }
 }
