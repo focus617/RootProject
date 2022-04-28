@@ -18,12 +18,11 @@ class XMatrixTest {
         //Then
         println(str)
 
-        val expectedString = """
-        (1.0,0.0,0.0,0.0)
-        (0.0,1.0,0.0,0.0)
-        (0.0,0.0,1.0,0.0)
-        (0.0,0.0,0.0,1.0)""".trimIndent() + "\n"
-        assertThat(str).isEqualTo(expectedString)
+        assertThat(str).contains("Matrix dump:")
+        assertThat(str).contains("1.00,  0.00,  0.00,  0.00")
+        assertThat(str).contains("0.00,  1.00,  0.00,  0.00")
+        assertThat(str).contains("0.00,  0.00,  1.00,  0.00")
+        assertThat(str).contains("0.00,  0.00,  0.00,  1.00")
     }
 
     @Test
@@ -85,7 +84,7 @@ class XMatrixTest {
 
         val result: FloatArray = FloatArray(16)
         //When
-        val v:Boolean = XMatrix.invertM(result,0,origin,0)
+        val v: Boolean = XMatrix.invertM(result, 0, origin, 0)
         //Then
         assertThat(v).isTrue()
         str = XMatrix.toString(result, 0)
