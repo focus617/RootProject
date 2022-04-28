@@ -41,7 +41,7 @@ class GameActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
-        AndroidWindow.destroyWindow()
+        mGLSurfaceView.close()
         super.onDestroy()
     }
 

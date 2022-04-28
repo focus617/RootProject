@@ -14,6 +14,7 @@ import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene.Scene
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventHandler
+import java.io.Closeable
 
 /**
  * 现在先借用 GLSurfaceView 来实现 IfWindow 定义的功能。
@@ -21,7 +22,7 @@ import com.focus617.core.platform.event.base.EventHandler
  */
 class AndroidWindow private constructor(
     context: Context
-) : GLSurfaceView(context), IfWindow {
+) : GLSurfaceView(context), IfWindow, Closeable {
     override val LOG = logger()
 
     val mData = WindowData()
@@ -47,6 +48,11 @@ class AndroidWindow private constructor(
         mData.callback = callback
     }
 
+    override fun close() {
+        renderer.close()
+        instance = null
+    }
+
     companion object {
         // 用来统一保存Engine对Window的信息需求
         class WindowData() {
@@ -59,10 +65,6 @@ class AndroidWindow private constructor(
 
         // 保证Window的单例
         private var instance: AndroidWindow? = null
-
-        fun destroyWindow(){
-            instance = null
-        }
 
         fun createWindow(
             context: Context,
@@ -121,5 +123,4 @@ class AndroidWindow private constructor(
             window.setOnTouchListener(GestureInput(window))
         }
     }
-
 }

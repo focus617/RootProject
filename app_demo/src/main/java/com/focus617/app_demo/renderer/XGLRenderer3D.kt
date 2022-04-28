@@ -37,6 +37,12 @@ class XGLRenderer3D(
     //private lateinit var mTriangle: Triangle
     private lateinit var mSquare: Square
 
+    override fun close() {
+        mShaderLibrary.close()
+        mTexture?.close()
+        mTextureLogo?.close()
+    }
+
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         // 打印OpenGL Version，Vendor，etc
         XGLContext.getOpenGLInfo()
@@ -122,6 +128,8 @@ class XGLRenderer3D(
         vertexArray.unbind()
         shader.unbind()
     }
+
+
 
     fun checkGLError() {
         val error = GLES30.glGetError()

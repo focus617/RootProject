@@ -3,8 +3,9 @@ package com.focus617.core.engine.renderer
 import com.focus617.core.engine.scene.Camera
 import com.focus617.core.engine.scene.CameraController
 import com.focus617.core.platform.base.BaseEntity
+import java.io.Closeable
 
-abstract class XRenderer : BaseEntity() {
+abstract class XRenderer : BaseEntity(), Closeable {
     abstract val mCameraController: CameraController
 
     fun getAPI(): RendererAPI.API = RendererAPI.getAPI()

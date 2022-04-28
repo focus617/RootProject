@@ -37,7 +37,7 @@ class XGLRenderer2D(
     override fun close() {
         quadVertexArray.close()
         textureShader.close()
-        //whiteTexture.close()
+        whiteTexture.close()
     }
 
     override fun beginScene(camera: Camera) {
@@ -135,7 +135,6 @@ class XGLRenderer2D(
         lateinit var whiteTexture: XGLTexture2D         // 一个默认贴图, 用于Blend等
 
         private val PATH = "SquareWithTexture"
-        private val FLAT_SHADER_FILE = "FlatColor.glsl"
         private val TEXTURE_SHADER_FILE = "Texture.glsl"
         private val TEXTURE_FILE = "Checkerboard.png"
 
@@ -160,7 +159,7 @@ class XGLRenderer2D(
                 "$PATH/$TEXTURE_SHADER_FILE"
             ) as XGLShader
             textureShader.bind()
-            textureShader.uploadUniformTexture("u_Texture", 0)
+            textureShader.setInt("u_Texture", 0)
         }
 
         private fun initVertexArray() {
