@@ -4,7 +4,10 @@ import android.content.Context
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.core.engine.baseDataType.Color
-import com.focus617.core.engine.math.*
+import com.focus617.core.engine.math.Vector2
+import com.focus617.core.engine.math.Vector3
+import com.focus617.core.engine.math.Vector4
+import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.renderer.*
 import com.focus617.core.engine.scene.Camera
 import com.focus617.core.engine.scene.OrthographicCamera
@@ -33,7 +36,7 @@ class XGLRenderer2D(
     override fun close() {
         quadVertexArray.close()
         flatColorShader.close()
-        //textureShader.close()
+        textureShader.close()
         //whiteTexture.close()
     }
 
@@ -48,23 +51,49 @@ class XGLRenderer2D(
         flatColorShader.bind()
         flatColorShader.setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
         flatColorShader.setMat4("u_ViewMatrix", SceneData.sViewMatrix)
-        flatColorShader.setMat4("u_ModelMatrix", transform)
+
+        textureShader.bind()
+        textureShader.setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
+        textureShader.setMat4("u_ViewMatrix", SceneData.sViewMatrix)
     }
 
     override fun endScene() {
 
     }
 
-    fun drawQuad(position: Point3D, size: Vector2, color: Vector4) {
+    fun drawQuad(position: Vector3, size: Vector2, color: Vector4) {
         flatColorShader.bind()
         flatColorShader.setFloat4("u_Color", color)
+
+        XMatrix.setIdentityM(transform, 0)
+        XMatrix.scaleM(transform,0, size.x, size.y, 1.0f)
+        XMatrix.translateM(transform,0, position)
+        flatColorShader.setMat4("u_ModelMatrix", transform)
 
         quadVertexArray.bind()
         RenderCommand.drawIndexed(quadVertexArray)
     }
 
-    fun drawQuad(position: Point2D, size: Vector2, color: Vector4) {
-        drawQuad(Point3D(position.x, position.y, 0.0f), size, color)
+    fun drawQuad(position: Vector2, size: Vector2, color: Vector4) {
+        drawQuad(Vector3(position.x, position.y, 0.0f), size, color)
+    }
+
+    fun drawQuad(position: Vector3, size: Vector2, texture: Texture2D) {
+        textureShader.bind()
+
+        XMatrix.setIdentityM(transform, 0)
+        XMatrix.scaleM(transform,0, size.x, size.y, 1.0f)
+        XMatrix.translateM(transform,0, position)
+        textureShader.setMat4("u_ModelMatrix", transform)
+
+        texture.bind()
+
+        quadVertexArray.bind()
+        RenderCommand.drawIndexed(quadVertexArray)
+    }
+
+    fun drawQuad(position: Vector2, size: Vector2, texture: Texture2D) {
+        drawQuad(Vector3(position.x, position.y, 0.0f), size, texture)
     }
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
@@ -96,7 +125,10 @@ class XGLRenderer2D(
         RenderCommand.clear()
 
         beginScene(scene.mCamera)
-        drawQuad(Point3D(0f,0f,0f), Vector2(0f,0f), mColor)
+        drawQuad(Vector2(-1.0f,0f), Vector2(0.8f,0.8f), RED)
+        drawQuad(Vector2(0.5f,-0.5f), Vector2(0.5f,0.75f), BLUE)
+        drawQuad(Vector3(0.0f,0.0f, -0.1f), Vector2(10f,10f), mCheckerBoardTexture!!)
+
         endScene()
     }
 
@@ -104,25 +136,40 @@ class XGLRenderer2D(
 
         lateinit var quadVertexArray: XGLVertexArray    // 一个Mesh, 代表Quad
         lateinit var flatColorShader: XGLShader            // 两个Shader
-        //lateinit var textureShader: XGLShader
+        lateinit var textureShader: XGLShader
         //lateinit var whiteTexture: XGLTexture2D            // 一个默认贴图, 用于Blend等
 
         private val PATH = "SquareWithTexture"
-        private val SHADER_FILE = "FlatColor.glsl"
+        private val FLAT_SHADER_FILE = "FlatColor.glsl"
+        private val TEXTURE_SHADER_FILE = "Texture.glsl"
+        private val TEXTURE_FILE = "Checkerboard.png"
+
+        val RED = Vector4(0.8f, 0.3f, 0.2f, 1.0f)
+        val BLUE = Vector4(0.2f, 0.3f, 0.8f, 1.0f)
+
         private var transform: FloatArray = FloatArray(16)
-        private val mColor = Vector4(0.8f, 0.3f, 0.2f, 1.0f)
+        private lateinit var mCheckerBoardTexture: Texture2D
 
         fun initStaticData(context: Context) {
             initShader(context)
             initVertexArray()
+            initTexture(context)
+
             XMatrix.setIdentityM(transform, 0)
         }
 
         private fun initShader(context: Context) {
             flatColorShader = XGLShaderBuilder.createShader(
                 context,
-                "$PATH/$SHADER_FILE"
+                "$PATH/$FLAT_SHADER_FILE"
             ) as XGLShader
+
+            textureShader = XGLShaderBuilder.createShader(
+                context,
+                "$PATH/$TEXTURE_SHADER_FILE"
+            ) as XGLShader
+            textureShader.bind()
+            textureShader.uploadUniformTexture("u_Texture", 0)
         }
 
         private fun initVertexArray() {
@@ -158,6 +205,13 @@ class XGLRenderer2D(
             ) as XGLIndexBuffer
 
             quadVertexArray.setIndexBuffer(indexBuffer)
+        }
+
+        private fun initTexture(context: Context){
+            mCheckerBoardTexture = XGLTextureBuilder.createTexture(
+                context,
+                "$PATH/$TEXTURE_FILE"
+            )!!
         }
     }
 

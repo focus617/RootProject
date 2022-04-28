@@ -2,6 +2,7 @@
 
 #type vertex
 #version 300 es
+
 layout (location = 0) in vec3 a_Position;    //顶点位置
 layout (location = 1) in vec2 a_TexCoord;    //顶点纹理坐标
 
@@ -40,5 +41,5 @@ void main()
     // 下面这行可用于调试，用对应Color(R,G)来确定顶点坐标是否定义错位
     //color = vec4(v_TexCoord, 0.0, 1.0);
 
-    color = texture(u_Texture, v_TexCoord);
+    color = texture(u_Texture, v_TexCoord * 10.0) * vec4(1.0, 0.8, 0.8, 1.0);
 }

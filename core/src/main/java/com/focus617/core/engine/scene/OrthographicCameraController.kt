@@ -55,11 +55,11 @@ class OrthographicCameraController(private val mCamera: OrthographicCamera) : Ca
         mCamera.setProjectionMatrix(mProjectionMatrix)
     }
 
-    private var mCameraRotation: Float = 90F
+    private var mCameraRotation: Float = 0F
     override fun onUpdate(timeStep: TimeStep) {
-        val mCameraRotationSpeed: Float = 0.001F
+        val mCameraRotationSpeed: Float = 0.01F
 
-        mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed
+        //mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed
         if (mCameraRotation > 180.0f)
             mCameraRotation -= 360.0f;
         else if (mCameraRotation <= -180.0f)

@@ -26,7 +26,7 @@ class XGLRenderer3D(
         PerspectiveCameraController(scene.mCamera as PerspectiveCamera)
 
     private val PATH = "SquareWithTexture"
-    private val SHADER_FILE = "shader_square.glsl"
+    private val SHADER_FILE = "Texture.glsl"
     private val TEXTURE_FILE = "Checkerboard.png"
     private val TEXTURE_LOGO_FILE = "Logo.png"
 

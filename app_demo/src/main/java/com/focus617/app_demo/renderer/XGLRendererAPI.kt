@@ -17,6 +17,8 @@ class XGLRendererAPI : RendererAPI() {
         //设置混合方式，source权重值用其alpha值，destination权重值为1-source权重值
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
+        //启动深度测试
+        glEnable(GL_DEPTH_TEST)
     }
 
     override fun clear() {
@@ -34,7 +36,7 @@ class XGLRendererAPI : RendererAPI() {
     }
 
     override fun drawIndexed(vertexArray: VertexArray) {
-        // 图元装配，绘制三角形
+        // 图元装配，OPENGL ES只支持绘制三角形
         GLES31.glDrawElements(
             GLES31.GL_TRIANGLES,
             (vertexArray as XGLVertexArray).getIndexBuffer()!!.mCount,
