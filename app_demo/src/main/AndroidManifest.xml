@@ -15,7 +15,8 @@
         android:theme="@style/Theme.XApp">
         <activity
             android:name=".GameActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.XApp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
