@@ -1,6 +1,5 @@
 package com.focus617.app_demo.objects.d2
 
-import com.focus617.app_demo.objects.DrawingObject
 import com.focus617.app_demo.renderer.XGLBufferBuilder
 import com.focus617.app_demo.renderer.XGLIndexBuffer
 import com.focus617.app_demo.renderer.XGLVertexArray
@@ -11,7 +10,7 @@ import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.ShaderDataType
 
 
-class Square : DrawingObject() {
+class Square {
 
     val vertexArray = XGLBufferBuilder.createVertexArray() as XGLVertexArray
 

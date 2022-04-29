@@ -7,8 +7,11 @@ import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
-import com.focus617.core.engine.math.XMatrix
-import com.focus617.core.engine.renderer.*
+import com.focus617.core.engine.objects.DrawableObject
+import com.focus617.core.engine.objects.d2.Quad
+import com.focus617.core.engine.renderer.RenderCommand
+import com.focus617.core.engine.renderer.Texture2D
+import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene.Camera
 import com.focus617.core.engine.scene.OrthographicCamera
 import com.focus617.core.engine.scene.OrthographicCameraController
@@ -63,10 +66,7 @@ class XGLRenderer2D(
         // Bind white texture here
         whiteTexture.bind()
 
-        XMatrix.setIdentityM(transform, 0)
-        XMatrix.scaleM(transform, 0, size.x, size.y, 1.0f)
-        XMatrix.translateM(transform, 0, position)
-        textureShader.setMat4("u_ModelMatrix", transform)
+        textureShader.setMat4("u_ModelMatrix", getTransform(position, size))
 
         quadVertexArray.bind()
         RenderCommand.drawIndexed(quadVertexArray)
@@ -84,10 +84,7 @@ class XGLRenderer2D(
         textureShader.setFloat("u_TilingFactor", tilingFactor)
         texture.bind()
 
-        XMatrix.setIdentityM(transform, 0)
-        XMatrix.scaleM(transform, 0, size.x, size.y, 1.0f)
-        XMatrix.translateM(transform, 0, position)
-        textureShader.setMat4("u_ModelMatrix", transform)
+        textureShader.setMat4("u_ModelMatrix", getTransform(position, size))
 
         quadVertexArray.bind()
         RenderCommand.drawIndexed(quadVertexArray)
@@ -117,12 +114,7 @@ class XGLRenderer2D(
         // Bind white texture here
         whiteTexture.bind()
 
-        XMatrix.setIdentityM(transform, 0)
-        XMatrix.scaleM(transform, 0, size.x, size.y, 1.0f)
-        //LOG.info("scaleM" + XMatrix.toString(transform))
-        XMatrix.rotateM(transform, 0, rotation, 0.0f, 0.0f, 1.0f)
-        XMatrix.translateM(transform, 0, position)
-        textureShader.setMat4("u_ModelMatrix", transform)
+        textureShader.setMat4("u_ModelMatrix", getTransform(position, size, rotation))
 
         quadVertexArray.bind()
         RenderCommand.drawIndexed(quadVertexArray)
@@ -144,11 +136,7 @@ class XGLRenderer2D(
         textureShader.setFloat("u_TilingFactor", tilingFactor)
         texture.bind()
 
-        XMatrix.setIdentityM(transform, 0)
-        XMatrix.scaleM(transform, 0, size.x, size.y, 1.0f)
-        XMatrix.rotateM(transform, 0, rotation, 0.0f, 0.0f, 1.0f)
-        XMatrix.translateM(transform, 0, position)
-        textureShader.setMat4("u_ModelMatrix", transform)
+        textureShader.setMat4("u_ModelMatrix", getTransform(position, size, rotation))
 
         quadVertexArray.bind()
         RenderCommand.drawIndexed(quadVertexArray)
@@ -203,16 +191,18 @@ class XGLRenderer2D(
         beginScene(scene.mCamera)
         drawQuad(Vector2(-1.0f, 0f), Vector2(0.8f, 0.8f), RED)
         drawRotatedQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), 45f, BLUE)
-        drawQuad(Vector3(0.0f, 0.0f, -0.1f), Vector2(10f, 10f), mCheckerBoardTexture!!, 10f)
+        drawQuad(Vector3(0.0f, 0.0f, -0.1f), Vector2(10f, 10f), checkerBoardTexture!!, 10f)
 
         endScene()
     }
 
     companion object Renderer2DStorage {
+        val quad = Quad()
 
         lateinit var quadVertexArray: XGLVertexArray    // 一个Mesh, 代表Quad
         lateinit var textureShader: XGLShader           // Shader
         lateinit var whiteTexture: XGLTexture2D         // 一个默认贴图, 用于Blend等
+        lateinit var checkerBoardTexture: Texture2D
 
         private val PATH = "SquareWithTexture"
         private val TEXTURE_SHADER_FILE = "Texture.glsl"
@@ -222,15 +212,10 @@ class XGLRenderer2D(
         val RED = Vector4(0.8f, 0.3f, 0.2f, 1.0f)
         val BLUE = Vector4(0.2f, 0.3f, 0.8f, 1.0f)
 
-        private var transform: FloatArray = FloatArray(16)
-        private lateinit var mCheckerBoardTexture: Texture2D
-
         fun initStaticData(context: Context) {
             initShader(context)
-            initVertexArray()
+            initVertexArray(quad)
             initTexture(context)
-
-            XMatrix.setIdentityM(transform, 0)
         }
 
         private fun initShader(context: Context) {
@@ -242,34 +227,19 @@ class XGLRenderer2D(
             textureShader.setInt("u_Texture", 0)
         }
 
-        private fun initVertexArray() {
+        private fun initVertexArray(drawingObject: DrawableObject) {
             quadVertexArray =
                 XGLBufferBuilder.createVertexArray() as XGLVertexArray
 
-            // 每个顶点有2个顶点属性一位置、纹理
-            val vertices = floatArrayOf(
-                // x,   y,     z,  TextureX, TextureY
-                -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-                0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-                0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
-                -0.5f, 0.5f, 0.0f, 0.0f, 1.0f
-            )
+            val vertices = drawingObject.getVertices()
             val vertexBuffer = XGLBufferBuilder.createVertexBuffer(
                 vertices, vertices.size * Float.SIZE_BYTES
             ) as XGLVertexBuffer
 
-            val layout = BufferLayout(
-                listOf(
-                    BufferElement("a_Position", ShaderDataType.Float3, true),
-                    BufferElement("a_TexCoord", ShaderDataType.Float2, true)
-                )
-            )
-            vertexBuffer.setLayout(layout)
+            vertexBuffer.setLayout(drawingObject.getLayout())
             quadVertexArray.addVertexBuffer(vertexBuffer)
 
-            val indices = shortArrayOf(
-                0, 1, 2, 2, 3, 0
-            )
+            val indices = drawingObject.getIndices()
             val indexBuffer = XGLBufferBuilder.createIndexBuffer(
                 indices, indices.size
             ) as XGLIndexBuffer
@@ -278,7 +248,7 @@ class XGLRenderer2D(
         }
 
         private fun initTexture(context: Context) {
-            mCheckerBoardTexture = XGLTextureBuilder.createTexture(
+            checkerBoardTexture = XGLTextureBuilder.createTexture(
                 context,
                 "$PATH/$TEXTURE_FILE"
             )!!
@@ -286,6 +256,16 @@ class XGLRenderer2D(
             whiteTexture = XGLTextureBuilder.createTexture(1, 1)!!
             val whiteTextureData = longArrayOf(0xffffffff)
             whiteTexture.setData(LongBuffer.wrap(whiteTextureData), Int.SIZE_BYTES)
+        }
+
+        private fun getTransform(
+            position: Vector3,
+            size: Vector2,
+            rotation: Float = 0.0f
+        ): FloatArray {
+            quad.resetTransform()
+            quad.onTransform(position, size, rotation)
+            return quad.transform
         }
     }
 
