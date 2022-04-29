@@ -59,12 +59,13 @@ class XGLRenderer2D(
 
     fun drawQuad(position: Vector3, size: Vector2, color: Vector4) {
         textureShader.setFloat4("u_Color", color)
+        textureShader.setFloat("u_TilingFactor", 1.0f)
         // Bind white texture here
         whiteTexture.bind()
 
         XMatrix.setIdentityM(transform, 0)
-        XMatrix.scaleM(transform,0, size.x, size.y, 1.0f)
-        XMatrix.translateM(transform,0, position)
+        XMatrix.scaleM(transform, 0, size.x, size.y, 1.0f)
+        XMatrix.translateM(transform, 0, position)
         textureShader.setMat4("u_ModelMatrix", transform)
 
         quadVertexArray.bind()
@@ -75,21 +76,28 @@ class XGLRenderer2D(
         drawQuad(Vector3(position.x, position.y, 0.0f), size, color)
     }
 
-    fun drawQuad(position: Vector3, size: Vector2, texture: Texture2D) {
-        textureShader.setFloat4("u_Color", WHITE)
+    fun drawQuad(
+        position: Vector3, size: Vector2, texture: Texture2D, tilingFactor: Float = 1.0f,
+        tintColor: Vector4 = WHITE
+    ) {
+        textureShader.setFloat4("u_Color", tintColor)
+        textureShader.setFloat("u_TilingFactor", tilingFactor)
         texture.bind()
 
         XMatrix.setIdentityM(transform, 0)
-        XMatrix.scaleM(transform,0, size.x, size.y, 1.0f)
-        XMatrix.translateM(transform,0, position)
+        XMatrix.scaleM(transform, 0, size.x, size.y, 1.0f)
+        XMatrix.translateM(transform, 0, position)
         textureShader.setMat4("u_ModelMatrix", transform)
 
         quadVertexArray.bind()
         RenderCommand.drawIndexed(quadVertexArray)
     }
 
-    fun drawQuad(position: Vector2, size: Vector2, texture: Texture2D) {
-        drawQuad(Vector3(position.x, position.y, 0.0f), size, texture)
+    fun drawQuad(
+        position: Vector2, size: Vector2, texture: Texture2D, tilingFactor: Float = 1.0f,
+        tintColor: Vector4 = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
+    ) {
+        drawQuad(Vector3(position.x, position.y, 0.0f), size, texture, tilingFactor, tintColor)
     }
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
@@ -121,9 +129,9 @@ class XGLRenderer2D(
         RenderCommand.clear()
 
         beginScene(scene.mCamera)
-        drawQuad(Vector2(-1.0f,0f), Vector2(0.8f,0.8f), RED)
-        drawQuad(Vector2(0.5f,-0.5f), Vector2(0.5f,0.75f), BLUE)
-        drawQuad(Vector3(0.0f,0.0f, -0.1f), Vector2(10f,10f), mCheckerBoardTexture!!)
+        drawQuad(Vector2(-1.0f, 0f), Vector2(0.8f, 0.8f), RED)
+        drawQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), BLUE)
+        drawQuad(Vector3(0.0f, 0.0f, -0.1f), Vector2(10f, 10f), mCheckerBoardTexture!!)
 
         endScene()
     }
@@ -197,15 +205,15 @@ class XGLRenderer2D(
             quadVertexArray.setIndexBuffer(indexBuffer)
         }
 
-        private fun initTexture(context: Context){
+        private fun initTexture(context: Context) {
             mCheckerBoardTexture = XGLTextureBuilder.createTexture(
                 context,
                 "$PATH/$TEXTURE_FILE"
             )!!
 
-            whiteTexture = XGLTextureBuilder.createTexture(1,1)!!
+            whiteTexture = XGLTextureBuilder.createTexture(1, 1)!!
             val whiteTextureData = longArrayOf(0xffffffff)
-            whiteTexture.setData(LongBuffer.wrap(whiteTextureData), Int.SIZE_BYTES )
+            whiteTexture.setData(LongBuffer.wrap(whiteTextureData), Int.SIZE_BYTES)
         }
     }
 

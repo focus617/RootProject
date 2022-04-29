@@ -60,6 +60,10 @@ class XGLShader constructor(
         uploadUniformInt(name, value)
     }
 
+    override fun setFloat(name: String, value: Float) {
+        uploadUniformFloat(name, value)
+    }
+
     override fun setFloat3(name: String, value: Vector3) {
         uploadUniformFloat3(name, value)
     }

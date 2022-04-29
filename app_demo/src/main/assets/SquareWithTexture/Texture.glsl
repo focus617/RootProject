@@ -35,6 +35,7 @@ layout(location = 0) out vec4 color;
 in vec2 v_TexCoord;
 
 uniform vec4 u_Color;
+uniform float u_TilingFactor;
 uniform sampler2D u_Texture;
 
 void main()
@@ -42,5 +43,5 @@ void main()
     // 下面这行可用于调试，用对应Color(R,G)来确定顶点坐标是否定义错位
     //color = vec4(v_TexCoord, 0.0, 1.0);
 
-    color = texture(u_Texture, v_TexCoord * 10.0) * u_Color;
+    color = texture(u_Texture, v_TexCoord * u_TilingFactor) * u_Color;
 }

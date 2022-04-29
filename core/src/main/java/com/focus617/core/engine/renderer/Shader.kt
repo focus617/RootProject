@@ -25,6 +25,7 @@ abstract class Shader(
     abstract fun unbind()
 
     abstract fun setInt(name: String, value: Int )
+    abstract fun setFloat(name: String, value: Float)
     abstract fun setFloat3(name: String, value: Vector3)
     abstract fun setFloat4(name: String, value: Vector4)
     abstract fun setMat4(name: String, matrix: FloatArray)
