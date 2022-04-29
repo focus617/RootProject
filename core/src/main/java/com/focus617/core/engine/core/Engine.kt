@@ -11,7 +11,7 @@ open class Engine : BaseEntity(), Runnable {
     private var isRunning: Boolean = true
     private var mLastFrameTime: Long = 0
 
-    protected var mWindow: IfWindow? = null
+    var mWindow: IfWindow? = null
 
     private val mLayerStack: LayerStack = LayerStack()
     private val mOverlayStack: LayerStack = LayerStack()
