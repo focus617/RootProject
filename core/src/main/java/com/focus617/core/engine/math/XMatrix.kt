@@ -576,7 +576,7 @@ object XMatrix : WithLogging() {
         synchronized(XMatrix.sTemp) {
             XMatrix.setRotateM(XMatrix.sTemp, 0, a, x, y, z)
             XMatrix.xMultiplyMM(XMatrix.sTemp, 16, m, mOffset, XMatrix.sTemp, 0)
-            System.arraycopy(XMatrix.sTemp, 16, m, mOffset, 16)
+            System.arraycopy(XMatrix.sTemp, 0, m, mOffset, 16)
         }
     }
 
