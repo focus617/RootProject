@@ -34,13 +34,27 @@ class XGLRenderer2D(
 
     override fun initRenderer() {
         RenderCommand.init()
+        initTextureForScene()
+
         initStaticData(context)     // 初始化本Render的静态数据
+    }
+
+    private fun initTextureForScene() {
+        val texture = XGLTextureBuilder.createTexture(
+            context,
+            "$PATH/$TEXTURE_FILE"
+        )!!
+        scene.register(objectTextureName, texture)
+
+        val whiteTexture = XGLTextureBuilder.createTexture(1, 1)!!
+        val whiteTextureData = longArrayOf(0xffffffff)
+        whiteTexture.setData(LongBuffer.wrap(whiteTextureData), Int.SIZE_BYTES)
+        scene.register(whiteTextureName, whiteTexture)
     }
 
     override fun close() {
         quadVertexArray.close()
         textureShader.close()
-        whiteTexture.close()
     }
 
     override fun beginScene(camera: Camera) {
@@ -66,7 +80,7 @@ class XGLRenderer2D(
         textureShader.setMat4("u_ModelMatrix", getTransform(position, size))
 
         // Bind white texture here
-        whiteTexture.bind()
+        scene.texture(whiteTextureName)!!.bind()
 
         quadVertexArray.bind()
         RenderCommand.drawIndexed(quadVertexArray)
@@ -116,7 +130,7 @@ class XGLRenderer2D(
         textureShader.setMat4("u_ModelMatrix", getTransform(position, size, rotation))
 
         // Bind white texture here
-        whiteTexture.bind()
+        scene.texture(whiteTextureName)!!.bind()
 
         // Bind VertexArray
         quadVertexArray.bind()
@@ -196,7 +210,12 @@ class XGLRenderer2D(
         beginScene(scene.mCamera)
         drawQuad(Vector2(-1.0f, 0f), Vector2(0.8f, 0.8f), RED)
         drawRotatedQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), 45f, BLUE)
-        drawQuad(Vector3(0.0f, 0.0f, -0.1f), Vector2(10f, 10f), checkerBoardTexture!!, 10f)
+        drawQuad(
+            Vector3(0.0f, 0.0f, -0.1f),
+            Vector2(10f, 10f),
+            scene.texture(objectTextureName)!! as Texture2D,
+            10f
+        )
 
         endScene()
     }
@@ -205,17 +224,10 @@ class XGLRenderer2D(
 
         lateinit var quadVertexArray: XGLVertexArray    // 一个Mesh, 代表Quad
         lateinit var textureShader: XGLShader           // Shader
-        lateinit var whiteTexture: XGLTexture2D         // 一个默认贴图, 用于Blend等
-        lateinit var checkerBoardTexture: XGLTexture2D     // Quad的表面贴图
-
-        private val PATH = "SquareWithTexture"
-        private val TEXTURE_SHADER_FILE = "Texture.glsl"
-        private val TEXTURE_FILE = "Checkerboard.png"
 
         fun initStaticData(context: Context) {
             initShader(context)
             initVertexArray(Quad)
-            initTexture(context)
         }
 
         private fun initShader(context: Context) {
@@ -229,17 +241,6 @@ class XGLRenderer2D(
 
         private fun initVertexArray(drawingObject: IfDrawable) {
             quadVertexArray = XGLVertexArray.buildVertexArray(drawingObject)
-        }
-
-        private fun initTexture(context: Context) {
-            checkerBoardTexture = XGLTextureBuilder.createTexture(
-                context,
-                "$PATH/$TEXTURE_FILE"
-            )!!
-
-            whiteTexture = XGLTextureBuilder.createTexture(1, 1)!!
-            val whiteTextureData = longArrayOf(0xffffffff)
-            whiteTexture.setData(LongBuffer.wrap(whiteTextureData), Int.SIZE_BYTES)
         }
 
         private fun getTransform(
@@ -256,6 +257,13 @@ class XGLRenderer2D(
         val WHITE = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
         val RED = Vector4(0.8f, 0.3f, 0.2f, 1.0f)
         val BLUE = Vector4(0.2f, 0.3f, 0.8f, 1.0f)
+
+        private val PATH = "SquareWithTexture"
+        private val TEXTURE_SHADER_FILE = "Texture.glsl"
+        private val TEXTURE_FILE = "Checkerboard.png"
+
+        val whiteTextureName = "WhiteTexture"
+        val objectTextureName = "$PATH/$TEXTURE_FILE"
 
     }
 
