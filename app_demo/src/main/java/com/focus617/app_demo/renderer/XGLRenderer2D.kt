@@ -94,10 +94,82 @@ class XGLRenderer2D(
     }
 
     fun drawQuad(
-        position: Vector2, size: Vector2, texture: Texture2D, tilingFactor: Float = 1.0f,
+        position: Vector2,
+        size: Vector2,
+        rotation: Float,
+        texture: Texture2D,
+        tilingFactor: Float = 1.0f,
         tintColor: Vector4 = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
     ) {
-        drawQuad(Vector3(position.x, position.y, 0.0f), size, texture, tilingFactor, tintColor)
+        drawRotatedQuad(
+            Vector3(position.x, position.y, 0.0f),
+            size,
+            rotation,
+            texture,
+            tilingFactor,
+            tintColor
+        )
+    }
+
+    fun drawRotatedQuad(position: Vector3, size: Vector2, rotation: Float, color: Vector4) {
+        textureShader.setFloat4("u_Color", color)
+        textureShader.setFloat("u_TilingFactor", 1.0f)
+        // Bind white texture here
+        whiteTexture.bind()
+
+        XMatrix.setIdentityM(transform, 0)
+        XMatrix.scaleM(transform, 0, size.x, size.y, 1.0f)
+        //LOG.info("scaleM" + XMatrix.toString(transform))
+        XMatrix.rotateM(transform, 0, rotation, 0.0f, 0.0f, 1.0f)
+        XMatrix.translateM(transform, 0, position)
+        textureShader.setMat4("u_ModelMatrix", transform)
+
+        quadVertexArray.bind()
+        RenderCommand.drawIndexed(quadVertexArray)
+    }
+
+    fun drawRotatedQuad(position: Vector2, size: Vector2, rotation: Float, color: Vector4) {
+        drawRotatedQuad(Vector3(position.x, position.y, 0.0f), size, rotation, color)
+    }
+
+    fun drawRotatedQuad(
+        position: Vector3,
+        size: Vector2,
+        rotation: Float,
+        texture: Texture2D,
+        tilingFactor: Float = 1.0f,
+        tintColor: Vector4 = WHITE
+    ) {
+        textureShader.setFloat4("u_Color", tintColor)
+        textureShader.setFloat("u_TilingFactor", tilingFactor)
+        texture.bind()
+
+        XMatrix.setIdentityM(transform, 0)
+        XMatrix.scaleM(transform, 0, size.x, size.y, 1.0f)
+        XMatrix.rotateM(transform, 0, rotation, 0.0f, 0.0f, 1.0f)
+        XMatrix.translateM(transform, 0, position)
+        textureShader.setMat4("u_ModelMatrix", transform)
+
+        quadVertexArray.bind()
+        RenderCommand.drawIndexed(quadVertexArray)
+    }
+
+    fun drawRotatedQuad(
+        position: Vector2,
+        size: Vector2,
+        rotation: Float,
+        texture: Texture2D,
+        tilingFactor: Float = 1.0f,
+        tintColor: Vector4 = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
+    ) {
+        drawRotatedQuad(
+            Vector3(position.x, position.y, 0.0f),
+            size,
+            rotation,
+            texture,
+            tilingFactor,
+            tintColor
+        )
     }
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
@@ -130,8 +202,8 @@ class XGLRenderer2D(
 
         beginScene(scene.mCamera)
         drawQuad(Vector2(-1.0f, 0f), Vector2(0.8f, 0.8f), RED)
-        drawQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), BLUE)
-        drawQuad(Vector3(0.0f, 0.0f, -0.1f), Vector2(10f, 10f), mCheckerBoardTexture!!)
+        drawRotatedQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), 45f, BLUE)
+        drawRotatedQuad(Vector3(0.0f, 0.0f, -0.1f), Vector2(10f, 10f), -30f, mCheckerBoardTexture!!)
 
         endScene()
     }
