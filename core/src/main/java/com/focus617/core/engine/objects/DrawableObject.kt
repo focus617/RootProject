@@ -6,38 +6,40 @@ import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.platform.base.BaseEntity
 
-abstract class DrawableObject : BaseEntity() {
-    var transform: FloatArray = FloatArray(16)
-
+interface IfDrawable{
     abstract fun getVertices(): FloatArray
     abstract fun getLayout(): BufferLayout
     abstract fun getIndices(): ShortArray
+}
+
+abstract class DrawableObject : BaseEntity() {
+    var modelMatrix: FloatArray = FloatArray(16)
 
     init {
         resetTransform()
     }
 
     fun resetTransform(){
-        XMatrix.setIdentityM(transform, 0)
+        XMatrix.setIdentityM(modelMatrix, 0)
     }
 
     open fun onTransform(
         position: Vector3,
-        size: Vector2,
+        scaleSize: Vector2,
         rotation: Float = 0.0f
     ){
-        XMatrix.scaleM(transform, 0, size.x, size.y, 1.0f)
-        XMatrix.rotateM(transform, 0, rotation, 0.0f, 0.0f, 1.0f)
-        XMatrix.translateM(transform, 0, position)
+        XMatrix.scaleM(modelMatrix, 0, scaleSize.x, scaleSize.y, 1.0f)
+        XMatrix.rotateM(modelMatrix, 0, rotation, 0.0f, 0.0f, 1.0f)
+        XMatrix.translateM(modelMatrix, 0, position)
         //LOG.info("scaleM" + XMatrix.toString(transform))
     }
 
     open fun onTransform(
         position: Vector2,
-        size: Vector2,
+        scaleSize: Vector2,
         rotation: Float = 0.0f
     ) {
-        onTransform(Vector3(position.x, position.y, 0.0f), size, rotation)
+        onTransform(Vector3(position.x, position.y, 0.0f), scaleSize, rotation)
     }
 
 }

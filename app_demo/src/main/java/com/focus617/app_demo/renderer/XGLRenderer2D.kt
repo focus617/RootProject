@@ -7,7 +7,7 @@ import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
-import com.focus617.core.engine.objects.DrawableObject
+import com.focus617.core.engine.objects.IfDrawable
 import com.focus617.core.engine.objects.d2.Quad
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Texture2D
@@ -63,10 +63,10 @@ class XGLRenderer2D(
     fun drawQuad(position: Vector3, size: Vector2, color: Vector4) {
         textureShader.setFloat4("u_Color", color)
         textureShader.setFloat("u_TilingFactor", 1.0f)
+        textureShader.setMat4("u_ModelMatrix", getTransform(position, size))
+
         // Bind white texture here
         whiteTexture.bind()
-
-        textureShader.setMat4("u_ModelMatrix", getTransform(position, size))
 
         quadVertexArray.bind()
         RenderCommand.drawIndexed(quadVertexArray)
@@ -82,10 +82,12 @@ class XGLRenderer2D(
     ) {
         textureShader.setFloat4("u_Color", tintColor)
         textureShader.setFloat("u_TilingFactor", tilingFactor)
-        texture.bind()
-
         textureShader.setMat4("u_ModelMatrix", getTransform(position, size))
 
+        // Bind texture
+        texture.bind()
+
+        // Bind VertexArray
         quadVertexArray.bind()
         RenderCommand.drawIndexed(quadVertexArray)
     }
@@ -111,11 +113,12 @@ class XGLRenderer2D(
     fun drawRotatedQuad(position: Vector3, size: Vector2, rotation: Float, color: Vector4) {
         textureShader.setFloat4("u_Color", color)
         textureShader.setFloat("u_TilingFactor", 1.0f)
+        textureShader.setMat4("u_ModelMatrix", getTransform(position, size, rotation))
+
         // Bind white texture here
         whiteTexture.bind()
 
-        textureShader.setMat4("u_ModelMatrix", getTransform(position, size, rotation))
-
+        // Bind VertexArray
         quadVertexArray.bind()
         RenderCommand.drawIndexed(quadVertexArray)
     }
@@ -134,10 +137,12 @@ class XGLRenderer2D(
     ) {
         textureShader.setFloat4("u_Color", tintColor)
         textureShader.setFloat("u_TilingFactor", tilingFactor)
-        texture.bind()
-
         textureShader.setMat4("u_ModelMatrix", getTransform(position, size, rotation))
 
+        // Bind texture
+        texture.bind()
+
+        // Bind VertexArray
         quadVertexArray.bind()
         RenderCommand.drawIndexed(quadVertexArray)
     }
@@ -197,24 +202,19 @@ class XGLRenderer2D(
     }
 
     companion object Renderer2DStorage {
-        val quad = Quad()
 
         lateinit var quadVertexArray: XGLVertexArray    // 一个Mesh, 代表Quad
         lateinit var textureShader: XGLShader           // Shader
         lateinit var whiteTexture: XGLTexture2D         // 一个默认贴图, 用于Blend等
-        lateinit var checkerBoardTexture: Texture2D
+        lateinit var checkerBoardTexture: XGLTexture2D     // Quad的表面贴图
 
         private val PATH = "SquareWithTexture"
         private val TEXTURE_SHADER_FILE = "Texture.glsl"
         private val TEXTURE_FILE = "Checkerboard.png"
 
-        val WHITE = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
-        val RED = Vector4(0.8f, 0.3f, 0.2f, 1.0f)
-        val BLUE = Vector4(0.2f, 0.3f, 0.8f, 1.0f)
-
         fun initStaticData(context: Context) {
             initShader(context)
-            initVertexArray(quad)
+            initVertexArray(Quad)
             initTexture(context)
         }
 
@@ -227,24 +227,8 @@ class XGLRenderer2D(
             textureShader.setInt("u_Texture", 0)
         }
 
-        private fun initVertexArray(drawingObject: DrawableObject) {
-            quadVertexArray =
-                XGLBufferBuilder.createVertexArray() as XGLVertexArray
-
-            val vertices = drawingObject.getVertices()
-            val vertexBuffer = XGLBufferBuilder.createVertexBuffer(
-                vertices, vertices.size * Float.SIZE_BYTES
-            ) as XGLVertexBuffer
-
-            vertexBuffer.setLayout(drawingObject.getLayout())
-            quadVertexArray.addVertexBuffer(vertexBuffer)
-
-            val indices = drawingObject.getIndices()
-            val indexBuffer = XGLBufferBuilder.createIndexBuffer(
-                indices, indices.size
-            ) as XGLIndexBuffer
-
-            quadVertexArray.setIndexBuffer(indexBuffer)
+        private fun initVertexArray(drawingObject: IfDrawable) {
+            quadVertexArray = XGLVertexArray.buildVertexArray(drawingObject)
         }
 
         private fun initTexture(context: Context) {
@@ -263,10 +247,16 @@ class XGLRenderer2D(
             size: Vector2,
             rotation: Float = 0.0f
         ): FloatArray {
+            val quad = Quad()
             quad.resetTransform()
             quad.onTransform(position, size, rotation)
-            return quad.transform
+            return quad.modelMatrix
         }
+
+        val WHITE = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
+        val RED = Vector4(0.8f, 0.3f, 0.2f, 1.0f)
+        val BLUE = Vector4(0.2f, 0.3f, 0.8f, 1.0f)
+
     }
 
 }

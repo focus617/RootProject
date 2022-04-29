@@ -2,6 +2,7 @@ package com.focus617.app_demo.renderer
 
 import android.opengl.GLES20.*
 import android.opengl.GLES31
+import com.focus617.core.engine.objects.IfDrawable
 import com.focus617.core.engine.renderer.IfBuffer
 import com.focus617.core.engine.renderer.ShaderDataType
 import com.focus617.core.engine.renderer.VertexArray
@@ -101,5 +102,26 @@ class XGLVertexArray : VertexArray(), IfBuffer, Closeable {
                 0
             }
         }
+
+        fun buildVertexArray(drawingObject: IfDrawable): XGLVertexArray {
+            val vertexArray =
+                XGLBufferBuilder.createVertexArray() as XGLVertexArray
+
+            val vertices = drawingObject.getVertices()
+            val vertexBuffer = XGLBufferBuilder.createVertexBuffer(
+                vertices, vertices.size * Float.SIZE_BYTES
+            ) as XGLVertexBuffer
+            vertexBuffer.setLayout(drawingObject.getLayout())
+            vertexArray.addVertexBuffer(vertexBuffer)
+
+            val indices = drawingObject.getIndices()
+            val indexBuffer = XGLBufferBuilder.createIndexBuffer(
+                indices, indices.size
+            ) as XGLIndexBuffer
+            vertexArray.setIndexBuffer(indexBuffer)
+
+            return vertexArray
+        }
+
     }
 }
