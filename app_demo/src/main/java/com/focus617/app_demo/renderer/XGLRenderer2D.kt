@@ -203,7 +203,7 @@ class XGLRenderer2D(
         beginScene(scene.mCamera)
         drawQuad(Vector2(-1.0f, 0f), Vector2(0.8f, 0.8f), RED)
         drawRotatedQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), 45f, BLUE)
-        drawRotatedQuad(Vector3(0.0f, 0.0f, -0.1f), Vector2(10f, 10f), -30f, mCheckerBoardTexture!!)
+        drawQuad(Vector3(0.0f, 0.0f, -0.1f), Vector2(10f, 10f), mCheckerBoardTexture!!, 10f)
 
         endScene()
     }
