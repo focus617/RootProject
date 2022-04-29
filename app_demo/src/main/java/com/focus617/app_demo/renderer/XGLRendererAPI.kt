@@ -1,7 +1,9 @@
 package com.focus617.app_demo.renderer
 
-import android.opengl.GLES20.*
 import android.opengl.GLES31
+import android.opengl.GLES32.*
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.renderer.RendererAPI
 import com.focus617.core.engine.renderer.VertexArray
@@ -9,6 +11,7 @@ import com.focus617.core.engine.renderer.VertexArray
 class XGLRendererAPI : RendererAPI() {
 
     override fun init() {
+
         LOG.info("Enable Blend.")
         // 启用颜色混合：这个函数用于决定, 在pixel绘制时, 如果已经有绘制的pixel了,
         // 那么新pixel的权重是其alpha值, 原本的pixel的权重值是1-alpha值
@@ -41,6 +44,48 @@ class XGLRendererAPI : RendererAPI() {
             GLES31.GL_TRIANGLES,
             (vertexArray as XGLVertexArray).getIndexBuffer()!!.mCount,
             GLES31.GL_UNSIGNED_SHORT, 0
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun initDebug() {
+        glEnable(GL_DEBUG_OUTPUT)
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
+        glDebugMessageCallback { source, type, id, severity, message ->
+            when (severity) {
+                GL_DEBUG_SEVERITY_HIGH -> LOG.error(
+                    "%d: %s of %s severity, raised from %s: %s\n",
+                    id, type, severity, source, message
+                )
+                GL_DEBUG_SEVERITY_MEDIUM -> LOG.warn(
+                    "%d: %s of %s severity, raised from %s: %s\n",
+                    id, type, severity, source, message
+                )
+                GL_DEBUG_SEVERITY_LOW -> LOG.info(
+                    "%d: %s of %s severity, raised from %s: %s\n",
+                    id, type, severity, source, message
+                )
+                GL_DEBUG_SEVERITY_NOTIFICATION -> LOG.trace(
+                    "%d: %s of %s severity, raised from %s: %s\n",
+                    id, type, severity, source, message
+                )
+                else -> {
+                    LOG.debug("onMessage from OpenGl: Unknown severity level!")
+                    LOG.debug(
+                        "%d: %s of %s severity, raised from %s: %s\n",
+                        id, type, severity, source, message
+                    )
+                }
+            }
+        }
+
+        glDebugMessageControl(
+            GL_DONT_CARE,
+            GL_DONT_CARE,
+            GL_DEBUG_SEVERITY_NOTIFICATION,
+            0,
+            null,
+            false
         )
     }
 }
