@@ -1,9 +1,6 @@
 package com.focus617.app_demo.renderer
 
-import android.opengl.GLES31
-import android.opengl.GLES32.*
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.opengl.GLES31.*
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.renderer.RendererAPI
 import com.focus617.core.engine.renderer.VertexArray
@@ -26,66 +23,24 @@ class XGLRendererAPI : RendererAPI() {
 
     override fun clear() {
         // 清理屏幕，重绘背景颜色
-        GLES31.glClear(GLES31.GL_COLOR_BUFFER_BIT or GLES31.GL_DEPTH_BUFFER_BIT)
+        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
     }
 
     override fun setClearColor(color: Color) {
-        GLES31.glClearColor(color.r, color.g, color.b, color.a)
+        glClearColor(color.r, color.g, color.b, color.a)
     }
 
     override fun setViewport(x: Int, y: Int, width: Int, height: Int) {
         // 设置渲染的OpenGL场景（视口）的位置和大小
-        GLES31.glViewport(x, y, width, height)
+        glViewport(x, y, width, height)
     }
 
     override fun drawIndexed(vertexArray: VertexArray) {
         // 图元装配，OPENGL ES只支持绘制三角形
-        GLES31.glDrawElements(
-            GLES31.GL_TRIANGLES,
+        glDrawElements(
+            GL_TRIANGLES,
             (vertexArray as XGLVertexArray).getIndexBuffer()!!.mCount,
-            GLES31.GL_UNSIGNED_SHORT, 0
-        )
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun initDebug() {
-        glEnable(GL_DEBUG_OUTPUT)
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
-        glDebugMessageCallback { source, type, id, severity, message ->
-            when (severity) {
-                GL_DEBUG_SEVERITY_HIGH -> LOG.error(
-                    "%d: %s of %s severity, raised from %s: %s\n",
-                    id, type, severity, source, message
-                )
-                GL_DEBUG_SEVERITY_MEDIUM -> LOG.warn(
-                    "%d: %s of %s severity, raised from %s: %s\n",
-                    id, type, severity, source, message
-                )
-                GL_DEBUG_SEVERITY_LOW -> LOG.info(
-                    "%d: %s of %s severity, raised from %s: %s\n",
-                    id, type, severity, source, message
-                )
-                GL_DEBUG_SEVERITY_NOTIFICATION -> LOG.trace(
-                    "%d: %s of %s severity, raised from %s: %s\n",
-                    id, type, severity, source, message
-                )
-                else -> {
-                    LOG.debug("onMessage from OpenGl: Unknown severity level!")
-                    LOG.debug(
-                        "%d: %s of %s severity, raised from %s: %s\n",
-                        id, type, severity, source, message
-                    )
-                }
-            }
-        }
-
-        glDebugMessageControl(
-            GL_DONT_CARE,
-            GL_DONT_CARE,
-            GL_DEBUG_SEVERITY_NOTIFICATION,
-            0,
-            null,
-            false
+            GL_UNSIGNED_SHORT, 0
         )
     }
 }
