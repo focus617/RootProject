@@ -8,6 +8,8 @@ import com.focus617.core.engine.renderer.VertexArray
 import com.focus617.core.platform.base.BaseEntity
 
 interface IfDrawable{
+    abstract fun beforeBuild()
+    abstract fun afterBuild()
     abstract fun getVertices(): FloatArray
     abstract fun getLayout(): BufferLayout
     abstract fun getIndices(): ShortArray
