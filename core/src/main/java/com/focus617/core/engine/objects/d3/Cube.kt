@@ -59,7 +59,7 @@ class Cube : DrawableObject() {
         listOf(
             BufferElement("a_Position", ShaderDataType.Float3, true),
             BufferElement("a_Normal", ShaderDataType.Float3, true),
-            BufferElement("a_TexCoords", ShaderDataType.Float4, true)
+            BufferElement("a_TexCoords", ShaderDataType.Float2, true)
         )
     )
 

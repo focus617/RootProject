@@ -10,6 +10,7 @@ import com.focus617.app_demo.renderer.XGLVertexArray
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
+import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.objects.DrawableObject
 import com.focus617.core.engine.objects.IfDrawable
 import com.focus617.core.engine.renderer.RenderCommand
@@ -155,8 +156,9 @@ class XGLRenderer3D(
         transform: FloatArray
     ) {
         val shader = scene.mShaderLibrary.get(SHADER_FILE)
-        (shader as XGLShader).setMat4("u_ModelMatrix", transform)
-        shader.uploadUniformTexture("u_Texture", 0)
+        (shader as XGLShader).bind()
+        shader.setMat4("u_ModelMatrix", transform)
+        shader.setFloat4("outColor", BLUE)
 
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)
@@ -179,6 +181,10 @@ class XGLRenderer3D(
 
         val logoTextureName = "${TEXTURE_PATH}/${TEXTURE_LOGO_FILE}"
         val objectTextureName = "${TEXTURE_PATH}/${TEXTURE_FILE}"
+
+        val WHITE = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
+        val RED = Vector4(0.8f, 0.3f, 0.2f, 1.0f)
+        val BLUE = Vector4(0.2f, 0.3f, 0.8f, 1.0f)
     }
 
 }
