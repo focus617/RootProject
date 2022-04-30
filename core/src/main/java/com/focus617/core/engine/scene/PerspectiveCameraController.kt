@@ -4,6 +4,7 @@ import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.XMatrix
+import com.focus617.core.engine.math.clamp
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.screenTouchEvents.*
 import com.focus617.mylib.helper.DateHelper
@@ -14,6 +15,12 @@ import com.focus617.mylib.helper.DateHelper
 class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : CameraController() {
     private val mProjectionMatrix = FloatArray(16)
     private var mZoomLevel: Float = 1.0f
+
+    // Euler angle
+    private var pitchX: Float = 0f
+    private var yawY: Float = 0f
+
+    // Viewport size
     private var mWidth: Int = 0
     private var mHeight: Int = 0
 
@@ -32,6 +39,10 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
 
     fun setRotation(rollZ: Float = 90f) {
         mCamera.setRotation(rollZ)
+    }
+
+    fun setRotation(pitchX: Float = 0f, yawY: Float = 90f) {
+        mCamera.setRotation(pitchX, yawY)
     }
 
     fun setPosition(position: Point3D) {
@@ -61,9 +72,9 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
 
         //mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed
         if (mCameraRotation > 180.0f)
-            mCameraRotation -= 360.0f;
+            mCameraRotation -= 360.0f
         else if (mCameraRotation <= -180.0f)
-            mCameraRotation += 360.0f;
+            mCameraRotation += 360.0f
     }
 
     private var previoudZoomLevel: Float = 1.0f
@@ -84,11 +95,13 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
 
             is TouchDragEvent -> {
                 LOG.info("CameraController: on TouchDragEvent")
-                val deltaX = previousX - event.x
+                val sensitivity = 600f
+                val deltaX = event.x - previousX
                 val deltaY = event.y - previousY
-                // TODO: 需要反向映射到视图空间
-                val translation = Vector3(deltaX, deltaY, 0f)
-                translate(translation*0.001f)
+                pitchX -= deltaX / sensitivity
+                yawY -= deltaY / sensitivity
+                yawY = clamp(yawY, -180f, 180f)
+                setRotation(pitchX, yawY)
 
                 previousX = event.x
                 previousY = event.y
