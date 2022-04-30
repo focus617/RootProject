@@ -125,14 +125,22 @@ class XGLRenderer3D(
 
         beginScene(scene.mCamera)
 
-        val transform = transformGameObject(
+        var transform = transformGameObject(
             scene.gameObjectList[0],
-            Vector3(0.0f, 0.0f, 0.0f),
+            Vector3(0.0f, 0.5f, 0.0f),
             Vector2(1f, 1f)
         )
+        //LOG.info("ModelMatrix:" + XMatrix.toString(transform))
+        //TODO: transform matrix is correct, but why graph translate on x direction?
 
         (scene.texture(objectTextureName)!! as Texture2D).bind()
         submit(sVertexArray, transform)
+
+        transform = transformGameObject(
+            scene.gameObjectList[0],
+            Vector3(0.0f, -0.5f, 0.0f),
+            Vector2(1f, 1f)
+        )
 
         // This texture has transparent alpha for part of image
         (scene.texture(logoTextureName)!! as Texture2D).bind()

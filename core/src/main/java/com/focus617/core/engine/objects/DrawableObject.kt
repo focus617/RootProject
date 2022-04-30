@@ -33,7 +33,7 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
         XMatrix.scaleM(modelMatrix, 0, scaleSize.x, scaleSize.y, 1.0f)
         XMatrix.rotateM(modelMatrix, 0, rotation, 0.0f, 0.0f, 1.0f)
         XMatrix.translateM(modelMatrix, 0, position)
-        //LOG.info("scaleM" + XMatrix.toString(transform))
+        //LOG.info("ModelMatrix:" + XMatrix.toString(modelMatrix))
     }
 
     open fun onTransform(

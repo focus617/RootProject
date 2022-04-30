@@ -132,12 +132,6 @@ class OrthographicCameraController(private val mCamera: OrthographicCamera) : Ca
         return event.hasBeenHandled
     }
 
-    private fun reCalculatePerspectiveProjectionMatrix() {
-        // 计算透视投影矩阵 (Project Matrix)
-        val ratio: Float = mWidth.toFloat() / mHeight.toFloat()
-        XMatrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
-    }
-
     private fun reCalculateOrthoGraphicProjectionMatrix() {
         // 计算正交投影矩阵 (Project Matrix)
         // 默认绘制的区间在横轴[-1.7778f, 1.778f]，纵轴[-1, 1]之间
