@@ -4,6 +4,7 @@ import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.renderer.BufferLayout
+import com.focus617.core.engine.renderer.VertexArray
 import com.focus617.core.platform.base.BaseEntity
 
 interface IfDrawable{
@@ -12,8 +13,9 @@ interface IfDrawable{
     abstract fun getIndices(): ShortArray
 }
 
-abstract class DrawableObject : BaseEntity() {
-    var modelMatrix: FloatArray = FloatArray(16)
+abstract class DrawableObject : BaseEntity(), IfDrawable {
+    val modelMatrix: FloatArray = FloatArray(16)
+    lateinit var vertexArray: VertexArray
 
     init {
         resetTransform()

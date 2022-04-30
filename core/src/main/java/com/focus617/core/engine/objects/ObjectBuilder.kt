@@ -1,15 +1,44 @@
 package com.focus617.core.engine.objects
 
 import com.focus617.core.engine.math.Vector3.Companion.calConeNormal
+import com.focus617.core.engine.renderer.BufferElement
+import com.focus617.core.engine.renderer.BufferLayout
+import com.focus617.core.engine.renderer.ShaderDataType
 import com.focus617.mylib.logging.WithLogging
 import kotlin.math.cos
 import kotlin.math.sin
 
-class ObjectBuilder: WithLogging() {
+class ObjectBuilder : WithLogging() {
     private val vertexList = ArrayList<Float>()
     private val indexList = ArrayList<Short>()
     private var index: Short = 0    // Vertex index
 
+    fun buildData(hasTexture: Boolean = true): GeneratedData {
+        val layout: BufferLayout =
+            if (hasTexture) BufferLayout(
+                listOf(
+                    BufferElement("a_Position", ShaderDataType.Float3, true),
+                    BufferElement("a_Normal", ShaderDataType.Float3, false),
+                    BufferElement("a_TexCoord", ShaderDataType.Float2, true)
+                )
+            )
+            else BufferLayout(
+                listOf(
+                    BufferElement("a_Position", ShaderDataType.Float3, true),
+                    BufferElement("a_Normal", ShaderDataType.Float3, false),
+                )
+            )
+
+        val numVertices = vertexList.size / layout.getStride()
+        val vertices = vertexList.toFloatArray()
+        val indices = indexList.toShortArray()
+
+        LOG.debug(
+            "buildTexturedData(): Size =(V:${vertices.size}, I:${indices.size}})"
+        )
+
+        return GeneratedData(numVertices, vertices, layout, indices)
+    }
 
     fun appendCircle(radius: Float, numPoints: Int, y: Float = 0f, UNIT_SIZE: Float = 1f) {
 
@@ -61,6 +90,7 @@ class ObjectBuilder: WithLogging() {
         indexList.add((startVertexIndex + 1).toShort())
     }
 
+    // 圆柱体（无两个底面）
     fun appendOpenCylinder(
         radius: Float,
         height: Float,
@@ -198,6 +228,7 @@ class ObjectBuilder: WithLogging() {
         indexList.add((startVertexIndex + 1).toShort())
     }
 
+    // 球体
     private val angleSpan = 10      // 将球进行单位切分的角度
     fun appendBall(radius: Float, UNIT_SIZE: Float = 1f) {
 
@@ -304,35 +335,7 @@ class ObjectBuilder: WithLogging() {
         }
     }
 
-    fun buildData(): GeneratedData {
-
-        val numVertices = vertexList.size / TEXTURE_VERTEX_ATTRIBUTE_SIZE
-
-        val vertexArray = FloatArray(numVertices * TEXTURE_VERTEX_ATTRIBUTE_SIZE)
-        val indexArray = ShortArray(indexList.size)
-
-        LOG.debug(
-            "buildTexturedBallData(): Size - V:${vertexArray.size}, I:${indexArray.size}}"
-        )
-
-        // 将构造的顶点列表转存为顶点数组
-        for (i in 0 until numVertices) {
-            // copy vertex and normal
-            for (j in 0 until TEXTURE_VERTEX_ATTRIBUTE_SIZE) {
-                vertexArray[i * TEXTURE_VERTEX_ATTRIBUTE_SIZE + j] =
-                    vertexList[i * TEXTURE_VERTEX_ATTRIBUTE_SIZE + j]
-            }
-        }
-
-        // 将构造的顶点列表转存为顶点索引数组
-        for (i in 0 until indexList.size) {
-            indexArray[i] = indexList[i]
-        }
-
-        return GeneratedData(numVertices, vertexArray, indexArray)
-    }
-
-
+    // 多角星
     fun appendStar(
         angleNum: Int,  // 星形的锐角个数
         r: Float,       // 内角半径
@@ -399,51 +402,6 @@ class ObjectBuilder: WithLogging() {
         }
     }
 
-    fun buildNoneTexturedData(): GeneratedData {
-
-        val vertexArray = FloatArray(vertexList.size)
-        val indexArray = ShortArray(indexList.size)
-
-        // 将构造的顶点列表转存为顶点数组和顶点索引数组
-        val numVertices = vertexList.size / VERTEX_ATTRIBUTE_SIZE
-        for (i in 0 until numVertices) {
-            for (j in 0 until VERTEX_ATTRIBUTE_SIZE) {
-                vertexArray[i * VERTEX_ATTRIBUTE_SIZE + j] =
-                    vertexList[i * VERTEX_ATTRIBUTE_SIZE + j]
-            }
-            indexArray[i] = indexList[i]
-        }
-        return GeneratedData(numVertices, vertexArray, indexArray)
-    }
-
-    companion object {
-
-        class GeneratedData(
-            val numVertices: Int,           // 顶点数量
-            val vertexArray: FloatArray,    // 顶点数组
-            val indexArray: ShortArray      // 顶点索引数组
-        )
-
-        // 顶点坐标的每个属性的Size
-        private const val VERTEX_POS_SIZE = 3            //x,y,z
-        private const val VERTEX_NORMAL_SIZE = 3         //NX, NY, NZ
-        private const val VERTEX_TEXCOORDO_SIZE = 2      //s and t
-
-        // the following 4 defines are used to determine the locations
-        // of various attributes if vertex data are stored as an array
-        //of structures
-        private const val VERTEX_POS_OFFSET = 0
-        private const val VERTEX_NORMAL_OFFSET = VERTEX_POS_SIZE * Float.SIZE_BYTES
-        private const val VERTEX_TEX_COORDO_OFFSET =
-            (VERTEX_POS_SIZE + VERTEX_NORMAL_SIZE) * Float.SIZE_BYTES
-
-        private const val VERTEX_ATTRIBUTE_SIZE =
-            VERTEX_POS_SIZE + VERTEX_NORMAL_SIZE
-
-        private const val TEXTURE_VERTEX_ATTRIBUTE_SIZE =
-            VERTEX_POS_SIZE + VERTEX_NORMAL_SIZE + VERTEX_TEXCOORDO_SIZE
-    }
-
     //对矩形自动切分纹理产生纹理数组的方法
     //bw:列数
     //bh:行数
@@ -473,4 +431,14 @@ class ObjectBuilder: WithLogging() {
         }
         return result
     }
+
+    companion object {
+        class GeneratedData(
+            val numVertices: Int,        // 顶点数量
+            val vertices: FloatArray,    // 顶点数组
+            val layout: BufferLayout,    // 顶点数组的布局
+            val indices: ShortArray      // 顶点索引数组
+        )
+    }
+
 }

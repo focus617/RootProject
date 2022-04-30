@@ -53,12 +53,15 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
         mCamera.setProjectionMatrix(mProjectionMatrix)
     }
 
-    private var mCameraRotation: Float = 90F
+    private var mCameraRotation: Float = 0F
     override fun onUpdate(timeStep: TimeStep) {
         val mCameraRotationSpeed: Float = 0.001F
 
-        mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed
-        setRotation(mCameraRotation)
+        //mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed
+        if (mCameraRotation > 180.0f)
+            mCameraRotation -= 360.0f;
+        else if (mCameraRotation <= -180.0f)
+            mCameraRotation += 360.0f;
     }
 
     private var previoudZoomLevel: Float = 1.0f

@@ -1,29 +1,18 @@
 package com.focus617.app_demo.renderer
 
 import android.opengl.GLES20
-import android.opengl.GLES20.GL_ARRAY_BUFFER
-import android.opengl.GLES20.glBindBuffer
+import android.opengl.GLES20.*
 import android.opengl.GLES31
 import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.IfBuffer
 import com.focus617.core.engine.renderer.IfBufferLayout
 import com.focus617.core.platform.base.BaseEntity
 import java.io.Closeable
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import java.nio.FloatBuffer
-import java.nio.IntBuffer
+import java.nio.*
 
-class XGLVertexBuffer(vertices: FloatArray, size: Int)
-    : BaseEntity(), IfBuffer, IfBufferLayout, Closeable {
-    // Vertex Buffer handle
-    private var mHandle: Int = 0
-    private var mVBOBuf: IntBuffer = IntBuffer.allocate(1)
+class XGLVertexBuffer private constructor() : BaseEntity(), IfBuffer, IfBufferLayout, Closeable {
 
-    // Vertex Buffer layout
-    private var mLayout: BufferLayout? = null
-
-    init {
+    constructor(vertices: FloatArray, size: Int) : this(){
         // Generate VBO ID
         GLES31.glGenBuffers(1, mVBOBuf)
         if (mVBOBuf.get(0) == 0) {
@@ -41,6 +30,32 @@ class XGLVertexBuffer(vertices: FloatArray, size: Int)
         )
     }
 
+    constructor(size: Int) : this(){
+        // Generate VBO ID
+        GLES31.glGenBuffers(1, mVBOBuf)
+        if (mVBOBuf.get(0) == 0) {
+            throw RuntimeException("Could not create a new vertex buffer object.")
+        }
+
+        mHandle = mVBOBuf.get(0)
+
+        // Bind VBO buffer
+        GLES31.glBindBuffer(GLES31.GL_ARRAY_BUFFER, mHandle)
+
+        // Transfer data from native memory to the GPU buffer.
+        GLES31.glBufferData(
+            GLES31.GL_ARRAY_BUFFER, size, null, GLES31.GL_DYNAMIC_DRAW
+        )
+    }
+
+    // Vertex Buffer handle
+    private var mHandle: Int = 0
+    private var mVBOBuf: IntBuffer = IntBuffer.allocate(1)
+
+    // Vertex Buffer layout
+    private var mLayout: BufferLayout? = null
+
+
     override fun close() {
         GLES20.glDeleteBuffers(1, mVBOBuf)
     }
@@ -51,6 +66,11 @@ class XGLVertexBuffer(vertices: FloatArray, size: Int)
 
     override fun unbind() {
         glBindBuffer(GL_ARRAY_BUFFER, 0)
+    }
+
+    fun setData(data: Buffer, size: Int) {
+        glBindBuffer(GL_ARRAY_BUFFER, mHandle);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
     }
 
     override fun getLayout(): BufferLayout? = mLayout

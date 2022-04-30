@@ -8,7 +8,7 @@ import com.focus617.core.platform.event.base.EventDispatcher
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.screenTouchEvents.*
 
-class Layer2D(name: String, val engine: Engine) : Layer(name) {
+class GameLayer(name: String, val engine: Engine, val is3D: Boolean) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
 
     init {

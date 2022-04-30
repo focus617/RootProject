@@ -1,8 +1,12 @@
-package com.focus617.app_demo.renderer
+package com.focus617.app_demo.engine.d2
 
 import android.content.Context
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
+import com.focus617.app_demo.renderer.XGLShader
+import com.focus617.app_demo.renderer.XGLShaderBuilder
+import com.focus617.app_demo.renderer.XGLTextureBuilder
+import com.focus617.app_demo.renderer.XGLVertexArray
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
@@ -55,6 +59,10 @@ class XGLRenderer2D(
     override fun close() {
         quadVertexArray.close()
         textureShader.close()
+    }
+
+    fun flush(){
+
     }
 
     override fun beginScene(camera: Camera) {
@@ -227,7 +235,7 @@ class XGLRenderer2D(
 
         fun initStaticData(context: Context) {
             initShader(context)
-            initVertexArray(Quad)
+            initVertexArray(Quad())
         }
 
         private fun initShader(context: Context) {
