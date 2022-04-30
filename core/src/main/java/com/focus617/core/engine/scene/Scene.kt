@@ -7,7 +7,7 @@ import com.focus617.core.engine.renderer.Texture
 import com.focus617.core.platform.base.BaseEntity
 import java.io.Closeable
 
-class Scene(val mCamera: Camera) : BaseEntity(), Closeable {
+class Scene(val is3D: Boolean, val mCamera: Camera) : BaseEntity(), Closeable {
     private val textureSet = HashMap<String, Texture>()
     val mShaderLibrary = ShaderLibrary()
 

@@ -1,6 +1,7 @@
 package com.focus617.app_demo.engine
 
 import com.focus617.core.engine.core.Engine
+import com.focus617.core.engine.scene.Camera
 import com.focus617.core.engine.scene.OrthographicCamera
 import com.focus617.core.engine.scene.PerspectiveCamera
 import com.focus617.core.engine.scene.Scene
@@ -8,7 +9,8 @@ import java.io.Closeable
 
 class Sandbox(private val is3D: Boolean) : Engine(), Closeable {
 
-    val scene: Scene = if (is3D) Scene(PerspectiveCamera()) else Scene(OrthographicCamera())
+    private val camera: Camera =  if (is3D) PerspectiveCamera() else OrthographicCamera()
+    val scene: Scene = Scene(is3D, camera)
 
     init {
         pushLayer(GameLayer("GameLayer", this, is3D))

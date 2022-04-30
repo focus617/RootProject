@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.GameActivity
+import com.focus617.app_demo.engine.d2.XGLRenderer2D
 import com.focus617.app_demo.engine.d3.XGLRenderer3D
 import com.focus617.app_demo.renderer.XGLRendererAPI
 import com.focus617.core.engine.core.IfWindow
@@ -103,8 +104,10 @@ class AndroidWindow private constructor(
                 mRenderContext.init()
 
                 // 创建并设置渲染器（Renderer）以在GLSurfaceView上绘制
-                // 此处是选择2D，或3D 渲染的关键点
-                renderer = XGLRenderer3D(instance!!.context, scene)
+                renderer =
+                    if(scene.is3D) XGLRenderer3D(instance!!.context, scene)
+                    else XGLRenderer2D(instance!!.context, scene)
+
                 setRenderer(renderer as Renderer)
                 mRenderer = renderer
 

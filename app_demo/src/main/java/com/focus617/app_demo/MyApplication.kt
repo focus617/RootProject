@@ -22,6 +22,7 @@ class MyApplication : BaseApplication() {
         Timber.plant(Timber.DebugTree())
 
         // 初始化引擎
+        // is3D是选择2D，或3D的总开关
         gameEngine = Sandbox(is3D = true)
     }
 
