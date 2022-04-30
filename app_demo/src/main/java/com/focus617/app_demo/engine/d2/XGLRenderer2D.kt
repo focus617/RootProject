@@ -3,15 +3,11 @@ package com.focus617.app_demo.engine.d2
 import android.content.Context
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
-import com.focus617.app_demo.renderer.XGLShader
-import com.focus617.app_demo.renderer.XGLShaderBuilder
 import com.focus617.app_demo.renderer.XGLTextureBuilder
-import com.focus617.app_demo.renderer.XGLVertexArray
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
-import com.focus617.core.engine.objects.IfDrawable
 import com.focus617.core.engine.objects.d2.Quad
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Texture2D
@@ -21,7 +17,6 @@ import com.focus617.core.engine.scene.OrthographicCamera
 import com.focus617.core.engine.scene.OrthographicCameraController
 import com.focus617.core.engine.scene.Scene
 import java.io.Closeable
-import java.nio.LongBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -40,7 +35,7 @@ class XGLRenderer2D(
         RenderCommand.init()
         initTextureForScene()
 
-        initStaticData(context)     // 初始化本Render的静态数据
+        Renderer2DData.initStaticData(context)     // 初始化本Render的静态数据
     }
 
     private fun initTextureForScene() {
@@ -49,19 +44,13 @@ class XGLRenderer2D(
             "$PATH/$TEXTURE_FILE"
         )!!
         scene.register(objectTextureName, texture)
-
-        val whiteTexture = XGLTextureBuilder.createTexture(1, 1)!!
-        val whiteTextureData = longArrayOf(0xffffffff)
-        whiteTexture.setData(LongBuffer.wrap(whiteTextureData), Int.SIZE_BYTES)
-        scene.register(whiteTextureName, whiteTexture)
     }
 
     override fun close() {
-        quadVertexArray.close()
-        textureShader.close()
+        Renderer2DData.close()
     }
 
-    fun flush(){
+    fun flush() {
 
     }
 
@@ -73,9 +62,9 @@ class XGLRenderer2D(
             System.arraycopy(camera.getViewMatrix(), 0, SceneData.sViewMatrix, 0, 16)
         }
 
-        textureShader.bind()
-        textureShader.setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
-        textureShader.setMat4("u_ViewMatrix", SceneData.sViewMatrix)
+        Renderer2DData.TextureShader.bind()
+        Renderer2DData.TextureShader.setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
+        Renderer2DData.TextureShader.setMat4("u_ViewMatrix", SceneData.sViewMatrix)
     }
 
     override fun endScene() {
@@ -83,15 +72,15 @@ class XGLRenderer2D(
     }
 
     fun drawQuad(position: Vector3, size: Vector2, color: Vector4) {
-        textureShader.setFloat4("u_Color", color)
-        textureShader.setFloat("u_TilingFactor", 1.0f)
-        textureShader.setMat4("u_ModelMatrix", getTransform(position, size))
+        Renderer2DData.TextureShader.setFloat4("u_Color", color)
+        Renderer2DData.TextureShader.setFloat("u_TilingFactor", 1.0f)
+        Renderer2DData.TextureShader.setMat4("u_ModelMatrix", getTransform(position, size))
 
         // Bind white texture here
-        scene.texture(whiteTextureName)!!.bind()
+        Renderer2DData.WhiteTexture.bind()
 
-        quadVertexArray.bind()
-        RenderCommand.drawIndexed(quadVertexArray)
+        Renderer2DData.QuadVertexArray.bind()
+        RenderCommand.drawIndexed(Renderer2DData.QuadVertexArray)
     }
 
     fun drawQuad(position: Vector2, size: Vector2, color: Vector4) {
@@ -102,16 +91,16 @@ class XGLRenderer2D(
         position: Vector3, size: Vector2, texture: Texture2D, tilingFactor: Float = 1.0f,
         tintColor: Vector4 = WHITE
     ) {
-        textureShader.setFloat4("u_Color", tintColor)
-        textureShader.setFloat("u_TilingFactor", tilingFactor)
-        textureShader.setMat4("u_ModelMatrix", getTransform(position, size))
+        Renderer2DData.TextureShader.setFloat4("u_Color", tintColor)
+        Renderer2DData.TextureShader.setFloat("u_TilingFactor", tilingFactor)
+        Renderer2DData.TextureShader.setMat4("u_ModelMatrix", getTransform(position, size))
 
         // Bind texture
         texture.bind()
 
         // Bind VertexArray
-        quadVertexArray.bind()
-        RenderCommand.drawIndexed(quadVertexArray)
+        Renderer2DData.QuadVertexArray.bind()
+        RenderCommand.drawIndexed(Renderer2DData.QuadVertexArray)
     }
 
     fun drawQuad(
@@ -133,16 +122,16 @@ class XGLRenderer2D(
     }
 
     fun drawRotatedQuad(position: Vector3, size: Vector2, rotation: Float, color: Vector4) {
-        textureShader.setFloat4("u_Color", color)
-        textureShader.setFloat("u_TilingFactor", 1.0f)
-        textureShader.setMat4("u_ModelMatrix", getTransform(position, size, rotation))
+        Renderer2DData.TextureShader.setFloat4("u_Color", color)
+        Renderer2DData.TextureShader.setFloat("u_TilingFactor", 1.0f)
+        Renderer2DData.TextureShader.setMat4("u_ModelMatrix", getTransform(position, size, rotation))
 
         // Bind white texture here
-        scene.texture(whiteTextureName)!!.bind()
+        Renderer2DData.WhiteTexture.bind()
 
         // Bind VertexArray
-        quadVertexArray.bind()
-        RenderCommand.drawIndexed(quadVertexArray)
+        Renderer2DData.QuadVertexArray.bind()
+        RenderCommand.drawIndexed(Renderer2DData.QuadVertexArray)
     }
 
     fun drawRotatedQuad(position: Vector2, size: Vector2, rotation: Float, color: Vector4) {
@@ -157,16 +146,16 @@ class XGLRenderer2D(
         tilingFactor: Float = 1.0f,
         tintColor: Vector4 = WHITE
     ) {
-        textureShader.setFloat4("u_Color", tintColor)
-        textureShader.setFloat("u_TilingFactor", tilingFactor)
-        textureShader.setMat4("u_ModelMatrix", getTransform(position, size, rotation))
+        Renderer2DData.TextureShader.setFloat4("u_Color", tintColor)
+        Renderer2DData.TextureShader.setFloat("u_TilingFactor", tilingFactor)
+        Renderer2DData.TextureShader.setMat4("u_ModelMatrix", getTransform(position, size, rotation))
 
         // Bind texture
         texture.bind()
 
         // Bind VertexArray
-        quadVertexArray.bind()
-        RenderCommand.drawIndexed(quadVertexArray)
+        Renderer2DData.QuadVertexArray.bind()
+        RenderCommand.drawIndexed(Renderer2DData.QuadVertexArray)
     }
 
     fun drawRotatedQuad(
@@ -230,27 +219,6 @@ class XGLRenderer2D(
 
     companion object Renderer2DStorage {
 
-        lateinit var quadVertexArray: XGLVertexArray    // 一个Mesh, 代表Quad
-        lateinit var textureShader: XGLShader           // Shader
-
-        fun initStaticData(context: Context) {
-            initShader(context)
-            initVertexArray(Quad())
-        }
-
-        private fun initShader(context: Context) {
-            textureShader = XGLShaderBuilder.createShader(
-                context,
-                "$PATH/$TEXTURE_SHADER_FILE"
-            ) as XGLShader
-            textureShader.bind()
-            textureShader.setInt("u_Texture", 0)
-        }
-
-        private fun initVertexArray(drawingObject: IfDrawable) {
-            quadVertexArray = XGLVertexArray.buildVertexArray(drawingObject)
-        }
-
         private fun getTransform(
             position: Vector3,
             size: Vector2,
@@ -267,10 +235,8 @@ class XGLRenderer2D(
         val BLUE = Vector4(0.2f, 0.3f, 0.8f, 1.0f)
 
         private val PATH = "SquareWithTexture"
-        private val TEXTURE_SHADER_FILE = "Texture.glsl"
         private val TEXTURE_FILE = "Checkerboard.png"
 
-        val whiteTextureName = "WhiteTexture"
         val objectTextureName = "$PATH/$TEXTURE_FILE"
 
     }
