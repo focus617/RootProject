@@ -127,7 +127,7 @@ class XGLRenderer3D(
 
         var transform = transformGameObject(
             scene.gameObjectList[0],
-            Vector3(0.0f, 0.5f, 0.0f),
+            Vector3(0.0f, 0.0f, 0.0f),
             Vector2(1f, 1f)
         )
         //LOG.info("ModelMatrix:" + XMatrix.toString(transform))
@@ -136,15 +136,9 @@ class XGLRenderer3D(
         (scene.texture(objectTextureName)!! as Texture2D).bind()
         submit(sVertexArray, transform)
 
-        transform = transformGameObject(
-            scene.gameObjectList[0],
-            Vector3(0.0f, -0.5f, 0.0f),
-            Vector2(1f, 1f)
-        )
-
         // This texture has transparent alpha for part of image
-        (scene.texture(logoTextureName)!! as Texture2D).bind()
-        submit(sVertexArray, transform)
+//        (scene.texture(logoTextureName)!! as Texture2D).bind()
+//        submit(sVertexArray, transform)
 
         endScene()
     }
@@ -167,7 +161,7 @@ class XGLRenderer3D(
         val shader = scene.mShaderLibrary.get(SHADER_FILE)
         (shader as XGLShader).bind()
         shader.setMat4("u_ModelMatrix", transform)
-        shader.setFloat4("u_Color", BLUE)
+        shader.setFloat4("u_Color", WHITE)
 
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)

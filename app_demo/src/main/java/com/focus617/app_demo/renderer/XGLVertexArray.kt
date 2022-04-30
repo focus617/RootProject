@@ -107,6 +107,9 @@ class XGLVertexArray : VertexArray(), IfBuffer, Closeable {
             val vertexArray =
                 XGLBufferBuilder.createVertexArray() as XGLVertexArray
 
+            // let drawingObject prepare data
+            drawingObject.beforeBuild()
+
             val vertices = drawingObject.getVertices()
             val vertexBuffer = XGLBufferBuilder.createVertexBuffer(
                 vertices, vertices.size * Float.SIZE_BYTES
@@ -119,6 +122,9 @@ class XGLVertexArray : VertexArray(), IfBuffer, Closeable {
                 indices, indices.size
             ) as XGLIndexBuffer
             vertexArray.setIndexBuffer(indexBuffer)
+
+            // let drawingObject release data
+            drawingObject.afterBuild()
 
             return vertexArray
         }

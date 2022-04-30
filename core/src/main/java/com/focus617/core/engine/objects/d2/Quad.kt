@@ -27,4 +27,10 @@ class Quad : DrawableObject() {
     override fun getIndices(): ShortArray = shortArrayOf(
         0, 1, 2, 2, 3, 0
     )
+
+    override fun beforeBuild() {
+    }
+
+    override fun afterBuild() {
+    }
 }

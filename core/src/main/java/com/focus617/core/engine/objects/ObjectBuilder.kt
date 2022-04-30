@@ -5,13 +5,19 @@ import com.focus617.core.engine.renderer.BufferElement
 import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.ShaderDataType
 import com.focus617.mylib.logging.WithLogging
+import java.io.Closeable
 import kotlin.math.cos
 import kotlin.math.sin
 
-class ObjectBuilder : WithLogging() {
+object ObjectBuilder : WithLogging(), Closeable {
     private val vertexList = ArrayList<Float>()
     private val indexList = ArrayList<Short>()
     private var index: Short = 0    // Vertex index
+
+    override fun close() {
+        vertexList.clear()
+        indexList.clear()
+    }
 
     fun buildData(hasTexture: Boolean = true): GeneratedData {
         val layout: BufferLayout =
@@ -37,12 +43,14 @@ class ObjectBuilder : WithLogging() {
             "buildTexturedData(): Size =(V:${vertices.size}, I:${indices.size}})"
         )
 
+        this.close()
+
         return GeneratedData(numVertices, vertices, layout, indices)
     }
 
     fun appendCircle(radius: Float, numPoints: Int, y: Float = 0f, UNIT_SIZE: Float = 1f) {
-
-        var startVertexIndex = index
+        LOG.info("Build Circle.")
+        val startVertexIndex = index
 
         // 第一个点: 圆面中心点的x、y、z坐标
         vertexList.add(0f)
@@ -97,6 +105,7 @@ class ObjectBuilder : WithLogging() {
         numPoints: Int,
         UNIT_SIZE: Float = 1f
     ) {
+        LOG.info("Build OpenCylinder.")
         val startVertexIndex = index
 
         val yStart: Float = -height / 2f
@@ -167,8 +176,8 @@ class ObjectBuilder : WithLogging() {
         numPoints: Int,
         UNIT_SIZE: Float = 1f
     ) {
-
-        var startVertexIndex = index
+        LOG.info("Build Cone.")
+        val startVertexIndex = index
 
         // 第一个点: 圆面中心点的x、y、z坐标
         vertexList.add(0f)
@@ -231,6 +240,7 @@ class ObjectBuilder : WithLogging() {
     // 球体
     private val angleSpan = 10      // 将球进行单位切分的角度
     fun appendBall(radius: Float, UNIT_SIZE: Float = 1f) {
+        LOG.info("Build Ball.")
 
         val sizew = 1.0f / (360 / angleSpan)    // 纹理水平方向步进值
         val sizeh = 1.0f / (180 / angleSpan)     // 纹理垂直方向步进值
@@ -343,6 +353,7 @@ class ObjectBuilder : WithLogging() {
         z: Float,       // z轴基准坐标
         UNIT_SIZE: Float = 1f
     ) {
+        LOG.info("Build Star.")
 
         val tempAngle: Int = 360 / angleNum
         //循环生成构成星形各三角形的顶点坐标
@@ -430,15 +441,6 @@ class ObjectBuilder : WithLogging() {
             }
         }
         return result
-    }
-
-    companion object {
-        class GeneratedData(
-            val numVertices: Int,        // 顶点数量
-            val vertices: FloatArray,    // 顶点数组
-            val layout: BufferLayout,    // 顶点数组的布局
-            val indices: ShortArray      // 顶点索引数组
-        )
     }
 
 }

@@ -89,4 +89,10 @@ class Cube : DrawableObject() {
         30, 31, 32,
         33, 34, 35
     )
+
+    override fun beforeBuild() {
+    }
+
+    override fun afterBuild() {
+    }
 }
