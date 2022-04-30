@@ -66,6 +66,8 @@ class XGLRenderer3D(
             context,
             "$SHADER_PATH/$SHADER_FILE"
         ) as XGLShader
+        shader.bind()
+        shader.setInt("u_Texture", 0)
         scene.mShaderLibrary.add(shader)
     }
 
@@ -130,7 +132,6 @@ class XGLRenderer3D(
         )
 
         (scene.texture(objectTextureName)!! as Texture2D).bind()
-        //submit(shader, mTriangle.vertexArray, mTriangle.transform)
         submit(sVertexArray, transform)
 
         // This texture has transparent alpha for part of image
@@ -158,7 +159,7 @@ class XGLRenderer3D(
         val shader = scene.mShaderLibrary.get(SHADER_FILE)
         (shader as XGLShader).bind()
         shader.setMat4("u_ModelMatrix", transform)
-        shader.setFloat4("outColor", BLUE)
+        shader.setFloat4("u_Color", BLUE)
 
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)
@@ -170,8 +171,7 @@ class XGLRenderer3D(
     }
 
 
-
-    companion object{
+    companion object {
         private val SHADER_PATH = "Cube"
         private val SHADER_FILE = "Texture.glsl"
 
