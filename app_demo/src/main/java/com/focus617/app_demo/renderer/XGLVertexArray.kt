@@ -123,7 +123,7 @@ class XGLVertexArray : VertexArray(), IfBuffer, Closeable {
             ) as XGLIndexBuffer
             vertexArray.setIndexBuffer(indexBuffer)
 
-            // let drawingObject release data
+            // let drawingObject release data buffer
             drawingObject.afterBuild()
 
             return vertexArray

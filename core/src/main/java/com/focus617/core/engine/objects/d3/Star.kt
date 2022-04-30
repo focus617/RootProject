@@ -3,7 +3,7 @@ package com.focus617.core.engine.objects.d3
 import com.focus617.core.engine.objects.DynamicCreationObject
 import com.focus617.core.engine.objects.ObjectBuilder
 
-// TODO: 显示不正常
+// TODO: Z轴显示不正常
 class Star(
     var angleNum: Int,  // 星形的锐角个数
     var radius: Float,  // 内角半径
@@ -13,7 +13,7 @@ class Star(
 
     override fun beforeBuild() {
         ObjectBuilder.appendStar(angleNum, radius, R, z)
-        buildData = ObjectBuilder.buildData()
+        buildData = ObjectBuilder.buildData(false)
     }
 
 }

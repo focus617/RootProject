@@ -5,16 +5,15 @@ import com.focus617.core.engine.renderer.BufferElement
 import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.ShaderDataType
 import com.focus617.mylib.logging.WithLogging
-import java.io.Closeable
 import kotlin.math.cos
 import kotlin.math.sin
 
-object ObjectBuilder : WithLogging(), Closeable {
+object ObjectBuilder : WithLogging() {
     private val vertexList = ArrayList<Float>()
     private val indexList = ArrayList<Short>()
     private var index: Short = 0    // Vertex index
 
-    override fun close() {
+    private fun cleanBuffer() {
         vertexList.clear()
         indexList.clear()
     }
@@ -43,7 +42,7 @@ object ObjectBuilder : WithLogging(), Closeable {
             "buildTexturedData(): Size =(V:${vertices.size}, I:${indices.size}})"
         )
 
-        this.close()
+        this.cleanBuffer()
 
         return GeneratedData(numVertices, vertices, layout, indices)
     }
