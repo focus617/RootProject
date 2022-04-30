@@ -35,12 +35,13 @@ class XGLRendererAPI : RendererAPI() {
         glViewport(x, y, width, height)
     }
 
-    override fun drawIndexed(vertexArray: VertexArray) {
+    override fun drawIndexed(vertexArray: VertexArray, indexCount: Int) {
+        val count =
+            if (indexCount != 0) indexCount
+            else (vertexArray as XGLVertexArray).getIndexBuffer()!!.mCount
+
         // 图元装配，OPENGL ES只支持绘制三角形
-        glDrawElements(
-            GL_TRIANGLES,
-            (vertexArray as XGLVertexArray).getIndexBuffer()!!.mCount,
-            GL_UNSIGNED_SHORT, 0
-        )
+        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_SHORT, 0)
+        glBindTexture(GL_TEXTURE_2D, 0)
     }
 }

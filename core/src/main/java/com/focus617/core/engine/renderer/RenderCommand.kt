@@ -22,8 +22,8 @@ object RenderCommand: BaseEntity() {
         sRendererAPI?.setViewport(x, y, width, height)
     }
 
-    fun drawIndexed(vertexArray: VertexArray){
-        sRendererAPI?.drawIndexed(vertexArray)
+    fun drawIndexed(vertexArray: VertexArray, indexCount: Int = 0){
+        sRendererAPI?.drawIndexed(vertexArray, indexCount)
     }
 
 }
