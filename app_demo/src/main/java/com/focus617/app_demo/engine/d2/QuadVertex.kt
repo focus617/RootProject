@@ -14,7 +14,11 @@ class QuadVertex(
     val Color: Vector4,
     val TextCoord: Vector2
     //TODO: Texid
-)
+) {
+    companion object {
+        val sizeInFloat: Int = 3 + 4 + 2
+    }
+}
 
 fun ByteBuffer.putQuadVertex(value: QuadVertex): ByteBuffer {
     try {

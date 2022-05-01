@@ -2,12 +2,14 @@ package com.focus617.app_demo.engine.d2
 
 import android.content.Context
 import com.focus617.app_demo.renderer.*
+import com.focus617.core.engine.math.Vector2
+import com.focus617.core.engine.math.Vector3
+import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.renderer.BufferElement
 import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.ShaderDataType
 import com.focus617.core.engine.renderer.Texture2D
 import java.io.Closeable
-import java.nio.ByteBuffer
 import java.nio.LongBuffer
 
 object Renderer2DData : Closeable {
@@ -20,7 +22,9 @@ object Renderer2DData : Closeable {
     lateinit var TextureShader: XGLShader
     lateinit var WhiteTexture: Texture2D
 
-    lateinit var QuadVertexBufferBase: ByteBuffer
+    lateinit var QuadVertexBufferBase: FloatArray
+    var QuadVertexBufferPtr: Int = 0    // Index of FloatArray(记住计算size时要乘4)
+
     var QuadIndexCount: Int = 0
     var QuadVertexSize: Int = 0         // QuadVertex的字节数
 
@@ -67,8 +71,10 @@ object Renderer2DData : Closeable {
         QuadVertexBuffer.setLayout(quadVertexBufferLayout)
         QuadVertexArray.addVertexBuffer(QuadVertexBuffer)
 
-        QuadVertexBufferBase = ByteBuffer.allocateDirect(quadVertexBufferSize)
+        // 按照MaxVertices，构造一个完整的Vertices空间
+        QuadVertexBufferBase = FloatArray(MaxVertices * QuadVertex.sizeInFloat)
 
+        // 构造一个完整的Indices，具体使用时有效范围由QuadIndexCount决定
         val quadIndices = ShortArray(MaxIndices)
         var offset: Int = 0
         for (i in 0 until MaxIndices step 6) {
@@ -82,6 +88,7 @@ object Renderer2DData : Closeable {
 
             offset += 4
         }
+
         val indexBuffer = XGLBufferBuilder.createIndexBuffer(
             quadIndices, MaxIndices
         ) as XGLIndexBuffer
@@ -92,6 +99,24 @@ object Renderer2DData : Closeable {
         WhiteTexture = XGLTextureBuilder.createTexture(1, 1)!!
         val whiteTextureData = longArrayOf(0xffffffff)
         WhiteTexture.setData(LongBuffer.wrap(whiteTextureData), Int.SIZE_BYTES)
+    }
+
+    fun put(value: Vector2){
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
+    }
+
+    fun put(value: Vector3){
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.z
+    }
+
+    fun put(value: Vector4){
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.z
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.w
     }
 
 }

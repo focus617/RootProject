@@ -4,6 +4,7 @@ import android.content.Context
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.renderer.XGLTextureBuilder
+import com.focus617.app_demo.renderer.XGLVertexArray
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
@@ -17,10 +18,8 @@ import com.focus617.core.engine.scene.Camera
 import com.focus617.core.engine.scene.OrthographicCamera
 import com.focus617.core.engine.scene.OrthographicCameraController
 import com.focus617.core.engine.scene.Scene
-import com.focus617.core.platform.helper.putVector2
-import com.focus617.core.platform.helper.putVector3
-import com.focus617.core.platform.helper.putVector4
 import java.io.Closeable
+import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -40,6 +39,8 @@ class XGLRenderer2D(
         initTextureForScene()
 
         Renderer2DData.initStaticData(context)     // 初始化本Render的静态数据
+
+        initLocalVertexArrayForTestPurpose()
     }
 
     private fun initTextureForScene() {
@@ -62,48 +63,96 @@ class XGLRenderer2D(
             System.arraycopy(camera.getViewMatrix(), 0, SceneData.sViewMatrix, 0, 16)
         }
 
-        Renderer2DData.TextureShader.bind()
-        Renderer2DData.TextureShader.setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
-        Renderer2DData.TextureShader.setMat4("u_ViewMatrix", SceneData.sViewMatrix)
+        XGLContext.checkGLError("before beginScene")
+        with(Renderer2DData) {
+            TextureShader.bind()
+            TextureShader.setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
+            TextureShader.setMat4("u_ViewMatrix", SceneData.sViewMatrix)
 
-        val modelMatrix: FloatArray = FloatArray(16)
-        XMatrix.setIdentityM(modelMatrix, 0)
-        Renderer2DData.TextureShader.setMat4("u_ModelMatrix", modelMatrix)
+            val modelMatrix: FloatArray = FloatArray(16)
+            XMatrix.setIdentityM(modelMatrix, 0)
+            TextureShader.setMat4("u_ModelMatrix", modelMatrix)
 
-        Renderer2DData.QuadVertexBufferBase.clear()
-        Renderer2DData.QuadIndexCount = 0
+            QuadVertexBufferPtr = 0
+            QuadIndexCount = 0
+        }
     }
 
     override fun endScene() {
         with(Renderer2DData) {
-            QuadVertexBuffer.setData(QuadVertexBufferBase, QuadVertexBufferBase.position())
+            QuadVertexBuffer.setData(FloatBuffer.wrap(QuadVertexBufferBase),
+                QuadVertexBufferPtr * Float.SIZE_BYTES
+            )
         }
         flush()
+        XGLContext.checkGLError("after endScene")
     }
 
     fun flush() {
         with(Renderer2DData) {
+            QuadVertexArray.bind()
             RenderCommand.drawIndexed(QuadVertexArray, QuadIndexCount)
         }
     }
 
+    override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
+        // 打印OpenGL Version，Vendor，etc
+        XGLContext.getOpenGLInfo()
+
+        // 设置重绘背景框架颜色
+        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
+        RenderCommand.clear()
+
+        // TODO: 当前的问题是，必须在opengl线程才能调用opengl api，无法在主线程调用。
+        // 调用XRenderer.initRenderer, 因为涉及opengl api, 只好在这里调用
+        initRenderer()
+    }
+
+    override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
+        LOG.info("onSurfaceChanged (width = $width, height = $height)")
+
+        // 设置渲染的OpenGL场景（视口）的位置和大小
+        RenderCommand.setViewport(0, 0, width, height)
+
+        mCameraController.onWindowSizeChange(width, height)
+    }
+
+    override fun onDrawFrame(unused: GL10) {
+        // 清理屏幕，重绘背景颜色
+        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
+        RenderCommand.clear()
+
+        beginScene(scene.mCamera)
+        drawQuad(Vector2(-0.8f, -1.0f), Vector2(0.5f, 0.8f), RED)
+        drawQuad(Vector2(0.5f, 0.5f), Vector2(0.75f, 0.5f), BLUE)
+//        drawRotatedQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), 45f, BLUE)
+//        drawQuad(
+//            Vector3(0.0f, 0.0f, -0.1f),
+//            Vector2(10f, 10f),
+//            scene.texture(objectTextureName)!! as Texture2D,
+//            10f
+//        )
+
+        endScene()
+    }
+
     fun drawQuad(position: Vector3, size: Vector2, color: Vector4) {
-        with(Renderer2DData.QuadVertexBufferBase) {
-            putVector3(position)
-            putVector4(color)
-            putVector2(Vector2(0.0f, 0.0f))
+        with(Renderer2DData) {
+            put(position)
+            put(color)
+            put(Vector2(0.0f, 0.0f))
 
-            putVector3(Vector3(position.x + size.x, position.y, 0.0f))
-            putVector4(color)
-            putVector2(Vector2(1.0f, 0.0f))
+            put(Vector3(position.x + size.x, position.y, 0.0f))
+            put(color)
+            put(Vector2(1.0f, 0.0f))
 
-            putVector3(Vector3(position.x + size.x, position.y + size.y, 0.0f))
-            putVector4(color)
-            putVector2(Vector2(1.0f, 1.0f))
+            put(Vector3(position.x + size.x, position.y + size.y, 0.0f))
+            put(color)
+            put(Vector2(1.0f, 1.0f))
 
-            putVector3(Vector3(position.x, position.y + size.y, 0.0f))
-            putVector4(color)
-            putVector2(Vector2(0.0f, 1.0f))
+            put(Vector3(position.x, position.y + size.y, 0.0f))
+            put(color)
+            put(Vector2(0.0f, 1.0f))
         }
         Renderer2DData.QuadIndexCount += 6
 
@@ -217,47 +266,6 @@ class XGLRenderer2D(
         )
     }
 
-    override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
-        // 打印OpenGL Version，Vendor，etc
-        XGLContext.getOpenGLInfo()
-
-        // 设置重绘背景框架颜色
-        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
-        RenderCommand.clear()
-
-        // TODO: 当前的问题是，必须在opengl线程才能调用opengl api，无法在主线程调用。
-        // 调用XRenderer.initRenderer, 因为涉及opengl api, 只好在这里调用
-        initRenderer()
-    }
-
-
-    override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
-        LOG.info("onSurfaceChanged (width = $width, height = $height)")
-
-        // 设置渲染的OpenGL场景（视口）的位置和大小
-        RenderCommand.setViewport(0, 0, width, height)
-
-        mCameraController.onWindowSizeChange(width, height)
-    }
-
-    override fun onDrawFrame(unused: GL10) {
-        // 清理屏幕，重绘背景颜色
-        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
-        RenderCommand.clear()
-
-        beginScene(scene.mCamera)
-        drawQuad(Vector2(-1.0f, 0f), Vector2(0.8f, 0.8f), RED)
-        drawQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), BLUE)
-//        drawRotatedQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), 45f, BLUE)
-//        drawQuad(
-//            Vector3(0.0f, 0.0f, -0.1f),
-//            Vector2(10f, 10f),
-//            scene.texture(objectTextureName)!! as Texture2D,
-//            10f
-//        )
-
-        endScene()
-    }
 
     companion object Renderer2DStorage {
 
@@ -281,6 +289,11 @@ class XGLRenderer2D(
 
         val objectTextureName = "$PATH/$TEXTURE_FILE"
 
+
+        lateinit var localVertexArray: XGLVertexArray
+        fun initLocalVertexArrayForTestPurpose() {
+            localVertexArray = XGLVertexArray.buildVertexArray(Quad())
+        }
     }
 
 }
