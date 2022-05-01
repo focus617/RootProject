@@ -39,6 +39,8 @@ precision highp float;
 precision mediump float;
 #endif
 
+#extension GL_EXT_gpu_shader5 : require
+
 layout(location = 0) out vec4 color;
 
 //接收从顶点着色器过来的参数
@@ -47,7 +49,7 @@ in vec2 v_TexCoord;
 in float v_TexIndex;
 in float v_TilingFactor;
 
-uniform sampler2D u_Textures[32];
+uniform sampler2D u_Textures[16];
 
 void main()
 {

@@ -16,7 +16,7 @@ object Renderer2DData : Closeable {
     val MaxQuads: Int = 10000
     val MaxVertices: Int = MaxQuads * 4
     val MaxIndices: Int = MaxQuads * 6
-    val MaxTextureSlots: Int = 32   //TODO: RenderCaps
+    val MaxTextureSlots: Int = 16   //TODO: RenderCaps
 
     lateinit var QuadVertexArray: XGLVertexArray
     lateinit var QuadVertexBuffer: XGLVertexBuffer
