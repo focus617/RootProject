@@ -8,6 +8,7 @@ import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
+import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.objects.d2.Quad
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Texture2D
@@ -16,6 +17,9 @@ import com.focus617.core.engine.scene.Camera
 import com.focus617.core.engine.scene.OrthographicCamera
 import com.focus617.core.engine.scene.OrthographicCameraController
 import com.focus617.core.engine.scene.Scene
+import com.focus617.core.platform.helper.putVector2
+import com.focus617.core.platform.helper.putVector3
+import com.focus617.core.platform.helper.putVector4
 import java.io.Closeable
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -50,10 +54,6 @@ class XGLRenderer2D(
         Renderer2DData.close()
     }
 
-    fun flush() {
-
-    }
-
     override fun beginScene(camera: Camera) {
         // 在多线程渲染里，会把BeginScene函数放在RenderCommandQueue里执行
         // camera在多线程渲染的时候不能保证主线程是否正在更改Camera的相关信息
@@ -65,22 +65,57 @@ class XGLRenderer2D(
         Renderer2DData.TextureShader.bind()
         Renderer2DData.TextureShader.setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
         Renderer2DData.TextureShader.setMat4("u_ViewMatrix", SceneData.sViewMatrix)
+
+        val modelMatrix: FloatArray = FloatArray(16)
+        XMatrix.setIdentityM(modelMatrix, 0)
+        Renderer2DData.TextureShader.setMat4("u_ModelMatrix", modelMatrix)
+
+        Renderer2DData.QuadVertexBufferBase.clear()
+        Renderer2DData.QuadIndexCount = 0
     }
 
     override fun endScene() {
+        with(Renderer2DData) {
+            QuadVertexBuffer.setData(QuadVertexBufferBase, QuadVertexBufferBase.position())
+        }
+        flush()
+    }
 
+    fun flush() {
+        with(Renderer2DData) {
+            RenderCommand.drawIndexed(QuadVertexArray, QuadIndexCount)
+        }
     }
 
     fun drawQuad(position: Vector3, size: Vector2, color: Vector4) {
-        Renderer2DData.TextureShader.setFloat4("u_Color", color)
-        Renderer2DData.TextureShader.setFloat("u_TilingFactor", 1.0f)
-        Renderer2DData.TextureShader.setMat4("u_ModelMatrix", getTransform(position, size))
+        with(Renderer2DData.QuadVertexBufferBase) {
+            putVector3(position)
+            putVector4(color)
+            putVector2(Vector2(0.0f, 0.0f))
 
-        // Bind white texture here
-        Renderer2DData.WhiteTexture.bind()
+            putVector3(Vector3(position.x + size.x, position.y, 0.0f))
+            putVector4(color)
+            putVector2(Vector2(1.0f, 0.0f))
 
-        Renderer2DData.QuadVertexArray.bind()
-        RenderCommand.drawIndexed(Renderer2DData.QuadVertexArray)
+            putVector3(Vector3(position.x + size.x, position.y + size.y, 0.0f))
+            putVector4(color)
+            putVector2(Vector2(1.0f, 1.0f))
+
+            putVector3(Vector3(position.x, position.y + size.y, 0.0f))
+            putVector4(color)
+            putVector2(Vector2(0.0f, 1.0f))
+        }
+        Renderer2DData.QuadIndexCount += 6
+
+//        Renderer2DData.TextureShader.setFloat4("u_Color", color)
+//        Renderer2DData.TextureShader.setFloat("u_TilingFactor", 1.0f)
+//        Renderer2DData.TextureShader.setMat4("u_ModelMatrix", getTransform(position, size))
+//
+//        // Bind white texture here
+//        Renderer2DData.WhiteTexture.bind()
+//
+//        Renderer2DData.QuadVertexArray.bind()
+//        RenderCommand.drawIndexed(Renderer2DData.QuadVertexArray)
     }
 
     fun drawQuad(position: Vector2, size: Vector2, color: Vector4) {
@@ -124,7 +159,10 @@ class XGLRenderer2D(
     fun drawRotatedQuad(position: Vector3, size: Vector2, rotation: Float, color: Vector4) {
         Renderer2DData.TextureShader.setFloat4("u_Color", color)
         Renderer2DData.TextureShader.setFloat("u_TilingFactor", 1.0f)
-        Renderer2DData.TextureShader.setMat4("u_ModelMatrix", getTransform(position, size, rotation))
+        Renderer2DData.TextureShader.setMat4(
+            "u_ModelMatrix",
+            getTransform(position, size, rotation)
+        )
 
         // Bind white texture here
         Renderer2DData.WhiteTexture.bind()
@@ -148,7 +186,10 @@ class XGLRenderer2D(
     ) {
         Renderer2DData.TextureShader.setFloat4("u_Color", tintColor)
         Renderer2DData.TextureShader.setFloat("u_TilingFactor", tilingFactor)
-        Renderer2DData.TextureShader.setMat4("u_ModelMatrix", getTransform(position, size, rotation))
+        Renderer2DData.TextureShader.setMat4(
+            "u_ModelMatrix",
+            getTransform(position, size, rotation)
+        )
 
         // Bind texture
         texture.bind()
@@ -206,13 +247,14 @@ class XGLRenderer2D(
 
         beginScene(scene.mCamera)
         drawQuad(Vector2(-1.0f, 0f), Vector2(0.8f, 0.8f), RED)
-        drawRotatedQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), 45f, BLUE)
-        drawQuad(
-            Vector3(0.0f, 0.0f, -0.1f),
-            Vector2(10f, 10f),
-            scene.texture(objectTextureName)!! as Texture2D,
-            10f
-        )
+        drawQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), BLUE)
+//        drawRotatedQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), 45f, BLUE)
+//        drawQuad(
+//            Vector3(0.0f, 0.0f, -0.1f),
+//            Vector2(10f, 10f),
+//            scene.texture(objectTextureName)!! as Texture2D,
+//            10f
+//        )
 
         endScene()
     }

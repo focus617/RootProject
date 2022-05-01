@@ -2,8 +2,6 @@ package com.focus617.app_demo.engine.d2
 
 import android.content.Context
 import com.focus617.app_demo.renderer.*
-import com.focus617.core.engine.objects.IfDrawable
-import com.focus617.core.engine.objects.d2.Quad
 import com.focus617.core.engine.renderer.BufferElement
 import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.ShaderDataType
@@ -12,7 +10,7 @@ import java.io.Closeable
 import java.nio.ByteBuffer
 import java.nio.LongBuffer
 
-object Renderer2DData: Closeable {
+object Renderer2DData : Closeable {
     val MaxQuads: Int = 10000
     val MaxVertices: Int = MaxQuads * 4
     val MaxIndices: Int = MaxQuads * 6
@@ -23,8 +21,8 @@ object Renderer2DData: Closeable {
     lateinit var WhiteTexture: Texture2D
 
     lateinit var QuadVertexBufferBase: ByteBuffer
-    var QuadVertexBufferPtr: Int = 0
     var QuadIndexCount: Int = 0
+    var QuadVertexSize: Int = 0         // QuadVertex的字节数
 
     override fun close() {
         QuadVertexBuffer.close()
@@ -35,7 +33,7 @@ object Renderer2DData: Closeable {
 
     fun initStaticData(context: Context) {
         initShader(context)
-        initVertexArray(Quad())
+        initVertexArray()
         initWhiteTexture()
     }
 
@@ -51,7 +49,7 @@ object Renderer2DData: Closeable {
         TextureShader.setInt("u_Texture", 0)
     }
 
-    private fun initVertexArray(drawingObject: IfDrawable) {
+    private fun initVertexArray() {
         QuadVertexArray = XGLBufferBuilder.createVertexArray() as XGLVertexArray
 
         val quadVertexBufferLayout = BufferLayout(
@@ -62,30 +60,40 @@ object Renderer2DData: Closeable {
                 //TODO: Texid
             )
         )
-        QuadVertexBuffer = XGLBufferBuilder.createVertexBuffer(
-            MaxVertices * quadVertexBufferLayout.getStride()
-        ) as XGLVertexBuffer
+        QuadVertexSize = quadVertexBufferLayout.getStride()
+        val quadVertexBufferSize = MaxVertices * QuadVertexSize
+        QuadVertexBuffer =
+            XGLBufferBuilder.createVertexBuffer(quadVertexBufferSize) as XGLVertexBuffer
         QuadVertexBuffer.setLayout(quadVertexBufferLayout)
         QuadVertexArray.addVertexBuffer(QuadVertexBuffer)
 
+        QuadVertexBufferBase = ByteBuffer.allocateDirect(quadVertexBufferSize)
+
         val quadIndices = ShortArray(MaxIndices)
+        var offset: Int = 0
+        for (i in 0 until MaxIndices step 6) {
+            quadIndices[i + 0] = (offset + 0).toShort()
+            quadIndices[i + 1] = (offset + 1).toShort()
+            quadIndices[i + 2] = (offset + 2).toShort()
+
+            quadIndices[i + 3] = (offset + 2).toShort()
+            quadIndices[i + 4] = (offset + 3).toShort()
+            quadIndices[i + 5] = (offset + 0).toShort()
+
+            offset += 4
+        }
         val indexBuffer = XGLBufferBuilder.createIndexBuffer(
             quadIndices, MaxIndices
         ) as XGLIndexBuffer
         QuadVertexArray.setIndexBuffer(indexBuffer)
     }
 
-    private fun initWhiteTexture(){
+    private fun initWhiteTexture() {
         WhiteTexture = XGLTextureBuilder.createTexture(1, 1)!!
         val whiteTextureData = longArrayOf(0xffffffff)
         WhiteTexture.setData(LongBuffer.wrap(whiteTextureData), Int.SIZE_BYTES)
     }
+
 }
 
-//class QuadVertex(
-//    val Position: Vector3,
-//    val Color: Vector4,
-//    val TextCoord: Vector2
-//    //TODO: Texid
-//)
 
