@@ -8,6 +8,7 @@ import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.renderer.Shader
 import com.focus617.platform.helper.FileHelper
+import java.nio.IntBuffer
 import java.util.*
 
 /**
@@ -60,6 +61,10 @@ class XGLShader constructor(
         uploadUniformInt(name, value)
     }
 
+    override fun setIntArray(name: String, values: IntArray, count: Int) {
+        uploadUniformIntArray(name, values, count)
+    }
+
     override fun setFloat(name: String, value: Float) {
         uploadUniformFloat(name, value)
     }
@@ -101,6 +106,10 @@ fun uploadUniformBool(name: String, bool: Boolean) {
 
 fun uploadUniformInt(name: String, value: Int) {
     glUniform1i(getLocation(name), value)
+}
+
+fun uploadUniformIntArray(name: String, values: IntArray, count: Int) {
+    glUniform1iv(getLocation(name), count, IntBuffer.wrap(values))
 }
 
 fun uploadUniformFloat(name: String, value: Float) {

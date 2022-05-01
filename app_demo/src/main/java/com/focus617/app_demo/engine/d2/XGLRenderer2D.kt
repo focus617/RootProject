@@ -75,6 +75,7 @@ class XGLRenderer2D(
 
             QuadVertexBufferPtr = 0
             QuadIndexCount = 0
+            TextureSlotIndex = 1
         }
     }
 
@@ -90,6 +91,8 @@ class XGLRenderer2D(
 
     fun flush() {
         with(Renderer2DData) {
+            for(i in 0 until TextureSlotIndex) TextureSlots[i]?.bind(i)
+
             QuadVertexArray.bind()
             RenderCommand.drawIndexed(QuadVertexArray, QuadIndexCount)
         }
@@ -137,22 +140,33 @@ class XGLRenderer2D(
     }
 
     fun drawQuad(position: Vector3, size: Vector2, color: Vector4) {
+        val texIndex: Float = 0.0f // White Texture
+        val tilingFactor: Float = 1.0f
+
         with(Renderer2DData) {
             put(position)
             put(color)
             put(Vector2(0.0f, 0.0f))
+            put(texIndex)
+            put(tilingFactor)
 
             put(Vector3(position.x + size.x, position.y, 0.0f))
             put(color)
             put(Vector2(1.0f, 0.0f))
+            put(texIndex)
+            put(tilingFactor)
 
             put(Vector3(position.x + size.x, position.y + size.y, 0.0f))
             put(color)
             put(Vector2(1.0f, 1.0f))
+            put(texIndex)
+            put(tilingFactor)
 
             put(Vector3(position.x, position.y + size.y, 0.0f))
             put(color)
             put(Vector2(0.0f, 1.0f))
+            put(texIndex)
+            put(tilingFactor)
         }
         Renderer2DData.QuadIndexCount += 6
 
