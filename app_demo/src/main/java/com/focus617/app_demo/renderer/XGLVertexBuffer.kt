@@ -12,7 +12,7 @@ import java.nio.*
 
 class XGLVertexBuffer private constructor() : BaseEntity(), IfBuffer, IfBufferLayout, Closeable {
 
-    constructor(vertices: FloatArray, size: Int) : this(){
+    constructor(vertices: FloatArray, size: Int) : this() {
         // Generate VBO ID
         GLES31.glGenBuffers(1, mVBOBuf)
         if (mVBOBuf.get(0) == 0) {
@@ -30,7 +30,7 @@ class XGLVertexBuffer private constructor() : BaseEntity(), IfBuffer, IfBufferLa
         )
     }
 
-    constructor(size: Int) : this(){
+    constructor(size: Int) : this() {
         // Generate VBO ID
         GLES31.glGenBuffers(1, mVBOBuf)
         if (mVBOBuf.get(0) == 0) {
@@ -69,8 +69,8 @@ class XGLVertexBuffer private constructor() : BaseEntity(), IfBuffer, IfBufferLa
     }
 
     fun setData(data: Buffer, size: Int) {
-        glBindBuffer(GL_ARRAY_BUFFER, mHandle);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+        glBindBuffer(GL_ARRAY_BUFFER, mHandle)
+        glBufferSubData(GL_ARRAY_BUFFER, 0, size, data)
     }
 
     override fun getLayout(): BufferLayout? = mLayout

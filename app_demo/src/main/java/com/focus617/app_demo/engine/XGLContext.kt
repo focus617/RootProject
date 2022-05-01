@@ -82,12 +82,12 @@ class XGLContext(private val windowHandle: AndroidWindow) : BaseEntity(), IfGrap
             )
         }
 
-        fun checkGLError() {
+        fun checkGLError(msg: String) {
             val error = GLES30.glGetError()
             if (error != GLES30.GL_NO_ERROR) {
                 val hexErrorCode = Integer.toHexString(error)
-                LOG.error("glError: $hexErrorCode")
-                throw RuntimeException("GLError")
+                LOG.warn("Check glError $msg: $hexErrorCode")
+                //throw RuntimeException("GLError")
             }
         }
     }
