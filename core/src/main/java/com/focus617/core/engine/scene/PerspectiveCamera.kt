@@ -13,8 +13,8 @@ class PerspectiveCamera : Camera() {
 
     override var mPosition: Point3D = Point3D(0.0f, 0.0f, defaultDistance)
     private var mTargetDistance: Float = defaultDistance
-    private var directionUp: Vector3 = worldUp
 
+    private var directionUp: Vector3 = worldUp
     private lateinit var directionFront: Vector3
     private lateinit var directionRight: Vector3
 
@@ -28,17 +28,22 @@ class PerspectiveCamera : Camera() {
     }
 
     // 相机位置不动，旋转directionUp
-    override fun setRotation(rollZ: Float){
-        directionUp.x = cos(rollZ)
-        directionUp.y = sin(rollZ)
+    override fun setRotation(rollZInDegree: Float){
+        val angle: Float = rollZInDegree * (Math.PI / 180.0f).toFloat()
+
+        directionUp.x = cos(angle)
+        directionUp.y = sin(angle)
         directionUp.z = 0f
         reCalculateViewMatrix()
     }
 
-    fun setRotation(pitchX: Float = 0f, yawY: Float = 90f) {
-        mPosition.y = kotlin.math.sin(pitchX) * mTargetDistance
-        mPosition.x = kotlin.math.cos(pitchX) * kotlin.math.cos(yawY) * mTargetDistance
-        mPosition.z = kotlin.math.cos(pitchX) * kotlin.math.sin(yawY) * mTargetDistance
+    fun setRotation(pitchXInDegree: Float = 0f, yawYInDegree: Float = 90f) {
+        val angleX: Float = pitchXInDegree * (Math.PI / 180.0f).toFloat()
+        val angleY: Float = yawYInDegree * (Math.PI / 180.0f).toFloat()
+
+        mPosition.y = sin(angleX) * mTargetDistance
+        mPosition.x = cos(angleX) * cos(angleY) * mTargetDistance
+        mPosition.z = cos(angleX) * sin(angleY) * mTargetDistance
 
         // also re-calculate the Right and Up vector
         directionFront = Vector3(mPosition, target).normalize()

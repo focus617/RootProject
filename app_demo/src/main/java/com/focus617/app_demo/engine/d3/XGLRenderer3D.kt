@@ -88,6 +88,9 @@ class XGLRenderer3D(
 
         val shader = scene.mShaderLibrary.get(SHADER_FILE)
         shader?.bind()
+//        LOG.info(XMatrix.toString(SceneData.sProjectionMatrix, matrixName = "ProjectionMatrix"))
+//        LOG.info(XMatrix.toString(SceneData.sViewMatrix, matrixName = "ViewMatrix"))
+
         shader?.setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
         shader?.setMat4("u_ViewMatrix", SceneData.sViewMatrix)
     }
@@ -130,8 +133,7 @@ class XGLRenderer3D(
             Vector3(0.0f, 0.0f, 0.0f),
             Vector2(1f, 1f)
         )
-        //LOG.info("ModelMatrix:" + XMatrix.toString(transform))
-        //TODO: transform matrix is correct, but why graph translate on x direction?
+        //LOG.info(XMatrix.toString(transform, matrixName = "ModelMatrix"))
 
         (scene.texture(objectTextureName)!! as Texture2D).bind()
         submit(sVertexArray, transform)

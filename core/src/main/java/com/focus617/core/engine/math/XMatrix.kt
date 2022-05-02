@@ -797,8 +797,9 @@ object XMatrix : WithLogging() {
         return sqrt((x * x + y * y + z * z).toDouble()).toFloat()
     }
 
-    fun toString(m: FloatArray, mOffset: Int = 0): String {
-        return StringBuilder("\nMatrix dump:\n").apply {
+    fun toString(m: FloatArray, mOffset: Int = 0, matrixName: String? = null): String {
+        val name = matrixName ?: "Matrix"
+        return StringBuilder("\nDump $name:\n").apply {
             for (i in 0..3)
                 append(
                     "\t(" +

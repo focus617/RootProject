@@ -4,7 +4,7 @@ import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.XMatrix
-import com.focus617.core.engine.math.clamp
+import com.focus617.core.engine.math.rotate
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.screenTouchEvents.*
 import com.focus617.mylib.helper.DateHelper
@@ -37,11 +37,11 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
         mCamera.setProjectionMatrix(mProjectionMatrix)
     }
 
-    fun setRotation(rollZ: Float = 90f) {
+    fun setRotation(rollZ: Float) {
         mCamera.setRotation(rollZ)
     }
 
-    fun setRotation(pitchX: Float = 0f, yawY: Float = 90f) {
+    fun setRotation(pitchX: Float = 0f, yawY: Float) {
         mCamera.setRotation(pitchX, yawY)
     }
 
@@ -71,10 +71,7 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
         val mCameraRotationSpeed: Float = 0.001F
 
         //mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed
-        if (mCameraRotation > 180.0f)
-            mCameraRotation -= 360.0f
-        else if (mCameraRotation <= -180.0f)
-            mCameraRotation += 360.0f
+        mCameraRotation = rotate(mCameraRotation)
     }
 
     private var previoudZoomLevel: Float = 1.0f
@@ -95,12 +92,13 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
 
             is TouchDragEvent -> {
                 LOG.info("CameraController: on TouchDragEvent")
-                val sensitivity = 600f
+                val sensitivity = 10f
                 val deltaX = event.x - previousX
                 val deltaY = event.y - previousY
-                pitchX -= deltaX / sensitivity
-                yawY -= deltaY / sensitivity
-                yawY = clamp(yawY, -180f, 180f)
+                pitchX += deltaY / sensitivity
+                yawY += deltaX / sensitivity
+                pitchX = rotate(pitchX, 0f, 360f)
+                yawY = rotate(yawY)
                 setRotation(pitchX, yawY)
 
                 previousX = event.x

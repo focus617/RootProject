@@ -6,14 +6,14 @@ import com.focus617.core.engine.math.XMatrix
 class OrthographicCamera : Camera() {
 
     override var mPosition: Point3D = Point3D(0f, 0f, 0f)
-    override var mRotationZAxis: Float = 0F
+    override var mRotationZAxis: Float = 0F // degree
 
     init {
         reCalculateViewMatrix()
     }
 
-    override fun setRotation(rollZ: Float) {
-        mRotationZAxis = rollZ
+    override fun setRotation(rollZInDegree: Float) {
+        mRotationZAxis = rollZInDegree
         reCalculateViewMatrix()
     }
 

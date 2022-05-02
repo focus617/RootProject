@@ -10,7 +10,7 @@ abstract class Camera : BaseEntity() {
 
     // 相机的其它属性
     protected open var mPosition: Point3D = Point3D(0.0f, 0.0f, 0.0f)
-    protected open var mRotationZAxis: Float = 0F //在XY平面绕Z轴的旋转角度
+    protected open var mRotationZAxis: Float = 90F //在XY平面绕Z轴的旋转角度
 
     abstract fun reCalculateViewMatrix()
 
