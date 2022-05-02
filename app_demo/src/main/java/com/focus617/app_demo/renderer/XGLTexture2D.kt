@@ -9,7 +9,6 @@ import android.opengl.GLES30.GL_RGBA8
 import android.opengl.GLES31
 import android.opengl.GLUtils
 import com.focus617.core.engine.renderer.Texture2D
-import timber.log.Timber
 import java.io.IOException
 import java.nio.Buffer
 import java.nio.ByteBuffer
@@ -295,7 +294,7 @@ class XGLTexture2D private constructor() : Texture2D() {
             val textureObjectIds = IntArray(1)
             GLES31.glGenTextures(1, textureObjectIds, 0)
             if (textureObjectIds[0] == 0) {
-                Timber.w("Could not generate a new OpenGL texture object.")
+                LOG.warn("Could not generate a new OpenGL texture object.")
                 return 0
             }
             val options = BitmapFactory.Options()
@@ -309,7 +308,7 @@ class XGLTexture2D private constructor() : Texture2D() {
                     cubeResources[i], options
                 )
                 if (cubeBitmaps[i] == null) {
-                    Timber.w("Resource ID ${cubeResources[i]} could not be decoded.")
+                    LOG.warn("Resource ID ${cubeResources[i]} could not be decoded.")
                     GLES31.glDeleteTextures(1, textureObjectIds, 0)
                     return 0
                 }
@@ -317,6 +316,8 @@ class XGLTexture2D private constructor() : Texture2D() {
 
             // Linear filtering for minification and magnification
             GLES31.glBindTexture(GLES31.GL_TEXTURE_CUBE_MAP, textureObjectIds[0])
+            // 因为每个立方体贴图的纹理都总是从同一个视点被观察，不必使用MIP
+            // 所以我们只使用常规的双线性过滤，也能节省纹理内存。
             GLES31.glTexParameteri(
                 GLES31.GL_TEXTURE_CUBE_MAP,
                 GLES31.GL_TEXTURE_MIN_FILTER,
@@ -327,6 +328,8 @@ class XGLTexture2D private constructor() : Texture2D() {
                 GLES31.GL_TEXTURE_MAG_FILTER,
                 GLES31.GL_LINEAR
             )
+            // 立方体贴图的惯例是： 在立方体内部使用左手坐标系统，而在立方体外部使用右手坐标系统
+            // 要以左、右、下、上、前和后的顺序把每张图像与其对应的立方体贴图的面关联起来
             GLUtils.texImage2D(GLES31.GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, cubeBitmaps[0], 0)
             GLUtils.texImage2D(GLES31.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, cubeBitmaps[1], 0)
             GLUtils.texImage2D(GLES31.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, cubeBitmaps[2], 0)
