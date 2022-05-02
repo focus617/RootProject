@@ -36,7 +36,7 @@ class XGLRenderer2D(
     override val mCameraController =
         OrthographicCameraController(scene.mCamera as OrthographicCamera)
 
-    override fun initRenderer() {
+    override fun initGlobalResource() {
         // ES3.2 doesn't support DebugMessageCallback
         //XGLContext.initDebug()
 
@@ -53,7 +53,7 @@ class XGLRenderer2D(
             context,
             "$PATH/$TEXTURE_FILE"
         )!!
-        scene.register(objectTextureName, texture)
+        scene.mTextureLibrary.add(objectTextureName, texture)
     }
 
     override fun close() {
@@ -113,7 +113,7 @@ class XGLRenderer2D(
 
         // TODO: 当前的问题是，必须在opengl线程才能调用opengl api，无法在主线程调用。
         // 调用XRenderer.initRenderer, 因为涉及opengl api, 只好在这里调用
-        initRenderer()
+        initGlobalResource()
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
@@ -138,7 +138,7 @@ class XGLRenderer2D(
         drawQuad(
             Vector3(-1.5f, -1.5f, -0.1f),
             Vector2(2f, 2f),
-            scene.texture(objectTextureName)!! as Texture2D,
+            scene.mTextureLibrary.get(objectTextureName)!! as Texture2D,
             10f
         )
 

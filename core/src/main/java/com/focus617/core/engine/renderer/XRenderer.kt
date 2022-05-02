@@ -10,7 +10,7 @@ abstract class XRenderer : BaseEntity(), Closeable {
 
     fun getAPI(): RendererAPI.API = RendererAPI.getAPI()
 
-    open fun initRenderer() {
+    open fun initGlobalResource() {
         RenderCommand.init()
     }
 

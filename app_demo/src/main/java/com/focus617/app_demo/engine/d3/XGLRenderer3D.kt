@@ -38,24 +38,15 @@ class XGLRenderer3D(
 
     private lateinit var sVertexArray: XGLVertexArray
 
-    override fun initRenderer() {
+    override fun initGlobalResource() {
         RenderCommand.init()
+        initShaderForScene()
         initTextureForScene()
-        initShaderForScene(context)     // 初始化本Render的静态数据
 
         initVertexArray(scene.gameObjectList[0])
     }
 
-    private fun initTextureForScene() {
-        val texture = XGLTextureCubeMap(
-            context,
-            SHADER_PATH,
-            arrayOf("left.png", "right.png", "bottom.png", "top.png", "front.png", "back.png")
-        )
-        scene.register(objectTextureName, texture)
-    }
-
-    private fun initShaderForScene(context: Context) {
+    private fun initShaderForScene() {
         // TODO: How to create objects in Sandbox layer?
         val shader = XGLShaderBuilder.createShader(
             context,
@@ -64,6 +55,15 @@ class XGLRenderer3D(
         shader.bind()
         shader.setInt("u_TextureUnit", 0)
         scene.mShaderLibrary.add(shader)
+    }
+
+    private fun initTextureForScene() {
+        val texture = XGLTextureCubeMap(
+            context,
+            SHADER_PATH,
+            arrayOf("left.png", "right.png", "bottom.png", "top.png", "front.png", "back.png")
+        )
+        scene.mTextureLibrary.add(objectTextureName, texture)
     }
 
     private fun initVertexArray(drawingObject: IfDrawable) {
@@ -83,9 +83,9 @@ class XGLRenderer3D(
 
         val shader = scene.mShaderLibrary.get(SHADER_FILE)
         shader?.bind()
+
 //        LOG.info(XMatrix.toString(SceneData.sProjectionMatrix, matrixName = "ProjectionMatrix"))
 //        LOG.info(XMatrix.toString(SceneData.sViewMatrix, matrixName = "ViewMatrix"))
-
         shader?.setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
         shader?.setMat4("u_ViewMatrix", SceneData.sViewMatrix)
     }
@@ -104,7 +104,7 @@ class XGLRenderer3D(
 
         // TODO: 当前的问题是，必须在opengl线程才能调用opengl api，无法在主线程调用。
         // 调用XRenderer.init, 因为涉及opengl api, 只好在这里调用
-        this.initRenderer()
+        this.initGlobalResource()
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
@@ -130,7 +130,7 @@ class XGLRenderer3D(
         )
         //LOG.info(XMatrix.toString(transform, matrixName = "ModelMatrix"))
 
-        scene.texture(objectTextureName)!!.bind()
+        scene.mTextureLibrary.get(objectTextureName)!!.bind()
         submit(sVertexArray, transform)
 
         // This texture has transparent alpha for part of image
