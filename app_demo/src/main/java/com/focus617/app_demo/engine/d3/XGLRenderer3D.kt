@@ -2,6 +2,7 @@ package com.focus617.app_demo.engine.d3
 
 import android.content.Context
 import android.opengl.GLSurfaceView
+import com.focus617.app_demo.engine.Sandbox
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.renderer.XGLShader
 import com.focus617.app_demo.renderer.XGLShaderBuilder
@@ -18,15 +19,16 @@ import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene.Camera
 import com.focus617.core.engine.scene.PerspectiveCamera
 import com.focus617.core.engine.scene.PerspectiveCameraController
-import com.focus617.core.engine.scene.Scene
 import java.io.Closeable
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer3D(
     private val context: Context,
-    private val scene: Scene
+    private val engine: Sandbox
 ) : XRenderer(), GLSurfaceView.Renderer, Closeable {
+
+    private val scene = engine.scene
 
     //TODO: Game objects should NOT owned by Renderer .
     // It should be injected from Engine's Scene, since GlSurfaceView/Renderer is always recreated
