@@ -177,7 +177,7 @@ class XGLRenderer3D(
 
     companion object {
         private val SHADER_PATH = "Cube"
-        private val SHADER_FILE = "Texture.glsl"
+        private val SHADER_FILE = "SkyBox.glsl"
 
         private val TEXTURE_PATH = "SquareWithTexture"
         private val TEXTURE_FILE = "Checkerboard.png"
