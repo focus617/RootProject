@@ -21,6 +21,7 @@ import com.focus617.core.engine.scene.Camera
 import com.focus617.core.engine.scene.PerspectiveCamera
 import com.focus617.core.engine.scene.PerspectiveCameraController
 import com.focus617.core.engine.scene.Scene
+import com.focus617.platform.helper.TextureHelper
 import java.io.Closeable
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -58,6 +59,12 @@ class XGLRenderer3D(
             logoTextureName
         )!!
         scene.register(logoTextureName, textureLogo)
+
+        TextureHelper.skyboxTexture = TextureHelper.loadCubeMap(
+            context,
+            SHADER_PATH,
+            arrayOf("left.png", "right.png", "bottom.png","top.png","front.png","back.png")
+        )
     }
 
     private fun initShaderForScene(context: Context) {
@@ -66,8 +73,8 @@ class XGLRenderer3D(
             context,
             "$SHADER_PATH/$SHADER_FILE"
         ) as XGLShader
-        shader.bind()
-        shader.setInt("u_Texture", 0)
+        //shader.bind()
+        //shader.setInt("u_Texture", 0)
         scene.mShaderLibrary.add(shader)
     }
 
