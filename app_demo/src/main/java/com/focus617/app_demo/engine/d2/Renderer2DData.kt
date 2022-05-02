@@ -16,17 +16,20 @@ object Renderer2DData : Closeable {
     val MaxQuads: Int = 10000
     val MaxVertices: Int = MaxQuads * 4
     val MaxIndices: Int = MaxQuads * 6
+    val MaxTextureSlots: Int = 16   //TODO: RenderCaps
 
     lateinit var QuadVertexArray: XGLVertexArray
     lateinit var QuadVertexBuffer: XGLVertexBuffer
     lateinit var TextureShader: XGLShader
     lateinit var WhiteTexture: Texture2D
 
+    var QuadIndexCount: Int = 0
+
     lateinit var QuadVertexBufferBase: FloatArray
     var QuadVertexBufferPtr: Int = 0    // Index of FloatArray(记住计算size时要乘4)
 
-    var QuadIndexCount: Int = 0
-    var QuadVertexSize: Int = 0         // QuadVertex的字节数
+    val TextureSlots: Array<Texture2D?> = arrayOfNulls(MaxTextureSlots)
+    var TextureSlotIndex: Int = 1        // 0 = white texture
 
     override fun close() {
         QuadVertexBuffer.close()
@@ -38,7 +41,7 @@ object Renderer2DData : Closeable {
     fun initStaticData(context: Context) {
         initShader(context)
         initVertexArray()
-        initWhiteTexture()
+        initTexture()
     }
 
     private val PATH = "SquareWithTexture"
@@ -49,26 +52,25 @@ object Renderer2DData : Closeable {
             context,
             "${PATH}/${TEXTURE_SHADER_FILE}"
         ) as XGLShader
-        TextureShader.bind()
-        TextureShader.setInt("u_Texture", 0)
     }
 
     private fun initVertexArray() {
         QuadVertexArray = XGLBufferBuilder.createVertexArray() as XGLVertexArray
 
-        val quadVertexBufferLayout = BufferLayout(
-            listOf(
-                BufferElement("a_Position", ShaderDataType.Float3, true),
-                BufferElement("a_Color", ShaderDataType.Float4, false),
-                BufferElement("a_TexCoord", ShaderDataType.Float2, true)
-                //TODO: Texid
-            )
-        )
-        QuadVertexSize = quadVertexBufferLayout.getStride()
-        val quadVertexBufferSize = MaxVertices * QuadVertexSize
+        val quadVertexBufferSize = MaxVertices * QuadVertex.sizeInFloat * Float.SIZE_BYTES
         QuadVertexBuffer =
             XGLBufferBuilder.createVertexBuffer(quadVertexBufferSize) as XGLVertexBuffer
-        QuadVertexBuffer.setLayout(quadVertexBufferLayout)
+        QuadVertexBuffer.setLayout(
+            BufferLayout(
+                listOf(
+                    BufferElement("a_Position", ShaderDataType.Float3, true),
+                    BufferElement("a_Color", ShaderDataType.Float4, false),
+                    BufferElement("a_TexCoord", ShaderDataType.Float2, true),
+                    BufferElement("a_TexIndex", ShaderDataType.Float1, false),
+                    BufferElement("a_TilingFactor", ShaderDataType.Float1, false)
+                )
+            )
+        )
         QuadVertexArray.addVertexBuffer(QuadVertexBuffer)
 
         // 按照MaxVertices，构造一个完整的Vertices空间
@@ -95,24 +97,34 @@ object Renderer2DData : Closeable {
         QuadVertexArray.setIndexBuffer(indexBuffer)
     }
 
-    private fun initWhiteTexture() {
+    private fun initTexture() {
+        val samplers: IntArray = IntArray(MaxTextureSlots) { i -> i }
+        TextureShader.bind()
+        TextureShader.setIntArray("u_Textures", samplers, MaxTextureSlots)
+
         WhiteTexture = XGLTextureBuilder.createTexture(1, 1)!!
         val whiteTextureData = longArrayOf(0xffffffff)
         WhiteTexture.setData(LongBuffer.wrap(whiteTextureData), Int.SIZE_BYTES)
+
+        TextureSlots[0] = WhiteTexture
     }
 
-    fun put(value: Vector2){
+    fun put(value: Float) {
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value
+    }
+
+    fun put(value: Vector2) {
         QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
         QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
     }
 
-    fun put(value: Vector3){
+    fun put(value: Vector3) {
         QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
         QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
         QuadVertexBufferBase[QuadVertexBufferPtr++] = value.z
     }
 
-    fun put(value: Vector4){
+    fun put(value: Vector4) {
         QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
         QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
         QuadVertexBufferBase[QuadVertexBufferPtr++] = value.z

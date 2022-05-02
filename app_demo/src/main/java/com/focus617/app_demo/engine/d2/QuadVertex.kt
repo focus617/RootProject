@@ -12,11 +12,13 @@ import java.nio.ByteBuffer
 class QuadVertex(
     val Position: Vector3,
     val Color: Vector4,
-    val TextCoord: Vector2
-    //TODO: Texid
+    val TextCoord: Vector2,
+    val TexIndex: Float,
+    val TilingFactor: Float
 ) {
     companion object {
-        val sizeInFloat: Int = 3 + 4 + 2
+        // QuadVertex的Float总数
+        const val sizeInFloat: Int = 3 + 4 + 2 + 1 + 1
     }
 }
 

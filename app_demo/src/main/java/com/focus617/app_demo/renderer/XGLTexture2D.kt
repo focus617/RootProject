@@ -29,6 +29,10 @@ class XGLTexture2D private constructor() : Texture2D() {
     override var mWidth: Int = 0
     override var mHeight: Int = 0
 
+    override fun equals(other: Any?): Boolean =
+        if (other !is XGLTexture2D) false
+        else textureObjectId == other.textureObjectId
+
     /** 基于Assets中的文件构造 */
     constructor(context: Context, filePath: String) : this() {
         val bitmap = loadTextureFromFile(context, filePath)
