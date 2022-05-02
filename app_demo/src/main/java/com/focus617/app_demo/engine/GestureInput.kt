@@ -17,12 +17,18 @@ class GestureInput(private val window: AndroidWindow) : WithLogging(), View.OnTo
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         var hasConsumed: Boolean = false
 
-        if (event != null) {
+        if (event != null && v != null) {
+            // Convert touch coordinates into normalized device coordinates,
+            // keeping in mind that Android's Y coordinates are inverted.
+            val normalizedX = (event.x / v.width.toFloat()) * 2 - 1
+            val normalizedY = -((event.y / v.height.toFloat()) * 2 - 1)
+
             when (event.actionMasked) {
                 // 在第一个点被按下时触发
                 MotionEvent.ACTION_DOWN -> {
                     LOG.info("MotionEvent.ACTION_DOWN Event: ${event.action}(${event.x},${event.y})")
-                    val nativeEvent = TouchPressEvent(event.x, event.y, window)
+                    val nativeEvent =
+                        TouchPressEvent(event.x, event.y, normalizedX, normalizedY, window)
                     window.mData.callback?.let { hasConsumed = it(nativeEvent) }
                     hasConsumed = true
                 }
@@ -68,7 +74,8 @@ class GestureInput(private val window: AndroidWindow) : WithLogging(), View.OnTo
                         val nativeEvent = PinchEvent(focus.x, focus.y, span, window)
                         window.mData.callback?.let { hasConsumed = it(nativeEvent) }
                     } else {
-                        val nativeEvent = TouchDragEvent(event.x, event.y, window)
+                        val nativeEvent =
+                            TouchDragEvent(event.x, event.y, normalizedX, normalizedY, window)
                         window.mData.callback?.let { hasConsumed = it(nativeEvent) }
                     }
                     hasConsumed = true

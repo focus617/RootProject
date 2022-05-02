@@ -10,6 +10,8 @@ import com.focus617.core.platform.event.base.EventType
 class TouchPressEvent(
     val x: Float,
     val y: Float,
+    val normalizedX: Float,
+    val normalizedY: Float,
     override val source: Any
 ) : Event() {
 

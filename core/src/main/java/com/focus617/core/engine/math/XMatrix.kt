@@ -552,9 +552,9 @@ object XMatrix : WithLogging() {
         m: FloatArray, mOffset: Int,
         a: Float, x: Float, y: Float, z: Float
     ) {
-        synchronized(XMatrix.sTemp) {
-            XMatrix.setRotateM(XMatrix.sTemp, 0, a, x, y, z)
-            XMatrix.xMultiplyMM(rm, rmOffset, m, mOffset, XMatrix.sTemp, 0)
+        synchronized(sTemp) {
+            XMatrix.setRotateM(sTemp, 0, a, x, y, z)
+            xMultiplyMM(rm, rmOffset, m, mOffset, sTemp, 0)
         }
     }
 
@@ -573,10 +573,10 @@ object XMatrix : WithLogging() {
         m: FloatArray, mOffset: Int,
         a: Float, x: Float, y: Float, z: Float
     ) {
-        synchronized(XMatrix.sTemp) {
-            XMatrix.setRotateM(XMatrix.sTemp, 0, a, x, y, z)
-            XMatrix.xMultiplyMM(XMatrix.sTemp, 16, m, mOffset, XMatrix.sTemp, 0)
-            System.arraycopy(XMatrix.sTemp, 0, m, mOffset, 16)
+        synchronized(sTemp) {
+            XMatrix.setRotateM(sTemp, 0, a, x, y, z)
+            xMultiplyMM(sTemp, 16, m, mOffset, sTemp, 0)
+            System.arraycopy(sTemp, 0, m, mOffset, 16)
         }
     }
 
@@ -809,5 +809,18 @@ object XMatrix : WithLogging() {
                             String.format("%6.2f", m[mOffset + i + 12]) + " )\n"
                 )
         }.toString()
+    }
+
+    fun caculateInvertedViewProjectionMatrix(
+        invertedViewProjectionMatrix: FloatArray,
+        viewMatrix: FloatArray,
+        projectionMatrix: FloatArray
+    ) {
+        synchronized(sTemp) {
+            // 视图转换：Multiply the view and projection matrices together
+            xMultiplyMM(sTemp, 0, projectionMatrix, 0, viewMatrix, 0)
+            // Create an inverted matrix for touch picking.
+            invertM(invertedViewProjectionMatrix, 0, sTemp, 0)
+        }
     }
 }
