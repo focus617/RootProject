@@ -2,8 +2,6 @@ package com.focus617.app_demo.engine
 
 import android.opengl.GLES30
 import android.opengl.GLES32
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.focus617.core.engine.renderer.IfGraphicsContext
 import com.focus617.core.platform.base.BaseEntity
 
@@ -25,7 +23,6 @@ class XGLContext(private val windowHandle: AndroidWindow) : BaseEntity(), IfGrap
 
         requestFocus()                   //获取焦点
         isFocusableInTouchMode = true    //设置为可触控
-
     }
 
     override fun swapBuffers() {
@@ -40,7 +37,6 @@ class XGLContext(private val windowHandle: AndroidWindow) : BaseEntity(), IfGrap
             LOG.info("OpenGL Version : ${GLES30.glGetString(GLES30.GL_VERSION)}")
         }
 
-        @RequiresApi(Build.VERSION_CODES.N)
         fun initDebug() {
             GLES32.glEnable(GLES32.GL_DEBUG_OUTPUT)
             GLES32.glEnable(GLES32.GL_DEBUG_OUTPUT_SYNCHRONOUS)

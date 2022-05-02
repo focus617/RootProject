@@ -35,6 +35,9 @@ class XGLRenderer2D(
         OrthographicCameraController(scene.mCamera as OrthographicCamera)
 
     override fun initRenderer() {
+        // ES3.2 doesn't support DebugMessageCallback
+        //XGLContext.initDebug()
+
         RenderCommand.init()
         initTextureForScene()
 

@@ -1,7 +1,7 @@
 package com.focus617.core.engine.scene
 
 import com.focus617.core.engine.objects.DrawableObject
-import com.focus617.core.engine.objects.d3.Cylinder
+import com.focus617.core.engine.objects.d2.Triangle
 import com.focus617.core.engine.renderer.ShaderLibrary
 import com.focus617.core.engine.renderer.Texture
 import com.focus617.core.platform.base.BaseEntity
@@ -14,9 +14,10 @@ class Scene(val is3D: Boolean, val mCamera: Camera) : BaseEntity(), Closeable {
     val gameObjectList = mutableListOf<DrawableObject>()
 
     init {
+        gameObjectList.add(Triangle())
         //gameObjectList.add(Circle(1.0f))
         //gameObjectList.add(Cone(1.0f, 1.0f))
-        gameObjectList.add(Cylinder(1.0f, 1.0f))
+        //gameObjectList.add(Cylinder(1.0f, 1.0f))
         //gameObjectList.add(Ball(1.0f))
         //gameObjectList.add(Star(5, 0.3f, 1.0f, 0f))
     }

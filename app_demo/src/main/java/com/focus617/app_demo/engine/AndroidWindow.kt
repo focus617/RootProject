@@ -3,6 +3,7 @@ package com.focus617.app_demo.engine
 import android.annotation.SuppressLint
 import android.content.Context
 import android.opengl.GLSurfaceView
+import com.focus617.app_demo.BuildConfig
 import com.focus617.app_demo.GameActivity
 import com.focus617.app_demo.engine.d2.XGLRenderer2D
 import com.focus617.app_demo.engine.d3.XGLRenderer3D
@@ -31,6 +32,10 @@ class AndroidWindow private constructor(
 
     override lateinit var mRenderer: XRenderer  // Used for Engine
     override val mRenderContext: IfGraphicsContext = XGLContext(this)
+
+    fun setDebug() {
+        debugFlags = if (BuildConfig.DEBUG) DEBUG_LOG_GL_CALLS else DEBUG_CHECK_GL_ERROR
+    }
 
     override fun isVSync(): Boolean = mData.VSync
     override fun setVSync(enable: Boolean) {
@@ -97,6 +102,10 @@ class AndroidWindow private constructor(
             return window
         }
 
+        private fun initRendererCommand() {
+            RenderCommand.sRendererAPI = XGLRendererAPI()
+        }
+
         private fun initView(isES3Supported: Boolean, scene: Scene) {
             with(instance!!) {
                 // 初始化Renderer Context
@@ -115,10 +124,6 @@ class AndroidWindow private constructor(
                 renderMode = RENDERMODE_WHEN_DIRTY
                 //renderMode = RENDERMODE_CONTINUOUSLY
             }
-        }
-
-        private fun initRendererCommand() {
-            RenderCommand.sRendererAPI = XGLRendererAPI()
         }
 
         @SuppressLint("ClickableViewAccessibility")
