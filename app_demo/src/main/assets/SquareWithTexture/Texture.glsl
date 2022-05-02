@@ -33,13 +33,14 @@ void main()
 
 #type fragment
 #version 310 es
+
+#extension GL_EXT_gpu_shader5 : require
+
 #ifdef GL_ES
 precision highp float;
 #else
 precision mediump float;
 #endif
-
-#extension GL_EXT_gpu_shader5 : require
 
 layout(location = 0) out vec4 color;
 
