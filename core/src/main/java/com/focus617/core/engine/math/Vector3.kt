@@ -86,9 +86,13 @@ class Vector3(var x: Float, var y: Float, var z: Float) {
             return angle.toFloat()
         }
 
-        // http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
-        // Note that this formula treats Ray as if it extended infinitely past
-        // either point.
+        /** http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
+         *  Note that this formula treats Ray as if it extended infinitely past
+         *  either point.
+         *  首先定义射线上的两个点：起始点和结束点，结束点是由起始点与射线的向拯相加而得。
+         *  接下来，在这两个点与球体的中心点之间创建一个虚拟三角形，
+         *  最后， 通过计算三角形的高就得到了这个距离。
+        */
         fun distanceBetween(point: Point3D, ray: Ray): Float {
             val p1ToPoint: Vector3 = vectorBetween(ray.point, point)
             val p2ToPoint: Vector3 =
