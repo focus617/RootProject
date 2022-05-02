@@ -50,7 +50,7 @@ object TextureHelper {
      * @return
      */
     fun loadTextureFromResource(context: Context, resourceId: Int): Bitmap? {
-        Timber.i("${TAG}: load texture from resource: $resourceId")
+        Timber.i("${TAG}: load texture from file: $resourceId")
 
         var bitmap: Bitmap? = null
         val options = BitmapFactory.Options()
