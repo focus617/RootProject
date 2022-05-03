@@ -62,7 +62,7 @@ class XGLRenderer3D(private val scene: XGLScene) : XRenderer(), GLSurfaceView.Re
                     setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
                     setMat4("u_ViewMatrix", SceneData.sViewMatrix)
 
-                    scene.mTextureLibrary.get(gameObject.textureName)!!.bind()
+                    scene.mTextureLibrary.get(gameObject.textureName)?.bind()
                     submit(shader, gameObject.vertexArray, gameObject.modelMatrix)
                 }
             }

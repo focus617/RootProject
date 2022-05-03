@@ -28,26 +28,28 @@ class XGLScene(
     }
 
     private fun initShader() {
-        val shader = XGLShaderBuilder.createShader(
+        var shader = XGLShaderBuilder.createShader(
             context,
-            "${SHADER_PATH}/${SHADER_FILE}"
+            SkyBoxShaderFilePath
         ) as XGLShader
         shader.bind()
         shader.setInt("u_TextureUnit", 0)
         mShaderLibrary.add(shader)
 
-        shaderName = shader.getName()
+        shader = XGLShaderBuilder.createShader(
+            context,
+            HeightMapShaderFilePath
+        ) as XGLShader
+        mShaderLibrary.add(shader)
     }
 
     private fun initTexture() {
         val texture = XGLTextureCubeMap(
             context,
-            SHADER_PATH,
+            SKYBOX_SHADER_PATH,
             arrayOf("left.png", "right.png", "bottom.png", "top.png", "front.png", "back.png")
         )
         mTextureLibrary.add(texture)
-
-        textureName = texture.filePath
     }
 
     private fun initGameObjects() {
@@ -55,8 +57,6 @@ class XGLScene(
         for (layer in layerStack.mLayers)
             for (gameObject in layer.gameObjectList) {
                 gameObject.vertexArray = XGLVertexArray.buildVertexArray(gameObject)
-                gameObject.shaderName = shaderName
-                gameObject.textureName = textureName
             }
 
     }
@@ -69,11 +69,17 @@ class XGLScene(
     }
 
     companion object {
-        private val SHADER_PATH = "Cube"
-        private val SHADER_FILE = "SkyBox.glsl"
+        private val SKYBOX_SHADER_PATH = "Cube"
+        private val SKYBOX_SHADER_FILE = "SkyBox.glsl"
 
-        private var shaderName: String = "null"
-        private var textureName: String = "null"
+        private val HEIGHTMAP_SHADER_PATH = "HeightMap"
+        private val HEIGHTMAP_SHADER_FILE = "heightmap.glsl"
+        private val HEIGHTMAP_BITMAP_FILE = "heightmap.png"
 
+        val SkyBoxShaderFilePath: String = "$SKYBOX_SHADER_PATH/$SKYBOX_SHADER_FILE"
+        val SkyBoxTextureFilePath: String = "$SKYBOX_SHADER_PATH/SkyBox"
+
+        val HeightMapShaderFilePath: String = "$HEIGHTMAP_SHADER_PATH/$HEIGHTMAP_SHADER_FILE"
+        val HeightMapBitmapFilePath: String = "$HEIGHTMAP_SHADER_PATH/$HEIGHTMAP_BITMAP_FILE"
     }
 }

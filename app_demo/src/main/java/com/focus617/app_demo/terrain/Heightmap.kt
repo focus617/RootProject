@@ -1,6 +1,6 @@
 package com.focus617.app_demo.terrain
 
-import android.graphics.Bitmap
+import android.content.Context
 import android.graphics.Color
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector3
@@ -9,14 +9,22 @@ import com.focus617.core.engine.objects.GeneratedData
 import com.focus617.core.engine.renderer.BufferElement
 import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.ShaderDataType
+import com.focus617.platform.helper.BitmapHelper
 
-class Heightmap(private val bitmap: Bitmap) : DynamicCreationObject() {
-    private val width: Int = bitmap.width
-    private val height: Int = bitmap.height
-
+class Heightmap(val context: Context, val filePath: String) : DynamicCreationObject() {
+    private var width: Int = 0
+    private var height: Int = 0
     private var numElements: Int = 0
 
     override fun beforeBuild() {
+        val bitmap = BitmapHelper.bitmapLoader(context, filePath)
+        width = bitmap.width
+        height = bitmap.height
+
+        val pixels = IntArray(width * height)
+        bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
+        bitmap.recycle()
+
         LOG.info("Terrain Map width:${width},  height:${height})")
         if (width * height > 65536) {
             throw RuntimeException("Heightmap is too large for the index buffer.")
@@ -32,7 +40,7 @@ class Heightmap(private val bitmap: Bitmap) : DynamicCreationObject() {
             )
         )
 
-        val vertices: FloatArray = loadBitmapData(bitmap, verticesLayout.getStride())
+        val vertices: FloatArray = loadBitmapData(pixels, verticesLayout.getStride())
         val indices: ShortArray = createIndexData()
 
         LOG.debug("vertices(size=${vertices.size})")
@@ -48,10 +56,7 @@ class Heightmap(private val bitmap: Bitmap) : DynamicCreationObject() {
     /**
      * Copy the heightmap data into a vertex buffer object.
      */
-    private fun loadBitmapData(bitmap: Bitmap, stride: Int): FloatArray {
-        val pixels = IntArray(width * height)
-        bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
-        bitmap.recycle()
+    private fun loadBitmapData(pixels: IntArray, stride: Int): FloatArray {
 
         val heightmapVertices = FloatArray(width * height * stride)
 

@@ -164,7 +164,7 @@ companion object {
         if (filePath.isEmpty() or TextUtils.isEmpty(filePath)) {
             LOG.error("Shader file doesn't exist")
         }
-        name = FileHelper.getFileName(filePath)
+        name = filePath
 
         try {
             val scanner = Scanner(context.assets.open(filePath))
