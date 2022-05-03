@@ -16,7 +16,7 @@ import java.nio.ByteBuffer
  * 1. 储存了纹理的基本属性 [mWidth] [mHeight]
  * 2. 它的构造器需要纹理的图片资源或文件
  */
-class XGLTexture2D private constructor() : Texture2D() {
+class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
     private val textureObjectIdBuf = IntArray(1)
     private var textureObjectId: Int = 0
 
@@ -31,19 +31,19 @@ class XGLTexture2D private constructor() : Texture2D() {
         else textureObjectId == other.textureObjectId
 
     /** 基于Assets中的文件构造 */
-    constructor(context: Context, filePath: String) : this() {
+    constructor(context: Context, filePath: String) : this(filePath) {
         val bitmap = TextureHelper.loadTextureFromFile(context, filePath)
         bitmap?.apply { initTexture(bitmap) }
     }
 
     /** 基于Resource/raw中的文件构造 */
-    constructor(context: Context, resourceId: Int) : this() {
+    constructor(context: Context, resourceId: Int) : this("Resource/$resourceId") {
         val bitmap = TextureHelper.loadTextureFromResource(context, resourceId)
         bitmap?.apply { initTexture(bitmap) }
     }
 
     /** 程序编程构造 */
-    constructor(width: Int, height: Int) : this() {
+    constructor(width: Int, height: Int) : this("Program/generated") {
         mWidth = width
         mHeight = height
 

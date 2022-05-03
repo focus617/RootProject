@@ -18,6 +18,8 @@ interface IfDrawable{
 abstract class DrawableObject : BaseEntity(), IfDrawable {
     val modelMatrix: FloatArray = FloatArray(16)
     lateinit var vertexArray: VertexArray
+    lateinit var shaderName: String
+    lateinit var textureName: String
 
     init {
         resetTransform()
@@ -27,7 +29,18 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
         XMatrix.setIdentityM(modelMatrix, 0)
     }
 
-    open fun onTransform(
+    open fun onTransform3D(
+        position: Vector3,
+        scaleSize: Vector3,
+        rotation: Float = 0.0f
+    ){
+        XMatrix.scaleM(modelMatrix, 0, scaleSize.x, scaleSize.y, scaleSize.z)
+        XMatrix.rotateM(modelMatrix, 0, rotation, 0.0f, 0.0f, 1.0f)
+        XMatrix.translateM(modelMatrix, 0, position)
+        //LOG.info("ModelMatrix:" + XMatrix.toString(modelMatrix))
+    }
+
+    open fun onTransform2D(
         position: Vector3,
         scaleSize: Vector2,
         rotation: Float = 0.0f
@@ -38,12 +51,12 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
         //LOG.info("ModelMatrix:" + XMatrix.toString(modelMatrix))
     }
 
-    open fun onTransform(
+    open fun onTransform2D(
         position: Vector2,
         scaleSize: Vector2,
         rotation: Float = 0.0f
     ) {
-        onTransform(Vector3(position.x, position.y, 0.0f), scaleSize, rotation)
+        onTransform2D(Vector3(position.x, position.y, 0.0f), scaleSize, rotation)
     }
 
 }

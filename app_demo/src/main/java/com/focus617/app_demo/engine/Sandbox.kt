@@ -1,24 +1,29 @@
 package com.focus617.app_demo.engine
 
+import android.content.Context
 import com.focus617.core.engine.core.Engine
-import com.focus617.core.engine.scene.Camera
-import com.focus617.core.engine.scene.OrthographicCamera
-import com.focus617.core.engine.scene.PerspectiveCamera
-import com.focus617.core.engine.scene.Scene
+import com.focus617.core.engine.core.LayerStack
+import com.focus617.core.engine.core.TimeStep
 import java.io.Closeable
 
-class Sandbox(private val is3D: Boolean) : Engine(), Closeable {
+class Sandbox(context: Context, val is3D: Boolean) : Engine(), Closeable {
 
-    private val camera: Camera =  if (is3D) PerspectiveCamera() else OrthographicCamera()
-    val scene: Scene = Scene(is3D, camera)
+    val scene: XGLScene = XGLScene(context, this, is3D)
 
     init {
-        pushLayer(GameLayer("GameLayer", this, is3D))
+        pushLayer(TerrainLayer("TerrainLayer", scene, is3D))
         //pushOverLayer(Layer2D("ExampleOverlay"))
     }
 
     override fun close() {
         scene.close()
+    }
+
+    fun getLayerStack(): LayerStack = mLayerStack
+
+    override fun onUpdate(timeStep: TimeStep) {
+        if(scene == null) return
+        scene.onUpdate(timeStep)
     }
 
 

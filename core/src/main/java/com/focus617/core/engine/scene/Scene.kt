@@ -1,45 +1,24 @@
 package com.focus617.core.engine.scene
 
-import com.focus617.core.engine.objects.DrawableObject
-import com.focus617.core.engine.objects.d3.Cube
+import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.renderer.ShaderLibrary
-import com.focus617.core.engine.renderer.Texture
+import com.focus617.core.engine.renderer.TextureLibrary
 import com.focus617.core.platform.base.BaseEntity
 import java.io.Closeable
 
-class Scene(val is3D: Boolean, val mCamera: Camera) : BaseEntity(), Closeable {
-    private val textureSet = HashMap<String, Texture>()
+open class Scene : BaseEntity(), Closeable {
     val mShaderLibrary = ShaderLibrary()
+    val mTextureLibrary = TextureLibrary()
 
-    val gameObjectList = mutableListOf<DrawableObject>()
-
-    init {
-        //gameObjectList.add(Triangle())
-        //gameObjectList.add(Circle(1.0f))
-        gameObjectList.add(Cube())
-        //gameObjectList.add(Cone(1.0f, 1.0f))
-        //gameObjectList.add(Cylinder(1.0f, 1.0f))
-        //gameObjectList.add(Ball(1.0f))
-        //gameObjectList.add(Star(5, 0.38f, 1.0f, 0.5f))
-    }
-
-
-    fun texture(name: String) = textureSet[name]
-    fun sizeForTest() = textureSet.size
-    fun register(name: String, texture: Texture) {
-        textureSet[name] = texture
-    }
-
-    fun unRegister(name: String) {
-        textureSet.remove(name)
-    }
-
+    lateinit var mCamera: Camera
+    lateinit var mCameraController: CameraController
 
     override fun close() {
         mShaderLibrary.close()
-        textureSet.forEach() {
-            it.value.close()
-        }
+        mTextureLibrary.close()
     }
+
+    // Used for updating the global resource, such as objects in scene
+    open fun onUpdate(timeStep: TimeStep){ }
 
 }

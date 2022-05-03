@@ -49,7 +49,7 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
         mCamera.setPosition(position)
     }
 
-    fun setPosition(x: Float, y: Float, z: Float) {
+    override fun setPosition(x: Float, y: Float, z: Float) {
         mCamera.setPosition(Point3D(x, y, z))
     }
 
@@ -59,7 +59,7 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
         }
     }
 
-    fun onWindowSizeChange(width: Int, height: Int) {
+    override fun onWindowSizeChange(width: Int, height: Int) {
         mWidth = width
         mHeight = height
         reCalculatePerspectiveProjectionMatrix()

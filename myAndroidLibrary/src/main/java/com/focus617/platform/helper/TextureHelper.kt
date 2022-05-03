@@ -95,44 +95,36 @@ object TextureHelper {
         return bitmap
     }
 
-    //TODO: define XGLTexture3D class
-    var skyboxTexture: Int = 0
-
     /**
      * Loads a cubemap texture from the provided resources and returns the
      * texture ID. Returns 0 if the load failed.
      *
      * @param context
-     * @param path
+     * @param cubeBitmaps
      * An array of texture file name corresponding to the cube map. Should be
      * provided in this order: left, right, bottom, top, front, back.
      * @return
      */
-    fun loadCubeMap(
-        context: Context,
-        path: String,
-        files: Array<String>
+    fun loadCubeMapIntoTexture(
+        textureObjectIdBuf: IntArray,
+        cubeBitmaps: Array<Bitmap?>
     ): Int {
-        val textureObjectIds = IntArray(1)
-        GLES31.glGenTextures(1, textureObjectIds, 0)
-        if (textureObjectIds[0] == 0) {
+        GLES31.glGenTextures(1, textureObjectIdBuf, 0)
+        if (textureObjectIdBuf[0] == 0) {
             Timber.w("$TAG: Could not generate a new OpenGL texture object.")
             return 0
         }
 
-        val cubeBitmaps = arrayOfNulls<Bitmap>(6)
-
         for (i in 0..5) {
-            cubeBitmaps[i] = loadTextureFromFile(context, "$path/${files[i]}")
             if (cubeBitmaps[i] == null) {
-                Timber.w("$TAG: Resource ID ${files[i]} could not be decoded.")
-                GLES31.glDeleteTextures(1, textureObjectIds, 0)
+                Timber.w("$TAG: No.$i Cube Bitmap is null.")
+                GLES31.glDeleteTextures(1, textureObjectIdBuf, 0)
                 return 0
             }
         }
 
         // Linear filtering for minification and magnification
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_CUBE_MAP, textureObjectIds[0])
+        GLES31.glBindTexture(GLES31.GL_TEXTURE_CUBE_MAP, textureObjectIdBuf[0])
         // 因为每个立方体贴图的纹理都总是从同一个视点被观察，不必使用MIP
         // 所以我们只使用常规的双线性过滤，也能节省纹理内存。
         GLES31.glTexParameteri(
@@ -155,11 +147,7 @@ object TextureHelper {
         GLUtils.texImage2D(GLES31.GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, cubeBitmaps[5], 0)
         GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, 0)
 
-        for (bitmap in cubeBitmaps) {
-            bitmap!!.recycle()
-        }
-
-        return textureObjectIds[0]
+        return textureObjectIdBuf[0]
     }
 
     // 多重纹理(multitexturing)
