@@ -7,6 +7,7 @@ import android.opengl.GLES30
 import android.opengl.GLES30.GL_RGBA8
 import android.opengl.GLES31
 import com.focus617.core.engine.renderer.Texture2D
+import com.focus617.platform.helper.BitmapHelper
 import com.focus617.platform.helper.TextureHelper
 import java.nio.Buffer
 import java.nio.ByteBuffer
@@ -32,14 +33,14 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
 
     /** 基于Assets中的文件构造 */
     constructor(context: Context, filePath: String) : this(filePath) {
-        val bitmap = TextureHelper.loadTextureFromFile(context, filePath)
-        bitmap?.apply { initTexture(bitmap) }
+        val bitmap = BitmapHelper.bitmapLoader(context, filePath)
+        initTexture(bitmap)
     }
 
     /** 基于Resource/raw中的文件构造 */
     constructor(context: Context, resourceId: Int) : this("Resource/$resourceId") {
-        val bitmap = TextureHelper.loadTextureFromResource(context, resourceId)
-        bitmap?.apply { initTexture(bitmap) }
+        val bitmap = BitmapHelper.bitmapLoader(context, resourceId)
+        initTexture(bitmap)
     }
 
     /** 程序编程构造 */

@@ -1,12 +1,9 @@
 package com.focus617.platform.helper
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.opengl.GLES31
 import android.opengl.GLUtils
 import timber.log.Timber
-import java.io.IOException
 
 object TextureHelper {
     val TAG = "TextureHelper"
@@ -39,60 +36,6 @@ object TextureHelper {
             GLES31.GL_TEXTURE_WRAP_T,
             GLES31.GL_REPEAT.toFloat()
         ) //设置T轴拉伸方式
-    }
-
-    /**
-     * Loads a texture from a resource ID, returning the OpenGL ID for that
-     * texture. Returns 0 if the load failed.
-     *
-     * @param context
-     * @param resourceId
-     * @return
-     */
-    fun loadTextureFromResource(context: Context, resourceId: Int): Bitmap? {
-        Timber.i("${TAG}: load texture from resource: $resourceId")
-
-        var bitmap: Bitmap? = null
-        val options = BitmapFactory.Options()
-        options.inScaled = false
-
-        // Read in the resource
-        bitmap = BitmapFactory.decodeResource(
-            context.resources, resourceId, options
-        )
-        if (bitmap == null) {
-            Timber.e("$TAG: Resource ID $resourceId could not be decoded.")
-        }
-        return bitmap
-    }
-
-    /**
-     * Loads a texture from a file, returning the OpenGL ID for that
-     * texture. Returns 0 if the load failed.
-     *
-     * @param context
-     * @param filePath
-     * @return
-     */
-    fun loadTextureFromFile(context: Context, filePath: String): Bitmap? {
-        Timber.i("${TAG}: load texture from file: $filePath")
-
-        var bitmap: Bitmap? = null
-
-        val options = BitmapFactory.Options()
-        options.inScaled = false
-
-        try {
-            val inputStream = context.resources.assets.open(filePath)
-            // Read in the resource
-            bitmap = BitmapFactory.decodeStream(inputStream)
-            if (bitmap == null) {
-                Timber.e("$TAG: $filePath could not be decoded.")
-            }
-        } catch (e: IOException) {
-            throw RuntimeException("Could not open shader file: $filePath $ e")
-        }
-        return bitmap
     }
 
     /**

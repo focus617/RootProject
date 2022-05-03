@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import android.opengl.GLES20
 import android.opengl.GLES31
 import com.focus617.core.engine.renderer.Texture
-import com.focus617.platform.helper.TextureHelper
+import com.focus617.platform.helper.BitmapHelper
 import com.focus617.platform.helper.TextureHelper.loadCubeMapIntoTexture
 import java.nio.Buffer
 
@@ -16,11 +16,11 @@ class XGLTextureCubeMap private constructor(filePath: String) : Texture(filePath
     override var mWidth: Int = 0
     override var mHeight: Int = 0
 
-    constructor(context: Context, path: String, files: Array<String>) : this("$path/$files") {
+    constructor(context: Context, path: String, files: Array<String>) : this("$path/SkyBox") {
         val cubeBitmaps = arrayOfNulls<Bitmap>(6)
 
         for (i in 0..5) {
-            cubeBitmaps[i] = TextureHelper.loadTextureFromFile(context, "$path/${files[i]}")
+            cubeBitmaps[i] = BitmapHelper.bitmapLoader(context, "$path/${files[i]}")
         }
 
         mWidth = cubeBitmaps[0]!!.width
