@@ -19,8 +19,6 @@ class XGLScene(
         mCameraController =
             if (is3D) PerspectiveCameraController(mCamera as PerspectiveCamera)
             else OrthographicCameraController(mCamera as OrthographicCamera)
-
-        mCameraController.setPosition(0f, -1.5f, 0f)
     }
 
     fun initOpenGlResource() {
