@@ -14,4 +14,6 @@ abstract class CameraController : BaseEntity() {
     abstract fun onEvent(event: Event): Boolean
 
     abstract fun onWindowSizeChange(width: Int, height: Int)
+
+    abstract fun setPosition(x: Float, y: Float, z: Float)
 }

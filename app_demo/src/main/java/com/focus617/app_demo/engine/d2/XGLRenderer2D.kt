@@ -330,7 +330,7 @@ class XGLRenderer2D(
         ): FloatArray {
             val quad = Quad()
             quad.resetTransform()
-            quad.onTransform(position, size, rotation)
+            quad.onTransform2D(position, size, rotation)
             return quad.modelMatrix
         }
 

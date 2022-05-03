@@ -38,7 +38,7 @@ class OrthographicCameraController(private val mCamera: OrthographicCamera) : Ca
         mCamera.setPosition(position)
     }
 
-    fun setPosition(x: Float, y: Float, z: Float) {
+    override fun setPosition(x: Float, y: Float, z: Float) {
         mCamera.setPosition(Point3D(x, y, z))
     }
 

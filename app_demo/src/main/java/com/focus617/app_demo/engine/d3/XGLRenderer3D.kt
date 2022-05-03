@@ -93,7 +93,6 @@ class XGLRenderer3D(private val scene: XGLScene) : XRenderer(), GLSurfaceView.Re
     ) {
         (shader as XGLShader).bind()
         shader.setMat4("u_ModelMatrix", transform)
-        //shader.setFloat4("u_Color", WHITE)
 
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)

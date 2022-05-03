@@ -3,6 +3,7 @@ package com.focus617.app_demo.engine
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
+import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.objects.d3.Cube
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
@@ -11,7 +12,12 @@ class TerrainLayer(name: String, val engine: Engine, val is3D: Boolean) : Layer(
     private val eventDispatcher = EventDispatcher()
 
     init {
-        gameObjectList.add(Cube())
+        val cube = Cube()
+        cube.onTransform3D(
+            Vector3(0.0f, 0.0f, 0.0f),
+            Vector3(2.0f, 2.0f, 2.0f)
+        )
+        gameObjectList.add(cube)
 
     }
 
@@ -36,7 +42,6 @@ class TerrainLayer(name: String, val engine: Engine, val is3D: Boolean) : Layer(
         LOG.info("${this.mDebugName} closed")
         eventDispatcher.close()
     }
-
 
 
 }
