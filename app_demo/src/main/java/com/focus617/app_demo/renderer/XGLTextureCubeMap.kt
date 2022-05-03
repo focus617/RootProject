@@ -9,14 +9,14 @@ import com.focus617.platform.helper.TextureHelper
 import com.focus617.platform.helper.TextureHelper.loadCubeMapIntoTexture
 import java.nio.Buffer
 
-class XGLTextureCubeMap private constructor() : Texture() {
+class XGLTextureCubeMap private constructor(filePath: String) : Texture(filePath) {
     private val textureObjectIdBuf = IntArray(1)
     private var textureObjectId: Int = 0
 
     override var mWidth: Int = 0
     override var mHeight: Int = 0
 
-    constructor(context: Context, path: String, files: Array<String>) : this() {
+    constructor(context: Context, path: String, files: Array<String>) : this("$path/$files") {
         val cubeBitmaps = arrayOfNulls<Bitmap>(6)
 
         for (i in 0..5) {

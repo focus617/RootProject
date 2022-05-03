@@ -18,6 +18,8 @@ interface IfDrawable{
 abstract class DrawableObject : BaseEntity(), IfDrawable {
     val modelMatrix: FloatArray = FloatArray(16)
     lateinit var vertexArray: VertexArray
+    lateinit var shaderName: String
+    lateinit var textureName: String
 
     init {
         resetTransform()

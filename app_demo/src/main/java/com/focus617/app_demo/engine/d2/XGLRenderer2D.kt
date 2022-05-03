@@ -2,8 +2,8 @@ package com.focus617.app_demo.engine.d2
 
 import android.content.Context
 import android.opengl.GLSurfaceView
-import com.focus617.app_demo.engine.Sandbox
 import com.focus617.app_demo.engine.XGLContext
+import com.focus617.app_demo.engine.XGLScene
 import com.focus617.app_demo.renderer.XGLTextureBuilder
 import com.focus617.app_demo.renderer.XGLVertexArray
 import com.focus617.core.engine.baseDataType.Color
@@ -16,8 +16,6 @@ import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Texture2D
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene.Camera
-import com.focus617.core.engine.scene.OrthographicCamera
-import com.focus617.core.engine.scene.OrthographicCameraController
 import java.io.Closeable
 import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
@@ -25,18 +23,10 @@ import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer2D(
     private val context: Context,
-    private val engine: Sandbox
+    private val scene: XGLScene
 ) : XRenderer(), GLSurfaceView.Renderer, Closeable {
 
-    private val scene = engine.scene
-
-    //TODO: Game objects should NOT owned by Renderer .
-    // It should be injected from Engine's Scene, since GlSurfaceView/Renderer is always recreated
-    // in case of configuration change, etc.
-    override val mCameraController =
-        OrthographicCameraController(scene.mCamera as OrthographicCamera)
-
-    override fun initGlobalResource() {
+    fun initGlobalResource() {
         // ES3.2 doesn't support DebugMessageCallback
         //XGLContext.initDebug()
 
@@ -53,7 +43,7 @@ class XGLRenderer2D(
             context,
             "$PATH/$TEXTURE_FILE"
         )!!
-        scene.mTextureLibrary.add(objectTextureName, texture)
+        scene.mTextureLibrary.add(texture)
     }
 
     override fun close() {
@@ -86,7 +76,8 @@ class XGLRenderer2D(
 
     override fun endScene() {
         with(Renderer2DData) {
-            QuadVertexBuffer.setData(FloatBuffer.wrap(QuadVertexBufferBase),
+            QuadVertexBuffer.setData(
+                FloatBuffer.wrap(QuadVertexBufferBase),
                 QuadVertexBufferPtr * Float.SIZE_BYTES
             )
         }
@@ -96,7 +87,7 @@ class XGLRenderer2D(
 
     fun flush() {
         with(Renderer2DData) {
-            for(i in 0 until TextureSlotIndex) TextureSlots[i]?.bind(i)
+            for (i in 0 until TextureSlotIndex) TextureSlots[i]?.bind(i)
 
             QuadVertexArray.bind()
             RenderCommand.drawIndexed(QuadVertexArray, QuadIndexCount)
@@ -122,7 +113,7 @@ class XGLRenderer2D(
         // 设置渲染的OpenGL场景（视口）的位置和大小
         RenderCommand.setViewport(0, 0, width, height)
 
-        mCameraController.onWindowSizeChange(width, height)
+        scene.mCameraController.onWindowSizeChange(width, height)
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -130,7 +121,7 @@ class XGLRenderer2D(
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
 
-        beginScene(scene.mCamera)
+        beginScene(scene.mCamera!!)
         drawQuad(Vector2(-0.8f, -1.0f), Vector2(0.5f, 0.8f), RED)
         drawQuad(Vector2(0.5f, 0.5f), Vector2(0.75f, 0.5f), BLUE)
 //        drawRotatedQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), 45f, BLUE)

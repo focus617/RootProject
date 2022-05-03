@@ -12,7 +12,7 @@ fun rotate(value: Float, min: Float = -180.0f, max: Float = 180.0f): Float {
     var degree: Float = value
 
     if (degree > max) degree -= 360.0f
-    else if (degree < -min) degree += 360.0f
+    else if (degree < min) degree += 360.0f
 
     return degree
 }

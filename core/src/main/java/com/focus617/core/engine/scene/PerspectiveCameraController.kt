@@ -59,7 +59,7 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
         }
     }
 
-    fun onWindowSizeChange(width: Int, height: Int) {
+    override fun onWindowSizeChange(width: Int, height: Int) {
         mWidth = width
         mHeight = height
         reCalculatePerspectiveProjectionMatrix()

@@ -54,7 +54,6 @@ class AndroidWindow private constructor(
     }
 
     override fun close() {
-        renderer.close()
         instance = null
     }
 
@@ -113,8 +112,8 @@ class AndroidWindow private constructor(
 
                 // 创建并设置渲染器（Renderer）以在GLSurfaceView上绘制
                 renderer =
-                    if(engine.scene.is3D) XGLRenderer3D(instance!!.context, engine)
-                    else XGLRenderer2D(instance!!.context, engine)
+                    if(engine.is3D) XGLRenderer3D(engine.scene)
+                    else XGLRenderer2D(instance!!.context, engine.scene)
 
                 setRenderer(renderer as Renderer)
                 mRenderer = renderer

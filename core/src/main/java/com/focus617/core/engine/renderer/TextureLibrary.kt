@@ -13,19 +13,17 @@ class TextureLibrary : WithLogging(), Closeable {
         mTextures.clear()
     }
 
-    fun add(name: String, texture: Texture) {
-        if (exists(name)) {
-            LOG.warn("Texture $name has already exist")
+    fun add(texture: Texture) {
+        if (mTextures.containsKey(texture.filePath)) {
+            LOG.warn("Texture ${texture.filePath} has already exist")
         }
-        mTextures[name] = texture
+        mTextures[texture.filePath] = texture
     }
 
-    fun remove(textureName: String){
-        mTextures.remove(textureName)
+    fun remove(texture: Texture){
+        mTextures.remove(texture.filePath)
     }
 
     fun get(name: String): Texture? = mTextures[name]
-
-    private fun exists(name: String): Boolean = mTextures.containsKey(name)
 
 }

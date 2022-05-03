@@ -12,4 +12,6 @@ abstract class CameraController : BaseEntity() {
     abstract fun onUpdate(timeStep: TimeStep)
 
     abstract fun onEvent(event: Event): Boolean
+
+    abstract fun onWindowSizeChange(width: Int, height: Int)
 }
