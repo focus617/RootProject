@@ -7,11 +7,8 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class PerspectiveCamera : Camera() {
-    private val target: Point3D = Point3D(0.0f, 0.0f, 0.0f)
-    private val worldUp = Vector3(0.0f, 1.0f, 0.0f)
-    private val defaultDistance: Float = 4.0F
-
     override var mPosition: Point3D = Point3D(0.0f, 0.0f, defaultDistance)
+    private val target: Point3D = Point3D(0.0f, 0.0f, 0.0f)
     private var mTargetDistance: Float = defaultDistance
 
     private var directionUp: Vector3 = worldUp
@@ -73,5 +70,10 @@ class PerspectiveCamera : Camera() {
             target.x, target.y, target.z,
             directionUp.x, directionUp.y, directionUp.z
         )
+    }
+
+    companion object{
+        val worldUp = Vector3(0.0f, 1.0f, 0.0f)
+        const val defaultDistance: Float = 4.0F
     }
 }

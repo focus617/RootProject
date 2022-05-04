@@ -1,10 +1,10 @@
 package com.focus617.app_demo.engine
 
 import com.focus617.app_demo.terrain.Heightmap
+import com.focus617.app_demo.terrain.SkyBox
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.objects.d3.Cube
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 import com.focus617.core.platform.event.base.EventType
@@ -14,23 +14,29 @@ class TerrainLayer(name: String, private val scene: XGLScene, val is3D: Boolean)
     private val eventDispatcher = EventDispatcher()
 
     init {
-        val cube = Cube()
-        cube.onTransform3D(
+        val skyBox = SkyBox()
+        skyBox.onTransform3D(
             Vector3(0.0f, 0.0f, 0.0f),
             Vector3(100f, 100f, 100f)
         )
-        cube.shaderName = XGLScene.SkyBoxShaderFilePath
-        cube.textureName = XGLScene.SkyBoxTextureFilePath
-        gameObjectList.add(cube)
+        skyBox.shaderName = XGLScene.SkyBoxShaderFilePath
+        skyBox.textureName = XGLScene.SkyBoxTextureFilePath
+        gameObjectList.add(skyBox)
 
         val heightmap = Heightmap(scene.context, XGLScene.HeightMapBitmapFilePath)
+        // Expand the heightmap's dimensions, but don't expand the height as
+        // much so that we don't get insanely tall mountains.
         heightmap.onTransform3D(
-            Vector3(0.0f, -0.04f, 0.0f),
-            Vector3(100f, 60f, 100f)
+            Vector3(0.0f, -0.05f, 0.0f),
+            Vector3(100f, 50f, 100f)
         )
         heightmap.shaderName = XGLScene.HeightMapShaderFilePath
         heightmap.textureName = ""
         gameObjectList.add(heightmap)
+    }
+
+    companion object {
+
     }
 
     override fun onAttach() {

@@ -12,25 +12,20 @@ abstract class DynamicCreationObject() : DrawableObject() {
     }
 
     override fun getVertices(): FloatArray {
-        if(buildData == null)
+        if (buildData == null)
             LOG.error("You should call beforeBuild at first.")
         return buildData!!.vertices
     }
 
     override fun getLayout(): BufferLayout {
-        if(buildData == null)
+        if (buildData == null)
             LOG.error("You should call beforeBuild at first.")
         return buildData!!.layout
     }
 
     override fun getIndices(): ShortArray {
-        if(buildData == null)
+        if (buildData == null)
             LOG.error("You should call beforeBuild at first.")
         return buildData!!.indices
-    }
-
-    companion object {
-        val UNIT_SIZE: Float = 1f
-
     }
 }

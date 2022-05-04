@@ -31,4 +31,9 @@ abstract class Camera : BaseEntity() {
     abstract fun setRotation(rollZ: Float = 90f)
     fun getRotation() = mRotationZAxis
 
+    companion object {
+        const val U_VIEW_MATRIX = "u_ViewMatrix"
+        const val U_PROJECT_MATRIX = "u_ProjectionMatrix"
+
+    }
 }

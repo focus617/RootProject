@@ -3,7 +3,6 @@ package com.focus617.app_demo.engine.d3
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.engine.XGLScene
-import com.focus617.app_demo.renderer.XGLShader
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Shader
@@ -59,11 +58,11 @@ class XGLRenderer3D(private val scene: XGLScene) : XRenderer(), GLSurfaceView.Re
 //                  LOG.info(XMatrix.toString(SceneData.sViewMatrix, matrixName = "ViewMatrix"))
 //                  LOG.info(XMatrix.toString(gameObject.modelMatrix, matrixName = "ModelMatrix"))
                     //TODO: 每个对象都需要一个Shader吗？
-                    setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
-                    setMat4("u_ViewMatrix", SceneData.sViewMatrix)
+                    setMat4(Camera.U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
+                    setMat4(Camera.U_VIEW_MATRIX, SceneData.sViewMatrix)
 
                     scene.mTextureLibrary.get(gameObject.textureName)?.bind()
-                    submit(shader, gameObject.vertexArray, gameObject.modelMatrix)
+                    gameObject.submit(shader)
                 }
             }
 
@@ -91,16 +90,16 @@ class XGLRenderer3D(private val scene: XGLScene) : XRenderer(), GLSurfaceView.Re
         vertexArray: VertexArray,
         transform: FloatArray
     ) {
-        (shader as XGLShader).bind()
-        shader.setMat4("u_ModelMatrix", transform)
-
-        vertexArray.bind()
-        RenderCommand.drawIndexed(vertexArray)
-
-        // 下面这两行可以省略，以节约GPU的运行资源；
-        // 在下个submit，会bind其它handle，自然会实现unbind
-        vertexArray.unbind()
-        shader.unbind()
+//        (shader as XGLShader).bind()
+//        shader.setMat4("u_ModelMatrix", transform)
+//
+//        vertexArray.bind()
+//        RenderCommand.drawIndexed(vertexArray)
+//
+//        // 下面这两行可以省略，以节约GPU的运行资源；
+//        // 在下个submit，会bind其它handle，自然会实现unbind
+//        vertexArray.unbind()
+//        shader.unbind()
     }
 
 }

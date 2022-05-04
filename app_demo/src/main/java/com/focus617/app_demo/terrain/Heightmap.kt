@@ -6,15 +6,28 @@ import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.objects.DynamicCreationObject
 import com.focus617.core.engine.objects.GeneratedData
-import com.focus617.core.engine.renderer.BufferElement
-import com.focus617.core.engine.renderer.BufferLayout
-import com.focus617.core.engine.renderer.ShaderDataType
+import com.focus617.core.engine.renderer.*
+import com.focus617.core.engine.scene.Light
 import com.focus617.platform.helper.BitmapHelper
 
-class Heightmap(val context: Context, val filePath: String) : DynamicCreationObject() {
+class Heightmap(val context: Context, private val filePath: String) : DynamicCreationObject() {
     private var width: Int = 0
     private var height: Int = 0
     private var numElements: Int = 0
+
+    override fun submit(shader: Shader) {
+        shader.bind()
+        shader.setMat4(U_MODEL_MATRIX, modelMatrix)
+        shader.setFloat3(Light.U_VECTOR_TO_LIGHT, Light.vectorToLight)
+
+        vertexArray.bind()
+        RenderCommand.drawIndexed(vertexArray)
+
+        // 下面这两行可以省略，以节约GPU的运行资源；
+        // 在下个submit，会bind其它handle，自然会实现unbind
+        vertexArray.unbind()
+        shader.unbind()
+    }
 
     override fun beforeBuild() {
         val bitmap = BitmapHelper.bitmapLoader(context, filePath)
