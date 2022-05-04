@@ -6,7 +6,9 @@ import android.opengl.GLSurfaceView
 import com.focus617.app_demo.BuildConfig
 import com.focus617.app_demo.GameActivity
 import com.focus617.app_demo.engine.d2.XGLRenderer2D
+import com.focus617.app_demo.engine.d2.XGLScene2D
 import com.focus617.app_demo.engine.d3.XGLRenderer3D
+import com.focus617.app_demo.engine.d3.XGLScene3D
 import com.focus617.app_demo.renderer.XGLRendererAPI
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.WindowProps
@@ -112,8 +114,8 @@ class AndroidWindow private constructor(
 
                 // 创建并设置渲染器（Renderer）以在GLSurfaceView上绘制
                 renderer =
-                    if(engine.is3D) XGLRenderer3D(engine.scene)
-                    else XGLRenderer2D(instance!!.context, engine.scene)
+                    if(engine.is3D) XGLRenderer3D(engine.scene as XGLScene3D)
+                    else XGLRenderer2D(instance!!.context, engine.scene as XGLScene2D)
 
                 setRenderer(renderer as Renderer)
                 mRenderer = renderer
