@@ -1,10 +1,7 @@
 package com.focus617.app_demo.engine
 
 import android.content.Context
-import com.focus617.app_demo.renderer.XGLShader
-import com.focus617.app_demo.renderer.XGLShaderBuilder
-import com.focus617.app_demo.renderer.XGLTextureCubeMap
-import com.focus617.app_demo.renderer.XGLVertexArray
+import com.focus617.app_demo.renderer.*
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.scene.*
 
@@ -32,8 +29,6 @@ class XGLScene(
             context,
             SkyBoxShaderFilePath
         ) as XGLShader
-        shader.bind()
-        shader.setInt("u_TextureUnit", 0)
         mShaderLibrary.add(shader)
 
         shader = XGLShaderBuilder.createShader(
@@ -50,6 +45,11 @@ class XGLScene(
             arrayOf("left.png", "right.png", "bottom.png", "top.png", "front.png", "back.png")
         )
         mTextureLibrary.add(texture)
+
+        var texture2D = XGLTextureBuilder.createTexture(context, HeightMapGrassFilePath)
+        mTextureLibrary.add(texture2D!!)
+        texture2D = XGLTextureBuilder.createTexture(context, HeightMapStoneFilePath)
+        mTextureLibrary.add(texture2D!!)
     }
 
     private fun initGameObjects() {
@@ -69,17 +69,21 @@ class XGLScene(
     }
 
     companion object {
-        private val SKYBOX_SHADER_PATH = "Cube"
+        private val SKYBOX_SHADER_PATH = "SkyBox"
         private val SKYBOX_SHADER_FILE = "SkyBox.glsl"
 
         private val HEIGHTMAP_SHADER_PATH = "HeightMap"
         private val HEIGHTMAP_SHADER_FILE = "heightmap.glsl"
         private val HEIGHTMAP_BITMAP_FILE = "heightmap.png"
+        private val HEIGHTMAP_GRASS_TEXTURE_FILE = "noisy_grass_public_domain.png"
+        private val HEIGHTMAP_STONE_TEXTURE_FILE = "stone_public_domain.png"
 
         val SkyBoxShaderFilePath: String = "$SKYBOX_SHADER_PATH/$SKYBOX_SHADER_FILE"
         val SkyBoxTextureFilePath: String = "$SKYBOX_SHADER_PATH/SkyBox"
 
         val HeightMapShaderFilePath: String = "$HEIGHTMAP_SHADER_PATH/$HEIGHTMAP_SHADER_FILE"
         val HeightMapBitmapFilePath: String = "$HEIGHTMAP_SHADER_PATH/$HEIGHTMAP_BITMAP_FILE"
+        val HeightMapGrassFilePath: String = "$HEIGHTMAP_SHADER_PATH/$HEIGHTMAP_GRASS_TEXTURE_FILE"
+        val HeightMapStoneFilePath: String = "$HEIGHTMAP_SHADER_PATH/$HEIGHTMAP_STONE_TEXTURE_FILE"
     }
 }
