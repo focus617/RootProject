@@ -61,7 +61,6 @@ class XGLRenderer2D(
     }
 
     override fun beginScene(camera: Camera) {
-
         XGLContext.checkGLError("before beginScene")
         with(Renderer2DData) {
             TextureShader.bind()
@@ -75,6 +74,7 @@ class XGLRenderer2D(
     }
 
     override fun endScene() {
+        // 将顶点数据注入VertexBuffer
         with(Renderer2DData) {
             QuadVertexBuffer.setData(
                 FloatBuffer.wrap(QuadVertexBufferBase),
