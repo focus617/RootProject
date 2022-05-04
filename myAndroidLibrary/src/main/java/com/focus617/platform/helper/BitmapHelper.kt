@@ -6,7 +6,6 @@ import timber.log.Timber
 import java.io.IOException
 
 object BitmapHelper {
-    val TAG = "BitmapHelper"
 
     /**
      * Loads a bitmap from a resource ID; throw exception if the load failed.
@@ -16,7 +15,7 @@ object BitmapHelper {
      * @return Bitmap
      */
     fun bitmapLoader(context: Context, resourceId: Int): Bitmap {
-        Timber.i("$TAG: load texture from resource: $resourceId")
+        Timber.i("load texture from resource: $resourceId")
 
         val options = BitmapFactory.Options()
         options.inScaled = false
@@ -26,7 +25,7 @@ object BitmapHelper {
             context.resources, resourceId, options
         )
         if (bitmap == null) {
-            Timber.e("$TAG: Resource ID $resourceId could not be decoded.")
+            Timber.e("Resource ID $resourceId could not be decoded.")
         }
         return bitmap
     }
@@ -39,7 +38,7 @@ object BitmapHelper {
      * @return Bitmap
      */
     fun bitmapLoader(context: Context, filePath: String): Bitmap{
-        Timber.i("$TAG: load bitmap from file: $filePath")
+        Timber.i("load bitmap from file: $filePath")
 
         var bitmap: Bitmap? = null
 
@@ -51,7 +50,7 @@ object BitmapHelper {
             // Read in the resource
             bitmap = BitmapFactory.decodeStream(inputStream)
             if (bitmap == null) {
-                Timber.e("$TAG: $filePath could not be decoded.")
+                Timber.e("$filePath could not be decoded.")
             }
         } catch (e: IOException) {
             throw RuntimeException("Could not open shader file: $filePath $ e")
