@@ -14,15 +14,6 @@ class TerrainLayer(name: String, private val scene: XGLScene, val is3D: Boolean)
     private val eventDispatcher = EventDispatcher()
 
     init {
-        val skyBox = SkyBox()
-        skyBox.onTransform3D(
-            Vector3(0.0f, 0.0f, 0.0f),
-            Vector3(100f, 100f, 100f)
-        )
-        skyBox.shaderName = XGLScene.SkyBoxShaderFilePath
-        skyBox.textureName = XGLScene.SkyBoxTextureFilePath
-        gameObjectList.add(skyBox)
-
         val heightmap = Heightmap(scene.context, XGLScene.HeightMapBitmapFilePath)
         // Expand the heightmap's dimensions, but don't expand the height as
         // much so that we don't get insanely tall mountains.
@@ -31,8 +22,17 @@ class TerrainLayer(name: String, private val scene: XGLScene, val is3D: Boolean)
             Vector3(100f, 50f, 100f)
         )
         heightmap.shaderName = XGLScene.HeightMapShaderFilePath
-        heightmap.textureName = ""
+        heightmap.textureName = XGLScene.HeightMapGrassFilePath
         gameObjectList.add(heightmap)
+
+        val skyBox = SkyBox()
+        skyBox.onTransform3D(
+            Vector3(0.0f, 0.0f, 0.0f),
+            Vector3(100f, 100f, 100f)
+        )
+        skyBox.shaderName = XGLScene.SkyBoxShaderFilePath
+        skyBox.textureName = XGLScene.SkyBoxTextureFilePath
+        gameObjectList.add(skyBox)
     }
 
     companion object {
