@@ -8,7 +8,6 @@ import android.opengl.GLES30.GL_RGBA8
 import android.opengl.GLES31
 import com.focus617.core.engine.renderer.Texture2D
 import com.focus617.platform.helper.BitmapHelper
-import com.focus617.platform.helper.TextureHelper
 import java.nio.Buffer
 import java.nio.ByteBuffer
 
@@ -149,7 +148,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, textureObjectId)
 
         //绑定纹理单元与sampler
-        GLES31.glBindSampler(0, TextureHelper.samplers[0])
+        //GLES31.glBindSampler(0, TextureHelper.samplers[0])
 
         // Set
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)

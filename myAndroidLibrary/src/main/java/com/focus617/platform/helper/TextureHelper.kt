@@ -88,7 +88,9 @@ object TextureHelper {
         GLUtils.texImage2D(GLES31.GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, cubeBitmaps[3], 0)
         GLUtils.texImage2D(GLES31.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, cubeBitmaps[4], 0)
         GLUtils.texImage2D(GLES31.GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, cubeBitmaps[5], 0)
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, 0)
+
+        //GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, 0)
+        GLES31.glBindTexture(GLES31.GL_TEXTURE_CUBE_MAP, 0)
 
         return textureObjectIdBuf[0]
     }
