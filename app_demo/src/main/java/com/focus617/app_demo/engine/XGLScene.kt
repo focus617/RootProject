@@ -1,11 +1,13 @@
 package com.focus617.app_demo.engine
 
 import android.content.Context
+import android.opengl.GLES31
 import com.focus617.app_demo.renderer.*
 import com.focus617.app_demo.terrain.Heightmap
 import com.focus617.app_demo.terrain.SkyBox
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.scene.*
+import com.focus617.platform.helper.TextureHelper
 
 class XGLScene(
     val context: Context,
@@ -48,10 +50,21 @@ class XGLScene(
         )
         mTextureLibrary.add(texture)
 
-        var texture2D = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapGrassFilePath)
-        mTextureLibrary.add(texture2D!!)
-        texture2D = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapStoneFilePath)
-        mTextureLibrary.add(texture2D!!)
+        val textureGrass = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapGrassFilePath)
+        textureGrass?.apply {
+            (textureGrass as XGLTexture2D).bind(1)
+            //绑定纹理单元与sampler
+            GLES31.glBindSampler(1, TextureHelper.samplers[0])
+        }
+        mTextureLibrary.add(textureGrass!!)
+
+        val textureStone = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapStoneFilePath)
+        textureStone?.apply {
+            (textureStone as XGLTexture2D).bind(2)
+            //绑定纹理单元与sampler
+            GLES31.glBindSampler(2, TextureHelper.samplers[0])
+        }
+        mTextureLibrary.add(textureStone!!)
     }
 
     private fun initGameObjects() {
