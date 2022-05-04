@@ -35,7 +35,7 @@ void main()
     float diffuse = max(dot(scaledNormal, u_VectorToLight), 0.0);
     v_Color *= diffuse;
 
-    float ambient = 0.1;
+    float ambient = 0.2;
     v_Color += ambient;
 
     //根据变换矩阵计算此次绘制此顶点位置

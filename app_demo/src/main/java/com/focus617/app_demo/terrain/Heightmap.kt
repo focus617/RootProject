@@ -36,10 +36,14 @@ class Heightmap(val context: Context, private val filePath: String) : DynamicCre
         val textureGrass = lib.get(HeightMapGrassFilePath) as XGLTexture2D
         textureGrass.bind(textureGrass.textureObjectId)
 
+        val textureStone = lib.get(HeightMapStoneFilePath) as XGLTexture2D
+        textureGrass.bind(textureStone.textureObjectId)
+
         shader.bind()
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
         shader.setFloat3(Light.U_VECTOR_TO_LIGHT, Light.vectorToLight)
         shader.setInt(U_TEXTURE_UNIT_1, textureGrass.textureObjectId)
+        shader.setInt(U_TEXTURE_UNIT_2, textureStone.textureObjectId)
 
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)
