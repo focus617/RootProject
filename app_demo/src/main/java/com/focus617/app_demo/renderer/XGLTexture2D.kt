@@ -103,7 +103,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
 
     override fun bind(slot: Int) {
         when (slot) {
-            0 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE0)
+            0 -> LOG.error("Slot 0 is occupied by Skybox's CubeMap!")
             1 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE1)
             2 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE2)
             3 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE3)
@@ -121,7 +121,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
             else -> GLES31.glActiveTexture(GLES31.GL_TEXTURE15)
         }
 
-        // Bind to the texture in OpenGL
+        // Bind this texture with above active texture
         GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, textureObjectId)
     }
 

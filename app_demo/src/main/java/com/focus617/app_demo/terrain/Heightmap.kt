@@ -37,17 +37,20 @@ class Heightmap(val context: Context, private val filePath: String) : DynamicCre
     }
 
     override fun submit(lib: TextureLibrary, shader: Shader) {
-        val textureGrass = lib.get(HeightMapGrassFilePath) as XGLTexture2D
-        textureGrass.bind(textureGrass.textureObjectId)
+        val textureGrass = lib.get(HeightMapGrassFilePath)
+        textureGrass?.apply {
+            (textureGrass as XGLTexture2D).bind(1)
+        }
+        shader.setInt(U_TEXTURE_UNIT_1,1)
 
-        val textureStone = lib.get(HeightMapStoneFilePath) as XGLTexture2D
-        textureGrass.bind(textureStone.textureObjectId)
+        val textureStone = lib.get(HeightMapStoneFilePath)
+        textureStone?.apply {
+            (textureStone as XGLTexture2D).bind(2)
+        }
+        shader.setInt(U_TEXTURE_UNIT_2, 2)
 
-        shader.bind()
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
         shader.setFloat3(Light.U_VECTOR_TO_LIGHT, Light.vectorToLight)
-        shader.setInt(U_TEXTURE_UNIT_1, textureGrass.textureObjectId)
-        shader.setInt(U_TEXTURE_UNIT_2, textureStone.textureObjectId)
 
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)

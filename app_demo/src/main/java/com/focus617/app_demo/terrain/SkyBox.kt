@@ -24,11 +24,10 @@ class SkyBox : Cube() {
 
     override fun submit(lib: TextureLibrary, shader: Shader) {
         val texture = lib.get(SkyBoxTextureFilePath) as XGLTextureCubeMap
-        texture.bind(texture.textureObjectId)
+        texture.bind(0)
+        shader.setInt(U_TEXTURE_UNIT, 0) // skybox always use slot 0
 
-        shader.bind()
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
-        shader.setInt(U_TEXTURE_UNIT, texture.textureObjectId)
 
         // This avoids problems with the skybox itself getting clipped.
         GLES31.glDepthFunc(GLES31.GL_LEQUAL)

@@ -1,7 +1,10 @@
 package com.focus617.app_demo.engine
 
 import android.content.Context
-import com.focus617.app_demo.renderer.*
+import com.focus617.app_demo.renderer.XGLShader
+import com.focus617.app_demo.renderer.XGLShaderBuilder
+import com.focus617.app_demo.renderer.XGLTextureCubeMap
+import com.focus617.app_demo.renderer.XGLVertexArray
 import com.focus617.app_demo.terrain.Heightmap
 import com.focus617.app_demo.terrain.SkyBox
 import com.focus617.core.engine.core.TimeStep
@@ -48,10 +51,10 @@ class XGLScene(
         )
         mTextureLibrary.add(texture)
 
-        var texture2D = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapGrassFilePath)
-        mTextureLibrary.add(texture2D!!)
-        texture2D = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapStoneFilePath)
-        mTextureLibrary.add(texture2D!!)
+//        var texture2D = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapGrassFilePath)
+//        mTextureLibrary.add(texture2D!!)
+//        texture2D = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapStoneFilePath)
+//        mTextureLibrary.add(texture2D!!)
     }
 
     private fun initGameObjects() {
