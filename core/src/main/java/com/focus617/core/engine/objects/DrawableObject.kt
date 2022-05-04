@@ -17,7 +17,10 @@ interface IfDrawable{
 
 abstract class DrawableObject : BaseEntity(), IfDrawable {
     val modelMatrix: FloatArray = FloatArray(16)
+
+    // vertexArray is initialized by Scene via calling XGLVertexArray.buildVertexArray
     lateinit var vertexArray: VertexArray
+    // shaderName should be initialized by each concrete drawable object itself
     lateinit var shaderName: String
 
     init {
