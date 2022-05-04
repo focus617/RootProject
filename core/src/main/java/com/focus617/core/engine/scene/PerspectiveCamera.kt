@@ -7,11 +7,8 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class PerspectiveCamera : Camera() {
-    private val target: Point3D = Point3D(0.0f, 0.0f, 0.0f)
-    private val worldUp = Vector3(0.0f, 1.0f, 0.0f)
-    private val defaultDistance: Float = 4.0F
-
     override var mPosition: Point3D = Point3D(0.0f, 0.0f, defaultDistance)
+    private val target: Point3D = Point3D(0.0f, 0.0f, 0.0f)
     private var mTargetDistance: Float = defaultDistance
 
     private var directionUp: Vector3 = worldUp
@@ -28,7 +25,7 @@ class PerspectiveCamera : Camera() {
     }
 
     // 相机位置不动，旋转directionUp
-    override fun setRotation(rollZInDegree: Float){
+    override fun setRotation(rollZInDegree: Float) {
         val angle: Float = rollZInDegree * (Math.PI / 180.0f).toFloat()
 
         directionUp.x = cos(angle)
@@ -55,6 +52,16 @@ class PerspectiveCamera : Camera() {
         reCalculateViewMatrix()
     }
 
+    fun setRotationNotWork(pitchXInDegree: Float = 0f, yawYInDegree: Float = 90f) {
+        val angleX: Float = pitchXInDegree * (Math.PI / 180.0f).toFloat()
+        val angleY: Float = yawYInDegree * (Math.PI / 180.0f).toFloat()
+
+        XMatrix.setIdentityM(mViewMatrix, 0)
+        XMatrix.rotateM(mViewMatrix, 0, angleX, 1f, 0f, 0f)
+        XMatrix.rotateM(mViewMatrix, 0, angleY, 0f, 1f, 0f)
+        XMatrix.translateM(mViewMatrix, 0, 0f, -1.5f, -5f)
+    }
+
     override fun reCalculateViewMatrix() {
         // 设置相机的位置，进而计算出视图矩阵 (View Matrix)
         XMatrix.setLookAtM(
@@ -63,5 +70,10 @@ class PerspectiveCamera : Camera() {
             target.x, target.y, target.z,
             directionUp.x, directionUp.y, directionUp.z
         )
+    }
+
+    companion object{
+        val worldUp = Vector3(0.0f, 1.0f, 0.0f)
+        const val defaultDistance: Float = 4.0F
     }
 }

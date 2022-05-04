@@ -31,6 +31,19 @@ object Renderer2DData : Closeable {
     val TextureSlots: Array<Texture2D?> = arrayOfNulls(MaxTextureSlots)
     var TextureSlotIndex: Int = 1        // 0 = white texture
 
+    fun getId(texture: Texture2D): Int {
+        for (i in 1 until TextureSlotIndex)
+            if (TextureSlots[i] == texture) {
+                return i
+            }
+
+        val newIndex = TextureSlotIndex
+        TextureSlots[TextureSlotIndex] = texture
+        TextureSlotIndex++
+
+        return newIndex
+    }
+
     override fun close() {
         QuadVertexBuffer.close()
         QuadVertexArray.close()

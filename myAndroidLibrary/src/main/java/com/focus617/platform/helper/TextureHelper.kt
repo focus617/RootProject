@@ -1,12 +1,9 @@
 package com.focus617.platform.helper
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.opengl.GLES31
 import android.opengl.GLUtils
 import timber.log.Timber
-import java.io.IOException
 
 object TextureHelper {
     val TAG = "TextureHelper"
@@ -42,97 +39,35 @@ object TextureHelper {
     }
 
     /**
-     * Loads a texture from a resource ID, returning the OpenGL ID for that
-     * texture. Returns 0 if the load failed.
-     *
-     * @param context
-     * @param resourceId
-     * @return
-     */
-    fun loadTextureFromResource(context: Context, resourceId: Int): Bitmap? {
-        Timber.i("${TAG}: load texture from resource: $resourceId")
-
-        var bitmap: Bitmap? = null
-        val options = BitmapFactory.Options()
-        options.inScaled = false
-
-        // Read in the resource
-        bitmap = BitmapFactory.decodeResource(
-            context.resources, resourceId, options
-        )
-        if (bitmap == null) {
-            Timber.e("$TAG: Resource ID $resourceId could not be decoded.")
-        }
-        return bitmap
-    }
-
-    /**
-     * Loads a texture from a file, returning the OpenGL ID for that
-     * texture. Returns 0 if the load failed.
-     *
-     * @param context
-     * @param filePath
-     * @return
-     */
-    fun loadTextureFromFile(context: Context, filePath: String): Bitmap? {
-        Timber.i("${TAG}: load texture from file: $filePath")
-
-        var bitmap: Bitmap? = null
-
-        val options = BitmapFactory.Options()
-        options.inScaled = false
-
-        try {
-            val inputStream = context.resources.assets.open(filePath)
-            // Read in the resource
-            bitmap = BitmapFactory.decodeStream(inputStream)
-            if (bitmap == null) {
-                Timber.e("$TAG: $filePath could not be decoded.")
-            }
-        } catch (e: IOException) {
-            throw RuntimeException("Could not open shader file: $filePath $ e")
-        }
-        return bitmap
-    }
-
-    //TODO: define XGLTexture3D class
-    var skyboxTexture: Int = 0
-
-    /**
      * Loads a cubemap texture from the provided resources and returns the
      * texture ID. Returns 0 if the load failed.
      *
      * @param context
-     * @param path
+     * @param cubeBitmaps
      * An array of texture file name corresponding to the cube map. Should be
      * provided in this order: left, right, bottom, top, front, back.
      * @return
      */
-    fun loadCubeMap(
-        context: Context,
-        path: String,
-        files: Array<String>
+    fun loadCubeMapIntoTexture(
+        textureObjectIdBuf: IntArray,
+        cubeBitmaps: Array<Bitmap?>
     ): Int {
-        val textureObjectIds = IntArray(1)
-        GLES31.glGenTextures(1, textureObjectIds, 0)
-        if (textureObjectIds[0] == 0) {
+        GLES31.glGenTextures(1, textureObjectIdBuf, 0)
+        if (textureObjectIdBuf[0] == 0) {
             Timber.w("$TAG: Could not generate a new OpenGL texture object.")
             return 0
         }
 
-        val cubeBitmaps = arrayOfNulls<Bitmap>(6)
-
         for (i in 0..5) {
-            cubeBitmaps[i] = loadTextureFromFile(context, "$path/${files[i]}")
             if (cubeBitmaps[i] == null) {
-                Timber.w("$TAG: Resource ID ${files[i]} could not be decoded.")
-                GLES31.glDeleteTextures(1, textureObjectIds, 0)
+                Timber.w("$TAG: No.$i Cube Bitmap is null.")
+                GLES31.glDeleteTextures(1, textureObjectIdBuf, 0)
                 return 0
             }
         }
 
         // Linear filtering for minification and magnification
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_CUBE_MAP, textureObjectIds[0])
+        GLES31.glBindTexture(GLES31.GL_TEXTURE_CUBE_MAP, textureObjectIdBuf[0])
         // 因为每个立方体贴图的纹理都总是从同一个视点被观察，不必使用MIP
         // 所以我们只使用常规的双线性过滤，也能节省纹理内存。
         GLES31.glTexParameteri(
@@ -153,13 +88,11 @@ object TextureHelper {
         GLUtils.texImage2D(GLES31.GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, cubeBitmaps[3], 0)
         GLUtils.texImage2D(GLES31.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, cubeBitmaps[4], 0)
         GLUtils.texImage2D(GLES31.GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, cubeBitmaps[5], 0)
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, 0)
 
-        for (bitmap in cubeBitmaps) {
-            bitmap!!.recycle()
-        }
+        //GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, 0)
+        GLES31.glBindTexture(GLES31.GL_TEXTURE_CUBE_MAP, 0)
 
-        return textureObjectIds[0]
+        return textureObjectIdBuf[0]
     }
 
     // 多重纹理(multitexturing)

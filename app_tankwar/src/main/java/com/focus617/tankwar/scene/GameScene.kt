@@ -88,41 +88,41 @@ class GameScene private constructor(val context: Context) : IfScene, IfRenderera
 
         private fun loadTankBitmap() = gameScene.apply {
             bitmapRepository[GameConstant.TANK_MINE] =
-                bitmapLoader(resource, R.drawable.ic_tank_good_up)
+                bitmapLoader(context, R.drawable.ic_tank_good_up)
             bitmapRepository[GameConstant.TANK_ENEMY_1] =
-                bitmapLoader(resource, R.drawable.ic_tank_enemy_1_up)
+                bitmapLoader(context, R.drawable.ic_tank_enemy_1_up)
             bitmapRepository[GameConstant.TANK_ENEMY_2] =
-                bitmapLoader(resource, R.drawable.ic_tank_enemy_2_up)
+                bitmapLoader(context, R.drawable.ic_tank_enemy_2_up)
         }
 
         private fun loadBulletBitmap() = gameScene.apply {
-            bitmapRepository[GameConstant.BULLET] = bitmapLoader(resource, R.drawable.ic_bullet_up)
+            bitmapRepository[GameConstant.BULLET] = bitmapLoader(context, R.drawable.ic_bullet_up)
         }
 
         private fun loadExplodesBitmap() = gameScene.apply {
-            bitmapRepository[GameConstant.EXPLODE_1] = bitmapLoader(resource, R.drawable.e1)
-            bitmapRepository[GameConstant.EXPLODE_2] = bitmapLoader(resource, R.drawable.e2)
-            bitmapRepository[GameConstant.EXPLODE_3] = bitmapLoader(resource, R.drawable.e3)
-            bitmapRepository[GameConstant.EXPLODE_4] = bitmapLoader(resource, R.drawable.e4)
-            bitmapRepository[GameConstant.EXPLODE_5] = bitmapLoader(resource, R.drawable.e5)
-            bitmapRepository[GameConstant.EXPLODE_6] = bitmapLoader(resource, R.drawable.e6)
-            bitmapRepository[GameConstant.EXPLODE_7] = bitmapLoader(resource, R.drawable.e7)
-            bitmapRepository[GameConstant.EXPLODE_8] = bitmapLoader(resource, R.drawable.e8)
-            bitmapRepository[GameConstant.EXPLODE_9] = bitmapLoader(resource, R.drawable.e9)
-            bitmapRepository[GameConstant.EXPLODE_10] = bitmapLoader(resource, R.drawable.e10)
-            bitmapRepository[GameConstant.EXPLODE_11] = bitmapLoader(resource, R.drawable.e11)
-            bitmapRepository[GameConstant.EXPLODE_12] = bitmapLoader(resource, R.drawable.e12)
-            bitmapRepository[GameConstant.EXPLODE_13] = bitmapLoader(resource, R.drawable.e13)
-            bitmapRepository[GameConstant.EXPLODE_14] = bitmapLoader(resource, R.drawable.e14)
-            bitmapRepository[GameConstant.EXPLODE_15] = bitmapLoader(resource, R.drawable.e15)
-            bitmapRepository[GameConstant.EXPLODE_16] = bitmapLoader(resource, R.drawable.e16)
+            bitmapRepository[GameConstant.EXPLODE_1] = bitmapLoader(context, R.drawable.e1)
+            bitmapRepository[GameConstant.EXPLODE_2] = bitmapLoader(context, R.drawable.e2)
+            bitmapRepository[GameConstant.EXPLODE_3] = bitmapLoader(context, R.drawable.e3)
+            bitmapRepository[GameConstant.EXPLODE_4] = bitmapLoader(context, R.drawable.e4)
+            bitmapRepository[GameConstant.EXPLODE_5] = bitmapLoader(context, R.drawable.e5)
+            bitmapRepository[GameConstant.EXPLODE_6] = bitmapLoader(context, R.drawable.e6)
+            bitmapRepository[GameConstant.EXPLODE_7] = bitmapLoader(context, R.drawable.e7)
+            bitmapRepository[GameConstant.EXPLODE_8] = bitmapLoader(context, R.drawable.e8)
+            bitmapRepository[GameConstant.EXPLODE_9] = bitmapLoader(context, R.drawable.e9)
+            bitmapRepository[GameConstant.EXPLODE_10] = bitmapLoader(context, R.drawable.e10)
+            bitmapRepository[GameConstant.EXPLODE_11] = bitmapLoader(context, R.drawable.e11)
+            bitmapRepository[GameConstant.EXPLODE_12] = bitmapLoader(context, R.drawable.e12)
+            bitmapRepository[GameConstant.EXPLODE_13] = bitmapLoader(context, R.drawable.e13)
+            bitmapRepository[GameConstant.EXPLODE_14] = bitmapLoader(context, R.drawable.e14)
+            bitmapRepository[GameConstant.EXPLODE_15] = bitmapLoader(context, R.drawable.e15)
+            bitmapRepository[GameConstant.EXPLODE_16] = bitmapLoader(context, R.drawable.e16)
         }
 
         private fun loadWallBitmap() = gameScene.apply {
             bitmapRepository[GameConstant.BRICK_WALL] =
-                bitmapLoader(resource, R.drawable.ic_brickwall)
+                bitmapLoader(context, R.drawable.ic_brickwall)
             bitmapRepository[GameConstant.STONE_WALL] =
-                bitmapLoader(resource, R.drawable.ic_stonewall)
+                bitmapLoader(context, R.drawable.ic_stonewall)
         }
 
         private fun loadTankFromProperties(key: String) {

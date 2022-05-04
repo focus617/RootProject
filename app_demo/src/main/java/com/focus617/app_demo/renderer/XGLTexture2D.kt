@@ -7,7 +7,7 @@ import android.opengl.GLES30
 import android.opengl.GLES30.GL_RGBA8
 import android.opengl.GLES31
 import com.focus617.core.engine.renderer.Texture2D
-import com.focus617.platform.helper.TextureHelper
+import com.focus617.platform.helper.BitmapHelper
 import java.nio.Buffer
 import java.nio.ByteBuffer
 
@@ -16,9 +16,9 @@ import java.nio.ByteBuffer
  * 1. 储存了纹理的基本属性 [mWidth] [mHeight]
  * 2. 它的构造器需要纹理的图片资源或文件
  */
-class XGLTexture2D private constructor() : Texture2D() {
+class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
     private val textureObjectIdBuf = IntArray(1)
-    private var textureObjectId: Int = 0
+    var textureObjectId: Int = 0
 
     private var mInternalFormat: Int = GL_RGBA8
     private var mDataFormat: Int = GL_RGBA
@@ -31,19 +31,19 @@ class XGLTexture2D private constructor() : Texture2D() {
         else textureObjectId == other.textureObjectId
 
     /** 基于Assets中的文件构造 */
-    constructor(context: Context, filePath: String) : this() {
-        val bitmap = TextureHelper.loadTextureFromFile(context, filePath)
-        bitmap?.apply { initTexture(bitmap) }
+    constructor(context: Context, filePath: String) : this(filePath) {
+        val bitmap = BitmapHelper.bitmapLoader(context, filePath)
+        initTexture(bitmap)
     }
 
     /** 基于Resource/raw中的文件构造 */
-    constructor(context: Context, resourceId: Int) : this() {
-        val bitmap = TextureHelper.loadTextureFromResource(context, resourceId)
-        bitmap?.apply { initTexture(bitmap) }
+    constructor(context: Context, resourceId: Int) : this("Resource/$resourceId") {
+        val bitmap = BitmapHelper.bitmapLoader(context, resourceId)
+        initTexture(bitmap)
     }
 
     /** 程序编程构造 */
-    constructor(width: Int, height: Int) : this() {
+    constructor(width: Int, height: Int) : this("Program/generated") {
         mWidth = width
         mHeight = height
 
@@ -102,7 +102,7 @@ class XGLTexture2D private constructor() : Texture2D() {
 
     override fun bind(slot: Int) {
         when (slot) {
-            0 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE0)
+            0 -> LOG.error("Slot 0 is occupied by Skybox's CubeMap!")
             1 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE1)
             2 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE2)
             3 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE3)
@@ -120,7 +120,7 @@ class XGLTexture2D private constructor() : Texture2D() {
             else -> GLES31.glActiveTexture(GLES31.GL_TEXTURE15)
         }
 
-        // Bind to the texture in OpenGL
+        // Bind this texture with above active texture
         GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, textureObjectId)
     }
 
@@ -146,9 +146,6 @@ class XGLTexture2D private constructor() : Texture2D() {
 
         // Bind to the texture in OpenGL
         GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, textureObjectId)
-
-        //绑定纹理单元与sampler
-        GLES31.glBindSampler(0, TextureHelper.samplers[0])
 
         // Set
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)

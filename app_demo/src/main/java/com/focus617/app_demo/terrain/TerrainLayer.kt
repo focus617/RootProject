@@ -1,18 +1,33 @@
-package com.focus617.app_demo.engine
+package com.focus617.app_demo.terrain
 
-import com.focus617.core.engine.core.Engine
+import com.focus617.app_demo.engine.XGLScene
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
+import com.focus617.core.engine.math.Vector3
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 import com.focus617.core.platform.event.base.EventType
-import com.focus617.core.platform.event.screenTouchEvents.*
+import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
 
-class GameLayer(name: String, val engine: Engine, val is3D: Boolean) : Layer(name) {
+class TerrainLayer(name: String, private val scene: XGLScene, val is3D: Boolean) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
 
     init {
-        registerEventHandlers()
+        val heightmap = Heightmap(scene.context, Heightmap.HeightMapBitmapFilePath)
+        // Expand the heightmap's dimensions, but don't expand the height as
+        // much so that we don't get insanely tall mountains.
+        heightmap.onTransform3D(
+            Vector3(0.0f, -0.05f, 0.0f),
+            Vector3(100f, 50f, 100f)
+        )
+        gameObjectList.add(heightmap)
+
+        val skyBox = SkyBox()
+        skyBox.onTransform3D(
+            Vector3(0.0f, 0.0f, 0.0f),
+            Vector3(100f, 100f, 100f)
+        )
+        gameObjectList.add(skyBox)
     }
 
     override fun onAttach() {
@@ -26,13 +41,7 @@ class GameLayer(name: String, val engine: Engine, val is3D: Boolean) : Layer(nam
     }
 
     override fun onUpdate(timeStep: TimeStep) {
-        engine.mWindow?.mRenderer?.apply {
-            // Update Camera
-            mCameraController.onUpdate(timeStep)
-
-            // Render UI
-            engine.mWindow!!.onUpdate()
-        }
+        //LOG.info("${this.mDebugName} onUpdate")
     }
 
     override fun onEvent(event: Event): Boolean {
@@ -44,39 +53,35 @@ class GameLayer(name: String, val engine: Engine, val is3D: Boolean) : Layer(nam
         eventDispatcher.close()
     }
 
+    // 处理各种触屏事件，例如可能引起相机位置变化的事件
     private fun registerEventHandlers() {
-
         eventDispatcher.register(EventType.TouchDrag) { event ->
             val e: TouchDragEvent = event as TouchDragEvent
-//                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
+            LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
 //                LOG.info("It's type is ${e.eventType}")
 //                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
 //                LOG.info("Current position is (${e.x}, ${e.y})\n")
-            val hasConsumed = engine.mWindow?.mRenderer?.mCameraController?.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.TouchPress) { event ->
-            val e: TouchPressEvent = event as TouchPressEvent
-            val hasConsumed = engine.mWindow?.mRenderer?.mCameraController?.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchStart) { event ->
-            val e: PinchStartEvent = event as PinchStartEvent
-            val hasConsumed = engine.mWindow?.mRenderer?.mCameraController?.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchEnd) { event ->
-            val e: PinchEndEvent = event as PinchEndEvent
-            val hasConsumed = engine.mWindow?.mRenderer?.mCameraController?.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.Pinch) { event ->
-            val e: PinchEvent = event as PinchEvent
-            val hasConsumed = engine.mWindow?.mRenderer?.mCameraController?.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
     }
@@ -88,5 +93,6 @@ class GameLayer(name: String, val engine: Engine, val is3D: Boolean) : Layer(nam
         eventDispatcher.unRegister(EventType.PinchEnd)
         eventDispatcher.unRegister(EventType.Pinch)
     }
+
 
 }

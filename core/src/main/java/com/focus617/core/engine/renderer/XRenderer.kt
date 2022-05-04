@@ -1,18 +1,11 @@
 package com.focus617.core.engine.renderer
 
 import com.focus617.core.engine.scene.Camera
-import com.focus617.core.engine.scene.CameraController
 import com.focus617.core.platform.base.BaseEntity
-import java.io.Closeable
 
-abstract class XRenderer : BaseEntity(), Closeable {
-    abstract val mCameraController: CameraController
+abstract class XRenderer : BaseEntity() {
 
     fun getAPI(): RendererAPI.API = RendererAPI.getAPI()
-
-    open fun initRenderer() {
-        RenderCommand.init()
-    }
 
     open fun beginScene(camera: Camera) {
         // 在多线程渲染里，会把BeginScene函数放在RenderCommandQueue里执行

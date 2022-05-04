@@ -38,7 +38,7 @@ class OrthographicCameraController(private val mCamera: OrthographicCamera) : Ca
         mCamera.setPosition(position)
     }
 
-    fun setPosition(x: Float, y: Float, z: Float) {
+    override fun setPosition(x: Float, y: Float, z: Float) {
         mCamera.setPosition(Point3D(x, y, z))
     }
 
@@ -48,7 +48,7 @@ class OrthographicCameraController(private val mCamera: OrthographicCamera) : Ca
         }
     }
 
-    fun onWindowSizeChange(width: Int, height: Int) {
+    override fun onWindowSizeChange(width: Int, height: Int) {
         mWidth = width
         mHeight = height
         reCalculateOrthoGraphicProjectionMatrix()

@@ -13,10 +13,10 @@ open class Engine : BaseEntity(), Runnable {
 
     var mWindow: IfWindow? = null
 
-    private val mLayerStack: LayerStack = LayerStack()
-    private val mOverlayStack: LayerStack = LayerStack()
+    protected val mLayerStack: LayerStack = LayerStack()
+    protected val mOverlayStack: LayerStack = LayerStack()
 
-    private val eventDispatcher = EventDispatcher()
+    protected val eventDispatcher = EventDispatcher()
 
     init {
         threadCore = Thread(this)
@@ -74,17 +74,22 @@ open class Engine : BaseEntity(), Runnable {
             val timeStep: TimeStep = TimeStep(time - mLastFrameTime)
             mLastFrameTime = time
 
-            // Update data
+            // Update global data, such as scene
+            this.onUpdate(timeStep)
+
+            // Update game objects in each layer
             for (layer in mLayerStack.mLayers) {
                 layer.onUpdate(timeStep)
             }
 
-            // 如果Window处于onDetach状态时，不再更新UI Overlay
+            // 如果Window处于onDetach状态时，不再更新Overlay
             mWindow?.apply {
                 for (layer in mOverlayStack.mLayers) {
                     layer.onUpdate(timeStep)
                 }
             }
+            // 通知Renderer绘制UI
+            mWindow?.onUpdate()
 
             //通过线程休眠以控制刷新速度
             try {
@@ -94,6 +99,9 @@ open class Engine : BaseEntity(), Runnable {
             }
         }
     }
+
+    // Used for updating the global resource, such as objects in scene
+    open fun onUpdate(timeStep: TimeStep){ }
 
     fun pushLayer(layer: Layer) {
         mLayerStack.PushLayer(layer)

@@ -1,12 +1,62 @@
 package com.focus617.platform.helper
 
-import android.content.res.Resources
+import android.content.Context
 import android.graphics.*
+import timber.log.Timber
+import java.io.IOException
 
 object BitmapHelper {
 
-    fun bitmapLoader(resource: Resources, resourceId: Int): Bitmap =
-        BitmapFactory.decodeResource(resource, resourceId)
+    /**
+     * Loads a bitmap from a resource ID; throw exception if the load failed.
+     *
+     * @param context
+     * @param resourceId
+     * @return Bitmap
+     */
+    fun bitmapLoader(context: Context, resourceId: Int): Bitmap {
+        Timber.i("load texture from resource: $resourceId")
+
+        val options = BitmapFactory.Options()
+        options.inScaled = false
+
+        // Read in the resource
+        val bitmap = BitmapFactory.decodeResource(
+            context.resources, resourceId, options
+        )
+        if (bitmap == null) {
+            Timber.e("Resource ID $resourceId could not be decoded.")
+        }
+        return bitmap
+    }
+
+    /**
+     * Loads a bitmap from a file; throw exception if the load failed.
+     *
+     * @param context
+     * @param filePath
+     * @return Bitmap
+     */
+    fun bitmapLoader(context: Context, filePath: String): Bitmap{
+        Timber.i("load bitmap from file: $filePath")
+
+        var bitmap: Bitmap? = null
+
+        val options = BitmapFactory.Options()
+        options.inScaled = false
+
+        try {
+            val inputStream = context.resources.assets.open(filePath)
+            // Read in the resource
+            bitmap = BitmapFactory.decodeStream(inputStream)
+            if (bitmap == null) {
+                Timber.e("$filePath could not be decoded.")
+            }
+        } catch (e: IOException) {
+            throw RuntimeException("Could not open shader file: $filePath $ e")
+        }
+        return bitmap
+    }
 
     //Bitmap,degrees: 待旋转的图片和角度
     fun Bitmap.rotate(degrees: Float): Bitmap {

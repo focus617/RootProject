@@ -13,7 +13,6 @@ import com.focus617.core.engine.core.WindowProps
 import com.focus617.core.engine.renderer.IfGraphicsContext
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.XRenderer
-import com.focus617.core.engine.scene.Scene
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventHandler
 import java.io.Closeable
@@ -55,7 +54,6 @@ class AndroidWindow private constructor(
     }
 
     override fun close() {
-        renderer.close()
         instance = null
     }
 
@@ -74,7 +72,7 @@ class AndroidWindow private constructor(
 
         fun createWindow(
             context: Context,
-            scene: Scene,
+            engine: Sandbox,
             props: WindowProps = WindowProps()
         ): AndroidWindow =
             synchronized(this) {
@@ -84,7 +82,7 @@ class AndroidWindow private constructor(
                     initRendererCommand()
                     initView(
                         (context as GameActivity).isES3Supported(),
-                        scene
+                        engine
                     )
                     setOnTouchListener(instance!!)
 
@@ -106,7 +104,7 @@ class AndroidWindow private constructor(
             RenderCommand.sRendererAPI = XGLRendererAPI()
         }
 
-        private fun initView(isES3Supported: Boolean, scene: Scene) {
+        private fun initView(isES3Supported: Boolean, engine: Sandbox) {
             with(instance!!) {
                 // 初始化Renderer Context
                 (mRenderContext as XGLContext).isES3Supported = isES3Supported
@@ -114,8 +112,8 @@ class AndroidWindow private constructor(
 
                 // 创建并设置渲染器（Renderer）以在GLSurfaceView上绘制
                 renderer =
-                    if(scene.is3D) XGLRenderer3D(instance!!.context, scene)
-                    else XGLRenderer2D(instance!!.context, scene)
+                    if(engine.is3D) XGLRenderer3D(engine.scene)
+                    else XGLRenderer2D(instance!!.context, engine.scene)
 
                 setRenderer(renderer as Renderer)
                 mRenderer = renderer

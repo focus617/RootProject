@@ -6,7 +6,7 @@ import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.ShaderDataType
 
 
-class Cube : DrawableObject() {
+open class Cube : DrawableObject() {
 
     override fun getVertices(): FloatArray = floatArrayOf(
         // 立方体的顶点有4个属性:位置、法线和纹理坐标
