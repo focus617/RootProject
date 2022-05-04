@@ -19,7 +19,6 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
     val modelMatrix: FloatArray = FloatArray(16)
     lateinit var vertexArray: VertexArray
     lateinit var shaderName: String
-    lateinit var textureName: String
 
     init {
         resetTransform()
@@ -32,11 +31,6 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
     override fun submit(lib: TextureLibrary, shader: Shader) {
         shader.bind()
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
-
-        val texture = lib.get(textureName)
-        texture?.apply {
-            texture.bind()
-        }
 
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)

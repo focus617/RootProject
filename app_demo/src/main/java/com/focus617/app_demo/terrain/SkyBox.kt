@@ -10,12 +10,18 @@ import com.focus617.core.engine.renderer.TextureLibrary
 class SkyBox : Cube() {
 
     companion object{
+        val SKYBOX_SHADER_PATH = "SkyBox"
+        private val SKYBOX_SHADER_FILE = "SkyBox.glsl"
+
+        val SkyBoxShaderFilePath: String = "$SKYBOX_SHADER_PATH/$SKYBOX_SHADER_FILE"
+        val SkyBoxTextureFilePath: String = "$SKYBOX_SHADER_PATH/SkyBox"
+
         const val U_TEXTURE_UNIT = "u_TextureUnit"
     }
 
     override fun submit(lib: TextureLibrary, shader: Shader) {
-        val texture = lib.get(textureName) as XGLTextureCubeMap
-        texture.bind()
+        val texture = lib.get(SkyBoxTextureFilePath) as XGLTextureCubeMap
+        texture.bind(texture.textureObjectId)
 
         shader.bind()
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)

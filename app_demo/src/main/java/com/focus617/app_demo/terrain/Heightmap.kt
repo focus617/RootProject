@@ -17,18 +17,29 @@ class Heightmap(val context: Context, private val filePath: String) : DynamicCre
     private var numElements: Int = 0
 
     companion object {
+        private val HEIGHTMAP_SHADER_PATH = "HeightMap"
+        private val HEIGHTMAP_SHADER_FILE = "heightmap.glsl"
+        private val HEIGHTMAP_BITMAP_FILE = "heightmap.png"
+        private val HEIGHTMAP_GRASS_TEXTURE_FILE = "noisy_grass_public_domain.png"
+        private val HEIGHTMAP_STONE_TEXTURE_FILE = "stone_public_domain.png"
+
+        val HeightMapShaderFilePath: String = "$HEIGHTMAP_SHADER_PATH/$HEIGHTMAP_SHADER_FILE"
+        val HeightMapBitmapFilePath: String = "$HEIGHTMAP_SHADER_PATH/$HEIGHTMAP_BITMAP_FILE"
+        val HeightMapGrassFilePath: String = "$HEIGHTMAP_SHADER_PATH/$HEIGHTMAP_GRASS_TEXTURE_FILE"
+        val HeightMapStoneFilePath: String = "$HEIGHTMAP_SHADER_PATH/$HEIGHTMAP_STONE_TEXTURE_FILE"
+
         const val U_TEXTURE_UNIT_1 = "u_TextureUnit1"
         const val U_TEXTURE_UNIT_2 = "u_TextureUnit2"
     }
 
     override fun submit(lib: TextureLibrary, shader: Shader) {
-        val texture = lib.get(textureName) as XGLTexture2D
-        texture.bind()
+        val textureGrass = lib.get(HeightMapGrassFilePath) as XGLTexture2D
+        textureGrass.bind(textureGrass.textureObjectId)
 
         shader.bind()
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
         shader.setFloat3(Light.U_VECTOR_TO_LIGHT, Light.vectorToLight)
-        shader.setInt(U_TEXTURE_UNIT_1, texture.textureObjectId)
+        shader.setInt(U_TEXTURE_UNIT_1, textureGrass.textureObjectId)
 
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)
