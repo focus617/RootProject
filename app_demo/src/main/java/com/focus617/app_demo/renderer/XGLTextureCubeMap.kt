@@ -11,7 +11,7 @@ import java.nio.Buffer
 
 class XGLTextureCubeMap private constructor(filePath: String) : Texture(filePath) {
     private val textureObjectIdBuf = IntArray(1)
-    private var textureObjectId: Int = 0
+    var textureObjectId: Int = 0
 
     override var mWidth: Int = 0
     override var mHeight: Int = 0
