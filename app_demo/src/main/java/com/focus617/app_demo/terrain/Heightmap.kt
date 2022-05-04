@@ -2,6 +2,7 @@ package com.focus617.app_demo.terrain
 
 import android.content.Context
 import android.graphics.Color
+import com.focus617.app_demo.renderer.XGLTexture2D
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.objects.DynamicCreationObject
@@ -15,10 +16,19 @@ class Heightmap(val context: Context, private val filePath: String) : DynamicCre
     private var height: Int = 0
     private var numElements: Int = 0
 
-    override fun submit(shader: Shader) {
+    companion object {
+        const val U_TEXTURE_UNIT_1 = "u_TextureUnit1"
+        const val U_TEXTURE_UNIT_2 = "u_TextureUnit2"
+    }
+
+    override fun submit(lib: TextureLibrary, shader: Shader) {
+        val texture = lib.get(textureName) as XGLTexture2D
+        texture.bind()
+
         shader.bind()
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
         shader.setFloat3(Light.U_VECTOR_TO_LIGHT, Light.vectorToLight)
+        shader.setInt(U_TEXTURE_UNIT_1, texture.textureObjectId)
 
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)
@@ -38,7 +48,7 @@ class Heightmap(val context: Context, private val filePath: String) : DynamicCre
         bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
         bitmap.recycle()
 
-        LOG.info("Terrain Map width:${width},  height:${height})")
+        LOG.info("Terrain Map (width=${width},  height=${height})")
         if (width * height > 65536) {
             throw RuntimeException("Heightmap is too large for the index buffer.")
         }
