@@ -14,12 +14,14 @@ import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.objects.d2.Quad
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Texture2D
+import com.focus617.core.engine.renderer.TextureSlots
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene.Camera
 import java.io.Closeable
 import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
+import kotlin.properties.Delegates
 
 class XGLRenderer2D(
     private val context: Context,
@@ -38,12 +40,13 @@ class XGLRenderer2D(
         initLocalVertexArrayForTestPurpose()
     }
 
+    var textureId by Delegates.notNull<Int>()
     private fun initTextureForScene() {
         val texture = XGLTextureBuilder.createTexture(
             context,
             "$PATH/$TEXTURE_FILE"
         )!!
-        scene.mTextureLibrary.add(texture)
+        textureId = TextureSlots.getId(texture)
     }
 
     override fun close() {
@@ -129,7 +132,7 @@ class XGLRenderer2D(
         drawQuad(
             Vector3(-1.5f, -1.5f, -0.1f),
             Vector2(2f, 2f),
-            scene.mTextureLibrary.get(objectTextureName)!! as Texture2D,
+            Renderer2DData.TextureSlots[textureIndex] as Texture2D,
             10f
         )
 
@@ -342,6 +345,7 @@ class XGLRenderer2D(
         private val TEXTURE_FILE = "Checkerboard.png"
 
         val objectTextureName = "$PATH/$TEXTURE_FILE"
+        var textureIndex by Delegates.notNull<Int>()
 
 
         lateinit var localVertexArray: XGLVertexArray

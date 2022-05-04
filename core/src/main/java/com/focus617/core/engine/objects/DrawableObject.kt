@@ -3,7 +3,10 @@ package com.focus617.core.engine.objects
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.XMatrix
-import com.focus617.core.engine.renderer.*
+import com.focus617.core.engine.renderer.BufferLayout
+import com.focus617.core.engine.renderer.RenderCommand
+import com.focus617.core.engine.renderer.Shader
+import com.focus617.core.engine.renderer.VertexArray
 import com.focus617.core.platform.base.BaseEntity
 
 interface IfDrawable{
@@ -12,7 +15,7 @@ interface IfDrawable{
     abstract fun getVertices(): FloatArray
     abstract fun getLayout(): BufferLayout
     abstract fun getIndices(): ShortArray
-    abstract fun submit(lib: TextureLibrary, shader: Shader)
+    abstract fun submit(shader: Shader)
 }
 
 abstract class DrawableObject : BaseEntity(), IfDrawable {
@@ -31,7 +34,7 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
         const val U_MODEL_MATRIX = "u_ModelMatrix"
     }
 
-    override fun submit(lib: TextureLibrary, shader: Shader) {
+    override fun submit(shader: Shader) {
         shader.bind()
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
 

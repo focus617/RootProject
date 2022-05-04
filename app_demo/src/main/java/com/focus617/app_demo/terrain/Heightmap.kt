@@ -2,7 +2,6 @@ package com.focus617.app_demo.terrain
 
 import android.content.Context
 import android.graphics.Color
-import com.focus617.app_demo.renderer.XGLTexture2D
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.objects.DynamicCreationObject
@@ -10,6 +9,7 @@ import com.focus617.core.engine.objects.GeneratedData
 import com.focus617.core.engine.renderer.*
 import com.focus617.core.engine.scene.Light
 import com.focus617.platform.helper.BitmapHelper
+import kotlin.properties.Delegates
 
 class Heightmap(val context: Context, private val filePath: String) : DynamicCreationObject() {
     private var width: Int = 0
@@ -34,21 +34,14 @@ class Heightmap(val context: Context, private val filePath: String) : DynamicCre
 
         const val U_TEXTURE_UNIT_1 = "u_TextureUnit1"
         const val U_TEXTURE_UNIT_2 = "u_TextureUnit2"
+
+        var textureIndexGrass by Delegates.notNull<Int>()
+        var textureIndexStone by Delegates.notNull<Int>()
     }
 
-    override fun submit(lib: TextureLibrary, shader: Shader) {
-        val textureGrass = lib.get(HeightMapGrassFilePath)
-        textureGrass?.apply {
-            (textureGrass as XGLTexture2D).bind(1)
-        }
-        shader.setInt(U_TEXTURE_UNIT_1, 1)
-
-        val textureStone = lib.get(HeightMapStoneFilePath)
-        textureStone?.apply {
-            (textureStone as XGLTexture2D).bind(2)
-        }
-        shader.setInt(U_TEXTURE_UNIT_2, 2)
-
+    override fun submit(shader: Shader) {
+        shader.setInt(U_TEXTURE_UNIT_1, textureIndexGrass)
+        shader.setInt(U_TEXTURE_UNIT_2, textureIndexStone)
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
         shader.setFloat3(Light.U_VECTOR_TO_LIGHT, Light.vectorToLight)
 

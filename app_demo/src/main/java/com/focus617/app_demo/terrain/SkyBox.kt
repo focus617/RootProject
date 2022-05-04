@@ -1,11 +1,9 @@
 package com.focus617.app_demo.terrain
 
 import android.opengl.GLES31
-import com.focus617.app_demo.renderer.XGLTextureCubeMap
 import com.focus617.core.engine.objects.d3.Cube
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Shader
-import com.focus617.core.engine.renderer.TextureLibrary
 
 class SkyBox : Cube() {
     init {
@@ -20,13 +18,11 @@ class SkyBox : Cube() {
         val SkyBoxTextureFilePath: String = "$SKYBOX_SHADER_PATH/SkyBox"
 
         const val U_TEXTURE_UNIT = "u_TextureUnit"
+        const val textureIndexCubeMap = 0 // skybox always use slot 0
     }
 
-    override fun submit(lib: TextureLibrary, shader: Shader) {
-        val texture = lib.get(SkyBoxTextureFilePath) as XGLTextureCubeMap
-        texture.bind(0)
-        shader.setInt(U_TEXTURE_UNIT, 0) // skybox always use slot 0
-
+    override fun submit(shader: Shader) {
+        shader.setInt(U_TEXTURE_UNIT, textureIndexCubeMap)
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
 
         // This avoids problems with the skybox itself getting clipped.

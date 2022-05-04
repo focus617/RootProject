@@ -10,10 +10,6 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer3D(private val scene: XGLScene) : XRenderer(), GLSurfaceView.Renderer {
-    val MaxTextureSlots: Int = 16   //TODO: RenderCaps
-
-    val TextureSlots: Array<Texture2D?> = arrayOfNulls(MaxTextureSlots)
-    var TextureSlotIndex: Int = 1        // 0 = skybox's CubeMap texture
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         // 打印OpenGL Version，Vendor，etc
@@ -48,6 +44,8 @@ class XGLRenderer3D(private val scene: XGLScene) : XRenderer(), GLSurfaceView.Re
 
         beginScene(scene.mCamera)
 
+        TextureSlots.flush()
+
         val layerStack = scene.engine.getLayerStack()
         for (layer in layerStack.mLayers)
             for (gameObject in layer.gameObjectList) {
@@ -62,7 +60,7 @@ class XGLRenderer3D(private val scene: XGLScene) : XRenderer(), GLSurfaceView.Re
                     setMat4(Camera.U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
                     setMat4(Camera.U_VIEW_MATRIX, SceneData.sViewMatrix)
 
-                    gameObject.submit(scene.mTextureLibrary, shader)
+                    gameObject.submit(shader)
                 }
             }
 
