@@ -21,7 +21,6 @@ class TerrainLayer(name: String, private val scene: XGLScene, val is3D: Boolean)
             Vector3(0.0f, -0.05f, 0.0f),
             Vector3(100f, 50f, 100f)
         )
-        heightmap.shaderName = Heightmap.HeightMapShaderFilePath
         gameObjectList.add(heightmap)
 
         val skyBox = SkyBox()
@@ -29,12 +28,7 @@ class TerrainLayer(name: String, private val scene: XGLScene, val is3D: Boolean)
             Vector3(0.0f, 0.0f, 0.0f),
             Vector3(100f, 100f, 100f)
         )
-        skyBox.shaderName = SkyBox.SkyBoxShaderFilePath
         gameObjectList.add(skyBox)
-    }
-
-    companion object {
-
     }
 
     override fun onAttach() {

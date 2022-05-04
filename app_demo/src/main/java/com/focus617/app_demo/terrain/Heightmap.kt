@@ -16,6 +16,10 @@ class Heightmap(val context: Context, private val filePath: String) : DynamicCre
     private var height: Int = 0
     private var numElements: Int = 0
 
+    init {
+        shaderName = HeightMapShaderFilePath
+    }
+
     companion object {
         private val HEIGHTMAP_SHADER_PATH = "HeightMap"
         private val HEIGHTMAP_SHADER_FILE = "heightmap.glsl"

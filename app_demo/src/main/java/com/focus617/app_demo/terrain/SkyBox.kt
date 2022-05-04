@@ -8,6 +8,9 @@ import com.focus617.core.engine.renderer.Shader
 import com.focus617.core.engine.renderer.TextureLibrary
 
 class SkyBox : Cube() {
+    init {
+        shaderName = SkyBoxShaderFilePath
+    }
 
     companion object{
         val SKYBOX_SHADER_PATH = "SkyBox"
