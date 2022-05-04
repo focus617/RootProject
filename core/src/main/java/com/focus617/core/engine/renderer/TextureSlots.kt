@@ -4,7 +4,7 @@ import com.focus617.mylib.logging.WithLogging
 import java.io.Closeable
 
 object TextureSlots : WithLogging(), Closeable {
-    val MaxTextureSlots: Int = 16   //TODO: RenderCaps
+    private const val MaxTextureSlots: Int = 16   //TODO: RenderCaps
 
     val TextureSlots: Array<Texture?> = arrayOfNulls(MaxTextureSlots)
     var TextureSlotIndex: Int = 1        // 0 = skybox's CubeMap texture
@@ -26,9 +26,15 @@ object TextureSlots : WithLogging(), Closeable {
             }
 
         val newIndex = TextureSlotIndex
-        TextureSlots[TextureSlotIndex] = texture
-        TextureSlotIndex++
-
-        return newIndex
+        if(newIndex< MaxTextureSlots) {
+            TextureSlots[TextureSlotIndex] = texture
+            TextureSlotIndex++
+            return newIndex
+        }
+        else{
+            val str = "Texture already reached to Max Texture Slot!"
+            LOG.error(str)
+            throw IllegalMonitorStateException(str)
+        }
     }
 }

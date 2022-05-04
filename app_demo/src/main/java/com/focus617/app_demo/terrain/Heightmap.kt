@@ -81,11 +81,11 @@ class Heightmap(val context: Context, private val filePath: String) : DynamicCre
         val vertices: FloatArray = loadBitmapData(pixels, verticesLayout.getStride())
         val indices: ShortArray = createIndexData()
 
-        LOG.debug("vertices(size=${vertices.size})")
-        for (i in 0..11) LOG.debug("$i : ${vertices[i]}")
-
-        LOG.debug("indices(size=${indices.size})")
-        for (i in 0..11) LOG.debug("$i : ${indices[i]}")
+//        LOG.debug("vertices(size=${vertices.size})")
+//        for (i in 0..11) LOG.debug("$i : ${vertices[i]}")
+//
+//        LOG.debug("indices(size=${indices.size})")
+//        for (i in 0..11) LOG.debug("$i : ${indices[i]}")
 
         buildData = GeneratedData(width * height, vertices, verticesLayout, indices)
     }

@@ -1,14 +1,13 @@
-package com.focus617.app_demo.engine
+package com.focus617.app_demo.terrain
 
-import com.focus617.app_demo.terrain.Heightmap
-import com.focus617.app_demo.terrain.SkyBox
+import com.focus617.app_demo.engine.XGLScene
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 import com.focus617.core.platform.event.base.EventType
-import com.focus617.core.platform.event.screenTouchEvents.*
+import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
 
 class TerrainLayer(name: String, private val scene: XGLScene, val is3D: Boolean) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
@@ -46,7 +45,6 @@ class TerrainLayer(name: String, private val scene: XGLScene, val is3D: Boolean)
     }
 
     override fun onEvent(event: Event): Boolean {
-        LOG.info("${this.mDebugName} onEvent")
         return eventDispatcher.dispatch(event)
     }
 
@@ -59,7 +57,7 @@ class TerrainLayer(name: String, private val scene: XGLScene, val is3D: Boolean)
     private fun registerEventHandlers() {
         eventDispatcher.register(EventType.TouchDrag) { event ->
             val e: TouchDragEvent = event as TouchDragEvent
-//                LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
+            LOG.info("${this.mDebugName}: ${e.name} from ${e.source} received")
 //                LOG.info("It's type is ${e.eventType}")
 //                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
 //                LOG.info("Current position is (${e.x}, ${e.y})\n")
@@ -68,25 +66,21 @@ class TerrainLayer(name: String, private val scene: XGLScene, val is3D: Boolean)
         }
 
         eventDispatcher.register(EventType.TouchPress) { event ->
-            val e: TouchPressEvent = event as TouchPressEvent
             val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchStart) { event ->
-            val e: PinchStartEvent = event as PinchStartEvent
             val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchEnd) { event ->
-            val e: PinchEndEvent = event as PinchEndEvent
             val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.Pinch) { event ->
-            val e: PinchEvent = event as PinchEvent
             val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
