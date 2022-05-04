@@ -41,7 +41,7 @@ class Heightmap(val context: Context, private val filePath: String) : DynamicCre
         textureGrass?.apply {
             (textureGrass as XGLTexture2D).bind(1)
         }
-        shader.setInt(U_TEXTURE_UNIT_1,1)
+        shader.setInt(U_TEXTURE_UNIT_1, 1)
 
         val textureStone = lib.get(HeightMapStoneFilePath)
         textureStone?.apply {
