@@ -1,26 +1,23 @@
-package com.focus617.app_demo.engine
+package com.focus617.app_demo.engine.d3
 
 import android.content.Context
 import android.opengl.GLES31
+import com.focus617.app_demo.engine.Sandbox
 import com.focus617.app_demo.renderer.*
 import com.focus617.app_demo.terrain.Heightmap
 import com.focus617.app_demo.terrain.SkyBox
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.renderer.TextureSlots
-import com.focus617.core.engine.scene.*
+import com.focus617.core.engine.scene.PerspectiveCamera
+import com.focus617.core.engine.scene.PerspectiveCameraController
+import com.focus617.core.engine.scene.Scene
 import com.focus617.platform.helper.TextureHelper
 
-class XGLScene(
-    val context: Context,
-    val engine: Sandbox,
-    is3D: Boolean
-) : Scene() {
+class XGLScene3D(val context: Context, val engine: Sandbox) : Scene() {
 
     init {
-        mCamera = if (is3D) PerspectiveCamera() else OrthographicCamera()
-        mCameraController =
-            if (is3D) PerspectiveCameraController(mCamera as PerspectiveCamera)
-            else OrthographicCameraController(mCamera as OrthographicCamera)
+        mCamera = PerspectiveCamera()
+        mCameraController =PerspectiveCameraController(mCamera as PerspectiveCamera)
     }
 
     fun initOpenGlResource() {

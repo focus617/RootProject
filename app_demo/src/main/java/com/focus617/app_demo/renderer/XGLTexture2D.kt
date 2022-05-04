@@ -102,7 +102,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
 
     override fun bind(slot: Int) {
         when (slot) {
-            0 -> LOG.error("Slot 0 is occupied by Skybox's CubeMap!")
+            0 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE0)
             1 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE1)
             2 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE2)
             3 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE3)
