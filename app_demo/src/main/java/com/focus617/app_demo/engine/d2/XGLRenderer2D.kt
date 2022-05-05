@@ -295,7 +295,7 @@ class XGLRenderer2D(
             rotationInDegree: Float,
             texture: Texture2D,
             tilingFactor: Float = 1.0f,
-            tintColor: Vector4 = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
+            tintColor: Vector4 = Renderer2DData.WHITE
         ) {
             drawRotatedQuad(
                 Vector3(position.x, position.y, 0.0f),
