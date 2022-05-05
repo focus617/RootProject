@@ -53,6 +53,7 @@ object Renderer2DData : Closeable {
         initShader(context)
         initVertexArray()
         initTexture()
+        stats.resetStats()
         initialized = true
     }
 

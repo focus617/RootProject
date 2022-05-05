@@ -73,7 +73,10 @@ class GameLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean) 
         XGLTextureSlots.TextureSlotIndex = 1
     }
 
-    fun endScene() {}
+    fun endScene() {
+        LOG.info("Statistic: drawCalls=${Renderer2DData.stats.drawCalls}," +
+                " quadCount=${Renderer2DData.stats.quadCount}")
+    }
 
     override fun onEvent(event: Event): Boolean {
         return eventDispatcher.dispatch(event)
