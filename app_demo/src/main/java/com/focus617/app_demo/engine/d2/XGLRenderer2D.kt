@@ -11,6 +11,7 @@ import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.objects.d2.Quad
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Texture2D
+import com.focus617.core.engine.renderer.TextureSlots
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene.Camera
 import java.io.Closeable
@@ -91,9 +92,9 @@ class XGLRenderer2D(
     }
 
     fun flush() {
-        with(Renderer2DData) {
-            for (i in 0 until TextureSlotIndex) TextureSlots[i]?.bind(i)
+        TextureSlots.flush()
 
+        with(Renderer2DData){
             QuadVertexArray.bind()
             RenderCommand.drawIndexed(QuadVertexArray, QuadIndexCount)
         }
@@ -151,16 +152,16 @@ class XGLRenderer2D(
         ) {
             var textureIndex: Float = 0.0f // White Texture
 
-            for (i in 1 until Renderer2DData.TextureSlotIndex)
-                if (Renderer2DData.TextureSlots[i] == texture) {
+            for (i in 1 until TextureSlots.TextureSlotIndex)
+                if (TextureSlots.TextureSlots[i] == texture) {
                     textureIndex = i.toFloat()
                     break
                 }
 
             if (textureIndex == 0.0f) {
-                textureIndex = Renderer2DData.TextureSlotIndex.toFloat()
-                Renderer2DData.TextureSlots[Renderer2DData.TextureSlotIndex] = texture
-                Renderer2DData.TextureSlotIndex++
+                textureIndex = TextureSlots.TextureSlotIndex.toFloat()
+                TextureSlots.TextureSlots[TextureSlots.TextureSlotIndex] = texture
+                TextureSlots.TextureSlotIndex++
             }
 
             Renderer2DData.put(position)

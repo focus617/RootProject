@@ -5,6 +5,7 @@ import com.focus617.app_demo.engine.Sandbox
 import com.focus617.app_demo.renderer.XGLTextureBuilder
 import com.focus617.app_demo.renderer.XGLVertexArray
 import com.focus617.core.engine.core.TimeStep
+import com.focus617.core.engine.renderer.TextureSlots
 import com.focus617.core.engine.scene.OrthographicCamera
 import com.focus617.core.engine.scene.OrthographicCameraController
 import com.focus617.core.engine.scene.Scene
@@ -29,7 +30,7 @@ class XGLScene2D(val context: Context, val engine: Sandbox) : Scene() {
             context,
             "$PATH/$TEXTURE_FILE"
         )!!
-        textureIndex = Renderer2DData.getId(texture)
+        textureIndex = TextureSlots.getId(texture)
     }
 
     private fun initGameObjects() {
@@ -49,6 +50,8 @@ class XGLScene2D(val context: Context, val engine: Sandbox) : Scene() {
     }
 
     companion object{
+
+        //TODO: I have no idea about 2D game object, put its data here temporarily
         private val PATH = "SquareWithTexture"
         private val TEXTURE_FILE = "Checkerboard.png"
 

@@ -5,10 +5,7 @@ import com.focus617.app_demo.renderer.*
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
-import com.focus617.core.engine.renderer.BufferElement
-import com.focus617.core.engine.renderer.BufferLayout
-import com.focus617.core.engine.renderer.ShaderDataType
-import com.focus617.core.engine.renderer.Texture2D
+import com.focus617.core.engine.renderer.*
 import java.io.Closeable
 import java.nio.LongBuffer
 
@@ -16,7 +13,6 @@ object Renderer2DData : Closeable {
     val MaxQuads: Int = 10000
     val MaxVertices: Int = MaxQuads * 4
     val MaxIndices: Int = MaxQuads * 6
-    val MaxTextureSlots: Int = 16   //TODO: RenderCaps
 
     val WHITE = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
 
@@ -31,22 +27,6 @@ object Renderer2DData : Closeable {
 
     lateinit var QuadVertexBufferBase: FloatArray
     var QuadVertexBufferPtr: Int = 0    // Index of FloatArray(记住计算size时要乘4)
-
-    val TextureSlots: Array<Texture2D?> = arrayOfNulls(MaxTextureSlots)
-    var TextureSlotIndex: Int = 1        // 0 = white texture
-
-    fun getId(texture: Texture2D): Int {
-        for (i in 1 until TextureSlotIndex)
-            if (TextureSlots[i] == texture) {
-                return i
-            }
-
-        val newIndex = TextureSlotIndex
-        TextureSlots[TextureSlotIndex] = texture
-        TextureSlotIndex++
-
-        return newIndex
-    }
 
     override fun close() {
         initialized = false
@@ -117,15 +97,15 @@ object Renderer2DData : Closeable {
     }
 
     private fun initTexture() {
-        val samplers: IntArray = IntArray(MaxTextureSlots) { i -> i }
+        val samplers: IntArray = IntArray(TextureSlots.MaxTextureSlots) { i -> i }
         TextureShader.bind()
-        TextureShader.setIntArray("u_Textures", samplers, MaxTextureSlots)
+        TextureShader.setIntArray("u_Textures", samplers, TextureSlots.MaxTextureSlots)
 
         WhiteTexture = XGLTextureBuilder.createTexture(1, 1)!!
         val whiteTextureData = longArrayOf(0xffffffff)
         WhiteTexture.setData(LongBuffer.wrap(whiteTextureData), Int.SIZE_BYTES)
 
-        TextureSlots[0] = WhiteTexture
+        TextureSlots.TextureSlots[0] = WhiteTexture
     }
 
     fun put(value: Float) {

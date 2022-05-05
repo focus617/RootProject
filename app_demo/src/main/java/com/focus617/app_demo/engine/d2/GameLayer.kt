@@ -6,6 +6,7 @@ import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.renderer.Texture2D
+import com.focus617.core.engine.renderer.TextureSlots
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene.Camera
 import com.focus617.core.platform.event.base.Event
@@ -37,7 +38,7 @@ class GameLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean) 
         XGLRenderer2D.drawQuad(
             Vector3(-1.5f, -1.5f, -0.1f),
             Vector2(2f, 2f),
-            Renderer2DData.TextureSlots[XGLScene2D.textureIndex] as Texture2D,
+            TextureSlots.TextureSlots[XGLScene2D.textureIndex] as Texture2D,
             10f
         )
 
@@ -55,8 +56,9 @@ class GameLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean) 
         with(Renderer2DData) {
             QuadVertexBufferPtr = 0
             QuadIndexCount = 0
-            TextureSlotIndex = 1
         }
+
+        TextureSlots.TextureSlotIndex = 1
     }
 
     fun endScene() {}
