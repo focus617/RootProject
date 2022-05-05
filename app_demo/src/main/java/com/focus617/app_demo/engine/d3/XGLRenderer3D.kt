@@ -2,8 +2,12 @@ package com.focus617.app_demo.engine.d3
 
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
+import com.focus617.app_demo.renderer.XGLTextureSlots
 import com.focus617.core.engine.baseDataType.Color
-import com.focus617.core.engine.renderer.*
+import com.focus617.core.engine.renderer.RenderCommand
+import com.focus617.core.engine.renderer.Shader
+import com.focus617.core.engine.renderer.VertexArray
+import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene.Camera
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -43,7 +47,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
 
         beginScene(scene.mCamera)
 
-        TextureSlots.flush()
+        XGLTextureSlots.flush()
 
         val layerStack = scene.engine.getLayerStack()
         for (layer in layerStack.mLayers)

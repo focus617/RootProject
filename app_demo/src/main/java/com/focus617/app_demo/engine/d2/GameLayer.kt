@@ -1,12 +1,12 @@
 package com.focus617.app_demo.engine.d2
 
+import com.focus617.app_demo.renderer.XGLTextureSlots
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.renderer.Texture2D
-import com.focus617.core.engine.renderer.TextureSlots
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene.Camera
 import com.focus617.core.platform.event.base.Event
@@ -28,21 +28,21 @@ class GameLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean) 
     }
 
     override fun onUpdate(timeStep: TimeStep) {
-        if (!Renderer2DData.initialized || !scene.initialized) return
-
-        beginScene(scene.mCamera)
-        XGLRenderer2D.drawQuad(Vector2(-0.8f, -1.0f), Vector2(0.5f, 0.8f), RED)
-        XGLRenderer2D.drawQuad(Vector2(0.5f, 0.5f), Vector2(0.75f, 0.5f), BLUE)
-//        Renderer2DData.drawRotatedQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), 45f, BLUE)
+        if (Renderer2DData.initialized && scene.initialized) {
+            beginScene(scene.mCamera)
+            XGLRenderer2D.drawQuad(Vector2(-0.8f, -1.0f), Vector2(0.5f, 0.8f), RED)
+            XGLRenderer2D.drawQuad(Vector2(0.5f, 0.5f), Vector2(0.75f, 0.5f), BLUE)
+//          Renderer2DData.drawRotatedQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), 45f, BLUE)
 //
-        XGLRenderer2D.drawQuad(
-            Vector3(-1.5f, -1.5f, -0.1f),
-            Vector2(2f, 2f),
-            TextureSlots.TextureSlots[XGLScene2D.textureIndex] as Texture2D,
-            10f
-        )
+            XGLRenderer2D.drawQuad(
+                Vector3(-1.5f, -1.5f, -0.1f),
+                Vector2(2f, 2f),
+                XGLTextureSlots.TextureSlots[XGLScene2D.textureIndex] as Texture2D,
+                10f
+            )
 
-        endScene()
+            endScene()
+        }
     }
 
     fun beginScene(camera: Camera) {
@@ -58,7 +58,7 @@ class GameLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean) 
             QuadIndexCount = 0
         }
 
-        TextureSlots.TextureSlotIndex = 1
+        XGLTextureSlots.TextureSlotIndex = 1
     }
 
     fun endScene() {}

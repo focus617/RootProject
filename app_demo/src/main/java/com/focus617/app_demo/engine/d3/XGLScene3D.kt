@@ -7,7 +7,6 @@ import com.focus617.app_demo.renderer.*
 import com.focus617.app_demo.terrain.Heightmap
 import com.focus617.app_demo.terrain.SkyBox
 import com.focus617.core.engine.core.TimeStep
-import com.focus617.core.engine.renderer.TextureSlots
 import com.focus617.core.engine.scene.PerspectiveCamera
 import com.focus617.core.engine.scene.PerspectiveCameraController
 import com.focus617.core.engine.scene.Scene
@@ -46,11 +45,11 @@ class XGLScene3D(val context: Context, val engine: Sandbox) : Scene() {
             SkyBox.SKYBOX_SHADER_PATH,
             arrayOf("left.png", "right.png", "bottom.png", "top.png", "front.png", "back.png")
         )
-        TextureSlots.TextureSlots[0] = texture
+        XGLTextureSlots.TextureSlots[0] = texture
 
         val textureGrass = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapGrassFilePath)
         textureGrass?.apply {
-            Heightmap.textureIndexGrass = TextureSlots.getId(textureGrass)
+            Heightmap.textureIndexGrass = XGLTextureSlots.getId(textureGrass)
             textureGrass.bind(Heightmap.textureIndexGrass)
             //绑定纹理单元与sampler
             GLES31.glBindSampler(Heightmap.textureIndexGrass, TextureHelper.samplers[0])
@@ -58,7 +57,7 @@ class XGLScene3D(val context: Context, val engine: Sandbox) : Scene() {
 
         val textureStone = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapStoneFilePath)
         textureStone?.apply {
-            Heightmap.textureIndexStone = TextureSlots.getId(textureStone)
+            Heightmap.textureIndexStone = XGLTextureSlots.getId(textureStone)
             textureStone.bind(Heightmap.textureIndexStone)
             //绑定纹理单元与sampler
             GLES31.glBindSampler(Heightmap.textureIndexStone, TextureHelper.samplers[0])
