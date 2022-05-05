@@ -150,19 +150,7 @@ class XGLRenderer2D(
             position: Vector3, size: Vector2, texture: Texture2D, tilingFactor: Float = 1.0f,
             tintColor: Vector4 = Renderer2DData.WHITE
         ) {
-            var textureIndex: Float = 0.0f // White Texture
-
-            for (i in 1 until TextureSlots.TextureSlotIndex)
-                if (TextureSlots.TextureSlots[i] == texture) {
-                    textureIndex = i.toFloat()
-                    break
-                }
-
-            if (textureIndex == 0.0f) {
-                textureIndex = TextureSlots.TextureSlotIndex.toFloat()
-                TextureSlots.TextureSlots[TextureSlots.TextureSlotIndex] = texture
-                TextureSlots.TextureSlotIndex++
-            }
+            val textureIndex: Float = TextureSlots.getId(texture).toFloat()
 
             Renderer2DData.put(position)
             Renderer2DData.put(Renderer2DData.WHITE)
