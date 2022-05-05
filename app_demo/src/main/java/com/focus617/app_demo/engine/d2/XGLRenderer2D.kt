@@ -313,12 +313,26 @@ class XGLRenderer2D(
             size: Vector2,
             rotationInDegree: Float = 0.0f
         ): FloatArray {
-            val transform = FloatArray(16)
-            XMatrix.setIdentityM(transform, 0)
-            XMatrix.scaleM(transform, 0, size.x, size.y, 1.0f)
-            XMatrix.rotateM(transform, 0, rotationInDegree, 0.0f, 0.0f, 1.0f)
-            XMatrix.translateM(transform, 0, position)
-            return transform
+            val result = FloatArray(16)
+            XMatrix.setIdentityM(result, 0)
+
+            val translate = FloatArray(16)
+            XMatrix.setIdentityM(translate, 0)
+            XMatrix.translateM(translate, 0, position)
+
+            val scale = FloatArray(16)
+            XMatrix.setIdentityM(scale, 0)
+            XMatrix.scaleM(scale, 0, size.x, size.y, 1.0f)
+
+            val rotation = FloatArray(16)
+            XMatrix.setIdentityM(rotation, 0)
+            XMatrix.rotateM(rotation, 0, rotationInDegree, 0.0f, 0.0f, 1.0f)
+
+            XMatrix.xMultiplyMM(result, 0, translate, 0, result,0)
+            XMatrix.xMultiplyMM(result, 0, rotation, 0, result,0)
+            XMatrix.xMultiplyMM(result, 0, scale, 0, result,0)
+            LOG.info(XMatrix.toString(result))
+            return result
         }
 
         private fun vector3AfterTransform(vector4: Vector4, transform: FloatArray): Vector3 {
