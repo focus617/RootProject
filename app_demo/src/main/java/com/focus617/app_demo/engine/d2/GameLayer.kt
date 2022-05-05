@@ -33,10 +33,10 @@ class GameLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean) 
             rotation += timeStep * 0.01f
 
             beginScene(scene.mCamera)
-            XGLRenderer2D.drawQuad(Vector2(-0.8f, -1.0f), Vector2(0.5f, 0.8f), RED)
+            XGLRenderer2D.drawQuad(Vector2(-0.8f, 1.0f), Vector2(0.5f, 0.8f), RED)
             //XGLRenderer2D.drawQuad(Vector2(0.5f, 0.5f), Vector2(0.75f, 0.5f), BLUE)
             XGLRenderer2D.drawRotatedQuad(
-                Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), rotation, BLUE
+                Vector2(-0.5f, -0.5f), Vector2(1.0f, 0.8f), 30f, BLUE
             )
 
             XGLRenderer2D.drawQuad(
