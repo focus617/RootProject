@@ -99,18 +99,20 @@ class XMatrixTest : WithLogging() {
             9F, 10F, 11F, 12F,
             13F, 14F, 15F, 16F
         ).toFloatArray()
-        val rhsVec = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
+        LOG.info(XMatrix.toString(lhsMat, 0))
+
+        val rhsVec = Vector4(0.1f, 0.2f, 0.3f, 0.4f)
+        LOG.info("Times $rhsVec")
 
         //When
         val result = FloatArray(4)
-        XMatrix.xMultiplyMV(result, 0, lhsMat, 0, rhsVec.toFloatArray(), 0)
+        XMatrix.xMultiplyMV(result, 0, lhsMat, 0, rhsVec)
 
         //Then
-        val str = Vector4(result).toString()
-        LOG.info(str)
+        LOG.info("Result=${Vector4(result)}")
 
         val resultVector4 = Vector4(result[0], result[1], result[2], result[3])
-        val expectedVec = Vector4(28f, 32f, 36f, 40f)
+        val expectedVec = Vector4(9f, 10f, 11f, 12f)
         assertThat(resultVector4).isEqualTo(expectedVec)
     }
 

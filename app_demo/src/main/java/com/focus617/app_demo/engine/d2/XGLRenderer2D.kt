@@ -323,7 +323,7 @@ class XGLRenderer2D(
 
         private fun vector3AfterTransform(vector4: Vector4, transform: FloatArray): Vector3 {
             val result = FloatArray(4)
-            XMatrix.xMultiplyMV(result, 0, transform, 0, vector4.toFloatArray(), 0)
+            XMatrix.xMultiplyMV(result, 0, transform, 0, vector4)
             return Vector4(result).toVector3()
         }
     }

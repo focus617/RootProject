@@ -124,11 +124,22 @@ object XMatrix : WithLogging() {
         rhsVec: FloatArray, rhsVecOffset: Int
     ) {
         for (i in 0..3) {
-            resultVec[resultVecOffset + i] = lhsMat[lhsMatOffset + I(i, 0)] * rhsVec[rhsVecOffset + 0]
+            resultVec[resultVecOffset + i] =
+                lhsMat[lhsMatOffset + I(i, 0)] * rhsVec[rhsVecOffset + 0]
             for (j in 1..3)
                 resultVec[resultVecOffset + i] +=
                     lhsMat[lhsMatOffset + I(i, j)] * rhsVec[rhsVecOffset + j]
         }
+    }
+
+    fun xMultiplyMV(
+        resultVec: FloatArray,
+        resultVecOffset: Int, lhsMat: FloatArray, lhsMatOffset: Int,
+        vector4: Vector4
+    ) {
+        xMultiplyMV(
+            resultVec, resultVecOffset, lhsMat, lhsMatOffset, vector4.toFloatArray(), 0
+        )
     }
 
     /**
