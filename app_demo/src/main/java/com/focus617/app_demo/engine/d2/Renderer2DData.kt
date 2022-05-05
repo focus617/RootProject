@@ -5,7 +5,10 @@ import com.focus617.app_demo.renderer.*
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
-import com.focus617.core.engine.renderer.*
+import com.focus617.core.engine.renderer.BufferElement
+import com.focus617.core.engine.renderer.BufferLayout
+import com.focus617.core.engine.renderer.ShaderDataType
+import com.focus617.core.engine.renderer.Texture2D
 import java.io.Closeable
 import java.nio.LongBuffer
 
@@ -43,7 +46,7 @@ object Renderer2DData : Closeable {
         initialized = true
     }
 
-    private val PATH = "SquareWithTexture"
+    private val PATH = "Quad"
     private val TEXTURE_SHADER_FILE = "Texture.glsl"
 
     private fun initShader(context: Context) {
@@ -97,15 +100,15 @@ object Renderer2DData : Closeable {
     }
 
     private fun initTexture() {
-        val samplers: IntArray = IntArray(TextureSlots.MaxTextureSlots) { i -> i }
+        val samplers: IntArray = IntArray(XGLTextureSlots.MaxTextureSlots) { i -> i }
         TextureShader.bind()
-        TextureShader.setIntArray("u_Textures", samplers, TextureSlots.MaxTextureSlots)
+        TextureShader.setIntArray("u_Textures", samplers, XGLTextureSlots.MaxTextureSlots)
 
         WhiteTexture = XGLTextureBuilder.createTexture(1, 1)!!
         val whiteTextureData = longArrayOf(0xffffffff)
         WhiteTexture.setData(LongBuffer.wrap(whiteTextureData), Int.SIZE_BYTES)
 
-        TextureSlots.TextureSlots[0] = WhiteTexture
+        XGLTextureSlots.TextureSlots[0] = WhiteTexture
     }
 
     fun put(value: Float) {

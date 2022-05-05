@@ -3,6 +3,7 @@ package com.focus617.app_demo.engine.d2
 import android.content.Context
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
+import com.focus617.app_demo.renderer.XGLTextureSlots
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
@@ -11,7 +12,6 @@ import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.objects.d2.Quad
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Texture2D
-import com.focus617.core.engine.renderer.TextureSlots
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene.Camera
 import java.io.Closeable
@@ -92,9 +92,9 @@ class XGLRenderer2D(
     }
 
     fun flush() {
-        TextureSlots.flush()
+        XGLTextureSlots.flush()
 
-        with(Renderer2DData){
+        with(Renderer2DData) {
             QuadVertexArray.bind()
             RenderCommand.drawIndexed(QuadVertexArray, QuadIndexCount)
         }
@@ -150,19 +150,7 @@ class XGLRenderer2D(
             position: Vector3, size: Vector2, texture: Texture2D, tilingFactor: Float = 1.0f,
             tintColor: Vector4 = Renderer2DData.WHITE
         ) {
-            var textureIndex: Float = 0.0f // White Texture
-
-            for (i in 1 until TextureSlots.TextureSlotIndex)
-                if (TextureSlots.TextureSlots[i] == texture) {
-                    textureIndex = i.toFloat()
-                    break
-                }
-
-            if (textureIndex == 0.0f) {
-                textureIndex = TextureSlots.TextureSlotIndex.toFloat()
-                TextureSlots.TextureSlots[TextureSlots.TextureSlotIndex] = texture
-                TextureSlots.TextureSlotIndex++
-            }
+            val textureIndex: Float = XGLTextureSlots.getId(texture).toFloat()
 
             Renderer2DData.put(position)
             Renderer2DData.put(Renderer2DData.WHITE)
