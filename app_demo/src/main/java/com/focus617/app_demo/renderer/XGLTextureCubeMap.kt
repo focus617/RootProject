@@ -10,7 +10,7 @@ import java.nio.Buffer
 
 class XGLTextureCubeMap private constructor(filePath: String) : Texture(filePath) {
     private val textureObjectIdBuf = IntArray(1)
-    var textureObjectId: Int = 0
+    var mHandle: Int = 0
 
     override var mWidth: Int = 0
     override var mHeight: Int = 0
@@ -24,7 +24,7 @@ class XGLTextureCubeMap private constructor(filePath: String) : Texture(filePath
 
         mWidth = cubeBitmaps[0]!!.width
         mHeight = cubeBitmaps[0]!!.height
-        textureObjectId = loadCubeMapIntoTexture(textureObjectIdBuf, cubeBitmaps)
+        mHandle = loadCubeMapIntoTexture(textureObjectIdBuf, cubeBitmaps)
 
         for (bitmap in cubeBitmaps) {
             bitmap!!.recycle()
@@ -37,7 +37,7 @@ class XGLTextureCubeMap private constructor(filePath: String) : Texture(filePath
 
     override fun bind(slot: Int) {
         GLES31.glActiveTexture(GLES31.GL_TEXTURE0)
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_CUBE_MAP, textureObjectId)
+        GLES31.glBindTexture(GLES31.GL_TEXTURE_CUBE_MAP, mHandle)
     }
 
     override fun close() {

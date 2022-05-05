@@ -18,7 +18,7 @@ import java.nio.ByteBuffer
  */
 class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
     private val textureObjectIdBuf = IntArray(1)
-    var textureObjectId: Int = 0
+    var mHandle: Int = 0
 
     private var mInternalFormat: Int = GL_RGBA8
     private var mDataFormat: Int = GL_RGBA
@@ -28,7 +28,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
 
     override fun equals(other: Any?): Boolean =
         if (other !is XGLTexture2D) false
-        else textureObjectId == other.textureObjectId
+        else mHandle == other.mHandle
 
     /** 基于Assets中的文件构造 */
     constructor(context: Context, filePath: String) : this(filePath) {
@@ -54,19 +54,19 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         if (textureObjectIdBuf[0] == 0) {
             LOG.error("Could not generate a new OpenGL texture object.")
         }
-        textureObjectId = textureObjectIdBuf[0]
+        mHandle = textureObjectIdBuf[0]
 
         // Bind to the texture in OpenGL
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, textureObjectId)
+        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, mHandle)
 
         // Allocate texture storage
         GLES31.glTexStorage2D(GL_TEXTURE_2D, 1, mInternalFormat, mWidth, mHeight)
 
-        glTexParameteri(textureObjectId, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-        glTexParameteri(textureObjectId, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        glTexParameteri(mHandle, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+        glTexParameteri(mHandle, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 
-        glTexParameteri(textureObjectId, GL_TEXTURE_WRAP_S, GL_REPEAT)
-        glTexParameteri(textureObjectId, GL_TEXTURE_WRAP_T, GL_REPEAT)
+        glTexParameteri(mHandle, GL_TEXTURE_WRAP_S, GL_REPEAT)
+        glTexParameteri(mHandle, GL_TEXTURE_WRAP_T, GL_REPEAT)
     }
 
     private fun initTexture(bitmap: Bitmap) {
@@ -84,7 +84,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         require(size == (mWidth * mHeight * bpp)) { "Data must be entire texture!" }
 
         // Bind to the texture in OpenGL
-        glBindTexture(GL_TEXTURE_2D, textureObjectId)
+        glBindTexture(GL_TEXTURE_2D, mHandle)
         glTexSubImage2D(
             GL_TEXTURE_2D,
             0,
@@ -121,7 +121,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         }
 
         // Bind this texture with above active texture
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, textureObjectId)
+        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, mHandle)
     }
 
     override fun close() {
@@ -142,10 +142,10 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
             LOG.error("Could not generate a new OpenGL texture object.")
             return 0
         }
-        textureObjectId = textureObjectIdBuf[0]
+        mHandle = textureObjectIdBuf[0]
 
         // Bind to the texture in OpenGL
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, textureObjectId)
+        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, mHandle)
 
         // Set
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
@@ -185,7 +185,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         // Unbind from the texture.
         GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, 0)
 
-        return textureObjectId
+        return mHandle
     }
 
 }
