@@ -9,7 +9,6 @@ import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.math.XMatrix
-import com.focus617.core.engine.objects.d2.Quad
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Texture2D
 import com.focus617.core.engine.renderer.XRenderer
@@ -130,16 +129,6 @@ class XGLRenderer2D(
             Renderer2DData.put(tilingFactor)
 
             Renderer2DData.QuadIndexCount += 6
-
-//        Renderer2DData.TextureShader.setFloat4("u_Color", color)
-//        Renderer2DData.TextureShader.setFloat("u_TilingFactor", 1.0f)
-//        Renderer2DData.TextureShader.setMat4("u_ModelMatrix", getTransform(position, size))
-//
-//        // Bind white texture here
-//        Renderer2DData.WhiteTexture.bind()
-//
-//        Renderer2DData.QuadVertexArray.bind()
-//        RenderCommand.drawIndexed(Renderer2DData.QuadVertexArray)
         }
 
         fun drawQuad(position: Vector2, size: Vector2, color: Vector4) {
@@ -177,17 +166,6 @@ class XGLRenderer2D(
             Renderer2DData.put(tilingFactor)
 
             Renderer2DData.QuadIndexCount += 6
-
-//        Renderer2DData.TextureShader.setFloat4("u_Color", tintColor)
-//        Renderer2DData.TextureShader.setFloat("u_TilingFactor", tilingFactor)
-//        Renderer2DData.TextureShader.setMat4("u_ModelMatrix", getTransform(position, size))
-//
-//        // Bind texture
-//        texture.bind()
-//
-//        // Bind VertexArray
-//        Renderer2DData.QuadVertexArray.bind()
-//        RenderCommand.drawIndexed(Renderer2DData.QuadVertexArray)
         }
 
         fun drawQuad(
@@ -208,61 +186,121 @@ class XGLRenderer2D(
             )
         }
 
-        fun drawRotatedQuad(position: Vector3, size: Vector2, rotation: Float, color: Vector4) {
-            Renderer2DData.TextureShader.setFloat4("u_Color", color)
-            Renderer2DData.TextureShader.setFloat("u_TilingFactor", 1.0f)
-            Renderer2DData.TextureShader.setMat4(
-                "u_ModelMatrix",
-                getTransform(position, size, rotation)
-            )
-
-            // Bind white texture here
-            Renderer2DData.WhiteTexture.bind()
-
-            // Bind VertexArray
-            Renderer2DData.QuadVertexArray.bind()
-            RenderCommand.drawIndexed(Renderer2DData.QuadVertexArray)
-        }
-
-        fun drawRotatedQuad(position: Vector2, size: Vector2, rotation: Float, color: Vector4) {
-            drawRotatedQuad(Vector3(position.x, position.y, 0.0f), size, rotation, color)
-        }
-
         fun drawRotatedQuad(
             position: Vector3,
             size: Vector2,
-            rotation: Float,
-            texture: Texture2D,
-            tilingFactor: Float = 1.0f,
-            tintColor: Vector4 = Renderer2DData.WHITE
+            rotationInDegree: Float,
+            color: Vector4
         ) {
-            Renderer2DData.TextureShader.setFloat4("u_Color", tintColor)
-            Renderer2DData.TextureShader.setFloat("u_TilingFactor", tilingFactor)
-            Renderer2DData.TextureShader.setMat4(
-                "u_ModelMatrix",
-                getTransform(position, size, rotation)
+            val texIndex: Float = 0.0f // White Texture
+            val tilingFactor: Float = 1.0f
+
+            val transform: FloatArray = getTransform(position, size, rotationInDegree)
+
+            Renderer2DData.put(
+                vector3AfterTransform(Renderer2DData.QuadVertexPosition[0], transform)
             )
+            Renderer2DData.put(color)
+            Renderer2DData.put(Vector2(0.0f, 0.0f))
+            Renderer2DData.put(texIndex)
+            Renderer2DData.put(tilingFactor)
 
-            // Bind texture
-            texture.bind()
+            Renderer2DData.put(
+                vector3AfterTransform(Renderer2DData.QuadVertexPosition[1], transform)
+            )
+            Renderer2DData.put(color)
+            Renderer2DData.put(Vector2(1.0f, 0.0f))
+            Renderer2DData.put(texIndex)
+            Renderer2DData.put(tilingFactor)
 
-            // Bind VertexArray
-            Renderer2DData.QuadVertexArray.bind()
-            RenderCommand.drawIndexed(Renderer2DData.QuadVertexArray)
+            Renderer2DData.put(
+                vector3AfterTransform(Renderer2DData.QuadVertexPosition[2], transform)
+            )
+            Renderer2DData.put(color)
+            Renderer2DData.put(Vector2(1.0f, 1.0f))
+            Renderer2DData.put(texIndex)
+            Renderer2DData.put(tilingFactor)
+
+            Renderer2DData.put(
+                vector3AfterTransform(Renderer2DData.QuadVertexPosition[3], transform)
+            )
+            Renderer2DData.put(color)
+            Renderer2DData.put(Vector2(0.0f, 1.0f))
+            Renderer2DData.put(texIndex)
+            Renderer2DData.put(tilingFactor)
+
+            Renderer2DData.QuadIndexCount += 6
         }
 
         fun drawRotatedQuad(
             position: Vector2,
             size: Vector2,
-            rotation: Float,
+            rotationInDegree: Float,
+            color: Vector4
+        ) {
+            drawRotatedQuad(Vector3(position.x, position.y, 0.0f), size, rotationInDegree, color)
+        }
+
+        fun drawRotatedQuad(
+            position: Vector3,
+            size: Vector2,
+            rotationInDegree: Float,
             texture: Texture2D,
             tilingFactor: Float = 1.0f,
-            tintColor: Vector4 = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
+            tintColor: Vector4 = Renderer2DData.WHITE
+        ) {
+            val textureIndex: Float = XGLTextureSlots.getId(texture).toFloat()
+
+            val transform: FloatArray = getTransform(position, size, rotationInDegree)
+
+            Renderer2DData.put(
+                vector3AfterTransform(Renderer2DData.QuadVertexPosition[0], transform)
+            )
+            Renderer2DData.put(Renderer2DData.WHITE)
+            Renderer2DData.put(Vector2(0.0f, 0.0f))
+            Renderer2DData.put(textureIndex)
+            Renderer2DData.put(tilingFactor)
+
+            Renderer2DData.put(
+                vector3AfterTransform(Renderer2DData.QuadVertexPosition[1], transform)
+            )
+            Renderer2DData.put(Renderer2DData.WHITE)
+            Renderer2DData.put(Vector2(1.0f, 0.0f))
+            Renderer2DData.put(textureIndex)
+            Renderer2DData.put(tilingFactor)
+
+            Renderer2DData.put(
+                vector3AfterTransform(Renderer2DData.QuadVertexPosition[2], transform)
+            )
+            Renderer2DData.put(Renderer2DData.WHITE)
+            Renderer2DData.put(Vector2(1.0f, 1.0f))
+            Renderer2DData.put(textureIndex)
+            Renderer2DData.put(tilingFactor)
+
+            Renderer2DData.put(
+                vector3AfterTransform(Renderer2DData.QuadVertexPosition[3], transform)
+            )
+            Renderer2DData.put(Renderer2DData.WHITE)
+            Renderer2DData.put(Vector2(0.0f, 1.0f))
+            Renderer2DData.put(textureIndex)
+            Renderer2DData.put(tilingFactor)
+
+            Renderer2DData.QuadIndexCount += 6
+
+        }
+
+        fun drawRotatedQuad(
+            position: Vector2,
+            size: Vector2,
+            rotationInDegree: Float,
+            texture: Texture2D,
+            tilingFactor: Float = 1.0f,
+            tintColor: Vector4 = Renderer2DData.WHITE
         ) {
             drawRotatedQuad(
                 Vector3(position.x, position.y, 0.0f),
                 size,
-                rotation,
+                rotationInDegree,
                 texture,
                 tilingFactor,
                 tintColor
@@ -273,12 +311,20 @@ class XGLRenderer2D(
         private fun getTransform(
             position: Vector3,
             size: Vector2,
-            rotation: Float = 0.0f
+            rotationInDegree: Float = 0.0f
         ): FloatArray {
-            val quad = Quad()
-            quad.resetTransform()
-            quad.onTransform2D(position, size, rotation)
-            return quad.modelMatrix
+            val transform = FloatArray(16)
+            XMatrix.setIdentityM(transform, 0)
+            XMatrix.scaleM(transform, 0, size.x, size.y, 1.0f)
+            XMatrix.rotateM(transform, 0, rotationInDegree, 0.0f, 0.0f, 1.0f)
+            XMatrix.translateM(transform, 0, position)
+            return transform
+        }
+
+        private fun vector3AfterTransform(vector4: Vector4, transform: FloatArray): Vector3 {
+            val result = FloatArray(4)
+            XMatrix.xMultiplyMV(result, 0, transform, 0, vector4)
+            return Vector4(result).toVector3()
         }
     }
 }

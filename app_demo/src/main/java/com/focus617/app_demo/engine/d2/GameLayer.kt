@@ -27,18 +27,30 @@ class GameLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean) 
         unRegisterEventHandlers()
     }
 
+    var rotation: Float = 0.0f
     override fun onUpdate(timeStep: TimeStep) {
         if (Renderer2DData.initialized && scene.initialized) {
+            rotation += timeStep * 0.01f
+
             beginScene(scene.mCamera)
-            XGLRenderer2D.drawQuad(Vector2(-0.8f, -1.0f), Vector2(0.5f, 0.8f), RED)
-            XGLRenderer2D.drawQuad(Vector2(0.5f, 0.5f), Vector2(0.75f, 0.5f), BLUE)
-//          Renderer2DData.drawRotatedQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), 45f, BLUE)
-//
+            XGLRenderer2D.drawQuad(Vector2(-0.8f, 1.0f), Vector2(0.5f, 0.8f), RED)
+            //XGLRenderer2D.drawQuad(Vector2(0.5f, 0.5f), Vector2(0.75f, 0.5f), BLUE)
+            XGLRenderer2D.drawRotatedQuad(
+                Vector2(0f, -1.0f), Vector2(1.0f, 0.8f), 30f, BLUE
+            )
+
             XGLRenderer2D.drawQuad(
-                Vector3(-1.5f, -1.5f, -0.1f),
-                Vector2(2f, 2f),
+                Vector3(-5f, -5f, -0.1f),
+                Vector2(10f, 10f),
                 XGLTextureSlots.TextureSlots[XGLScene2D.textureIndex] as Texture2D,
                 10f
+            )
+            XGLRenderer2D.drawRotatedQuad(
+                Vector2(-0.5f, 0.5f),
+                Vector2(1.5f, 0.5f),
+                45f,
+                XGLTextureSlots.TextureSlots[XGLScene2D.textureIndex] as Texture2D,
+                20f
             )
 
             endScene()

@@ -30,6 +30,8 @@ import kotlin.math.sqrt
 object XMatrix : WithLogging() {
     /** Temporary memory for operations that need temporary Matrix data.  */
     private val sTemp = FloatArray(32)
+
+    // i: row, j:column
     private fun I(i: Int, j: Int) = i + (j * 4)
 
     /**
@@ -115,6 +117,30 @@ object XMatrix : WithLogging() {
         resultVecOffset: Int, lhsMat: FloatArray, lhsMatOffset: Int,
         rhsVec: FloatArray, rhsVecOffset: Int
     )
+
+    fun xMultiplyMV(
+        resultVec: FloatArray,
+        resultVecOffset: Int, lhsMat: FloatArray, lhsMatOffset: Int,
+        rhsVec: FloatArray, rhsVecOffset: Int
+    ) {
+        for (i in 0..3) {
+            resultVec[resultVecOffset + i] =
+                lhsMat[lhsMatOffset + I(i, 0)] * rhsVec[rhsVecOffset + 0]
+            for (j in 1..3)
+                resultVec[resultVecOffset + i] +=
+                    lhsMat[lhsMatOffset + I(i, j)] * rhsVec[rhsVecOffset + j]
+        }
+    }
+
+    fun xMultiplyMV(
+        resultVec: FloatArray,
+        resultVecOffset: Int, lhsMat: FloatArray, lhsMatOffset: Int,
+        vector4: Vector4
+    ) {
+        xMultiplyMV(
+            resultVec, resultVecOffset, lhsMat, lhsMatOffset, vector4.toFloatArray(), 0
+        )
+    }
 
     /**
      * Transposes a 4 x 4 Matrix.

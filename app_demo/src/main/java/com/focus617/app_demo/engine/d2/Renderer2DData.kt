@@ -31,6 +31,14 @@ object Renderer2DData : Closeable {
     lateinit var QuadVertexBufferBase: FloatArray
     var QuadVertexBufferPtr: Int = 0    // Index of FloatArray(记住计算size时要乘4)
 
+    val QuadVertexPosition = arrayOf<Vector4>(
+        Vector4( -0.5f, -0.5f, 0.0f, 1.0f),
+        Vector4(  0.5f, -0.5f, 0.0f, 1.0f),
+        Vector4(  0.5f,  0.5f, 0.0f, 1.0f),
+        Vector4( -0.5f,  0.5f, 0.0f, 1.0f)
+    )
+
+
     override fun close() {
         initialized = false
         QuadVertexBuffer.close()

@@ -33,10 +33,10 @@ fun convertNormalized2DPointToRay(
     val nearPointWorld = FloatArray(4)
     val farPointWorld = FloatArray(4)
 
-    XMatrix.multiplyMV(
+    XMatrix.xMultiplyMV(
         nearPointWorld, 0, invertedViewProjectionMatrix, 0, nearPointNdc, 0
     )
-    XMatrix.multiplyMV(
+    XMatrix.xMultiplyMV(
         farPointWorld, 0, invertedViewProjectionMatrix, 0, farPointNdc, 0
     )
 

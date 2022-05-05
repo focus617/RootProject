@@ -8,6 +8,8 @@ data class Vector4(var x: Float, var y: Float, var z: Float, var w: Float) {
         if (w == 0F) Vector4(x, y, z, 0F)       // 如果是向量
         else Vector4(x / w, y / w, z / w, 1F)
 
+    fun toFloatArray(): FloatArray = floatArrayOf(x, y, z, w)
+
     override fun toString(): String = "Vector($x, $y, $z, $w)"
 
     override fun equals(other: Any?): Boolean =
@@ -28,6 +30,15 @@ data class Vector4(var x: Float, var y: Float, var z: Float, var w: Float) {
 
         val normalizedVector4 = this.normalize()
         return Point3D(
+            normalizedVector4.x,
+            normalizedVector4.y,
+            normalizedVector4.z
+        )
+    }
+
+    fun toVector3(): Vector3 {
+        val normalizedVector4 = this.normalize()
+        return Vector3(
             normalizedVector4.x,
             normalizedVector4.y,
             normalizedVector4.z
