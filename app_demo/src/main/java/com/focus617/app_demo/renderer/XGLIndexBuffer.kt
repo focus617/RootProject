@@ -28,11 +28,23 @@ class XGLIndexBuffer(indices: ShortArray, count: Int) : BaseEntity(), IfBuffer, 
         mHandle = mVBOBuf.get(0)
 
         // Bind VBO buffer
-        GLES31.glBindBuffer(GLES31.GL_ELEMENT_ARRAY_BUFFER, mHandle)
+//        GLES31.glBindBuffer(GLES31.GL_ELEMENT_ARRAY_BUFFER, mHandle)
+//
+        // Transfer data from native memory to the GPU buffer.
+//        GLES31.glBufferData(
+//            GLES31.GL_ELEMENT_ARRAY_BUFFER,
+//            count * Short.SIZE_BYTES,
+//            ShortBuffer.wrap(indices),
+//            GLES31.GL_STATIC_DRAW
+//        )
+
+        // GL_ELEMENT_ARRAY_BUFFER is not valid without an actively bound VAO
+        // Binding with GL_ARRAY_BUFFER allows the data to be loaded regardless of VAO state.
+        GLES31.glBindBuffer(GLES31.GL_ARRAY_BUFFER, mHandle)
 
         // Transfer data from native memory to the GPU buffer.
         GLES31.glBufferData(
-            GLES31.GL_ELEMENT_ARRAY_BUFFER,
+            GLES31.GL_ARRAY_BUFFER,
             count * Short.SIZE_BYTES,
             ShortBuffer.wrap(indices),
             GLES31.GL_STATIC_DRAW
