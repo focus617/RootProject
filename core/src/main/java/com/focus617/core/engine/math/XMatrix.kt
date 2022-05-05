@@ -116,6 +116,17 @@ object XMatrix : WithLogging() {
         rhsVec: FloatArray, rhsVecOffset: Int
     )
 
+    fun xMultiplyMV(
+        resultVec: FloatArray,
+        resultVecOffset: Int, lhsMat: FloatArray, lhsMatOffset: Int,
+        rhsVec: FloatArray, rhsVecOffset: Int
+    ) {
+        for (i in 0..3)
+            for (j in 0..3)
+                resultVec[resultVecOffset + i] +=
+                    lhsMat[lhsMatOffset + I(i, j)] * rhsVec[rhsVecOffset + i]
+    }
+
     /**
      * Transposes a 4 x 4 Matrix.
      * 矩阵的转置操作
