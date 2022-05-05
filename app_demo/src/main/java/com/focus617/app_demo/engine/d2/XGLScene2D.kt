@@ -54,7 +54,7 @@ class XGLScene2D(val context: Context, val engine: Sandbox) : Scene() {
     companion object {
 
         //TODO: I have no idea about 2D game object, put its data here temporarily
-        private val PATH = "SquareWithTexture"
+        private val PATH = "Quad"
         private val TEXTURE_FILE = "Checkerboard.png"
 
         val objectTextureName = "$PATH/$TEXTURE_FILE"

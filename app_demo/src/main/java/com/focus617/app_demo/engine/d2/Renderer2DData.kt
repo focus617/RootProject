@@ -43,7 +43,7 @@ object Renderer2DData : Closeable {
         initialized = true
     }
 
-    private val PATH = "SquareWithTexture"
+    private val PATH = "Quad"
     private val TEXTURE_SHADER_FILE = "Texture.glsl"
 
     private fun initShader(context: Context) {
