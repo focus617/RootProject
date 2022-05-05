@@ -30,11 +30,11 @@ class GameLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean) 
         if (!Renderer2DData.initialized || !scene.initialized) return
 
         beginScene(scene.mCamera)
-        Renderer2DData.drawQuad(Vector2(-0.8f, -1.0f), Vector2(0.5f, 0.8f), RED)
-        Renderer2DData.drawQuad(Vector2(0.5f, 0.5f), Vector2(0.75f, 0.5f), BLUE)
+        XGLRenderer2D.drawQuad(Vector2(-0.8f, -1.0f), Vector2(0.5f, 0.8f), RED)
+        XGLRenderer2D.drawQuad(Vector2(0.5f, 0.5f), Vector2(0.75f, 0.5f), BLUE)
 //        Renderer2DData.drawRotatedQuad(Vector2(0.5f, -0.5f), Vector2(0.5f, 0.75f), 45f, BLUE)
 //
-        Renderer2DData.drawQuad(
+        XGLRenderer2D.drawQuad(
             Vector3(-1.5f, -1.5f, -0.1f),
             Vector2(2f, 2f),
             Renderer2DData.TextureSlots[XGLScene2D.textureIndex] as Texture2D,

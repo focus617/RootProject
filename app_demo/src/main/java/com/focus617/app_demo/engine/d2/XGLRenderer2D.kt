@@ -4,8 +4,13 @@ import android.content.Context
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.core.engine.baseDataType.Color
+import com.focus617.core.engine.math.Vector2
+import com.focus617.core.engine.math.Vector3
+import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.math.XMatrix
+import com.focus617.core.engine.objects.d2.Quad
 import com.focus617.core.engine.renderer.RenderCommand
+import com.focus617.core.engine.renderer.Texture2D
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene.Camera
 import java.io.Closeable
@@ -94,4 +99,197 @@ class XGLRenderer2D(
         }
     }
 
+    companion object {
+        fun drawQuad(position: Vector3, size: Vector2, color: Vector4) {
+            val texIndex: Float = 0.0f // White Texture
+            val tilingFactor: Float = 1.0f
+
+            Renderer2DData.put(position)
+            Renderer2DData.put(color)
+            Renderer2DData.put(Vector2(0.0f, 0.0f))
+            Renderer2DData.put(texIndex)
+            Renderer2DData.put(tilingFactor)
+
+            Renderer2DData.put(Vector3(position.x + size.x, position.y, 0.0f))
+            Renderer2DData.put(color)
+            Renderer2DData.put(Vector2(1.0f, 0.0f))
+            Renderer2DData.put(texIndex)
+            Renderer2DData.put(tilingFactor)
+
+            Renderer2DData.put(Vector3(position.x + size.x, position.y + size.y, 0.0f))
+            Renderer2DData.put(color)
+            Renderer2DData.put(Vector2(1.0f, 1.0f))
+            Renderer2DData.put(texIndex)
+            Renderer2DData.put(tilingFactor)
+
+            Renderer2DData.put(Vector3(position.x, position.y + size.y, 0.0f))
+            Renderer2DData.put(color)
+            Renderer2DData.put(Vector2(0.0f, 1.0f))
+            Renderer2DData.put(texIndex)
+            Renderer2DData.put(tilingFactor)
+
+            Renderer2DData.QuadIndexCount += 6
+
+//        Renderer2DData.TextureShader.setFloat4("u_Color", color)
+//        Renderer2DData.TextureShader.setFloat("u_TilingFactor", 1.0f)
+//        Renderer2DData.TextureShader.setMat4("u_ModelMatrix", getTransform(position, size))
+//
+//        // Bind white texture here
+//        Renderer2DData.WhiteTexture.bind()
+//
+//        Renderer2DData.QuadVertexArray.bind()
+//        RenderCommand.drawIndexed(Renderer2DData.QuadVertexArray)
+        }
+
+        fun drawQuad(position: Vector2, size: Vector2, color: Vector4) {
+            drawQuad(Vector3(position.x, position.y, 0.0f), size, color)
+        }
+
+        fun drawQuad(
+            position: Vector3, size: Vector2, texture: Texture2D, tilingFactor: Float = 1.0f,
+            tintColor: Vector4 = Renderer2DData.WHITE
+        ) {
+            var textureIndex: Float = 0.0f // White Texture
+
+            for (i in 1 until Renderer2DData.TextureSlotIndex)
+                if (Renderer2DData.TextureSlots[i] == texture) {
+                    textureIndex = i.toFloat()
+                    break
+                }
+
+            if (textureIndex == 0.0f) {
+                textureIndex = Renderer2DData.TextureSlotIndex.toFloat()
+                Renderer2DData.TextureSlots[Renderer2DData.TextureSlotIndex] = texture
+                Renderer2DData.TextureSlotIndex++
+            }
+
+            Renderer2DData.put(position)
+            Renderer2DData.put(Renderer2DData.WHITE)
+            Renderer2DData.put(Vector2(0.0f, 0.0f))
+            Renderer2DData.put(textureIndex)
+            Renderer2DData.put(tilingFactor)
+
+            Renderer2DData.put(Vector3(position.x + size.x, position.y, 0.0f))
+            Renderer2DData.put(Renderer2DData.WHITE)
+            Renderer2DData.put(Vector2(1.0f, 0.0f))
+            Renderer2DData.put(textureIndex)
+            Renderer2DData.put(tilingFactor)
+
+            Renderer2DData.put(Vector3(position.x + size.x, position.y + size.y, 0.0f))
+            Renderer2DData.put(Renderer2DData.WHITE)
+            Renderer2DData.put(Vector2(1.0f, 1.0f))
+            Renderer2DData.put(textureIndex)
+            Renderer2DData.put(tilingFactor)
+
+            Renderer2DData.put(Vector3(position.x, position.y + size.y, 0.0f))
+            Renderer2DData.put(Renderer2DData.WHITE)
+            Renderer2DData.put(Vector2(0.0f, 1.0f))
+            Renderer2DData.put(textureIndex)
+            Renderer2DData.put(tilingFactor)
+
+            Renderer2DData.QuadIndexCount += 6
+
+//        Renderer2DData.TextureShader.setFloat4("u_Color", tintColor)
+//        Renderer2DData.TextureShader.setFloat("u_TilingFactor", tilingFactor)
+//        Renderer2DData.TextureShader.setMat4("u_ModelMatrix", getTransform(position, size))
+//
+//        // Bind texture
+//        texture.bind()
+//
+//        // Bind VertexArray
+//        Renderer2DData.QuadVertexArray.bind()
+//        RenderCommand.drawIndexed(Renderer2DData.QuadVertexArray)
+        }
+
+        fun drawQuad(
+            position: Vector2,
+            size: Vector2,
+            rotation: Float,
+            texture: Texture2D,
+            tilingFactor: Float = 1.0f,
+            tintColor: Vector4 = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
+        ) {
+            drawRotatedQuad(
+                Vector3(position.x, position.y, 0.0f),
+                size,
+                rotation,
+                texture,
+                tilingFactor,
+                tintColor
+            )
+        }
+
+        fun drawRotatedQuad(position: Vector3, size: Vector2, rotation: Float, color: Vector4) {
+            Renderer2DData.TextureShader.setFloat4("u_Color", color)
+            Renderer2DData.TextureShader.setFloat("u_TilingFactor", 1.0f)
+            Renderer2DData.TextureShader.setMat4(
+                "u_ModelMatrix",
+                getTransform(position, size, rotation)
+            )
+
+            // Bind white texture here
+            Renderer2DData.WhiteTexture.bind()
+
+            // Bind VertexArray
+            Renderer2DData.QuadVertexArray.bind()
+            RenderCommand.drawIndexed(Renderer2DData.QuadVertexArray)
+        }
+
+        fun drawRotatedQuad(position: Vector2, size: Vector2, rotation: Float, color: Vector4) {
+            drawRotatedQuad(Vector3(position.x, position.y, 0.0f), size, rotation, color)
+        }
+
+        fun drawRotatedQuad(
+            position: Vector3,
+            size: Vector2,
+            rotation: Float,
+            texture: Texture2D,
+            tilingFactor: Float = 1.0f,
+            tintColor: Vector4 = Renderer2DData.WHITE
+        ) {
+            Renderer2DData.TextureShader.setFloat4("u_Color", tintColor)
+            Renderer2DData.TextureShader.setFloat("u_TilingFactor", tilingFactor)
+            Renderer2DData.TextureShader.setMat4(
+                "u_ModelMatrix",
+                getTransform(position, size, rotation)
+            )
+
+            // Bind texture
+            texture.bind()
+
+            // Bind VertexArray
+            Renderer2DData.QuadVertexArray.bind()
+            RenderCommand.drawIndexed(Renderer2DData.QuadVertexArray)
+        }
+
+        fun drawRotatedQuad(
+            position: Vector2,
+            size: Vector2,
+            rotation: Float,
+            texture: Texture2D,
+            tilingFactor: Float = 1.0f,
+            tintColor: Vector4 = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
+        ) {
+            drawRotatedQuad(
+                Vector3(position.x, position.y, 0.0f),
+                size,
+                rotation,
+                texture,
+                tilingFactor,
+                tintColor
+            )
+        }
+
+
+        private fun getTransform(
+            position: Vector3,
+            size: Vector2,
+            rotation: Float = 0.0f
+        ): FloatArray {
+            val quad = Quad()
+            quad.resetTransform()
+            quad.onTransform2D(position, size, rotation)
+            return quad.modelMatrix
+        }
+    }
 }
