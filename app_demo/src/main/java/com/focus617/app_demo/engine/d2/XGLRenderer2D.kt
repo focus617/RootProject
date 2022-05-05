@@ -96,8 +96,16 @@ class XGLRenderer2D(
         with(Renderer2DData) {
             QuadVertexArray.bind()
             RenderCommand.drawIndexed(QuadVertexArray, QuadIndexCount)
+            stats.drawCalls++
         }
     }
+
+//    fun flushAndReset() {
+//        endScene()
+//        Renderer2DData.QuadIndexCount = 0
+//        Renderer2DData.QuadVertexBufferPtr = 0
+//        XGLTextureSlots.TextureSlotIndex = 1
+//    }
 
     companion object {
         fun drawQuad(position: Vector3, size: Vector2, color: Vector4) {
@@ -129,6 +137,8 @@ class XGLRenderer2D(
             Renderer2DData.put(tilingFactor)
 
             Renderer2DData.QuadIndexCount += 6
+
+            Renderer2DData.stats.quadCount++
         }
 
         fun drawQuad(position: Vector2, size: Vector2, color: Vector4) {
@@ -166,6 +176,8 @@ class XGLRenderer2D(
             Renderer2DData.put(tilingFactor)
 
             Renderer2DData.QuadIndexCount += 6
+
+            Renderer2DData.stats.quadCount++
         }
 
         fun drawQuad(
@@ -230,6 +242,8 @@ class XGLRenderer2D(
             Renderer2DData.put(tilingFactor)
 
             Renderer2DData.QuadIndexCount += 6
+
+            Renderer2DData.stats.quadCount++
         }
 
         fun drawRotatedQuad(
@@ -287,6 +301,7 @@ class XGLRenderer2D(
 
             Renderer2DData.QuadIndexCount += 6
 
+            Renderer2DData.stats.quadCount++
         }
 
         fun drawRotatedQuad(
@@ -328,10 +343,10 @@ class XGLRenderer2D(
             XMatrix.setIdentityM(rotation, 0)
             XMatrix.rotateM(rotation, 0, rotationInDegree, 0.0f, 0.0f, 1.0f)
 
-            XMatrix.xMultiplyMM(result, 0, translate, 0, result,0)
-            XMatrix.xMultiplyMM(result, 0, rotation, 0, result,0)
-            XMatrix.xMultiplyMM(result, 0, scale, 0, result,0)
-            LOG.info(XMatrix.toString(result))
+            XMatrix.xMultiplyMM(result, 0, translate, 0, result, 0)
+            XMatrix.xMultiplyMM(result, 0, rotation, 0, result, 0)
+            XMatrix.xMultiplyMM(result, 0, scale, 0, result, 0)
+            //LOG.info(XMatrix.toString(result))
             return result
         }
 
