@@ -33,6 +33,8 @@ class XGLScene2D(val context: Context, val engine: Sandbox) : Scene() {
         textureIndex = TextureSlots.getId(texture)
     }
 
+    // TODO: My thought: I may call it in renderer.onSurfaceChanged when 2D GO ready,
+    //  poll each game object for opengl related initialization(vertexArray & textures).
     private fun initGameObjects() {
         val layerStack = engine.getLayerStack()
         for (layer in layerStack.mLayers)
@@ -49,7 +51,7 @@ class XGLScene2D(val context: Context, val engine: Sandbox) : Scene() {
 
     }
 
-    companion object{
+    companion object {
 
         //TODO: I have no idea about 2D game object, put its data here temporarily
         private val PATH = "SquareWithTexture"

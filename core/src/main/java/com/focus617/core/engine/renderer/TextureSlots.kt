@@ -4,11 +4,11 @@ import com.focus617.mylib.logging.WithLogging
 import java.io.Closeable
 
 object TextureSlots : WithLogging(), Closeable {
-    const val MaxTextureSlots: Int = 16     //Opengl es can support up to 16 samplers
+    const val MaxTextureSlots: Int = 16   //Opengl es can support up to 16 samplers
     //TODO: RenderCaps
 
     val TextureSlots: Array<Texture?> = arrayOfNulls(MaxTextureSlots)
-    var TextureSlotIndex: Int = 1        // 0 = skybox's CubeMap texture
+    var TextureSlotIndex: Int = 1         // 0 = 3D:skybox's CubeMap texture Or 2D:WhiteTexture
 
     override fun close() {
         TextureSlots.forEach() {
