@@ -35,12 +35,12 @@ class PerspectiveCamera : Camera() {
     }
 
     fun setRotation(pitchXInDegree: Float = 0f, yawYInDegree: Float = 90f) {
-        val angleX: Float = pitchXInDegree * (Math.PI / 180.0f).toFloat()
-        val angleY: Float = yawYInDegree * (Math.PI / 180.0f).toFloat()
+        val pitchXInRadians: Float = pitchXInDegree * (Math.PI / 180.0f).toFloat()
+        val yawYInRadians: Float = yawYInDegree * (Math.PI / 180.0f).toFloat()
 
-        mPosition.y = sin(angleX) * mTargetDistance
-        mPosition.x = cos(angleX) * cos(angleY) * mTargetDistance
-        mPosition.z = cos(angleX) * sin(angleY) * mTargetDistance
+        mPosition.y = sin(pitchXInRadians) * mTargetDistance
+        mPosition.x = cos(pitchXInRadians) * cos(yawYInRadians) * mTargetDistance
+        mPosition.z = cos(pitchXInRadians) * sin(yawYInRadians) * mTargetDistance
 
         // also re-calculate the Right and Up vector
         directionFront = Vector3(mPosition, target).normalize()
