@@ -1,9 +1,12 @@
 package com.focus617.platform.helper
 
 import android.graphics.Bitmap
+import android.opengl.GLES20
+import android.opengl.GLES30
 import android.opengl.GLES31
 import android.opengl.GLUtils
 import timber.log.Timber
+import java.nio.ByteBuffer
 
 object TextureHelper {
     val TAG = "TextureHelper"
@@ -39,6 +42,71 @@ object TextureHelper {
     }
 
     /**
+     * Loads a texture from a file, returning the OpenGL ID for that
+     * texture. Returns 0 if the load failed.
+     *
+     * @param bitmap
+     * @return textureObjectId
+     */
+    fun loadImageIntoTexture(
+        textureObjectIdBuf: IntArray,
+        bitmap: Bitmap
+    ): Int {
+        GLES31.glGenTextures(1, textureObjectIdBuf, 0)
+        if (textureObjectIdBuf[0] == 0) {
+            Timber.e("$TAG: Could not generate a new OpenGL texture object.")
+            return 0
+        }
+
+        // Bind to the texture in OpenGL
+        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, textureObjectIdBuf[0])
+
+        // Set wrapping mode
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT)
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT)
+
+        // Set filtering: a default must be set, or the texture will be black.
+        GLES20.glTexParameteri(
+            GLES20.GL_TEXTURE_2D,
+            GLES20.GL_TEXTURE_MIN_FILTER,
+            GLES20.GL_LINEAR_MIPMAP_LINEAR
+        )
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR)
+
+        val byteBuf = ByteBuffer.allocate(bitmap.width * bitmap.height * 4)
+        bitmap.copyPixelsToBuffer(byteBuf)
+        byteBuf.position(0)
+
+        // Load the bitmap into the bound texture.
+        GLES31.glTexImage2D(
+            GLES30.GL_TEXTURE_2D,
+            0,
+            GLES30.GL_RGBA,
+            bitmap.width,
+            bitmap.height,
+            0,
+            GLES30.GL_RGBA,
+            GLES30.GL_UNSIGNED_BYTE,
+            byteBuf
+        )
+        //  GLUtils.texImage2D(GLES31.GL_TEXTURE_2D, 0, bitmap, 0)
+
+        // Note: Following code may cause an error to be reported in the
+        // ADB log as follows: E/IMGSRV(20095): :0: HardwareMipGen:
+        // Failed to generate texture mipmap levels (error=3)
+        // No OpenGL error will be encountered (glGetError() will return
+        // 0). If this happens, just squash the source image to be
+        // square. It will look the same because of texture coordinates,
+        // and mipmap generation will work.
+        GLES31.glGenerateMipmap(GLES31.GL_TEXTURE_2D)
+
+        // Unbind from the texture.
+        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, 0)
+
+        return textureObjectIdBuf[0]
+    }
+
+    /**
      * Loads a cubemap texture from the provided resources and returns the
      * texture ID. Returns 0 if the load failed.
      *
@@ -54,7 +122,7 @@ object TextureHelper {
     ): Int {
         GLES31.glGenTextures(1, textureObjectIdBuf, 0)
         if (textureObjectIdBuf[0] == 0) {
-            Timber.w("$TAG: Could not generate a new OpenGL texture object.")
+            Timber.e("$TAG: Could not generate a new OpenGL texture object.")
             return 0
         }
 
