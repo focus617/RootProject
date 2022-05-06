@@ -35,6 +35,12 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
 
     fun toFloatArray() = floatArray
 
+    operator fun times(vector4: Vector4): Vector4{
+        val result = FloatArray(4)
+        XMatrix.xMultiplyMV(result, 0, floatArray, 0, vector4)
+        return Vector4(result)
+    }
+
     fun setIdentity(): Mat4 {
         XMatrix.setIdentityM(floatArray, 0)
         return this

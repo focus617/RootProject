@@ -204,35 +204,28 @@ class XGLRenderer2D(
             val texIndex: Float = 0.0f // White Texture
             val tilingFactor: Float = 1.0f
 
-            val transform: FloatArray = getTransform(position, size, rotationInDegree)
+            val transform: Mat4 = Mat4().transform2D(position, size, rotationInDegree)
+            //LOG.info(transform.toString("Transform Matrix"))
 
-            Renderer2DData.put(
-                vector3AfterTransform(Renderer2DData.QuadVertexPosition[0], transform)
-            )
+            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[0]).toVector3())
             Renderer2DData.put(color)
             Renderer2DData.put(Vector2(0.0f, 0.0f))
             Renderer2DData.put(texIndex)
             Renderer2DData.put(tilingFactor)
 
-            Renderer2DData.put(
-                vector3AfterTransform(Renderer2DData.QuadVertexPosition[1], transform)
-            )
+            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[1]).toVector3())
             Renderer2DData.put(color)
             Renderer2DData.put(Vector2(1.0f, 0.0f))
             Renderer2DData.put(texIndex)
             Renderer2DData.put(tilingFactor)
 
-            Renderer2DData.put(
-                vector3AfterTransform(Renderer2DData.QuadVertexPosition[2], transform)
-            )
+            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[2]).toVector3())
             Renderer2DData.put(color)
             Renderer2DData.put(Vector2(1.0f, 1.0f))
             Renderer2DData.put(texIndex)
             Renderer2DData.put(tilingFactor)
 
-            Renderer2DData.put(
-                vector3AfterTransform(Renderer2DData.QuadVertexPosition[3], transform)
-            )
+            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[3]).toVector3())
             Renderer2DData.put(color)
             Renderer2DData.put(Vector2(0.0f, 1.0f))
             Renderer2DData.put(texIndex)
@@ -262,35 +255,28 @@ class XGLRenderer2D(
         ) {
             val textureIndex: Float = XGLTextureSlots.getId(texture).toFloat()
 
-            val transform: FloatArray = getTransform(position, size, rotationInDegree)
+            val transform: Mat4 = Mat4().transform2D(position, size, rotationInDegree)
+            //LOG.info(transform.toString("Transform Matrix"))
 
-            Renderer2DData.put(
-                vector3AfterTransform(Renderer2DData.QuadVertexPosition[0], transform)
-            )
+            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[0]).toVector3())
             Renderer2DData.put(Renderer2DData.WHITE)
             Renderer2DData.put(Vector2(0.0f, 0.0f))
             Renderer2DData.put(textureIndex)
             Renderer2DData.put(tilingFactor)
 
-            Renderer2DData.put(
-                vector3AfterTransform(Renderer2DData.QuadVertexPosition[1], transform)
-            )
+            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[1]).toVector3())
             Renderer2DData.put(Renderer2DData.WHITE)
             Renderer2DData.put(Vector2(1.0f, 0.0f))
             Renderer2DData.put(textureIndex)
             Renderer2DData.put(tilingFactor)
 
-            Renderer2DData.put(
-                vector3AfterTransform(Renderer2DData.QuadVertexPosition[2], transform)
-            )
+            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[2]).toVector3())
             Renderer2DData.put(Renderer2DData.WHITE)
             Renderer2DData.put(Vector2(1.0f, 1.0f))
             Renderer2DData.put(textureIndex)
             Renderer2DData.put(tilingFactor)
 
-            Renderer2DData.put(
-                vector3AfterTransform(Renderer2DData.QuadVertexPosition[3], transform)
-            )
+            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[3]).toVector3())
             Renderer2DData.put(Renderer2DData.WHITE)
             Renderer2DData.put(Vector2(0.0f, 1.0f))
             Renderer2DData.put(textureIndex)
@@ -317,23 +303,6 @@ class XGLRenderer2D(
                 tilingFactor,
                 tintColor
             )
-        }
-
-
-        private fun getTransform(
-            position: Vector3,
-            size: Vector2,
-            rotationInDegree: Float = 0.0f
-        ): FloatArray {
-            val result = Mat4().transform2D(position,size,rotationInDegree)
-            //LOG.info(result.toString("Transform Matrix"))
-            return result.toFloatArray()
-        }
-
-        private fun vector3AfterTransform(vector4: Vector4, transform: FloatArray): Vector3 {
-            val result = FloatArray(4)
-            XMatrix.xMultiplyMV(result, 0, transform, 0, vector4)
-            return Vector4(result).toVector3()
         }
     }
 }
