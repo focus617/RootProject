@@ -41,6 +41,12 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
         return Vector4(result)
     }
 
+    operator fun times(mat: Mat4): Mat4{
+        val result = FloatArray(16)
+        XMatrix.xMultiplyMM(result, 0, floatArray, 0, mat.toFloatArray(), 0)
+        return Mat4(result)
+    }
+
     fun setIdentity(): Mat4 {
         XMatrix.setIdentityM(floatArray, 0)
         return this
@@ -84,6 +90,7 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
         val scale = Mat4().scale(size).toFloatArray()
         val rotation = Mat4().rotate2D(rotationInDegree).toFloatArray()
 
+        /** 由于采用了列主序的转置矩阵，所以乘法的顺序是反的 */
         setIdentity()
         XMatrix.xMultiplyMM(floatArray, 0, translate, 0, floatArray, 0)
         XMatrix.xMultiplyMM(floatArray, 0, rotation, 0, floatArray, 0)
