@@ -1,7 +1,6 @@
 package com.focus617.platform.helper
 
 import android.graphics.Bitmap
-import android.opengl.GLES20
 import android.opengl.GLES30
 import android.opengl.GLES31
 import android.opengl.GLUtils
@@ -19,26 +18,30 @@ object TextureHelper {
 
     private fun initSampler() {        //初始化Sampler对象的方法
         GLES31.glGenSamplers(1, samplers, 0) //生成Samplers id
+        //设置MIN采样方式
         GLES31.glSamplerParameterf(
             samplers[0],
             GLES31.GL_TEXTURE_MIN_FILTER,
             GLES31.GL_LINEAR_MIPMAP_LINEAR.toFloat()
-        ) //设置MIN采样方式
+        )
+        //设置MAG采样方式
         GLES31.glSamplerParameterf(
             samplers[0],
             GLES31.GL_TEXTURE_MAG_FILTER,
             GLES31.GL_LINEAR.toFloat()
-        ) //设置MAG采样方式
+        )
+        //设置S轴拉伸方式
         GLES31.glSamplerParameterf(
             samplers[0],
             GLES31.GL_TEXTURE_WRAP_S,
             GLES31.GL_REPEAT.toFloat()
-        ) //设置S轴拉伸方式
+        )
+        //设置T轴拉伸方式
         GLES31.glSamplerParameterf(
             samplers[0],
             GLES31.GL_TEXTURE_WRAP_T,
             GLES31.GL_REPEAT.toFloat()
-        ) //设置T轴拉伸方式
+        )
     }
 
     /**
@@ -61,17 +64,8 @@ object TextureHelper {
         // Bind to the texture in OpenGL
         GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, textureObjectIdBuf[0])
 
-        // Set wrapping mode
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT)
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT)
-
-        // Set filtering: a default must be set, or the texture will be black.
-        GLES20.glTexParameteri(
-            GLES20.GL_TEXTURE_2D,
-            GLES20.GL_TEXTURE_MIN_FILTER,
-            GLES20.GL_LINEAR_MIPMAP_LINEAR
-        )
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR)
+        //绑定纹理单元与sampler
+        GLES31.glBindSampler(textureObjectIdBuf[0], TextureHelper.samplers[0])
 
         val byteBuf = ByteBuffer.allocate(bitmap.width * bitmap.height * 4)
         bitmap.copyPixelsToBuffer(byteBuf)

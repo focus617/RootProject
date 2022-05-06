@@ -72,11 +72,9 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         // Allocate texture storage
         GLES31.glTexStorage2D(GL_TEXTURE_2D, 1, mInternalFormat, mWidth, mHeight)
 
-        glTexParameteri(mHandle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
-        glTexParameteri(mHandle, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+        //绑定纹理单元与sampler
+        GLES31.glBindSampler(mHandle, TextureHelper.samplers[0])
 
-        glTexParameteri(mHandle, GL_TEXTURE_WRAP_S, GL_REPEAT)
-        glTexParameteri(mHandle, GL_TEXTURE_WRAP_T, GL_REPEAT)
     }
 
     override fun setData(data: Buffer, size: Int) {
@@ -101,26 +99,28 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
     }
 
     override fun bind(slot: Int) {
-        when (slot) {
-            0 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE0)
-            1 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE1)
-            2 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE2)
-            3 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE3)
-            4 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE4)
-            5 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE5)
-            6 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE6)
-            7 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE7)
-            8 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE8)
-            9 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE9)
-            10 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE10)
-            11 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE11)
-            12 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE12)
-            13 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE13)
-            14 -> GLES31.glActiveTexture(GLES31.GL_TEXTURE14)
-            else -> GLES31.glActiveTexture(GLES31.GL_TEXTURE15)
+        val textureSlot = when (slot) {
+            0 -> GLES31.GL_TEXTURE0
+            1 -> GLES31.GL_TEXTURE1
+            2 -> GLES31.GL_TEXTURE2
+            3 -> GLES31.GL_TEXTURE3
+            4 -> GLES31.GL_TEXTURE4
+            5 -> GLES31.GL_TEXTURE5
+            6 -> GLES31.GL_TEXTURE6
+            7 -> GLES31.GL_TEXTURE7
+            8 -> GLES31.GL_TEXTURE8
+            9 -> GLES31.GL_TEXTURE9
+            10 -> GLES31.GL_TEXTURE10
+            11 -> GLES31.GL_TEXTURE11
+            12 -> GLES31.GL_TEXTURE12
+            13 -> GLES31.GL_TEXTURE13
+            14 -> GLES31.GL_TEXTURE14
+            else -> GLES31.GL_TEXTURE15
         }
+        // Set active texture unit
+        GLES31.glActiveTexture(textureSlot)
 
-        // Bind this texture with above active texture
+        // Bind this texture with above active texture unit
         GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, mHandle)
     }
 
