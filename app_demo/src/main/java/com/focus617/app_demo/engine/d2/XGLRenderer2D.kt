@@ -5,10 +5,7 @@ import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.renderer.XGLTextureSlots
 import com.focus617.core.engine.baseDataType.Color
-import com.focus617.core.engine.math.Vector2
-import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.math.Vector4
-import com.focus617.core.engine.math.XMatrix
+import com.focus617.core.engine.math.*
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Texture2D
 import com.focus617.core.engine.renderer.XRenderer
@@ -328,26 +325,9 @@ class XGLRenderer2D(
             size: Vector2,
             rotationInDegree: Float = 0.0f
         ): FloatArray {
-            val result = FloatArray(16)
-            XMatrix.setIdentityM(result, 0)
-
-            val translate = FloatArray(16)
-            XMatrix.setIdentityM(translate, 0)
-            XMatrix.translateM(translate, 0, position)
-
-            val scale = FloatArray(16)
-            XMatrix.setIdentityM(scale, 0)
-            XMatrix.scaleM(scale, 0, size.x, size.y, 1.0f)
-
-            val rotation = FloatArray(16)
-            XMatrix.setIdentityM(rotation, 0)
-            XMatrix.rotateM(rotation, 0, rotationInDegree, 0.0f, 0.0f, 1.0f)
-
-            XMatrix.xMultiplyMM(result, 0, translate, 0, result, 0)
-            XMatrix.xMultiplyMM(result, 0, rotation, 0, result, 0)
-            XMatrix.xMultiplyMM(result, 0, scale, 0, result, 0)
-            //LOG.info(XMatrix.toString(result))
-            return result
+            val result = Mat4().transform(position,size,rotationInDegree)
+            //LOG.info(result.toString("Transform Matrix"))
+            return result.toFloatArray()
         }
 
         private fun vector3AfterTransform(vector4: Vector4, transform: FloatArray): Vector3 {
