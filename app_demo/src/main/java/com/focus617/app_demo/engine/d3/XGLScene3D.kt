@@ -1,7 +1,6 @@
 package com.focus617.app_demo.engine.d3
 
 import android.content.Context
-import android.opengl.GLES31
 import com.focus617.app_demo.engine.Sandbox
 import com.focus617.app_demo.renderer.*
 import com.focus617.app_demo.terrain.Heightmap
@@ -10,7 +9,6 @@ import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.scene.PerspectiveCamera
 import com.focus617.core.engine.scene.PerspectiveCameraController
 import com.focus617.core.engine.scene.Scene
-import com.focus617.platform.helper.TextureHelper
 
 class XGLScene3D(val context: Context, val engine: Sandbox) : Scene() {
 
@@ -51,16 +49,12 @@ class XGLScene3D(val context: Context, val engine: Sandbox) : Scene() {
         textureGrass?.apply {
             Heightmap.textureIndexGrass = XGLTextureSlots.getId(textureGrass)
             textureGrass.bind(Heightmap.textureIndexGrass)
-            //绑定纹理单元与sampler
-            GLES31.glBindSampler(Heightmap.textureIndexGrass, TextureHelper.samplers[0])
-        }
+       }
 
         val textureStone = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapStoneFilePath)
         textureStone?.apply {
             Heightmap.textureIndexStone = XGLTextureSlots.getId(textureStone)
             textureStone.bind(Heightmap.textureIndexStone)
-            //绑定纹理单元与sampler
-            GLES31.glBindSampler(Heightmap.textureIndexStone, TextureHelper.samplers[0])
         }
     }
 
