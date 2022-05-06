@@ -1,15 +1,15 @@
 package com.focus617.core.engine.objects
 
+import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Shader
 import com.focus617.core.engine.renderer.VertexArray
 import com.focus617.core.platform.base.BaseEntity
 
-interface IfDrawable{
+interface IfDrawable {
     abstract fun beforeBuild()
     abstract fun afterBuild()
     abstract fun getVertices(): FloatArray
@@ -19,10 +19,12 @@ interface IfDrawable{
 }
 
 abstract class DrawableObject : BaseEntity(), IfDrawable {
-    val modelMatrix: FloatArray = FloatArray(16)
+    //val modelMatrix: FloatArray = FloatArray(16)
+    val modelMatrix = Mat4()
 
     // vertexArray is initialized by Scene via calling XGLVertexArray.buildVertexArray
     lateinit var vertexArray: VertexArray
+
     // shaderName should be initialized by each concrete drawable object itself
     lateinit var shaderName: String
 
@@ -47,19 +49,16 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
         shader.unbind()
     }
 
-    fun resetTransform(){
-        XMatrix.setIdentityM(modelMatrix, 0)
+    fun resetTransform() {
+        modelMatrix.setIdentity()
     }
 
     open fun onTransform3D(
         position: Vector3,
         scaleSize: Vector3,
         rotation: Float = 0.0f
-    ){
-        XMatrix.setIdentityM(modelMatrix, 0)
-        XMatrix.scaleM(modelMatrix, 0, scaleSize.x, scaleSize.y, scaleSize.z)
-        XMatrix.rotateM(modelMatrix, 0, rotation, 0.0f, 0.0f, 1.0f)
-        XMatrix.translateM(modelMatrix, 0, position)
+    ) {
+        modelMatrix.transform3D(position, scaleSize, rotation, 0.0f, 0.0f, 1.0f)
         //LOG.info("ModelMatrix:" + XMatrix.toString(modelMatrix))
     }
 
@@ -67,11 +66,8 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
         position: Vector3,
         scaleSize: Vector2,
         rotation: Float = 0.0f
-    ){
-        XMatrix.setIdentityM(modelMatrix, 0)
-        XMatrix.scaleM(modelMatrix, 0, scaleSize.x, scaleSize.y, 1.0f)
-        XMatrix.rotateM(modelMatrix, 0, rotation, 0.0f, 0.0f, 1.0f)
-        XMatrix.translateM(modelMatrix, 0, position)
+    ) {
+        modelMatrix.transform2D(position, scaleSize, rotation)
         //LOG.info("ModelMatrix:" + XMatrix.toString(modelMatrix))
     }
 
@@ -80,7 +76,7 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
         scaleSize: Vector2,
         rotation: Float = 0.0f
     ) {
-        onTransform2D(Vector3(position.x, position.y, 0.0f), scaleSize, rotation)
+        modelMatrix.transform2D(Vector3(position.x, position.y, 0.0f), scaleSize, rotation)
     }
 
 }

@@ -38,6 +38,8 @@ object Renderer2DData : Closeable {
         Vector4( -0.5f,  0.5f, 0.0f, 1.0f)
     )
 
+    val stats: Statistics = Statistics(0, 0)
+
 
     override fun close() {
         initialized = false
@@ -51,6 +53,7 @@ object Renderer2DData : Closeable {
         initShader(context)
         initVertexArray()
         initTexture()
+        stats.resetStats()
         initialized = true
     }
 
@@ -120,25 +123,32 @@ object Renderer2DData : Closeable {
     }
 
     fun put(value: Float) {
-        QuadVertexBufferBase[QuadVertexBufferPtr++] = value
+        if (QuadVertexBufferPtr < QuadVertexBufferBase.size - 5)
+            QuadVertexBufferBase[QuadVertexBufferPtr++] = value
     }
 
     fun put(value: Vector2) {
-        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
-        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
+        if (QuadVertexBufferPtr < QuadVertexBufferBase.size - 9) {
+            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
+            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
+        }
     }
 
     fun put(value: Vector3) {
-        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
-        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
-        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.z
+        if (QuadVertexBufferPtr < QuadVertexBufferBase.size - 13) {
+            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
+            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
+            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.z
+        }
     }
 
     fun put(value: Vector4) {
-        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
-        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
-        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.z
-        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.w
+        if (QuadVertexBufferPtr < QuadVertexBufferBase.size - 17) {
+            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
+            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
+            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.z
+            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.w
+        }
     }
 
 }

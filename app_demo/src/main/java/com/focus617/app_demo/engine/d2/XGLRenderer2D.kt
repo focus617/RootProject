@@ -5,10 +5,7 @@ import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.renderer.XGLTextureSlots
 import com.focus617.core.engine.baseDataType.Color
-import com.focus617.core.engine.math.Vector2
-import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.math.Vector4
-import com.focus617.core.engine.math.XMatrix
+import com.focus617.core.engine.math.*
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Texture2D
 import com.focus617.core.engine.renderer.XRenderer
@@ -96,8 +93,16 @@ class XGLRenderer2D(
         with(Renderer2DData) {
             QuadVertexArray.bind()
             RenderCommand.drawIndexed(QuadVertexArray, QuadIndexCount)
+            stats.drawCalls++
         }
     }
+
+//    fun flushAndReset() {
+//        endScene()
+//        Renderer2DData.QuadIndexCount = 0
+//        Renderer2DData.QuadVertexBufferPtr = 0
+//        XGLTextureSlots.TextureSlotIndex = 1
+//    }
 
     companion object {
         fun drawQuad(position: Vector3, size: Vector2, color: Vector4) {
@@ -129,6 +134,8 @@ class XGLRenderer2D(
             Renderer2DData.put(tilingFactor)
 
             Renderer2DData.QuadIndexCount += 6
+
+            Renderer2DData.stats.quadCount++
         }
 
         fun drawQuad(position: Vector2, size: Vector2, color: Vector4) {
@@ -166,6 +173,8 @@ class XGLRenderer2D(
             Renderer2DData.put(tilingFactor)
 
             Renderer2DData.QuadIndexCount += 6
+
+            Renderer2DData.stats.quadCount++
         }
 
         fun drawQuad(
@@ -230,6 +239,8 @@ class XGLRenderer2D(
             Renderer2DData.put(tilingFactor)
 
             Renderer2DData.QuadIndexCount += 6
+
+            Renderer2DData.stats.quadCount++
         }
 
         fun drawRotatedQuad(
@@ -287,6 +298,7 @@ class XGLRenderer2D(
 
             Renderer2DData.QuadIndexCount += 6
 
+            Renderer2DData.stats.quadCount++
         }
 
         fun drawRotatedQuad(
@@ -313,12 +325,9 @@ class XGLRenderer2D(
             size: Vector2,
             rotationInDegree: Float = 0.0f
         ): FloatArray {
-            val transform = FloatArray(16)
-            XMatrix.setIdentityM(transform, 0)
-            XMatrix.scaleM(transform, 0, size.x, size.y, 1.0f)
-            XMatrix.rotateM(transform, 0, rotationInDegree, 0.0f, 0.0f, 1.0f)
-            XMatrix.translateM(transform, 0, position)
-            return transform
+            val result = Mat4().transform2D(position,size,rotationInDegree)
+            //LOG.info(result.toString("Transform Matrix"))
+            return result.toFloatArray()
         }
 
         private fun vector3AfterTransform(vector4: Vector4, transform: FloatArray): Vector3 {

@@ -3,6 +3,7 @@ package com.focus617.app_demo.renderer
 import android.content.Context
 import android.opengl.GLES31.*
 import android.text.TextUtils
+import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
@@ -79,6 +80,10 @@ class XGLShader constructor(
 
     override fun setMat4(name: String, matrix: FloatArray) {
         uploadUniformMat4(name, matrix)
+    }
+
+    override fun setMat4(name: String, matrix: Mat4) {
+        uploadUniformMat4(name, matrix.toFloatArray())
     }
 
     override fun close() {
