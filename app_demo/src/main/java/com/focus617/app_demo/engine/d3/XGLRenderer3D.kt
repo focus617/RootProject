@@ -90,17 +90,6 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         shader: Shader,
         vertexArray: VertexArray,
         transform: FloatArray
-    ) {
-//        (shader as XGLShader).bind()
-//        shader.setMat4("u_ModelMatrix", transform)
-//
-//        vertexArray.bind()
-//        RenderCommand.drawIndexed(vertexArray)
-//
-//        // 下面这两行可以省略，以节约GPU的运行资源；
-//        // 在下个submit，会bind其它handle，自然会实现unbind
-//        vertexArray.unbind()
-//        shader.unbind()
-    }
+    ) { }
 
 }

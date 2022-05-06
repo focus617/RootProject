@@ -12,7 +12,7 @@ import kotlin.math.sqrt
  * matrices and vectors stored in float arrays.
  *
  *
- * Matrices are 4 x 4 column-vector matrices stored in column-major
+ * Matrices are 4 x 4 column-vector matrices stored in column-major(列主序)
  * order:
  * <pre>
  * m[offset +  0] m[offset +  4] m[offset +  8] m[offset + 12]

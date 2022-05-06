@@ -3,6 +3,7 @@ package com.focus617.app_demo.engine
 import android.content.Context
 import com.focus617.app_demo.engine.d2.GameLayer
 import com.focus617.app_demo.engine.d2.XGLScene2D
+import com.focus617.app_demo.engine.d3.GamePlayerLayer
 import com.focus617.app_demo.engine.d3.XGLScene3D
 import com.focus617.app_demo.terrain.TerrainLayer
 import com.focus617.core.engine.core.Engine
@@ -19,6 +20,7 @@ class Sandbox(context: Context, val is3D: Boolean) : Engine(), Closeable {
         if (is3D) {
             scene = XGLScene3D(context, this)
             pushLayer(TerrainLayer("TerrainLayer", scene as XGLScene3D, is3D))
+            pushLayer(GamePlayerLayer("GamePlayerLayer", scene as XGLScene3D, is3D))
             //pushOverLayer(Layer2D("ExampleOverlay"))
         } else {
             scene = XGLScene2D(context, this)

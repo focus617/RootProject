@@ -1,7 +1,6 @@
 package com.focus617.app_demo.engine.d3
 
 import android.content.Context
-import android.opengl.GLES31
 import com.focus617.app_demo.engine.Sandbox
 import com.focus617.app_demo.renderer.*
 import com.focus617.app_demo.terrain.Heightmap
@@ -10,7 +9,6 @@ import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.scene.PerspectiveCamera
 import com.focus617.core.engine.scene.PerspectiveCameraController
 import com.focus617.core.engine.scene.Scene
-import com.focus617.platform.helper.TextureHelper
 
 class XGLScene3D(val context: Context, val engine: Sandbox) : Scene() {
 
@@ -37,6 +35,18 @@ class XGLScene3D(val context: Context, val engine: Sandbox) : Scene() {
             Heightmap.HeightMapShaderFilePath
         ) as XGLShader
         mShaderLibrary.add(shader)
+
+        shader = XGLShaderBuilder.createShader(
+            context,
+            Earth.ShaderFilePath
+        ) as XGLShader
+        mShaderLibrary.add(shader)
+
+        shader = XGLShaderBuilder.createShader(
+            context,
+            Box.ShaderFilePath
+        ) as XGLShader
+        mShaderLibrary.add(shader)
     }
 
     private fun initTexture() {
@@ -50,17 +60,26 @@ class XGLScene3D(val context: Context, val engine: Sandbox) : Scene() {
         val textureGrass = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapGrassFilePath)
         textureGrass?.apply {
             Heightmap.textureIndexGrass = XGLTextureSlots.getId(textureGrass)
-            textureGrass.bind(Heightmap.textureIndexGrass)
-            //绑定纹理单元与sampler
-            GLES31.glBindSampler(Heightmap.textureIndexGrass, TextureHelper.samplers[0])
-        }
+       }
 
         val textureStone = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapStoneFilePath)
         textureStone?.apply {
             Heightmap.textureIndexStone = XGLTextureSlots.getId(textureStone)
-            textureStone.bind(Heightmap.textureIndexStone)
-            //绑定纹理单元与sampler
-            GLES31.glBindSampler(Heightmap.textureIndexStone, TextureHelper.samplers[0])
+        }
+
+        val textureEarthDay = XGLTextureBuilder.createTexture(context, Earth.DayTextureFilePath)
+        textureEarthDay?.apply {
+            Earth.textureIndexDay = XGLTextureSlots.getId(textureEarthDay)
+        }
+
+        val textureEarthNight = XGLTextureBuilder.createTexture(context, Earth.NightTextureFilePath)
+        textureEarthNight?.apply {
+            Earth.textureIndexNight = XGLTextureSlots.getId(textureEarthNight)
+        }
+
+        val textureBox = XGLTextureBuilder.createTexture(context, Box.TextureFilePath)
+        textureBox?.apply {
+            Box.textureIndex = XGLTextureSlots.getId(textureBox)
         }
     }
 

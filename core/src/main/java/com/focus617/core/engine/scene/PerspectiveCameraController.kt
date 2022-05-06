@@ -1,10 +1,7 @@
 package com.focus617.core.engine.scene
 
 import com.focus617.core.engine.core.TimeStep
-import com.focus617.core.engine.math.Point3D
-import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.math.XMatrix
-import com.focus617.core.engine.math.rotate
+import com.focus617.core.engine.math.*
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.screenTouchEvents.*
 import com.focus617.mylib.helper.DateHelper
@@ -71,10 +68,10 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
         val mCameraRotationSpeed: Float = 0.001F
 
         //mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed
-        mCameraRotation = rotate(mCameraRotation)
+        mCameraRotation = yawClamp(mCameraRotation)
     }
 
-    private var previoudZoomLevel: Float = 1.0f
+    private var previousZoomLevel: Float = 1.0f
     private var previousSpan: Float = 1.0f
     private var previousX: Float = 0.0f
     private var previousY: Float = 0.0f
@@ -95,21 +92,23 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
                 val sensitivity = 10f
                 val deltaX = event.x - previousX
                 val deltaY = event.y - previousY
-                pitchX += deltaY / sensitivity
-                yawY += deltaX / sensitivity
-                pitchX = rotate(pitchX, 0f, 360f)
-                yawY = rotate(yawY)
-                setRotation(pitchX, yawY)
 
                 previousX = event.x
                 previousY = event.y
+
+                pitchX += deltaY / sensitivity
+                yawY += deltaX / sensitivity
+                pitchX = pitchClamp(pitchX)
+                yawY = yawClamp(yawY)
+                setRotation(pitchX, yawY)
+
                 event.handleFinished()
             }
 
             is PinchStartEvent -> {
                 LOG.info("CameraController: on PinchStartEvent")
                 // 记录下本轮缩放操作的基准
-                previoudZoomLevel = mZoomLevel
+                previousZoomLevel = mZoomLevel
                 previousSpan = event.span
                 mode = ControllerWorkingMode.Zoom
                 event.handleFinished()
@@ -120,7 +119,7 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
                     // 根据双指间距的变化，计算相对变化量
                     val scaleFactor = previousSpan / event.span
                     LOG.info("CameraController: on PinchEvent, ZoomLevel=$scaleFactor")
-                    setZoomLevel(previoudZoomLevel * scaleFactor)
+                    setZoomLevel(previousZoomLevel * scaleFactor)
                 }
                 event.handleFinished()
             }

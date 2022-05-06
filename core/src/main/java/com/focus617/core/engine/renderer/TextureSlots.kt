@@ -27,12 +27,11 @@ abstract class TextureSlots : WithLogging(), Closeable {
             }
 
         val newIndex = TextureSlotIndex
-        if(newIndex< MaxTextureSlots) {
+        if (newIndex < MaxTextureSlots) {
             TextureSlots[TextureSlotIndex] = texture
             TextureSlotIndex++
             return newIndex
-        }
-        else{
+        } else {
             val str = "Texture already reached to Max Texture Slot!"
             LOG.error(str)
             throw IllegalMonitorStateException(str)

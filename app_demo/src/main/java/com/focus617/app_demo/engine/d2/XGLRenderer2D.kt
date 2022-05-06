@@ -5,7 +5,10 @@ import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.renderer.XGLTextureSlots
 import com.focus617.core.engine.baseDataType.Color
-import com.focus617.core.engine.math.*
+import com.focus617.core.engine.math.Mat4
+import com.focus617.core.engine.math.Vector2
+import com.focus617.core.engine.math.Vector3
+import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Texture2D
 import com.focus617.core.engine.renderer.XRenderer
@@ -69,9 +72,10 @@ class XGLRenderer2D(
             TextureShader.setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
             TextureShader.setMat4("u_ViewMatrix", SceneData.sViewMatrix)
 
-            val modelMatrix: FloatArray = FloatArray(16)
-            XMatrix.setIdentityM(modelMatrix, 0)
-            TextureShader.setMat4("u_ModelMatrix", modelMatrix)
+//            val modelMatrix: FloatArray = FloatArray(16)
+//            XMatrix.setIdentityM(modelMatrix, 0)
+//            TextureShader.setMat4("u_ModelMatrix", modelMatrix)
+            TextureShader.setMat4("u_ModelMatrix", Mat4())
         }
     }
 
