@@ -88,6 +88,8 @@ class XGLRenderer2D(
     }
 
     fun flush() {
+        if (Renderer2DData.QuadIndexCount == 0) return
+
         XGLTextureSlots.flush()
 
         with(Renderer2DData) {
@@ -143,8 +145,7 @@ class XGLRenderer2D(
         }
 
         fun drawQuad(
-            position: Vector3, size: Vector2, texture: Texture2D, tilingFactor: Float = 1.0f,
-            tintColor: Vector4 = Renderer2DData.WHITE
+            position: Vector3, size: Vector2, texture: Texture2D, tilingFactor: Float = 1.0f
         ) {
             val textureIndex: Float = XGLTextureSlots.getId(texture).toFloat()
 
@@ -182,16 +183,14 @@ class XGLRenderer2D(
             size: Vector2,
             rotation: Float,
             texture: Texture2D,
-            tilingFactor: Float = 1.0f,
-            tintColor: Vector4 = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
+            tilingFactor: Float = 1.0f
         ) {
             drawRotatedQuad(
                 Vector3(position.x, position.y, 0.0f),
                 size,
                 rotation,
                 texture,
-                tilingFactor,
-                tintColor
+                tilingFactor
             )
         }
 

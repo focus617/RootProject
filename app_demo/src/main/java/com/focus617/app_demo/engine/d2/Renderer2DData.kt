@@ -47,6 +47,7 @@ object Renderer2DData : Closeable {
         QuadVertexArray.close()
         TextureShader.close()
         WhiteTexture.close()
+        QuadVertexBufferBase = FloatArray(1)
     }
 
     fun initStaticData(context: Context) {
