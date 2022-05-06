@@ -325,7 +325,7 @@ class XGLRenderer2D(
             size: Vector2,
             rotationInDegree: Float = 0.0f
         ): FloatArray {
-            val result = Mat4().transform(position,size,rotationInDegree)
+            val result = Mat4().transform2D(position,size,rotationInDegree)
             //LOG.info(result.toString("Transform Matrix"))
             return result.toFloatArray()
         }
