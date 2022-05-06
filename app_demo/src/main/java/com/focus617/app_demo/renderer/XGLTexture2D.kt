@@ -1,15 +1,13 @@
 package com.focus617.app_demo.renderer
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.opengl.GLES20.*
-import android.opengl.GLES30
 import android.opengl.GLES30.GL_RGBA8
 import android.opengl.GLES31
 import com.focus617.core.engine.renderer.Texture2D
 import com.focus617.platform.helper.BitmapHelper
+import com.focus617.platform.helper.TextureHelper
 import java.nio.Buffer
-import java.nio.ByteBuffer
 
 /**
  * OpenGL纹理类 XGLTexture
@@ -33,13 +31,25 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
     /** 基于Assets中的文件构造 */
     constructor(context: Context, filePath: String) : this(filePath) {
         val bitmap = BitmapHelper.bitmapLoader(context, filePath)
-        initTexture(bitmap)
+        bitmap.apply {
+            mWidth = bitmap.width
+            mHeight = bitmap.height
+            mHandle = TextureHelper.loadImageIntoTexture(textureObjectIdBuf, bitmap)
+        }
+        // Recycle the bitmap, since its data has been loaded into OpenGL.
+        bitmap.recycle()
     }
 
     /** 基于Resource/raw中的文件构造 */
     constructor(context: Context, resourceId: Int) : this("Resource/$resourceId") {
         val bitmap = BitmapHelper.bitmapLoader(context, resourceId)
-        initTexture(bitmap)
+        bitmap.apply {
+            mWidth = bitmap.width
+            mHeight = bitmap.height
+            mHandle = TextureHelper.loadImageIntoTexture(textureObjectIdBuf, bitmap)
+        }
+        // Recycle the bitmap, since its data has been loaded into OpenGL.
+        bitmap.recycle()
     }
 
     /** 程序编程构造 */
@@ -62,21 +72,11 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         // Allocate texture storage
         GLES31.glTexStorage2D(GL_TEXTURE_2D, 1, mInternalFormat, mWidth, mHeight)
 
-        glTexParameteri(mHandle, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-        glTexParameteri(mHandle, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        glTexParameteri(mHandle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
+        glTexParameteri(mHandle, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 
         glTexParameteri(mHandle, GL_TEXTURE_WRAP_S, GL_REPEAT)
         glTexParameteri(mHandle, GL_TEXTURE_WRAP_T, GL_REPEAT)
-    }
-
-    private fun initTexture(bitmap: Bitmap) {
-        bitmap.apply {
-            mWidth = bitmap.width
-            mHeight = bitmap.height
-            loadImageIntoTexture(bitmap)
-        }
-        // Recycle the bitmap, since its data has been loaded into OpenGL.
-        bitmap.recycle()
     }
 
     override fun setData(data: Buffer, size: Int) {
@@ -126,66 +126,6 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
 
     override fun close() {
         GLES31.glDeleteTextures(1, textureObjectIdBuf, 0)
-    }
-
-    /**
-     * Loads a texture from a file, returning the OpenGL ID for that
-     * texture. Returns 0 if the load failed.
-     *
-     * @param bitmap
-     * @return textureObjectId
-     */
-    private fun loadImageIntoTexture(bitmap: Bitmap): Int {
-
-        GLES31.glGenTextures(1, textureObjectIdBuf, 0)
-        if (textureObjectIdBuf[0] == 0) {
-            LOG.error("Could not generate a new OpenGL texture object.")
-            return 0
-        }
-        mHandle = textureObjectIdBuf[0]
-
-        // Bind to the texture in OpenGL
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, mHandle)
-
-        // Set
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
-
-        // Set filtering: a default must be set, or the texture will be black.
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-
-        val byteBuf = ByteBuffer.allocate(bitmap.width * bitmap.height * 4)
-        bitmap.copyPixelsToBuffer(byteBuf)
-        byteBuf.position(0)
-
-        // Load the bitmap into the bound texture.
-        GLES31.glTexImage2D(
-            GLES30.GL_TEXTURE_2D,
-            0,
-            GLES30.GL_RGBA,
-            bitmap.width,
-            bitmap.height,
-            0,
-            GLES30.GL_RGBA,
-            GLES30.GL_UNSIGNED_BYTE,
-            byteBuf
-        )
-        //  GLUtils.texImage2D(GLES31.GL_TEXTURE_2D, 0, bitmap, 0)
-
-        // Note: Following code may cause an error to be reported in the
-        // ADB log as follows: E/IMGSRV(20095): :0: HardwareMipGen:
-        // Failed to generate texture mipmap levels (error=3)
-        // No OpenGL error will be encountered (glGetError() will return
-        // 0). If this happens, just squash the source image to be
-        // square. It will look the same because of texture coordinates,
-        // and mipmap generation will work.
-        GLES31.glGenerateMipmap(GLES31.GL_TEXTURE_2D)
-
-        // Unbind from the texture.
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, 0)
-
-        return mHandle
     }
 
 }
