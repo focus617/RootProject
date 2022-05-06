@@ -67,15 +67,11 @@ class XGLRenderer2D(
 
     override fun beginScene(camera: Camera) {
         XGLContext.checkGLError("before beginScene")
-        with(Renderer2DData) {
-            TextureShader.bind()
-            TextureShader.setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
-            TextureShader.setMat4("u_ViewMatrix", SceneData.sViewMatrix)
-
-//            val modelMatrix: FloatArray = FloatArray(16)
-//            XMatrix.setIdentityM(modelMatrix, 0)
-//            TextureShader.setMat4("u_ModelMatrix", modelMatrix)
-            TextureShader.setMat4("u_ModelMatrix", Mat4())
+        with(Renderer2DData.TextureShader) {
+            bind()
+            setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
+            setMat4("u_ViewMatrix", SceneData.sViewMatrix)
+            setMat4("u_ModelMatrix", Mat4())
         }
     }
 
