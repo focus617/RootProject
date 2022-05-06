@@ -17,8 +17,8 @@ class TerrainLayer(name: String, private val scene: XGLScene3D, val is3D: Boolea
         // Expand the heightmap's dimensions, but don't expand the height as
         // much so that we don't get insanely tall mountains.
         heightmap.onTransform3D(
-            Vector3(0.0f, -2.5f, 0.0f),
-            Vector3(100f, 100f, 100f)
+            Vector3(0.0f, 0.0f, 0.0f),
+            Vector3(100f, 10f, 100f)
         )
         gameObjectList.add(heightmap)
 

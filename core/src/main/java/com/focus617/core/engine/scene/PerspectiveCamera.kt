@@ -7,8 +7,8 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class PerspectiveCamera : Camera() {
-    override var mPosition: Point3D = Point3D(0.0f, 0.0f, defaultDistance)
-    private val target: Point3D = Point3D(0.0f, 0.0f, 0.0f)
+    override var mPosition: Point3D = Point3D(0.0f, 1.0f, defaultDistance)
+    private val target: Point3D = Point3D(0.0f, 1.0f, 0.0f)
     private var mTargetDistance: Float = defaultDistance
 
     private var directionUp: Vector3 = worldUp
@@ -50,16 +50,6 @@ class PerspectiveCamera : Camera() {
         directionUp = directionRight.crossProduct(directionFront).normalize()
 
         reCalculateViewMatrix()
-    }
-
-    fun setRotationNotWork(pitchXInDegree: Float = 0f, yawYInDegree: Float = 90f) {
-        val angleX: Float = pitchXInDegree * (Math.PI / 180.0f).toFloat()
-        val angleY: Float = yawYInDegree * (Math.PI / 180.0f).toFloat()
-
-        XMatrix.setIdentityM(mViewMatrix, 0)
-        XMatrix.rotateM(mViewMatrix, 0, angleX, 1f, 0f, 0f)
-        XMatrix.rotateM(mViewMatrix, 0, angleY, 0f, 1f, 0f)
-        XMatrix.translateM(mViewMatrix, 0, 0f, -1.5f, -5f)
     }
 
     override fun reCalculateViewMatrix() {

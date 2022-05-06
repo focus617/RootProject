@@ -35,6 +35,18 @@ class XGLScene3D(val context: Context, val engine: Sandbox) : Scene() {
             Heightmap.HeightMapShaderFilePath
         ) as XGLShader
         mShaderLibrary.add(shader)
+
+        shader = XGLShaderBuilder.createShader(
+            context,
+            Earth.ShaderFilePath
+        ) as XGLShader
+        mShaderLibrary.add(shader)
+
+        shader = XGLShaderBuilder.createShader(
+            context,
+            Box.ShaderFilePath
+        ) as XGLShader
+        mShaderLibrary.add(shader)
     }
 
     private fun initTexture() {
@@ -48,13 +60,26 @@ class XGLScene3D(val context: Context, val engine: Sandbox) : Scene() {
         val textureGrass = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapGrassFilePath)
         textureGrass?.apply {
             Heightmap.textureIndexGrass = XGLTextureSlots.getId(textureGrass)
-            textureGrass.bind(Heightmap.textureIndexGrass)
        }
 
         val textureStone = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapStoneFilePath)
         textureStone?.apply {
             Heightmap.textureIndexStone = XGLTextureSlots.getId(textureStone)
-            textureStone.bind(Heightmap.textureIndexStone)
+        }
+
+        val textureEarthDay = XGLTextureBuilder.createTexture(context, Earth.DayTextureFilePath)
+        textureEarthDay?.apply {
+            Earth.textureIndexDay = XGLTextureSlots.getId(textureEarthDay)
+        }
+
+        val textureEarthNight = XGLTextureBuilder.createTexture(context, Earth.NightTextureFilePath)
+        textureEarthNight?.apply {
+            Earth.textureIndexNight = XGLTextureSlots.getId(textureEarthNight)
+        }
+
+        val textureBox = XGLTextureBuilder.createTexture(context, Box.TextureFilePath)
+        textureBox?.apply {
+            Box.textureIndex = XGLTextureSlots.getId(textureBox)
         }
     }
 
