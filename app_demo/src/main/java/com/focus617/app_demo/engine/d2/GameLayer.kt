@@ -51,29 +51,29 @@ class GameLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean) 
                 20f
             )
 
-            var subTexture2D = SubTexture2D.createFromCoords(
+            // 构造SubTexture
+            val textureTree = SubTexture2D.createFromCoords(
                 XGLTextureSlots.TextureSlots[XGLScene2D.textureAltasIndex] as Texture2D,
-                Vector2(0f, 5f),        // SubTexture Coords
-                Vector2(128f, 256f)     // SubTexture Size
+                Vector2(0f, 10f),       // SubTexture Coords（原点在左上角，Y轴向下）
+                Vector2(128f, 128f),    // sprite size
+                Vector2(1f, 2f)         // cell size
             )
-
-            XGLRenderer2D.drawQuad(
-                Point3D(-0.5f, -1.0f, 0.01f),
-                Vector2(1.0f, 2.0f),
-                subTexture2D,
-                1.0f
-            )
-
-            subTexture2D = SubTexture2D.createFromCoords(
+            val textureBarrel = SubTexture2D.createFromCoords(
                 XGLTextureSlots.TextureSlots[XGLScene2D.textureAltasIndex] as Texture2D,
                 Vector2(6f, 12f),        // SubTexture Coords
                 Vector2(128f, 128f)     // SubTexture Size
             )
-
+            // 使用SubTexture绘制
+            XGLRenderer2D.drawQuad(
+                Point3D(-0.5f, -1.0f, 0.01f),
+                Vector2(1.0f, 2.0f),
+                textureTree,
+                1.0f
+            )
             XGLRenderer2D.drawQuad(
                 Point3D(-0.5f, -1.2f, 0.02f),
                 Vector2(1.0f, 1.0f),
-                subTexture2D,
+                textureBarrel,
                 1.0f
             )
 

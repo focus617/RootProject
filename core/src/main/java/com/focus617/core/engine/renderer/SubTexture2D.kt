@@ -24,7 +24,8 @@ data class SubTexture2D(val mTextureAtlas: Texture2D) {
         fun createFromCoords(
             textureAtlas: Texture2D,
             coords: Vector2,
-            spriteSize: Vector2
+            spriteSize: Vector2,
+            cellSize: Vector2 = Vector2(1f, 1f)
         ): SubTexture2D = SubTexture2D(
             textureAtlas,
             Vector2(
@@ -32,8 +33,8 @@ data class SubTexture2D(val mTextureAtlas: Texture2D) {
                 (coords.y * spriteSize.y) / textureAtlas.mHeight
             ),
             Vector2(
-                ((coords.x + 1) * spriteSize.x) / textureAtlas.mWidth,
-                ((coords.y + 1) * spriteSize.y) / textureAtlas.mHeight
+                ((coords.x + cellSize.x) * spriteSize.x ) / textureAtlas.mWidth,
+                ((coords.y + cellSize.y) * spriteSize.y ) / textureAtlas.mHeight
             )
         )
     }
