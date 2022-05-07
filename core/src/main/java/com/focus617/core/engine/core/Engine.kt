@@ -23,7 +23,7 @@ open class Engine : BaseEntity(), Runnable {
         threadCore!!.start()
     }
 
-    fun onAttachWindow(window: IfWindow) {
+    open fun onAttachWindow(window: IfWindow) {
         LOG.info("Window Attached")
         mWindow = window
         mWindow!!.setEventCallbackFn {
@@ -31,7 +31,7 @@ open class Engine : BaseEntity(), Runnable {
         }
     }
 
-    fun onDetachWindow() {
+    open fun onDetachWindow() {
         LOG.info("Window Detached")
         mWindow = null
     }
