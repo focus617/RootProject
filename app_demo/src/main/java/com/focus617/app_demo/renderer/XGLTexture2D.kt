@@ -16,7 +16,7 @@ import java.nio.Buffer
  */
 class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
     private val textureObjectIdBuf = IntArray(1)
-    var mHandle: Int = 0
+    override var mHandle: Int = 0
 
     private var mInternalFormat: Int = GL_RGBA8
     private var mDataFormat: Int = GL_RGBA

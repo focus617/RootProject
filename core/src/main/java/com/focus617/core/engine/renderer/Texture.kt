@@ -10,6 +10,7 @@ import java.nio.Buffer
  * 2. 它的构造器需要纹理的图片资源或文件
  */
 abstract class Texture(val filePath: String) : BaseEntity(), Closeable {
+    abstract var mHandle: Int
     protected abstract var mWidth: Int
     protected abstract var mHeight: Int
 
