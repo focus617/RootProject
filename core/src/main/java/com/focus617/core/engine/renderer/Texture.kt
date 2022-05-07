@@ -11,8 +11,8 @@ import java.nio.Buffer
  */
 abstract class Texture(val filePath: String) : BaseEntity(), Closeable {
     abstract var mHandle: Int
-    protected abstract var mWidth: Int
-    protected abstract var mHeight: Int
+    abstract var mWidth: Int
+    abstract var mHeight: Int
 
     // 向GPU传递数据
     abstract fun setData(data: Buffer, size: Int)
