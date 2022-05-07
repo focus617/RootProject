@@ -7,6 +7,7 @@ import com.focus617.core.engine.math.Point2D
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector4
+import com.focus617.core.engine.renderer.SubTexture2D
 import com.focus617.core.engine.renderer.Texture2D
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene.Camera
@@ -39,15 +40,41 @@ class GameLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean) 
             XGLRenderer2D.drawQuad(
                 Point3D(-5f, -5f, -0.1f),
                 Vector2(10f, 10f),
-                XGLTextureSlots.TextureSlots[XGLScene2D.textureIndex] as Texture2D,
+                XGLTextureSlots.TextureSlots[XGLScene2D.textureCheckboxIndex] as Texture2D,
                 10f
             )
             XGLRenderer2D.drawRotatedQuad(
                 Point2D(0.0f, 1.0f),
                 Vector2(1.0f, 1.0f),
                 rotation,
-                XGLTextureSlots.TextureSlots[XGLScene2D.textureIndex] as Texture2D,
+                XGLTextureSlots.TextureSlots[XGLScene2D.textureCheckboxIndex] as Texture2D,
                 20f
+            )
+
+            var subTexture2D = SubTexture2D.createFromCoords(
+                XGLTextureSlots.TextureSlots[XGLScene2D.textureAltasIndex] as Texture2D,
+                Vector2(0f, 5f),        // SubTexture Coords
+                Vector2(128f, 256f)     // SubTexture Size
+            )
+
+            XGLRenderer2D.drawQuad(
+                Point3D(-0.5f, -1.0f, 0.01f),
+                Vector2(1.0f, 2.0f),
+                subTexture2D,
+                1.0f
+            )
+
+            subTexture2D = SubTexture2D.createFromCoords(
+                XGLTextureSlots.TextureSlots[XGLScene2D.textureAltasIndex] as Texture2D,
+                Vector2(6f, 12f),        // SubTexture Coords
+                Vector2(128f, 128f)     // SubTexture Size
+            )
+
+            XGLRenderer2D.drawQuad(
+                Point3D(-0.5f, -1.2f, 0.02f),
+                Vector2(1.0f, 1.0f),
+                subTexture2D,
+                1.0f
             )
 
             endScene()
@@ -67,10 +94,10 @@ class GameLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean) 
     }
 
     fun endScene() {
-        LOG.info(
-            "Statistic: drawCalls=${Renderer2DData.stats.drawCalls}," +
-                    " quadCount=${Renderer2DData.stats.quadCount}"
-        )
+//        LOG.info(
+//            "Statistic: drawCalls=${Renderer2DData.stats.drawCalls}," +
+//                    " quadCount=${Renderer2DData.stats.quadCount}"
+//        )
     }
 
     override fun onEvent(event: Event): Boolean {

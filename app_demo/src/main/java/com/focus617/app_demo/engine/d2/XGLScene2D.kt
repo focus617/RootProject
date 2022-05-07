@@ -26,11 +26,15 @@ class XGLScene2D(val context: Context, val engine: Sandbox) : Scene() {
     }
 
     private fun initTexture() {
-        val texture = XGLTextureBuilder.createTexture(
-            context,
-            "$PATH/$TEXTURE_FILE"
+        var texture = XGLTextureBuilder.createTexture(
+            context, TextureCheckboxFilePath
         )!!
-        textureIndex = XGLTextureSlots.getId(texture)
+        textureCheckboxIndex = XGLTextureSlots.getId(texture)
+
+        texture = XGLTextureBuilder.createTexture(
+            context, TextureAtlasFilePath
+        )!!
+        textureAltasIndex = XGLTextureSlots.getId(texture)
     }
 
     // TODO: My thought: I may call it in renderer.onSurfaceChanged when 2D GO ready,
@@ -55,10 +59,14 @@ class XGLScene2D(val context: Context, val engine: Sandbox) : Scene() {
 
         //TODO: I have no idea about 2D game object, put its data here temporarily
         private val PATH = "Quad"
-        private val TEXTURE_FILE = "Checkerboard.png"
+        private val TEXTURE_FILE_CKBoard = "Checkerboard.png"
+        private val TEXTURE_FILE_Atlas = "TextureAtlas.png"
 
-        val objectTextureName = "$PATH/$TEXTURE_FILE"
-        var textureIndex by Delegates.notNull<Int>()
+        val TextureCheckboxFilePath = "$PATH/$TEXTURE_FILE_CKBoard"
+        val TextureAtlasFilePath = "$PATH/$TEXTURE_FILE_Atlas"
+
+        var textureCheckboxIndex by Delegates.notNull<Int>()
+        var textureAltasIndex by Delegates.notNull<Int>()
     }
 
 }
