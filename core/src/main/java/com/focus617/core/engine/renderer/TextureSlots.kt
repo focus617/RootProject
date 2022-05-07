@@ -16,6 +16,10 @@ abstract class TextureSlots : WithLogging(), Closeable {
         }
     }
 
+    fun resetTextureSlot(){
+        TextureSlotIndex = 1
+    }
+
     fun flush() {
         for (i in 0 until TextureSlotIndex) TextureSlots[i]?.bind(i)
     }

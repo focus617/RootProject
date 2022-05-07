@@ -107,33 +107,38 @@ class XGLRenderer2D(
 //    }
 
     companion object {
+        /**
+         * 支持批处理 Batching Renderer后的 DrawQuad函数的做法是，每次调用 DrawQuad函数，
+         * 就去动态填充Vertex Buffer里顶点的各项顶点属性数据。
+         */
         fun drawQuad(position: Vector3, size: Vector2, color: Vector4) {
             val texIndex: Float = 0.0f // White Texture
             val tilingFactor: Float = 1.0f
 
-            Renderer2DData.put(position)
-            Renderer2DData.put(color)
-            Renderer2DData.put(Vector2(0.0f, 0.0f))
-            Renderer2DData.put(texIndex)
-            Renderer2DData.put(tilingFactor)
-
-            Renderer2DData.put(Vector3(position.x + size.x, position.y, 0.0f))
-            Renderer2DData.put(color)
-            Renderer2DData.put(Vector2(1.0f, 0.0f))
-            Renderer2DData.put(texIndex)
-            Renderer2DData.put(tilingFactor)
-
-            Renderer2DData.put(Vector3(position.x + size.x, position.y + size.y, 0.0f))
-            Renderer2DData.put(color)
-            Renderer2DData.put(Vector2(1.0f, 1.0f))
-            Renderer2DData.put(texIndex)
-            Renderer2DData.put(tilingFactor)
-
-            Renderer2DData.put(Vector3(position.x, position.y + size.y, 0.0f))
-            Renderer2DData.put(color)
-            Renderer2DData.put(Vector2(0.0f, 1.0f))
-            Renderer2DData.put(texIndex)
-            Renderer2DData.put(tilingFactor)
+            Renderer2DData.putQuadVertex(
+                position, color, Vector2(0.0f, 0.0f), texIndex, tilingFactor
+            )
+            Renderer2DData.putQuadVertex(
+                Vector3(position.x + size.x, position.y, 0.0f),
+                color,
+                Vector2(1.0f, 0.0f),
+                texIndex,
+                tilingFactor
+            )
+            Renderer2DData.putQuadVertex(
+                Vector3(position.x + size.x, position.y + size.y, 0.0f),
+                color,
+                Vector2(1.0f, 1.0f),
+                texIndex,
+                tilingFactor
+            )
+            Renderer2DData.putQuadVertex(
+                Vector3(position.x, position.y + size.y, 0.0f),
+                color,
+                Vector2(0.0f, 1.0f),
+                texIndex,
+                tilingFactor
+            )
 
             Renderer2DData.QuadIndexCount += 6
 
@@ -144,34 +149,38 @@ class XGLRenderer2D(
             drawQuad(Vector3(position.x, position.y, 0.0f), size, color)
         }
 
+        /**
+         * Tiling功能：Tint是着色、染色的东西，其实就是给Texture的 Color加上一个颜色的滤镜而已
+         */
         fun drawQuad(
             position: Vector3, size: Vector2, texture: Texture2D, tilingFactor: Float = 1.0f
         ) {
-            val textureIndex: Float = XGLTextureSlots.getId(texture).toFloat()
+            val texIndex: Float = XGLTextureSlots.getId(texture).toFloat()
 
-            Renderer2DData.put(position)
-            Renderer2DData.put(Renderer2DData.WHITE)
-            Renderer2DData.put(Vector2(0.0f, 0.0f))
-            Renderer2DData.put(textureIndex)
-            Renderer2DData.put(tilingFactor)
-
-            Renderer2DData.put(Vector3(position.x + size.x, position.y, 0.0f))
-            Renderer2DData.put(Renderer2DData.WHITE)
-            Renderer2DData.put(Vector2(1.0f, 0.0f))
-            Renderer2DData.put(textureIndex)
-            Renderer2DData.put(tilingFactor)
-
-            Renderer2DData.put(Vector3(position.x + size.x, position.y + size.y, 0.0f))
-            Renderer2DData.put(Renderer2DData.WHITE)
-            Renderer2DData.put(Vector2(1.0f, 1.0f))
-            Renderer2DData.put(textureIndex)
-            Renderer2DData.put(tilingFactor)
-
-            Renderer2DData.put(Vector3(position.x, position.y + size.y, 0.0f))
-            Renderer2DData.put(Renderer2DData.WHITE)
-            Renderer2DData.put(Vector2(0.0f, 1.0f))
-            Renderer2DData.put(textureIndex)
-            Renderer2DData.put(tilingFactor)
+            Renderer2DData.putQuadVertex(
+                position, Renderer2DData.WHITE, Vector2(0.0f, 0.0f), texIndex, tilingFactor
+            )
+            Renderer2DData.putQuadVertex(
+                Vector3(position.x + size.x, position.y, 0.0f),
+                Renderer2DData.WHITE,
+                Vector2(1.0f, 0.0f),
+                texIndex,
+                tilingFactor
+            )
+            Renderer2DData.putQuadVertex(
+                Vector3(position.x + size.x, position.y + size.y, 0.0f),
+                Renderer2DData.WHITE,
+                Vector2(1.0f, 1.0f),
+                texIndex,
+                tilingFactor
+            )
+            Renderer2DData.putQuadVertex(
+                Vector3(position.x, position.y + size.y, 0.0f),
+                Renderer2DData.WHITE,
+                Vector2(0.0f, 1.0f),
+                texIndex,
+                tilingFactor
+            )
 
             Renderer2DData.QuadIndexCount += 6
 
@@ -206,29 +215,34 @@ class XGLRenderer2D(
             val transform: Mat4 = Mat4().transform2D(position, size, rotationInDegree)
             //LOG.info(transform.toString("Transform Matrix"))
 
-            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[0]).toVector3())
-            Renderer2DData.put(color)
-            Renderer2DData.put(Vector2(0.0f, 0.0f))
-            Renderer2DData.put(texIndex)
-            Renderer2DData.put(tilingFactor)
-
-            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[1]).toVector3())
-            Renderer2DData.put(color)
-            Renderer2DData.put(Vector2(1.0f, 0.0f))
-            Renderer2DData.put(texIndex)
-            Renderer2DData.put(tilingFactor)
-
-            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[2]).toVector3())
-            Renderer2DData.put(color)
-            Renderer2DData.put(Vector2(1.0f, 1.0f))
-            Renderer2DData.put(texIndex)
-            Renderer2DData.put(tilingFactor)
-
-            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[3]).toVector3())
-            Renderer2DData.put(color)
-            Renderer2DData.put(Vector2(0.0f, 1.0f))
-            Renderer2DData.put(texIndex)
-            Renderer2DData.put(tilingFactor)
+            Renderer2DData.putQuadVertex(
+                (transform * Renderer2DData.QuadVertexPosition[0]).toVector3(),
+                color,
+                Vector2(0.0f, 0.0f),
+                texIndex,
+                tilingFactor
+            )
+            Renderer2DData.putQuadVertex(
+                (transform * Renderer2DData.QuadVertexPosition[1]).toVector3(),
+                color,
+                Vector2(1.0f, 0.0f),
+                texIndex,
+                tilingFactor
+            )
+            Renderer2DData.putQuadVertex(
+                (transform * Renderer2DData.QuadVertexPosition[2]).toVector3(),
+                color,
+                Vector2(1.0f, 1.0f),
+                texIndex,
+                tilingFactor
+            )
+            Renderer2DData.putQuadVertex(
+                (transform * Renderer2DData.QuadVertexPosition[3]).toVector3(),
+                color,
+                Vector2(0.0f, 1.0f),
+                texIndex,
+                tilingFactor
+            )
 
             Renderer2DData.QuadIndexCount += 6
 
@@ -252,34 +266,39 @@ class XGLRenderer2D(
             tilingFactor: Float = 1.0f,
             tintColor: Vector4 = Renderer2DData.WHITE
         ) {
-            val textureIndex: Float = XGLTextureSlots.getId(texture).toFloat()
+            val texIndex: Float = XGLTextureSlots.getId(texture).toFloat()
 
             val transform: Mat4 = Mat4().transform2D(position, size, rotationInDegree)
             //LOG.info(transform.toString("Transform Matrix"))
 
-            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[0]).toVector3())
-            Renderer2DData.put(Renderer2DData.WHITE)
-            Renderer2DData.put(Vector2(0.0f, 0.0f))
-            Renderer2DData.put(textureIndex)
-            Renderer2DData.put(tilingFactor)
-
-            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[1]).toVector3())
-            Renderer2DData.put(Renderer2DData.WHITE)
-            Renderer2DData.put(Vector2(1.0f, 0.0f))
-            Renderer2DData.put(textureIndex)
-            Renderer2DData.put(tilingFactor)
-
-            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[2]).toVector3())
-            Renderer2DData.put(Renderer2DData.WHITE)
-            Renderer2DData.put(Vector2(1.0f, 1.0f))
-            Renderer2DData.put(textureIndex)
-            Renderer2DData.put(tilingFactor)
-
-            Renderer2DData.put((transform * Renderer2DData.QuadVertexPosition[3]).toVector3())
-            Renderer2DData.put(Renderer2DData.WHITE)
-            Renderer2DData.put(Vector2(0.0f, 1.0f))
-            Renderer2DData.put(textureIndex)
-            Renderer2DData.put(tilingFactor)
+            Renderer2DData.putQuadVertex(
+                (transform * Renderer2DData.QuadVertexPosition[0]).toVector3(),
+                Renderer2DData.WHITE,
+                Vector2(0.0f, 0.0f),
+                texIndex,
+                tilingFactor
+            )
+            Renderer2DData.putQuadVertex(
+                (transform * Renderer2DData.QuadVertexPosition[1]).toVector3(),
+                Renderer2DData.WHITE,
+                Vector2(1.0f, 0.0f),
+                texIndex,
+                tilingFactor
+            )
+            Renderer2DData.putQuadVertex(
+                (transform * Renderer2DData.QuadVertexPosition[2]).toVector3(),
+                Renderer2DData.WHITE,
+                Vector2(1.0f, 1.0f),
+                texIndex,
+                tilingFactor
+            )
+            Renderer2DData.putQuadVertex(
+                (transform * Renderer2DData.QuadVertexPosition[3]).toVector3(),
+                Renderer2DData.WHITE,
+                Vector2(0.0f, 1.0f),
+                texIndex,
+                tilingFactor
+            )
 
             Renderer2DData.QuadIndexCount += 6
 

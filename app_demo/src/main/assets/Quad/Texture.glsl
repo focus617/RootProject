@@ -56,5 +56,6 @@ void main()
 {
     // 下面这行可用于调试，用对应Color(R,G)来确定顶点坐标是否定义错位
     //color = vec4(v_TexCoord, 0.0, 1.0);
+
     color = texture(u_Textures[int(v_TexIndex)], v_TexCoord * v_TilingFactor) * v_Color;
 }

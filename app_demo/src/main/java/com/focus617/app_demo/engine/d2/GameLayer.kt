@@ -61,17 +61,15 @@ class GameLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean) 
             System.arraycopy(camera.getViewMatrix(), 0, XRenderer.sViewMatrix, 0, 16)
         }
 
-        with(Renderer2DData) {
-            QuadVertexBufferPtr = 0
-            QuadIndexCount = 0
-        }
-
-        XGLTextureSlots.TextureSlotIndex = 1
+        Renderer2DData.resetVertexBuffer()
+        XGLTextureSlots.resetTextureSlot()
     }
 
     fun endScene() {
-        LOG.info("Statistic: drawCalls=${Renderer2DData.stats.drawCalls}," +
-                " quadCount=${Renderer2DData.stats.quadCount}")
+        LOG.info(
+            "Statistic: drawCalls=${Renderer2DData.stats.drawCalls}," +
+                    " quadCount=${Renderer2DData.stats.quadCount}"
+        )
     }
 
     override fun onEvent(event: Event): Boolean {

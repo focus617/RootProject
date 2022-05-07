@@ -9,10 +9,11 @@ import com.focus617.core.engine.renderer.BufferElement
 import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.ShaderDataType
 import com.focus617.core.engine.renderer.Texture2D
+import com.focus617.mylib.logging.WithLogging
 import java.io.Closeable
 import java.nio.LongBuffer
 
-object Renderer2DData : Closeable {
+object Renderer2DData : WithLogging(), Closeable {
     val MaxQuads: Int = 10000
     val MaxVertices: Int = MaxQuads * 4
     val MaxIndices: Int = MaxQuads * 6
@@ -30,12 +31,13 @@ object Renderer2DData : Closeable {
 
     lateinit var QuadVertexBufferBase: FloatArray
     var QuadVertexBufferPtr: Int = 0    // Index of FloatArray(记住计算size时要乘4)
+    var QuadVertexNumber: Int = 0       // 当前已经填充的顶点数目
 
     val QuadVertexPosition = arrayOf<Vector4>(
-        Vector4( -0.5f, -0.5f, 0.0f, 1.0f),
-        Vector4(  0.5f, -0.5f, 0.0f, 1.0f),
-        Vector4(  0.5f,  0.5f, 0.0f, 1.0f),
-        Vector4( -0.5f,  0.5f, 0.0f, 1.0f)
+        Vector4(-0.5f, -0.5f, 0.0f, 1.0f),
+        Vector4(0.5f, -0.5f, 0.0f, 1.0f),
+        Vector4(0.5f, 0.5f, 0.0f, 1.0f),
+        Vector4(-0.5f, 0.5f, 0.0f, 1.0f)
     )
 
     val stats: Statistics = Statistics(0, 0)
@@ -123,33 +125,51 @@ object Renderer2DData : Closeable {
         XGLTextureSlots.TextureSlots[0] = WhiteTexture
     }
 
+    fun resetVertexBuffer() {
+        QuadVertexBufferPtr = 0
+        QuadVertexNumber = 0
+        QuadIndexCount = 0
+    }
+
+    fun putQuadVertex(
+        position: Vector3,
+        color: Vector4,
+        texCoords: Vector2,
+        texIndex: Float = 0.0f,         // White Texture
+        tilingFactor: Float = 1.0f
+    ) {
+        if (QuadVertexNumber >= MaxVertices) {
+            LOG.error("Reach max vertices limitation.")
+            return
+        }
+        put(position)
+        put(color)
+        put(texCoords)
+        put(texIndex)
+        put(tilingFactor)
+        QuadVertexNumber++
+    }
+
     fun put(value: Float) {
-        if (QuadVertexBufferPtr < QuadVertexBufferBase.size - 5)
-            QuadVertexBufferBase[QuadVertexBufferPtr++] = value
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value
     }
 
     fun put(value: Vector2) {
-        if (QuadVertexBufferPtr < QuadVertexBufferBase.size - 9) {
-            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
-            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
-        }
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
     }
 
     fun put(value: Vector3) {
-        if (QuadVertexBufferPtr < QuadVertexBufferBase.size - 13) {
-            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
-            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
-            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.z
-        }
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.z
     }
 
     fun put(value: Vector4) {
-        if (QuadVertexBufferPtr < QuadVertexBufferBase.size - 17) {
-            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
-            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
-            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.z
-            QuadVertexBufferBase[QuadVertexBufferPtr++] = value.w
-        }
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.x
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.z
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = value.w
     }
 
 }
