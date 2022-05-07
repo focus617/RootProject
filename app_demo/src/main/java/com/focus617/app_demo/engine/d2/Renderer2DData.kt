@@ -2,13 +2,11 @@ package com.focus617.app_demo.engine.d2
 
 import android.content.Context
 import com.focus617.app_demo.renderer.*
+import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
-import com.focus617.core.engine.renderer.BufferElement
-import com.focus617.core.engine.renderer.BufferLayout
-import com.focus617.core.engine.renderer.ShaderDataType
-import com.focus617.core.engine.renderer.Texture2D
+import com.focus617.core.engine.renderer.*
 import com.focus617.mylib.logging.WithLogging
 import java.io.Closeable
 import java.nio.LongBuffer
@@ -96,6 +94,7 @@ object Renderer2DData : WithLogging(), Closeable {
         val quadIndices = ShortArray(MaxIndices)
         var offset: Int = 0
         for (i in 0 until MaxIndices step 6) {
+            // Quad的顶点顺序是: 0左下, 1右下, 2右上, 3左上
             quadIndices[i + 0] = (offset + 0).toShort()
             quadIndices[i + 1] = (offset + 1).toShort()
             quadIndices[i + 2] = (offset + 2).toShort()
@@ -132,11 +131,79 @@ object Renderer2DData : WithLogging(), Closeable {
     }
 
     fun putQuadVertex(
-        position: Vector3,
+        position: Point3D,
+        size: Vector2,
         color: Vector4,
         texCoords: Vector2,
         texIndex: Float = 0.0f,         // White Texture
         tilingFactor: Float = 1.0f
+    ) {
+        putVertex(   //0左下
+            position, color, Vector2(0.0f, 0.0f), texIndex, tilingFactor
+        )
+        putVertex(   //1右下
+            Point3D(position.x + size.x, position.y, 0.0f),
+            color,
+            Vector2(1.0f, 0.0f),
+            texIndex,
+            tilingFactor
+        )
+        putVertex(   //2右上
+            Point3D(position.x + size.x, position.y + size.y, 0.0f),
+            color,
+            Vector2(1.0f, 1.0f),
+            texIndex,
+            tilingFactor
+        )
+        putVertex(   //3左上
+            Point3D(position.x, position.y + size.y, 0.0f),
+            color,
+            Vector2(0.0f, 1.0f),
+            texIndex,
+            tilingFactor
+        )
+    }
+
+    fun putQuadVertex(
+        position: Point3D,
+        size: Vector2,
+        color: Vector4,
+        subTexCoords: SubTexture2D,
+        texIndex: Float = 0.0f,         // White Texture
+        tilingFactor: Float = 1.0f
+    ) {
+        putVertex(   //0左下
+            position, color, subTexCoords.mTexCoords[0], texIndex, tilingFactor
+        )
+        putVertex(   //1右下
+            Point3D(position.x + size.x, position.y, 0.0f),
+            color,
+            subTexCoords.mTexCoords[1],
+            texIndex,
+            tilingFactor
+        )
+        putVertex(   //2右上
+            Point3D(position.x + size.x, position.y + size.y, 0.0f),
+            color,
+            subTexCoords.mTexCoords[2],
+            texIndex,
+            tilingFactor
+        )
+        putVertex(   //3左上
+            Point3D(position.x, position.y + size.y, 0.0f),
+            color,
+            subTexCoords.mTexCoords[3],
+            texIndex,
+            tilingFactor
+        )
+    }
+
+    fun putVertex(
+        position: Point3D,
+        color: Vector4,
+        texCoords: Vector2,
+        texIndex: Float,
+        tilingFactor: Float
     ) {
         if (QuadVertexNumber >= MaxVertices) {
             LOG.error("Reach max vertices limitation.")
@@ -148,6 +215,12 @@ object Renderer2DData : WithLogging(), Closeable {
         put(texIndex)
         put(tilingFactor)
         QuadVertexNumber++
+    }
+
+    private fun put(position: Point3D) {
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = position.x
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = position.y
+        QuadVertexBufferBase[QuadVertexBufferPtr++] = position.z
     }
 
     fun put(value: Float) {

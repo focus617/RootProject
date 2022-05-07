@@ -5,11 +5,9 @@ import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.renderer.XGLTextureSlots
 import com.focus617.core.engine.baseDataType.Color
-import com.focus617.core.engine.math.Mat4
-import com.focus617.core.engine.math.Vector2
-import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.math.Vector4
+import com.focus617.core.engine.math.*
 import com.focus617.core.engine.renderer.RenderCommand
+import com.focus617.core.engine.renderer.SubTexture2D
 import com.focus617.core.engine.renderer.Texture2D
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene.Camera
@@ -111,33 +109,12 @@ class XGLRenderer2D(
          * 支持批处理 Batching Renderer后的 DrawQuad函数的做法是，每次调用 DrawQuad函数，
          * 就去动态填充Vertex Buffer里顶点的各项顶点属性数据。
          */
-        fun drawQuad(position: Vector3, size: Vector2, color: Vector4) {
+        fun drawQuad(position: Point3D, size: Vector2, color: Vector4) {
             val texIndex: Float = 0.0f // White Texture
             val tilingFactor: Float = 1.0f
 
             Renderer2DData.putQuadVertex(
-                position, color, Vector2(0.0f, 0.0f), texIndex, tilingFactor
-            )
-            Renderer2DData.putQuadVertex(
-                Vector3(position.x + size.x, position.y, 0.0f),
-                color,
-                Vector2(1.0f, 0.0f),
-                texIndex,
-                tilingFactor
-            )
-            Renderer2DData.putQuadVertex(
-                Vector3(position.x + size.x, position.y + size.y, 0.0f),
-                color,
-                Vector2(1.0f, 1.0f),
-                texIndex,
-                tilingFactor
-            )
-            Renderer2DData.putQuadVertex(
-                Vector3(position.x, position.y + size.y, 0.0f),
-                color,
-                Vector2(0.0f, 1.0f),
-                texIndex,
-                tilingFactor
+                position, size, color, Vector2(0.0f, 0.0f), texIndex, tilingFactor
             )
 
             Renderer2DData.QuadIndexCount += 6
@@ -145,41 +122,20 @@ class XGLRenderer2D(
             Renderer2DData.stats.quadCount++
         }
 
-        fun drawQuad(position: Vector2, size: Vector2, color: Vector4) {
-            drawQuad(Vector3(position.x, position.y, 0.0f), size, color)
+        fun drawQuad(position: Point2D, size: Vector2, color: Vector4) {
+            drawQuad(Point3D(position.x, position.y, 0.0f), size, color)
         }
 
         /**
          * Tiling功能：Tint是着色、染色的东西，其实就是给Texture的 Color加上一个颜色的滤镜而已
          */
         fun drawQuad(
-            position: Vector3, size: Vector2, texture: Texture2D, tilingFactor: Float = 1.0f
+            position: Point3D, size: Vector2, texture: Texture2D, tilingFactor: Float = 1.0f
         ) {
             val texIndex: Float = XGLTextureSlots.getId(texture).toFloat()
 
             Renderer2DData.putQuadVertex(
-                position, Renderer2DData.WHITE, Vector2(0.0f, 0.0f), texIndex, tilingFactor
-            )
-            Renderer2DData.putQuadVertex(
-                Vector3(position.x + size.x, position.y, 0.0f),
-                Renderer2DData.WHITE,
-                Vector2(1.0f, 0.0f),
-                texIndex,
-                tilingFactor
-            )
-            Renderer2DData.putQuadVertex(
-                Vector3(position.x + size.x, position.y + size.y, 0.0f),
-                Renderer2DData.WHITE,
-                Vector2(1.0f, 1.0f),
-                texIndex,
-                tilingFactor
-            )
-            Renderer2DData.putQuadVertex(
-                Vector3(position.x, position.y + size.y, 0.0f),
-                Renderer2DData.WHITE,
-                Vector2(0.0f, 1.0f),
-                texIndex,
-                tilingFactor
+                position, size, Renderer2DData.WHITE, Vector2(0.0f, 0.0f), texIndex, tilingFactor
             )
 
             Renderer2DData.QuadIndexCount += 6
@@ -188,23 +144,46 @@ class XGLRenderer2D(
         }
 
         fun drawQuad(
-            position: Vector2,
+            position: Point2D,
             size: Vector2,
-            rotation: Float,
             texture: Texture2D,
             tilingFactor: Float = 1.0f
         ) {
-            drawRotatedQuad(
-                Vector3(position.x, position.y, 0.0f),
+            drawQuad(
+                Point3D(position.x, position.y, 0.0f),
                 size,
-                rotation,
                 texture,
                 tilingFactor
             )
         }
 
+        fun drawQuad(
+            position: Point3D, size: Vector2, subTexture: SubTexture2D, tilingFactor: Float = 1.0f
+        ) {
+            val texIndex: Float = XGLTextureSlots.getId(subTexture.mTextureAtlas).toFloat()
+
+            Renderer2DData.putQuadVertex(
+                position, size, Renderer2DData.WHITE, subTexture, texIndex, tilingFactor
+            )
+
+            Renderer2DData.QuadIndexCount += 6
+
+            Renderer2DData.stats.quadCount++
+        }
+
+        fun drawQuad(
+            position: Point2D, size: Vector2, subTexture: SubTexture2D, tilingFactor: Float = 1.0f
+        ) {
+            drawQuad(
+                Point3D(position.x, position.y, 0.0f),
+                size,
+                subTexture,
+                tilingFactor
+            )
+        }
+
         fun drawRotatedQuad(
-            position: Vector3,
+            position: Point3D,
             size: Vector2,
             rotationInDegree: Float,
             color: Vector4
@@ -212,32 +191,32 @@ class XGLRenderer2D(
             val texIndex: Float = 0.0f // White Texture
             val tilingFactor: Float = 1.0f
 
-            val transform: Mat4 = Mat4().transform2D(position, size, rotationInDegree)
+            val transform: Mat4 = Mat4().transform2D(position.toVector3(), size, rotationInDegree)
             //LOG.info(transform.toString("Transform Matrix"))
 
-            Renderer2DData.putQuadVertex(
-                (transform * Renderer2DData.QuadVertexPosition[0]).toVector3(),
+            Renderer2DData.putVertex(
+                (transform * Renderer2DData.QuadVertexPosition[0]).toPoint3D()!!,
                 color,
                 Vector2(0.0f, 0.0f),
                 texIndex,
                 tilingFactor
             )
-            Renderer2DData.putQuadVertex(
-                (transform * Renderer2DData.QuadVertexPosition[1]).toVector3(),
+            Renderer2DData.putVertex(
+                (transform * Renderer2DData.QuadVertexPosition[1]).toPoint3D()!!,
                 color,
                 Vector2(1.0f, 0.0f),
                 texIndex,
                 tilingFactor
             )
-            Renderer2DData.putQuadVertex(
-                (transform * Renderer2DData.QuadVertexPosition[2]).toVector3(),
+            Renderer2DData.putVertex(
+                (transform * Renderer2DData.QuadVertexPosition[2]).toPoint3D()!!,
                 color,
                 Vector2(1.0f, 1.0f),
                 texIndex,
                 tilingFactor
             )
-            Renderer2DData.putQuadVertex(
-                (transform * Renderer2DData.QuadVertexPosition[3]).toVector3(),
+            Renderer2DData.putVertex(
+                (transform * Renderer2DData.QuadVertexPosition[3]).toPoint3D()!!,
                 color,
                 Vector2(0.0f, 1.0f),
                 texIndex,
@@ -250,16 +229,16 @@ class XGLRenderer2D(
         }
 
         fun drawRotatedQuad(
-            position: Vector2,
+            position: Point2D,
             size: Vector2,
             rotationInDegree: Float,
             color: Vector4
         ) {
-            drawRotatedQuad(Vector3(position.x, position.y, 0.0f), size, rotationInDegree, color)
+            drawRotatedQuad(Point3D(position.x, position.y, 0.0f), size, rotationInDegree, color)
         }
 
         fun drawRotatedQuad(
-            position: Vector3,
+            position: Point3D,
             size: Vector2,
             rotationInDegree: Float,
             texture: Texture2D,
@@ -268,32 +247,32 @@ class XGLRenderer2D(
         ) {
             val texIndex: Float = XGLTextureSlots.getId(texture).toFloat()
 
-            val transform: Mat4 = Mat4().transform2D(position, size, rotationInDegree)
+            val transform: Mat4 = Mat4().transform2D(position.toVector3(), size, rotationInDegree)
             //LOG.info(transform.toString("Transform Matrix"))
 
-            Renderer2DData.putQuadVertex(
-                (transform * Renderer2DData.QuadVertexPosition[0]).toVector3(),
+            Renderer2DData.putVertex(
+                (transform * Renderer2DData.QuadVertexPosition[0]).toPoint3D()!!,
                 Renderer2DData.WHITE,
                 Vector2(0.0f, 0.0f),
                 texIndex,
                 tilingFactor
             )
-            Renderer2DData.putQuadVertex(
-                (transform * Renderer2DData.QuadVertexPosition[1]).toVector3(),
+            Renderer2DData.putVertex(
+                (transform * Renderer2DData.QuadVertexPosition[1]).toPoint3D()!!,
                 Renderer2DData.WHITE,
                 Vector2(1.0f, 0.0f),
                 texIndex,
                 tilingFactor
             )
-            Renderer2DData.putQuadVertex(
-                (transform * Renderer2DData.QuadVertexPosition[2]).toVector3(),
+            Renderer2DData.putVertex(
+                (transform * Renderer2DData.QuadVertexPosition[2]).toPoint3D()!!,
                 Renderer2DData.WHITE,
                 Vector2(1.0f, 1.0f),
                 texIndex,
                 tilingFactor
             )
-            Renderer2DData.putQuadVertex(
-                (transform * Renderer2DData.QuadVertexPosition[3]).toVector3(),
+            Renderer2DData.putVertex(
+                (transform * Renderer2DData.QuadVertexPosition[3]).toPoint3D()!!,
                 Renderer2DData.WHITE,
                 Vector2(0.0f, 1.0f),
                 texIndex,
@@ -306,7 +285,7 @@ class XGLRenderer2D(
         }
 
         fun drawRotatedQuad(
-            position: Vector2,
+            position: Point2D,
             size: Vector2,
             rotationInDegree: Float,
             texture: Texture2D,
@@ -314,7 +293,7 @@ class XGLRenderer2D(
             tintColor: Vector4 = Renderer2DData.WHITE
         ) {
             drawRotatedQuad(
-                Vector3(position.x, position.y, 0.0f),
+                Point3D(position.x, position.y, 0.0f),
                 size,
                 rotationInDegree,
                 texture,
@@ -322,5 +301,52 @@ class XGLRenderer2D(
                 tintColor
             )
         }
+
+        fun drawRotatedQuad(
+            position: Point3D,
+            size: Vector2,
+            rotationInDegree: Float,
+            subTexCoords: SubTexture2D,
+            tilingFactor: Float = 1.0f,
+            tintColor: Vector4 = Renderer2DData.WHITE
+        ) {
+            val texIndex: Float = XGLTextureSlots.getId(subTexCoords.mTextureAtlas).toFloat()
+
+            val transform: Mat4 = Mat4().transform2D(position.toVector3(), size, rotationInDegree)
+            //LOG.info(transform.toString("Transform Matrix"))
+
+            for (i in 0..3) {
+                Renderer2DData.putVertex(
+                    (transform * Renderer2DData.QuadVertexPosition[i]).toPoint3D()!!,
+                    Renderer2DData.WHITE,
+                    subTexCoords.mTexCoords[i],
+                    texIndex,
+                    tilingFactor
+                )
+            }
+
+            Renderer2DData.QuadIndexCount += 6
+
+            Renderer2DData.stats.quadCount++
+        }
+
+        fun drawRotatedQuad(
+            position: Point2D,
+            size: Vector2,
+            rotationInDegree: Float,
+            texture: SubTexture2D,
+            tilingFactor: Float = 1.0f,
+            tintColor: Vector4 = Renderer2DData.WHITE
+        ) {
+            drawRotatedQuad(
+                Point3D(position.x, position.y, 0.0f),
+                size,
+                rotationInDegree,
+                texture,
+                tilingFactor,
+                tintColor
+            )
+        }
+
     }
 }

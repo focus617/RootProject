@@ -9,6 +9,8 @@ package com.focus617.core.engine.math
  */
 class Point3D(var x: Float, var y: Float, var z: Float) {
 
+    fun toVector3() = Vector3(x, y, z)
+
     fun homogeneouCoord(): Vector4 {
         return Vector4(x, y, z, 1F)
     }
