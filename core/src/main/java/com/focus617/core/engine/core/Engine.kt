@@ -3,8 +3,9 @@ package com.focus617.core.engine.core
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
+import java.io.Closeable
 
-open class Engine : BaseEntity(), Runnable {
+open class Engine : BaseEntity(), Runnable, Closeable {
 
     // Game线程
     private var threadCore: Thread? = null
@@ -23,6 +24,15 @@ open class Engine : BaseEntity(), Runnable {
         threadCore!!.start()
     }
 
+    /**
+     * 销毁时, 停止线程的运行，防止内存泄漏
+     */
+    override fun close() {
+        isRunning = false
+        threadCore?.interrupt()
+        threadCore = null
+    }
+
     open fun onAttachWindow(window: IfWindow) {
         LOG.info("Window Attached")
         mWindow = window
@@ -34,15 +44,6 @@ open class Engine : BaseEntity(), Runnable {
     open fun onDetachWindow() {
         LOG.info("Window Detached")
         mWindow = null
-    }
-
-    /**
-     * 销毁时, 停止线程的运行，防止内存泄漏
-     */
-    fun onDestroy() {
-        threadCore?.interrupt()
-        threadCore = null
-
     }
 
     // 如果事件可以被本地消费，则返回true，否则false
@@ -115,4 +116,5 @@ open class Engine : BaseEntity(), Runnable {
         const val SLEEP_INTERVAL = 100L
 
     }
+
 }

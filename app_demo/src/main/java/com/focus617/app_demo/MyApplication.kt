@@ -27,7 +27,7 @@ class MyApplication : BaseApplication() {
     }
 
     override fun onTerminate() {
-        gameEngine.onDestroy()
+        gameEngine.close()
         super.onTerminate()
     }
 }
