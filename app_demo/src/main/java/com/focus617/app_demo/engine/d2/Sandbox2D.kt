@@ -17,8 +17,9 @@ class Sandbox2D(context: Context) : Engine(), Closeable {
     var scene: Scene = XGLScene2D(context, this)
 
     init {
+        pushLayer(MapLayer("MayLayer", scene as XGLScene2D))
         pushLayer(GameLayer("GameLayer", scene as XGLScene2D))
-        pushLayer(Map2DLayer("MayLayer", scene as XGLScene2D))
+
     }
 
     fun getLayerStack(): LayerStack = mLayerStack
