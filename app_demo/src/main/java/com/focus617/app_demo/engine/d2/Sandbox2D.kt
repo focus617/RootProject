@@ -13,10 +13,10 @@ import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
 import java.io.Closeable
 
 class Sandbox2D(context: Context) : Engine(), Closeable {
-    var scene: Scene?
+
+    var scene: Scene = XGLScene2D(context, this)
 
     init {
-        scene = XGLScene2D(context, this)
         pushLayer(GameLayer("GameLayer", scene as XGLScene2D))
         pushLayer(Map2DLayer("MayLayer", scene as XGLScene2D))
     }
@@ -24,7 +24,7 @@ class Sandbox2D(context: Context) : Engine(), Closeable {
     fun getLayerStack(): LayerStack = mLayerStack
 
     override fun close() {
-        scene?.close()
+        scene.close()
     }
 
     override fun onAttachWindow(window: IfWindow) {
@@ -70,27 +70,27 @@ class Sandbox2D(context: Context) : Engine(), Closeable {
 //                LOG.info("It's type is ${e.eventType}")
 //                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
 //                LOG.info("Current position is (${e.x}, ${e.y})\n")
-            val hasConsumed = scene?.mCameraController?.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
             hasConsumed
         }
 
         eventDispatcher.register(EventType.TouchPress) { event ->
-            val hasConsumed = scene?.mCameraController?.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchStart) { event ->
-            val hasConsumed = scene?.mCameraController?.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchEnd) { event ->
-            val hasConsumed = scene?.mCameraController?.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
             hasConsumed
         }
 
         eventDispatcher.register(EventType.Pinch) { event ->
-            val hasConsumed = scene?.mCameraController?.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
             hasConsumed
         }
     }
