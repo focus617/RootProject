@@ -7,7 +7,7 @@ import com.focus617.core.engine.math.Vector3
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 
-class TerrainLayer(name: String, private val scene: XGLScene3D, val is3D: Boolean) : Layer(name) {
+class TerrainLayer(name: String, private val scene: XGLScene3D) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
 
     init {

@@ -1,14 +1,7 @@
-package com.focus617.app_demo.engine
+package com.focus617.app_demo.engine.d2
 
 import android.content.Context
-import com.focus617.app_demo.engine.d2.GameLayer
-import com.focus617.app_demo.engine.d2.Map2DLayer
-import com.focus617.app_demo.engine.d2.Renderer2DData
-import com.focus617.app_demo.engine.d2.XGLScene2D
-import com.focus617.app_demo.engine.d3.GamePlayerLayer
-import com.focus617.app_demo.engine.d3.XGLScene3D
 import com.focus617.app_demo.renderer.XGLTextureSlots
-import com.focus617.app_demo.terrain.TerrainLayer
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
@@ -19,23 +12,13 @@ import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
 import java.io.Closeable
 
-class Sandbox(context: Context, val is3D: Boolean) : Engine(), Closeable {
-
+class Sandbox2D(context: Context) : Engine(), Closeable {
     var scene: Scene?
 
     init {
-        if (is3D) {
-            scene = XGLScene3D(context, this)
-            pushLayer(GamePlayerLayer("GamePlayerLayer", scene as XGLScene3D, is3D))
-            pushLayer(TerrainLayer("TerrainLayer", scene as XGLScene3D, is3D))
-            //pushOverLayer(Layer2D("ExampleOverlay"))
-        } else {
-            scene = XGLScene2D(context, this)
-            pushLayer(GameLayer("GameLayer", scene as XGLScene2D, is3D))
-            pushLayer(Map2DLayer("MayLayer", scene as XGLScene2D, is3D))
-        }
-
-
+        scene = XGLScene2D(context, this)
+        pushLayer(GameLayer("GameLayer", scene as XGLScene2D))
+        pushLayer(Map2DLayer("MayLayer", scene as XGLScene2D))
     }
 
     fun getLayerStack(): LayerStack = mLayerStack

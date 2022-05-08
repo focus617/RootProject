@@ -1,7 +1,6 @@
 package com.focus617.app_demo.engine.d2
 
 import android.content.Context
-import com.focus617.app_demo.engine.Sandbox
 import com.focus617.app_demo.renderer.XGLTextureBuilder
 import com.focus617.app_demo.renderer.XGLTextureSlots
 import com.focus617.app_demo.renderer.XGLVertexArray
@@ -11,7 +10,7 @@ import com.focus617.core.engine.scene.OrthographicCameraController
 import com.focus617.core.engine.scene.Scene
 import kotlin.properties.Delegates
 
-class XGLScene2D(val context: Context, val engine: Sandbox) : Scene() {
+class XGLScene2D(val context: Context, val engine: Sandbox2D) : Scene() {
     var initialized: Boolean = false
 
     init {

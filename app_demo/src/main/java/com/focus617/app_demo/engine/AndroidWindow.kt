@@ -5,11 +5,14 @@ import android.content.Context
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.BuildConfig
 import com.focus617.app_demo.GameActivity
+import com.focus617.app_demo.engine.d2.Sandbox2D
 import com.focus617.app_demo.engine.d2.XGLRenderer2D
 import com.focus617.app_demo.engine.d2.XGLScene2D
+import com.focus617.app_demo.engine.d3.Sandbox3D
 import com.focus617.app_demo.engine.d3.XGLRenderer3D
 import com.focus617.app_demo.engine.d3.XGLScene3D
 import com.focus617.app_demo.renderer.XGLRendererAPI
+import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.WindowProps
 import com.focus617.core.engine.renderer.IfGraphicsContext
@@ -74,7 +77,7 @@ class AndroidWindow private constructor(
 
         fun createWindow(
             context: Context,
-            engine: Sandbox,
+            engine: Engine,
             props: WindowProps = WindowProps()
         ): AndroidWindow =
             synchronized(this) {
@@ -106,7 +109,7 @@ class AndroidWindow private constructor(
             RenderCommand.sRendererAPI = XGLRendererAPI()
         }
 
-        private fun initView(isES3Supported: Boolean, engine: Sandbox) {
+        private fun initView(isES3Supported: Boolean, engine: Engine) {
             with(instance!!) {
                 // 初始化Renderer Context
                 (mRenderContext as XGLContext).isES3Supported = isES3Supported
@@ -114,8 +117,8 @@ class AndroidWindow private constructor(
 
                 // 创建并设置渲染器（Renderer）以在GLSurfaceView上绘制
                 renderer =
-                    if(engine.is3D) XGLRenderer3D(engine.scene as XGLScene3D)
-                    else XGLRenderer2D(instance!!.context, engine.scene as XGLScene2D)
+                    if(engine is Sandbox3D) XGLRenderer3D(engine.scene as XGLScene3D)
+                    else XGLRenderer2D(instance!!.context, (engine as Sandbox2D).scene as XGLScene2D)
 
                 setRenderer(renderer as Renderer)
                 mRenderer = renderer
