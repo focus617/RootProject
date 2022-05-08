@@ -13,11 +13,11 @@ data class SubTexture2D(val mTextureAtlas: Texture2D) {
 
     constructor(textureAtlas: Texture2D, minUV: Vector2, maxUV: Vector2) : this(textureAtlas) {
         // Quad的顶点顺序是: 0左下, 1右下, 2右上, 3左上
-        // 但由于Texture的Y轴方向是向下的，因此对应的纹理坐标为0左上, 1右上, 2右下, 3左下
-        mTexCoords[0] = Vector2(minUV.x, maxUV.y)   //左上
-        mTexCoords[1] = maxUV                       //右上
-        mTexCoords[2] = Vector2(maxUV.x, minUV.y)   //右下
-        mTexCoords[3] = minUV                       //左下
+        // 但由于Texture的Y轴方向是向下的，因此Y轴对应的纹理坐标是上小上大
+        mTexCoords[0] = Vector2(minUV.x, maxUV.y)   //左下
+        mTexCoords[1] = maxUV                       //右下
+        mTexCoords[2] = Vector2(maxUV.x, minUV.y)   //右上
+        mTexCoords[3] = minUV                       //左上
     }
 
     companion object {
