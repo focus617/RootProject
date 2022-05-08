@@ -9,7 +9,7 @@ import com.focus617.core.engine.renderer.SubTexture2D
 import com.focus617.core.engine.renderer.Texture2D
 import com.focus617.core.platform.event.base.Event
 
-class Map2DLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean) : Layer(name) {
+class Map2DLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
     var initialized: Boolean = false
     lateinit var textureDirty: SubTexture2D
     lateinit var textureWater: SubTexture2D

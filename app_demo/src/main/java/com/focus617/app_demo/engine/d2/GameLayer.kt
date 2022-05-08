@@ -11,7 +11,7 @@ import com.focus617.core.engine.renderer.Texture2D
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 
-class GameLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean) : Layer(name) {
+class GameLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
 
     override fun onAttach() {
