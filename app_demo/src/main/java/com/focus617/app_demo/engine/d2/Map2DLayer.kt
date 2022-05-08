@@ -29,9 +29,9 @@ class Map2DLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean)
         if (Renderer2DData.initialized && scene.initialized) {
             if (!this.initialized) initSubTexture()
 
-            val tileSize = 0.23f
-            val height = 16 * tileSize
-            val width = 8 * tileSize
+            val tileSize = TileSize
+            val height = Row * tileSize
+            val width = Column * tileSize
 
             for (y in 0 until 16)
                 for (x in 0 until 8) {
@@ -65,31 +65,31 @@ class Map2DLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean)
         // 构造SubTexture
         textureDirty = SubTexture2D.createFromCoords(
             XGLTextureSlots.TextureSlots[XGLScene2D.textureAltasIndex] as Texture2D,
-            Vector2(6f, 1f),        // SubTexture Coords（原点在左上角，Y轴向下）
-            Vector2(128f, 128f),    // sprite size
-            Vector2(1f, 1f)         // cell size
+            Vector2(6f, 1f),            // SubTexture Coords（原点在左上角，Y轴向下）
+            Vector2(SpriteSize, SpriteSize), // sprite size
+            Vector2(1f, 1f)             // cell size
         )
         sMap['D'] = textureDirty
 
         textureWater = SubTexture2D.createFromCoords(
             XGLTextureSlots.TextureSlots[XGLScene2D.textureAltasIndex] as Texture2D,
-            Vector2(11f, 1f),        // SubTexture Coords
-            Vector2(128f, 128f)     // SubTexture Size
+            Vector2(11f, 1f),           // SubTexture Coords
+            Vector2(SpriteSize, SpriteSize)  // sprite size
         )
         sMap['W'] = textureWater
 
         textureTree = SubTexture2D.createFromCoords(
             XGLTextureSlots.TextureSlots[XGLScene2D.textureAltasIndex] as Texture2D,
-            Vector2(0f, 10f),       // SubTexture Coords（原点在左上角，Y轴向下）
-            Vector2(128f, 128f),    // sprite size
-            Vector2(1f, 2f)         // cell size
+            Vector2(0f, 10f),           // SubTexture Coords（原点在左上角，Y轴向下）
+            Vector2(SpriteSize, SpriteSize), // sprite size
+            Vector2(1f, 2f)             // cell size
         )
         sMap['T'] = textureTree
 
         textureMilestone = SubTexture2D.createFromCoords(
             XGLTextureSlots.TextureSlots[XGLScene2D.textureAltasIndex] as Texture2D,
-            Vector2(9f, 10f),        // SubTexture Coords
-            Vector2(128f, 128f)     // SubTexture Size
+            Vector2(9f, 10f),           // SubTexture Coords
+            Vector2(SpriteSize, SpriteSize)  // sprite size
         )
         sMap['S'] = textureMilestone
 
@@ -98,6 +98,12 @@ class Map2DLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean)
 
     companion object {
         // 16行8列
+        private const val Row = 16
+        private const val Column = 8
+        private const val TileSize = 0.23f      // 实际绘制时，每个Quad的边长
+
+        private const val SpriteSize = 128f     // 纹理图 SubTexture的取样单位
+
         // 这种写法其实代表一个长字符串, D代表Dirt土地Tile, W代表Water Tile, S代表路标Tile
         // 注意第一个Tile为D, 虽然在数组里坐标为(0,0), 但是在屏幕上对应的坐标应该是(0,1)
         val sMapTiles: CharArray = (
@@ -120,6 +126,6 @@ class Map2DLayer(name: String, private val scene: XGLScene2D, val is3D: Boolean)
                 ).toCharArray()
     }
 
-    val sMap = HashMap<Char, SubTexture2D>()
+    val sMap = HashMap<Char, SubTexture2D>()    // SubTexture字典，KEY为 sMapTiles中的Char
 
 }
