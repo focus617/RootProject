@@ -79,9 +79,11 @@ open class Engine : BaseEntity(), Runnable, Closeable {
             this.onUpdate(timeStep)
 
             // Update game objects in each layer
+            beforeUpdate()
             for (layer in mLayerStack.mLayers) {
                 layer.onUpdate(timeStep)
             }
+            afterUpdate()
 
             // 如果Window处于onDetach状态时，不再更新Overlay
             mWindow?.apply {
@@ -102,7 +104,7 @@ open class Engine : BaseEntity(), Runnable, Closeable {
     }
 
     // Used for updating the global resource, such as objects in scene
-    open fun onUpdate(timeStep: TimeStep){ }
+    open fun onUpdate(timeStep: TimeStep) {}
 
     fun pushLayer(layer: Layer) {
         mLayerStack.PushLayer(layer)
@@ -111,6 +113,9 @@ open class Engine : BaseEntity(), Runnable, Closeable {
     fun pushOverLayer(layer: Layer) {
         mOverlayStack.PushLayer(layer)
     }
+
+    open fun beforeUpdate() {}
+    open fun afterUpdate() {}
 
     companion object {
         const val SLEEP_INTERVAL = 100L

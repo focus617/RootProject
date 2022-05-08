@@ -2,14 +2,18 @@ package com.focus617.app_demo.engine
 
 import android.content.Context
 import com.focus617.app_demo.engine.d2.GameLayer
+import com.focus617.app_demo.engine.d2.Map2DLayer
+import com.focus617.app_demo.engine.d2.Renderer2DData
 import com.focus617.app_demo.engine.d2.XGLScene2D
 import com.focus617.app_demo.engine.d3.GamePlayerLayer
 import com.focus617.app_demo.engine.d3.XGLScene3D
+import com.focus617.app_demo.renderer.XGLTextureSlots
 import com.focus617.app_demo.terrain.TerrainLayer
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
 import com.focus617.core.engine.core.TimeStep
+import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene.Scene
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
@@ -28,6 +32,7 @@ class Sandbox(context: Context, val is3D: Boolean) : Engine(), Closeable {
         } else {
             scene = XGLScene2D(context, this)
             pushLayer(GameLayer("GameLayer", scene as XGLScene2D, is3D))
+            pushLayer(Map2DLayer("MayLayer", scene as XGLScene2D, is3D))
         }
 
 
@@ -47,6 +52,27 @@ class Sandbox(context: Context, val is3D: Boolean) : Engine(), Closeable {
     override fun onDetachWindow() {
         super.onDetachWindow()
         unRegisterEventHandlers()
+    }
+
+    override fun beforeUpdate() {
+        // 在多线程渲染里，会把BeginScene函数放在RenderCommandQueue里执行
+        // camera在多线程渲染的时候不能保证主线程是否正在更改Camera的相关信息
+        scene?.mCamera?.let {
+            synchronized(it) {
+                System.arraycopy(it.getProjectionMatrix(), 0, XRenderer.sProjectionMatrix, 0, 16)
+                System.arraycopy(it.getViewMatrix(), 0, XRenderer.sViewMatrix, 0, 16)
+            }
+        }
+
+        Renderer2DData.resetVertexBuffer()
+        XGLTextureSlots.resetTextureSlot()
+    }
+
+    override fun afterUpdate() {
+//        LOG.info(
+//            "Statistic: drawCalls=${Renderer2DData.stats.drawCalls}," +
+//                    " quadCount=${Renderer2DData.stats.quadCount}"
+//        )
     }
 
     override fun onUpdate(timeStep: TimeStep) {
