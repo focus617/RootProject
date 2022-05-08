@@ -1,6 +1,7 @@
 package com.focus617.app_demo.renderer
 
 import com.focus617.core.engine.renderer.BufferBuilder
+import com.focus617.core.engine.renderer.Framebuffer
 import com.focus617.core.engine.renderer.IfBuffer
 import com.focus617.core.engine.renderer.RendererAPI
 
@@ -42,6 +43,16 @@ object XGLBufferBuilder : BufferBuilder() {
                 null
             }
             RendererAPI.API.OpenGLES -> XGLIndexBuffer(indices, count)
+        }
+    }
+
+    override fun createFrameBuffer(width: Int, height: Int): Framebuffer? {
+        return when (RendererAPI.getAPI()) {
+            RendererAPI.API.None -> {
+                LOG.error("RendererAPI::None is currently not supported!")
+                null
+            }
+            RendererAPI.API.OpenGLES -> XGLFrameBuffer(width, height)
         }
     }
 

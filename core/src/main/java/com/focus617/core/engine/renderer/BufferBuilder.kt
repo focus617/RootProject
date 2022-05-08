@@ -7,4 +7,6 @@ abstract class BufferBuilder : WithLogging() {
     abstract fun createVertexBuffer(vertices: FloatArray, size: Int): IfBuffer?
     abstract fun createVertexBuffer(size: Int): IfBuffer?
     abstract fun createIndexBuffer(indices: ShortArray, count: Int): IfBuffer?
+
+    abstract fun createFrameBuffer(width: Int, height: Int): Framebuffer?
 }
