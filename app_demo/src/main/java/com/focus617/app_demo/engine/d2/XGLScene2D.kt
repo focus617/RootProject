@@ -19,6 +19,7 @@ class XGLScene2D(val context: Context, val engine: Sandbox2D) : Scene() {
     }
 
     fun initOpenGlResource() {
+        Renderer2DData.initStaticData(context)     // 初始化本Render的静态数据
         initTexture()
         initGameObjects()
         initialized = true

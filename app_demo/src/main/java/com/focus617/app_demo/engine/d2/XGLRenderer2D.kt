@@ -1,6 +1,5 @@
 package com.focus617.app_demo.engine.d2
 
-import android.content.Context
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.renderer.XGLTextureSlots
@@ -16,10 +15,7 @@ import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class XGLRenderer2D(
-    private val context: Context,
-    private val scene: XGLScene2D
-) : XRenderer(), GLSurfaceView.Renderer, Closeable {
+class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.Renderer, Closeable {
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         // 打印OpenGL Version，Vendor，etc
@@ -28,8 +24,6 @@ class XGLRenderer2D(
         // TODO: 当前的问题是，必须在opengl线程才能调用opengl api，无法在主线程调用。
         // 调用scene.initOpenGlResource, 因为涉及opengl api, 只好在这里调用
         scene.initOpenGlResource()
-
-        Renderer2DData.initStaticData(context)     // 初始化本Render的静态数据
 
         RenderCommand.init()
         // 设置重绘背景框架颜色

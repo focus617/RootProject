@@ -118,7 +118,7 @@ class AndroidWindow private constructor(
                 // 创建并设置渲染器（Renderer）以在GLSurfaceView上绘制
                 renderer =
                     if(engine is Sandbox3D) XGLRenderer3D(engine.scene as XGLScene3D)
-                    else XGLRenderer2D(instance!!.context, (engine as Sandbox2D).scene as XGLScene2D)
+                    else XGLRenderer2D((engine as Sandbox2D).scene as XGLScene2D)
 
                 setRenderer(renderer as Renderer)
                 mRenderer = renderer
