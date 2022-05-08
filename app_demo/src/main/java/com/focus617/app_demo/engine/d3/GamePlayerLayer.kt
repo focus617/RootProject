@@ -6,7 +6,7 @@ import com.focus617.core.engine.math.Vector3
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 
-class GamePlayerLayer(name: String, private val scene: XGLScene3D, val is3D: Boolean) : Layer(name) {
+class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
 
     private val earth = Earth()

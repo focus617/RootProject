@@ -1,14 +1,7 @@
-package com.focus617.app_demo.engine
+package com.focus617.app_demo.engine.d2
 
 import android.content.Context
-import com.focus617.app_demo.engine.d2.GameLayer
-import com.focus617.app_demo.engine.d2.Map2DLayer
-import com.focus617.app_demo.engine.d2.Renderer2DData
-import com.focus617.app_demo.engine.d2.XGLScene2D
-import com.focus617.app_demo.engine.d3.GamePlayerLayer
-import com.focus617.app_demo.engine.d3.XGLScene3D
 import com.focus617.app_demo.renderer.XGLTextureSlots
-import com.focus617.app_demo.terrain.TerrainLayer
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
@@ -19,29 +12,19 @@ import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
 import java.io.Closeable
 
-class Sandbox(context: Context, val is3D: Boolean) : Engine(), Closeable {
+class Sandbox2D(context: Context, val is3D: Boolean) : Engine(), Closeable {
 
-    var scene: Scene?
+    var scene: Scene = XGLScene2D(context, this)
 
     init {
-        if (is3D) {
-            scene = XGLScene3D(context, this)
-            pushLayer(GamePlayerLayer("GamePlayerLayer", scene as XGLScene3D, is3D))
-            pushLayer(TerrainLayer("TerrainLayer", scene as XGLScene3D, is3D))
-            //pushOverLayer(Layer2D("ExampleOverlay"))
-        } else {
-            scene = XGLScene2D(context, this)
-            pushLayer(GameLayer("GameLayer", scene as XGLScene2D, is3D))
-            pushLayer(Map2DLayer("MayLayer", scene as XGLScene2D, is3D))
-        }
-
-
+        pushLayer(GameLayer("GameLayer", scene as XGLScene2D, is3D))
+        pushLayer(Map2DLayer("MayLayer", scene as XGLScene2D, is3D))
     }
 
     fun getLayerStack(): LayerStack = mLayerStack
 
     override fun close() {
-        scene?.close()
+        scene.close()
     }
 
     override fun onAttachWindow(window: IfWindow) {
@@ -57,11 +40,15 @@ class Sandbox(context: Context, val is3D: Boolean) : Engine(), Closeable {
     override fun beforeUpdate() {
         // 在多线程渲染里，会把BeginScene函数放在RenderCommandQueue里执行
         // camera在多线程渲染的时候不能保证主线程是否正在更改Camera的相关信息
-        scene?.mCamera?.let {
-            synchronized(it) {
-                System.arraycopy(it.getProjectionMatrix(), 0, XRenderer.sProjectionMatrix, 0, 16)
-                System.arraycopy(it.getViewMatrix(), 0, XRenderer.sViewMatrix, 0, 16)
-            }
+        synchronized(scene.mCamera) {
+            System.arraycopy(
+                scene.mCamera.getProjectionMatrix(),
+                0,
+                XRenderer.sProjectionMatrix,
+                0,
+                16
+            )
+            System.arraycopy(scene.mCamera.getViewMatrix(), 0, XRenderer.sViewMatrix, 0, 16)
         }
 
         Renderer2DData.resetVertexBuffer()
@@ -69,14 +56,14 @@ class Sandbox(context: Context, val is3D: Boolean) : Engine(), Closeable {
     }
 
     override fun afterUpdate() {
-//        LOG.info(
-//            "Statistic: drawCalls=${Renderer2DData.stats.drawCalls}," +
-//                    " quadCount=${Renderer2DData.stats.quadCount}"
-//        )
+//            LOG.info(
+//                "Statistic: drawCalls=${Renderer2DData.stats.drawCalls}," +
+//                        " quadCount=${Renderer2DData.stats.quadCount}"
+//            )
     }
 
     override fun onUpdate(timeStep: TimeStep) {
-        scene?.onUpdate(timeStep)
+        scene.onUpdate(timeStep)
     }
 
     // 处理各种触屏事件，例如可能引起相机位置变化的事件
@@ -87,27 +74,27 @@ class Sandbox(context: Context, val is3D: Boolean) : Engine(), Closeable {
 //                LOG.info("It's type is ${e.eventType}")
 //                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
 //                LOG.info("Current position is (${e.x}, ${e.y})\n")
-            val hasConsumed = scene?.mCameraController?.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController?.onEvent(event) ?: false
             hasConsumed
         }
 
         eventDispatcher.register(EventType.TouchPress) { event ->
-            val hasConsumed = scene?.mCameraController?.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController?.onEvent(event) ?: false
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchStart) { event ->
-            val hasConsumed = scene?.mCameraController?.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController?.onEvent(event) ?: false
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchEnd) { event ->
-            val hasConsumed = scene?.mCameraController?.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController?.onEvent(event) ?: false
             hasConsumed
         }
 
         eventDispatcher.register(EventType.Pinch) { event ->
-            val hasConsumed = scene?.mCameraController?.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController?.onEvent(event) ?: false
             hasConsumed
         }
     }
