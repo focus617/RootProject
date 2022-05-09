@@ -16,41 +16,6 @@ class Box : Cube() {
         shaderName = ShaderFilePath
     }
 
-    companion object {
-        val SHADER_PATH = "Cube"
-        val SHADER_FILE = "CubeWithTextureAndLight.glsl"
-        val TEXTURE_FILE = "box.png"
-
-        val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
-        val TextureFilePath: String = "$SHADER_PATH/$TEXTURE_FILE"
-
-        var textureIndex by Delegates.notNull<Int>()
-
-        const val U_TEXTURE_UNIT = "u_Texture"
-        const val U_COLOR = "u_Color"
-
-        const val U_POINT_VIEW_POSITION = "u_ViewPos"
-        const val U_POINT_LIGHT_POSITION = "light.position"
-        const val U_POINT_LIGHT_AMBIENT = "light.ambient"
-        const val U_POINT_LIGHT_DIFFUSE = "light.diffuse"
-        const val U_POINT_LIGHT_SPECULAR = "light.specular"
-        const val U_POINT_LIGHT_CONSTANT = "light.constant"
-        const val U_POINT_LIGHT_LINEAR = "light.linear"
-        const val U_POINT_LIGHT_QUADRATIC = "light.quadratic"
-
-        const val U_MATERIAL_TEXTURE_DIFFUSE = "material.diffuse"
-        const val U_MATERIAL_SPECULAR = "material.specular"
-        const val U_MATERIAL_SHININESS = "material.shininess"
-
-        val WHITE = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
-
-        // 镜面强度(Specular Intensity)
-        var specular: Vector3 = Vector3(0.5f, 0.5f, 0.5f)
-
-        // 高光的反光度
-        var shininess: Float = 100.0f
-    }
-
     override fun submit(shader: Shader) {
 
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
@@ -81,4 +46,37 @@ class Box : Cube() {
     fun updateCameraPosition(point: Point3D) {
         viewPoint = point
     }
+
+    companion object {
+        val SHADER_PATH = "Cube"
+        val SHADER_FILE = "CubeWithTextureAndLight.glsl"
+        val TEXTURE_FILE = "box.png"
+
+        val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
+        val TextureFilePath: String = "$SHADER_PATH/$TEXTURE_FILE"
+
+        var textureIndex by Delegates.notNull<Int>()
+
+        const val U_POINT_VIEW_POSITION = "u_ViewPos"
+        const val U_POINT_LIGHT_POSITION = "light.position"
+        const val U_POINT_LIGHT_AMBIENT = "light.ambient"
+        const val U_POINT_LIGHT_DIFFUSE = "light.diffuse"
+        const val U_POINT_LIGHT_SPECULAR = "light.specular"
+        const val U_POINT_LIGHT_CONSTANT = "light.constant"
+        const val U_POINT_LIGHT_LINEAR = "light.linear"
+        const val U_POINT_LIGHT_QUADRATIC = "light.quadratic"
+
+        const val U_MATERIAL_TEXTURE_DIFFUSE = "material.diffuse"
+        const val U_MATERIAL_SPECULAR = "material.specular"
+        const val U_MATERIAL_SHININESS = "material.shininess"
+
+        val WHITE = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
+
+        // 镜面强度(Specular Intensity)
+        var specular: Vector3 = Vector3(0.5f, 0.5f, 0.5f)
+
+        // 高光的反光度
+        var shininess: Float = 100.0f
+    }
+
 }
