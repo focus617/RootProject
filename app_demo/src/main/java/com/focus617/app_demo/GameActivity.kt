@@ -18,19 +18,17 @@ class GameActivity : BaseActivity() {
 
     // Used for sensor detection
     private val sensorEventListener = SensorInput()
-    private var mSensorManager: SensorManager? = null
-    private var mRotationSensor: Sensor? = null
-    private var mWindowManager: WindowManager? = null
+    private lateinit var mSensorManager: SensorManager
+
+    private lateinit var mWindowManager: WindowManager  // 有什么用？
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mWindowManager = windowManager
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        mRotationSensor = mSensorManager!!.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
 
-        val deviceSensors: List<Sensor> = mSensorManager!!.getSensorList(Sensor.TYPE_ALL)
-
+        val deviceSensors: List<Sensor> = mSensorManager.getSensorList(Sensor.TYPE_ALL)
         Timber.i("MobilePhone's Sensor List")
         deviceSensors.forEach() {
             Timber.i("Type: ${it.name}")
@@ -52,8 +50,9 @@ class GameActivity : BaseActivity() {
         // 以这个GLSurfaceView实例作为Sandbox的Window, start render
         (application as MyApplication).gameEngine.onAttachWindow(mGLSurfaceView)
 
-        mRotationSensor?.apply {
-            mSensorManager?.registerListener(
+        mSensorManager.apply {
+            val mRotationSensor = getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+            registerListener(
                 sensorEventListener,
                 mRotationSensor,
                 SensorManager.SENSOR_DELAY_FASTEST
@@ -69,7 +68,7 @@ class GameActivity : BaseActivity() {
         (application as MyApplication).gameEngine.onDetachWindow()
 
         mGLSurfaceView.onPause()
-        mSensorManager?.unregisterListener(sensorEventListener)
+        mSensorManager.unregisterListener(sensorEventListener)
     }
 
     override fun onDestroy() {
