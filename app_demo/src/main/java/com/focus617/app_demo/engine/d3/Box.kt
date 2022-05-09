@@ -10,8 +10,6 @@ import com.focus617.core.engine.scene.PointLight
 import kotlin.properties.Delegates
 
 class Box : Cube() {
-    lateinit var viewPoint: Point3D
-
     init {
         shaderName = ShaderFilePath
     }
@@ -56,6 +54,8 @@ class Box : Cube() {
         val TextureFilePath: String = "$SHADER_PATH/$TEXTURE_FILE"
 
         var textureIndex by Delegates.notNull<Int>()
+
+        lateinit var viewPoint: Point3D
 
         const val U_POINT_VIEW_POSITION = "u_ViewPos"
         const val U_POINT_LIGHT_POSITION = "light.position"

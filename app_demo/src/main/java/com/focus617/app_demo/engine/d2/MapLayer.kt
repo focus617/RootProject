@@ -68,6 +68,12 @@ class MapLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
         mFramebuffer?.unbind()
     }
 
+    override fun beforeDrawFrame() {
+    }
+
+    override fun afterDrawFrame() {
+    }
+
     override fun onEvent(event: Event): Boolean {
         //LOG.info("${this.mDebugName} onEvent")
         return false

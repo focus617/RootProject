@@ -47,6 +47,12 @@ class TerrainLayer(name: String, private val scene: XGLScene3D) : Layer(name) {
         //LOG.info("${this.mDebugName} onUpdate")
     }
 
+    override fun beforeDrawFrame() {
+    }
+
+    override fun afterDrawFrame() {
+    }
+
     override fun onEvent(event: Event): Boolean {
         return eventDispatcher.dispatch(event)
     }

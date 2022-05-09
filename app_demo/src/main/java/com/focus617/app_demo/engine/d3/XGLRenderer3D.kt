@@ -50,7 +50,8 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         XGLTextureSlots.flush()
 
         val layerStack = scene.engine.getLayerStack()
-        for (layer in layerStack.mLayers)
+        for (layer in layerStack.mLayers) {
+            layer.beforeDrawFrame()
             for (gameObject in layer.gameObjectList) {
                 val shader = scene.mShaderLibrary.get(gameObject.shaderName)
 
@@ -59,14 +60,15 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
 //                  LOG.info(XMatrix.toString(SceneData.sProjectionMatrix, matrixName = "ProjectionMatrix"))
 //                  LOG.info(XMatrix.toString(SceneData.sViewMatrix, matrixName = "ViewMatrix"))
 //                  LOG.info(XMatrix.toString(gameObject.modelMatrix, matrixName = "ModelMatrix"))
-                    //TODO: 每个对象都需要一个Shader吗？
+
                     setMat4(Camera.U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
                     setMat4(Camera.U_VIEW_MATRIX, SceneData.sViewMatrix)
 
                     gameObject.submit(shader)
                 }
             }
-
+            layer.afterDrawFrame()
+        }
         endScene()
     }
 

@@ -13,23 +13,13 @@ class ShaderLibrary : WithLogging(), Closeable {
         mShaders.clear()
     }
 
-    fun add(name: String, shader: Shader) {
-        if (exists(name)) {
-            LOG.warn("Shader $name has already exist")
-        }
-        mShaders[name] = shader
-    }
-
     fun add(shader: Shader) {
         val name = shader.getName()
         if (exists(name)) {
             LOG.warn("Shader $name has already exist")
+            return
         }
         mShaders[name] = shader
-    }
-
-    fun remove(shaderName: String){
-        mShaders.remove(shaderName)
     }
 
     fun remove(shader: Shader){

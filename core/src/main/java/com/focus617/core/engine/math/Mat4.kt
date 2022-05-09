@@ -110,6 +110,7 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
         val scale = Mat4().scale(size).toFloatArray()
         val rotation = Mat4().rotate3D(rotationInDegree, xAxis, yAxis, zAxis).toFloatArray()
 
+        /** 由于采用了列主序的转置矩阵，所以乘法的顺序是反的 */
         setIdentity()
         XMatrix.xMultiplyMM(floatArray, 0, translate, 0, floatArray, 0)
         XMatrix.xMultiplyMM(floatArray, 0, rotation, 0, floatArray, 0)

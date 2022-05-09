@@ -2,6 +2,7 @@ package com.focus617.app_demo.terrain
 
 import android.content.Context
 import android.graphics.Color
+import android.opengl.GLES31
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.objects.DynamicCreationObject
@@ -45,8 +46,13 @@ class Heightmap(val context: Context, private val filePath: String) : DynamicCre
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
         shader.setFloat3(Light.U_VECTOR_TO_LIGHT, Light.vectorToLight)
 
+        //Enable Cull Back Face
+        GLES31.glEnable(GLES31.GL_CULL_FACE)
+
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)
+
+        GLES31.glDisable(GLES31.GL_CULL_FACE)
 
         // 下面这两行可以省略，以节约GPU的运行资源；
         // 在下个submit，会bind其它handle，自然会实现unbind
