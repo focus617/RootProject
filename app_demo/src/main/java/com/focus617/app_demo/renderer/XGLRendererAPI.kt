@@ -19,11 +19,14 @@ class XGLRendererAPI : RendererAPI() {
 
         //启动深度测试
         glEnable(GL_DEPTH_TEST)
+        glDepthFunc(GL_LEQUAL) // indicate what type of depth test
     }
 
     override fun clear() {
         // 清理屏幕，重绘背景颜色
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
+        // Setup the depth buff
+        glClearDepthf(1.0f)
     }
 
     override fun setClearColor(color: Color) {
