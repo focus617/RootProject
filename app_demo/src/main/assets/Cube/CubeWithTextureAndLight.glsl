@@ -108,6 +108,7 @@ void main()
 vec3 getAmbientLighting()
 {
     //vec3 ambient = light.ambient * material.ambient;
+    
     vec3 ambient = light.ambient * vec3(texture(material.diffuse, v_TexCoords));
 
     return ambient;
