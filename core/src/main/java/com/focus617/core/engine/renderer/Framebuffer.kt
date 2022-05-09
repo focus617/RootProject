@@ -15,5 +15,6 @@ abstract class Framebuffer(
 
     abstract fun bind()
     abstract fun unbind()
-    abstract fun getColorAttachmentTexture2DId(): Int
+    abstract fun resizeColorAttachment(width: Int, height: Int)
+    abstract fun getColorAttachmentTextureId(): Int
 }
