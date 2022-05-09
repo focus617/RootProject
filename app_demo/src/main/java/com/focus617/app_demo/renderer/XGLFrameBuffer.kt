@@ -23,7 +23,7 @@ class XGLFrameBuffer(width: Int, height: Int) : Framebuffer(width, height) {
         GLES31.glBindBuffer(GLES31.GL_FRAMEBUFFER, mHandle)
 
         // 创建Texture2D，作为FrameBuffer的output image
-        mColorAttachmentTexture2D= XGLTexture2D(this, mWidth, mHeight)
+        mColorAttachmentTexture2D = XGLTexture2D(this, mWidth, mHeight)
 
         // attach it to the frame buffer, 作为输出的texture
         GLES31.glFramebufferTexture2D(
@@ -38,7 +38,7 @@ class XGLFrameBuffer(width: Int, height: Int) : Framebuffer(width, height) {
 
         val state: Boolean =
             (GLES31.glCheckFramebufferStatus(GL_FRAMEBUFFER) == GLES31.GL_FRAMEBUFFER_COMPLETE)
-        check(state){
+        check(state) {
             LOG.warn("Framebuffer is incomplete!")
         }
     }
@@ -59,6 +59,24 @@ class XGLFrameBuffer(width: Int, height: Int) : Framebuffer(width, height) {
     override fun getColorAttachmentTextureId() = mColorAttachmentTexture2D.mHandle
 
     override fun resizeColorAttachment(width: Int, height: Int) {
-        TODO("Not yet implemented")
+        if (mHandle != -1) {
+            mWidth = width
+            mHeight = height
+
+            // 注意, 这里不需要BindFramebuffer
+            GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, mColorAttachmentTexture2D.mHandle);
+            GLES31.glTexImage2D(
+                GLES31.GL_TEXTURE_2D,
+                0,
+                GLES31.GL_RGBA,
+                width,
+                height,
+                0,
+                GLES31.GL_RGBA,
+                GLES31.GL_UNSIGNED_BYTE,
+                null
+            );
+
+        }
     }
 }
