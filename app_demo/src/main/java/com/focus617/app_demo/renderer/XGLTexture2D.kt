@@ -80,6 +80,8 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
 
     // 创建Texture2D，作为FrameBuffer的output image
     constructor(framebuffer: Framebuffer, width: Int, height: Int) : this("FrameBuffer") {
+        mWidth = width
+        mHeight = height
 
         GLES31.glGenTextures(1, mHandleBuf, 0)
         if (mHandleBuf[0] == 0) {
