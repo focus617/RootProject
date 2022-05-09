@@ -65,9 +65,9 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
 
     private var mCameraRotation: Float = 0F
     override fun onUpdate(timeStep: TimeStep) {
-        val mCameraRotationSpeed: Float = 0.001F
+//        val mCameraRotationSpeed: Float = 0.001F
+//        mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed
 
-        //mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed
         mCameraRotation = yawClamp(mCameraRotation)
     }
 
@@ -156,7 +156,7 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
                 ratio,
                 -mZoomLevel,
                 mZoomLevel,
-                3f,
+                2f,
                 7f
             )
         } else {
@@ -170,7 +170,7 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
                 mZoomLevel,
                 -ratio,
                 ratio,
-                3f,
+                2f,
                 7f
             )
         }
