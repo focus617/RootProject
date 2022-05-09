@@ -14,6 +14,13 @@ import com.focus617.core.platform.event.base.EventDispatcher
 class GameLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
 
+    override fun initOpenGlResource() { }
+
+    override fun close() {
+        LOG.info("${this.mDebugName} closed")
+        eventDispatcher.close()
+    }
+
     override fun onAttach() {
         LOG.info("${this.mDebugName} onAttach()")
     }
@@ -27,8 +34,8 @@ class GameLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
         if (Renderer2DData.initialized && scene.initialized) {
             rotation += timeStep * 0.01f
 
-            XGLRenderer2D.drawQuad(Point3D(0f, 0f, 2f), Vector2(1f, 1f), RED)
-            //XGLRenderer2D.drawQuad(Vector2(0.5f, 0.5f), Vector2(0.75f, 0.5f), BLUE)
+//            XGLRenderer2D.drawQuad(Point3D(0f, 0f, 2f), Vector2(1f, 1f), RED)
+//            //XGLRenderer2D.drawQuad(Vector2(0.5f, 0.5f), Vector2(0.75f, 0.5f), BLUE)
 //            XGLRenderer2D.drawRotatedQuad(
 //                Point3D(0f, -1.0f, 0.5f), Vector2(1.0f, 0.8f), rotation, BLUE
 //            )
@@ -66,22 +73,17 @@ class GameLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
 //                textureTree,
 //                1.0f
 //            )
-//            XGLRenderer2D.drawQuad(
-//                Point3D(-0.5f, -1.2f, 2f),
-//                Vector2(1.0f, 1.0f),
-//                textureBarrel,
-//                1.0f
-//            )
+            XGLRenderer2D.drawQuad(
+                Point3D(0f, 0f, 2f),
+                Vector2(1.0f, 1.0f),
+                textureBarrel,
+                1.0f
+            )
         }
     }
 
     override fun onEvent(event: Event): Boolean {
         return eventDispatcher.dispatch(event)
-    }
-
-    override fun close() {
-        LOG.info("${this.mDebugName} closed")
-        eventDispatcher.close()
     }
 
     companion object {

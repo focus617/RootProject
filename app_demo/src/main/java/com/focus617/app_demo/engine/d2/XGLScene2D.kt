@@ -41,11 +41,12 @@ class XGLScene2D(val context: Context, val engine: Sandbox2D) : Scene() {
     //  poll each game object for opengl related initialization(vertexArray & textures).
     private fun initGameObjects() {
         val layerStack = engine.getLayerStack()
-        for (layer in layerStack.mLayers)
+        for (layer in layerStack.mLayers) {
+            layer.initOpenGlResource()
             for (gameObject in layer.gameObjectList) {
                 gameObject.vertexArray = XGLVertexArray.buildVertexArray(gameObject)
             }
-
+        }
     }
 
     // Used for updating the global resource, such as objects in scene
