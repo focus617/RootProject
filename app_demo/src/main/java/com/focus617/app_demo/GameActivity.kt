@@ -1,9 +1,14 @@
 package com.focus617.app_demo
 
 import android.app.ActivityManager
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import com.focus617.app_demo.engine.AndroidWindow
+import com.focus617.app_demo.engine.SensorInput
 import com.focus617.platform.uicontroller.BaseActivity
 import timber.log.Timber
 
@@ -11,8 +16,25 @@ class GameActivity : BaseActivity() {
 
     private lateinit var mGLSurfaceView: AndroidWindow
 
+    // Used for sensor detection
+    private val sensorEventListener = SensorInput()
+    private var mSensorManager: SensorManager? = null
+    private var mRotationSensor: Sensor? = null
+    private var mWindowManager: WindowManager? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mWindowManager = windowManager
+        mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        mRotationSensor = mSensorManager!!.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+
+        val deviceSensors: List<Sensor> = mSensorManager!!.getSensorList(Sensor.TYPE_ALL)
+
+        Timber.i("MobilePhone's Sensor List")
+        deviceSensors.forEach() {
+            Timber.i("Type: ${it.name}")
+        }
 
         // 创建一个GLSurfaceView实例,并将其设置为此Activity的ContentView。
         mGLSurfaceView = AndroidWindow.createWindow(
@@ -29,6 +51,14 @@ class GameActivity : BaseActivity() {
 
         // 以这个GLSurfaceView实例作为Sandbox的Window, start render
         (application as MyApplication).gameEngine.onAttachWindow(mGLSurfaceView)
+
+        mRotationSensor?.apply {
+            mSensorManager?.registerListener(
+                sensorEventListener,
+                mRotationSensor,
+                SensorManager.SENSOR_DELAY_FASTEST
+            )
+        }
     }
 
 
@@ -39,6 +69,7 @@ class GameActivity : BaseActivity() {
         (application as MyApplication).gameEngine.onDetachWindow()
 
         mGLSurfaceView.onPause()
+        mSensorManager?.unregisterListener(sensorEventListener)
     }
 
     override fun onDestroy() {
