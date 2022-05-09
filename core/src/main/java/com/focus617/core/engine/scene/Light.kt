@@ -4,7 +4,7 @@ import com.focus617.core.engine.math.Vector3
 
 class Light {
 
-    companion object{
+    companion object {
         const val U_VECTOR_TO_LIGHT = "u_Vector3ToLight"
         const val U_POINT_LIGHT_POSITIONS = "u_PointLightPositions"
         const val U_POINT_LIGHT_COLORS = "u_PointLightColors"
@@ -17,7 +17,7 @@ class Light {
 
 // 点光源
 object PointLight {
-    var position: Vector3 = Vector3(0.61f, 0.64f, -0.47f)
+    var position: Vector3 = Vector3(6.1f, 6.4f, -4.7f)
 
     var ambient: Vector3 = Vector3(0.3f, 0.3f, 0.3f)
     var diffuse: Vector3 = Vector3(1.0f, 1.0f, 1.0f)

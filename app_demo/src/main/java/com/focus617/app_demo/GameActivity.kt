@@ -20,6 +20,7 @@ class GameActivity : BaseActivity() {
             (application as MyApplication).gameEngine
         )
         setContentView(mGLSurfaceView)
+        setupFullScreen()
     }
 
     override fun onResume() {
