@@ -16,7 +16,7 @@ import java.nio.Buffer
  * 2. 它的构造器需要纹理的图片资源或文件
  */
 class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
-    private val textureObjectIdBuf = IntArray(1)
+    private val mHandleBuf = IntArray(1)
     override var mHandle: Int = 0
 
     private var mInternalFormat: Int = GL_RGBA8
@@ -35,7 +35,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         bitmap.apply {
             mWidth = bitmap.width
             mHeight = bitmap.height
-            mHandle = TextureHelper.loadImageIntoTexture(textureObjectIdBuf, bitmap)
+            mHandle = TextureHelper.loadImageIntoTexture(mHandleBuf, bitmap)
         }
         // Recycle the bitmap, since its data has been loaded into OpenGL.
         bitmap.recycle()
@@ -47,7 +47,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         bitmap.apply {
             mWidth = bitmap.width
             mHeight = bitmap.height
-            mHandle = TextureHelper.loadImageIntoTexture(textureObjectIdBuf, bitmap)
+            mHandle = TextureHelper.loadImageIntoTexture(mHandleBuf, bitmap)
         }
         // Recycle the bitmap, since its data has been loaded into OpenGL.
         bitmap.recycle()
@@ -61,11 +61,11 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         mInternalFormat = GL_RGBA8
         mDataFormat = GL_RGBA
 
-        GLES31.glGenTextures(1, textureObjectIdBuf, 0)
-        if (textureObjectIdBuf[0] == 0) {
+        GLES31.glGenTextures(1, mHandleBuf, 0)
+        if (mHandleBuf[0] == 0) {
             LOG.error("Could not generate a new OpenGL texture object.")
         }
-        mHandle = textureObjectIdBuf[0]
+        mHandle = mHandleBuf[0]
 
         // Bind to the texture in OpenGL
         GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, mHandle)
@@ -81,11 +81,11 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
     // 创建Texture2D，作为FrameBuffer的output image
     constructor(framebuffer: Framebuffer, width: Int, height: Int) : this("FrameBuffer") {
 
-        GLES31.glGenTextures(1, textureObjectIdBuf, 0)
-        if (textureObjectIdBuf[0] == 0) {
+        GLES31.glGenTextures(1, mHandleBuf, 0)
+        if (mHandleBuf[0] == 0) {
             LOG.error("Could not generate a new OpenGL texture object.")
         }
-        mHandle = textureObjectIdBuf[0]
+        mHandle = mHandleBuf[0]
         // Bind to the texture in OpenGL
         GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, mHandle)
         //绑定纹理单元与sampler
@@ -152,7 +152,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
     }
 
     override fun close() {
-        GLES31.glDeleteTextures(1, textureObjectIdBuf, 0)
+        GLES31.glDeleteTextures(1, mHandleBuf, 0)
     }
 
 }
