@@ -11,6 +11,7 @@ import com.focus617.app_demo.engine.d2.XGLScene2D
 import com.focus617.app_demo.engine.d3.Sandbox3D
 import com.focus617.app_demo.engine.d3.XGLRenderer3D
 import com.focus617.app_demo.engine.d3.XGLScene3D
+import com.focus617.app_demo.engine.input.GestureInput
 import com.focus617.app_demo.renderer.XGLRendererAPI
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow

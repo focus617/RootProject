@@ -1,4 +1,4 @@
-package com.focus617.app_demo.engine
+package com.focus617.app_demo.engine.input
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent

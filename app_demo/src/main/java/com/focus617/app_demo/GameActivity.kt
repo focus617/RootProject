@@ -8,7 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import com.focus617.app_demo.engine.AndroidWindow
-import com.focus617.app_demo.engine.SensorInput
+import com.focus617.app_demo.engine.input.SensorInput
 import com.focus617.platform.uicontroller.BaseActivity
 import timber.log.Timber
 
