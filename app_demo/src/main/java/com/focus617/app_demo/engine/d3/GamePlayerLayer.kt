@@ -10,11 +10,11 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
     private val eventDispatcher = EventDispatcher()
 
     private val earth = Earth()
+    private val box = Box()
 
     init{
-        val box = Box()
         box.onTransform3D(
-            Vector3(0f, 0.51f, 0f),
+            Vector3(0f, 0.55f, 0f),
             Vector3(1.0f, 1.0f, 1.0f)
         )
         gameObjectList.add(box)
@@ -45,7 +45,7 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
 
     override fun onUpdate(timeStep: TimeStep) {
         //LOG.info("${this.mDebugName} onUpdate")
-        earth.updateCameraPosition(scene.mCamera.getPosition())
+        box.updateCameraPosition(scene.mCamera.getPosition())
     }
 
     override fun onEvent(event: Event): Boolean {
