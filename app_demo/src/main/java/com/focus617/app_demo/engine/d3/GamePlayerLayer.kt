@@ -1,5 +1,6 @@
 package com.focus617.app_demo.engine.d3
 
+import android.opengl.GLES31
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Vector3
@@ -14,7 +15,7 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
 
     init{
         box.onTransform3D(
-            Vector3(0f, 0.55f, 0f),
+            Vector3(0f, 0.54f, 0f),
             Vector3(1.0f, 1.0f, 1.0f)
         )
         gameObjectList.add(box)
@@ -46,6 +47,16 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
     override fun onUpdate(timeStep: TimeStep) {
         //LOG.info("${this.mDebugName} onUpdate")
         box.updateCameraPosition(scene.mCamera.getPosition())
+    }
+
+    override fun beforeDrawFrame() {
+        //Enable Cull Back Face
+        GLES31.glEnable(GLES31.GL_CULL_FACE)
+    }
+
+    override fun afterDrawFrame() {
+        //Enable Cull Back Face
+        GLES31.glDisable(GLES31.GL_CULL_FACE)
     }
 
     override fun onEvent(event: Event): Boolean {

@@ -82,6 +82,12 @@ class GameLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
         }
     }
 
+    override fun beforeDrawFrame() {
+    }
+
+    override fun afterDrawFrame() {
+    }
+
     override fun onEvent(event: Event): Boolean {
         return eventDispatcher.dispatch(event)
     }

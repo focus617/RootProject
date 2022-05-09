@@ -50,7 +50,8 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         XGLTextureSlots.flush()
 
         val layerStack = scene.engine.getLayerStack()
-        for (layer in layerStack.mLayers)
+        for (layer in layerStack.mLayers) {
+            layer.beforeDrawFrame()
             for (gameObject in layer.gameObjectList) {
                 val shader = scene.mShaderLibrary.get(gameObject.shaderName)
 
@@ -66,7 +67,8 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
                     gameObject.submit(shader)
                 }
             }
-
+            layer.afterDrawFrame()
+        }
         endScene()
     }
 

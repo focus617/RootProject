@@ -1,5 +1,6 @@
 package com.focus617.app_demo.renderer
 
+import android.opengl.GLES31
 import android.opengl.GLES31.*
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.renderer.RendererAPI
@@ -20,6 +21,9 @@ class XGLRendererAPI : RendererAPI() {
         //启动深度测试
         glEnable(GL_DEPTH_TEST)
         glDepthFunc(GL_LEQUAL) // indicate what type of depth test
+
+        //Define Cull Back Face, Enable/Disable by each Layer/GO
+        glCullFace(GLES31.GL_BACK)
     }
 
     override fun clear() {
