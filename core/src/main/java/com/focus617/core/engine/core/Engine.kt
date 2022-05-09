@@ -66,11 +66,13 @@ open class Engine : BaseEntity(), Runnable, Closeable {
 
     override fun run() {
         while (isRunning) {
-            // 全平台通用的封装的API, OpenGL上就是glfwGetTime();
-            // 虽然不同机器执行一次Loop函数的用时不同，但只要把每一帧里的运动，
-            // 跟该帧所经历的时间相乘，就能抵消因为帧率导致的数据不一致的问题。
-            // 注意, 这里time - m_LastFrameTIme, 正好算的应该是当前帧所经历的时间,
-            // 而不是上一帧经历的时间
+            /**
+             * 全平台通用的封装的API
+             * 虽然不同机器执行一次Loop函数的用时不同，但只要把每一帧里的运动，
+             * 跟该帧所经历的时间相乘，就能抵消因为帧率导致的数据不一致的问题。
+             * 注意, 这里time - m_LastFrameTIme, 正好算的应该是当前帧所经历的时间,
+             * 而不是上一帧经历的时间
+             */
             val time: Long = System.currentTimeMillis()
             val timeStep: TimeStep = TimeStep(time - mLastFrameTime)
             mLastFrameTime = time
