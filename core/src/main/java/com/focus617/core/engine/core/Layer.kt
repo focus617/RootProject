@@ -29,4 +29,7 @@ abstract class Layer(
 
     // 负责接收事件，并完成对应的转发
     abstract fun onEvent(event: Event): Boolean
+
+    // 需要在EGL环境下进行初始化的资源
+    abstract fun initOpenGlResource()
 }

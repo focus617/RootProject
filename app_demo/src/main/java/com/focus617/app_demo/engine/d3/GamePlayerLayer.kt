@@ -26,6 +26,13 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
         gameObjectList.add(earth)
     }
 
+    override fun initOpenGlResource() { }
+
+    override fun close() {
+        LOG.info("${this.mDebugName} closed")
+        eventDispatcher.close()
+    }
+
     override fun onAttach() {
         LOG.info("${this.mDebugName} onAttach()")
         registerEventHandlers()
@@ -43,11 +50,6 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
 
     override fun onEvent(event: Event): Boolean {
         return eventDispatcher.dispatch(event)
-    }
-
-    override fun close() {
-        LOG.info("${this.mDebugName} closed")
-        eventDispatcher.close()
     }
 
     // 处理各种触屏事件，例如可能引起相机位置变化的事件

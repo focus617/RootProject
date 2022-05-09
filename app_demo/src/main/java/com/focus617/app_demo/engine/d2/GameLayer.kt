@@ -14,6 +14,13 @@ import com.focus617.core.platform.event.base.EventDispatcher
 class GameLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
 
+    override fun initOpenGlResource() { }
+
+    override fun close() {
+        LOG.info("${this.mDebugName} closed")
+        eventDispatcher.close()
+    }
+
     override fun onAttach() {
         LOG.info("${this.mDebugName} onAttach()")
     }
@@ -77,11 +84,6 @@ class GameLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
 
     override fun onEvent(event: Event): Boolean {
         return eventDispatcher.dispatch(event)
-    }
-
-    override fun close() {
-        LOG.info("${this.mDebugName} closed")
-        eventDispatcher.close()
     }
 
     companion object {

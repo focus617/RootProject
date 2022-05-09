@@ -28,6 +28,13 @@ class TerrainLayer(name: String, private val scene: XGLScene3D) : Layer(name) {
         gameObjectList.add(skyBox)
     }
 
+    override fun initOpenGlResource() { }
+
+    override fun close() {
+        LOG.info("${this.mDebugName} closed")
+        eventDispatcher.close()
+    }
+
     override fun onAttach() {
         LOG.info("${this.mDebugName} onAttach()")
     }
@@ -42,11 +49,6 @@ class TerrainLayer(name: String, private val scene: XGLScene3D) : Layer(name) {
 
     override fun onEvent(event: Event): Boolean {
         return eventDispatcher.dispatch(event)
-    }
-
-    override fun close() {
-        LOG.info("${this.mDebugName} closed")
-        eventDispatcher.close()
     }
 
 }

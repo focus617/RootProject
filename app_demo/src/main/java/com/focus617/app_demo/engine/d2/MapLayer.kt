@@ -1,5 +1,6 @@
 package com.focus617.app_demo.engine.d2
 
+import com.focus617.app_demo.renderer.XGLFrameBuffer
 import com.focus617.app_demo.renderer.XGLTextureSlots
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
@@ -16,16 +17,30 @@ class MapLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
     lateinit var textureTree: SubTexture2D
     lateinit var textureMilestone: SubTexture2D
 
-    override fun onAttach() {
-        LOG.info("${this.mDebugName} onAttach()")
+    private var mFramebuffer: XGLFrameBuffer? = null
+
+    override fun initOpenGlResource() {
+        mFramebuffer = XGLFrameBuffer(1024, 2048)
     }
 
+    override fun close() {
+        LOG.info("${this.mDebugName} closed")
+    }
+
+    // 当Layer添加到LayerStack的时候会调用此函数，相当于Init函数
+    override fun onAttach() {
+        LOG.info("${this.mDebugName} onAttach()")
+
+    }
+    //当Layer从LayerStack移除的时候会调用此函数，相当于Shutdown函数
     override fun onDetach() {
         LOG.info("${this.mDebugName} onDetach")
     }
 
     override fun onUpdate(timeStep: TimeStep) {
         //LOG.info("${this.mDebugName} onUpdate")
+        mFramebuffer?.bind()
+
         if (Renderer2DData.initialized && scene.initialized) {
             if (!this.initialized) initSubTexture()
 
@@ -49,15 +64,13 @@ class MapLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
                     )
                 }
         }
+
+        mFramebuffer?.unbind()
     }
 
     override fun onEvent(event: Event): Boolean {
         //LOG.info("${this.mDebugName} onEvent")
         return false
-    }
-
-    override fun close() {
-        LOG.info("${this.mDebugName} closed")
     }
 
     fun initSubTexture() {
