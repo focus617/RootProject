@@ -55,15 +55,15 @@ class Box : Cube() {
 
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
 
-        shader.setFloat3(Earth.U_POINT_VIEW_POSITION, viewPoint)
+        shader.setFloat3(U_POINT_VIEW_POSITION, viewPoint)
 
-        shader.setFloat3(Earth.U_POINT_LIGHT_POSITION, PointLight.position)
-        shader.setFloat3(Earth.U_POINT_LIGHT_AMBIENT, PointLight.ambient)
-        shader.setFloat3(Earth.U_POINT_LIGHT_DIFFUSE, PointLight.diffuse)
-        shader.setFloat3(Earth.U_POINT_LIGHT_SPECULAR, PointLight.specular)
-        shader.setFloat(Earth.U_POINT_LIGHT_CONSTANT, PointLight.Constant)
-        shader.setFloat(Earth.U_POINT_LIGHT_LINEAR, PointLight.Linear)
-        shader.setFloat(Earth.U_POINT_LIGHT_QUADRATIC, PointLight.Quadratic)
+        shader.setFloat3(U_POINT_LIGHT_POSITION, PointLight.position)
+        shader.setFloat3(U_POINT_LIGHT_AMBIENT, PointLight.ambient)
+        shader.setFloat3(U_POINT_LIGHT_DIFFUSE, PointLight.diffuse)
+        shader.setFloat3(U_POINT_LIGHT_SPECULAR, PointLight.specular)
+        shader.setFloat(U_POINT_LIGHT_CONSTANT, PointLight.Constant)
+        shader.setFloat(U_POINT_LIGHT_LINEAR, PointLight.Linear)
+        shader.setFloat(U_POINT_LIGHT_QUADRATIC, PointLight.Quadratic)
 
         shader.setInt(U_MATERIAL_TEXTURE_DIFFUSE, textureIndex)
         shader.setFloat3(U_MATERIAL_SPECULAR, specular)
