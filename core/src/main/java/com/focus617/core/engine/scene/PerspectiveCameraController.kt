@@ -11,11 +11,11 @@ import com.focus617.mylib.helper.DateHelper
  */
 class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : CameraController() {
     private val mProjectionMatrix = FloatArray(16)
-    private var mZoomLevel: Float = 1.0f
+    private var mZoomLevel: Float = 0.5f
 
     // Euler angle
     private var pitchX: Float = 0f
-    private var yawY: Float = 0f
+    private var yawY: Float = 90f
 
     // Viewport size
     private var mWidth: Int = 0
@@ -75,7 +75,6 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
     private var previousSpan: Float = 1.0f
     private var previousX: Float = 0.0f
     private var previousY: Float = 0.0f
-    // private var previousZ: Float = 0.0f
 
     override fun onEvent(event: Event): Boolean {
         when (event) {
