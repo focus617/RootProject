@@ -28,6 +28,7 @@ class XGLFrameBuffer(
 
     init {
         LOG.info("XGLFrameBuffer created.")
+
         // Generate FBO
         glGenFramebuffers(1, mFrameBuf)
         if (mFrameBuf[0] == 0) {
@@ -35,13 +36,24 @@ class XGLFrameBuffer(
         }
         mFBOHandle = mFrameBuf[0]
 
-        // 创建Texture2D，作为FrameBuffer的Color Attachment
+        // Generate Texture2D for FrameBuffer's Color Attachment
         // 把纹理的维度设置为屏幕大小：传入width和height，只分配相应的内存，而不填充
         mColorAttachmentTexture2D = XGLTexture2D(this, mWidth, mHeight)
         // 注册到TextureSlots, 以便ActiveTexture
         mColorAttachmentTextureIndex = XGLTextureSlots.getId(mColorAttachmentTexture2D)
 
         mQuad = FrameBufferQuad(mColorAttachmentTextureIndex)
+
+        // Generate RBO for FrameBuffer's Stencil and Depth Attachment
+        glGenRenderbuffers(1, mRenderBuf)
+        if (mRenderBuf[0] == 0) {
+            throw RuntimeException("Could not create a new render buffer object.")
+        }
+        mRBOHandle = mRenderBuf[0]
+        glBindRenderbuffer(GL_RENDERBUFFER, mRBOHandle)
+        // 采用GL_DEPTH24_STENCIL8作为内部格式，它同时代表24位的深度和8位的模板缓冲
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, mWidth, mHeight)
+        glBindRenderbuffer(GL_RENDERBUFFER, 0)
 
         // Bind FrameBuffer
         glBindFramebuffer(GL_FRAMEBUFFER, mFBOHandle)
@@ -53,17 +65,6 @@ class XGLFrameBuffer(
             mColorAttachmentTexture2D.mHandle,
             0
         )
-
-        // Generate RBO for FrameBuffer's Stencil and Depth Attachment
-        glGenRenderbuffers(1, mRenderBuf)
-        if (mRenderBuf[0] == 0) {
-            throw RuntimeException("Could not create a new render buffer object.")
-        }
-        mRBOHandle = mRenderBuf[0]
-
-        glBindRenderbuffer(GL_RENDERBUFFER, mRBOHandle)
-        // 采用GL_DEPTH24_STENCIL8作为内部格式，它同时代表24位的深度和8位的模板缓冲
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, mWidth, mHeight)
         // Attach the Renderbuffer to FrameBuffer
         glFramebufferRenderbuffer(
             GL_FRAMEBUFFER,
@@ -71,7 +72,6 @@ class XGLFrameBuffer(
             GL_RENDERBUFFER,
             mRBOHandle
         )
-        glBindRenderbuffer(GL_RENDERBUFFER, 0)
 
         val state: Boolean = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
         check(state) { LOG.warn("Framebuffer is incomplete!") }
