@@ -14,6 +14,7 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.Renderer {
+
     private lateinit var mFrameBuffer: XGLFrameBuffer
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
@@ -47,6 +48,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
     }
 
     override fun onDrawFrame(unused: GL10) {
+        XGLContext.checkGLError("Before beginScene")
         beginScene(scene.mCamera)
 
         XGLTextureSlots.flush()
@@ -72,6 +74,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
             layer.afterDrawFrame()
         }
         endScene()
+        XGLContext.checkGLError("After endScene")
     }
 
 

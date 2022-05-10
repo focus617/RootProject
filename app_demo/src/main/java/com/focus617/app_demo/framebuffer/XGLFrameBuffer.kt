@@ -1,8 +1,10 @@
 package com.focus617.app_demo.framebuffer
 
+import android.opengl.GLES20
 import android.opengl.GLES20.GL_FRAMEBUFFER
 import android.opengl.GLES20.glBindFramebuffer
 import android.opengl.GLES31.*
+import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.renderer.XGLTexture2D
 import com.focus617.app_demo.renderer.XGLTextureSlots
 import com.focus617.core.engine.renderer.Framebuffer
@@ -17,7 +19,7 @@ class XGLFrameBuffer(
     private var mRenderBuf: IntBuffer = IntBuffer.allocate(1)
 
     private var mFBOHandle: Int = -1   // FrameBuffer的Handle
-    private var mRBOHandle: Int = -1      // RenderBuffer的Handle
+    private var mRBOHandle: Int = -1   // RenderBuffer的Handle
 
     private var mColorAttachmentTexture2D: XGLTexture2D // ColorTexture的Handle
     private var mColorAttachmentTextureIndex: Int = -1  // 在TextureSlots内的Index
@@ -74,13 +76,16 @@ class XGLFrameBuffer(
         val state: Boolean = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
         check(state) { LOG.warn("Framebuffer is incomplete!") }
 
-        glBindTexture(GL_TEXTURE_2D, 0)
+        // Switch back to the default framebuffer.
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
+        XGLContext.checkGLError("FrameBuffer init finish")
     }
 
     override fun close() {
         glDeleteFramebuffers(1, mFrameBuf)
+        GLES20.glDeleteRenderbuffers(1, mRenderBuf)
         mColorAttachmentTexture2D.close()
+
     }
 
     override fun bind() {

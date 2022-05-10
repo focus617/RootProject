@@ -25,7 +25,7 @@ class SensorInput(private val mainActivity: GameActivity) : BaseEntity(), Sensor
     // new sensor data received
     override fun onSensorChanged(event: SensorEvent?) {
         event?.apply {
-            LOG.info("onSensorChanged: event=(${event.sensor},${event.values},${event.timestamp})")
+//            LOG.info("onSensorChanged: event=(${event.sensor},${event.values},${event.timestamp})")
             when (event.sensor) {
                 mRotationSensor -> onOrientation(event)
                 else -> {}
