@@ -91,6 +91,7 @@ class XGLFrameBuffer(
     override fun bind() {
         glBindFramebuffer(GL_FRAMEBUFFER, mFBOHandle)
         glEnable(GL_DEPTH_TEST)
+        glEnable(GL_BLEND)
     }
 
     override fun unbind() {
@@ -124,6 +125,7 @@ class XGLFrameBuffer(
     fun draw() {
         glClear(GL_COLOR_BUFFER_BIT)
         glDisable(GL_DEPTH_TEST)
+        glDisable(GL_BLEND)
 
         mColorAttachmentTexture2D.bind(mColorAttachmentTextureIndex)
         mQuad.draw()
