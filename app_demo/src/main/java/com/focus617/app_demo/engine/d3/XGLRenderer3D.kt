@@ -48,7 +48,10 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
     }
 
     override fun onDrawFrame(unused: GL10) {
-        XGLContext.checkGLError("Before beginScene")
+        XGLContext.checkGLError("Before onDrawFrame")
+        // First pass: draw on FrameBuffer
+        mFrameBuffer.bind()
+
         beginScene(scene.mCamera)
 
         XGLTextureSlots.flush()
@@ -74,7 +77,17 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
             layer.afterDrawFrame()
         }
         endScene()
-        XGLContext.checkGLError("After endScene")
+
+        mFrameBuffer.unbind()   // back to default
+
+        // 清理屏幕，重绘背景颜色
+        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1.0F))
+        RenderCommand.clear()
+
+        // Second pass: draw on real screen
+        mFrameBuffer.drawOnScreen()
+
+        XGLContext.checkGLError("After onDrawFrame")
     }
 
 
@@ -88,24 +101,12 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
             System.arraycopy(camera.getViewMatrix(), 0, SceneData.sViewMatrix, 0, 16)
         }
 
-        // First pass: draw on FrameBuffer
-        mFrameBuffer.bind()
-
         // 清理屏幕，重绘背景颜色
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1.0F))
         RenderCommand.clear()
     }
 
     override fun endScene() {
-        mFrameBuffer.unbind()   // back to default
-
-        // 清理屏幕，重绘背景颜色
-        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1.0F))
-        RenderCommand.clear()
-
-        // Second pass: draw on real screen
-        mFrameBuffer.drawOnScreen()
-
     }
 
     override fun submit(
