@@ -10,12 +10,13 @@ import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.sensorEvents.SensorRotationEvent
 
 class SensorInput(private val mainActivity: GameActivity) : BaseEntity(), SensorEventListener {
+    private val mSensorManager = mainActivity.mSensorManager
 
     private val mRotationSensor: Sensor =
-        mainActivity.mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+        mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
 
     private val mAccelerometer =
-        mainActivity.mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         LOG.info("onAccuracyChanged: sensor=${sensor}, accuracy=$accuracy")
@@ -61,7 +62,7 @@ class SensorInput(private val mainActivity: GameActivity) : BaseEntity(), Sensor
             }
         }
 
-    // Remap the axes of the device screen and adjust the rotation matrix for the device orientation
+        // Remap the axes of the device screen and adjust the rotation matrix for the device orientation
         SensorManager.getRotationMatrixFromVector(rotationMatrix, rotationVector)
         SensorManager.remapCoordinateSystem(
             rotationMatrix,
@@ -77,7 +78,15 @@ class SensorInput(private val mainActivity: GameActivity) : BaseEntity(), Sensor
         val pitch: Float = orientation[1] * RadiusToDegree
         val roll: Float = orientation[2] * RadiusToDegree
 
-        val nativeEvent = SensorRotationEvent(pitch,yaw,roll,event.sensor)
+        val nativeEvent = SensorRotationEvent(pitch, yaw, roll, event.sensor)
         mainActivity.mGLSurfaceView.mData.callback?.let { it(nativeEvent) }
+    }
+
+    fun dumpSensors() {
+        val deviceSensors: List<Sensor> = mSensorManager.getSensorList(Sensor.TYPE_ALL)
+        LOG.info("MobilePhone's Sensor List")
+        deviceSensors.forEach() {
+            LOG.info("Type: ${it.name}")
+        }
     }
 }

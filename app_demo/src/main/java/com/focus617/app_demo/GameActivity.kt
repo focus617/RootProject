@@ -30,11 +30,7 @@ class GameActivity : BaseActivity() {
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensorEventListener = SensorInput(this)
 
-        val deviceSensors: List<Sensor> = mSensorManager.getSensorList(Sensor.TYPE_ALL)
-        Timber.i("MobilePhone's Sensor List")
-        deviceSensors.forEach() {
-            Timber.i("Type: ${it.name}")
-        }
+//        sensorEventListener.dumpSensors()
 
         // 创建一个GLSurfaceView实例,并将其设置为此Activity的ContentView。
         mGLSurfaceView = AndroidWindow.createWindow(
