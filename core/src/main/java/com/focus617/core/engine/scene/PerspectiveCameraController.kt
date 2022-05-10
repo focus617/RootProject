@@ -131,7 +131,7 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
             }
 
             is SensorRotationEvent -> {
-                LOG.info("CameraController: on SensorRotationEvent")
+//                LOG.info("CameraController: on SensorRotationEvent")
                 setRotation(-event.pitchXInDegree, -event.yawYInDegree)
                 when(event.yawYInDegree.toInt()){
                     in 0..180 -> setRotation(event.rollZInDegree)

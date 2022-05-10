@@ -2,6 +2,7 @@ package com.focus617.app_demo.engine.d3
 
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
+import com.focus617.app_demo.framebuffer.XGLFrameBuffer
 import com.focus617.app_demo.renderer.XGLTextureSlots
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.renderer.RenderCommand
@@ -13,6 +14,8 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.Renderer {
+
+    private lateinit var mFrameBuffer: XGLFrameBuffer
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         // 打印OpenGL Version，Vendor，etc
@@ -29,6 +32,8 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
 
         // ES3.2 doesn't support DebugMessageCallback
         //XGLContext.initDebug()
+
+        mFrameBuffer = XGLFrameBuffer()
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
@@ -38,13 +43,12 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         RenderCommand.setViewport(0, 0, width, height)
 
         scene.mCameraController.onWindowSizeChange(width, height)
+
+        mFrameBuffer.resizeColorAttachment(width, height)
     }
 
     override fun onDrawFrame(unused: GL10) {
-        // 清理屏幕，重绘背景颜色
-        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
-        RenderCommand.clear()
-
+        XGLContext.checkGLError("Before beginScene")
         beginScene(scene.mCamera)
 
         XGLTextureSlots.flush()
@@ -70,6 +74,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
             layer.afterDrawFrame()
         }
         endScene()
+        XGLContext.checkGLError("After endScene")
     }
 
 
@@ -82,9 +87,24 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
             )
             System.arraycopy(camera.getViewMatrix(), 0, SceneData.sViewMatrix, 0, 16)
         }
+
+        // First pass: draw on FrameBuffer
+        mFrameBuffer.bind()
+
+        // 清理屏幕，重绘背景颜色
+        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1.0F))
+        RenderCommand.clear()
     }
 
     override fun endScene() {
+        mFrameBuffer.unbind()   // back to default
+
+        // 清理屏幕，重绘背景颜色
+        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1.0F))
+        RenderCommand.clear()
+
+        // Second pass: draw on real screen
+        mFrameBuffer.drawOnScreen()
 
     }
 
@@ -92,6 +112,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         shader: Shader,
         vertexArray: VertexArray,
         transform: FloatArray
-    ) { }
+    ) {
+    }
 
 }

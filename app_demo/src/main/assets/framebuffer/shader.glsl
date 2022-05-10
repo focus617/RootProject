@@ -28,6 +28,7 @@ precision mediump float;
 
 //接收从顶点着色器过来的参数
 in vec2 v_TexCoords;
+out vec4 color;
 
 uniform sampler2D u_screenTexture;
 
