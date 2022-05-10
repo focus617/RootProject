@@ -104,7 +104,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         RenderCommand.clear()
 
         // Second pass: draw on real screen
-        mFrameBuffer.draw()
+        mFrameBuffer.drawOnScreen()
 
     }
 
