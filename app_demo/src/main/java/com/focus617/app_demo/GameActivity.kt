@@ -2,6 +2,7 @@ package com.focus617.app_demo
 
 import android.app.ActivityManager
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.os.Build
@@ -42,6 +43,8 @@ class GameActivity : BaseActivity() {
         )
         setContentView(mGLSurfaceView)
         setupFullScreen()
+        // 设置为竖屏模式
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     }
 
     override fun onResume() {
