@@ -72,6 +72,11 @@ class Sandbox3D(context: Context) : Engine(), Closeable {
             val hasConsumed = scene.mCameraController.onEvent(event) ?: false
             hasConsumed
         }
+
+        eventDispatcher.register(EventType.SensorRotation) { event ->
+            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
+            hasConsumed
+        }
     }
 
     private fun unRegisterEventHandlers() {
@@ -80,6 +85,7 @@ class Sandbox3D(context: Context) : Engine(), Closeable {
         eventDispatcher.unRegister(EventType.PinchStart)
         eventDispatcher.unRegister(EventType.PinchEnd)
         eventDispatcher.unRegister(EventType.Pinch)
+        eventDispatcher.unRegister(EventType.SensorRotation)
     }
 
 }

@@ -14,19 +14,20 @@ import timber.log.Timber
 
 class GameActivity : BaseActivity() {
 
-    private lateinit var mGLSurfaceView: AndroidWindow
+    lateinit var mGLSurfaceView: AndroidWindow
 
     // Used for sensor detection
-    private val sensorEventListener = SensorInput()
-    private lateinit var mSensorManager: SensorManager
+    private lateinit var sensorEventListener: SensorInput
+    lateinit var mSensorManager: SensorManager
 
-    private lateinit var mWindowManager: WindowManager  // 有什么用？
+    lateinit var mWindowManager: WindowManager  // 有什么用？
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mWindowManager = windowManager
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensorEventListener = SensorInput(this)
 
         val deviceSensors: List<Sensor> = mSensorManager.getSensorList(Sensor.TYPE_ALL)
         Timber.i("MobilePhone's Sensor List")
@@ -50,6 +51,7 @@ class GameActivity : BaseActivity() {
         // 以这个GLSurfaceView实例作为Sandbox的Window, start render
         (application as MyApplication).gameEngine.onAttachWindow(mGLSurfaceView)
 
+        // 注册各种传感器的事件监听器
         mSensorManager.apply {
             val mRotationSensor = getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
             registerListener(
@@ -68,6 +70,7 @@ class GameActivity : BaseActivity() {
         (application as MyApplication).gameEngine.onDetachWindow()
 
         mGLSurfaceView.onPause()
+        // Stop receiving updates from the sensor
         mSensorManager.unregisterListener(sensorEventListener)
     }
 

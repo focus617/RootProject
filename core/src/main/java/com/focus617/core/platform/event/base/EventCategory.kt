@@ -8,7 +8,8 @@ enum class EventCategory(val category: Int) {
     EventCategoryKeyboard   (1 shl 2),
     EventCategoryMouse      (1 shl 3),
     EventCategoryMouseButton(1 shl 4),
-    EventCategoryScreenTouch(1 shl 5);
+    EventCategoryScreenTouch(1 shl 5),
+    EventCategorySensor     (1 shl 6);
 
     fun getCategoryFlags(): Int = this.category
 
