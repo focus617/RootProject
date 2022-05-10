@@ -1,9 +1,7 @@
 package com.focus617.app_demo.renderer
 
 import android.content.Context
-import android.opengl.GLES20.*
-import android.opengl.GLES30.GL_RGBA8
-import android.opengl.GLES31
+import android.opengl.GLES31.*
 import com.focus617.core.engine.renderer.Framebuffer
 import com.focus617.core.engine.renderer.Texture2D
 import com.focus617.platform.helper.BitmapHelper
@@ -61,21 +59,23 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         mInternalFormat = GL_RGBA8
         mDataFormat = GL_RGBA
 
-        GLES31.glGenTextures(1, mHandleBuf, 0)
+        glGenTextures(1, mHandleBuf, 0)
         if (mHandleBuf[0] == 0) {
             LOG.error("Could not generate a new OpenGL texture object.")
         }
         mHandle = mHandleBuf[0]
 
         // Bind to the texture in OpenGL
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, mHandle)
+        glBindTexture(GL_TEXTURE_2D, mHandle)
 
         // Allocate texture storage
-        GLES31.glTexStorage2D(GL_TEXTURE_2D, 1, mInternalFormat, mWidth, mHeight)
+        glTexStorage2D(GL_TEXTURE_2D, 1, mInternalFormat, mWidth, mHeight)
 
         //绑定纹理单元与sampler
-        GLES31.glBindSampler(mHandle, TextureHelper.samplers[0])
+        glBindSampler(mHandle, TextureHelper.samplers[0])
 
+        // Unbind from the texture.
+        glBindTexture(GL_TEXTURE_2D, 0)
     }
 
     // 创建Texture2D，作为FrameBuffer的output image
@@ -83,27 +83,29 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         mWidth = width
         mHeight = height
 
-        GLES31.glGenTextures(1, mHandleBuf, 0)
+        glGenTextures(1, mHandleBuf, 0)
         if (mHandleBuf[0] == 0) {
             LOG.error("Could not generate a new OpenGL texture object.")
         }
         mHandle = mHandleBuf[0]
         // Bind to the texture in OpenGL
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, mHandle)
+        glBindTexture(GL_TEXTURE_2D, mHandle)
         //绑定纹理单元与sampler
-        GLES31.glBindSampler(mHandle, TextureHelper.samplers[0])
+        glBindSampler(mHandle, TextureHelper.samplers[0])
         // Allocate texture storage
-        GLES31.glTexImage2D(
-            GLES31.GL_TEXTURE_2D,
+        glTexImage2D(
+            GL_TEXTURE_2D,
             0,
-            GLES31.GL_RGBA,
+            GL_RGBA,
             width,
             height,
             0,
-            GLES31.GL_RGBA,
-            GLES31.GL_UNSIGNED_BYTE,
+            GL_RGBA,
+            GL_UNSIGNED_BYTE,
             null
         )
+        // Unbind from the texture.
+        glBindTexture(GL_TEXTURE_2D, 0)
     }
 
     override fun setData(data: Buffer, size: Int) {
@@ -124,37 +126,37 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
             data
         )
         // Unbind from the texture.
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, 0)
+        glBindTexture(GL_TEXTURE_2D, 0)
     }
 
     override fun bind(slot: Int) {
         val textureSlot = when (slot) {
-            0 -> GLES31.GL_TEXTURE0
-            1 -> GLES31.GL_TEXTURE1
-            2 -> GLES31.GL_TEXTURE2
-            3 -> GLES31.GL_TEXTURE3
-            4 -> GLES31.GL_TEXTURE4
-            5 -> GLES31.GL_TEXTURE5
-            6 -> GLES31.GL_TEXTURE6
-            7 -> GLES31.GL_TEXTURE7
-            8 -> GLES31.GL_TEXTURE8
-            9 -> GLES31.GL_TEXTURE9
-            10 -> GLES31.GL_TEXTURE10
-            11 -> GLES31.GL_TEXTURE11
-            12 -> GLES31.GL_TEXTURE12
-            13 -> GLES31.GL_TEXTURE13
-            14 -> GLES31.GL_TEXTURE14
-            else -> GLES31.GL_TEXTURE15
+            0 -> GL_TEXTURE0
+            1 -> GL_TEXTURE1
+            2 -> GL_TEXTURE2
+            3 -> GL_TEXTURE3
+            4 -> GL_TEXTURE4
+            5 -> GL_TEXTURE5
+            6 -> GL_TEXTURE6
+            7 -> GL_TEXTURE7
+            8 -> GL_TEXTURE8
+            9 -> GL_TEXTURE9
+            10 -> GL_TEXTURE10
+            11 -> GL_TEXTURE11
+            12 -> GL_TEXTURE12
+            13 -> GL_TEXTURE13
+            14 -> GL_TEXTURE14
+            else -> GL_TEXTURE15
         }
         // Set active texture unit
-        GLES31.glActiveTexture(textureSlot)
+        glActiveTexture(textureSlot)
 
         // Bind this texture with above active texture unit
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_2D, mHandle)
+        glBindTexture(GL_TEXTURE_2D, mHandle)
     }
 
     override fun close() {
-        GLES31.glDeleteTextures(1, mHandleBuf, 0)
+        glDeleteTextures(1, mHandleBuf, 0)
     }
 
 }
