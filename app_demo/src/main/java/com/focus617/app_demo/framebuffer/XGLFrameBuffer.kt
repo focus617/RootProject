@@ -57,7 +57,7 @@ class XGLFrameBuffer(
 
         // Bind FrameBuffer
         glBindFramebuffer(GL_FRAMEBUFFER, mFBOHandle)
-        // attach Texture2D to the FrameBuffer, 作为输出的texture
+        // Attach the Texture2D to the FrameBuffer as color buffer
         glFramebufferTexture2D(
             GL_FRAMEBUFFER,
             GL_COLOR_ATTACHMENT0,
@@ -65,7 +65,7 @@ class XGLFrameBuffer(
             mColorAttachmentTexture2D.mHandle,
             0
         )
-        // Attach the Renderbuffer to FrameBuffer
+        // Attach the Renderbuffer to FrameBuffer as Stencil and Depth buffers
         glFramebufferRenderbuffer(
             GL_FRAMEBUFFER,
             GL_DEPTH_STENCIL_ATTACHMENT,
