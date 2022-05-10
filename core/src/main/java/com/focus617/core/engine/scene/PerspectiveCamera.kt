@@ -28,8 +28,8 @@ class PerspectiveCamera : Camera() {
     override fun setRotation(rollZInDegree: Float) {
         val angle: Float = rollZInDegree * (Math.PI / 180.0f).toFloat()
 
-        directionUp.x = cos(angle)
-        directionUp.y = sin(angle)
+        directionUp.x = sin(angle)
+        directionUp.y = cos(angle)
         directionUp.z = 0f
         reCalculateViewMatrix()
     }

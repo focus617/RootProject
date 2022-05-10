@@ -16,5 +16,7 @@ enum class EventType(val typeId: Int) {
     MouseMoved(402), MouseScrolled(403),
 
     TouchPress(500), TouchDrag(501),
-    PinchStart(520), Pinch(521), PinchEnd(522)
+    PinchStart(520), Pinch(521), PinchEnd(522),
+
+    SensorRotation(600)
 }

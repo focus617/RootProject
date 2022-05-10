@@ -4,6 +4,7 @@ import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.*
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.screenTouchEvents.*
+import com.focus617.core.platform.event.sensorEvents.SensorRotationEvent
 import com.focus617.mylib.helper.DateHelper
 
 /**
@@ -11,11 +12,11 @@ import com.focus617.mylib.helper.DateHelper
  */
 class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : CameraController() {
     private val mProjectionMatrix = FloatArray(16)
-    private var mZoomLevel: Float = 1.0f
+    private var mZoomLevel: Float = 0.5f
 
     // Euler angle
     private var pitchX: Float = 0f
-    private var yawY: Float = 0f
+    private var yawY: Float = 90f
 
     // Viewport size
     private var mWidth: Int = 0
@@ -50,7 +51,7 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
         mCamera.setPosition(Point3D(x, y, z))
     }
 
-    fun translate(normalizedVector3: Vector3){
+    fun translate(normalizedVector3: Vector3) {
         with(mCamera) {
             setPosition(getPosition().translate(normalizedVector3))
         }
@@ -75,7 +76,6 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
     private var previousSpan: Float = 1.0f
     private var previousX: Float = 0.0f
     private var previousY: Float = 0.0f
-    // private var previousZ: Float = 0.0f
 
     override fun onEvent(event: Event): Boolean {
         when (event) {
@@ -127,6 +127,16 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
             is PinchEndEvent -> {
                 LOG.info("CameraController: on PinchEndEvent")
                 mode = ControllerWorkingMode.Scroll
+                event.handleFinished()
+            }
+
+            is SensorRotationEvent -> {
+                LOG.info("CameraController: on SensorRotationEvent")
+                setRotation(-event.pitchXInDegree, -event.yawYInDegree)
+                when(event.yawYInDegree.toInt()){
+                    in 0..180 -> setRotation(event.rollZInDegree)
+                    else -> setRotation(-event.rollZInDegree)
+                }
                 event.handleFinished()
             }
 

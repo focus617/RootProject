@@ -1,7 +1,8 @@
-package com.focus617.app_demo.engine
+package com.focus617.app_demo.engine.input
 
 import android.view.MotionEvent
 import android.view.View
+import com.focus617.app_demo.engine.AndroidWindow
 import com.focus617.core.engine.math.Point2D
 import com.focus617.core.platform.event.screenTouchEvents.*
 import com.focus617.mylib.logging.WithLogging
