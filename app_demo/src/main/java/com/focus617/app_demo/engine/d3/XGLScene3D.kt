@@ -1,6 +1,7 @@
 package com.focus617.app_demo.engine.d3
 
 import android.content.Context
+import com.focus617.app_demo.framebuffer.FrameBufferQuad
 import com.focus617.app_demo.renderer.*
 import com.focus617.app_demo.terrain.Heightmap
 import com.focus617.app_demo.terrain.SkyBox
@@ -24,6 +25,13 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
 
     private fun initShader() {
         var shader = XGLShaderBuilder.createShader(
+            context,
+            FrameBufferQuad.ShaderFilePath
+        ) as XGLShader
+        FrameBufferQuad.shader = shader
+        mShaderLibrary.add(shader)
+
+        shader = XGLShaderBuilder.createShader(
             context,
             SkyBox.SkyBoxShaderFilePath
         ) as XGLShader

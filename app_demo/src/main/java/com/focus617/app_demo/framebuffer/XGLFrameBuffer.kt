@@ -1,5 +1,7 @@
 package com.focus617.app_demo.framebuffer
 
+import android.opengl.GLES20.GL_FRAMEBUFFER
+import android.opengl.GLES20.glBindFramebuffer
 import android.opengl.GLES31.*
 import com.focus617.app_demo.renderer.XGLTexture2D
 import com.focus617.app_demo.renderer.XGLTextureSlots
@@ -7,7 +9,10 @@ import com.focus617.core.engine.renderer.Framebuffer
 import java.nio.IntBuffer
 
 
-class XGLFrameBuffer(width: Int, height: Int) : Framebuffer(width, height) {
+class XGLFrameBuffer(
+    width: Int = 1080,
+    height: Int = 2220
+) : Framebuffer(width, height) {
     private var mFrameBuf: IntBuffer = IntBuffer.allocate(1)
     private var mRenderBuf: IntBuffer = IntBuffer.allocate(1)
 
@@ -17,7 +22,10 @@ class XGLFrameBuffer(width: Int, height: Int) : Framebuffer(width, height) {
     private var mColorAttachmentTexture2D: XGLTexture2D // ColorTexture的Handle
     private var mColorAttachmentTextureIndex: Int = -1  // 在TextureSlots内的Index
 
+    private var mQuad: FrameBufferQuad
+
     init {
+        LOG.info("XGLFrameBuffer created.")
         // Generate FBO
         glGenFramebuffers(1, mFrameBuf)
         if (mFrameBuf[0] == 0) {
@@ -30,6 +38,8 @@ class XGLFrameBuffer(width: Int, height: Int) : Framebuffer(width, height) {
         mColorAttachmentTexture2D = XGLTexture2D(this, mWidth, mHeight)
         // 注册到TextureSlots, 以便ActiveTexture
         mColorAttachmentTextureIndex = XGLTextureSlots.getId(mColorAttachmentTexture2D)
+
+        mQuad = FrameBufferQuad(mColorAttachmentTextureIndex)
 
         // Bind FrameBuffer
         glBindFramebuffer(GL_FRAMEBUFFER, mFBOHandle)
@@ -64,7 +74,7 @@ class XGLFrameBuffer(width: Int, height: Int) : Framebuffer(width, height) {
         val state: Boolean = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
         check(state) { LOG.warn("Framebuffer is incomplete!") }
 
-        glBindTexture(GL_TEXTURE_2D,0)
+        glBindTexture(GL_TEXTURE_2D, 0)
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
     }
 
@@ -75,6 +85,7 @@ class XGLFrameBuffer(width: Int, height: Int) : Framebuffer(width, height) {
 
     override fun bind() {
         glBindFramebuffer(GL_FRAMEBUFFER, mFBOHandle)
+        glEnable(GL_DEPTH_TEST)
     }
 
     override fun unbind() {
@@ -84,10 +95,11 @@ class XGLFrameBuffer(width: Int, height: Int) : Framebuffer(width, height) {
     override fun getColorAttachmentTextureId() = mColorAttachmentTexture2D.mHandle
 
     override fun resizeColorAttachment(width: Int, height: Int) {
-        if (mFBOHandle != -1) {
-            mWidth = width
-            mHeight = height
+        LOG.info("XGLFrameBuffer resizeColorAttachment($width, $height)")
+        mWidth = width
+        mHeight = height
 
+        if (mFBOHandle != -1) {
             // 注意, 这里不需要BindFramebuffer
             glBindTexture(GL_TEXTURE_2D, mColorAttachmentTexture2D.mHandle)
             glTexImage2D(
@@ -101,7 +113,17 @@ class XGLFrameBuffer(width: Int, height: Int) : Framebuffer(width, height) {
                 GL_UNSIGNED_BYTE,
                 null
             )
-
         }
+    }
+
+    fun draw() {
+        glClear(GL_COLOR_BUFFER_BIT)
+        glDisable(GL_DEPTH_TEST)
+
+        mColorAttachmentTexture2D.bind(mColorAttachmentTextureIndex)
+        mQuad.draw()
+
+        // TODO: How to Swap the buffers?
+        glViewport(0,0, mWidth, mHeight)
     }
 }
