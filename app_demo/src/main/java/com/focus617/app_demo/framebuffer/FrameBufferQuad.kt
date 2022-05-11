@@ -55,9 +55,13 @@ class FrameBufferQuad(private val screenTextureIndex: Int): DrawableObject() {
     companion object {
         val SHADER_PATH = "framebuffer"
         val SHADER_FILE = "shader.glsl"
+        val SHADER_OUTLINING_FILE = "shaderSingleColor.glsl"
 
         val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
+        val ShaderOutliningFilePath: String = "$SHADER_PATH/$SHADER_OUTLINING_FILE"
+
         lateinit var shader: Shader
+        lateinit var shaderOutlining: Shader
 
         const val U_TEXTURE = "u_screenTexture"
     }

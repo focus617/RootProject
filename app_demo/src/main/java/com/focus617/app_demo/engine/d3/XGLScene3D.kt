@@ -24,14 +24,19 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
     }
 
     private fun initShader() {
-        var shader = XGLShaderBuilder.createShader(
+        FrameBufferQuad.shader = XGLShaderBuilder.createShader(
             context,
             FrameBufferQuad.ShaderFilePath
         ) as XGLShader
-        FrameBufferQuad.shader = shader
-        mShaderLibrary.add(shader)
+        mShaderLibrary.add(FrameBufferQuad.shader)
 
-        shader = XGLShaderBuilder.createShader(
+        FrameBufferQuad.shaderOutlining = XGLShaderBuilder.createShader(
+            context,
+            FrameBufferQuad.ShaderOutliningFilePath
+        ) as XGLShader
+        mShaderLibrary.add(FrameBufferQuad.shaderOutlining)
+
+        var shader = XGLShaderBuilder.createShader(
             context,
             SkyBox.SkyBoxShaderFilePath
         ) as XGLShader
