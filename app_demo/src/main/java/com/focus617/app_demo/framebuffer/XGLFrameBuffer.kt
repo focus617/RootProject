@@ -1,6 +1,5 @@
 package com.focus617.app_demo.framebuffer
 
-import android.opengl.GLES20
 import android.opengl.GLES20.GL_FRAMEBUFFER
 import android.opengl.GLES20.glBindFramebuffer
 import android.opengl.GLES31.*
@@ -16,13 +15,12 @@ class XGLFrameBuffer(
     height: Int = 2220
 ) : Framebuffer(width, height) {
     private var mFrameBuf: IntBuffer = IntBuffer.allocate(1)
-    private var mRenderBuf: IntBuffer = IntBuffer.allocate(1)
-
     private var mFBOHandle: Int = -1   // FrameBuffer的Handle
-    private var mRBOHandle: Int = -1   // RenderBuffer的Handle
 
-    private var mColorAttachmentTexture2D: XGLTexture2D // ColorTexture的Handle
+    private var mColorAttachmentTexture2D: XGLTexture2D // ColorTextureBuffer
     private var mColorAttachmentTextureIndex: Int = -1  // 在TextureSlots内的Index
+
+    private var mRenderBuf: XGLRenderBuffer // RenderBuffer
 
     private var mQuad: FrameBufferQuad
 
@@ -45,15 +43,7 @@ class XGLFrameBuffer(
         mQuad = FrameBufferQuad(mColorAttachmentTextureIndex)
 
         // Generate RBO for FrameBuffer's Stencil and Depth Attachment
-        glGenRenderbuffers(1, mRenderBuf)
-        if (mRenderBuf[0] == 0) {
-            throw RuntimeException("Could not create a new render buffer object.")
-        }
-        mRBOHandle = mRenderBuf[0]
-        glBindRenderbuffer(GL_RENDERBUFFER, mRBOHandle)
-        // 采用GL_DEPTH24_STENCIL8作为内部格式，它同时代表24位的深度和8位的模板缓冲
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, mWidth, mHeight)
-        glBindRenderbuffer(GL_RENDERBUFFER, 0)
+        mRenderBuf = XGLRenderBuffer(mWidth, mHeight)
 
         // Bind FrameBuffer
         glBindFramebuffer(GL_FRAMEBUFFER, mFBOHandle)
@@ -70,7 +60,7 @@ class XGLFrameBuffer(
             GL_FRAMEBUFFER,
             GL_DEPTH_STENCIL_ATTACHMENT,
             GL_RENDERBUFFER,
-            mRBOHandle
+            mRenderBuf.mHandle
         )
 
         val state: Boolean = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
@@ -83,7 +73,7 @@ class XGLFrameBuffer(
 
     override fun close() {
         glDeleteFramebuffers(1, mFrameBuf)
-        GLES20.glDeleteRenderbuffers(1, mRenderBuf)
+        mRenderBuf.close()
         mColorAttachmentTexture2D.close()
 
     }
@@ -117,6 +107,17 @@ class XGLFrameBuffer(
                 GL_UNSIGNED_BYTE,
                 null
             )
+            glBindTexture(GL_TEXTURE_2D, 0)
+
+            glBindRenderbuffer(GL_RENDERBUFFER, mRenderBuf.mHandle)
+            // 采用GL_DEPTH24_STENCIL8作为内部格式，它同时代表24位的深度和8位的模板缓冲
+            glRenderbufferStorage(
+                GL_RENDERBUFFER,
+                GL_DEPTH24_STENCIL8,
+                width,
+                height
+            )
+            glBindRenderbuffer(GL_RENDERBUFFER, 0)
         }
     }
 
