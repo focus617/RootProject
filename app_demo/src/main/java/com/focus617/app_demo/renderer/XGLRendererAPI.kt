@@ -28,7 +28,7 @@ class XGLRendererAPI : RendererAPI() {
 
     override fun clear() {
         // 清理屏幕，重绘背景颜色
-        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
+        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT)
         // Setup the depth buff
         glClearDepthf(1.0f)
     }

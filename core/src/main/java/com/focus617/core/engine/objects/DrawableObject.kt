@@ -28,6 +28,8 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
     // shaderName should be initialized by each concrete drawable object itself
     lateinit var shaderName: String
 
+    var isSelected = false
+
     init {
         resetTransform()
     }
@@ -51,6 +53,10 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
 
     fun resetTransform() {
         modelMatrix.setIdentity()
+    }
+
+    fun scale(size: Vector3){
+        modelMatrix.scale(size)
     }
 
     open fun onTransform3D(

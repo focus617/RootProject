@@ -31,4 +31,18 @@ class XGLRenderBuffer(width: Int, height: Int) : BaseEntity(), Closeable {
         glDeleteRenderbuffers(1, mRenderBuf)
     }
 
+    fun bind() {
+        glBindRenderbuffer(GL_RENDERBUFFER, mHandle)
+
+        // 开启模板测试，设置模板、深度测试通过或失败时才采取动作
+        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE)
+
+        // 在正常绘制时确保关闭模板缓冲的写入
+        glStencilMask(0x00)
+    }
+
+    fun unbind() {
+        glBindRenderbuffer(GL_RENDERBUFFER, 0)
+    }
+
 }

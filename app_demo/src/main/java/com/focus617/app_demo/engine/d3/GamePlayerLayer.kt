@@ -11,14 +11,22 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
     private val eventDispatcher = EventDispatcher()
 
     private val earth = Earth()
-    private val box = Box()
+    private val box1 = Box()
+    private val box2 = Box()
 
     init{
-        box.onTransform3D(
+        box1.onTransform3D(
             Vector3(0f, 0.54f, 0f),
             Vector3(1.0f, 1.0f, 1.0f)
         )
-        gameObjectList.add(box)
+        gameObjectList.add(box1)
+
+        box2.onTransform3D(
+            Vector3(1.5f, 0.54f, -1.5f),
+            Vector3(1.0f, 1.0f, 1.0f)
+        )
+        box2.isSelected = true
+        gameObjectList.add(box2)
 
         earth.onTransform3D(
             Vector3(-1.5f, 1.0f, -1.5f),
@@ -46,7 +54,8 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
 
     override fun onUpdate(timeStep: TimeStep) {
         //LOG.info("${this.mDebugName} onUpdate")
-        box.updateCameraPosition(scene.mCamera.getPosition())
+        box1.updateCameraPosition(scene.mCamera.getPosition())
+        box2.updateCameraPosition(scene.mCamera.getPosition())
     }
 
     override fun beforeDrawFrame() {

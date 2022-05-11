@@ -17,10 +17,9 @@ class XGLFrameBuffer(
     private var mFrameBuf: IntBuffer = IntBuffer.allocate(1)
     private var mFBOHandle: Int = -1   // FrameBuffer的Handle
 
-    private var mColorAttachmentTexture2D: XGLTexture2D // ColorTextureBuffer
-    private var mColorAttachmentTextureIndex: Int = -1  // 在TextureSlots内的Index
+    var mColorAttachmentTexture2D: XGLTexture2D // ColorTextureBuffer
 
-    private var mRenderBuf: XGLRenderBuffer // RenderBuffer
+    var mRenderBuf: XGLRenderBuffer // RenderBuffer
 
     private var mQuad: FrameBufferQuad
 
@@ -38,9 +37,9 @@ class XGLFrameBuffer(
         // 把纹理的维度设置为屏幕大小：传入width和height，只分配相应的内存，而不填充
         mColorAttachmentTexture2D = XGLTexture2D(this, mWidth, mHeight)
         // 注册到TextureSlots, 以便ActiveTexture
-        mColorAttachmentTextureIndex = XGLTextureSlots.getId(mColorAttachmentTexture2D)
+        FrameBufferQuad.screenTextureIndex = XGLTextureSlots.getId(mColorAttachmentTexture2D)
 
-        mQuad = FrameBufferQuad(mColorAttachmentTextureIndex)
+        mQuad = FrameBufferQuad()
 
         // Generate RBO for FrameBuffer's Stencil and Depth Attachment
         mRenderBuf = XGLRenderBuffer(mWidth, mHeight)
@@ -126,7 +125,7 @@ class XGLFrameBuffer(
         glDisable(GL_DEPTH_TEST)
         glDisable(GL_BLEND)
 
-        mColorAttachmentTexture2D.bind(mColorAttachmentTextureIndex)
+        mColorAttachmentTexture2D.bind(FrameBufferQuad.screenTextureIndex)
         mQuad.draw()
 
         // TODO: How to Swap the buffers?
@@ -135,4 +134,5 @@ class XGLFrameBuffer(
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_BLEND)
     }
+
 }

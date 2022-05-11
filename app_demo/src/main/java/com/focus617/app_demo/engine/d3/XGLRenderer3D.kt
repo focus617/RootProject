@@ -3,6 +3,7 @@ package com.focus617.app_demo.engine.d3
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.framebuffer.XGLFrameBuffer
+import com.focus617.app_demo.framebuffer.submitWithOutlining
 import com.focus617.app_demo.renderer.XGLTextureSlots
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.renderer.RenderCommand
@@ -75,7 +76,14 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
                     setMat4(Camera.U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
                     setMat4(Camera.U_VIEW_MATRIX, SceneData.sViewMatrix)
 
-                    gameObject.submit(shader)
+                    if (gameObject.isSelected){
+                        mFrameBuffer.mRenderBuf.bind()
+                        gameObject.submitWithOutlining(shader)
+                        mFrameBuffer.mRenderBuf.unbind()
+                    }
+                    else{
+                        gameObject.submit(shader)
+                    }
                 }
             }
             layer.afterDrawFrame()

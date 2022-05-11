@@ -5,14 +5,14 @@ import com.focus617.core.engine.objects.DrawableObject
 import com.focus617.core.engine.renderer.*
 
 
-class FrameBufferQuad(private val screenTextureIndex: Int): DrawableObject() {
-    init{
+class FrameBufferQuad : DrawableObject() {
+    init {
         vertexArray = XGLVertexArray.buildVertexArray(this)
     }
 
     override fun submit(shader: Shader) {}
 
-    fun draw(){
+    fun draw() {
         shader.bind()
         shader.setInt(U_TEXTURE, screenTextureIndex)
 
@@ -29,10 +29,10 @@ class FrameBufferQuad(private val screenTextureIndex: Int): DrawableObject() {
         // Vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
         // 每个顶点有2个顶点属性一位置、纹理
         // x,   y,  TextureX, TextureY
-        -1.0f,  1.0f,  0.0f, 1.0f,  //0 左上
-        -1.0f, -1.0f,  0.0f, 0.0f,  //1 左下
-        1.0f, -1.0f,  1.0f, 0.0f,   //2 右下
-        1.0f,  1.0f,  1.0f, 1.0f    //3 右上
+        -1.0f, 1.0f, 0.0f, 1.0f,  //0 左上
+        -1.0f, -1.0f, 0.0f, 0.0f,  //1 左下
+        1.0f, -1.0f, 1.0f, 0.0f,   //2 右下
+        1.0f, 1.0f, 1.0f, 1.0f    //3 右上
     )
 
     override fun getLayout(): BufferLayout = BufferLayout(
@@ -62,6 +62,7 @@ class FrameBufferQuad(private val screenTextureIndex: Int): DrawableObject() {
 
         lateinit var shader: Shader
         lateinit var shaderOutlining: Shader
+        var screenTextureIndex: Int = -1    // 在TextureSlots内的Index
 
         const val U_TEXTURE = "u_screenTexture"
     }
