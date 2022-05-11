@@ -54,6 +54,10 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
 
         beginScene(scene.mCamera)
 
+        // 清理屏幕，重绘背景颜色
+        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1.0F))
+        RenderCommand.clear()
+
         XGLTextureSlots.flush()
 
         val layerStack = scene.engine.getLayerStack()
@@ -101,9 +105,6 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
             System.arraycopy(camera.getViewMatrix(), 0, SceneData.sViewMatrix, 0, 16)
         }
 
-        // 清理屏幕，重绘背景颜色
-        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1.0F))
-        RenderCommand.clear()
     }
 
     override fun endScene() {

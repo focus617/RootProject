@@ -65,7 +65,7 @@ class XGLFrameBuffer(
             mColorAttachmentTexture2D.mHandle,
             0
         )
-        // Attach the Renderbuffer to FrameBuffer as Stencil and Depth buffers
+        // Attach the Renderbuffer to FrameBuffer as Stencil buffer and Depth buffer
         glFramebufferRenderbuffer(
             GL_FRAMEBUFFER,
             GL_DEPTH_STENCIL_ATTACHMENT,
