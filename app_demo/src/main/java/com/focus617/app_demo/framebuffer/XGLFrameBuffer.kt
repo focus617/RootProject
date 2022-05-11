@@ -128,7 +128,7 @@ class XGLFrameBuffer(
         mQuad.draw()
 
         // TODO: How to Swap the buffers?
-        glViewport(0,0, mWidth, mHeight)
+        glViewport(0, 0, mWidth, mHeight)
 
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_BLEND)

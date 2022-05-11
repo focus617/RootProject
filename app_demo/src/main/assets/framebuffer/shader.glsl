@@ -28,11 +28,11 @@ precision mediump float;
 
 //接收从顶点着色器过来的参数
 in vec2 v_TexCoords;
-out vec4 color;
+out vec4 FragColor;
 
 uniform sampler2D u_screenTexture;
 
 void main()
 {
-    color = texture(u_screenTexture, v_TexCoords);
+    FragColor = texture(u_screenTexture, v_TexCoords);
 }

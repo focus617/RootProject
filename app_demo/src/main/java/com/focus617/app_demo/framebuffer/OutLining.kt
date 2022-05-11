@@ -9,17 +9,16 @@ import com.focus617.core.engine.scene.Camera
 
 fun DrawableObject.submitWithOutlining(
     shader: Shader,
-    scaleSize: Vector3 = Vector3(1.1f, 1.1f, 1.1f)
+    scaleSize: Vector3 = Vector3(1.05f, 1.05f, 1.05f)
 ) {
     // 开启模板测试
     glEnable(GL_STENCIL_TEST)
-    // 设置模板、深度测试通过或失败时才采取动作
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE)
+    glEnable(GL_DEPTH_TEST)
 
     // 1st. Render pass, draw objects as normal, filling the stencil buffer
-    glStencilFunc(GL_ALWAYS, 1, 0xFF)   // 绘制的所有片段都要用模板值1更新模板缓冲
-    glStencilMask(0xFF)                     // 在正常绘制时确保打开模板缓冲的写入
-    glEnable(GL_DEPTH_TEST)
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE)  // 设置模板、深度测试通过或失败时才采取动作
+    glStencilFunc(GL_ALWAYS, 1, 0xFF)          // 绘制的所有片段都要用模板值1更新模板缓冲
+    glStencilMask(0xFF)                        // 在正常绘制时确保打开模板缓冲的写入
 
     shader.bind()
     this.submit(shader)
@@ -31,7 +30,7 @@ fun DrawableObject.submitWithOutlining(
     // making it look like borders.
     glStencilFunc(GL_NOTEQUAL, 1, 0xFF)     // 只绘制外围不等于1的那部分
     glStencilMask(0x00)
-    glDisable(GL_DEPTH_TEST)
+    //glDisable(GL_DEPTH_TEST)
 
     with(FrameBufferQuad.shaderOutlining) {
         bind()

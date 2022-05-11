@@ -1,6 +1,5 @@
 package com.focus617.app_demo.renderer
 
-import android.opengl.GLES31
 import android.opengl.GLES31.*
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.renderer.RendererAPI
@@ -20,13 +19,16 @@ class XGLRendererAPI : RendererAPI() {
 
         //启动深度测试
         glEnable(GL_DEPTH_TEST)
-        glDepthFunc(GL_LEQUAL) // indicate what type of depth test
+        glDepthFunc(GL_LESS) // indicate what type of depth test
 
         //Define Cull Back Face, Enable/Disable by each Layer/GO
-        glCullFace(GLES31.GL_BACK)
+        glCullFace(GL_BACK)
     }
 
     override fun clear() {
+        // glStencilMask(0x00)不仅会阻止模板缓冲的写入，也会阻止其清空(glClear(stencil_buffer)无效)
+        glStencilMask(0xFF)
+
         // 清理屏幕，重绘背景颜色
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT)
         glClearDepthf(1.0f)     // Setup the Depth buff

@@ -15,6 +15,7 @@ class XGLContext(private val windowHandle: AndroidWindow) : BaseEntity(), IfGrap
             // Request an OpenGL ES 3.0 compatible context.
             setEGLContextClientVersion(3)
             setEGLConfigChooser(MultiSampleConfigChooser())
+            //setEGLConfigChooser(8,8,8,8,16,8)
         } else {
             // Request an OpenGL ES 2.0 compatible context.
             setEGLContextClientVersion(2)

@@ -77,9 +77,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
                     setMat4(Camera.U_VIEW_MATRIX, SceneData.sViewMatrix)
 
                     if (gameObject.isSelected) {
-                        mFrameBuffer.mRenderBufferAttachment.bind()
                         gameObject.submitWithOutlining(shader)
-                        mFrameBuffer.mRenderBufferAttachment.unbind()
                     } else {
                         gameObject.submit(shader)
                     }
