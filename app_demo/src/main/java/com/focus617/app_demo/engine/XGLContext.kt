@@ -1,6 +1,6 @@
 package com.focus617.app_demo.engine
 
-import android.opengl.GLES30
+import android.opengl.GLES31.*
 import android.opengl.GLES32
 import com.focus617.core.engine.renderer.IfGraphicsContext
 import com.focus617.core.platform.base.BaseEntity
@@ -32,10 +32,31 @@ class XGLContext(private val windowHandle: AndroidWindow) : BaseEntity(), IfGrap
     companion object {
         fun getOpenGLInfo() {
             LOG.info("OpenGL Info")
-            LOG.info("OpenGL Vendor  : ${GLES30.glGetString(GLES30.GL_VENDOR)}")
-            LOG.info("OpenGL Renderer: ${GLES30.glGetString(GLES30.GL_RENDERER)}")
-            LOG.info("OpenGL Version : ${GLES30.glGetString(GLES30.GL_VERSION)}")
+            LOG.info("OpenGL Vendor  : ${glGetString(GL_VENDOR)}")
+            LOG.info("OpenGL Renderer: ${glGetString(GL_RENDERER)}")
+            LOG.info("OpenGL Version : ${glGetString(GL_VERSION)}")
         }
+
+        fun checkGLError(msg: String) {
+            val error = glGetError()
+            if (error != GL_NO_ERROR) {
+                val hexErrorCode = Integer.toHexString(error)
+                LOG.warn("Check glError $msg: $hexErrorCode")
+                //throw RuntimeException("GLError")
+            }
+        }
+
+        // The extensions string is padded with spaces between extensions, but not
+        // necessarily at the beginning or end. For simplicity, add spaces at the
+        // beginning and end of the extensions string and the extension string.
+        // This means we can avoid special-case checks for the first or last
+        // extension, as well as avoid special-case checks when an extension name
+        // is the same as the first part of another extension name.
+        fun checkIfContextSupportsExtension(extension: String): Boolean {
+            val extensions = " " + glGetString(GL_EXTENSIONS) + " "
+            return extensions.indexOf(" $extension ") >= 0
+        }
+
 
         fun initDebug() {
             GLES32.glEnable(GLES32.GL_DEBUG_OUTPUT)
@@ -76,15 +97,6 @@ class XGLContext(private val windowHandle: AndroidWindow) : BaseEntity(), IfGrap
                 null,
                 false
             )
-        }
-
-        fun checkGLError(msg: String) {
-            val error = GLES30.glGetError()
-            if (error != GLES30.GL_NO_ERROR) {
-                val hexErrorCode = Integer.toHexString(error)
-                LOG.warn("Check glError $msg: $hexErrorCode")
-                //throw RuntimeException("GLError")
-            }
         }
     }
 }
