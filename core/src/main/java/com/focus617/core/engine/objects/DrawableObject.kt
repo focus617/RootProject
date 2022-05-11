@@ -16,7 +16,6 @@ interface IfDrawable {
     abstract fun getLayout(): BufferLayout
     abstract fun getIndices(): ShortArray
     abstract fun submit(shader: Shader)
-    abstract fun submitWithOutlining(shader: Shader, scaleSize: Vector3 = Vector3(1.1f, 1.1f, 1.1f))
 }
 
 abstract class DrawableObject : BaseEntity(), IfDrawable {
@@ -59,10 +58,6 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
         // 在下个submit，会bind其它handle，自然会实现unbind
         vertexArray.unbind()
         shader.unbind()
-    }
-
-    override fun submitWithOutlining(shader: Shader, scaleSize: Vector3) {
-        LOG.warn("DrawableObject.submitWithOutlining: This should not be printed.")
     }
 
     fun resetTransform() {

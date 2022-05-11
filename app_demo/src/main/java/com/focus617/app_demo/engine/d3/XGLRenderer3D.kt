@@ -4,6 +4,7 @@ import android.opengl.GLES31
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.framebuffer.XGLFrameBuffer
+import com.focus617.app_demo.framebuffer.submitWithOutlining
 import com.focus617.app_demo.renderer.XGLTextureSlots
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.renderer.RenderCommand
@@ -51,7 +52,8 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
     override fun onDrawFrame(unused: GL10) {
         XGLContext.checkGLError("Before onDrawFrame")
         // First pass: draw on FrameBuffer
-//        mFrameBuffer.bind()
+        mFrameBuffer.bind()
+        mFrameBuffer.refreshWindow()
 
         beginScene(scene.mCamera)
 
@@ -96,14 +98,14 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         }
         endScene()
 
-//        mFrameBuffer.unbind()   // back to default
-//
-//        // 清理屏幕，重绘背景颜色
-//        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1.0F))
-//        RenderCommand.clear()
-//
-//        // Second pass: draw on real screen
-//        mFrameBuffer.drawOnScreen()
+        mFrameBuffer.unbind()   // back to default
+
+        // 清理屏幕，重绘背景颜色
+        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1.0F))
+        RenderCommand.clear()
+
+        // Second pass: draw on real screen
+        mFrameBuffer.drawOnScreen()
 
         XGLContext.checkGLError("After onDrawFrame")
     }
