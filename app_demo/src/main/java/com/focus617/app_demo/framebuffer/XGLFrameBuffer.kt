@@ -24,13 +24,6 @@ class XGLFrameBuffer(
     init {
         LOG.info("XGLFrameBuffer created.")
 
-        // Generate FBO
-        glGenFramebuffers(1, mFrameBuf)
-        if (mFrameBuf[0] == 0) {
-            throw RuntimeException("Could not create a new frame buffer object.")
-        }
-        mHandle = mFrameBuf[0]
-
         // Generate Texture2D for FrameBuffer's Color Attachment
         // 把纹理的维度设置为屏幕大小：传入width和height，只分配相应的内存，而不填充
         mTexture2DColorAttachment = XGLTexture2D(this, mWidth, mHeight)
@@ -42,9 +35,15 @@ class XGLFrameBuffer(
         // Generate RBO for FrameBuffer's Stencil and Depth Attachment
         mRenderBufferAttachment = XGLRenderBuffer(mWidth, mHeight)
 
+        // Generate FBO
+        glGenFramebuffers(1, mFrameBuf)
+        if (mFrameBuf[0] == 0) {
+            throw RuntimeException("Could not create a new frame buffer object.")
+        }
+        mHandle = mFrameBuf[0]
         // Bind FrameBuffer
         glBindFramebuffer(GL_FRAMEBUFFER, mHandle)
-        // Attach the Texture2D to the FrameBuffer as color buffer
+        // Attach the Texture2D to FBO color attachment point
         glFramebufferTexture2D(
             GL_FRAMEBUFFER,
             GL_COLOR_ATTACHMENT0,
@@ -52,14 +51,14 @@ class XGLFrameBuffer(
             mTexture2DColorAttachment.mHandle,
             0
         )
-        // Attach the Renderbuffer to FrameBuffer as Stencil buffer and Depth buffer
+        // Attach the Renderbuffer to FBO Stencil and Depth attachment point
         glFramebufferRenderbuffer(
             GL_FRAMEBUFFER,
             GL_DEPTH_STENCIL_ATTACHMENT,
             GL_RENDERBUFFER,
             mRenderBufferAttachment.mHandle
         )
-
+        // check FBO status
         val state: Boolean = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
         check(state) { LOG.warn("Framebuffer is incomplete!") }
 
@@ -77,6 +76,8 @@ class XGLFrameBuffer(
 
     override fun bind() {
         glBindFramebuffer(GL_FRAMEBUFFER, mHandle)
+        glEnable(GL_DEPTH_TEST)
+        glEnable(GL_TEXTURE_2D)
     }
 
     override fun unbind() {
@@ -118,10 +119,6 @@ class XGLFrameBuffer(
         }
     }
 
-    fun refreshWindow(){
-        glViewport(0,0, mWidth, mHeight)
-    }
-
     fun drawOnScreen() {
         glClear(GL_COLOR_BUFFER_BIT)
         glDisable(GL_DEPTH_TEST)
@@ -131,7 +128,7 @@ class XGLFrameBuffer(
         mQuad.draw()
 
         // TODO: How to Swap the buffers?
-        refreshWindow()
+        glViewport(0,0, mWidth, mHeight)
 
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_BLEND)

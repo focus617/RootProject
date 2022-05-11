@@ -27,9 +27,9 @@ precision highp float;
 precision mediump float;
 #endif
 
-out vec4 color;
+out vec4 FragColor;
 
 void main()
 {
-    color = vec4(0.04, 0.28, 0.26, 1.0);
+    FragColor = vec4(0.04, 0.28, 0.26, 1.0);
 }
