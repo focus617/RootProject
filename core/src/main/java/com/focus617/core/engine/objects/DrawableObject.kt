@@ -16,11 +16,13 @@ interface IfDrawable {
     abstract fun getLayout(): BufferLayout
     abstract fun getIndices(): ShortArray
     abstract fun submit(shader: Shader)
+    abstract fun submitWithOutlining(shader: Shader, scaleSize: Vector3 = Vector3(1.1f, 1.1f, 1.1f))
 }
 
 abstract class DrawableObject : BaseEntity(), IfDrawable {
     //val modelMatrix: FloatArray = FloatArray(16)
     val modelMatrix = Mat4()
+    private val modelMatrixInStack = Mat4()
 
     // vertexArray is initialized by Scene via calling XGLVertexArray.buildVertexArray
     lateinit var vertexArray: VertexArray
@@ -38,6 +40,14 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
         const val U_MODEL_MATRIX = "u_ModelMatrix"
     }
 
+    fun push() {
+        modelMatrixInStack.setValue(modelMatrix)
+    }
+
+    fun pop(){
+        modelMatrix.setValue(modelMatrixInStack)
+    }
+
     override fun submit(shader: Shader) {
         shader.bind()
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
@@ -51,11 +61,15 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
         shader.unbind()
     }
 
+    override fun submitWithOutlining(shader: Shader, scaleSize: Vector3) {
+        LOG.warn("DrawableObject.submitWithOutlining: This should not be printed.")
+    }
+
     fun resetTransform() {
         modelMatrix.setIdentity()
     }
 
-    fun scale(size: Vector3){
+    fun scale(size: Vector3) {
         modelMatrix.scale(size)
     }
 

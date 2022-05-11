@@ -1,9 +1,9 @@
 package com.focus617.app_demo.engine.d3
 
+import android.opengl.GLES31
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.framebuffer.XGLFrameBuffer
-import com.focus617.app_demo.framebuffer.submitWithOutlining
 import com.focus617.app_demo.renderer.XGLTextureSlots
 import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.renderer.RenderCommand
@@ -51,7 +51,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
     override fun onDrawFrame(unused: GL10) {
         XGLContext.checkGLError("Before onDrawFrame")
         // First pass: draw on FrameBuffer
-        mFrameBuffer.bind()
+//        mFrameBuffer.bind()
 
         beginScene(scene.mCamera)
 
@@ -76,12 +76,18 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
                     setMat4(Camera.U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
                     setMat4(Camera.U_VIEW_MATRIX, SceneData.sViewMatrix)
 
-                    if (gameObject.isSelected){
-                        mFrameBuffer.mRenderBuf.bind()
+                    if (gameObject.isSelected) {
+                        //mFrameBuffer.mRenderBuf.bind()
+
+                        // 开启模板测试，设置模板、深度测试通过或失败时才采取动作
+                        GLES31.glStencilOp(GLES31.GL_KEEP, GLES31.GL_KEEP, GLES31.GL_REPLACE)
+
+                        // 在正常绘制时确保关闭模板缓冲的写入
+                        GLES31.glStencilMask(0x00)
+
                         gameObject.submitWithOutlining(shader)
-                        mFrameBuffer.mRenderBuf.unbind()
-                    }
-                    else{
+                        //mFrameBuffer.mRenderBuf.unbind()
+                    } else {
                         gameObject.submit(shader)
                     }
                 }
@@ -90,14 +96,14 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         }
         endScene()
 
-        mFrameBuffer.unbind()   // back to default
-
-        // 清理屏幕，重绘背景颜色
-        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1.0F))
-        RenderCommand.clear()
-
-        // Second pass: draw on real screen
-        mFrameBuffer.drawOnScreen()
+//        mFrameBuffer.unbind()   // back to default
+//
+//        // 清理屏幕，重绘背景颜色
+//        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1.0F))
+//        RenderCommand.clear()
+//
+//        // Second pass: draw on real screen
+//        mFrameBuffer.drawOnScreen()
 
         XGLContext.checkGLError("After onDrawFrame")
     }
