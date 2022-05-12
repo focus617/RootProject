@@ -35,6 +35,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core"))
 
     implementation(Jetpack.ANDROIDX_CORE)
     implementation(Jetpack.APPCOMPAT)

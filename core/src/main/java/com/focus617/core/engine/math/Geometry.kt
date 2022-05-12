@@ -25,7 +25,7 @@ class Triangle3D(val point0: Point3D, val point1: Point3D, val point2: Point3D) 
 
 class Cylinder(val center: Point3D, val radius: Float, val height: Float)
 
-class Sphere(val center: Point3D, val radius: Float)
+class Sphere(var center: Point3D, var radius: Float)
 
 class Plane(val point: Point3D, val normal: Vector3)
 
