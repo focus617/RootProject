@@ -77,7 +77,6 @@ class XGLFrameBuffer(
     override fun bind() {
         glBindFramebuffer(GL_FRAMEBUFFER, mHandle)
         glEnable(GL_DEPTH_TEST)
-        glEnable(GL_TEXTURE_2D)
     }
 
     override fun unbind() {

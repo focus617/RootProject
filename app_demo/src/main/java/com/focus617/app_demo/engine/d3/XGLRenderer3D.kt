@@ -86,6 +86,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
             layer.afterDrawFrame()
         }
         endScene()
+        XGLContext.checkGLError("After endScene")
 
         mFrameBuffer.unbind()   // back to default
 
