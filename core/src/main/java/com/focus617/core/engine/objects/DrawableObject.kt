@@ -1,8 +1,6 @@
 package com.focus617.core.engine.objects
 
-import com.focus617.core.engine.math.Mat4
-import com.focus617.core.engine.math.Vector2
-import com.focus617.core.engine.math.Vector3
+import com.focus617.core.engine.math.*
 import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Shader
@@ -22,6 +20,8 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
     //val modelMatrix: FloatArray = FloatArray(16)
     val modelMatrix = Mat4()
     private val modelMatrixInStack = Mat4()
+
+    protected val boundingSphere = Sphere(Point3D(0f, 0f, 0f), 1.0f)
 
     // vertexArray is initialized by Scene via calling XGLVertexArray.buildVertexArray
     lateinit var vertexArray: VertexArray
@@ -43,8 +43,12 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
         modelMatrixInStack.setValue(modelMatrix)
     }
 
-    fun pop(){
+    fun pop() {
         modelMatrix.setValue(modelMatrixInStack)
+    }
+
+    open fun intersects(ray: Ray) {
+        isSelected = !isSelected
     }
 
     override fun submit(shader: Shader) {
@@ -64,8 +68,9 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
         modelMatrix.setIdentity()
     }
 
-    fun scale(size: Vector3) {
-        modelMatrix.scale(size)
+    fun scale(scaleSize: Vector3) {
+        modelMatrix.scale(scaleSize)
+        boundingSphere.radius *= (scaleSize.x + scaleSize.y + scaleSize.z) / 3
     }
 
     open fun onTransform3D(
@@ -75,15 +80,9 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
     ) {
         modelMatrix.transform3D(position, scaleSize, rotation, 0.0f, 0.0f, 1.0f)
         //LOG.info("ModelMatrix:" + XMatrix.toString(modelMatrix))
-    }
 
-    open fun onTransform2D(
-        position: Vector3,
-        scaleSize: Vector2,
-        rotation: Float = 0.0f
-    ) {
-        modelMatrix.transform2D(position, scaleSize, rotation)
-        //LOG.info("ModelMatrix:" + XMatrix.toString(modelMatrix))
+        boundingSphere.center += position
+        boundingSphere.radius *= (scaleSize.x + scaleSize.y + scaleSize.z) / 3
     }
 
     open fun onTransform2D(
@@ -92,6 +91,9 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
         rotation: Float = 0.0f
     ) {
         modelMatrix.transform2D(Vector3(position.x, position.y, 0.0f), scaleSize, rotation)
+
+        boundingSphere.center += Point3D(position.x, position.y, 0f)
+        boundingSphere.radius *= (scaleSize.x + scaleSize.y) / 2
     }
 
 }
