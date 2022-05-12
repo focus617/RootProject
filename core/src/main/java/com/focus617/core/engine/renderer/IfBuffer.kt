@@ -1,5 +1,7 @@
 package com.focus617.core.engine.renderer
 
+import com.focus617.core.engine.renderer.vertex.BufferLayout
+
 interface IfBuffer {
     fun bind()
     fun unbind()

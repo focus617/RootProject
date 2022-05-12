@@ -3,9 +3,9 @@ package com.focus617.app_demo.renderer.vertex
 import android.opengl.GLES20
 import android.opengl.GLES20.*
 import android.opengl.GLES31
-import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.IfBuffer
 import com.focus617.core.engine.renderer.IfBufferLayout
+import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.platform.base.BaseEntity
 import java.io.Closeable
 import java.nio.*

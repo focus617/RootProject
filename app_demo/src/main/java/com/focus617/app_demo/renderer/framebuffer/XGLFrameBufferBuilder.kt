@@ -1,8 +1,8 @@
 package com.focus617.app_demo.renderer.framebuffer
 
-import com.focus617.core.engine.renderer.FrameBufferBuilder
-import com.focus617.core.engine.renderer.Framebuffer
 import com.focus617.core.engine.renderer.RendererAPI
+import com.focus617.core.engine.renderer.framebuffer.FrameBufferBuilder
+import com.focus617.core.engine.renderer.framebuffer.Framebuffer
 
 object XGLFrameBufferBuilder : FrameBufferBuilder() {
 

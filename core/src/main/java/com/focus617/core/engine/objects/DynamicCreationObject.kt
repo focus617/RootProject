@@ -1,6 +1,6 @@
 package com.focus617.core.engine.objects
 
-import com.focus617.core.engine.renderer.BufferLayout
+import com.focus617.core.engine.renderer.vertex.BufferLayout
 
 abstract class DynamicCreationObject() : DrawableObject() {
     var buildData: GeneratedData? = null

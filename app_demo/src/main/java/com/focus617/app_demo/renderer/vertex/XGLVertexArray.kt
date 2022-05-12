@@ -4,8 +4,8 @@ import android.opengl.GLES20.*
 import android.opengl.GLES31
 import com.focus617.core.engine.objects.IfDrawable
 import com.focus617.core.engine.renderer.IfBuffer
-import com.focus617.core.engine.renderer.ShaderDataType
-import com.focus617.core.engine.renderer.VertexArray
+import com.focus617.core.engine.renderer.vertex.ShaderDataType
+import com.focus617.core.engine.renderer.vertex.VertexArray
 import com.focus617.mylib.logging.WithLogging
 import java.io.Closeable
 import java.nio.IntBuffer

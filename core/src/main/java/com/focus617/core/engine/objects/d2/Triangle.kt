@@ -1,9 +1,9 @@
 package com.focus617.core.engine.objects.d2
 
 import com.focus617.core.engine.objects.DrawableObject
-import com.focus617.core.engine.renderer.BufferElement
-import com.focus617.core.engine.renderer.BufferLayout
-import com.focus617.core.engine.renderer.ShaderDataType
+import com.focus617.core.engine.renderer.vertex.BufferElement
+import com.focus617.core.engine.renderer.vertex.BufferLayout
+import com.focus617.core.engine.renderer.vertex.ShaderDataType
 
 class Triangle : DrawableObject() {
 

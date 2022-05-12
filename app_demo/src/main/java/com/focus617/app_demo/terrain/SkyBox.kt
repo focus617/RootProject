@@ -3,7 +3,7 @@ package com.focus617.app_demo.terrain
 import android.opengl.GLES31
 import com.focus617.core.engine.objects.d3.Cube
 import com.focus617.core.engine.renderer.RenderCommand
-import com.focus617.core.engine.renderer.Shader
+import com.focus617.core.engine.renderer.shader.Shader
 
 class SkyBox : Cube() {
     init {

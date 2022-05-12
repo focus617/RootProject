@@ -1,9 +1,9 @@
 package com.focus617.core.engine.objects
 
 import com.focus617.core.engine.math.Vector3.Companion.calConeNormal
-import com.focus617.core.engine.renderer.BufferElement
-import com.focus617.core.engine.renderer.BufferLayout
-import com.focus617.core.engine.renderer.ShaderDataType
+import com.focus617.core.engine.renderer.vertex.BufferElement
+import com.focus617.core.engine.renderer.vertex.BufferLayout
+import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.mylib.logging.WithLogging
 import kotlin.math.cos
 import kotlin.math.sin

@@ -1,5 +1,6 @@
 package com.focus617.core.engine.renderer
 
+import com.focus617.core.engine.renderer.vertex.VertexArray
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.platform.base.BaseEntity
 

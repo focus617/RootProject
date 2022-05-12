@@ -49,32 +49,32 @@ class Sandbox3D(context: Context) : Engine(), Closeable {
 //                LOG.info("It's type is ${e.eventType}")
 //                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
 //                LOG.info("Current position is (${e.x}, ${e.y})\n")
-            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.TouchPress) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchStart) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchEnd) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.Pinch) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.SensorRotation) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
     }

@@ -2,7 +2,7 @@ package com.focus617.app_demo.renderer.vertex
 
 import com.focus617.core.engine.renderer.IfBuffer
 import com.focus617.core.engine.renderer.RendererAPI
-import com.focus617.core.engine.renderer.VertexBufferBuilder
+import com.focus617.core.engine.renderer.vertex.VertexBufferBuilder
 
 object XGLVertexBufferBuilder : VertexBufferBuilder() {
     override fun createVertexArray(): IfBuffer? {

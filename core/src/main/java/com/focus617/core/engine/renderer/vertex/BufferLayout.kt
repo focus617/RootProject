@@ -1,4 +1,4 @@
-package com.focus617.core.engine.renderer
+package com.focus617.core.engine.renderer.vertex
 
 
 data class BufferElement(

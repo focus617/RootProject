@@ -2,7 +2,7 @@ package com.focus617.app_demo.renderer
 
 import android.media.effect.EffectContext
 import android.media.effect.EffectFactory
-import com.focus617.core.engine.renderer.Texture2D
+import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.platform.base.BaseEntity
 
 

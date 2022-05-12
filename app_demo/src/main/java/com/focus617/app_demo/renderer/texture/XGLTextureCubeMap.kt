@@ -3,7 +3,7 @@ package com.focus617.app_demo.renderer.texture
 import android.content.Context
 import android.graphics.Bitmap
 import android.opengl.GLES31
-import com.focus617.core.engine.renderer.Texture
+import com.focus617.core.engine.renderer.texture.Texture
 import com.focus617.platform.helper.BitmapHelper
 import com.focus617.platform.helper.TextureHelper.loadCubeMapIntoTexture
 import java.nio.Buffer

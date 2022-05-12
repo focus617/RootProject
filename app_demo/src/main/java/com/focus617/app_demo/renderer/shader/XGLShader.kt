@@ -4,7 +4,7 @@ import android.content.Context
 import android.opengl.GLES31.*
 import android.text.TextUtils
 import com.focus617.core.engine.math.*
-import com.focus617.core.engine.renderer.Shader
+import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.platform.helper.FileHelper
 import java.nio.IntBuffer
