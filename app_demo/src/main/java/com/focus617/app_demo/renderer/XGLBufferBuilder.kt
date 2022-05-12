@@ -1,6 +1,6 @@
 package com.focus617.app_demo.renderer
 
-import com.focus617.app_demo.framebuffer.XGLFrameBuffer
+import com.focus617.app_demo.renderer.framebuffer.XGLFrameBuffer
 import com.focus617.core.engine.renderer.BufferBuilder
 import com.focus617.core.engine.renderer.Framebuffer
 import com.focus617.core.engine.renderer.IfBuffer

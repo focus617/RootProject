@@ -1,4 +1,4 @@
-package com.focus617.app_demo.framebuffer
+package com.focus617.app_demo.renderer.framebuffer
 
 import android.opengl.GLES31.*
 import com.focus617.core.platform.base.BaseEntity

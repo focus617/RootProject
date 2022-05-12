@@ -1,7 +1,5 @@
-package com.focus617.app_demo.framebuffer
+package com.focus617.app_demo.renderer.framebuffer
 
-import android.opengl.GLES20.GL_FRAMEBUFFER
-import android.opengl.GLES20.glBindFramebuffer
 import android.opengl.GLES31.*
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.renderer.XGLTexture2D

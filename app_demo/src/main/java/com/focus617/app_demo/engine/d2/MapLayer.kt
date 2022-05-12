@@ -1,7 +1,7 @@
 package com.focus617.app_demo.engine.d2
 
-import com.focus617.app_demo.framebuffer.XGLFrameBuffer
 import com.focus617.app_demo.renderer.XGLTextureSlots
+import com.focus617.app_demo.renderer.framebuffer.XGLFrameBuffer
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Point3D

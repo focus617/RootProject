@@ -1,4 +1,4 @@
-package com.focus617.app_demo.framebuffer
+package com.focus617.app_demo.renderer.framebuffer
 
 import com.focus617.app_demo.renderer.XGLVertexArray
 import com.focus617.core.engine.objects.DrawableObject

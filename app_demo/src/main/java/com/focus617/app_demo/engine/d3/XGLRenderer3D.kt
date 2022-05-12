@@ -2,9 +2,9 @@ package com.focus617.app_demo.engine.d3
 
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
-import com.focus617.app_demo.framebuffer.XGLFrameBuffer
-import com.focus617.app_demo.framebuffer.submitWithOutlining
 import com.focus617.app_demo.renderer.XGLTextureSlots
+import com.focus617.app_demo.renderer.framebuffer.XGLFrameBuffer
+import com.focus617.app_demo.renderer.framebuffer.submitWithOutlining
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Shader
 import com.focus617.core.engine.renderer.VertexArray
