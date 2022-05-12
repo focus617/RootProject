@@ -5,11 +5,11 @@ import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.framebuffer.XGLFrameBuffer
 import com.focus617.app_demo.framebuffer.submitWithOutlining
 import com.focus617.app_demo.renderer.XGLTextureSlots
-import com.focus617.core.engine.baseDataType.Color
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.Shader
 import com.focus617.core.engine.renderer.VertexArray
 import com.focus617.core.engine.renderer.XRenderer
+import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.engine.scene.Camera
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -77,7 +77,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
                     setMat4(Camera.U_VIEW_MATRIX, SceneData.sViewMatrix)
 
                     if (gameObject.isSelected) {
-                        gameObject.submitWithOutlining(shader)
+                        gameObject.submitWithOutlining(shader, Color.GOLD)
                     } else {
                         gameObject.submit(shader)
                     }

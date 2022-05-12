@@ -5,7 +5,6 @@ import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
-import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.renderer.SubTexture2D
 import com.focus617.core.engine.renderer.Texture2D
 import com.focus617.core.platform.event.base.Event
@@ -92,10 +91,4 @@ class GameLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
         return eventDispatcher.dispatch(event)
     }
 
-    companion object {
-        val WHITE = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
-        val RED = Vector4(0.8f, 0.3f, 0.2f, 1.0f)
-        val BLUE = Vector4(0.2f, 0.3f, 0.8f, 1.0f)
-
-    }
 }

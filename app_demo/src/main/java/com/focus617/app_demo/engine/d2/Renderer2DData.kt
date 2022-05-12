@@ -7,6 +7,7 @@ import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.renderer.*
+import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.mylib.logging.WithLogging
 import java.io.Closeable
 import java.nio.LongBuffer
@@ -15,8 +16,6 @@ object Renderer2DData : WithLogging(), Closeable {
     val MaxQuads: Int = 10000
     val MaxVertices: Int = MaxQuads * 4
     val MaxIndices: Int = MaxQuads * 6
-
-    val WHITE = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
 
     var initialized: Boolean = false
 
@@ -133,7 +132,7 @@ object Renderer2DData : WithLogging(), Closeable {
     fun putQuadVertex(
         position: Point3D,
         size: Vector2,
-        color: Vector4,
+        color: Color,
         texCoords: Vector2,
         texIndex: Float = 0.0f,         // White Texture
         tilingFactor: Float = 1.0f
@@ -167,7 +166,7 @@ object Renderer2DData : WithLogging(), Closeable {
     fun putQuadVertex(
         position: Point3D,
         size: Vector2,
-        color: Vector4,
+        color: Color,
         subTexCoords: SubTexture2D,
         texIndex: Float = 0.0f,         // White Texture
         tilingFactor: Float = 1.0f
@@ -200,7 +199,7 @@ object Renderer2DData : WithLogging(), Closeable {
 
     fun putVertex(
         position: Point3D,
-        color: Vector4,
+        color: Color,
         texCoords: Vector2,
         texIndex: Float,
         tilingFactor: Float
@@ -243,6 +242,10 @@ object Renderer2DData : WithLogging(), Closeable {
         QuadVertexBufferBase[QuadVertexBufferPtr++] = value.y
         QuadVertexBufferBase[QuadVertexBufferPtr++] = value.z
         QuadVertexBufferBase[QuadVertexBufferPtr++] = value.w
+    }
+
+    fun put(color: Color){
+        put(color.toVector4())
     }
 
 }
