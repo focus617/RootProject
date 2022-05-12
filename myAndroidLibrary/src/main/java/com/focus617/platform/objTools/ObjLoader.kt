@@ -2,12 +2,12 @@ package com.focus617.platform.objTools
 
 import android.content.Context
 import android.text.TextUtils
+import com.focus617.core.engine.math.Vector3
 import com.focus617.myopengldemo.utils.objTools.ObjInfo
 import com.focus617.myopengldemo.utils.objTools.ObjNormal
 import com.focus617.myopengldemo.utils.objTools.ObjTexture
 import com.focus617.myopengldemo.utils.objTools.ObjVertex
 import com.focus617.platform.helper.FileHelper
-import com.focus617.platform.objTools.Vector.Companion.calTriangleNormal
 import timber.log.Timber
 import java.util.*
 
@@ -252,7 +252,7 @@ object ObjLoader {
             val z2 = mObjInfo.mVertices[vertexIndex].z
 
             //通过三角形面两个边向量0-1，0-2求叉积得到此面的法向量
-            val vNormal = calTriangleNormal(
+            val vNormal = Vector3.calTriangleNormal(
                 x0, y0, z0,
                 x1, y1, z1,
                 x2, y2, z2

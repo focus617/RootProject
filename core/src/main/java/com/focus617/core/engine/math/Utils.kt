@@ -26,8 +26,9 @@ fun pitchClamp(pitch: Float, min: Float = -89.0f, max: Float = 89.0f): Float {
     return degree
 }
 
-
-fun convertNormalized2DPointToRay(
+// 把被LongPress的正交空间中的点映射到三维空间的一条直线：直线的近端映射到
+// 投影矩阵中定义的视椎体的近平面，直线的远端映射到视椎体的远平面。
+fun convertNormalized2DPointToRayOld(
     invertedViewProjectionMatrix: FloatArray,
     normalizedX: Float,
     normalizedY: Float
@@ -53,16 +54,13 @@ fun convertNormalized2DPointToRay(
     // matrix, so the W value that we end up is actually the *inverse* of
     // what the projection matrix would create. By dividing all 3 components
     // by W, we effectively undo the hardware perspective divide.
-//    divideByW(nearPointWorld)
-//    divideByW(farPointWorld)
+    divideByW(nearPointWorld)
+    divideByW(farPointWorld)
 
     // We don't care about the W value anymore, because our points are now
     // in world coordinates.
-//    val nearPointRay = Point3D(nearPointWorld[0], nearPointWorld[1], nearPointWorld[2])
-//    val farPointRay = Point3D(farPointWorld[0], farPointWorld[1], farPointWorld[2])
-
-    val nearPointRay = Vector4(nearPointWorld).toPoint3D()!!
-    val farPointRay = Vector4(farPointWorld).toPoint3D()!!
+    val nearPointRay = Point3D(nearPointWorld[0], nearPointWorld[1], nearPointWorld[2])
+    val farPointRay = Point3D(farPointWorld[0], farPointWorld[1], farPointWorld[2])
 
     return Ray(
         nearPointRay,
@@ -70,10 +68,10 @@ fun convertNormalized2DPointToRay(
     )
 }
 
-//private fun divideByW(vector: FloatArray) {
-//    vector[0] /= vector[3]
-//    vector[1] /= vector[3]
-//    vector[2] /= vector[3]
-//}
+private fun divideByW(vector: FloatArray) {
+    vector[0] /= vector[3]
+    vector[1] /= vector[3]
+    vector[2] /= vector[3]
+}
 
 

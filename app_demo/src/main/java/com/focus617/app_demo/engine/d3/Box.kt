@@ -1,6 +1,7 @@
 package com.focus617.app_demo.engine.d3
 
 import com.focus617.core.engine.math.Point3D
+import com.focus617.core.engine.math.Ray
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.objects.d3.Cube
@@ -43,6 +44,12 @@ class Box : Cube() {
 
     fun updateCameraPosition(point: Point3D) {
         viewPoint = point
+    }
+
+    override fun intersects(ray: Ray) {
+        // test if this ray intersects with the game object
+        isSelected = Vector3.intersects(boundingSphere, ray)
+
     }
 
     companion object {

@@ -35,8 +35,14 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
 
     fun toFloatArray() = floatArray
 
-    fun setValue(mat: Mat4){
+    fun setValue(mat: Mat4): Mat4 {
         System.arraycopy(mat.floatArray, 0, floatArray, 0, 16)
+        return this
+    }
+
+    fun setValue(value: FloatArray): Mat4 {
+        System.arraycopy(value, 0, floatArray, 0, 16)
+        return this
     }
 
     operator fun times(vector4: Vector4): Vector4{
@@ -48,12 +54,18 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
     operator fun times(mat: Mat4): Mat4{
         val result = FloatArray(16)
         XMatrix.xMultiplyMM(result, 0, floatArray, 0, mat.toFloatArray(), 0)
-        return Mat4(result)
+        return Mat4().setValue(result)
     }
 
     fun setIdentity(): Mat4 {
         XMatrix.setIdentityM(floatArray, 0)
         return this
+    }
+
+    fun invert(): Mat4 {
+        val result = FloatArray(16)
+        XMatrix.invertM(result, 0, floatArray, 0)
+        return Mat4().setValue(result)
     }
 
     fun translate(position: Vector3): Mat4 {
