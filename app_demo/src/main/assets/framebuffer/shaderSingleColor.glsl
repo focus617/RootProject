@@ -26,10 +26,11 @@ precision highp float;
 #else
 precision mediump float;
 #endif
+uniform vec4 u_Color;
 
 out vec4 FragColor;
 
 void main()
 {
-    FragColor = vec4(0.04, 0.28, 0.26, 1.0);
+    FragColor = u_Color;
 }

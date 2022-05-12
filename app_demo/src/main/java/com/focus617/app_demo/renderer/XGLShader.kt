@@ -5,6 +5,7 @@ import android.opengl.GLES31.*
 import android.text.TextUtils
 import com.focus617.core.engine.math.*
 import com.focus617.core.engine.renderer.Shader
+import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.platform.helper.FileHelper
 import java.nio.IntBuffer
 import java.util.*
@@ -77,6 +78,10 @@ class XGLShader constructor(
 
     override fun setFloat4(name: String, value: Vector4) {
         uploadUniformFloat4(name, value)
+    }
+
+    override fun setFloat4(name: String, value: Color) {
+        uploadUniformFloat4(name, value.toVector4())
     }
 
     override fun setMat4(name: String, matrix: FloatArray) {

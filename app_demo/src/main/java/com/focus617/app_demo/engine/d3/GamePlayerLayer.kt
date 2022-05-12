@@ -19,13 +19,13 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
             Vector3(0f, 0.54f, 0f),
             Vector3(1.0f, 1.0f, 1.0f)
         )
-        box1.isSelected = true
         gameObjectList.add(box1)
 
         box2.onTransform3D(
             Vector3(1.5f, 0.54f, -1.5f),
             Vector3(1.0f, 1.0f, 1.0f)
         )
+        box2.isSelected = true
         gameObjectList.add(box2)
 
         earth.onTransform3D(

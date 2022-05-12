@@ -5,10 +5,14 @@ import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.objects.DrawableObject
 import com.focus617.core.engine.renderer.Shader
 import com.focus617.core.engine.renderer.XRenderer.SceneData
+import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.engine.scene.Camera
+
+const val U_COLOR = "u_Color"
 
 fun DrawableObject.submitWithOutlining(
     shader: Shader,
+    color: Color = Color.CYAN,
     scaleSize: Vector3 = Vector3(1.05f, 1.05f, 1.05f)
 ) {
     // 开启模板测试
@@ -36,6 +40,7 @@ fun DrawableObject.submitWithOutlining(
         bind()
         setMat4(Camera.U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
         setMat4(Camera.U_VIEW_MATRIX, SceneData.sViewMatrix)
+        setFloat4(U_COLOR, color)
     }
     this.push()
     this.scale(scaleSize)

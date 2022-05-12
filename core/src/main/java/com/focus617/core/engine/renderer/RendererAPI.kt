@@ -1,6 +1,6 @@
 package com.focus617.core.engine.renderer
 
-import com.focus617.core.engine.baseDataType.Color
+import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.mylib.logging.WithLogging
 
 abstract class RendererAPI : WithLogging() {
