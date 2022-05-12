@@ -1,12 +1,10 @@
-package com.focus617.app_demo.renderer
+package com.focus617.app_demo.renderer.vertex
 
-import com.focus617.app_demo.renderer.framebuffer.XGLFrameBuffer
-import com.focus617.core.engine.renderer.BufferBuilder
-import com.focus617.core.engine.renderer.Framebuffer
 import com.focus617.core.engine.renderer.IfBuffer
 import com.focus617.core.engine.renderer.RendererAPI
+import com.focus617.core.engine.renderer.VertexBufferBuilder
 
-object XGLBufferBuilder : BufferBuilder() {
+object XGLVertexBufferBuilder : VertexBufferBuilder() {
     override fun createVertexArray(): IfBuffer? {
         return when (RendererAPI.getAPI()) {
             RendererAPI.API.None -> {
@@ -46,15 +44,4 @@ object XGLBufferBuilder : BufferBuilder() {
             RendererAPI.API.OpenGLES -> XGLIndexBuffer(indices, count)
         }
     }
-
-    override fun createFrameBuffer(width: Int, height: Int): Framebuffer? {
-        return when (RendererAPI.getAPI()) {
-            RendererAPI.API.None -> {
-                LOG.error("RendererAPI::None is currently not supported!")
-                null
-            }
-            RendererAPI.API.OpenGLES -> XGLFrameBuffer(width, height)
-        }
-    }
-
 }

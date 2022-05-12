@@ -1,6 +1,7 @@
 package com.focus617.app_demo.renderer
 
 import android.opengl.GLES31.*
+import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.renderer.RendererAPI
 import com.focus617.core.engine.renderer.VertexArray
 import com.focus617.core.engine.resource.baseDataType.Color

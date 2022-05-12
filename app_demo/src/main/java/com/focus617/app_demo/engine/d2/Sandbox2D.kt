@@ -1,7 +1,7 @@
 package com.focus617.app_demo.engine.d2
 
 import android.content.Context
-import com.focus617.app_demo.renderer.XGLTextureSlots
+import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack

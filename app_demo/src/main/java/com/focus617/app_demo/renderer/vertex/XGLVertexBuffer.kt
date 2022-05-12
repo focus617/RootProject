@@ -1,4 +1,4 @@
-package com.focus617.app_demo.renderer
+package com.focus617.app_demo.renderer.vertex
 
 import android.opengl.GLES20
 import android.opengl.GLES20.*

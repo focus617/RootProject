@@ -2,7 +2,7 @@ package com.focus617.app_demo.engine.d2
 
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
-import com.focus617.app_demo.renderer.XGLTextureSlots
+import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Point2D
 import com.focus617.core.engine.math.Point3D

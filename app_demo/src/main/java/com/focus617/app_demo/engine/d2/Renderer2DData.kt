@@ -1,7 +1,14 @@
 package com.focus617.app_demo.engine.d2
 
 import android.content.Context
-import com.focus617.app_demo.renderer.*
+import com.focus617.app_demo.renderer.shader.XGLShader
+import com.focus617.app_demo.renderer.shader.XGLShaderBuilder
+import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
+import com.focus617.app_demo.renderer.texture.XGLTextureSlots
+import com.focus617.app_demo.renderer.vertex.XGLIndexBuffer
+import com.focus617.app_demo.renderer.vertex.XGLVertexArray
+import com.focus617.app_demo.renderer.vertex.XGLVertexBuffer
+import com.focus617.app_demo.renderer.vertex.XGLVertexBufferBuilder
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
@@ -68,11 +75,11 @@ object Renderer2DData : WithLogging(), Closeable {
     }
 
     private fun initVertexArray() {
-        QuadVertexArray = XGLBufferBuilder.createVertexArray() as XGLVertexArray
+        QuadVertexArray = XGLVertexBufferBuilder.createVertexArray() as XGLVertexArray
 
         val quadVertexBufferSize = MaxVertices * QuadVertex.sizeInFloat * Float.SIZE_BYTES
         QuadVertexBuffer =
-            XGLBufferBuilder.createVertexBuffer(quadVertexBufferSize) as XGLVertexBuffer
+            XGLVertexBufferBuilder.createVertexBuffer(quadVertexBufferSize) as XGLVertexBuffer
         QuadVertexBuffer.setLayout(
             BufferLayout(
                 listOf(
@@ -105,7 +112,7 @@ object Renderer2DData : WithLogging(), Closeable {
             offset += 4
         }
 
-        val indexBuffer = XGLBufferBuilder.createIndexBuffer(
+        val indexBuffer = XGLVertexBufferBuilder.createIndexBuffer(
             quadIndices, MaxIndices
         ) as XGLIndexBuffer
         QuadVertexArray.setIndexBuffer(indexBuffer)

@@ -2,8 +2,8 @@ package com.focus617.app_demo.renderer.framebuffer
 
 import android.opengl.GLES31.*
 import com.focus617.app_demo.engine.XGLContext
-import com.focus617.app_demo.renderer.XGLTexture2D
-import com.focus617.app_demo.renderer.XGLTextureSlots
+import com.focus617.app_demo.renderer.texture.XGLTexture2D
+import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.renderer.Framebuffer
 import java.nio.IntBuffer
 

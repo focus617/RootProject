@@ -1,4 +1,4 @@
-package com.focus617.app_demo.renderer
+package com.focus617.app_demo.renderer.vertex
 
 import android.opengl.GLES20.*
 import android.opengl.GLES31
@@ -105,20 +105,20 @@ class XGLVertexArray : VertexArray(), IfBuffer, Closeable {
 
         fun buildVertexArray(drawingObject: IfDrawable): XGLVertexArray {
             val vertexArray =
-                XGLBufferBuilder.createVertexArray() as XGLVertexArray
+                XGLVertexBufferBuilder.createVertexArray() as XGLVertexArray
 
             // let drawingObject prepare data
             drawingObject.beforeBuild()
 
             val vertices = drawingObject.getVertices()
-            val vertexBuffer = XGLBufferBuilder.createVertexBuffer(
+            val vertexBuffer = XGLVertexBufferBuilder.createVertexBuffer(
                 vertices, vertices.size * Float.SIZE_BYTES
             ) as XGLVertexBuffer
             vertexBuffer.setLayout(drawingObject.getLayout())
             vertexArray.addVertexBuffer(vertexBuffer)
 
             val indices = drawingObject.getIndices()
-            val indexBuffer = XGLBufferBuilder.createIndexBuffer(
+            val indexBuffer = XGLVertexBufferBuilder.createIndexBuffer(
                 indices, indices.size
             ) as XGLIndexBuffer
             vertexArray.setIndexBuffer(indexBuffer)

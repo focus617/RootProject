@@ -1,4 +1,4 @@
-package com.focus617.app_demo.renderer
+package com.focus617.app_demo.renderer.shader
 
 import android.content.Context
 import android.opengl.GLES31.*
