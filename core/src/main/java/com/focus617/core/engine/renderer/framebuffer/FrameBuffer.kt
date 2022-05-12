@@ -3,7 +3,7 @@ package com.focus617.core.engine.renderer.framebuffer
 import com.focus617.core.platform.base.BaseEntity
 import java.io.Closeable
 
-abstract class Framebuffer(
+abstract class FrameBuffer(
     protected var mWidth: Int = 1024,
     protected var mHeight: Int = 2048
 ): BaseEntity(), Closeable {

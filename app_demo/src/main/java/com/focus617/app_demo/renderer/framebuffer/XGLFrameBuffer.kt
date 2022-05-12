@@ -4,14 +4,14 @@ import android.opengl.GLES31.*
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.renderer.texture.XGLTexture2D
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
-import com.focus617.core.engine.renderer.framebuffer.Framebuffer
+import com.focus617.core.engine.renderer.framebuffer.FrameBuffer
 import java.nio.IntBuffer
 
 
 class XGLFrameBuffer(
     width: Int = 1080,
     height: Int = 2220
-) : Framebuffer(width, height) {
+) : FrameBuffer(width, height) {
     private var mFrameBuf: IntBuffer = IntBuffer.allocate(1)
     private var mHandle: Int = -1   // FrameBuffer的Handle
 
