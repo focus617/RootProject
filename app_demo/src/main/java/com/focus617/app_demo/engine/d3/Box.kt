@@ -48,7 +48,7 @@ class Box : Cube() {
 
     override fun intersects(ray: Ray) {
         // test if this ray intersects with the game object
-        //isSelected = Vector3.intersects(boundingSphere, ray)
+        isSelected = Vector3.intersects(boundingSphere, ray)
 
     }
 

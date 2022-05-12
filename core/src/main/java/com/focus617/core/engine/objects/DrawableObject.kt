@@ -21,7 +21,7 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
     val modelMatrix = Mat4()
     private val modelMatrixInStack = Mat4()
 
-    protected val boundingSphere = Sphere(Point3D(0f, 0f, 0f), 1.0f)
+    protected val boundingSphere = Sphere(Point3D(0f, 0f, 0f), 0.5f)
 
     // vertexArray is initialized by Scene via calling XGLVertexArray.buildVertexArray
     lateinit var vertexArray: VertexArray

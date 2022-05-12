@@ -1,5 +1,6 @@
 package com.focus617.core.platform.event.screenTouchEvents
 
+import com.focus617.core.engine.math.Mat4
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventCategory
 import com.focus617.core.platform.event.base.EventType
@@ -12,6 +13,7 @@ class TouchLongPressEvent(
     val y: Float,
     val normalizedX: Float,
     val normalizedY: Float,
+    val invertedViewProjectionMat: Mat4,
     override val source: Any
 ) : Event() {
 

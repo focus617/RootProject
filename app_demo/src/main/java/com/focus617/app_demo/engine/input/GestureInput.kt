@@ -4,7 +4,9 @@ import android.os.Handler
 import android.view.MotionEvent
 import android.view.View
 import com.focus617.app_demo.engine.AndroidWindow
+import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Point2D
+import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.platform.event.screenTouchEvents.*
 import com.focus617.mylib.logging.WithLogging
 import kotlin.math.abs
@@ -28,16 +30,25 @@ class GestureInput(private val window: AndroidWindow) : WithLogging(), View.OnTo
     private val handler = Handler()
     private val longPressed = Runnable {
         LOG.info("MotionEvent trigger LongPress Event")
-
+        LOG.info("Normalized Coords:($longPressStartNormalizedX,$longPressStartNormalizedY)")
         window.mData.callback?.let {
-            val nativeEvent =
-                TouchLongPressEvent(
-                    longPressStartX,
-                    longPressStartY,
-                    longPressStartNormalizedX,
-                    longPressStartNormalizedY,
-                    window
-                )
+            val projectMat = Mat4()
+            val viewMat = Mat4()
+            synchronized(XRenderer.SceneData) {
+                projectMat.setValue(XRenderer.SceneData.sProjectionMatrix)
+                viewMat.setValue(XRenderer.SceneData.sViewMatrix)
+            }
+            // Create an inverted matrix for touch picking.
+            val invertViewProjectionMat = (projectMat * viewMat).invert()
+
+            val nativeEvent = TouchLongPressEvent(
+                longPressStartX,
+                longPressStartY,
+                longPressStartNormalizedX,
+                longPressStartNormalizedY,
+                invertViewProjectionMat,
+                window
+            )
             it(nativeEvent)
         }
 
