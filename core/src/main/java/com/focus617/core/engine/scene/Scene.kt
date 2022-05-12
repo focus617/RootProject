@@ -1,7 +1,7 @@
 package com.focus617.core.engine.scene
 
 import com.focus617.core.engine.core.TimeStep
-import com.focus617.core.engine.renderer.ShaderLibrary
+import com.focus617.core.engine.renderer.shader.ShaderLibrary
 import com.focus617.core.platform.base.BaseEntity
 import java.io.Closeable
 

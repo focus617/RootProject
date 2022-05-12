@@ -1,5 +1,7 @@
 package com.focus617.core.engine.renderer
 
+import com.focus617.core.engine.renderer.shader.Shader
+import com.focus617.core.engine.renderer.vertex.VertexArray
 import com.focus617.core.engine.scene.Camera
 import com.focus617.core.platform.base.BaseEntity
 

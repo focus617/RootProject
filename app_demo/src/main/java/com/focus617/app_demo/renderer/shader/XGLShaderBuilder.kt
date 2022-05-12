@@ -2,8 +2,8 @@ package com.focus617.app_demo.renderer.shader
 
 import android.content.Context
 import com.focus617.core.engine.renderer.RendererAPI
-import com.focus617.core.engine.renderer.Shader
-import com.focus617.core.engine.renderer.ShaderBuilder
+import com.focus617.core.engine.renderer.shader.Shader
+import com.focus617.core.engine.renderer.shader.ShaderBuilder
 
 object XGLShaderBuilder : ShaderBuilder() {
 

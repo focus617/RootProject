@@ -6,7 +6,7 @@ import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.objects.d3.Cube
 import com.focus617.core.engine.renderer.RenderCommand
-import com.focus617.core.engine.renderer.Shader
+import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene.PointLight
 import kotlin.properties.Delegates
 

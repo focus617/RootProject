@@ -6,8 +6,8 @@ import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
-import com.focus617.core.engine.renderer.SubTexture2D
-import com.focus617.core.engine.renderer.Texture2D
+import com.focus617.core.engine.renderer.texture.SubTexture2D
+import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.platform.event.base.Event
 
 class MapLayer(name: String, private val scene: XGLScene2D) : Layer(name) {

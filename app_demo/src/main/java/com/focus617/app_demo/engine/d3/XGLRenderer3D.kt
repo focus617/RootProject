@@ -6,9 +6,9 @@ import com.focus617.app_demo.renderer.framebuffer.XGLFrameBuffer
 import com.focus617.app_demo.renderer.framebuffer.submitWithOutlining
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.renderer.RenderCommand
-import com.focus617.core.engine.renderer.Shader
-import com.focus617.core.engine.renderer.VertexArray
 import com.focus617.core.engine.renderer.XRenderer
+import com.focus617.core.engine.renderer.shader.Shader
+import com.focus617.core.engine.renderer.vertex.VertexArray
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.engine.scene.Camera
 import javax.microedition.khronos.egl.EGLConfig

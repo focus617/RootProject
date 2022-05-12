@@ -2,8 +2,8 @@ package com.focus617.app_demo.renderer.texture
 
 import android.content.Context
 import android.opengl.GLES31.*
-import com.focus617.core.engine.renderer.Framebuffer
-import com.focus617.core.engine.renderer.Texture2D
+import com.focus617.core.engine.renderer.framebuffer.Framebuffer
+import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.platform.helper.BitmapHelper
 import com.focus617.platform.helper.TextureHelper
 import java.nio.Buffer

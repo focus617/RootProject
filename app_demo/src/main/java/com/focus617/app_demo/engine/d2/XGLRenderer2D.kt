@@ -8,9 +8,9 @@ import com.focus617.core.engine.math.Point2D
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.renderer.RenderCommand
-import com.focus617.core.engine.renderer.SubTexture2D
-import com.focus617.core.engine.renderer.Texture2D
 import com.focus617.core.engine.renderer.XRenderer
+import com.focus617.core.engine.renderer.texture.SubTexture2D
+import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.engine.scene.Camera
 import java.io.Closeable

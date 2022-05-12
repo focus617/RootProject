@@ -1,10 +1,10 @@
 package com.focus617.core.engine.objects
 
 import com.focus617.core.engine.math.*
-import com.focus617.core.engine.renderer.BufferLayout
 import com.focus617.core.engine.renderer.RenderCommand
-import com.focus617.core.engine.renderer.Shader
-import com.focus617.core.engine.renderer.VertexArray
+import com.focus617.core.engine.renderer.shader.Shader
+import com.focus617.core.engine.renderer.vertex.BufferLayout
+import com.focus617.core.engine.renderer.vertex.VertexArray
 import com.focus617.core.platform.base.BaseEntity
 
 interface IfDrawable {

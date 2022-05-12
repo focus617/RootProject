@@ -1,4 +1,4 @@
-package com.focus617.core.engine.renderer
+package com.focus617.core.engine.renderer.shader
 
 import com.focus617.mylib.logging.WithLogging
 

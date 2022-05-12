@@ -1,7 +1,7 @@
 package com.focus617.app_demo.renderer.texture
 
-import com.focus617.core.engine.renderer.Texture
-import com.focus617.core.engine.renderer.TextureSlots
+import com.focus617.core.engine.renderer.texture.Texture
+import com.focus617.core.engine.renderer.texture.TextureSlots
 
 object XGLTextureSlots : TextureSlots() {
 

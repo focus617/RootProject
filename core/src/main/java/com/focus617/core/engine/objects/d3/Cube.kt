@@ -1,9 +1,9 @@
 package com.focus617.core.engine.objects.d3
 
 import com.focus617.core.engine.objects.DrawableObject
-import com.focus617.core.engine.renderer.BufferElement
-import com.focus617.core.engine.renderer.BufferLayout
-import com.focus617.core.engine.renderer.ShaderDataType
+import com.focus617.core.engine.renderer.vertex.BufferElement
+import com.focus617.core.engine.renderer.vertex.BufferLayout
+import com.focus617.core.engine.renderer.vertex.ShaderDataType
 
 
 open class Cube : DrawableObject() {

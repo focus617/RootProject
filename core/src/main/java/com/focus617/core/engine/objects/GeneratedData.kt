@@ -1,6 +1,6 @@
 package com.focus617.core.engine.objects
 
-import com.focus617.core.engine.renderer.BufferLayout
+import com.focus617.core.engine.renderer.vertex.BufferLayout
 
 class GeneratedData (
     val numVertices: Int,        // 顶点数量

@@ -1,4 +1,4 @@
-package com.focus617.core.engine.renderer
+package com.focus617.core.engine.renderer.texture
 
 import com.focus617.core.engine.math.Vector2
 

@@ -3,8 +3,8 @@ package com.focus617.app_demo.renderer.framebuffer
 import android.opengl.GLES31.*
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.objects.DrawableObject
-import com.focus617.core.engine.renderer.Shader
 import com.focus617.core.engine.renderer.XRenderer.SceneData
+import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.engine.scene.Camera
 
