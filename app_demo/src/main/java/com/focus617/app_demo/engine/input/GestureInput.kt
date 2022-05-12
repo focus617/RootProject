@@ -21,11 +21,26 @@ class GestureInput(private val window: AndroidWindow) : WithLogging(), View.OnTo
     private val LONG_PRESS_TIME_OUT = 750L // in Milli_Second
     private val LONG_PRESS_DISTANCE_THRESHOLD = 100 // in Pixel
     private var isLongPressConsumed: Boolean = true
-    private var longPressStartX: Float = 0f     // Position when Touch start
+    private var longPressStartX: Float = 0f     // Screen Position when Touch start
     private var longPressStartY: Float = 0f
+    private var longPressStartNormalizedX: Float = 0f     // normalized coordinates when Touch start
+    private var longPressStartNormalizedY: Float = 0f
     private val handler = Handler()
     private val longPressed = Runnable {
         LOG.info("MotionEvent trigger LongPress Event")
+
+        window.mData.callback?.let {
+            val nativeEvent =
+                TouchLongPressEvent(
+                    longPressStartX,
+                    longPressStartY,
+                    longPressStartNormalizedX,
+                    longPressStartNormalizedY,
+                    window
+                )
+            it(nativeEvent)
+        }
+
         isLongPressConsumed = true
     }
 
@@ -53,6 +68,8 @@ class GestureInput(private val window: AndroidWindow) : WithLogging(), View.OnTo
                         isLongPressConsumed = false
                         longPressStartX = event.rawX
                         longPressStartY = event.rawY
+                        longPressStartNormalizedX = normalizedX
+                        longPressStartNormalizedY = normalizedY
                     }
 
                     hasConsumed = true
@@ -116,7 +133,8 @@ class GestureInput(private val window: AndroidWindow) : WithLogging(), View.OnTo
                         window.mData.callback?.let { hasConsumed = it(nativeEvent) }
                     } else {
                         if (abs(event.rawX - longPressStartX) > LONG_PRESS_DISTANCE_THRESHOLD ||
-                            abs(event.rawY - longPressStartY) > LONG_PRESS_DISTANCE_THRESHOLD) {
+                            abs(event.rawY - longPressStartY) > LONG_PRESS_DISTANCE_THRESHOLD
+                        ) {
                             handler.removeCallbacks(longPressed)
                             isLongPressConsumed = true
                         }
