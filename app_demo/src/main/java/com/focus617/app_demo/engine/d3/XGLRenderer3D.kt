@@ -16,6 +16,7 @@ import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.VertexArray
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.engine.scene.Camera
+import com.focus617.core.engine.scene.CameraController
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -67,7 +68,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         // First pass: draw on FrameBuffer
         mFrameBuffer.bind()
 
-        beginScene(scene.mCamera)
+        beginScene(scene.mCameraController)
 
         // 清理屏幕，重绘背景颜色
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1.0F))
@@ -115,16 +116,8 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
     }
 
 
-    override fun beginScene(camera: Camera) {
-        // 在多线程渲染里，会把BeginScene函数放在RenderCommandQueue里执行
-        // camera在多线程渲染的时候不能保证主线程是否正在更改Camera的相关信息
-        synchronized(camera) {
-            System.arraycopy(
-                camera.getProjectionMatrix(), 0, SceneData.sProjectionMatrix, 0, 16
-            )
-            System.arraycopy(camera.getViewMatrix(), 0, SceneData.sViewMatrix, 0, 16)
-        }
-
+    override fun beginScene(cameraController: CameraController) {
+        super.beginScene(cameraController)
     }
 
     override fun endScene() {

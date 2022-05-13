@@ -55,7 +55,7 @@ class PerspectiveCamera : Camera() {
     override fun reCalculateViewMatrix() {
         // 设置相机的位置，进而计算出视图矩阵 (View Matrix)
         XMatrix.setLookAtM(
-            mViewMatrix, 0,
+            mViewMatrix.toFloatArray(), 0,
             mPosition.x, mPosition.y, mPosition.z,
             target.x, target.y, target.z,
             directionUp.x, directionUp.y, directionUp.z

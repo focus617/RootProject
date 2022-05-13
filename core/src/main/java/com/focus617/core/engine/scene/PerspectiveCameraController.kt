@@ -10,58 +10,26 @@ import com.focus617.mylib.helper.DateHelper
 /**
  * Perspective Camera 的 Controller类
  */
-class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : CameraController() {
-    private val mProjectionMatrix = FloatArray(16)
-    private var mZoomLevel: Float = 0.05f
+class PerspectiveCameraController(camera: PerspectiveCamera) : CameraController(camera) {
+    override var mZoomLevel: Float = 0.05f
+
+    // Viewport size
+    override var mWidth: Int = 0
+    override var mHeight: Int = 0
 
     // Euler angle
     private var pitchX: Float = 0f
     private var yawY: Float = 90f
 
-    // Viewport size
-    private var mWidth: Int = 0
-    private var mHeight: Int = 0
-
     enum class ControllerWorkingMode { Scroll, Zoom }
 
     private var mode: ControllerWorkingMode = ControllerWorkingMode.Scroll
-
-    fun getCamera() = mCamera
-
-    fun getZoomLevel() = mZoomLevel
-    fun setZoomLevel(level: Float) {
-        mZoomLevel = level
-        reCalculatePerspectiveProjectionMatrix()
-        mCamera.setProjectionMatrix(mProjectionMatrix)
-    }
-
-    fun setRotation(rollZ: Float) {
-        mCamera.setRotation(rollZ)
-    }
-
-    fun setRotation(pitchX: Float = 0f, yawY: Float) {
-        mCamera.setRotation(pitchX, yawY)
-    }
-
-    fun setPosition(position: Point3D) {
-        mCamera.setPosition(position)
-    }
-
-    override fun setPosition(x: Float, y: Float, z: Float) {
-        mCamera.setPosition(Point3D(x, y, z))
-    }
-
-    fun translate(normalizedVector3: Vector3) {
-        with(mCamera) {
-            setPosition(getPosition().translate(normalizedVector3))
-        }
-    }
 
     override fun onWindowSizeChange(width: Int, height: Int) {
         mWidth = width
         mHeight = height
         reCalculatePerspectiveProjectionMatrix()
-        mCamera.setProjectionMatrix(mProjectionMatrix)
+//        (mCamera as PerspectiveCamera).setProjectionMatrix(mProjectionMatrix)
     }
 
     private var mCameraRotation: Float = 0F
@@ -161,7 +129,7 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
             val aspect: Float = mWidth.toFloat() / mHeight.toFloat()
             val ratio = aspect * mZoomLevel
             XMatrix.frustumM(
-                mProjectionMatrix,
+                mProjectionMatrix.toFloatArray(),
                 0,
                 -ratio,
                 ratio,
@@ -175,7 +143,7 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
             val aspect: Float = mHeight.toFloat() / mWidth.toFloat()
             val ratio = aspect * mZoomLevel
             XMatrix.frustumM(
-                mProjectionMatrix,
+                mProjectionMatrix.toFloatArray(),
                 0,
                 -mZoomLevel,
                 mZoomLevel,
@@ -186,5 +154,36 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
             )
         }
     }
+
+    fun getZoomLevel() = mZoomLevel
+    fun setZoomLevel(level: Float) {
+        mZoomLevel = level
+        reCalculatePerspectiveProjectionMatrix()
+//        mCamera.setProjectionMatrix(mProjectionMatrix)
+    }
+
+    fun setRotation(rollZ: Float) {
+        (mCamera as PerspectiveCamera).setRotation(rollZ)
+    }
+
+    fun setRotation(pitchX: Float = 0f, yawY: Float) {
+        (mCamera as PerspectiveCamera).setRotation(pitchX, yawY)
+    }
+
+    fun setPosition(position: Point3D) {
+        (mCamera as PerspectiveCamera).setPosition(position)
+    }
+
+    override fun setPosition(x: Float, y: Float, z: Float) {
+        (mCamera as PerspectiveCamera).setPosition(Point3D(x, y, z))
+    }
+
+    fun translate(normalizedVector3: Vector3) {
+        with( (mCamera as PerspectiveCamera)) {
+            setPosition(getPosition().translate(normalizedVector3))
+        }
+    }
+
+
 
 }
