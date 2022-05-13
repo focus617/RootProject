@@ -1,12 +1,12 @@
 package com.focus617.app_demo.renderer.shader
 
 import android.content.Context
-import android.opengl.GLES31
+import android.opengl.GLES31.*
 import android.text.TextUtils
 import com.focus617.core.platform.base.BaseEntity
 import java.util.*
 
-object XGLShaderHelper {
+object XGLShaderHelper: BaseEntity() {
     val TAG = "XGLShader"
 
     enum class ShaderType {
@@ -25,13 +25,13 @@ object XGLShaderHelper {
     fun parseShaderSource(context: Context, filePath: String) {
         val typeToken = "#type"
 
-        BaseEntity.LOG.info("$TAG: parse shader source: $filePath")
+        LOG.info("$TAG: parse shader source: $filePath")
 
         shaderSources.clear()
         mode = ShaderType.None
 
         if (filePath.isEmpty() or TextUtils.isEmpty(filePath)) {
-            BaseEntity.LOG.error("Shader file doesn't exist")
+            LOG.error("Shader file doesn't exist")
         }
         name = filePath
 
@@ -47,7 +47,7 @@ object XGLShaderHelper {
             }
             scanner.close()
         } catch (e: Exception) {
-            BaseEntity.LOG.error(e.message.toString())
+            LOG.error(e.message.toString())
         }
     }
 
@@ -79,46 +79,46 @@ object XGLShaderHelper {
         fragmentShaderSource: String
     ): Int {
 
-        BaseEntity.LOG.debug("$TAG: buildProgram()")
+        LOG.debug("$TAG: buildProgram()")
 
         val program: Int
 
         // Compile the Vertex shaders.
         val vertexShader = compileVertexShader(vertexShaderSource)
-        if (vertexShader == GLES31.GL_FALSE) {
-            BaseEntity.LOG.error("$TAG: Vertex shader compilation failure.")
-            return GLES31.GL_FALSE
+        if (vertexShader == GL_FALSE) {
+            LOG.error("$TAG: Vertex shader compilation failure.")
+            return GL_FALSE
         }
         // Compile the Fragment shaders.
         val fragmentShader = compileFragmentShader(fragmentShaderSource)
-        if (fragmentShader == GLES31.GL_FALSE) {
-            BaseEntity.LOG.error("$TAG: Fragment shader compilation failure.")
-            GLES31.glDeleteShader(vertexShader)    // Don't leak shaders.
-            return GLES31.GL_FALSE
+        if (fragmentShader == GL_FALSE) {
+            LOG.error("$TAG: Fragment shader compilation failure.")
+            glDeleteShader(vertexShader)    // Don't leak shaders.
+            return GL_FALSE
         }
 
         // Vertex and fragment shaders are successfully compiled.
         // Now time to link them together into a program.
         program = linkProgram(vertexShader, fragmentShader)
-        if (program == GLES31.GL_FALSE) {
-            BaseEntity.LOG.error("$TAG: Shader link failure!")
+        if (program == GL_FALSE) {
+            LOG.error("$TAG: Shader link failure!")
             // 销毁不再需要的着色器对象
-            GLES31.glDeleteShader(vertexShader)
-            GLES31.glDeleteShader(fragmentShader)
-            return GLES31.GL_FALSE
+            glDeleteShader(vertexShader)
+            glDeleteShader(fragmentShader)
+            return GL_FALSE
         }
 
         if (validateProgram(program))
-            BaseEntity.LOG.debug("$TAG buildProgram(): Program=$program")
+            LOG.debug("$TAG buildProgram(): Program=$program")
 
         // Always detach shaders after a successful link.
-        GLES31.glDetachShader(program, vertexShader)
-        GLES31.glDetachShader(program, fragmentShader)
-        GLES31.glDeleteShader(vertexShader)
-        GLES31.glDeleteShader(fragmentShader)
+        glDetachShader(program, vertexShader)
+        glDetachShader(program, fragmentShader)
+        glDeleteShader(vertexShader)
+        glDeleteShader(fragmentShader)
 
         // 释放着色器编译器使用的资源
-        GLES31.glReleaseShaderCompiler()
+        glReleaseShaderCompiler()
 
         return program
     }
@@ -127,16 +127,16 @@ object XGLShaderHelper {
      * Loads and compiles a vertex shader, returning the OpenGL object ID.
      */
     private fun compileVertexShader(shaderCode: String): Int {
-        BaseEntity.LOG.debug("$TAG: compileVertexShader()")
-        return compileShader(GLES31.GL_VERTEX_SHADER, shaderCode)
+        LOG.debug("$TAG: compileVertexShader()")
+        return compileShader(GL_VERTEX_SHADER, shaderCode)
     }
 
     /**
      * Loads and compiles a fragment shader, returning the OpenGL object ID.
      */
     private fun compileFragmentShader(shaderCode: String): Int {
-        BaseEntity.LOG.debug("$TAG: compileFragmentShader()")
-        return compileShader(GLES31.GL_FRAGMENT_SHADER, shaderCode)
+        LOG.debug("$TAG: compileFragmentShader()")
+        return compileShader(GL_FRAGMENT_SHADER, shaderCode)
     }
 
     /**
@@ -144,38 +144,38 @@ object XGLShaderHelper {
      */
     private fun compileShader(type: Int, shaderCode: String): Int {
         // Create a new shader object.
-        val shaderObjectId = GLES31.glCreateShader(type)
-        if (shaderObjectId == GLES31.GL_FALSE) {
-            BaseEntity.LOG.error("$TAG: compileShader(): Could not create new shader.")
-            return GLES31.GL_FALSE
+        val shaderObjectId = glCreateShader(type)
+        if (shaderObjectId == GL_FALSE) {
+            LOG.error("$TAG: compileShader(): Could not create new shader.")
+            return GL_FALSE
         }
 
         // Pass in the shader source code to GL
-        GLES31.glShaderSource(shaderObjectId, shaderCode)
+        glShaderSource(shaderObjectId, shaderCode)
 
         // Compile the shader.
-        GLES31.glCompileShader(shaderObjectId)
+        glCompileShader(shaderObjectId)
 
         // Get the compilation status.
         val compileStatus = IntArray(1)
-        GLES31.glGetShaderiv(shaderObjectId, GLES31.GL_COMPILE_STATUS, compileStatus, 0)
+        glGetShaderiv(shaderObjectId, GL_COMPILE_STATUS, compileStatus, 0)
 
         // Verify the compile status.
-        if (compileStatus[0] == GLES31.GL_FALSE) {
+        if (compileStatus[0] == GL_FALSE) {
             // Print the shader info log to the Android log output.
-            BaseEntity.LOG.error("$TAG: Shader compilation failure.")
-            BaseEntity.LOG.error(
+            LOG.error("$TAG: Shader compilation failure.")
+            LOG.error(
                 ("$TAG: shader compilation result: ${compileStatus[0]}" +
-                        "Log: ${GLES31.glGetShaderInfoLog(shaderObjectId)}").trimIndent()
+                        "Log: ${glGetShaderInfoLog(shaderObjectId)}").trimIndent()
             )
 
             // If it failed, delete the shader object.
-            GLES31.glDeleteShader(shaderObjectId)
+            glDeleteShader(shaderObjectId)
 
-            return GLES31.GL_FALSE
+            return GL_FALSE
         }
 
-        BaseEntity.LOG.debug("$TAG: Shader compilation success.")
+        LOG.debug("$TAG: Shader compilation success.")
         // Return the shader object ID.
         return shaderObjectId
     }
@@ -186,40 +186,40 @@ object XGLShaderHelper {
      */
     private fun linkProgram(vertexShaderId: Int, fragmentShaderId: Int): Int {
         // Create a new program object.
-        val programObjectId = GLES31.glCreateProgram()
-        if (programObjectId == GLES31.GL_FALSE) {
-            BaseEntity.LOG.error("$TAG: Could not create new program")
-            return GLES31.GL_FALSE
+        val programObjectId = glCreateProgram()
+        if (programObjectId == GL_FALSE) {
+            LOG.error("$TAG: Could not create new program")
+            return GL_FALSE
         }
 
         // Attach the vertex shader to the program.
-        GLES31.glAttachShader(programObjectId, vertexShaderId)
+        glAttachShader(programObjectId, vertexShaderId)
 
         // Attach the fragment shader to the program.
-        GLES31.glAttachShader(programObjectId, fragmentShaderId)
+        glAttachShader(programObjectId, fragmentShaderId)
 
         // Link the two shaders together into a program.
-        GLES31.glLinkProgram(programObjectId)
+        glLinkProgram(programObjectId)
 
         // Get the link status.
         val linkStatus = IntArray(1)
-        GLES31.glGetProgramiv(programObjectId, GLES31.GL_LINK_STATUS, linkStatus, 0)
+        glGetProgramiv(programObjectId, GL_LINK_STATUS, linkStatus, 0)
 
         // Verify the link status.
-        if (linkStatus[0] == GLES31.GL_FALSE) {
-            BaseEntity.LOG.error("$TAG: Shader link failure!")
+        if (linkStatus[0] == GL_FALSE) {
+            LOG.error("$TAG: Shader link failure!")
             // Print the program info log to the Android log output.
-            BaseEntity.LOG.error(
+            LOG.error(
                 ("$TAG: shader linking result:${linkStatus[0]}\n"
-                        + "Log: ${GLES31.glGetProgramInfoLog(programObjectId)}").trimIndent()
+                        + "Log: ${glGetProgramInfoLog(programObjectId)}").trimIndent()
             )
 
             // If it failed, delete the program object.
-            GLES31.glDeleteProgram(programObjectId)
+            glDeleteProgram(programObjectId)
 
-            return GLES31.GL_FALSE
+            return GL_FALSE
         }
-        BaseEntity.LOG.debug("$TAG: Shader linking success.")
+        LOG.debug("$TAG: Shader linking success.")
         // Return the program object ID.
         return programObjectId
     }
@@ -229,23 +229,23 @@ object XGLShaderHelper {
      * application.
      */
     private fun validateProgram(programObjectId: Int): Boolean {
-        GLES31.glValidateProgram(programObjectId)
+        glValidateProgram(programObjectId)
 
         val validateStatus = IntArray(1)
-        GLES31.glGetProgramiv(
-            programObjectId, GLES31.GL_VALIDATE_STATUS,
+        glGetProgramiv(
+            programObjectId, GL_VALIDATE_STATUS,
             validateStatus, 0
         )
-        if (validateStatus[0] == GLES31.GL_FALSE) {
-            BaseEntity.LOG.error("$TAG: Shader validation failure!")
-            BaseEntity.LOG.error(
+        if (validateStatus[0] == GL_FALSE) {
+            LOG.error("$TAG: Shader validation failure!")
+            LOG.error(
                 ("$TAG: shader validation result: ${validateStatus[0]}\n"
-                        + "Log: ${GLES31.glGetProgramInfoLog(programObjectId)}").trimIndent()
+                        + "Log: ${glGetProgramInfoLog(programObjectId)}").trimIndent()
             )
             return false
         }
 
-        BaseEntity.LOG.debug("$TAG: Shader validation success.")
+        LOG.debug("$TAG: Shader validation success.")
         return true
     }
 }
