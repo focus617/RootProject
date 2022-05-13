@@ -82,6 +82,7 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
         return this.scale(Vector3(size.x, size.y, 1.0f))
     }
 
+    // 绕Z轴旋转
     fun rotate2D(rotationInDegree: Float): Mat4 {
         XMatrix.rotateM(floatArray, 0, rotationInDegree, 0.0f, 0.0f, 1.0f)
         return this
@@ -100,7 +101,7 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
     fun transform2D(
         position: Vector3,
         size: Vector2,
-        rotationInDegree: Float = 0.0f
+        rotationInDegree: Float = 0.0f      // 绕Z轴旋转
     ): Mat4 {
         val translate = Mat4().translate(position).toFloatArray()
         val scale = Mat4().scale(size).toFloatArray()

@@ -55,7 +55,7 @@ class PerspectiveCamera : Camera() {
     override fun reCalculateViewMatrix() {
         // 设置相机的位置，进而计算出视图矩阵 (View Matrix)
         XMatrix.setLookAtM(
-            mViewMatrix, 0,
+            mViewMatrix.toFloatArray(), 0,
             mPosition.x, mPosition.y, mPosition.z,
             target.x, target.y, target.z,
             directionUp.x, directionUp.y, directionUp.z
@@ -64,6 +64,6 @@ class PerspectiveCamera : Camera() {
 
     companion object{
         val worldUp = Vector3(0.0f, 1.0f, 0.0f)
-        const val defaultDistance: Float = 4.0F
+        const val defaultDistance: Float = 3.0F
     }
 }

@@ -12,7 +12,7 @@ import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.renderer.texture.SubTexture2D
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.engine.resource.baseDataType.Color
-import com.focus617.core.engine.scene.Camera
+import com.focus617.core.engine.scene.CameraController
 import java.io.Closeable
 import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
@@ -51,7 +51,7 @@ class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
 
-        beginScene(scene.mCamera)
+        beginScene(scene.mCameraController)
 
         endScene()
     }
@@ -60,7 +60,7 @@ class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.
         Renderer2DData.close()
     }
 
-    override fun beginScene(camera: Camera) {
+    override fun beginScene(cameraController: CameraController) {
         XGLContext.checkGLError("before beginScene")
         with(Renderer2DData.TextureShader) {
             bind()
@@ -249,28 +249,28 @@ class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.
 
             Renderer2DData.putVertex(
                 (transform * Renderer2DData.QuadVertexPosition[0]).toPoint3D()!!,
-                Color.WHITE,
+                tintColor,
                 Vector2(0.0f, 0.0f),
                 texIndex,
                 tilingFactor
             )
             Renderer2DData.putVertex(
                 (transform * Renderer2DData.QuadVertexPosition[1]).toPoint3D()!!,
-                Color.WHITE,
+                tintColor,
                 Vector2(1.0f, 0.0f),
                 texIndex,
                 tilingFactor
             )
             Renderer2DData.putVertex(
                 (transform * Renderer2DData.QuadVertexPosition[2]).toPoint3D()!!,
-                Color.WHITE,
+                tintColor,
                 Vector2(1.0f, 1.0f),
                 texIndex,
                 tilingFactor
             )
             Renderer2DData.putVertex(
                 (transform * Renderer2DData.QuadVertexPosition[3]).toPoint3D()!!,
-                Color.WHITE,
+                tintColor,
                 Vector2(0.0f, 1.0f),
                 texIndex,
                 tilingFactor
@@ -315,7 +315,7 @@ class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.
             for (i in 0..3) {
                 Renderer2DData.putVertex(
                     (transform * Renderer2DData.QuadVertexPosition[i]).toPoint3D()!!,
-                    Color.WHITE,
+                    tintColor,
                     subTexCoords.mTexCoords[i],
                     texIndex,
                     tilingFactor

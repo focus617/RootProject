@@ -5,7 +5,11 @@ import com.focus617.core.platform.base.BaseEntity
 import java.io.Closeable
 import java.nio.IntBuffer
 
-class XGLRenderBuffer(width: Int, height: Int) : BaseEntity(), Closeable {
+class XGLRenderBuffer(
+    width: Int,
+    height: Int,
+    format: Int
+) : BaseEntity(), Closeable {
     private var mRenderBuf: IntBuffer = IntBuffer.allocate(1)
     var mHandle: Int = -1   // RenderBuffer的Handle
 
@@ -20,7 +24,7 @@ class XGLRenderBuffer(width: Int, height: Int) : BaseEntity(), Closeable {
         // 采用GL_DEPTH24_STENCIL8作为内部格式，它同时代表24位的深度和8位的模板缓冲
         glRenderbufferStorage(
             GL_RENDERBUFFER,
-            GL_DEPTH24_STENCIL8,
+            format,
             width,
             height
         )

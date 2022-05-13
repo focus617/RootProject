@@ -11,48 +11,21 @@ import com.focus617.mylib.helper.DateHelper
 /**
  * Orthographic Camera 的 Controller类
  */
-class OrthographicCameraController(private val mCamera: OrthographicCamera) : CameraController() {
-    private val mProjectionMatrix = FloatArray(16)
-    private var mZoomLevel: Float = 1.0f
-    private var mWidth: Int = 0
-    private var mHeight: Int = 0
+class OrthographicCameraController(camera: OrthographicCamera) : CameraController(camera) {
+    override var mZoomLevel: Float = 1.0f
+
+    // Viewport size
+    override var mWidth: Int = 0
+    override var mHeight: Int = 0
 
     enum class ControllerWorkingMode { Scroll, Zoom }
 
     private var mode: ControllerWorkingMode = ControllerWorkingMode.Scroll
 
-    fun getCamera() = mCamera
-
-     fun getZoomLevel() = mZoomLevel
-    fun setZoomLevel(level: Float) {
-        mZoomLevel = level
-        reCalculateOrthoGraphicProjectionMatrix()
-        mCamera.setProjectionMatrix(mProjectionMatrix)
-    }
-
-    fun setRotation(rollZ: Float = 90f) {
-        mCamera.setRotation(rollZ)
-    }
-
-    fun setPosition(position: Point3D) {
-        mCamera.setPosition(position)
-    }
-
-    override fun setPosition(x: Float, y: Float, z: Float) {
-        mCamera.setPosition(Point3D(x, y, z))
-    }
-
-    fun translate(normalizedVector3: Vector3) {
-        with(mCamera) {
-            setPosition(getPosition().translate(normalizedVector3))
-        }
-    }
-
     override fun onWindowSizeChange(width: Int, height: Int) {
         mWidth = width
         mHeight = height
         reCalculateOrthoGraphicProjectionMatrix()
-        mCamera.setProjectionMatrix(mProjectionMatrix)
     }
 
     private var mCameraRotation: Float = 0F
@@ -142,7 +115,7 @@ class OrthographicCameraController(private val mCamera: OrthographicCamera) : Ca
 
             // 用ZoomLevel来表示top，因为拉近镜头时，ZoomLevel变大，而对应可见区域会变小
             XMatrix.orthoM(
-                mProjectionMatrix,
+                mProjectionMatrix.toFloatArray(),
                 0,
                 -ratio,
                 ratio,
@@ -156,7 +129,7 @@ class OrthographicCameraController(private val mCamera: OrthographicCamera) : Ca
             val aspect: Float = mHeight.toFloat() / mWidth.toFloat()
             val ratio = aspect * mZoomLevel
             XMatrix.orthoM(
-                mProjectionMatrix,
+                mProjectionMatrix.toFloatArray(),
                 0,
                 -mZoomLevel,
                 mZoomLevel,
@@ -168,4 +141,28 @@ class OrthographicCameraController(private val mCamera: OrthographicCamera) : Ca
         }
     }
 
+    fun getZoomLevel() = mZoomLevel
+    fun setZoomLevel(level: Float) {
+        mZoomLevel = level
+        reCalculateOrthoGraphicProjectionMatrix()
+//        mCamera.setProjectionMatrix(mProjectionMatrix)
+    }
+
+    fun setRotation(rollZ: Float = 90f) {
+        mCamera.setRotation(rollZ)
+    }
+
+    fun setPosition(position: Point3D) {
+        mCamera.setPosition(position)
+    }
+
+    override fun setPosition(x: Float, y: Float, z: Float) {
+        mCamera.setPosition(Point3D(x, y, z))
+    }
+
+    fun translate(normalizedVector3: Vector3) {
+        with(mCamera) {
+            setPosition(getPosition().translate(normalizedVector3))
+        }
+    }
 }

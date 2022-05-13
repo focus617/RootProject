@@ -41,10 +41,10 @@ class Sandbox2D(context: Context) : Engine(), Closeable {
     override fun beforeUpdate() {
         // 在多线程渲染里，会把BeginScene函数放在RenderCommandQueue里执行
         // camera在多线程渲染的时候不能保证主线程是否正在更改Camera的相关信息
-        scene?.mCamera?.let {
+        scene?.mCameraController?.let {
             synchronized(it) {
                 System.arraycopy(it.getProjectionMatrix(), 0, XRenderer.sProjectionMatrix, 0, 16)
-                System.arraycopy(it.getViewMatrix(), 0, XRenderer.sViewMatrix, 0, 16)
+                System.arraycopy(it.getProjectionMatrix(), 0, XRenderer.sViewMatrix, 0, 16)
             }
         }
 
@@ -71,27 +71,27 @@ class Sandbox2D(context: Context) : Engine(), Closeable {
 //                LOG.info("It's type is ${e.eventType}")
 //                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
 //                LOG.info("Current position is (${e.x}, ${e.y})\n")
-            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.TouchPress) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchStart) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchEnd) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.Pinch) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event) ?: false
+            val hasConsumed = scene.mCameraController.onEvent(event)
             hasConsumed
         }
     }
