@@ -64,6 +64,6 @@ class PerspectiveCamera : Camera() {
 
     companion object{
         val worldUp = Vector3(0.0f, 1.0f, 0.0f)
-        const val defaultDistance: Float = 4.0F
+        const val defaultDistance: Float = 3.0F
     }
 }

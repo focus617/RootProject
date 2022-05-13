@@ -12,7 +12,7 @@ import com.focus617.mylib.helper.DateHelper
  */
 class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : CameraController() {
     private val mProjectionMatrix = FloatArray(16)
-    private var mZoomLevel: Float = 0.5f
+    private var mZoomLevel: Float = 0.05f
 
     // Euler angle
     private var pitchX: Float = 0f
@@ -118,8 +118,8 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
                 if (mode == ControllerWorkingMode.Zoom) {
                     // 根据双指间距的变化，计算相对变化量
                     val scaleFactor = previousSpan / event.span
-                    LOG.info("CameraController: on PinchEvent, ZoomLevel=$scaleFactor")
                     setZoomLevel(previousZoomLevel * scaleFactor)
+                    LOG.info("CameraController: on PinchEvent, ZoomLevel=$mZoomLevel")
                 }
                 event.handleFinished()
             }
@@ -127,13 +127,14 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
             is PinchEndEvent -> {
                 LOG.info("CameraController: on PinchEndEvent")
                 mode = ControllerWorkingMode.Scroll
+                LOG.info("CameraController: on PinchEndEvent, ZoomLevel=$mZoomLevel")
                 event.handleFinished()
             }
 
             is SensorRotationEvent -> {
 //                LOG.info("CameraController: on SensorRotationEvent")
                 setRotation(-event.pitchXInDegree, -event.yawYInDegree)
-                when(event.yawYInDegree.toInt()){
+                when (event.yawYInDegree.toInt()) {
                     in 0..180 -> setRotation(event.rollZInDegree)
                     else -> setRotation(-event.rollZInDegree)
                 }
@@ -166,8 +167,8 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
                 ratio,
                 -mZoomLevel,
                 mZoomLevel,
-                2f,
-                7f
+                0.1f,
+                100f
             )
         } else {
             // Portrait or Square
@@ -180,8 +181,8 @@ class PerspectiveCameraController(private val mCamera: PerspectiveCamera) : Came
                 mZoomLevel,
                 -ratio,
                 ratio,
-                2f,
-                7f
+                0.1f,
+                100f
             )
         }
     }
