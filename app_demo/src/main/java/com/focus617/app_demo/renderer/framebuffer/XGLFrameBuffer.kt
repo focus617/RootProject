@@ -65,8 +65,17 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
             }
         }
 
-        // Generate RBO for FrameBuffer's Stencil and Depth Attachment
-        mRenderBufferAttachment = XGLRenderBuffer(mSpecification.mWidth, mSpecification.mHeight)
+        if (mDepthAttachmentSpecification.textureFormat != FrameBufferTextureFormat.None) {
+            when (mDepthAttachmentSpecification.textureFormat) {
+                FrameBufferTextureFormat.DEPTH24STENCIL8 -> {
+                    // Generate RBO for FrameBuffer's Stencil and Depth Attachment
+                    mRenderBufferAttachment =
+                        XGLRenderBuffer(mSpecification.mWidth, mSpecification.mHeight, GL_DEPTH24_STENCIL8)
+                }
+                else -> {
+                }
+            }
+        }
 
         // Generate FBO
         glGenFramebuffers(1, mFrameBuf)
