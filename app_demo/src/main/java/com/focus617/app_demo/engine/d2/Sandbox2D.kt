@@ -43,8 +43,8 @@ class Sandbox2D(context: Context) : Engine(), Closeable {
         // camera在多线程渲染的时候不能保证主线程是否正在更改Camera的相关信息
         scene?.mCameraController?.let {
             synchronized(it) {
-                System.arraycopy(it.getProjectionMatrix(), 0, XRenderer.sProjectionMatrix, 0, 16)
-                System.arraycopy(it.getProjectionMatrix(), 0, XRenderer.sViewMatrix, 0, 16)
+                XRenderer.sProjectionMatrix.setValue(it.getProjectionMatrix())
+                XRenderer.sViewMatrix.setValue(it.getCamera().getViewMatrix())
             }
         }
 

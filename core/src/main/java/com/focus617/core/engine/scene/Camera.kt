@@ -15,8 +15,9 @@ abstract class Camera : BaseEntity() {
 
     // 相机的其它属性
     protected open var mPosition: Point3D = Point3D(0.0f, 0.0f, 0.0f)
-    protected open var mRotationZAxis: Float = 90F //在XY平面绕Z轴的旋转角度
+    protected open var mRotationZAxisInDegree: Float = 90F //在XY平面绕Z轴的旋转角度
 
+    // 根据相机的空间位置和相机绕Z轴的旋转角度，重新计算相机的视图矩阵
     abstract fun reCalculateViewMatrix()
 
     fun getViewMatrix(): Mat4 = mViewMatrix
@@ -28,8 +29,8 @@ abstract class Camera : BaseEntity() {
     }
 
     // 相机位置不动，旋转directionUp
-    abstract fun setRotation(rollZ: Float = 90f)
-    fun getRotation() = mRotationZAxis
+    abstract fun setRotation(rollZInDegree: Float = 90f)
+    fun getRotation() = mRotationZAxisInDegree
 
     companion object {
         const val U_VIEW_MATRIX = "u_ViewMatrix"

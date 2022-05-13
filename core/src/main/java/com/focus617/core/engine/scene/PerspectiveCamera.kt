@@ -8,6 +8,7 @@ import kotlin.math.sin
 
 class PerspectiveCamera : Camera() {
     override var mPosition: Point3D = Point3D(0.0f, 1.0f, defaultDistance)
+
     private val target: Point3D = Point3D(0.0f, 1.0f, 0.0f)
     private var mTargetDistance: Float = defaultDistance
 
@@ -16,7 +17,7 @@ class PerspectiveCamera : Camera() {
     private lateinit var directionRight: Vector3
 
     init {
-        setRotation(mRotationZAxis)
+        setRotation(mRotationZAxisInDegree)
     }
 
     fun getDistance() = mTargetDistance
@@ -52,14 +53,16 @@ class PerspectiveCamera : Camera() {
         reCalculateViewMatrix()
     }
 
+    // 根据相机的空间位置和相机绕Z轴的旋转角度，重新计算相机的视图矩阵(View Matrix)
     override fun reCalculateViewMatrix() {
-        // 设置相机的位置，进而计算出视图矩阵 (View Matrix)
+        val viewMatrixFloatArray = FloatArray(16)
         XMatrix.setLookAtM(
-            mViewMatrix.toFloatArray(), 0,
+            viewMatrixFloatArray, 0,
             mPosition.x, mPosition.y, mPosition.z,
             target.x, target.y, target.z,
             directionUp.x, directionUp.y, directionUp.z
         )
+        mViewMatrix.setValue(viewMatrixFloatArray)
     }
 
     companion object{
