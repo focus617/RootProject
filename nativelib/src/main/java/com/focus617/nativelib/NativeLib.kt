@@ -10,10 +10,10 @@ class NativeLib {
 
 
     companion object {
-        // Used to load the 'nativelib' library on application startup.
+        // Used to loadFile the 'nativelib' library on application startup.
         init {
             System.loadLibrary("nativelib")
         }
-        external fun openGlEsSdkNativeLibraryInit(width: Int, height: Int)
+        external fun openGlEsSdkNativeLibraryInit(filePath: String, line: Int)
     }
 }
