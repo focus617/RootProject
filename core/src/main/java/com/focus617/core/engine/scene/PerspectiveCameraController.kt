@@ -29,7 +29,6 @@ class PerspectiveCameraController(camera: PerspectiveCamera) : CameraController(
         mWidth = width
         mHeight = height
         reCalculatePerspectiveProjectionMatrix()
-//        (mCamera as PerspectiveCamera).setProjectionMatrix(mProjectionMatrix)
     }
 
     private var mCameraRotation: Float = 0F
@@ -121,9 +120,6 @@ class PerspectiveCameraController(camera: PerspectiveCamera) : CameraController(
 
     private fun reCalculatePerspectiveProjectionMatrix() {
         // 计算透视投影矩阵 (Project Matrix)
-        //val ratio: Float = mWidth.toFloat() / mHeight.toFloat()
-        //XMatrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
-
         if (mWidth > mHeight) {
             // Landscape
             val aspect: Float = mWidth.toFloat() / mHeight.toFloat()
@@ -159,7 +155,6 @@ class PerspectiveCameraController(camera: PerspectiveCamera) : CameraController(
     fun setZoomLevel(level: Float) {
         mZoomLevel = level
         reCalculatePerspectiveProjectionMatrix()
-//        mCamera.setProjectionMatrix(mProjectionMatrix)
     }
 
     fun setRotation(rollZ: Float) {

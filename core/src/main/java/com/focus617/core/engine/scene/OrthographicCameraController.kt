@@ -22,36 +22,10 @@ class OrthographicCameraController(camera: OrthographicCamera) : CameraControlle
 
     private var mode: ControllerWorkingMode = ControllerWorkingMode.Scroll
 
-    fun getZoomLevel() = mZoomLevel
-    fun setZoomLevel(level: Float) {
-        mZoomLevel = level
-        reCalculateOrthoGraphicProjectionMatrix()
-//        mCamera.setProjectionMatrix(mProjectionMatrix)
-    }
-
-    fun setRotation(rollZ: Float = 90f) {
-        mCamera.setRotation(rollZ)
-    }
-
-    fun setPosition(position: Point3D) {
-        mCamera.setPosition(position)
-    }
-
-    override fun setPosition(x: Float, y: Float, z: Float) {
-        mCamera.setPosition(Point3D(x, y, z))
-    }
-
-    fun translate(normalizedVector3: Vector3) {
-        with(mCamera) {
-            setPosition(getPosition().translate(normalizedVector3))
-        }
-    }
-
     override fun onWindowSizeChange(width: Int, height: Int) {
         mWidth = width
         mHeight = height
         reCalculateOrthoGraphicProjectionMatrix()
-//        mCamera.setProjectionMatrix(mProjectionMatrix)
     }
 
     private var mCameraRotation: Float = 0F
@@ -167,4 +141,28 @@ class OrthographicCameraController(camera: OrthographicCamera) : CameraControlle
         }
     }
 
+    fun getZoomLevel() = mZoomLevel
+    fun setZoomLevel(level: Float) {
+        mZoomLevel = level
+        reCalculateOrthoGraphicProjectionMatrix()
+//        mCamera.setProjectionMatrix(mProjectionMatrix)
+    }
+
+    fun setRotation(rollZ: Float = 90f) {
+        mCamera.setRotation(rollZ)
+    }
+
+    fun setPosition(position: Point3D) {
+        mCamera.setPosition(position)
+    }
+
+    override fun setPosition(x: Float, y: Float, z: Float) {
+        mCamera.setPosition(Point3D(x, y, z))
+    }
+
+    fun translate(normalizedVector3: Vector3) {
+        with(mCamera) {
+            setPosition(getPosition().translate(normalizedVector3))
+        }
+    }
 }

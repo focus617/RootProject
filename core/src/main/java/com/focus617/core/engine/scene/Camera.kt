@@ -4,8 +4,13 @@ import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.platform.base.BaseEntity
 
+/**
+ * Camera 抽象类
+ * 负责管理 视图矩阵mViewMatrix：mViewMatrix
+ */
 abstract class Camera : BaseEntity() {
     // Camera本质就是两个Matrix——视图矩阵mViewMatrix和投影矩阵mProjectionMatrix
+    // 投影矩阵mProjectionMatrix委托给了CameraController类
     protected val mViewMatrix = Mat4()
 
     // 相机的其它属性

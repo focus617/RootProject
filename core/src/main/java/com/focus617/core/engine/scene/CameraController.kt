@@ -7,6 +7,7 @@ import com.focus617.core.platform.event.base.Event
 
 /**
  * CameraController抽象类
+ * 负责管理 投影矩阵mProjectionMatrix：mProjectionMatrix
  */
 abstract class CameraController(protected val mCamera: Camera) : BaseEntity() {
     fun getCamera() = mCamera
