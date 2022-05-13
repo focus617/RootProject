@@ -1,11 +1,16 @@
 package com.focus617.app_demo.engine.d2
 
 import com.focus617.app_demo.renderer.framebuffer.XGLFrameBuffer
+import com.focus617.app_demo.renderer.framebuffer.XGLFrameBufferBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
+import com.focus617.core.engine.renderer.framebuffer.FrameBufferAttachmentSpecification
+import com.focus617.core.engine.renderer.framebuffer.FrameBufferSpecification
+import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureFormat
+import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureSpecification
 import com.focus617.core.engine.renderer.texture.SubTexture2D
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.platform.event.base.Event
@@ -20,7 +25,16 @@ class MapLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
     private var mFramebuffer: XGLFrameBuffer? = null
 
     override fun initOpenGlResource() {
-        mFramebuffer = XGLFrameBuffer(1024, 2048)
+        val fbSpec = FrameBufferSpecification()
+        fbSpec.attachment = FrameBufferAttachmentSpecification(
+            listOf(
+                FrameBufferTextureSpecification(FrameBufferTextureFormat.RGBA8),
+                FrameBufferTextureSpecification(FrameBufferTextureFormat.DEPTH24STENCIL8)
+            )
+        )
+        fbSpec.mWidth = 1024
+        fbSpec.mHeight = 2048
+        mFramebuffer = XGLFrameBufferBuilder.createFrameBuffer(fbSpec) as XGLFrameBuffer
     }
 
     override fun close() {

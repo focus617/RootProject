@@ -111,7 +111,7 @@ class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.
             val tilingFactor: Float = 1.0f
 
             Renderer2DData.putQuadVertex(
-                position, size, color, Vector2(0.0f, 0.0f), texIndex, tilingFactor
+                position, size, color, texIndex, tilingFactor
             )
 
             Renderer2DData.QuadIndexCount += 6
@@ -132,7 +132,7 @@ class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.
             val texIndex: Float = XGLTextureSlots.getId(texture).toFloat()
 
             Renderer2DData.putQuadVertex(
-                position, size, Color.WHITE, Vector2(0.0f, 0.0f), texIndex, tilingFactor
+                position, size, Color.WHITE, texIndex, tilingFactor
             )
 
             Renderer2DData.QuadIndexCount += 6
