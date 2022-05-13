@@ -31,6 +31,10 @@ class PerspectiveCameraController(camera: PerspectiveCamera) : CameraController(
         reCalculatePerspectiveProjectionMatrix()
     }
 
+    override fun setPosition(x: Float, y: Float, z: Float) {
+        (mCamera as PerspectiveCamera).setPosition(Point3D(x, y, z))
+    }
+
     private var mCameraRotation: Float = 0F
     override fun onUpdate(timeStep: TimeStep) {
 //        val mCameraRotationSpeed: Float = 0.001F
@@ -167,10 +171,6 @@ class PerspectiveCameraController(camera: PerspectiveCamera) : CameraController(
 
     fun setPosition(position: Point3D) {
         (mCamera as PerspectiveCamera).setPosition(position)
-    }
-
-    override fun setPosition(x: Float, y: Float, z: Float) {
-        (mCamera as PerspectiveCamera).setPosition(Point3D(x, y, z))
     }
 
     fun translate(normalizedVector3: Vector3) {
