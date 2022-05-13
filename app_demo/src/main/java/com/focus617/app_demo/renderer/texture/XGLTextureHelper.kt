@@ -6,7 +6,7 @@ import android.opengl.GLUtils
 import com.focus617.core.platform.base.BaseEntity
 import java.nio.ByteBuffer
 
-object XGLTextureHelper: BaseEntity() {
+object XGLTextureHelper : BaseEntity() {
 
     var samplers = IntArray(1) //存放Samplers id的成员变量数组
 
@@ -18,28 +18,14 @@ object XGLTextureHelper: BaseEntity() {
         glGenSamplers(1, samplers, 0) //生成Samplers id
         //设置MIN采样方式
         glSamplerParameterf(
-            samplers[0],
-            GL_TEXTURE_MIN_FILTER,
-            GL_LINEAR_MIPMAP_LINEAR.toFloat()
+            samplers[0], GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR.toFloat()
         )
         //设置MAG采样方式
-        glSamplerParameterf(
-            samplers[0],
-            GL_TEXTURE_MAG_FILTER,
-            GL_LINEAR.toFloat()
-        )
+        glSamplerParameterf(samplers[0], GL_TEXTURE_MAG_FILTER, GL_LINEAR.toFloat())
         //设置S轴拉伸方式
-        glSamplerParameterf(
-            samplers[0],
-            GL_TEXTURE_WRAP_S,
-            GL_REPEAT.toFloat()
-        )
+        glSamplerParameterf(samplers[0], GL_TEXTURE_WRAP_S, GL_REPEAT.toFloat())
         //设置T轴拉伸方式
-        glSamplerParameterf(
-            samplers[0],
-            GL_TEXTURE_WRAP_T,
-            GL_REPEAT.toFloat()
-        )
+        glSamplerParameterf(samplers[0], GL_TEXTURE_WRAP_T, GL_REPEAT.toFloat())
     }
 
     /**

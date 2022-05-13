@@ -21,7 +21,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         FrameBufferTextureSpecification(FrameBufferTextureFormat.None)
 
     private var mColorAttachments = mutableListOf<XGLTexture2D>()  // ColorTextureBuffers
-    private lateinit var mRenderBufferAttachment: XGLRenderBuffer // RenderBuffer
+    private lateinit var mRenderBufferAttachment: XGLRenderBuffer  // RenderBuffer
     private lateinit var mQuad: FrameBufferQuad
 
     init {
