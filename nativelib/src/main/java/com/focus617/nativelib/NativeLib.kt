@@ -7,6 +7,7 @@ class NativeLib {
      * which is packaged with this application.
      */
     external fun stringFromJNI(): String
+    external fun openGlEsSdkNativeLibraryInit()
 
     companion object {
         // Used to load the 'nativelib' library on application startup.
