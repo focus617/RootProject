@@ -2,7 +2,7 @@ package com.focus617.app_demo.renderer.texture
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.opengl.GLES31
+import android.opengl.GLES31.*
 import com.focus617.core.engine.renderer.texture.Texture
 import com.focus617.platform.helper.BitmapHelper
 import com.focus617.platform.helper.TextureHelper.loadCubeMapIntoTexture
@@ -36,11 +36,11 @@ class XGLTextureCubeMap private constructor(filePath: String) : Texture(filePath
     }
 
     override fun bind(slot: Int) {
-        GLES31.glActiveTexture(GLES31.GL_TEXTURE0)
-        GLES31.glBindTexture(GLES31.GL_TEXTURE_CUBE_MAP, mHandle)
+        glActiveTexture(GL_TEXTURE0)
+        glBindTexture(GL_TEXTURE_CUBE_MAP, mHandle)
     }
 
     override fun close() {
-        GLES31.glDeleteTextures(1, textureObjectIdBuf, 0)
+        glDeleteTextures(1, textureObjectIdBuf, 0)
     }
 }

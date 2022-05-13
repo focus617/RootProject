@@ -144,7 +144,6 @@ object Renderer2DData : WithLogging(), Closeable {
         position: Point3D,
         size: Vector2,
         color: Color,
-        texCoords: Vector2,
         texIndex: Float = 0.0f,         // White Texture
         tilingFactor: Float = 1.0f
     ) {

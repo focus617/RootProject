@@ -2,7 +2,7 @@ package com.focus617.app_demo.renderer.texture
 
 import android.content.Context
 import android.opengl.GLES31.*
-import com.focus617.core.engine.renderer.framebuffer.Framebuffer
+import com.focus617.core.engine.renderer.framebuffer.FrameBuffer
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.platform.helper.BitmapHelper
 import com.focus617.platform.helper.TextureHelper
@@ -79,7 +79,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
     }
 
     // 创建Texture2D，作为FrameBuffer的output image
-    constructor(framebuffer: Framebuffer, width: Int, height: Int) : this("FrameBuffer") {
+    constructor(framebuffer: FrameBuffer, width: Int, height: Int) : this("FrameBuffer") {
         mWidth = width
         mHeight = height
 
@@ -90,7 +90,6 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         mHandle = mHandleBuf[0]
         // Bind to the texture in OpenGL
         glBindTexture(GL_TEXTURE_2D, mHandle)
-//        glEnable(GL_MULTISAMPLE)
 
         //绑定纹理单元与sampler
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
