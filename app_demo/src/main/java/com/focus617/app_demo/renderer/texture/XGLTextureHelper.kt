@@ -1,13 +1,12 @@
-package com.focus617.platform.helper
+package com.focus617.app_demo.renderer.texture
 
 import android.graphics.Bitmap
 import android.opengl.GLES31.*
 import android.opengl.GLUtils
-import timber.log.Timber
+import com.focus617.core.platform.base.BaseEntity
 import java.nio.ByteBuffer
 
-object TextureHelper {
-    val TAG = "TextureHelper"
+object XGLTextureHelper: BaseEntity() {
 
     var samplers = IntArray(1) //存放Samplers id的成员变量数组
 
@@ -56,7 +55,7 @@ object TextureHelper {
     ): Int {
         glGenTextures(1, textureObjectIdBuf, 0)
         if (textureObjectIdBuf[0] == 0) {
-            Timber.e("$TAG: Could not generate a new OpenGL texture object.")
+            LOG.error("Could not generate a new OpenGL texture object.")
             return 0
         }
 
@@ -64,7 +63,7 @@ object TextureHelper {
         glBindTexture(GL_TEXTURE_2D, textureObjectIdBuf[0])
 
         //绑定纹理单元与sampler
-        glBindSampler(textureObjectIdBuf[0], TextureHelper.samplers[0])
+        glBindSampler(textureObjectIdBuf[0], samplers[0])
 
         val byteBuf = ByteBuffer.allocate(bitmap.width * bitmap.height * 4)
         bitmap.copyPixelsToBuffer(byteBuf)
@@ -115,13 +114,13 @@ object TextureHelper {
     ): Int {
         glGenTextures(1, textureObjectIdBuf, 0)
         if (textureObjectIdBuf[0] == 0) {
-            Timber.e("$TAG: Could not generate a new OpenGL texture object.")
+            LOG.error("Could not generate a new OpenGL texture object.")
             return 0
         }
 
         for (i in 0..5) {
             if (cubeBitmaps[i] == null) {
-                Timber.w("$TAG: No.$i Cube Bitmap is null.")
+                LOG.warn("No.$i Cube Bitmap is null.")
                 glDeleteTextures(1, textureObjectIdBuf, 0)
                 return 0
             }
