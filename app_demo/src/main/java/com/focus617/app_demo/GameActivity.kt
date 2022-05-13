@@ -28,7 +28,8 @@ class GameActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         Timber.i("On Create Method Calling Native Library")
-        NativeLib.init()
+        val nativeLib = NativeLib()
+        Timber.i(nativeLib.stringFromJNI())
 
         mWindowManager = windowManager
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager

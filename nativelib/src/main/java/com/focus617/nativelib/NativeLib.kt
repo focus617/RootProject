@@ -10,7 +10,7 @@ class NativeLib {
 
     companion object {
         // Used to load the 'nativelib' library on application startup.
-        fun init() {
+        init {
             System.loadLibrary("nativelib")
         }
     }
