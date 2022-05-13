@@ -2,11 +2,14 @@ package com.focus617.app_demo.engine
 
 import android.opengl.GLES31.*
 import android.opengl.GLES32
+import android.opengl.GLSurfaceView
+import com.focus617.app_demo.egl.ConfigChooser
+import com.focus617.app_demo.egl.ContextFactory
 import com.focus617.core.engine.renderer.IfGraphicsContext
 import com.focus617.core.platform.base.BaseEntity
 
 
-class XGLContext(private val windowHandle: AndroidWindow) : BaseEntity(), IfGraphicsContext {
+class XGLContext(private val windowHandle: GLSurfaceView) : BaseEntity(), IfGraphicsContext {
     var isES3Supported: Boolean = false
 
     override fun init() = with(windowHandle) {
@@ -14,8 +17,11 @@ class XGLContext(private val windowHandle: AndroidWindow) : BaseEntity(), IfGrap
         if (isES3Supported) {
             // Request an OpenGL ES 3.0 compatible context.
             setEGLContextClientVersion(3)
-            setEGLConfigChooser(MultiSampleConfigChooser())
-            //setEGLConfigChooser(8,8,8,8,16,8)
+
+//            setEGLConfigChooser(MultiSampleConfigChooser())
+            setEGLContextFactory(ContextFactory())
+            setEGLConfigChooser(ConfigChooser())
+
         } else {
             // Request an OpenGL ES 2.0 compatible context.
             setEGLContextClientVersion(2)

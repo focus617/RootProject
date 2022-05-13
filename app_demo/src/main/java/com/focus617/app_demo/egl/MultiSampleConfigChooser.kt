@@ -1,6 +1,6 @@
-package com.focus617.app_demo.engine
+package com.focus617.app_demo.egl
 
-import android.opengl.GLSurfaceView.EGLConfigChooser
+import android.opengl.GLSurfaceView
 import timber.log.Timber
 import javax.microedition.khronos.egl.EGL10
 import javax.microedition.khronos.egl.EGLConfig
@@ -24,9 +24,9 @@ import javax.microedition.khronos.egl.EGLDisplay
  * measure performance carefully and decide if the vastly improved visual
  * quality is worth the cost.
  */
-class MultiSampleConfigChooser : EGLConfigChooser {
+class MultiSampleConfigChooser : GLSurfaceView.EGLConfigChooser {
 
-    private var mValue: IntArray = IntArray(1)
+    private var numConfig: IntArray = IntArray(1)
     private var mUsesCoverageAa = false
 
     override fun chooseConfig(egl: EGL10, display: EGLDisplay): EGLConfig {
@@ -49,11 +49,11 @@ class MultiSampleConfigChooser : EGLConfigChooser {
                 configSpec,
                 null,
                 0,
-                mValue
+                numConfig
             )
         ) { "eglChooseConfig failed" }
 
-        var numConfigs = mValue[0]
+        var numConfigs = numConfig[0]
         if (numConfigs <= 0) {
             Timber.v("%s%s%s",
                 "No normal multisampling config was found. ",
@@ -80,11 +80,11 @@ class MultiSampleConfigChooser : EGLConfigChooser {
                     configSpec,
                     null,
                     0,
-                    mValue
+                    numConfig
                 )
             ) { "2nd eglChooseConfig failed" }
 
-            numConfigs = mValue[0]
+            numConfigs = numConfig[0]
             if (numConfigs <= 0) {
                 Timber.v("Could not find a multisample config. Trying without multisampling...")
 
@@ -100,10 +100,10 @@ class MultiSampleConfigChooser : EGLConfigChooser {
                         configSpec,
                         null,
                         0,
-                        mValue
+                        numConfig
                     )
                 ) { "3rd eglChooseConfig failed" }
-                numConfigs = mValue[0]
+                numConfigs = numConfig[0]
                 require(numConfigs > 0) { "No configs match configSpec" }
             } else {
                 mUsesCoverageAa = true
@@ -113,7 +113,7 @@ class MultiSampleConfigChooser : EGLConfigChooser {
         // Get all matching configurations.
         val configs = arrayOfNulls<EGLConfig>(numConfigs)
         require(
-            egl.eglChooseConfig(display, configSpec, configs, numConfigs, mValue)
+            egl.eglChooseConfig(display, configSpec, configs, numConfigs, numConfig)
         ) { "data eglChooseConfig failed" }
 
         // CAUTION! eglChooseConfigs returns configs with higher bit depth
@@ -135,17 +135,15 @@ class MultiSampleConfigChooser : EGLConfigChooser {
     }
 
     private fun findConfigAttrib(
-        egl: EGL10, display: EGLDisplay,
-        config: EGLConfig?, attribute: Int, defaultValue: Int
+        egl: EGL10, display: EGLDisplay, config: EGLConfig?, attribute: Int, defaultValue: Int
     ): Int {
-        return if (egl.eglGetConfigAttrib(display, config, attribute, mValue)) {
-            mValue[0]
+        return if (egl.eglGetConfigAttrib(display, config, attribute, numConfig)) {
+            numConfig[0]
         } else defaultValue
     }
 
     fun usesCoverageAa(): Boolean {
         return mUsesCoverageAa
     }
-
 
 }

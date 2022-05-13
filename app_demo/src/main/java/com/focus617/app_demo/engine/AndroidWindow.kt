@@ -73,6 +73,16 @@ class AndroidWindow private constructor(
             var callback: EventHandler<Event>? = null
         }
 
+        // Surface format: RGBA8888
+        var redSize = 8
+        var greenSize = 8
+        var blueSize = 8
+        var alphaSize = 8
+        var depthSize = 16
+        var sampleSize = 4        // enabling Anti Aliasing
+        var stencilSize = 0
+        var value = IntArray(1)
+
         // 保证Window的单例
         private var instance: AndroidWindow? = null
 

@@ -58,6 +58,7 @@ android {
 dependencies {
     api project(':myAndroidLibrary')
     api project(':core')
+    implementation project(path: ':nativelib')
 
     // Basic
     implementation(
