@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/login" />
             <option value="$PROJECT_DIR$/myAndroidLibrary" />
             <option value="$PROJECT_DIR$/myLib" />
+            <option value="$PROJECT_DIR$/nativelib" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

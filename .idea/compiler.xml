@@ -17,6 +17,7 @@
       <module name="XApp.app_xgame" target="11" />
       <module name="XApp.login" target="11" />
       <module name="XApp.myAndroidLibrary" target="11" />
+      <module name="XApp.nativelib" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
