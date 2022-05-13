@@ -168,6 +168,9 @@ class XGLShader constructor(
         var name: String = ""
         val shaderSources = HashMap<ShaderType, String>()
 
+        /**
+         * Helper function that compiles the single shaders with both vertex and fragment shaders
+         */
         fun parseShaderSource(context: Context, filePath: String) {
             val typeToken = "#type"
 
@@ -217,8 +220,8 @@ class XGLShader constructor(
         }
 
         /**
-         * Helper function that compiles the shaders, links and validates the
-         * program, returning the program ID.
+         * Helper function that compiles the shaders, links and validates the program,
+         * returning the program ID.
          */
         fun buildProgram(
             vertexShaderSource: String,
