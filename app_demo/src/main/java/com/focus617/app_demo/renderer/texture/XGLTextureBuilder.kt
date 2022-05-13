@@ -1,6 +1,8 @@
 package com.focus617.app_demo.renderer.texture
 
 import android.content.Context
+import android.opengl.GLES31.GL_TEXTURE_2D
+import android.opengl.GLES31.GL_TEXTURE_2D_MULTISAMPLE
 import com.focus617.core.engine.renderer.RendererAPI
 import com.focus617.mylib.logging.WithLogging
 
@@ -37,4 +39,8 @@ object XGLTextureBuilder : WithLogging() {
             RendererAPI.API.OpenGLES -> XGLTexture2D(width, height)
         }
     }
+
+    fun textureTarget(multiSampled: Boolean) =
+        if (multiSampled) GL_TEXTURE_2D_MULTISAMPLE else GL_TEXTURE_2D
+
 }

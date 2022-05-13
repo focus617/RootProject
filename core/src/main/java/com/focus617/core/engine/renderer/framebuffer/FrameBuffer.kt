@@ -4,8 +4,7 @@ import com.focus617.core.platform.base.BaseEntity
 import java.io.Closeable
 
 abstract class FrameBuffer(
-    protected var mWidth: Int = 1024,
-    protected var mHeight: Int = 2048
+    protected val mSpecification: FrameBufferSpecification
 ): BaseEntity(), Closeable {
     // 后续的引擎还会添加RenderPass的概念
     // RenderPass在OpenGL里更像是一个抽象的概念，但在Vulkan里却是一个实实在在存在的类，
@@ -16,5 +15,5 @@ abstract class FrameBuffer(
     abstract fun bind()
     abstract fun unbind()
     abstract fun resizeColorAttachment(width: Int, height: Int)
-    abstract fun getColorAttachmentTextureId(): Int
+    abstract fun getColorAttachmentTextureId(index: Int): Int
 }

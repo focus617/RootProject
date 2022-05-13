@@ -3,10 +3,15 @@ package com.focus617.app_demo.engine.d3
 import android.opengl.GLSurfaceView
 import com.focus617.app_demo.engine.XGLContext
 import com.focus617.app_demo.renderer.framebuffer.XGLFrameBuffer
+import com.focus617.app_demo.renderer.framebuffer.XGLFrameBufferBuilder
 import com.focus617.app_demo.renderer.framebuffer.submitWithOutlining
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.XRenderer
+import com.focus617.core.engine.renderer.framebuffer.FrameBufferAttachmentSpecification
+import com.focus617.core.engine.renderer.framebuffer.FrameBufferSpecification
+import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureFormat
+import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureSpecification
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.VertexArray
 import com.focus617.core.engine.resource.baseDataType.Color
@@ -34,7 +39,16 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         // ES3.2 doesn't support DebugMessageCallback
         //XGLContext.initDebug()
 
-        mFrameBuffer = XGLFrameBuffer()
+        val fbSpec = FrameBufferSpecification()
+        fbSpec.attachment = FrameBufferAttachmentSpecification(
+            listOf(
+                FrameBufferTextureSpecification(FrameBufferTextureFormat.RGBA8),
+                FrameBufferTextureSpecification(FrameBufferTextureFormat.DEPTH24STENCIL8)
+            )
+        )
+        fbSpec.mWidth = 1080
+        fbSpec.mHeight = 2220
+        mFrameBuffer = XGLFrameBufferBuilder.createFrameBuffer(fbSpec) as XGLFrameBuffer
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {

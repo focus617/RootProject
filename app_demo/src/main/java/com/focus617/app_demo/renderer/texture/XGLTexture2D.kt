@@ -90,7 +90,6 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         mHandle = mHandleBuf[0]
         // Bind to the texture in OpenGL
         glBindTexture(GL_TEXTURE_2D, mHandle)
-//        glEnable(GL_MULTISAMPLE)
 
         //绑定纹理单元与sampler
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
