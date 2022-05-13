@@ -1,4 +1,4 @@
-package com.focus617.platform.helper
+package com.focus617.app_demo.renderer.texture
 
 import android.graphics.Bitmap
 import android.opengl.GLES31.*
@@ -6,7 +6,7 @@ import android.opengl.GLUtils
 import timber.log.Timber
 import java.nio.ByteBuffer
 
-object TextureHelper {
+object XGLTextureHelper {
     val TAG = "TextureHelper"
 
     var samplers = IntArray(1) //存放Samplers id的成员变量数组
@@ -64,7 +64,7 @@ object TextureHelper {
         glBindTexture(GL_TEXTURE_2D, textureObjectIdBuf[0])
 
         //绑定纹理单元与sampler
-        glBindSampler(textureObjectIdBuf[0], TextureHelper.samplers[0])
+        glBindSampler(textureObjectIdBuf[0], samplers[0])
 
         val byteBuf = ByteBuffer.allocate(bitmap.width * bitmap.height * 4)
         bitmap.copyPixelsToBuffer(byteBuf)

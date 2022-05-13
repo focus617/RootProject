@@ -5,7 +5,6 @@ import android.opengl.GLES31.*
 import com.focus617.core.engine.renderer.framebuffer.FrameBuffer
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.platform.helper.BitmapHelper
-import com.focus617.platform.helper.TextureHelper
 import java.nio.Buffer
 
 /**
@@ -33,7 +32,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         bitmap.apply {
             mWidth = bitmap.width
             mHeight = bitmap.height
-            mHandle = TextureHelper.loadImageIntoTexture(mHandleBuf, bitmap)
+            mHandle = XGLTextureHelper.loadImageIntoTexture(mHandleBuf, bitmap)
         }
         // Recycle the bitmap, since its data has been loaded into OpenGL.
         bitmap.recycle()
@@ -45,7 +44,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         bitmap.apply {
             mWidth = bitmap.width
             mHeight = bitmap.height
-            mHandle = TextureHelper.loadImageIntoTexture(mHandleBuf, bitmap)
+            mHandle = XGLTextureHelper.loadImageIntoTexture(mHandleBuf, bitmap)
         }
         // Recycle the bitmap, since its data has been loaded into OpenGL.
         bitmap.recycle()
@@ -72,7 +71,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         glTexStorage2D(GL_TEXTURE_2D, 1, mInternalFormat, mWidth, mHeight)
 
         //绑定纹理单元与sampler
-        glBindSampler(mHandle, TextureHelper.samplers[0])
+        glBindSampler(mHandle, XGLTextureHelper.samplers[0])
 
         // Unbind from the texture.
         glBindTexture(GL_TEXTURE_2D, 0)

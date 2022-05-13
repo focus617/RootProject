@@ -71,15 +71,15 @@ object XGLShaderBuilder : ShaderBuilder() {
                 null
             }
             RendererAPI.API.OpenGLES -> {
-                XGLShader.parseShaderSource(context, filePath)
+                XGLShaderHelper.parseShaderSource(context, filePath)
 
                 val vertexShaderSrc =
-                    XGLShader.shaderSources[XGLShader.Companion.ShaderType.VERTEX_SHADER]!!
+                    XGLShaderHelper.shaderSources[XGLShaderHelper.ShaderType.VERTEX_SHADER]!!
                 val fragmentShaderSrc =
-                    XGLShader.shaderSources[XGLShader.Companion.ShaderType.FRAGMENT_SHADER]!!
+                    XGLShaderHelper.shaderSources[XGLShaderHelper.ShaderType.FRAGMENT_SHADER]!!
 
                 return XGLShader(
-                    XGLShader.name,
+                    filePath,
                     vertexShaderSrc,
                     fragmentShaderSrc
                 )
