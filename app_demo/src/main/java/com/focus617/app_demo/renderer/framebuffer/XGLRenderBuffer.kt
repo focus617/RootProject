@@ -1,13 +1,14 @@
 package com.focus617.app_demo.renderer.framebuffer
 
 import android.opengl.GLES31.*
+import com.focus617.core.engine.renderer.framebuffer.IfFrameBufferAttachment
 import com.focus617.core.platform.base.BaseEntity
 import java.io.Closeable
 import java.nio.IntBuffer
 
-class XGLRenderBuffer private constructor() : BaseEntity(), Closeable {
+class XGLRenderBuffer private constructor() : BaseEntity(), Closeable, IfFrameBufferAttachment {
     private var mRenderBuf: IntBuffer = IntBuffer.allocate(1)
-    var mHandle: Int = -1   // RenderBuffer的Handle
+    override var mHandle: Int = -1   // RenderBuffer的Handle
 
     // 采用GL_DEPTH24_STENCIL8作为内部格式，它同时代表24位的深度和8位的模板缓冲
     constructor(width: Int, height: Int, format: Int) : this() {
@@ -55,13 +56,13 @@ class XGLRenderBuffer private constructor() : BaseEntity(), Closeable {
         glDeleteRenderbuffers(1, mRenderBuf)
     }
 
-    fun bind() {
+    override fun bind() {
         glBindRenderbuffer(GL_RENDERBUFFER, mHandle)
         // 在正常绘制时确保关闭模板缓冲的写入
         glStencilMask(0x00)
     }
 
-    fun unbind() {
+    override fun unbind() {
         glBindRenderbuffer(GL_RENDERBUFFER, 0)
     }
 

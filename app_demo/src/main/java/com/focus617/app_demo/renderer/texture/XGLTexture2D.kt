@@ -2,7 +2,6 @@ package com.focus617.app_demo.renderer.texture
 
 import android.content.Context
 import android.opengl.GLES31.*
-import com.focus617.core.engine.renderer.framebuffer.FrameBuffer
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.platform.helper.BitmapHelper
 import java.nio.Buffer
@@ -73,41 +72,6 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         //绑定纹理单元与sampler
         glBindSampler(mHandle, XGLTextureHelper.samplers[0])
 
-        // Unbind from the texture.
-        glBindTexture(GL_TEXTURE_2D, 0)
-    }
-
-    // 创建Texture2D，作为FrameBuffer的output image
-    constructor(framebuffer: FrameBuffer, width: Int, height: Int) : this("FrameBuffer") {
-        mWidth = width
-        mHeight = height
-
-        glGenTextures(1, mHandleBuf, 0)
-        if (mHandleBuf[0] == 0) {
-            LOG.error("Could not generate a new OpenGL texture object.")
-        }
-        mHandle = mHandleBuf[0]
-        // Bind to the texture in OpenGL
-        glBindTexture(GL_TEXTURE_2D, mHandle)
-
-        //绑定纹理单元与sampler
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-
-        // Allocate texture storage
-        glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            GL_RGBA,
-            width,
-            height,
-            0,
-            GL_RGBA,
-            GL_UNSIGNED_BYTE,
-            null
-        )
         // Unbind from the texture.
         glBindTexture(GL_TEXTURE_2D, 0)
     }

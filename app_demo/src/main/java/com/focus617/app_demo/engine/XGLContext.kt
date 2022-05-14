@@ -25,7 +25,8 @@ class XGLContext(private val windowHandle: GLSurfaceView) : BaseEntity(), IfGrap
         } else {
             // Request an OpenGL ES 2.0 compatible context.
             setEGLContextClientVersion(2)
-            setEGLConfigChooser(true)
+            setEGLContextFactory(ContextFactory())
+            setEGLConfigChooser(ConfigChooser())
         }
 
         requestFocus()                   //获取焦点
