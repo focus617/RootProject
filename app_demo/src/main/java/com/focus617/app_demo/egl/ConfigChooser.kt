@@ -9,7 +9,6 @@ import javax.microedition.khronos.egl.EGLDisplay
 
 
 class ConfigChooser : GLSurfaceView.EGLConfigChooser {
-    private val numConfig = IntArray(1)
 
     override fun chooseConfig(egl: EGL10, display: EGLDisplay): EGLConfig? {
         val EGL_OPENGL_ES2_BIT = 4
@@ -25,6 +24,7 @@ class ConfigChooser : GLSurfaceView.EGLConfigChooser {
             EGL10.EGL_STENCIL_SIZE, AndroidWindow.stencilSize,
             EGL10.EGL_NONE
         )
+        val numConfig = IntArray(1)
         require(
             egl.eglChooseConfig(
                 display, configAttributes, null, 0, numConfig

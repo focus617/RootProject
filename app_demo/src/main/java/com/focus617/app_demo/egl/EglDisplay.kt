@@ -18,7 +18,7 @@ class ContextFactory : EGLContextFactory {
 
         // EGL_CONTEXT_CLIENT_VERSION set the version of OpenGL ES
         // EGL10.EGL_NONE is used to signify the end of the list.
-        val attribList = intArrayOf(EGL_CONTEXT_CLIENT_VERSION, 2, EGL10.EGL_NONE)
+        val attribList = intArrayOf(EGL_CONTEXT_CLIENT_VERSION, 3, EGL10.EGL_NONE)
 
         // An EGLContext is a data structure that is used internally by OpenGL.
         val context: EGLContext =
