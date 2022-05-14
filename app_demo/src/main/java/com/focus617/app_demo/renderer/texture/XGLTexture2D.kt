@@ -98,26 +98,8 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
     }
 
     override fun bind(slot: Int) {
-        val textureSlot = when (slot) {
-            0 -> GL_TEXTURE0
-            1 -> GL_TEXTURE1
-            2 -> GL_TEXTURE2
-            3 -> GL_TEXTURE3
-            4 -> GL_TEXTURE4
-            5 -> GL_TEXTURE5
-            6 -> GL_TEXTURE6
-            7 -> GL_TEXTURE7
-            8 -> GL_TEXTURE8
-            9 -> GL_TEXTURE9
-            10 -> GL_TEXTURE10
-            11 -> GL_TEXTURE11
-            12 -> GL_TEXTURE12
-            13 -> GL_TEXTURE13
-            14 -> GL_TEXTURE14
-            else -> GL_TEXTURE15
-        }
         // Set active texture unit
-        glActiveTexture(textureSlot)
+        glActiveTexture(XGLTextureSlots.getTextureUnit(slot))
 
         // Bind this texture with above active texture unit
         glBindTexture(GL_TEXTURE_2D, mHandle)

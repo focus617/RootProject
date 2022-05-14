@@ -1,6 +1,7 @@
 package com.focus617.app_demo.renderer.framebuffer
 
 import android.opengl.GLES31.*
+import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureFormat
 import com.focus617.core.engine.renderer.framebuffer.IfFrameBufferAttachment
 import com.focus617.core.engine.renderer.texture.Texture2D
@@ -11,6 +12,7 @@ class XGLTexture2DBuffer private constructor() :
     Texture2D("FrameBufferAttachment"), Closeable, IfFrameBufferAttachment {
     private val mHandleBuf = IntArray(1)
     override var mHandle: Int = -1
+    var screenTextureIndex: Int = -1    // 在TextureSlots内的Index
 
     override var mWidth: Int = 0
     override var mHeight: Int = 0
@@ -30,7 +32,11 @@ class XGLTexture2DBuffer private constructor() :
 
         when (format) {
             // 作为FrameBuffer的Color Attachment
-            FrameBufferTextureFormat.RGBA8 -> createColorStorage(width, height)
+            FrameBufferTextureFormat.RGBA8 -> {
+                createColorStorage(width, height)
+                // 注册到TextureSlots, 以便ActiveTexture
+                screenTextureIndex = XGLTextureSlots.getId(this)
+            }
             // 作为FrameBuffer的Color Attachment
             FrameBufferTextureFormat.DEPTH_COMPONENT32F -> createDepthStorage(width, height)
             else -> {
@@ -66,29 +72,12 @@ class XGLTexture2DBuffer private constructor() :
     }
 
     override fun bind(slot: Int) {
-        val textureSlot = when (slot) {
-            0 -> GL_TEXTURE0
-            1 -> GL_TEXTURE1
-            2 -> GL_TEXTURE2
-            3 -> GL_TEXTURE3
-            4 -> GL_TEXTURE4
-            5 -> GL_TEXTURE5
-            6 -> GL_TEXTURE6
-            7 -> GL_TEXTURE7
-            8 -> GL_TEXTURE8
-            9 -> GL_TEXTURE9
-            10 -> GL_TEXTURE10
-            11 -> GL_TEXTURE11
-            12 -> GL_TEXTURE12
-            13 -> GL_TEXTURE13
-            14 -> GL_TEXTURE14
-            else -> GL_TEXTURE15
+        if(screenTextureIndex != -1) {
+            // Set active texture unit
+            glActiveTexture(XGLTextureSlots.getTextureUnit(screenTextureIndex))
+            // Bind this texture with above active texture unit
+            glBindTexture(GL_TEXTURE_2D, mHandle)
         }
-        // Set active texture unit
-        glActiveTexture(textureSlot)
-
-        // Bind this texture with above active texture unit
-        glBindTexture(GL_TEXTURE_2D, mHandle)
     }
 
     private fun createColorStorage(width: Int, height: Int) {

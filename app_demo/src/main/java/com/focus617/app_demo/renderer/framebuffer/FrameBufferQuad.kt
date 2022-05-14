@@ -16,7 +16,7 @@ class FrameBufferQuad : DrawableObject() {
 
     override fun submit(shader: Shader) {}
 
-    fun draw() {
+    fun draw(screenTextureIndex: Int) {
         shader.bind()
         shader.setInt(U_TEXTURE, screenTextureIndex)
 
@@ -57,16 +57,15 @@ class FrameBufferQuad : DrawableObject() {
     }
 
     companion object {
-        val SHADER_PATH = "framebuffer"
-        val SHADER_FILE = "shader.glsl"
-        val SHADER_OUTLINING_FILE = "shaderSingleColor.glsl"
+        const val SHADER_PATH = "framebuffer"
+        const val SHADER_FILE = "shader.glsl"
+        const val SHADER_OUTLINING_FILE = "shaderSingleColor.glsl"
 
-        val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
-        val ShaderOutliningFilePath: String = "$SHADER_PATH/$SHADER_OUTLINING_FILE"
+        const val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
+        const val ShaderOutliningFilePath: String = "$SHADER_PATH/$SHADER_OUTLINING_FILE"
 
         lateinit var shader: Shader
         lateinit var shaderOutlining: Shader
-        var screenTextureIndex: Int = -1    // 在TextureSlots内的Index
 
         const val U_TEXTURE = "u_screenTexture"
     }
