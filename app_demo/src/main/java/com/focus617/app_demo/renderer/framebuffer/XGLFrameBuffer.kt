@@ -54,16 +54,14 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
 
         // Make FrameBuffer Active
         glBindFramebuffer(GL_FRAMEBUFFER, mHandle)
-        // Attach the Texture2D to FBO color attachment point
-        mColorAttachments.forEach{
-            glFramebufferTexture2D(
-                GL_DRAW_FRAMEBUFFER,
-                GL_COLOR_ATTACHMENT0,
-                GL_TEXTURE_2D,
-                it.mHandle,
-                0
-            )
-        }
+        // Attach the first Texture2D to FBO color attachment point
+        glFramebufferTexture2D(
+            GL_DRAW_FRAMEBUFFER,
+            GL_COLOR_ATTACHMENT0,
+            GL_TEXTURE_2D,
+            mColorAttachments[0].mHandle,
+            0
+        )
 
         // Attach the RenderBuffer to FBO Stencil and Depth attachment point
         mRenderBufferAttachment?.apply {
