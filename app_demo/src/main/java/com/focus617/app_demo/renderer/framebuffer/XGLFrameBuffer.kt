@@ -28,7 +28,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         LOG.info("XGLFrameBuffer created.")
 
         for (format in specification.attachment.attachments) {
-            if (!isDepthFormat(format.textureFormat))
+            if (!FrameBufferTextureFormat.isDepthFormat(format.textureFormat))
                 mColorAttachmentSpecifications.add(format)
             else
                 mDepthAttachmentSpecification = format
@@ -113,7 +113,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     override fun close() {
         glDeleteFramebuffers(1, mFrameBuf)
         mRenderBufferAttachment.close()
-        mColorAttachments.forEach() { it.close() }
+        mColorAttachments.forEach { it.close() }
     }
 
     override fun bind() {
@@ -156,11 +156,11 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     companion object {
         const val sMaxFrameBufferSize = 8192
 
-        fun isDepthFormat(format: FrameBufferTextureFormat): Boolean =
-            when (format) {
-                FrameBufferTextureFormat.DEPTH24STENCIL8 -> true
-                else -> false
-            }
+//        fun isDepthFormat(format: FrameBufferTextureFormat): Boolean =
+//            when (format) {
+//                FrameBufferTextureFormat.DEPTH24STENCIL8 -> true
+//                else -> false
+//            }
 
 
     }

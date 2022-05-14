@@ -77,7 +77,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         glBindTexture(GL_TEXTURE_2D, 0)
     }
 
-    // 创建Texture2D，作为FrameBuffer的output image
+    // 创建Texture2D，作为FrameBuffer的Color Attachment
     constructor(framebuffer: FrameBuffer, width: Int, height: Int) : this("FrameBuffer") {
         mWidth = width
         mHeight = height
@@ -100,7 +100,7 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         glTexImage2D(
             GL_TEXTURE_2D,
             0,
-            GL_RGBA,
+            GL_RGBA8,
             width,
             height,
             0,
