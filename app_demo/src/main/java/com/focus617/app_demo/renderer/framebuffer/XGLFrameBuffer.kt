@@ -2,7 +2,6 @@ package com.focus617.app_demo.renderer.framebuffer
 
 import android.opengl.GLES31.*
 import com.focus617.app_demo.engine.XGLContext
-import com.focus617.app_demo.renderer.texture.XGLTexture2D
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.renderer.framebuffer.FrameBuffer
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferSpecification
@@ -20,7 +19,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     private var mDepthAttachmentSpecification =
         FrameBufferTextureSpecification(FrameBufferTextureFormat.None)
 
-    private var mColorAttachments = mutableListOf<XGLTexture2D>()  // ColorTextureBuffers
+    private var mColorAttachments = mutableListOf<XGLTexture2DBuffer>()  // ColorTextureBuffers
     private lateinit var mRenderBufferAttachment: XGLRenderBuffer  // RenderBuffer
     private lateinit var mQuad: FrameBufferQuad
 
@@ -51,7 +50,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
                         // Generate Texture2D for FrameBuffer's Color Attachment
                         // 把纹理的维度设置为屏幕大小：传入width和height，只分配相应的内存，而不填充
                         val colorTextureBuf =
-                            XGLTexture2D(this, mSpecification.mWidth, mSpecification.mHeight)
+                            XGLTexture2DBuffer(this, mSpecification.mWidth, mSpecification.mHeight)
                         mColorAttachments.add(colorTextureBuf)
 
                         // 注册到TextureSlots, 以便ActiveTexture
@@ -73,6 +72,14 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
                     mRenderBufferAttachment =
                         XGLRenderBuffer(mSpecification.mWidth, mSpecification.mHeight, GL_DEPTH24_STENCIL8)
                 }
+
+                FrameBufferTextureFormat.DEPTH_COMPONENT32F -> {
+                    // Generate Texture2D for FrameBuffer's Depth Attachment
+                    val mRenderBufferAttachment =
+                        XGLTexture2DBuffer(this, mSpecification.mWidth, mSpecification.mHeight)
+
+                }
+
                 else -> {
                 }
             }
