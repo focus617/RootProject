@@ -57,7 +57,7 @@ class TextTexture2D(val text: String, val fontSize: Float) : Texture2D("TextText
         textPaint.setARGB(255, 255, 255, 255)
         // If a hinting is available on the platform you are developing,
         // you should enable it (uncomment the line below).
-        textPaint.hinting = Paint.HINTING_ON;
+//        textPaint.hinting = Paint.HINTING_ON;
         textPaint.isSubpixelText = true
         textPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SCREEN)
 

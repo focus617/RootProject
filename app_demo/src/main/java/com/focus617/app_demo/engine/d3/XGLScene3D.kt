@@ -4,6 +4,7 @@ import android.content.Context
 import com.focus617.app_demo.renderer.framebuffer.FrameBufferQuad
 import com.focus617.app_demo.renderer.shader.XGLShader
 import com.focus617.app_demo.renderer.shader.XGLShaderBuilder
+import com.focus617.app_demo.renderer.texture.TextTexture2D
 import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureCubeMap
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
@@ -98,6 +99,9 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         textureBox?.apply {
             Box.textureIndex = XGLTextureSlots.getId(textureBox)
         }
+
+        val textTexture = TextTexture2D("Hello", 100f)
+//        Box.textureIndex = XGLTextureSlots.getId(textTexture)
     }
 
     private fun initGameObjects() {

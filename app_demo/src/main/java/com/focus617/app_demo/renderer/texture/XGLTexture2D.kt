@@ -2,6 +2,7 @@ package com.focus617.app_demo.renderer.texture
 
 import android.content.Context
 import android.opengl.GLES31.*
+import com.focus617.app_demo.engine.XGLContext
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.platform.helper.BitmapHelper
 import java.nio.Buffer
@@ -33,6 +34,10 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
             mWidth = bitmap.width
             mHeight = bitmap.height
             mHandle = XGLTextureHelper.loadImageIntoTexture(mHandleBuf, bitmap)
+
+            //绑定纹理单元与sampler
+            glBindSampler(mHandle, XGLTextureHelper.samplers[0])
+            XGLContext.checkGLError("glBindSampler")
         }
         // Recycle the bitmap, since its data has been loaded into OpenGL.
         bitmap.recycle()
@@ -45,6 +50,10 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
             mWidth = bitmap.width
             mHeight = bitmap.height
             mHandle = XGLTextureHelper.loadImageIntoTexture(mHandleBuf, bitmap)
+
+            //绑定纹理单元与sampler
+            glBindSampler(mHandle, XGLTextureHelper.samplers[0])
+            XGLContext.checkGLError("glBindSampler")
         }
         // Recycle the bitmap, since its data has been loaded into OpenGL.
         bitmap.recycle()
