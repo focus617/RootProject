@@ -8,7 +8,7 @@ import java.nio.Buffer
 class TextTexture2D(val text: String, val fontSize: Float) : Texture2D("TextTexture$text") {
     private val mHandleBuf = IntArray(1)
     override var mHandle: Int = -1
-    var screenTextureIndex: Int = -1    // 在TextureSlots内的Index
+    var textureIndex: Int = -1    // 在TextureSlots内的Index
 
     override var mWidth: Int = 0
     override var mHeight: Int = 0
@@ -21,12 +21,15 @@ class TextTexture2D(val text: String, val fontSize: Float) : Texture2D("TextText
         mHandle = XGLTextureHelper.loadImageIntoTexture(mHandleBuf, textBitmap)
         // Recycle the bitmap, since its data has been loaded into OpenGL.
         textBitmap.recycle()
+
+        // 注册到TextureSlots, 获得TextureUnit Index, 以便ActiveTexture
+        textureIndex = XGLTextureSlots.getId(this)
     }
 
     override fun bind(slot: Int) {
-        if (screenTextureIndex != -1) {
+        if (textureIndex != -1) {
             // Set active texture unit
-            glActiveTexture(XGLTextureSlots.getTextureUnit(screenTextureIndex))
+            glActiveTexture(XGLTextureSlots.getTextureUnit(textureIndex))
             // Bind this texture with above active texture unit
             glBindTexture(GL_TEXTURE_2D, mHandle)
         }
@@ -66,7 +69,6 @@ class TextTexture2D(val text: String, val fontSize: Float) : Texture2D("TextText
         // Creates a new mutable bitmap, with 128px of width and height
         val bitmapWidth = (realTextWidth + 2.0f).toInt()
         val bitmapHeight = aFontSize.toInt() + 2
-        LOG.info("bmpSize[$bitmapWidth, $bitmapHeight]")
 
         val textBitmap: Bitmap =
             Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888)
@@ -80,6 +82,7 @@ class TextTexture2D(val text: String, val fontSize: Float) : Texture2D("TextText
         // The base_line_position may vary from one font to another
         // but it usually is equal to 75% of font size (height).
         bitmapCanvas.drawText(text, 1f, 1.0f + aFontSize * 0.75f, textPaint)
+        LOG.info("build textTexture, text=$text, size=($bitmapWidth, $bitmapHeight)")
 
         return textBitmap
     }

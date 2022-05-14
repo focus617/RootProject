@@ -17,7 +17,7 @@ class Sandbox3D(context: Context) : Engine(), Closeable {
     init {
         pushLayer(GamePlayerLayer("GamePlayerLayer", scene as XGLScene3D))
         pushLayer(TerrainLayer("TerrainLayer", scene as XGLScene3D))
-        //pushOverLayer(Layer2D("ExampleOverlay"))
+        pushLayer(OverLayer2D("ExampleOverlay"))
     }
 
     fun getLayerStack(): LayerStack = mLayerStack

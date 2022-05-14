@@ -4,7 +4,7 @@ import android.content.Context
 import com.focus617.app_demo.renderer.framebuffer.FrameBufferQuad
 import com.focus617.app_demo.renderer.shader.XGLShader
 import com.focus617.app_demo.renderer.shader.XGLShaderBuilder
-import com.focus617.app_demo.renderer.texture.TextTexture2D
+import com.focus617.app_demo.renderer.texture.TextQuad
 import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureCubeMap
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
@@ -34,13 +34,11 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
             context,
             FrameBufferQuad.ShaderFilePath
         ) as XGLShader
-        mShaderLibrary.add(FrameBufferQuad.shader)
 
         FrameBufferQuad.shaderOutlining = XGLShaderBuilder.createShader(
             context,
             FrameBufferQuad.ShaderOutliningFilePath
         ) as XGLShader
-        mShaderLibrary.add(FrameBufferQuad.shaderOutlining)
 
         var shader = XGLShaderBuilder.createShader(
             context,
@@ -65,6 +63,12 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
             Box.ShaderFilePath
         ) as XGLShader
         mShaderLibrary.add(shader)
+
+        TextQuad.shader = XGLShaderBuilder.createShader(
+            context,
+            TextQuad.ShaderFilePath
+        ) as XGLShader
+        mShaderLibrary.add(TextQuad.shader)
     }
 
     private fun initTexture() {
@@ -85,23 +89,9 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
             Heightmap.textureIndexStone = XGLTextureSlots.getId(textureStone)
         }
 
-        val textureEarthDay = XGLTextureBuilder.createTexture(context, Earth.DayTextureFilePath)
-        textureEarthDay?.apply {
-            Earth.textureIndexDay = XGLTextureSlots.getId(textureEarthDay)
-        }
+        Box.initTexture(context)
 
-        val textureEarthNight = XGLTextureBuilder.createTexture(context, Earth.NightTextureFilePath)
-        textureEarthNight?.apply {
-            Earth.textureIndexNight = XGLTextureSlots.getId(textureEarthNight)
-        }
-
-        val textureBox = XGLTextureBuilder.createTexture(context, Box.TextureFilePath)
-        textureBox?.apply {
-            Box.textureIndex = XGLTextureSlots.getId(textureBox)
-        }
-
-        val textTexture = TextTexture2D("Hello", 100f)
-//        Box.textureIndex = XGLTextureSlots.getId(textTexture)
+        TextQuad.initTexture("Hello", 80f)
     }
 
     private fun initGameObjects() {
