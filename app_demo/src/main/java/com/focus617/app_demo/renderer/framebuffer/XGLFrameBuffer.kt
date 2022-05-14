@@ -41,6 +41,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     private fun invalidate() {
         if (mHandle != -1) this.close()
 
+        XGLContext.checkGLError("FrameBuffer init begin")
         val multiSample: Boolean = mSpecification.samples > 1
         // Attachment
         if (mColorAttachmentSpecifications.size != 0) {
