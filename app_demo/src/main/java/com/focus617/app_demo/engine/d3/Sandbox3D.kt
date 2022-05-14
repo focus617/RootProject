@@ -8,7 +8,6 @@ import com.focus617.core.engine.core.LayerStack
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.scene.Scene
 import com.focus617.core.platform.event.base.EventType
-import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
 import java.io.Closeable
 
 class Sandbox3D(context: Context) : Engine(), Closeable {
@@ -43,15 +42,15 @@ class Sandbox3D(context: Context) : Engine(), Closeable {
 
     // 处理各种触屏事件，例如可能引起相机位置变化的事件
     private fun registerEventHandlers() {
-        eventDispatcher.register(EventType.TouchDrag) { event ->
-            val e: TouchDragEvent = event as TouchDragEvent
-            LOG.info("Engine: ${e.name} from ${e.source} received")
-//                LOG.info("It's type is ${e.eventType}")
-//                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
-//                LOG.info("Current position is (${e.x}, ${e.y})\n")
-            val hasConsumed = scene.mCameraController.onEvent(event)
-            hasConsumed
-        }
+//        eventDispatcher.register(EventType.TouchDrag) { event ->
+//            val e: TouchDragEvent = event as TouchDragEvent
+//            LOG.info("Engine: ${e.name} from ${e.source} received")
+////                LOG.info("It's type is ${e.eventType}")
+////                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
+////                LOG.info("Current position is (${e.x}, ${e.y})\n")
+//            val hasConsumed = scene.mCameraController.onEvent(event)
+//            hasConsumed
+//        }
 
         eventDispatcher.register(EventType.TouchPress) { event ->
             val hasConsumed = scene.mCameraController.onEvent(event)
