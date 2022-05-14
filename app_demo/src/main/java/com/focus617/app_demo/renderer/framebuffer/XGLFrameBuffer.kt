@@ -19,13 +19,12 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     private var mDepthAttachmentSpecification =
         FrameBufferTextureSpecification(FrameBufferTextureFormat.None)
 
-    private var mColorAttachments = mutableListOf<XGLTexture2DBuffer>()  // ColorTextureBuffers
-    private lateinit var mRenderBufferAttachment: XGLRenderBuffer  // RenderBuffer
+    private var mColorAttachments = mutableListOf<XGLTexture2DBuffer>()   // ColorTextureBuffers
+    private var mDepthBufferAttachment: XGLTexture2DBuffer? = null        // DepthBuffer
+    private var mRenderBufferAttachment: XGLRenderBuffer? = null          // RenderBuffer
     private lateinit var mQuad: FrameBufferQuad
 
     init {
-        LOG.info("XGLFrameBuffer created.")
-
         for (format in specification.attachment.attachments) {
             if (!FrameBufferTextureFormat.isDepthFormat(format.textureFormat))
                 mColorAttachmentSpecifications.add(format)
@@ -34,6 +33,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         }
 
         invalidate()
+        LOG.info("XGLFrameBuffer created.")
     }
 
 
@@ -42,48 +42,9 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
 
         XGLContext.checkGLError("FrameBuffer init begin")
         val multiSample: Boolean = mSpecification.samples > 1
-        // Attachment
-        if (mColorAttachmentSpecifications.size != 0) {
-            for (spec in mColorAttachmentSpecifications) {
-                when (spec.textureFormat) {
-                    FrameBufferTextureFormat.RGBA8 -> {
-                        // Generate Texture2D for FrameBuffer's Color Attachment
-                        // 把纹理的维度设置为屏幕大小：传入width和height，只分配相应的内存，而不填充
-                        val colorTextureBuf =
-                            XGLTexture2DBuffer(this, mSpecification.mWidth, mSpecification.mHeight)
-                        mColorAttachments.add(colorTextureBuf)
 
-                        // 注册到TextureSlots, 以便ActiveTexture
-                        FrameBufferQuad.screenTextureIndex = XGLTextureSlots.getId(colorTextureBuf)
-
-                        mQuad = FrameBufferQuad()
-
-                    }
-                    else -> {
-                    }
-                }
-            }
-        }
-
-        if (mDepthAttachmentSpecification.textureFormat != FrameBufferTextureFormat.None) {
-            when (mDepthAttachmentSpecification.textureFormat) {
-                FrameBufferTextureFormat.DEPTH24STENCIL8 -> {
-                    // Generate RBO for FrameBuffer's Stencil and Depth Attachment
-                    mRenderBufferAttachment =
-                        XGLRenderBuffer(mSpecification.mWidth, mSpecification.mHeight, GL_DEPTH24_STENCIL8)
-                }
-
-                FrameBufferTextureFormat.DEPTH_COMPONENT32F -> {
-                    // Generate Texture2D for FrameBuffer's Depth Attachment
-                    val mRenderBufferAttachment =
-                        XGLTexture2DBuffer(this, mSpecification.mWidth, mSpecification.mHeight)
-
-                }
-
-                else -> {
-                }
-            }
-        }
+        initAttachments()
+        XGLContext.checkGLError("FrameBufferAttachment initialized")
 
         // Generate FBO
         glGenFramebuffers(1, mFrameBuf)
@@ -101,13 +62,25 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
             mColorAttachments[0].mHandle,
             0
         )
-        // Attach the Renderbuffer to FBO Stencil and Depth attachment point
-        glFramebufferRenderbuffer(
-            GL_FRAMEBUFFER,
-            GL_DEPTH_STENCIL_ATTACHMENT,
-            GL_RENDERBUFFER,
-            mRenderBufferAttachment.mHandle
-        )
+        // Attach the RenderBuffer to FBO Stencil and Depth attachment point
+        mRenderBufferAttachment?.apply {
+            glFramebufferRenderbuffer(
+                GL_FRAMEBUFFER,
+                GL_DEPTH_STENCIL_ATTACHMENT,
+                GL_RENDERBUFFER,
+                mRenderBufferAttachment!!.mHandle
+            )
+        }
+        // Attach the DepthBuffer to FBO Depth attachment point
+        mDepthBufferAttachment?.apply {
+            glFramebufferRenderbuffer(
+                GL_FRAMEBUFFER,
+                GL_DEPTH_ATTACHMENT,
+                GL_TEXTURE_2D,
+                mDepthBufferAttachment!!.mHandle
+            )
+        }
+
         // check FBO status
         val state: Boolean = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
         check(state) { LOG.warn("Framebuffer is incomplete!") }
@@ -117,9 +90,58 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         XGLContext.checkGLError("FrameBuffer init finish")
     }
 
+    private fun initAttachments() {
+        // Attachment
+        if (mColorAttachmentSpecifications.size != 0) {
+            for (spec in mColorAttachmentSpecifications) {
+                when (spec.textureFormat) {
+                    FrameBufferTextureFormat.RGBA8 -> {
+                        // Generate Texture2D for FrameBuffer's Color Attachment
+                        // 把纹理的维度设置为屏幕大小：传入width和height，只分配相应的内存，而不填充
+                        val colorTextureBuf = XGLTexture2DBuffer(
+                            FrameBufferTextureFormat.RGBA8,
+                            mSpecification.mWidth,
+                            mSpecification.mHeight
+                        )
+                        mColorAttachments.add(colorTextureBuf)
+
+                        // 注册到TextureSlots, 以便ActiveTexture
+                        FrameBufferQuad.screenTextureIndex = XGLTextureSlots.getId(colorTextureBuf)
+                        mQuad = FrameBufferQuad()
+                    }
+                    else -> {}
+                }
+            }
+        }
+
+        if (mDepthAttachmentSpecification.textureFormat != FrameBufferTextureFormat.None) {
+            when (mDepthAttachmentSpecification.textureFormat) {
+
+                FrameBufferTextureFormat.DEPTH24STENCIL8 -> {
+                    // Generate RBO for FrameBuffer's Stencil and Depth Attachment
+                    mRenderBufferAttachment = XGLRenderBuffer(
+                        mSpecification.mWidth,
+                        mSpecification.mHeight,
+                        GL_DEPTH24_STENCIL8
+                    )
+                }
+                FrameBufferTextureFormat.DEPTH_COMPONENT32F -> {
+                    // Generate Texture2D for FrameBuffer's Depth Attachment
+                    mDepthBufferAttachment = XGLTexture2DBuffer(
+                        FrameBufferTextureFormat.DEPTH_COMPONENT32F,
+                        mSpecification.mWidth,
+                        mSpecification.mHeight
+                    )
+                }
+                else -> {}
+            }
+        }
+    }
+
     override fun close() {
         glDeleteFramebuffers(1, mFrameBuf)
-        mRenderBufferAttachment.close()
+        mDepthBufferAttachment?.close()
+        mRenderBufferAttachment?.close()
         mColorAttachments.forEach { it.close() }
     }
 
