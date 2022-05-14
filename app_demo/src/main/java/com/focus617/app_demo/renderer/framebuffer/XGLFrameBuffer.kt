@@ -51,16 +51,20 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
             throw RuntimeException("Could not create a new frame buffer object.")
         }
         mHandle = mFrameBuf[0]
-        // Bind FrameBuffer
+
+        // Make FrameBuffer Active
         glBindFramebuffer(GL_FRAMEBUFFER, mHandle)
         // Attach the Texture2D to FBO color attachment point
-        glFramebufferTexture2D(
-            GL_FRAMEBUFFER,
-            GL_COLOR_ATTACHMENT0,
-            GL_TEXTURE_2D,
-            mColorAttachments[0].mHandle,
-            0
-        )
+        mColorAttachments.forEach{
+            glFramebufferTexture2D(
+                GL_DRAW_FRAMEBUFFER,
+                GL_COLOR_ATTACHMENT0,
+                GL_TEXTURE_2D,
+                it.mHandle,
+                0
+            )
+        }
+
         // Attach the RenderBuffer to FBO Stencil and Depth attachment point
         mRenderBufferAttachment?.apply {
             glFramebufferRenderbuffer(
@@ -84,7 +88,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         val state: Boolean = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
         check(state) { LOG.warn("Framebuffer is incomplete!") }
 
-        // Switch back to the default framebuffer.
+        // Restore default framebuffer.
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
         XGLContext.checkGLError("FrameBuffer init finish")
     }
@@ -143,7 +147,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     override fun bind() {
         /**
          * Bind a framebuffer object to the GL_DRAW_FRAMEBUFFER framebuffer binding point,
-         * so that everything we render will end up in the FBO's attachments.
+         * so that everything I render will end up in the FBO's attachments.
          *  */
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mHandle)
         glViewport(0, 0, mSpecification.mWidth, mSpecification.mHeight)

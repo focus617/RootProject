@@ -73,6 +73,7 @@ class XGLTexture2DBuffer private constructor() :
         TODO("Not yet implemented")
     }
 
+    // Used for render this texture to screen
     override fun bind(slot: Int) {
         if(screenTextureIndex != -1) {
             // Set active texture unit
