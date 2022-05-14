@@ -3,6 +3,7 @@ package com.focus617.app_demo.renderer.texture
 import android.graphics.Bitmap
 import android.opengl.GLES31.*
 import android.opengl.GLUtils
+import com.focus617.app_demo.engine.XGLContext
 import com.focus617.core.platform.base.BaseEntity
 import java.nio.ByteBuffer
 
@@ -50,6 +51,7 @@ object XGLTextureHelper : BaseEntity() {
 
         //绑定纹理单元与sampler
         glBindSampler(textureObjectIdBuf[0], samplers[0])
+        XGLContext.checkGLError("glBindSampler")
 
         val byteBuf = ByteBuffer.allocate(bitmap.width * bitmap.height * 4)
         bitmap.copyPixelsToBuffer(byteBuf)

@@ -6,6 +6,7 @@ import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.platform.helper.BitmapHelper
 import java.nio.Buffer
 
+
 /**
  * OpenGL纹理类 XGLTexture
  * 1. 储存了纹理的基本属性 [mWidth] [mHeight]
@@ -66,11 +67,11 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         // Bind to the texture in OpenGL
         glBindTexture(GL_TEXTURE_2D, mHandle)
 
-        // Allocate texture storage
-        glTexStorage2D(GL_TEXTURE_2D, 1, mInternalFormat, mWidth, mHeight)
-
         //绑定纹理单元与sampler
         glBindSampler(mHandle, XGLTextureHelper.samplers[0])
+
+        // Allocate texture storage
+        glTexStorage2D(GL_TEXTURE_2D, 1, mInternalFormat, mWidth, mHeight)
 
         // Unbind from the texture.
         glBindTexture(GL_TEXTURE_2D, 0)

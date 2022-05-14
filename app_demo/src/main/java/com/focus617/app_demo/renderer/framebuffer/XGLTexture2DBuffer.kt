@@ -5,11 +5,10 @@ import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureFormat
 import com.focus617.core.engine.renderer.framebuffer.IfFrameBufferAttachment
 import com.focus617.core.engine.renderer.texture.Texture2D
-import java.io.Closeable
 import java.nio.Buffer
 
 class XGLTexture2DBuffer private constructor() :
-    Texture2D("FrameBufferAttachment"), Closeable, IfFrameBufferAttachment {
+    Texture2D("FrameBufferAttachment"), IfFrameBufferAttachment {
     private val mHandleBuf = IntArray(1)
     override var mHandle: Int = -1
     var screenTextureIndex: Int = -1    // 在TextureSlots内的Index
