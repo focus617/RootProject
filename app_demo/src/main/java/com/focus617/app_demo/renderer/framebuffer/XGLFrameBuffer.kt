@@ -141,7 +141,10 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     }
 
     override fun bind() {
-//        glBindFramebuffer(GL_FRAMEBUFFER, mHandle)
+        /**
+         * Bind a framebuffer object to the GL_DRAW_FRAMEBUFFER framebuffer binding point,
+         * so that everything we render will end up in the FBO's attachments.
+         *  */
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mHandle)
         glViewport(0, 0, mSpecification.mWidth, mSpecification.mHeight)
 
@@ -155,7 +158,6 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     }
 
     override fun unbind() {
-//        glBindFramebuffer(GL_FRAMEBUFFER, 0)
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0)
     }
 
@@ -177,8 +179,8 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         glDisable(GL_DEPTH_TEST)
         glDisable(GL_BLEND)
 
-        mColorAttachments.forEach{
-            if(it.screenTextureIndex != -1) {
+        mColorAttachments.forEach {
+            if (it.screenTextureIndex != -1) {
                 it.bind(it.screenTextureIndex)
                 mQuad.draw(it.screenTextureIndex)
             }

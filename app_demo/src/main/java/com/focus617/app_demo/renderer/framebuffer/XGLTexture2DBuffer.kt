@@ -34,13 +34,15 @@ class XGLTexture2DBuffer private constructor() :
             // 作为FrameBuffer的Color Attachment
             FrameBufferTextureFormat.RGBA8 -> {
                 createColorStorage(width, height)
-                // 注册到TextureSlots, 以便ActiveTexture
+                // 注册到TextureSlots, 获得TextureUnit Index, 以便ActiveTexture
                 screenTextureIndex = XGLTextureSlots.getId(this)
             }
+
             // 作为FrameBuffer的Color Attachment
             FrameBufferTextureFormat.DEPTH_COMPONENT32F -> createDepthStorage(width, height)
+
             else -> {
-                LOG.error("Wrong Texture Format!")
+                LOG.error("Unknown Texture Format!")
             }
         }
         //绑定纹理单元与sampler
