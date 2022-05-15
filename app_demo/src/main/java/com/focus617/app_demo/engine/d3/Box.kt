@@ -1,21 +1,27 @@
 package com.focus617.app_demo.engine.d3
 
 import android.content.Context
+import com.focus617.app_demo.engine.XGLDrawableObject
 import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
+import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Ray
 import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.math.Vector4
-import com.focus617.core.engine.objects.d3.Cube
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.shader.Shader
+import com.focus617.core.engine.renderer.vertex.BufferElement
+import com.focus617.core.engine.renderer.vertex.BufferLayout
+import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.scene.PointLight
-import kotlin.properties.Delegates
 
-class Box : Cube() {
+class Box : XGLDrawableObject() {
     init {
         shaderName = ShaderFilePath
+    }
+
+    override fun initOpenGlResource() {
+        vertexArray = XGLVertexArray.buildVertexArray(this)
     }
 
     override fun submit(shader: Shader) {
@@ -56,16 +62,104 @@ class Box : Cube() {
     }
 
 
+    override fun getVertices(): FloatArray = floatArrayOf(
+        // 立方体的顶点有4个属性:位置、法线和纹理坐标
+        // 背面
+        // positions         normals           texture Coords
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+        // 正面
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+        // 左侧
+        -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+        // 右侧
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        // 底面
+        -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+        // 顶面
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f
+    )
+
+    override fun getLayout(): BufferLayout = BufferLayout(
+        listOf(
+            BufferElement("a_Position", ShaderDataType.Float3, true),
+            BufferElement("a_Normal", ShaderDataType.Float3, true),
+            BufferElement("a_TexCoords", ShaderDataType.Float2, true)
+        )
+    )
+
+    override fun getIndices(): ShortArray = shortArrayOf(
+        // 顶点索引: 6 indices per cube side
+        // Back
+        0, 1, 2,
+        3, 4, 5,
+
+        // Front
+        6, 7, 8,
+        9, 10, 11,
+
+        // Left
+        12, 13, 14,
+        15, 16, 17,
+
+        // Right
+        18, 19, 20,
+        21, 22, 23,
+
+        // Top
+        24, 25, 26,
+        27, 28, 29,
+
+        // Bottom
+        30, 31, 32,
+        33, 34, 35
+    )
+
+    override fun beforeBuild() {
+    }
+
+    override fun afterBuild() {
+    }
+
     companion object {
-        val SHADER_PATH = "Cube"
-        val SHADER_FILE = "CubeWithTextureAndLight.glsl"
-        val TEXTURE_FILE = "box.png"
+        private const val SHADER_PATH = "Cube"
+        private const val SHADER_FILE = "CubeWithTextureAndLight.glsl"
+        private const val TEXTURE_FILE = "box.png"
 
-        val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
-        val TextureFilePath: String = "$SHADER_PATH/$TEXTURE_FILE"
+        const val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
+        const val TextureFilePath: String = "$SHADER_PATH/$TEXTURE_FILE"
 
-        var textureIndex by Delegates.notNull<Int>()
-        fun initTexture(context: Context){
+        var textureIndex: Int = -1
+        fun initTexture(context: Context) {
             val textureBox = XGLTextureBuilder.createTexture(context, TextureFilePath)
             textureBox?.apply {
                 textureIndex = XGLTextureSlots.getId(textureBox)
@@ -86,8 +180,6 @@ class Box : Cube() {
         const val U_MATERIAL_TEXTURE_DIFFUSE = "material.diffuse"
         const val U_MATERIAL_SPECULAR = "material.specular"
         const val U_MATERIAL_SHININESS = "material.shininess"
-
-        val WHITE = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
 
         // 镜面强度(Specular Intensity)
         var specular: Vector3 = Vector3(0.5f, 0.5f, 0.5f)

@@ -9,7 +9,7 @@ import com.focus617.app_demo.renderer.texture.XGLTextureCubeMap
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.app_demo.terrain.Heightmap
 import com.focus617.app_demo.terrain.SkyBox
-import com.focus617.app_demo.text.TextQuad3D
+import com.focus617.app_demo.text.TextQuad
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.scene.PerspectiveCamera
 import com.focus617.core.engine.scene.PerspectiveCameraController
@@ -23,6 +23,8 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
     }
 
     fun initOpenGlResource() {
+        XGLTextureSlots.initUnderOpenGl()
+
         initShader()
         initTexture()
         initGameObjects()
@@ -63,11 +65,11 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         ) as XGLShader
         mShaderLibrary.add(shader)
 
-        TextQuad3D.shader = XGLShaderBuilder.createShader(
+        TextQuad.shader = XGLShaderBuilder.createShader(
             context,
-            TextQuad3D.ShaderFilePath
+            TextQuad.ShaderFilePath
         ) as XGLShader
-        mShaderLibrary.add(TextQuad3D.shader)
+        mShaderLibrary.add(TextQuad.shader)
     }
 
     private fun initTexture() {
@@ -94,7 +96,12 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
     }
 
     private fun initGameObjects() {
-        val layerStack = engine.getLayerStack()
+        var layerStack = engine.getLayerStack()
+        for (layer in layerStack.mLayers) {
+            layer.initOpenGlResource()
+        }
+
+        layerStack = engine.getOverLayerStack()
         for (layer in layerStack.mLayers) {
             layer.initOpenGlResource()
         }

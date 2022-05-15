@@ -42,7 +42,7 @@ open class XGLTexture2D(filePath: String) : Texture2D(filePath) {
         bitmap.apply {
             mWidth = bitmap.width
             mHeight = bitmap.height
-            XGLTextureHelper.loadImageIntoTexture(mHandle, bitmap)
+            XGLTextureHelper.loadImageIntoMutableTexture(mHandle, bitmap)
 
             // Recycle the bitmap, since its data has been loaded into OpenGL.
             bitmap.recycle()
@@ -59,7 +59,7 @@ open class XGLTexture2D(filePath: String) : Texture2D(filePath) {
         bitmap.apply {
             mWidth = bitmap.width
             mHeight = bitmap.height
-            XGLTextureHelper.loadImageIntoTexture(mHandle, bitmap)
+            XGLTextureHelper.loadImageIntoMutableTexture(mHandle, bitmap)
 
             // Recycle the bitmap, since its data has been loaded into OpenGL.
             bitmap.recycle()

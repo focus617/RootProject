@@ -2,7 +2,8 @@ package com.focus617.app_demo.engine.d3
 
 import android.content.Context
 import com.focus617.app_demo.terrain.TerrainLayer
-import com.focus617.app_demo.text.TextLayer
+import com.focus617.app_demo.text.TextLayer2D
+import com.focus617.app_demo.text.TextLayer3D
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
@@ -18,10 +19,13 @@ class Sandbox3D(context: Context) : Engine(), Closeable {
     init {
         pushLayer(GamePlayerLayer("GamePlayerLayer", scene as XGLScene3D))
         pushLayer(TerrainLayer("TerrainLayer", scene as XGLScene3D))
-        pushLayer(TextLayer("ExampleOverlay"))
+        pushLayer(TextLayer3D("TextLayer"))
+
+        pushOverLayer(TextLayer2D("OverLayer"))
     }
 
     fun getLayerStack(): LayerStack = mLayerStack
+    fun getOverLayerStack(): LayerStack = mOverlayStack
 
     override fun close() {
         scene.close()
