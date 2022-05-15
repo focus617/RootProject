@@ -2,6 +2,7 @@ package com.focus617.app_demo.engine.d3
 
 import android.opengl.GLES31
 import com.focus617.app_demo.renderer.text.TextQuad3D
+import com.focus617.app_demo.renderer.text.TextTexture2D
 import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
@@ -9,14 +10,15 @@ import com.focus617.core.engine.math.Vector3
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 
-class OverLayer2D(name: String) : Layer(name) {
+class TextLayer(name: String) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
+    private lateinit var textTexture: TextTexture2D
 
     init {
         val textQuad = TextQuad3D()
         textQuad.onTransform3D(
-            Vector3(0f, 2f, 0f),
-            Vector3(1.0f, 1.0f, 1.0f)
+            Vector3(0f, 1.5f, 0f),
+            Vector3(1.0f, 0.5f, 1.0f)
         )
         gameObjectList.add(textQuad)
     }
@@ -26,7 +28,10 @@ class OverLayer2D(name: String) : Layer(name) {
             gameObject.vertexArray = XGLVertexArray.buildVertexArray(gameObject)
         }
 
-        TextQuad3D.initTexture("Hello", 80f)
+        textTexture = TextTexture2D(256, 256)
+        TextQuad3D.textureIndex = textTexture.textureIndex
+
+        textTexture.setText("Hello World!", 100f)
     }
 
     override fun close() {
@@ -50,6 +55,7 @@ class OverLayer2D(name: String) : Layer(name) {
     override fun beforeDrawFrame() {
         //Enable Cull Back Face
         GLES31.glEnable(GLES31.GL_CULL_FACE)
+        textTexture.setText("你好，徐智勇!", 100f)
     }
 
     override fun afterDrawFrame() {
