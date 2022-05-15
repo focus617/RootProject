@@ -4,12 +4,12 @@ import android.content.Context
 import com.focus617.app_demo.renderer.framebuffer.FrameBufferQuad
 import com.focus617.app_demo.renderer.shader.XGLShader
 import com.focus617.app_demo.renderer.shader.XGLShaderBuilder
-import com.focus617.app_demo.renderer.text.TextQuad3D
 import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureCubeMap
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.app_demo.terrain.Heightmap
 import com.focus617.app_demo.terrain.SkyBox
+import com.focus617.app_demo.text.TextQuad3D
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.scene.PerspectiveCamera
 import com.focus617.core.engine.scene.PerspectiveCameraController

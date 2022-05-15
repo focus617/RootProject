@@ -1,4 +1,4 @@
-package com.focus617.app_demo.renderer.text
+package com.focus617.app_demo.text
 
 import android.graphics.*
 import android.opengl.GLES31.*
@@ -29,36 +29,8 @@ class TextTexture2D(width: Int, height: Int) : Texture2D("TextTexture") {
         }
         mHandle = mHandleBuf[0]
 
-        // Bind to the texture in OpenGL
-//        glBindTexture(GL_TEXTURE_2D, mHandle)
-
-        // Allocate texture storage
-//        glTexStorage2D(GL_TEXTURE_2D, 1, mInternalFormat, mWidth, mHeight)
-//        XGLContext.checkGLError("glTexStorage2D")
-
         // 注册到TextureSlots, 获得TextureUnit Index, 以便ActiveTexture
         textureIndex = XGLTextureSlots.getId(this)
-
-        // Unbind from the texture.
-//        glBindTexture(GL_TEXTURE_2D, 0)
-    }
-
-    override fun bind(slot: Int) {
-        if (textureIndex != -1) {
-            // Set active texture unit
-            glActiveTexture(XGLTextureSlots.getTextureUnit(textureIndex))
-            // Bind this texture with above active texture unit
-            glBindTexture(GL_TEXTURE_2D, mHandle)
-        }
-    }
-
-    fun unbind() {
-        // Unbind from the texture.
-        glBindTexture(GL_TEXTURE_2D, 0)
-    }
-
-    override fun close() {
-        glDeleteTextures(1, mHandleBuf, 0)
     }
 
     override fun setData(data: Buffer, size: Int) {
@@ -72,7 +44,7 @@ class TextTexture2D(width: Int, height: Int) : Texture2D("TextTexture") {
         glTexImage2D(
             GL_TEXTURE_2D,
             0,
-            GL_RGBA,
+            mInternalFormat,
             mWidth,
             mHeight,
             0,
@@ -94,6 +66,25 @@ class TextTexture2D(width: Int, height: Int) : Texture2D("TextTexture") {
         // Unbind from the texture.
         glBindTexture(GL_TEXTURE_2D, 0)
     }
+
+    override fun bind(slot: Int) {
+        if (textureIndex != -1) {
+            // Set active texture unit
+            glActiveTexture(XGLTextureSlots.getTextureUnit(textureIndex))
+            // Bind this texture with above active texture unit
+            glBindTexture(GL_TEXTURE_2D, mHandle)
+        }
+    }
+
+    fun unbind() {
+        // Unbind from the texture.
+        glBindTexture(GL_TEXTURE_2D, 0)
+    }
+
+    override fun close() {
+        glDeleteTextures(1, mHandleBuf, 0)
+    }
+
 
     fun setText(text: String, fontSize: Float){
         // Creates a new mutable bitmap based on text and font size

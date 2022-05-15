@@ -2,6 +2,7 @@ package com.focus617.app_demo.engine.d3
 
 import android.content.Context
 import com.focus617.app_demo.terrain.TerrainLayer
+import com.focus617.app_demo.text.TextLayer
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack

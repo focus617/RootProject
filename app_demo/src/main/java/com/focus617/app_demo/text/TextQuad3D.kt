@@ -1,6 +1,6 @@
-package com.focus617.app_demo.renderer.text
+package com.focus617.app_demo.text
 
-import com.focus617.core.engine.objects.DrawableObject
+import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.BufferElement
@@ -8,10 +8,24 @@ import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.resource.baseDataType.Color
 
+class TextQuad3D : XGLDrawableObject() {
+    private lateinit var textTexture: TextTexture2D
 
-class TextQuad3D : DrawableObject() {
+    var text: String = "Hello World!"
+    var textColor: Color = Color.WHITE
+    var textFont: Float = 100f
+
     init {
         shaderName = ShaderFilePath
+    }
+
+    override fun initOpenGlResource() {
+        vertexArray = XGLVertexArray.buildVertexArray(this)
+
+        textTexture = TextTexture2D(256, 256)
+        textureIndex = textTexture.textureIndex
+
+        textTexture.setText(text, textFont)
     }
 
     override fun submit(shader: Shader) {
@@ -19,7 +33,7 @@ class TextQuad3D : DrawableObject() {
 
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
         shader.setInt(U_TEXTURE, textureIndex)
-        shader.setFloat4(U_COLOR, Color.BLUE)
+        shader.setFloat4(U_COLOR, textColor)
 
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)
