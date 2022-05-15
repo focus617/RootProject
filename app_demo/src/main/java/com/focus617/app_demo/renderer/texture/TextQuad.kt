@@ -6,7 +6,7 @@ import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
-import kotlin.properties.Delegates
+import com.focus617.core.engine.resource.baseDataType.Color
 
 
 class TextQuad : DrawableObject() {
@@ -17,8 +17,9 @@ class TextQuad : DrawableObject() {
     override fun submit(shader: Shader) {
         if (textureIndex == -1) return
 
-        shader.bind()
+        shader.setMat4(U_MODEL_MATRIX, modelMatrix)
         shader.setInt(U_TEXTURE, textureIndex)
+        shader.setFloat4(U_COLOR, Color.BLUE)
 
         vertexArray.bind()
         RenderCommand.drawIndexed(vertexArray)
@@ -33,10 +34,10 @@ class TextQuad : DrawableObject() {
         // Vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
         // 每个顶点有2个顶点属性一位置、纹理
         // x,   y,  TextureX, TextureY
-        -1.0f, 1.0f, 0.0f, 0.0f,  //0 左上
-        -1.0f, -1.0f, 0.0f, 1.0f,  //1 左下
-        1.0f, -1.0f, 1.0f, 1.0f,   //2 右下
-        1.0f, 1.0f, 1.0f, 0.0f    //3 右上
+        -0.5f, 0.5f, 0.0f, 0.0f,  //0 左上
+        -0.5f, -0.5f, 0.0f, 1.0f,  //1 左下
+        0.5f, -0.5f, 1.0f, 1.0f,   //2 右下
+        0.5f, 0.5f, 1.0f, 0.0f    //3 右上
     )
 
     override fun getLayout(): BufferLayout = BufferLayout(
@@ -59,14 +60,13 @@ class TextQuad : DrawableObject() {
     companion object {
         const val SHADER_PATH = "Text"
         const val SHADER_FILE = "shader.glsl"
-
         const val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
+        const val U_TEXTURE = "u_Texture"
+        const val U_COLOR = "u_Color"
 
         lateinit var shader: Shader
 
-        const val U_TEXTURE = "u_screenTexture"
-
-        var textureIndex by Delegates.notNull<Int>()
+        var textureIndex: Int = -1      // 在TextureSlot中的Index
         fun initTexture(text: String, fontSize: Float) {
             val texture = TextTexture2D(text, fontSize)
             textureIndex = texture.textureIndex

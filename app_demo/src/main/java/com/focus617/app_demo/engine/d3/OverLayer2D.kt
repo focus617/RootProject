@@ -14,8 +14,8 @@ class OverLayer2D(name: String) : Layer(name) {
     init {
         val textQuad = TextQuad()
         textQuad.onTransform3D(
-            Vector3(5f, 0f, 0f),
-            Vector3(1.0f, 0.2f, 1.0f)
+            Vector3(0f, 2f, 0f),
+            Vector3(1.0f, 1.0f, 1.0f)
         )
         gameObjectList.add(textQuad)
     }
