@@ -4,11 +4,10 @@ import android.content.Context
 import com.focus617.app_demo.renderer.framebuffer.FrameBufferQuad
 import com.focus617.app_demo.renderer.shader.XGLShader
 import com.focus617.app_demo.renderer.shader.XGLShaderBuilder
-import com.focus617.app_demo.renderer.texture.TextQuad
+import com.focus617.app_demo.renderer.text.TextQuad3D
 import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureCubeMap
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
-import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.app_demo.terrain.Heightmap
 import com.focus617.app_demo.terrain.SkyBox
 import com.focus617.core.engine.core.TimeStep
@@ -20,7 +19,7 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
 
     init {
         mCamera = PerspectiveCamera()
-        mCameraController =PerspectiveCameraController(mCamera as PerspectiveCamera)
+        mCameraController = PerspectiveCameraController(mCamera as PerspectiveCamera)
     }
 
     fun initOpenGlResource() {
@@ -64,11 +63,11 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         ) as XGLShader
         mShaderLibrary.add(shader)
 
-        TextQuad.shader = XGLShaderBuilder.createShader(
+        TextQuad3D.shader = XGLShaderBuilder.createShader(
             context,
-            TextQuad.ShaderFilePath
+            TextQuad3D.ShaderFilePath
         ) as XGLShader
-        mShaderLibrary.add(TextQuad.shader)
+        mShaderLibrary.add(TextQuad3D.shader)
     }
 
     private fun initTexture() {
@@ -79,28 +78,26 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         )
         XGLTextureSlots.TextureSlots[0] = texture
 
-        val textureGrass = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapGrassFilePath)
+        val textureGrass =
+            XGLTextureBuilder.createTexture(context, Heightmap.HeightMapGrassFilePath)
         textureGrass?.apply {
             Heightmap.textureIndexGrass = XGLTextureSlots.getId(textureGrass)
-       }
+        }
 
-        val textureStone = XGLTextureBuilder.createTexture(context, Heightmap.HeightMapStoneFilePath)
+        val textureStone =
+            XGLTextureBuilder.createTexture(context, Heightmap.HeightMapStoneFilePath)
         textureStone?.apply {
             Heightmap.textureIndexStone = XGLTextureSlots.getId(textureStone)
         }
 
         Box.initTexture(context)
-
-        TextQuad.initTexture("Hello", 80f)
     }
 
     private fun initGameObjects() {
         val layerStack = engine.getLayerStack()
-        for (layer in layerStack.mLayers)
-            for (gameObject in layer.gameObjectList) {
-                gameObject.vertexArray = XGLVertexArray.buildVertexArray(gameObject)
-            }
-
+        for (layer in layerStack.mLayers) {
+            layer.initOpenGlResource()
+        }
     }
 
     // Used for updating the global resource, such as objects in scene

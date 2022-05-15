@@ -1,7 +1,9 @@
-package com.focus617.app_demo.renderer.texture
+package com.focus617.app_demo.renderer.text
 
 import android.graphics.*
 import android.opengl.GLES31.*
+import com.focus617.app_demo.renderer.texture.XGLTextureHelper
+import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.renderer.texture.Texture2D
 import java.nio.Buffer
 

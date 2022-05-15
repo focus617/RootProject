@@ -1,7 +1,8 @@
 package com.focus617.app_demo.engine.d3
 
 import android.opengl.GLES31
-import com.focus617.app_demo.renderer.texture.TextQuad
+import com.focus617.app_demo.renderer.text.TextQuad3D
+import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Vector3
@@ -12,7 +13,7 @@ class OverLayer2D(name: String) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
 
     init {
-        val textQuad = TextQuad()
+        val textQuad = TextQuad3D()
         textQuad.onTransform3D(
             Vector3(0f, 2f, 0f),
             Vector3(1.0f, 1.0f, 1.0f)
@@ -20,7 +21,13 @@ class OverLayer2D(name: String) : Layer(name) {
         gameObjectList.add(textQuad)
     }
 
-    override fun initOpenGlResource() {}
+    override fun initOpenGlResource() {
+        for (gameObject in gameObjectList) {
+            gameObject.vertexArray = XGLVertexArray.buildVertexArray(gameObject)
+        }
+
+        TextQuad3D.initTexture("Hello", 80f)
+    }
 
     override fun close() {
         LOG.info("${this.mDebugName} closed")

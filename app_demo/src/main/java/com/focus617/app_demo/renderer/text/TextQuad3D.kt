@@ -1,4 +1,4 @@
-package com.focus617.app_demo.renderer.texture
+package com.focus617.app_demo.renderer.text
 
 import com.focus617.core.engine.objects.DrawableObject
 import com.focus617.core.engine.renderer.RenderCommand
@@ -9,7 +9,7 @@ import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.resource.baseDataType.Color
 
 
-class TextQuad : DrawableObject() {
+class TextQuad3D : DrawableObject() {
     init {
         shaderName = ShaderFilePath
     }
