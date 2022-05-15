@@ -1,6 +1,7 @@
 package com.focus617.app_demo.terrain
 
 import com.focus617.app_demo.engine.d3.XGLScene3D
+import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Vector3
@@ -28,7 +29,11 @@ class TerrainLayer(name: String, private val scene: XGLScene3D) : Layer(name) {
         gameObjectList.add(skyBox)
     }
 
-    override fun initOpenGlResource() { }
+    override fun initOpenGlResource() {
+        for (gameObject in gameObjectList) {
+            gameObject.vertexArray = XGLVertexArray.buildVertexArray(gameObject)
+        }
+    }
 
     override fun close() {
         LOG.info("${this.mDebugName} closed")

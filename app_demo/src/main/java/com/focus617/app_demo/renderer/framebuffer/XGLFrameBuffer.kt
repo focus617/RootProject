@@ -2,7 +2,6 @@ package com.focus617.app_demo.renderer.framebuffer
 
 import android.opengl.GLES31.*
 import com.focus617.app_demo.engine.XGLContext
-import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.renderer.framebuffer.FrameBuffer
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferSpecification
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureFormat
@@ -22,7 +21,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     private var mColorAttachments = mutableListOf<XGLTexture2DBuffer>()   // ColorTextureBuffers
     private var mDepthBufferAttachment: XGLTexture2DBuffer? = null        // DepthBuffer
     private var mRenderBufferAttachment: XGLRenderBuffer? = null          // RenderBuffer
-    private lateinit var mQuad: FrameBufferQuad
+    private val mQuad: FrameBufferQuad = FrameBufferQuad()
 
     init {
         for (format in specification.attachment.attachments) {
@@ -52,16 +51,18 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
             throw RuntimeException("Could not create a new frame buffer object.")
         }
         mHandle = mFrameBuf[0]
-        // Bind FrameBuffer
+
+        // Make FrameBuffer Active
         glBindFramebuffer(GL_FRAMEBUFFER, mHandle)
-        // Attach the Texture2D to FBO color attachment point
+        // Attach the first Texture2D to FBO color attachment point
         glFramebufferTexture2D(
-            GL_FRAMEBUFFER,
+            GL_DRAW_FRAMEBUFFER,
             GL_COLOR_ATTACHMENT0,
             GL_TEXTURE_2D,
             mColorAttachments[0].mHandle,
             0
         )
+
         // Attach the RenderBuffer to FBO Stencil and Depth attachment point
         mRenderBufferAttachment?.apply {
             glFramebufferRenderbuffer(
@@ -85,7 +86,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         val state: Boolean = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
         check(state) { LOG.warn("Framebuffer is incomplete!") }
 
-        // Switch back to the default framebuffer.
+        // Restore default framebuffer.
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
         XGLContext.checkGLError("FrameBuffer init finish")
     }
@@ -104,10 +105,6 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
                             mSpecification.mHeight
                         )
                         mColorAttachments.add(colorTextureBuf)
-
-                        // 注册到TextureSlots, 以便ActiveTexture
-                        FrameBufferQuad.screenTextureIndex = XGLTextureSlots.getId(colorTextureBuf)
-                        mQuad = FrameBufferQuad()
                     }
                     else -> {}
                 }
@@ -146,12 +143,24 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     }
 
     override fun bind() {
-        glBindFramebuffer(GL_FRAMEBUFFER, mHandle)
+        /**
+         * Bind a framebuffer object to the GL_DRAW_FRAMEBUFFER framebuffer binding point,
+         * so that everything I render will end up in the FBO's attachments.
+         *  */
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mHandle)
         glViewport(0, 0, mSpecification.mWidth, mSpecification.mHeight)
+
+        // glStencilMask(0x00)不仅会阻止模板缓冲的写入，也会阻止其清空(glClear(stencil_buffer)无效)
+        glStencilMask(0xFF)
+
+        // Clear the FrameBuffer's content.
+        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT)
+        glClearDepthf(1.0f)     // Setup the Depth buff
+        glClearStencil(0)           // Setup the Stencil buff
     }
 
     override fun unbind() {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0)
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0)
     }
 
     override fun getColorAttachmentTextureId(index: Int) = mColorAttachments[index].mHandle
@@ -172,10 +181,13 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         glDisable(GL_DEPTH_TEST)
         glDisable(GL_BLEND)
 
-        mColorAttachments[0].bind(FrameBufferQuad.screenTextureIndex)
-        mQuad.draw()
+        mColorAttachments.forEach {
+            if (it.screenTextureIndex != -1) {
+                it.bind(it.screenTextureIndex)
+                mQuad.draw(it.screenTextureIndex)
+            }
+        }
 
-        // TODO: How to Swap the buffers?
         glViewport(0, 0, mSpecification.mWidth, mSpecification.mHeight)
 
         glEnable(GL_DEPTH_TEST)
@@ -184,13 +196,5 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
 
     companion object {
         const val sMaxFrameBufferSize = 8192
-
-//        fun isDepthFormat(format: FrameBufferTextureFormat): Boolean =
-//            when (format) {
-//                FrameBufferTextureFormat.DEPTH24STENCIL8 -> true
-//                else -> false
-//            }
-
-
     }
 }

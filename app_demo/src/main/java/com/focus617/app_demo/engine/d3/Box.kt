@@ -1,5 +1,8 @@
 package com.focus617.app_demo.engine.d3
 
+import android.content.Context
+import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
+import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Ray
 import com.focus617.core.engine.math.Vector3
@@ -52,6 +55,7 @@ class Box : Cube() {
 
     }
 
+
     companion object {
         val SHADER_PATH = "Cube"
         val SHADER_FILE = "CubeWithTextureAndLight.glsl"
@@ -61,6 +65,12 @@ class Box : Cube() {
         val TextureFilePath: String = "$SHADER_PATH/$TEXTURE_FILE"
 
         var textureIndex by Delegates.notNull<Int>()
+        fun initTexture(context: Context){
+            val textureBox = XGLTextureBuilder.createTexture(context, TextureFilePath)
+            textureBox?.apply {
+                textureIndex = XGLTextureSlots.getId(textureBox)
+            }
+        }
 
         lateinit var viewPoint: Point3D
 

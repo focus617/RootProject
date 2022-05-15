@@ -29,7 +29,7 @@ void main()
                   a_Position.y);
 
     vec3 scaledNormal = a_Normal;
-    scaledNormal.y *= 50.0;
+    scaledNormal.y *= 20.0;
     scaledNormal = normalize(scaledNormal);
 
     float diffuse = max(dot(scaledNormal, u_VectorToLight), 0.0);

@@ -96,11 +96,14 @@ class XGLShader constructor(
 
     private val mLocationCache = HashMap<String, Int>()
 
-    private fun getLocation(name: String): Int =
-        if (mLocationCache.containsKey(name)) mLocationCache[name]!!
+    private fun getLocation(uniformName: String): Int =
+        if (mLocationCache.containsKey(uniformName)) mLocationCache[uniformName]!!
         else {
-            val location = glGetUniformLocation(mHandle, name)
-            mLocationCache[name] = location
+            val location = glGetUniformLocation(mHandle, uniformName)
+            if(location == -1){
+                LOG.warn("Could not find location of a uniform($uniformName) in shader($nName)")
+            }
+            mLocationCache[uniformName] = location
             location
         }
 

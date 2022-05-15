@@ -27,13 +27,8 @@ class XGLRendererAPI : RendererAPI() {
     }
 
     override fun clear() {
-        // glStencilMask(0x00)不仅会阻止模板缓冲的写入，也会阻止其清空(glClear(stencil_buffer)无效)
-        glStencilMask(0xFF)
-
         // 清理屏幕，重绘背景颜色
-        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT)
-        glClearDepthf(1.0f)     // Setup the Depth buff
-        glClearStencil(0)           // Setup the Stencil buff
+        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
     }
 
     override fun setClearColor(color: Color) {

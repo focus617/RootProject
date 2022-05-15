@@ -49,7 +49,7 @@ class XGLContext(private val windowHandle: GLSurfaceView) : BaseEntity(), IfGrap
             val error = glGetError()
             if (error != GL_NO_ERROR) {
                 val hexErrorCode = Integer.toHexString(error)
-                LOG.warn("Check glError $msg: $hexErrorCode")
+                LOG.warn("Check glError $msg errorCode:$hexErrorCode")
                 //throw RuntimeException("GLError")
             }
         }
