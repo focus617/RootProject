@@ -23,6 +23,8 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
     }
 
     fun initOpenGlResource() {
+        XGLTextureSlots.initUnderOpenGl()
+
         initShader()
         initTexture()
         initGameObjects()

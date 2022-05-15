@@ -4,7 +4,7 @@ import com.focus617.mylib.logging.WithLogging
 import java.io.Closeable
 
 abstract class TextureSlots : WithLogging(), Closeable {
-    abstract val MaxTextureSlots: Int
+    abstract var MaxTextureSlots: Int
     //TODO: RenderCaps
 
     abstract val TextureSlots: Array<Texture?>
