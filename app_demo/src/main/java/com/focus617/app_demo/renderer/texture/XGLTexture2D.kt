@@ -13,15 +13,15 @@ import java.nio.Buffer
  * 1. 储存了纹理的基本属性 [mWidth] [mHeight]
  * 2. 它的构造器需要纹理的图片资源或文件
  */
-class XGLTexture2D(filePath: String) : Texture2D(filePath) {
+open class XGLTexture2D(filePath: String) : Texture2D(filePath) {
     private val mHandleBuf = IntArray(1)
-    override var mHandle: Int = 0
+    final override var mHandle: Int = 0
 
-    private var mInternalFormat: Int = GL_RGBA8
-    private var mDataFormat: Int = GL_RGBA
+    final override var mWidth: Int = 0
+    final override var mHeight: Int = 0
 
-    override var mWidth: Int = 0
-    override var mHeight: Int = 0
+    protected var mInternalFormat: Int = GL_RGBA8
+    protected var mDataFormat: Int = GL_RGBA
 
     override fun equals(other: Any?): Boolean =
         if (other !is XGLTexture2D) false
@@ -118,6 +118,11 @@ class XGLTexture2D(filePath: String) : Texture2D(filePath) {
 
         // Bind this texture with above active texture unit
         glBindTexture(GL_TEXTURE_2D, mHandle)
+    }
+
+    open fun unbind() {
+        // Unbind from the texture.
+        glBindTexture(GL_TEXTURE_2D, 0)
     }
 
     override fun close() {

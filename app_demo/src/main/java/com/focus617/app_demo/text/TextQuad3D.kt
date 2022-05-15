@@ -15,6 +15,9 @@ class TextQuad3D : XGLDrawableObject() {
     var textColor: Color = Color.WHITE
     var textFont: Float = 100f
 
+    private var preText: String = text
+    private var preTextFont: Float = textFont
+
     init {
         shaderName = ShaderFilePath
     }
@@ -22,17 +25,23 @@ class TextQuad3D : XGLDrawableObject() {
     override fun initOpenGlResource() {
         vertexArray = XGLVertexArray.buildVertexArray(this)
 
-        textTexture = TextTexture2D(256, 256)
-        textureIndex = textTexture.textureIndex
+        textTexture = TextTexture2D()
 
         textTexture.setText(text, textFont)
     }
 
     override fun submit(shader: Shader) {
-        if (textureIndex == -1) return
+        if((text != preText)||(textFont != preTextFont)) {
+            textTexture.setText(text, textFont)
+
+            preText = text
+            preTextFont = textFont
+        }
+
+        textTexture.bind(0)
 
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
-        shader.setInt(U_TEXTURE, textureIndex)
+        shader.setInt(U_TEXTURE, textTexture.textureIndex)
         shader.setFloat4(U_COLOR, textColor)
 
         vertexArray.bind()
@@ -80,8 +89,5 @@ class TextQuad3D : XGLDrawableObject() {
         const val U_COLOR = "u_Color"
 
         lateinit var shader: Shader
-
-        var textureIndex: Int = -1      // 在TextureSlot中的Index
-
     }
 }

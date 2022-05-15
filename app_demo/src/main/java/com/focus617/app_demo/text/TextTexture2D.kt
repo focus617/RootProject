@@ -2,57 +2,22 @@ package com.focus617.app_demo.text
 
 import android.graphics.*
 import android.opengl.GLES31.*
+import com.focus617.app_demo.renderer.texture.XGLTexture2D
 import com.focus617.app_demo.renderer.texture.XGLTextureHelper
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
-import com.focus617.core.engine.renderer.texture.Texture2D
-import java.nio.Buffer
 
-class TextTexture2D(width: Int, height: Int) : Texture2D("TextTexture") {
-    private val mHandleBuf = IntArray(1)
-    override var mHandle: Int = -1
+class TextTexture2D : XGLTexture2D("TextTexture") {
     var textureIndex: Int = -1    // 在TextureSlots内的Index
 
-    override var mWidth: Int = 0
-    override var mHeight: Int = 0
-
-    private var mInternalFormat: Int = GL_RGBA8
-    private var mDataFormat: Int = GL_RGBA
-
-    init {
-        mWidth = width
-        mHeight = height
-
-        glGenTextures(1, mHandleBuf, 0)
-        if (mHandleBuf[0] == 0) {
-            LOG.error("Could not generate a new OpenGL texture object.")
-        }
-        mHandle = mHandleBuf[0]
-
+    override fun bind(slot: Int) {
         // 注册到TextureSlots, 获得TextureUnit Index, 以便ActiveTexture
         textureIndex = XGLTextureSlots.getId(this)
-    }
 
-    override fun setData(data: Buffer, size: Int) {
+        // Set active texture unit
+        glActiveTexture(XGLTextureSlots.getTextureUnit(textureIndex))
+        // Bind this texture with above active texture unit
+        glBindTexture(GL_TEXTURE_2D, mHandle)
     }
-
-    override fun bind(slot: Int) {
-        if (textureIndex != -1) {
-            // Set active texture unit
-            glActiveTexture(XGLTextureSlots.getTextureUnit(textureIndex))
-            // Bind this texture with above active texture unit
-            glBindTexture(GL_TEXTURE_2D, mHandle)
-        }
-    }
-
-    fun unbind() {
-        // Unbind from the texture.
-        glBindTexture(GL_TEXTURE_2D, 0)
-    }
-
-    override fun close() {
-        glDeleteTextures(1, mHandleBuf, 0)
-    }
-
 
     fun setText(text: String, fontSize: Float) {
         // Creates a new mutable bitmap based on text and font size
@@ -62,9 +27,10 @@ class TextTexture2D(width: Int, height: Int) : Texture2D("TextTexture") {
         XGLTextureHelper.loadImageIntoTexture(mHandle, bitmap, mInternalFormat)
         bitmap.recycle()
 
-        LOG.info("set new text to Texture, text=$text, size=($mWidth, $mHeight)")
+        LOG.info("set new text($text) to Texture, size=($mWidth, $mHeight)")
     }
 
+    // Create bitmap for text with font size setting
     private fun createBitmap(text: String, fontSize: Float): Bitmap {
         var aFontSize = fontSize
         if (aFontSize < 8.0f) aFontSize = 8.0f
