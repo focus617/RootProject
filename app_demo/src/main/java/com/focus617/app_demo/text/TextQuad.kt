@@ -9,7 +9,7 @@ import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.resource.baseDataType.Color
 
-class TextQuad3D : XGLDrawableObject() {
+class TextQuad : XGLDrawableObject() {
     private lateinit var textTexture: TextTexture2D
 
     var text: String = "Hello World!"
