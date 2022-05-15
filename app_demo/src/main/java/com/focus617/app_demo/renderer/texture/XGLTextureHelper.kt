@@ -3,6 +3,7 @@ package com.focus617.app_demo.renderer.texture
 import android.graphics.Bitmap
 import android.opengl.GLES31.*
 import android.opengl.GLUtils
+import com.focus617.app_demo.engine.XGLContext
 import com.focus617.core.platform.base.BaseEntity
 import java.nio.ByteBuffer
 
@@ -36,19 +37,20 @@ object XGLTextureHelper : BaseEntity() {
      * @return textureObjectId
      */
     fun loadImageIntoTexture(
-        textureObjectIdBuf: IntArray,
-        bitmap: Bitmap
-    ): Int {
-        glGenTextures(1, textureObjectIdBuf, 0)
-        if (textureObjectIdBuf[0] == 0) {
-            LOG.error("Could not generate a new OpenGL texture object.")
-            return 0
-        }
-
+        textureHandle: Int,
+        bitmap: Bitmap,
+        internalFormat: Int = GL_RGBA8,
+    ) {
         // Bind to the texture in OpenGL
-        glBindTexture(GL_TEXTURE_2D, textureObjectIdBuf[0])
+        glBindTexture(GL_TEXTURE_2D, textureHandle)
 
-        val byteBuf = ByteBuffer.allocate(bitmap.width * bitmap.height * 4)
+        // Check the bitmap format
+        val dataFormat: Int = setDataFormat(bitmap)
+
+        // Allocate buffer to copy bitmap pixels
+        val bpp = if (dataFormat == GL_RGBA) 4 else 3
+        val size = bitmap.width * bitmap.height * bpp
+        val byteBuf = ByteBuffer.allocate(size)
         bitmap.copyPixelsToBuffer(byteBuf)
         byteBuf.position(0)
 
@@ -56,15 +58,15 @@ object XGLTextureHelper : BaseEntity() {
         glTexImage2D(
             GL_TEXTURE_2D,
             0,
-            GL_RGBA,
+            internalFormat,
             bitmap.width,
             bitmap.height,
             0,
-            GL_RGBA,
+            dataFormat,
             GL_UNSIGNED_BYTE,
             byteBuf
         )
-        //  GLUtils.texImage2D(GL_TEXTURE_2D, 0, bitmap, 0)
+        XGLContext.checkGLError("glTexImage2D")
 
         // Note: Following code may cause an error to be reported in the
         // ADB log as follows: E/IMGSRV(20095): :0: HardwareMipGen:
@@ -74,12 +76,20 @@ object XGLTextureHelper : BaseEntity() {
         // square. It will look the same because of texture coordinates,
         // and mipmap generation will work.
         glGenerateMipmap(GL_TEXTURE_2D)
+        XGLContext.checkGLError("glGenerateMipmap")
 
         // Unbind from the texture.
         glBindTexture(GL_TEXTURE_2D, 0)
-
-        return textureObjectIdBuf[0]
     }
+
+    private fun setDataFormat(bitmap: Bitmap): Int =
+        when (bitmap.config) {
+            Bitmap.Config.ARGB_8888 -> GL_RGBA
+            else -> {
+                LOG.error("Unknown bitmap format")
+                -1
+            }
+        }
 
     /**
      * Loads a cubemap texture from the provided resources and returns the

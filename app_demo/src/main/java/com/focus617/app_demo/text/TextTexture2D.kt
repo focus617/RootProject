@@ -2,11 +2,10 @@ package com.focus617.app_demo.text
 
 import android.graphics.*
 import android.opengl.GLES31.*
-import com.focus617.app_demo.engine.XGLContext
+import com.focus617.app_demo.renderer.texture.XGLTextureHelper
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.renderer.texture.Texture2D
 import java.nio.Buffer
-import java.nio.ByteBuffer
 
 class TextTexture2D(width: Int, height: Int) : Texture2D("TextTexture") {
     private val mHandleBuf = IntArray(1)
@@ -34,37 +33,6 @@ class TextTexture2D(width: Int, height: Int) : Texture2D("TextTexture") {
     }
 
     override fun setData(data: Buffer, size: Int) {
-        val bpp = if (mDataFormat == GL_RGBA) 4 else 3
-        require(size == (mWidth * mHeight * bpp)) {
-            "Data must be entire texture!"
-        }
-        // Bind to the texture in OpenGL
-        glBindTexture(GL_TEXTURE_2D, mHandle)
-        // Load the buffer into the bound texture.
-        glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            mInternalFormat,
-            mWidth,
-            mHeight,
-            0,
-            mDataFormat,
-            GL_UNSIGNED_BYTE,
-            data
-        )
-        XGLContext.checkGLError("glTexImage2D")
-
-        // Note: Following code may cause an error to be reported in the
-        // ADB log as follows: E/IMGSRV(20095): :0: HardwareMipGen:
-        // Failed to generate texture mipmap levels (error=3)
-        // No OpenGL error will be encountered (glGetError() will return
-        // 0). If this happens, just squash the source image to be
-        // square. It will look the same because of texture coordinates,
-        // and mipmap generation will work.
-        glGenerateMipmap(GL_TEXTURE_2D)
-
-        // Unbind from the texture.
-        glBindTexture(GL_TEXTURE_2D, 0)
     }
 
     override fun bind(slot: Int) {
@@ -86,26 +54,15 @@ class TextTexture2D(width: Int, height: Int) : Texture2D("TextTexture") {
     }
 
 
-    fun setText(text: String, fontSize: Float){
+    fun setText(text: String, fontSize: Float) {
         // Creates a new mutable bitmap based on text and font size
         val bitmap = createBitmap(text, fontSize)
         mWidth = bitmap.width
         mHeight = bitmap.height
-
-        // Check the bitmap format
-        setDataFormat(bitmap)
-
-        val bpp = if (mDataFormat == GL_RGBA) 4 else 3
-        val size = bitmap.width * bitmap.height * bpp
-        val byteBuf = ByteBuffer.allocate(size)
-        bitmap.copyPixelsToBuffer(byteBuf)
-        byteBuf.position(0)
-        // Recycle the bitmap, since its data has been loaded into buffer.
+        XGLTextureHelper.loadImageIntoTexture(mHandle, bitmap, mInternalFormat)
         bitmap.recycle()
 
         LOG.info("set new text to Texture, text=$text, size=($mWidth, $mHeight)")
-
-        setData(byteBuf, size)
     }
 
     private fun createBitmap(text: String, fontSize: Float): Bitmap {
@@ -144,15 +101,5 @@ class TextTexture2D(width: Int, height: Int) : Texture2D("TextTexture") {
         bitmapCanvas.drawText(text, 1f, 1.0f + aFontSize * 0.75f, textPaint)
 
         return textBitmap
-    }
-
-    private fun setDataFormat(textBitmap: Bitmap) {
-        mDataFormat = when (textBitmap.config) {
-            Bitmap.Config.ARGB_8888 -> GL_RGBA
-            else -> {
-                LOG.error("Unknown bitmap format")
-                -1
-            }
-        }
     }
 }

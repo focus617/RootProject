@@ -13,7 +13,7 @@ import java.nio.Buffer
  * 1. 储存了纹理的基本属性 [mWidth] [mHeight]
  * 2. 它的构造器需要纹理的图片资源或文件
  */
-class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
+class XGLTexture2D(filePath: String) : Texture2D(filePath) {
     private val mHandleBuf = IntArray(1)
     override var mHandle: Int = 0
 
@@ -27,20 +27,30 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         if (other !is XGLTexture2D) false
         else mHandle == other.mHandle
 
+    /** 最基础构造 */
+    init{
+        glGenTextures(1, mHandleBuf, 0)
+        if (mHandleBuf[0] == 0) {
+            LOG.error("Could not generate a new OpenGL texture object.")
+        }
+        mHandle = mHandleBuf[0]
+    }
+
     /** 基于Assets中的文件构造 */
     constructor(context: Context, filePath: String) : this(filePath) {
         val bitmap = BitmapHelper.bitmapLoader(context, filePath)
         bitmap.apply {
             mWidth = bitmap.width
             mHeight = bitmap.height
-            mHandle = XGLTextureHelper.loadImageIntoTexture(mHandleBuf, bitmap)
+            XGLTextureHelper.loadImageIntoTexture(mHandle, bitmap)
+
+            // Recycle the bitmap, since its data has been loaded into OpenGL.
+            bitmap.recycle()
 
             //绑定纹理单元与sampler
             glBindSampler(mHandle, XGLTextureHelper.samplers[0])
             XGLContext.checkGLError("glBindSampler")
         }
-        // Recycle the bitmap, since its data has been loaded into OpenGL.
-        bitmap.recycle()
     }
 
     /** 基于Resource/raw中的文件构造 */
@@ -49,14 +59,15 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         bitmap.apply {
             mWidth = bitmap.width
             mHeight = bitmap.height
-            mHandle = XGLTextureHelper.loadImageIntoTexture(mHandleBuf, bitmap)
+            XGLTextureHelper.loadImageIntoTexture(mHandle, bitmap)
+
+            // Recycle the bitmap, since its data has been loaded into OpenGL.
+            bitmap.recycle()
 
             //绑定纹理单元与sampler
             glBindSampler(mHandle, XGLTextureHelper.samplers[0])
             XGLContext.checkGLError("glBindSampler")
         }
-        // Recycle the bitmap, since its data has been loaded into OpenGL.
-        bitmap.recycle()
     }
 
     /** 程序编程构造 */
@@ -67,19 +78,13 @@ class XGLTexture2D private constructor(filePath: String) : Texture2D(filePath) {
         mInternalFormat = GL_RGBA8
         mDataFormat = GL_RGBA
 
-        glGenTextures(1, mHandleBuf, 0)
-        if (mHandleBuf[0] == 0) {
-            LOG.error("Could not generate a new OpenGL texture object.")
-        }
-        mHandle = mHandleBuf[0]
-
         // Bind to the texture in OpenGL
         glBindTexture(GL_TEXTURE_2D, mHandle)
 
         //绑定纹理单元与sampler
         glBindSampler(mHandle, XGLTextureHelper.samplers[0])
 
-        // Allocate texture storage
+        // Allocate texture storage(fix format/buffer size)
         glTexStorage2D(GL_TEXTURE_2D, 1, mInternalFormat, mWidth, mHeight)
 
         // Unbind from the texture.
