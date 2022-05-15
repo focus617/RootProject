@@ -1,7 +1,7 @@
 package com.focus617.app_demo.engine.d3
 
-import android.opengl.GLES31
-import com.focus617.app_demo.renderer.vertex.XGLVertexArray
+import android.opengl.GLES31.*
+import com.focus617.app_demo.engine.XGLDrawableObject
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Ray
@@ -14,7 +14,6 @@ import com.focus617.core.platform.event.screenTouchEvents.TouchLongPressEvent
 class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
 
-    private val earth = Earth()
     private val box1 = Box()
     private val box2 = Box()
 
@@ -30,17 +29,11 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
             Vector3(1.0f, 1.0f, 1.0f)
         )
         gameObjectList.add(box2)
-
-        earth.onTransform3D(
-            Vector3(-1.5f, 1.0f, -1.5f),
-            Vector3(1.0f, 1.0f, 1.0f)
-        )
-//        gameObjectList.add(earth)
     }
 
     override fun initOpenGlResource() {
         for (gameObject in gameObjectList) {
-            gameObject.vertexArray = XGLVertexArray.buildVertexArray(gameObject)
+            (gameObject as XGLDrawableObject).initOpenGlResource()
         }
     }
 
@@ -67,12 +60,12 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
 
     override fun beforeDrawFrame() {
         //Enable Cull Back Face
-        GLES31.glEnable(GLES31.GL_CULL_FACE)
+        glEnable(GL_CULL_FACE)
     }
 
     override fun afterDrawFrame() {
         //Enable Cull Back Face
-        GLES31.glDisable(GLES31.GL_CULL_FACE)
+        glDisable(GL_CULL_FACE)
     }
 
     override fun onEvent(event: Event): Boolean {

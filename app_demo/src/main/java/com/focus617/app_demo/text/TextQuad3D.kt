@@ -1,5 +1,6 @@
 package com.focus617.app_demo.text
 
+import com.focus617.app_demo.engine.XGLDrawableObject
 import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.shader.Shader
@@ -31,7 +32,7 @@ class TextQuad3D : XGLDrawableObject() {
     }
 
     override fun submit(shader: Shader) {
-        if((text != preText)||(textFont != preTextFont)) {
+        if ((text != preText) || (textFont != preTextFont)) {
             textTexture.setText(text, textFont)
 
             preText = text

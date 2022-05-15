@@ -1,14 +1,14 @@
 package com.focus617.app_demo.text
 
+import com.focus617.app_demo.engine.XGLDrawableObject
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.objects.DrawableObject
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 
-class TextLayer(name: String) : Layer(name) {
+class TextLayer3D(name: String) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
     private val textQuad = TextQuad3D()
 
@@ -70,6 +70,3 @@ class TextLayer(name: String) : Layer(name) {
 
 }
 
-abstract class XGLDrawableObject : DrawableObject() {
-    abstract fun initOpenGlResource()
-}
