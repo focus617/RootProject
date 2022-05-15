@@ -36,14 +36,11 @@ object XGLTextureHelper : BaseEntity() {
      * @param bitmap
      * @return textureObjectId
      */
-    fun loadImageIntoTexture(
+    fun loadImageIntoMutableTexture(
         textureHandle: Int,
         bitmap: Bitmap,
         internalFormat: Int = GL_RGBA8,
     ) {
-        // Bind to the texture in OpenGL
-        glBindTexture(GL_TEXTURE_2D, textureHandle)
-
         // Check the bitmap format
         val dataFormat: Int = setDataFormat(bitmap)
 
@@ -54,6 +51,8 @@ object XGLTextureHelper : BaseEntity() {
         bitmap.copyPixelsToBuffer(byteBuf)
         byteBuf.position(0)
 
+        // Bind to the texture in OpenGL
+        glBindTexture(GL_TEXTURE_2D, textureHandle)
         // Load the bitmap into the bound texture.
         glTexImage2D(
             GL_TEXTURE_2D,
@@ -82,7 +81,7 @@ object XGLTextureHelper : BaseEntity() {
         glBindTexture(GL_TEXTURE_2D, 0)
     }
 
-    private fun setDataFormat(bitmap: Bitmap): Int =
+    fun setDataFormat(bitmap: Bitmap): Int =
         when (bitmap.config) {
             Bitmap.Config.ARGB_8888 -> GL_RGBA
             else -> {

@@ -24,7 +24,7 @@ class TextTexture2D : XGLTexture2D("TextTexture") {
         val bitmap = createBitmap(text, fontSize)
         mWidth = bitmap.width
         mHeight = bitmap.height
-        XGLTextureHelper.loadImageIntoTexture(mHandle, bitmap, mInternalFormat)
+        XGLTextureHelper.loadImageIntoMutableTexture(mHandle, bitmap, mInternalFormat)
         bitmap.recycle()
 
         LOG.info("set new text($text) to Texture, size=($mWidth, $mHeight)")
