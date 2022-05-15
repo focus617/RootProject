@@ -106,16 +106,17 @@ class OrthographicCameraController(camera: OrthographicCamera) : CameraControlle
     }
 
     private fun reCalculateOrthoGraphicProjectionMatrix() {
+        val matrix = FloatArray(16)
+
         // 计算正交投影矩阵 (Project Matrix)
         // 默认绘制的区间在横轴[-1.7778f, 1.778f]，纵轴[-1, 1]之间
         if (mWidth > mHeight) {
             // Landscape
             val aspect: Float = mWidth.toFloat() / mHeight.toFloat()
             val ratio = aspect * mZoomLevel
-
             // 用ZoomLevel来表示top，因为拉近镜头时，ZoomLevel变大，而对应可见区域会变小
             XMatrix.orthoM(
-                mProjectionMatrix.toFloatArray(),
+                matrix,
                 0,
                 -ratio,
                 ratio,
@@ -129,7 +130,7 @@ class OrthographicCameraController(camera: OrthographicCamera) : CameraControlle
             val aspect: Float = mHeight.toFloat() / mWidth.toFloat()
             val ratio = aspect * mZoomLevel
             XMatrix.orthoM(
-                mProjectionMatrix.toFloatArray(),
+                matrix,
                 0,
                 -mZoomLevel,
                 mZoomLevel,
@@ -139,13 +140,13 @@ class OrthographicCameraController(camera: OrthographicCamera) : CameraControlle
                 1.0f
             )
         }
+        mProjectionMatrix.setValue(matrix)
     }
 
     fun getZoomLevel() = mZoomLevel
     fun setZoomLevel(level: Float) {
         mZoomLevel = level
         reCalculateOrthoGraphicProjectionMatrix()
-//        mCamera.setProjectionMatrix(mProjectionMatrix)
     }
 
     fun setRotation(rollZ: Float = 90f) {

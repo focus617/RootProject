@@ -123,13 +123,15 @@ class PerspectiveCameraController(camera: PerspectiveCamera) : CameraController(
     }
 
     private fun reCalculatePerspectiveProjectionMatrix() {
+        val matrix = FloatArray(16)
+
         // 计算透视投影矩阵 (Project Matrix)
         if (mWidth > mHeight) {
             // Landscape
             val aspect: Float = mWidth.toFloat() / mHeight.toFloat()
             val ratio = aspect * mZoomLevel
             XMatrix.frustumM(
-                mProjectionMatrix.toFloatArray(),
+                matrix,
                 0,
                 -ratio,
                 ratio,
@@ -143,7 +145,7 @@ class PerspectiveCameraController(camera: PerspectiveCamera) : CameraController(
             val aspect: Float = mHeight.toFloat() / mWidth.toFloat()
             val ratio = aspect * mZoomLevel
             XMatrix.frustumM(
-                mProjectionMatrix.toFloatArray(),
+                matrix,
                 0,
                 -mZoomLevel,
                 mZoomLevel,
@@ -153,6 +155,7 @@ class PerspectiveCameraController(camera: PerspectiveCamera) : CameraController(
                 100f
             )
         }
+        mProjectionMatrix.setValue(matrix)
     }
 
     fun getZoomLevel() = mZoomLevel
