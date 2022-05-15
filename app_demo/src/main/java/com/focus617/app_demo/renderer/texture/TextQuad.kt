@@ -57,15 +57,12 @@ class TextQuad : DrawableObject() {
     }
 
     companion object {
-        const val SHADER_PATH = "framebuffer"
+        const val SHADER_PATH = "Text"
         const val SHADER_FILE = "shader.glsl"
-        const val SHADER_OUTLINING_FILE = "shaderSingleColor.glsl"
 
         const val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
-        const val ShaderOutliningFilePath: String = "$SHADER_PATH/$SHADER_OUTLINING_FILE"
 
         lateinit var shader: Shader
-        lateinit var shaderOutlining: Shader
 
         const val U_TEXTURE = "u_screenTexture"
 
