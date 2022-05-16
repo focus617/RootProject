@@ -1,11 +1,13 @@
 package com.focus617.app_demo.renderer.framebuffer
 
+import android.graphics.Bitmap
 import android.opengl.GLES31.*
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureFormat
 import com.focus617.core.engine.renderer.framebuffer.IfFrameBufferAttachment
 import com.focus617.core.engine.renderer.texture.Texture2D
 import java.nio.Buffer
+import java.nio.ByteBuffer
 
 class XGLTexture2DBuffer private constructor() :
     Texture2D("FrameBufferAttachment"), IfFrameBufferAttachment {
@@ -95,6 +97,36 @@ class XGLTexture2DBuffer private constructor() :
             GL_UNSIGNED_BYTE,
             null
         )
+    }
+
+    fun setData(bitmap: Bitmap, xOffset: Int, yOffset: Int) {
+        require((xOffset + bitmap.width) < mWidth) {
+            "Bitmap width(${bitmap.width} plug xoffset($xOffset) must less than texture width($mWidth)"
+        }
+        require((yOffset + bitmap.height) < mHeight) {
+            "Bitmap width(${bitmap.height} plug xoffset($yOffset) must less than texture height($mHeight)"
+        }
+
+        val size = bitmap.width * bitmap.height * 4
+        val byteBuf = ByteBuffer.allocate(size)
+        bitmap.copyPixelsToBuffer(byteBuf)
+        byteBuf.position(0)
+
+        // Bind to the texture in OpenGL
+        glBindTexture(GL_TEXTURE_2D, mHandle)
+        glTexSubImage2D(
+            GL_TEXTURE_2D,
+            0,
+            xOffset,
+            yOffset,
+            bitmap.width,
+            bitmap.height,
+            GL_RGBA,
+            GL_UNSIGNED_BYTE,
+            byteBuf
+        )
+        // Unbind from the texture.
+        glBindTexture(GL_TEXTURE_2D, 0)
     }
 
     private fun createDepthStorage(width: Int, height: Int) {

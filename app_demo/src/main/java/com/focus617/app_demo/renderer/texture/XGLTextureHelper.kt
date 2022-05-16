@@ -30,11 +30,10 @@ object XGLTextureHelper : BaseEntity() {
     }
 
     /**
-     * Loads a texture from a file, returning the OpenGL ID for that
-     * texture. Returns 0 if the load failed.
+     * Loads a texture from a bitmap
      *
      * @param bitmap
-     * @return textureObjectId
+     * @return
      */
     fun loadImageIntoMutableTexture(
         textureHandle: Int,

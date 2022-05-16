@@ -93,4 +93,9 @@ object BitmapHelper {
         canvas.drawBitmap(this, srcRect, destRect, paint)
     }
 
+    fun Bitmap.convert(sx: Float, sy: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postScale(sx, sy)
+        return Bitmap.createBitmap(this, 0, 0, this.width, this.height, matrix, true)
+    }
 }

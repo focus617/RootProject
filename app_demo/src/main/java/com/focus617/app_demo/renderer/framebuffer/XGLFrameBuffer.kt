@@ -23,6 +23,8 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     private var mRenderBufferAttachment: XGLRenderBuffer? = null          // RenderBuffer
     private val mQuad: FrameBufferQuad = FrameBufferQuad()
 
+    private var mActiveColorAttachment: Int = 0
+
     init {
         for (format in specification.attachment.attachments) {
             if (!FrameBufferTextureFormat.isDepthFormat(format.textureFormat))
@@ -59,7 +61,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
             GL_DRAW_FRAMEBUFFER,
             GL_COLOR_ATTACHMENT0,
             GL_TEXTURE_2D,
-            mColorAttachments[0].mHandle,
+            mColorAttachments[mActiveColorAttachment].mHandle,
             0
         )
 
