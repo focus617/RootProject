@@ -91,6 +91,18 @@ open class XGLTexture2D(filePath: String) : Texture2D(filePath) {
         glBindTexture(GL_TEXTURE_2D, 0)
     }
 
+    // 将Text生成Bitmap，然后将之动态加载到Texture2D
+    fun setText(text: String, fontSize: Float) {
+        // Creates a new mutable bitmap based on text and font size
+        val bitmap = BitmapHelper.createBitmap(text, fontSize)
+        mWidth = bitmap.width
+        mHeight = bitmap.height
+        XGLTextureHelper.loadImageIntoMutableTexture(mHandle, bitmap, mInternalFormat)
+        bitmap.recycle()
+
+        LOG.info("set new text($text) to Texture, size=($mWidth, $mHeight)")
+    }
+
     override fun setData(data: Buffer, size: Int) {
         val bpp = if (mDataFormat == GL_RGBA) 4 else 3
         require(size == (mWidth * mHeight * bpp)) { "Data must be entire texture!" }

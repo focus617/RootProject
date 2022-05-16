@@ -9,8 +9,8 @@ import com.focus617.app_demo.renderer.texture.XGLTextureCubeMap
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.app_demo.terrain.Heightmap
 import com.focus617.app_demo.terrain.SkyBox
-import com.focus617.app_demo.text.FrameBufferTextQuad
-import com.focus617.app_demo.text.TextQuad
+import com.focus617.app_demo.text.TextQuad2D
+import com.focus617.app_demo.text.TextQuad3D
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.scene.PerspectiveCamera
 import com.focus617.core.engine.scene.PerspectiveCameraController
@@ -42,9 +42,9 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
             FrameBufferQuad.ShaderOutliningFilePath
         ) as XGLShader
 
-        FrameBufferTextQuad.shaderWithColor = XGLShaderBuilder.createShader(
+        TextQuad2D.shaderWithColor = XGLShaderBuilder.createShader(
             context,
-            FrameBufferTextQuad.ShaderWithColorFilePath
+            TextQuad2D.ShaderWithColorFilePath
         ) as XGLShader
 
         var shader = XGLShaderBuilder.createShader(
@@ -71,11 +71,11 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         ) as XGLShader
         mShaderLibrary.add(shader)
 
-        TextQuad.shader = XGLShaderBuilder.createShader(
+        TextQuad3D.shader = XGLShaderBuilder.createShader(
             context,
-            TextQuad.ShaderFilePath
+            TextQuad3D.ShaderFilePath
         ) as XGLShader
-        mShaderLibrary.add(TextQuad.shader)
+        mShaderLibrary.add(TextQuad3D.shader)
     }
 
     private fun initTexture() {

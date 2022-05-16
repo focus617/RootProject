@@ -7,6 +7,7 @@ import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureFormat
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
+import com.focus617.platform.helper.BitmapHelper
 import com.focus617.platform.helper.BitmapHelper.convert
 
 /**
@@ -14,7 +15,7 @@ import com.focus617.platform.helper.BitmapHelper.convert
  */
 class TextLayer2D(name: String) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
-    private val mQuad: FrameBufferTextQuad = FrameBufferTextQuad()
+    private val mQuad: TextQuad2D = TextQuad2D()
 
     override fun initOpenGlResource() {
         mQuad.initOpenGlResource()
@@ -43,7 +44,7 @@ class TextLayer2D(name: String) : Layer(name) {
             mQuad.fontColor = Color.CYAN
 
             val bitmap =
-                TextTexture2D.createBitmap("欢迎访问我的虚拟世界！", 50f).convert(1f, -1f)
+                BitmapHelper.createBitmap("欢迎访问我的虚拟世界！", 50f).convert(1f, -1f)
             texture!!.setData(
                 bitmap,
                 screenWidth - bitmap.width - 20,
@@ -51,11 +52,11 @@ class TextLayer2D(name: String) : Layer(name) {
             )
             bitmap.recycle()
 
-            FrameBufferTextQuad.shaderWithColor.bind()
-            FrameBufferTextQuad.shaderWithColor.setInt(
-                FrameBufferTextQuad.U_TEXTURE, texture!!.screenTextureIndex
+            TextQuad2D.shaderWithColor.bind()
+            TextQuad2D.shaderWithColor.setInt(
+                TextQuad2D.U_TEXTURE, texture!!.screenTextureIndex
             )
-            mQuad.submit(FrameBufferTextQuad.shaderWithColor)
+            mQuad.submit(TextQuad2D.shaderWithColor)
         }
     }
 

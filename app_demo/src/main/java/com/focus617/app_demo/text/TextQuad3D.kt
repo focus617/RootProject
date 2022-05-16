@@ -1,6 +1,8 @@
 package com.focus617.app_demo.text
 
 import com.focus617.app_demo.engine.XGLDrawableObject
+import com.focus617.app_demo.renderer.texture.XGLTexture2D
+import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.XMatrix
@@ -19,8 +21,9 @@ import com.focus617.core.engine.scene.Camera
  * 2. Orthographic 3D Text, which projection matrix is orthographic(no zoom)
  *    textQuad2 is example for this type.
  */
-class TextQuad(val isPerspective: Boolean = true) : XGLDrawableObject() {
-    private lateinit var textTexture: TextTexture2D
+class TextQuad3D(private val isPerspective: Boolean = true) : XGLDrawableObject() {
+    private lateinit var textTexture: XGLTexture2D
+    private var textureIndex: Int = -1    // 在TextureSlots内的Index
 
     var text: String = "Hello World!"
     var textColor: Color = Color.WHITE
@@ -36,7 +39,7 @@ class TextQuad(val isPerspective: Boolean = true) : XGLDrawableObject() {
     override fun initOpenGlResource() {
         vertexArray = XGLVertexArray.buildVertexArray(this)
 
-        textTexture = TextTexture2D()
+        textTexture = XGLTexture2D("TextTexture")
 
         textTexture.setText(text, textFont)
     }
@@ -48,17 +51,18 @@ class TextQuad(val isPerspective: Boolean = true) : XGLDrawableObject() {
             preText = text
             preTextFont = textFont
         }
+        // 注册到TextureSlots, 获得TextureUnit Index, 以便ActiveTexture
+        textureIndex = XGLTextureSlots.getId(textTexture)
+        textTexture.bind(textureIndex)
 
         shader.bind()
-        textTexture.bind(0)
-
         if(!isPerspective) {
             shader.setMat4(Camera.U_PROJECT_MATRIX, mProjectionMatrix)
             shader.setMat4(Camera.U_VIEW_MATRIX, XRenderer.sViewMatrix)
         }
 
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
-        shader.setInt(U_TEXTURE, textTexture.textureIndex)
+        shader.setInt(U_TEXTURE, textureIndex)
         shader.setFloat4(U_COLOR, textColor)
 
         vertexArray.bind()

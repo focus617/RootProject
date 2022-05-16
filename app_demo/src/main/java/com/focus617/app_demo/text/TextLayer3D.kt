@@ -13,8 +13,8 @@ import com.focus617.core.platform.event.base.EventDispatcher
  */
 class TextLayer3D(name: String) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
-    private val textQuad1 = TextQuad()
-    private val textQuad2 = TextQuad(false)
+    private val textQuad1 = TextQuad3D()
+    private val textQuad2 = TextQuad3D(false)
 
     init {
         textQuad1.onTransform3D(

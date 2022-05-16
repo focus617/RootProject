@@ -7,7 +7,7 @@ import com.focus617.app_demo.renderer.framebuffer.XGLFrameBufferBuilder
 import com.focus617.app_demo.renderer.framebuffer.submitWithOutlining
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.app_demo.text.TextLayer2D
-import com.focus617.app_demo.text.TextQuad
+import com.focus617.app_demo.text.TextQuad3D
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferAttachmentSpecification
@@ -64,7 +64,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
 
         mFrameBuffer.resizeColorAttachment(width, height)
         TextLayer2D.onWindowSizeChange(width, height)   // used for text on screen
-        TextQuad.onWindowSizeChange(width, height)      // used for projection matrix
+        TextQuad3D.onWindowSizeChange(width, height)      // used for projection matrix
     }
 
     override fun onDrawFrame(unused: GL10) {
