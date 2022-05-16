@@ -2,14 +2,18 @@ package com.focus617.app_demo.text
 
 import com.focus617.app_demo.engine.XGLDrawableObject
 import com.focus617.app_demo.renderer.vertex.XGLVertexArray
+import com.focus617.core.engine.math.Mat4
+import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.renderer.RenderCommand
+import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.resource.baseDataType.Color
+import com.focus617.core.engine.scene.Camera
 
-class TextQuad : XGLDrawableObject() {
+class TextQuad(val isPerspective: Boolean = true) : XGLDrawableObject() {
     private lateinit var textTexture: TextTexture2D
 
     var text: String = "Hello World!"
@@ -39,7 +43,13 @@ class TextQuad : XGLDrawableObject() {
             preTextFont = textFont
         }
 
+        shader.bind()
         textTexture.bind(0)
+
+        if(!isPerspective) {
+            shader.setMat4(Camera.U_PROJECT_MATRIX, mProjectionMatrix)
+            shader.setMat4(Camera.U_VIEW_MATRIX, XRenderer.sViewMatrix)
+        }
 
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
         shader.setInt(U_TEXTURE, textTexture.textureIndex)
@@ -90,5 +100,46 @@ class TextQuad : XGLDrawableObject() {
         const val U_COLOR = "u_Color"
 
         lateinit var shader: Shader
+
+
+        private val mProjectionMatrix = Mat4()
+        var mZoomLevel: Float = 1.0f
+        fun onWindowSizeChange(width: Int, height: Int) {
+            val matrix = FloatArray(16)
+            // 计算正交投影矩阵 (Project Matrix)
+            // 默认绘制的区间在横轴[-1.7778f, 1.778f]，纵轴[-1, 1]之间
+            if (width > height) {
+                // Landscape
+                val aspect: Float = width.toFloat() / height.toFloat()
+                val ratio = aspect * mZoomLevel
+
+                // 用ZoomLevel来表示top，因为拉近镜头时，ZoomLevel变大，而对应可见区域会变小
+                XMatrix.orthoM(
+                    matrix,
+                    0,
+                    -ratio,
+                    ratio,
+                    -mZoomLevel,
+                    mZoomLevel,
+                    -0.1f,
+                    10f
+                )
+            } else {
+                // Portrait or Square
+                val aspect: Float = height.toFloat() / width.toFloat()
+                val ratio = aspect * mZoomLevel
+                XMatrix.orthoM(
+                    matrix,
+                    0,
+                    -mZoomLevel,
+                    mZoomLevel,
+                    -ratio,
+                    ratio,
+                    -0.1f,
+                    10f
+                )
+            }
+            mProjectionMatrix.setValue(matrix)
+        }
     }
 }

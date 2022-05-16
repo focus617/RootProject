@@ -6,7 +6,7 @@ import com.focus617.app_demo.renderer.framebuffer.XGLFrameBuffer
 import com.focus617.app_demo.renderer.framebuffer.XGLFrameBufferBuilder
 import com.focus617.app_demo.renderer.framebuffer.submitWithOutlining
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
-import com.focus617.app_demo.text.TextLayer2D
+import com.focus617.app_demo.text.TextQuad
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferAttachmentSpecification
@@ -62,7 +62,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         scene.mCameraController.onWindowSizeChange(width, height)
 
         mFrameBuffer.resizeColorAttachment(width, height)
-        TextLayer2D.onWindowSizeChange(width, height)
+        TextQuad.onWindowSizeChange(width, height)
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -108,13 +108,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
             layer.beforeDrawFrame()
             for (gameObject in layer.gameObjectList) {
                 val shader = scene.mShaderLibrary.get(gameObject.shaderName)
-
                 shader?.apply {
-                    bind()
-
-                    setMat4(Camera.U_PROJECT_MATRIX, TextLayer2D.mProjectionMatrix)
-                    setMat4(Camera.U_VIEW_MATRIX, SceneData.sViewMatrix)
-
                     if (gameObject.isSelected) {
                         gameObject.submitWithOutlining(shader, Color.GOLD)
                     } else {

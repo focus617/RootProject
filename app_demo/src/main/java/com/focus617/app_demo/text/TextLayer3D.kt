@@ -10,15 +10,22 @@ import com.focus617.core.platform.event.base.EventDispatcher
 
 class TextLayer3D(name: String) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
-    private val textQuad = TextQuad()
+    private val textQuad1 = TextQuad()
+    private val textQuad2 = TextQuad(false)
 
     init {
-        textQuad.onTransform3D(
+        textQuad1.onTransform3D(
             Vector3(0f, 1.5f, 0f),
             Vector3(1.0f, 0.5f, 1.0f)
         )
-        textQuad.textColor = Color.GOLD
-        gameObjectList.add(textQuad)
+        textQuad1.textColor = Color.GOLD
+        gameObjectList.add(textQuad1)
+
+        textQuad2.onTransform3D(
+            Vector3(-1.0f, 0.5f, 0.0f),
+            Vector3(1.0f, 0.5f, 1.0f)
+        )
+        gameObjectList.add(textQuad2)
     }
 
     override fun initOpenGlResource() {
@@ -48,8 +55,12 @@ class TextLayer3D(name: String) : Layer(name) {
     override fun beforeDrawFrame() {
         //Enable Cull Back Face
         //GLES31.glEnable(GLES31.GL_CULL_FACE)
-        textQuad.text = "你好，徐智勇！"
-        textQuad.textFont = 200f
+        textQuad1.text = "你好，徐智勇！"
+        textQuad1.textFont = 200f
+
+        textQuad2.text = "Hello World!"
+        textQuad2.textFont = 100f
+        textQuad2.textColor = Color.RED
     }
 
     override fun afterDrawFrame() {
