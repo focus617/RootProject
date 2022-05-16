@@ -1,22 +1,21 @@
 package com.focus617.app_demo.text
 
-import com.focus617.app_demo.engine.XGLDrawableObject
+import com.focus617.app_demo.renderer.framebuffer.FrameBufferQuad
+import com.focus617.app_demo.renderer.framebuffer.XGLTexture2DBuffer
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
+import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureFormat
+import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
+import com.focus617.platform.helper.BitmapHelper.convert
 
 class TextLayer2D(name: String) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
-
-    init {
-
-    }
+    private val mQuad: FrameBufferQuad = FrameBufferQuad()
 
     override fun initOpenGlResource() {
-        for (gameObject in gameObjectList) {
-            (gameObject as XGLDrawableObject).initOpenGlResource()
-        }
+        mQuad.initOpenGlResource()
     }
 
     override fun close() {
@@ -38,14 +37,27 @@ class TextLayer2D(name: String) : Layer(name) {
     }
 
     override fun beforeDrawFrame() {
-        //Enable Cull Back Face
-        //GLES31.glEnable(GLES31.GL_CULL_FACE)
+        textureBuffer?.apply {
+            mQuad.fontColor = Color.CYAN
 
+            val bitmap =
+                TextTexture2D.createBitmap("欢迎访问我的虚拟世界！", 50f).convert(1f, -1f)
+            textureBuffer!!.setData(
+                bitmap,
+                screenWidth - bitmap.width - 20,
+                screenHeight - bitmap.height - 20
+            )
+            bitmap.recycle()
+
+            FrameBufferQuad.shaderWithColor.bind()
+            FrameBufferQuad.shaderWithColor.setInt(
+                FrameBufferQuad.U_TEXTURE, textureBuffer!!.screenTextureIndex
+            )
+            mQuad.submit(FrameBufferQuad.shaderWithColor)
+        }
     }
 
     override fun afterDrawFrame() {
-        //Enable Cull Back Face
-        //GLES31.glDisable(GLES31.GL_CULL_FACE)
     }
 
     override fun onEvent(event: Event): Boolean {
@@ -57,6 +69,24 @@ class TextLayer2D(name: String) : Layer(name) {
     }
 
     private fun unRegisterEventHandlers() {
+    }
+
+    companion object {
+        private var textureBuffer: XGLTexture2DBuffer? = null
+        private var screenWidth: Int = 0
+        private var screenHeight: Int = 0
+
+        fun onWindowSizeChange(width: Int, height: Int) {
+            screenWidth = width
+            screenHeight = height
+
+            textureBuffer?.close()
+
+            // Generate Texture2D for Overlay
+            // 把纹理的维度设置为屏幕大小：传入width和height，只分配相应的内存，而不填充
+            textureBuffer =
+                XGLTexture2DBuffer(FrameBufferTextureFormat.RGBA8, screenWidth, screenHeight)
+        }
     }
 
 }

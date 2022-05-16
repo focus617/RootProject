@@ -25,6 +25,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
 
     private var mActiveColorAttachment: Int = 0
 
+    // Must call under EGL
     init {
         for (format in specification.attachment.attachments) {
             if (!FrameBufferTextureFormat.isDepthFormat(format.textureFormat))
@@ -34,6 +35,8 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         }
 
         invalidate()
+
+        mQuad.initOpenGlResource()
         LOG.info("XGLFrameBuffer created.")
     }
 

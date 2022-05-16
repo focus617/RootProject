@@ -41,6 +41,11 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
             FrameBufferQuad.ShaderOutliningFilePath
         ) as XGLShader
 
+        FrameBufferQuad.shaderWithColor = XGLShaderBuilder.createShader(
+            context,
+            FrameBufferQuad.ShaderWithColorFilePath
+        ) as XGLShader
+
         var shader = XGLShaderBuilder.createShader(
             context,
             SkyBox.SkyBoxShaderFilePath

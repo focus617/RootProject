@@ -6,6 +6,7 @@ import com.focus617.app_demo.renderer.framebuffer.XGLFrameBuffer
 import com.focus617.app_demo.renderer.framebuffer.XGLFrameBufferBuilder
 import com.focus617.app_demo.renderer.framebuffer.submitWithOutlining
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
+import com.focus617.app_demo.text.TextLayer2D
 import com.focus617.app_demo.text.TextQuad
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.XRenderer
@@ -62,7 +63,8 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         scene.mCameraController.onWindowSizeChange(width, height)
 
         mFrameBuffer.resizeColorAttachment(width, height)
-        TextQuad.onWindowSizeChange(width, height)
+        TextLayer2D.onWindowSizeChange(width, height)   // used for text on screen
+        TextQuad.onWindowSizeChange(width, height)      // used for projection matrix
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -105,17 +107,18 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
 
         val overLayerStack = scene.engine.getOverLayerStack()
         for (layer in overLayerStack.mLayers) {
-            layer.beforeDrawFrame()
-            for (gameObject in layer.gameObjectList) {
-                val shader = scene.mShaderLibrary.get(gameObject.shaderName)
-                shader?.apply {
-                    if (gameObject.isSelected) {
-                        gameObject.submitWithOutlining(shader, Color.GOLD)
-                    } else {
-                        gameObject.submit(shader)
-                    }
-                }
-            }
+            layer.beforeDrawFrame() // 暂时先在这里DrawFrame
+
+//            for (gameObject in layer.gameObjectList) {
+//                val shader = scene.mShaderLibrary.get(gameObject.shaderName)
+//                shader?.apply {
+//                    if (gameObject.isSelected) {
+//                        gameObject.submitWithOutlining(shader, Color.GOLD)
+//                    } else {
+//                        gameObject.submit(shader)
+//                    }
+//                }
+//            }
             layer.afterDrawFrame()
         }
         endScene()
