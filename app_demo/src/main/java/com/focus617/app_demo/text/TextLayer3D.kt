@@ -8,6 +8,9 @@ import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 
+/**
+ * TextLayer3D is often used for text showing on game layers
+ */
 class TextLayer3D(name: String) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
     private val textQuad1 = TextQuad()

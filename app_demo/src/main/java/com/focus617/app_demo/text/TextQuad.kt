@@ -13,6 +13,12 @@ import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.engine.scene.Camera
 
+/**
+ *  * Two kinds of objects:
+ * 1. Perspective 3D Text, textQuad1 is example
+ * 2. Orthographic 3D Text, which projection matrix is orthographic(no zoom)
+ *    textQuad2 is example for this type.
+ */
 class TextQuad(val isPerspective: Boolean = true) : XGLDrawableObject() {
     private lateinit var textTexture: TextTexture2D
 

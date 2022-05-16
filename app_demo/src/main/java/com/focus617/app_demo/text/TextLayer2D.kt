@@ -10,6 +10,9 @@ import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 import com.focus617.platform.helper.BitmapHelper.convert
 
+/**
+ * TextLayer2D is often used for screen text showing on overlayer
+ */
 class TextLayer2D(name: String) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
     private val mQuad: FrameBufferQuad = FrameBufferQuad()
