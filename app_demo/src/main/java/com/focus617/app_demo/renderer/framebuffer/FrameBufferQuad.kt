@@ -2,6 +2,7 @@ package com.focus617.app_demo.renderer.framebuffer
 
 import com.focus617.app_demo.engine.XGLDrawableObject
 import com.focus617.app_demo.renderer.vertex.XGLVertexArray
+import com.focus617.core.engine.objects.DrawableObject
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.BufferElement
@@ -9,7 +10,7 @@ import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 
 
-open class FrameBufferQuad : XGLDrawableObject() {
+open class FrameBufferQuad : DrawableObject(), XGLDrawableObject {
 
 
     override fun initOpenGlResource() {

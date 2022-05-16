@@ -8,6 +8,7 @@ import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Ray
 import com.focus617.core.engine.math.Vector3
+import com.focus617.core.engine.objects.DrawableObject
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.BufferElement
@@ -15,7 +16,7 @@ import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.scene.PointLight
 
-class Box : XGLDrawableObject() {
+class Box : DrawableObject(), XGLDrawableObject{
     init {
         shaderName = ShaderFilePath
     }

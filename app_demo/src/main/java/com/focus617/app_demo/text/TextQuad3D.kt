@@ -6,6 +6,7 @@ import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.XMatrix
+import com.focus617.core.engine.objects.DrawableObject
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.renderer.shader.Shader
@@ -21,7 +22,7 @@ import com.focus617.core.engine.scene.Camera
  * 2. Orthographic 3D Text, which projection matrix is orthographic(no zoom)
  *    textQuad2 is example for this type.
  */
-class TextQuad3D(private val isPerspective: Boolean = true) : XGLDrawableObject() {
+class TextQuad3D(private val isPerspective: Boolean = true) : DrawableObject(), XGLDrawableObject {
     private lateinit var textTexture: XGLTexture2D
     private var textureIndex: Int = -1    // 在TextureSlots内的Index
 
@@ -56,7 +57,7 @@ class TextQuad3D(private val isPerspective: Boolean = true) : XGLDrawableObject(
         textTexture.bind(textureIndex)
 
         shader.bind()
-        if(!isPerspective) {
+        if (!isPerspective) {
             shader.setMat4(Camera.U_PROJECT_MATRIX, mProjectionMatrix)
             shader.setMat4(Camera.U_VIEW_MATRIX, XRenderer.sViewMatrix)
         }

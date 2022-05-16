@@ -1,6 +1,6 @@
 # Blender v2.78 (sub 0) OBJ File: 'Viking.blend'
 # www.blender.org
-#mtllib Viking.mtl
+mtllib Viking.mtl
 o Cylinder_Cylinder.001
 v 0.007981 0.233436 0.154429
 v 0.007981 0.245988 0.154429
@@ -9828,7 +9828,7 @@ vn -0.0204 0.9518 -0.3058
 vn -0.1615 0.9193 -0.3588
 vn 0.3396 0.9386 0.0604
 vn -0.3214 0.9048 -0.2794
-#usemtl Viking
+usemtl Viking
 s 1
 f 1/1/1 753/2/2 2308/3/3 755/4/4
 f 1/1/1 755/4/4 2313/5/5 769/6/6

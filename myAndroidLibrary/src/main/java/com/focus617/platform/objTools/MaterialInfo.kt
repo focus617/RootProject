@@ -1,5 +1,6 @@
-package com.focus617.myopengldemo.utils.objTools
+package com.focus617.platform.objTools
 
+import com.focus617.core.engine.resource.baseDataType.Color
 import timber.log.Timber
 
 /**
@@ -46,16 +47,16 @@ class MaterialInfo {
     var name: String? = null
 
     // 环境光
-    var Ka_Color = 0
+    var Ka_Color = Color(0f, 0f, 0f, 1f)
 
     // 散射光
-    var Kd_Color = 0
+    var Kd_Color = Color(0f, 0f, 0f, 1f)
 
     // 镜面光
-    var Ks_Color = 0
+    var Ks_Color = Color(0f, 0f, 0f, 1f)
 
     // 高光调整参数
-    var ns = 0f
+    var ns = 100f
 
     // 溶解度，为0时完全透明，1完全不透明
     var alpha = 1f
@@ -89,7 +90,7 @@ class MaterialInfo {
     }
 
     companion object{
-        fun getDefault(kdTexture: String): MaterialInfo{
+        fun getDefault(kdTexture: String): MaterialInfo {
             val material = MaterialInfo()
             material.name = "Default"
             material.Kd_Texture = kdTexture

@@ -29,6 +29,7 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
             Vector3(1.0f, 1.0f, 1.0f)
         )
         gameObjectList.add(box2)
+
     }
 
     override fun initOpenGlResource() {

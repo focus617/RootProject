@@ -1,9 +1,8 @@
 package com.focus617.platform.objTools
 
 import android.content.Context
-import android.graphics.Color
 import android.text.TextUtils
-import com.focus617.myopengldemo.utils.objTools.MaterialInfo
+import com.focus617.core.engine.resource.baseDataType.Color
 import timber.log.Timber
 import java.util.*
 
@@ -162,14 +161,14 @@ object MtlLoader {
      * @param parts
      * @return
      */
-    private fun getColorFromLine(line: String): Int {
+    private fun getColorFromLine(line: String): Color {
         val items = line.split(DELIMITER).toTypedArray()
-        if (items.size != 4) return Color.rgb(0, 0, 0)
+        if (items.size != 4) return Color(0f, 0f, 0f, 1f)
 
-        val r = (items[1].toFloat() * 255f).toInt()
-        val g = (items[2].toFloat() * 255f).toInt()
-        val b = (items[3].toFloat() * 255f).toInt()
-        return Color.rgb(r, g, b)
+        val r = items[1].toFloat() * 255f
+        val g = items[2].toFloat() * 255f
+        val b = items[3].toFloat() * 255f
+        return Color(r, g, b, 1f)
     }
 
     private fun getFloatFromLine(line: String): Float {
