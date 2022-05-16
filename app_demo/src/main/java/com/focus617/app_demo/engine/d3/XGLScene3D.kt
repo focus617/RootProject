@@ -9,6 +9,7 @@ import com.focus617.app_demo.renderer.texture.XGLTextureCubeMap
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.app_demo.terrain.Heightmap
 import com.focus617.app_demo.terrain.SkyBox
+import com.focus617.app_demo.text.FrameBufferTextQuad
 import com.focus617.app_demo.text.TextQuad
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.scene.PerspectiveCamera
@@ -41,9 +42,9 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
             FrameBufferQuad.ShaderOutliningFilePath
         ) as XGLShader
 
-        FrameBufferQuad.shaderWithColor = XGLShaderBuilder.createShader(
+        FrameBufferTextQuad.shaderWithColor = XGLShaderBuilder.createShader(
             context,
-            FrameBufferQuad.ShaderWithColorFilePath
+            FrameBufferTextQuad.ShaderWithColorFilePath
         ) as XGLShader
 
         var shader = XGLShaderBuilder.createShader(

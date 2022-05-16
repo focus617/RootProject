@@ -7,27 +7,16 @@ import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
-import com.focus617.core.engine.resource.baseDataType.Color
 
 
-class FrameBufferQuad : XGLDrawableObject() {
-    var fontColor: Color = Color.BLACK
+open class FrameBufferQuad : XGLDrawableObject() {
+
 
     override fun initOpenGlResource() {
         vertexArray = XGLVertexArray.buildVertexArray(this)
     }
 
-    // 用于本对象作为一个GO时（目前就用在overLayer的字幕）
     override fun submit(shader: Shader) {
-        shaderWithColor.setFloat4(U_COLOR, fontColor)
-
-        vertexArray.bind()
-        RenderCommand.drawIndexed(vertexArray)
-
-        // 下面这两行可以省略，以节约GPU的运行资源；
-        // 在下个submit，会bind其它handle，自然会实现unbind
-        vertexArray.unbind()
-        shaderWithColor.unbind()
     }
 
     // 用于本对象作为FrameBuffer绘制时
@@ -74,18 +63,14 @@ class FrameBufferQuad : XGLDrawableObject() {
     companion object {
         const val SHADER_PATH = "framebuffer"
         const val SHADER_FILE = "shader.glsl"
-        const val SHADER_COLOR_FILE = "shaderWithColor.glsl"
         const val SHADER_OUTLINING_FILE = "shaderSingleColor.glsl"
 
         const val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
-        const val ShaderWithColorFilePath: String = "$SHADER_PATH/$SHADER_COLOR_FILE"
         const val ShaderOutliningFilePath: String = "$SHADER_PATH/$SHADER_OUTLINING_FILE"
 
         lateinit var shader: Shader
-        lateinit var shaderWithColor: Shader
         lateinit var shaderOutlining: Shader
 
         const val U_TEXTURE = "u_screenTexture"
-        const val U_COLOR = "u_Color"
     }
 }
