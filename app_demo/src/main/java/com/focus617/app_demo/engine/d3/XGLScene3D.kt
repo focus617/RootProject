@@ -19,7 +19,7 @@ import com.focus617.core.engine.scene.Scene
 
 class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
 
-    private val model = Model(context, "3dModel/viking/viking.obj")
+    private val model = Model(context, "3dModel/teapot/teapot_t.obj")
 
     init {
         mCamera = PerspectiveCamera()

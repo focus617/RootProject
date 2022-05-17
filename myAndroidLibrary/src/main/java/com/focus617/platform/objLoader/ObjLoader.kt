@@ -29,15 +29,13 @@ object ObjLoader {
     private var mTextureDimension = 2
 
     private val mFaceIndices = HashMap<String, ArrayList<ObjIndex>>()   //存放解析出来面的索引
-    private lateinit var mCurrentIndices: ArrayList<ObjIndex>
+    private var mCurrentIndices: ArrayList<ObjIndex>? = null
 
     fun clear() {
         mPositions.clear()
         mTexCoords.clear()
         mNormals.clear()
         mFaceIndices.clear()
-
-        mCurrentIndices.clear()
     }
 
     /**
@@ -196,7 +194,7 @@ object ObjLoader {
         } else {
             // create a new Face Indices
             mCurrentIndices = ArrayList<ObjIndex>()
-            mFaceIndices[currentMaterialName] = mCurrentIndices
+            mFaceIndices[currentMaterialName] = mCurrentIndices!!
             Timber.i("switchUseMtl(): create new face indices for $currentMaterialName")
             Timber.i("switchUseMtl(): now we have total ${mFaceIndices.size} groups.")
         }
@@ -205,10 +203,15 @@ object ObjLoader {
     private fun fillFaceList(line: String) {
         val tokens = line.split(DELIMITER)
 
+        if(mCurrentIndices == null){
+            mCurrentIndices = ArrayList<ObjIndex>()
+            mFaceIndices["Default"] = mCurrentIndices!!
+        }
+
         for (i in 0 until tokens.size - 3) {
-            mCurrentIndices.add(parseFaceIndex(tokens[1]))
-            mCurrentIndices.add(parseFaceIndex(tokens[2 + i]))
-            mCurrentIndices.add(parseFaceIndex(tokens[3 + i]))
+            mCurrentIndices!!.add(parseFaceIndex(tokens[1]))
+            mCurrentIndices!!.add(parseFaceIndex(tokens[2 + i]))
+            mCurrentIndices!!.add(parseFaceIndex(tokens[3 + i]))
         }
     }
 
@@ -296,52 +299,52 @@ object ObjLoader {
         return BufferLayout(elements.toList())
     }
 
-    fun toIndexedModel(): IndexedModel {
-        val result = IndexedModel()
-        val normalModel = IndexedModel()
-
-        val resultIndexMap = HashMap<ObjIndex, Int>()
-        val normalIndexMap = HashMap<Int, Int>()
-        val indexMap = HashMap<Int, Int>()
-
-        for (i in 0 until mCurrentIndices.size) {
-            val currentIndex: ObjIndex = mCurrentIndices[i]
-
-            val currentPosition: Vector3 = mPositions[currentIndex.mVertexIndex]
-
-            val currentTexCoord: Vector3 =
-                if (mHasTexCoords) mTexCoords[currentIndex.mTexCoordIndex]
-                else Vector3(0f, 0f, 0f)
-
-            val currentNormal: Vector3 = if (mHasNormals) mNormals[currentIndex.mNormalIndex]
-            else Vector3(0f, 0f, 0f)
-
-            var modelVertexIndex = resultIndexMap[currentIndex]
-            if (modelVertexIndex == null) {
-                modelVertexIndex = result.getPositions().size
-                resultIndexMap[currentIndex] = modelVertexIndex
-                result.getPositions().add(currentPosition)
-                result.getTexCoords().add(currentTexCoord)
-                if (mHasNormals) result.getNormals().add(currentNormal)
-            }
-
-            var normalModelIndex = normalIndexMap[currentIndex.mVertexIndex]
-            if (normalModelIndex == null) {
-                normalModelIndex = normalModel.getPositions().size
-                normalIndexMap[currentIndex.mVertexIndex] = normalModelIndex
-                normalModel.getPositions().add(currentPosition)
-                normalModel.getTexCoords().add(currentTexCoord)
-                normalModel.getNormals().add(currentNormal)
-                normalModel.getTangents().add(Vector3(0f, 0f, 0f))
-            }
-
-            result.getIndices().add(modelVertexIndex)
-            normalModel.getIndices().add(normalModelIndex)
-            indexMap[modelVertexIndex] = normalModelIndex
-        }
-
-        return result
-    }
+//    fun toIndexedModel(): IndexedModel {
+//        val result = IndexedModel()
+//        val normalModel = IndexedModel()
+//
+//        val resultIndexMap = HashMap<ObjIndex, Int>()
+//        val normalIndexMap = HashMap<Int, Int>()
+//        val indexMap = HashMap<Int, Int>()
+//
+//        for (i in 0 until mCurrentIndices.size) {
+//            val currentIndex: ObjIndex = mCurrentIndices[i]
+//
+//            val currentPosition: Vector3 = mPositions[currentIndex.mVertexIndex]
+//
+//            val currentTexCoord: Vector3 =
+//                if (mHasTexCoords) mTexCoords[currentIndex.mTexCoordIndex]
+//                else Vector3(0f, 0f, 0f)
+//
+//            val currentNormal: Vector3 = if (mHasNormals) mNormals[currentIndex.mNormalIndex]
+//            else Vector3(0f, 0f, 0f)
+//
+//            var modelVertexIndex = resultIndexMap[currentIndex]
+//            if (modelVertexIndex == null) {
+//                modelVertexIndex = result.getPositions().size
+//                resultIndexMap[currentIndex] = modelVertexIndex
+//                result.getPositions().add(currentPosition)
+//                result.getTexCoords().add(currentTexCoord)
+//                if (mHasNormals) result.getNormals().add(currentNormal)
+//            }
+//
+//            var normalModelIndex = normalIndexMap[currentIndex.mVertexIndex]
+//            if (normalModelIndex == null) {
+//                normalModelIndex = normalModel.getPositions().size
+//                normalIndexMap[currentIndex.mVertexIndex] = normalModelIndex
+//                normalModel.getPositions().add(currentPosition)
+//                normalModel.getTexCoords().add(currentTexCoord)
+//                normalModel.getNormals().add(currentNormal)
+//                normalModel.getTangents().add(Vector3(0f, 0f, 0f))
+//            }
+//
+//            result.getIndices().add(modelVertexIndex)
+//            normalModel.getIndices().add(normalModelIndex)
+//            indexMap[modelVertexIndex] = normalModelIndex
+//        }
+//
+//        return result
+//    }
 
     /**
      * obj需解析字段
