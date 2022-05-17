@@ -11,7 +11,7 @@ import java.util.*
 /**
  * @description Wavefront Obj 3D模型文件解析类
  */
-object ObjLoader {
+object ObjLoaderOld {
 
     //模型文件所在目录
     private lateinit var directory: String

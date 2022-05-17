@@ -6,7 +6,6 @@ import com.focus617.core.engine.objects.IfDrawable
 import com.focus617.core.engine.renderer.IfBuffer
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.renderer.vertex.VertexArray
-import com.focus617.core.engine.scene_graph.renderer.IfModelLoader
 import com.focus617.mylib.logging.WithLogging
 import java.io.Closeable
 import java.nio.IntBuffer
@@ -130,33 +129,5 @@ class XGLVertexArray : VertexArray(), IfBuffer, Closeable {
 
             return vertexArray
         }
-
-        // Used for Scene-graph model
-        fun buildVertexArray(model: IfModelLoader): XGLVertexArray {
-            val vertexArray =
-                XGLVertexBufferBuilder.createVertexArray() as XGLVertexArray
-
-            // let drawingObject prepare data
-            model.beforeBuild()
-
-            val vertices = model.getVertices()
-            val vertexBuffer = XGLVertexBufferBuilder.createVertexBuffer(
-                vertices, vertices.size * Float.SIZE_BYTES
-            ) as XGLVertexBuffer
-            vertexBuffer.setLayout(model.getLayout())
-            vertexArray.addVertexBuffer(vertexBuffer)
-
-            val indices = model.getIndices()
-            val indexBuffer = XGLVertexBufferBuilder.createIndexBuffer(
-                indices, indices.size
-            ) as XGLIndexBuffer
-            vertexArray.setIndexBuffer(indexBuffer)
-
-            // let drawingObject release data buffer
-            model.afterBuild()
-
-            return vertexArray
-        }
-
     }
 }

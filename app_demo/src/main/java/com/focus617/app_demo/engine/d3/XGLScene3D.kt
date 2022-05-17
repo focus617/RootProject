@@ -7,6 +7,7 @@ import com.focus617.app_demo.renderer.shader.XGLShaderBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureCubeMap
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
+import com.focus617.app_demo.scene_graph.Model
 import com.focus617.app_demo.terrain.Heightmap
 import com.focus617.app_demo.terrain.SkyBox
 import com.focus617.app_demo.text.TextQuad2D
@@ -18,7 +19,7 @@ import com.focus617.core.engine.scene.Scene
 
 class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
 
-//    val model = Model(context, "3dModel/viking/viking.obj")
+    private val model = Model(context, "3dModel/viking/viking.obj")
 
     init {
         mCamera = PerspectiveCamera()
@@ -31,6 +32,8 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         initShader()
         initTexture()
         initGameObjects()
+
+        model.initOpenGlResource()
     }
 
     private fun initShader() {
