@@ -14,9 +14,10 @@ import java.nio.IntBuffer
  * VertexArray is used to link VertexBuffer with data layout
  */
 class XGLVertexArray : VertexArray(), IfBuffer, Closeable {
+    private var mVAOBuf: IntBuffer = IntBuffer.allocate(1)
+
     // Vertex Array handle
     private var mHandle: Int = 0
-    private var mVAOBuf: IntBuffer = IntBuffer.allocate(1)
 
     // Vertex Buffer stack
     private var mVertexBufferStack = mutableListOf<XGLVertexBuffer>()

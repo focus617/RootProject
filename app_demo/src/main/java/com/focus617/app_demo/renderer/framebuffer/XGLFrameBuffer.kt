@@ -111,7 +111,8 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
                         )
                         mColorAttachments.add(colorTextureBuf)
                     }
-                    else -> {}
+                    else -> {
+                    }
                 }
             }
         }
@@ -135,7 +136,8 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
                         mSpecification.mHeight
                     )
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
     }
