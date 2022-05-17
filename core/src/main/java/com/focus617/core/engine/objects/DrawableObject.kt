@@ -8,12 +8,12 @@ import com.focus617.core.engine.renderer.vertex.VertexArray
 import com.focus617.core.platform.base.BaseEntity
 
 interface IfDrawable {
-    abstract fun beforeBuild()
-    abstract fun afterBuild()
-    abstract fun getVertices(): FloatArray
-    abstract fun getLayout(): BufferLayout
-    abstract fun getIndices(): ShortArray
-    abstract fun submit(shader: Shader)
+    fun beforeBuild()
+    fun afterBuild()
+    fun getVertices(): FloatArray
+    fun getLayout(): BufferLayout
+    fun getIndices(): ShortArray
+    fun submit(shader: Shader)
 }
 
 abstract class DrawableObject : BaseEntity(), IfDrawable {
@@ -23,7 +23,7 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
 
     protected val boundingSphere = Sphere(Point3D(0f, 0f, 0f), 0.5f)
 
-    // vertexArray is initialized by Scene via calling XGLVertexArray.buildVertexArray
+    // vertexArray is initialized via calling XGLVertexArray.buildVertexArray
     lateinit var vertexArray: VertexArray
 
     // shaderName should be initialized by each concrete drawable object itself
