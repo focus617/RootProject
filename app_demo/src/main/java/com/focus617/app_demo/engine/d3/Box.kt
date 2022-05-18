@@ -14,6 +14,8 @@ import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.scene.PointLight
+import com.focus617.core.engine.scene_graph.components.MeshRenderer
+import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
 
 class Box : DrawableObject(), XGLDrawableObject{
@@ -22,13 +24,11 @@ class Box : DrawableObject(), XGLDrawableObject{
     }
 
     override fun initOpenGlResource() {
-        mesh = Mesh(XGLVertexArray.buildVertexArray(this))
+        val mesh = Mesh(XGLVertexArray.buildVertexArray(this))
+        meshRenderer = MeshRenderer(mesh, Material())
     }
 
     override fun submit(shader: Shader) {
-
-        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
-
         shader.setFloat3(U_POINT_VIEW_POSITION, viewPoint)
 
         shader.setFloat3(U_POINT_LIGHT_POSITION, PointLight.position)
@@ -43,9 +43,11 @@ class Box : DrawableObject(), XGLDrawableObject{
         shader.setFloat3(U_MATERIAL_SPECULAR, specular)
         shader.setFloat(U_MATERIAL_SHININESS, shininess)
 
-        mesh.draw()
+//        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
+//        mesh.draw()
+//        shader.unbind()
+        meshRenderer.onRender(shader, mTransform)
 
-        shader.unbind()
     }
 
     fun updateCameraPosition(point: Point3D) {

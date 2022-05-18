@@ -4,7 +4,7 @@ import com.focus617.core.engine.math.*
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene_graph.GameEntity
 import com.focus617.core.engine.scene_graph.IfMeshable
-import com.focus617.core.engine.scene_graph.renderer.Mesh
+import com.focus617.core.engine.scene_graph.components.MeshRenderer
 
 abstract class DrawableObject : GameEntity(), IfMeshable {
     private var modelMatrixInStack = getTransform()
@@ -12,7 +12,7 @@ abstract class DrawableObject : GameEntity(), IfMeshable {
     protected val boundingSphere = Sphere(Point3D(0f, 0f, 0f), 0.5f)
 
     // mesh is initialized via calling XGLVertexArray.buildVertexArray
-    lateinit var mesh: Mesh
+    lateinit var meshRenderer: MeshRenderer
 
     // shaderName should be initialized by each concrete drawable object itself
     lateinit var shaderName: String
@@ -24,16 +24,15 @@ abstract class DrawableObject : GameEntity(), IfMeshable {
     }
 
     override fun submit(shader: Shader) {
-        shader.bind()
-        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
-
-        mesh.draw()
-
-        shader.unbind()
+//        shader.bind()
+//        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
+//        mesh.draw()
+//        shader.unbind()
+        meshRenderer.onRender(shader, mTransform)
     }
 
     fun resetTransform() {
-       mTransform.reset()
+        mTransform.reset()
     }
 
     fun scale(scaleSize: Vector3) {
@@ -78,10 +77,4 @@ abstract class DrawableObject : GameEntity(), IfMeshable {
     open fun intersects(ray: Ray) {
         isSelected = !isSelected
     }
-
-    companion object {
-        const val U_MODEL_MATRIX = "u_ModelMatrix"
-    }
-
-
 }

@@ -22,15 +22,17 @@ class SkyBox : Cube() {
 
     override fun submit(shader: Shader) {
         shader.setInt(U_TEXTURE_UNIT, textureIndexCubeMap)
-        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
 
         // This avoids problems with the skybox itself getting clipped.
         GLES31.glDepthFunc(GLES31.GL_LEQUAL)
 
-        mesh.draw()
+//        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
+//        mesh.draw()
+//        shader.unbind()
+        meshRenderer.onRender(shader, mTransform)
 
         GLES31.glDepthFunc(GLES31.GL_LESS)
 
-        shader.unbind()
+
     }
 }

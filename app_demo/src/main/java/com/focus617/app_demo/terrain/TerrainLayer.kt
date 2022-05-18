@@ -5,6 +5,8 @@ import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Vector3
+import com.focus617.core.engine.scene_graph.components.MeshRenderer
+import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
@@ -32,7 +34,8 @@ class TerrainLayer(name: String, private val scene: XGLScene3D) : Layer(name) {
 
     override fun initOpenGlResource() {
         for (gameObject in gameObjectList) {
-            gameObject.mesh = Mesh(XGLVertexArray.buildVertexArray(gameObject))
+            val mesh = Mesh(XGLVertexArray.buildVertexArray(gameObject))
+            gameObject.meshRenderer = MeshRenderer(mesh, Material())
         }
     }
 

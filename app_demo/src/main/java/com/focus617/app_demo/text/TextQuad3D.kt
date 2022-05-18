@@ -14,6 +14,8 @@ import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.engine.scene.Camera
+import com.focus617.core.engine.scene_graph.components.MeshRenderer
+import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
 
 /**
@@ -38,7 +40,8 @@ class TextQuad3D(private val isPerspective: Boolean = true) : DrawableObject(), 
     }
 
     override fun initOpenGlResource() {
-        mesh = Mesh(XGLVertexArray.buildVertexArray(this))
+        val mesh = Mesh(XGLVertexArray.buildVertexArray(this))
+        meshRenderer = MeshRenderer(mesh, Material())
 
         textTexture = XGLTexture2D("TextTexture")
 
@@ -62,13 +65,15 @@ class TextQuad3D(private val isPerspective: Boolean = true) : DrawableObject(), 
             shader.setMat4(Camera.U_VIEW_MATRIX, XRenderer.sViewMatrix)
         }
 
-        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
         shader.setInt(U_TEXTURE, textureIndex)
         shader.setFloat4(U_COLOR, textColor)
 
-        mesh.draw()
+//        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
+//        mesh.draw()
+//        shader.unbind()
+        meshRenderer.onRender(shader, mTransform)
 
-        shader.unbind()
+
     }
 
     override fun getVertices(): FloatArray = floatArrayOf(

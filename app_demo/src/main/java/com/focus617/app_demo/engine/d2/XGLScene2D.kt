@@ -8,6 +8,8 @@ import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.scene.OrthographicCamera
 import com.focus617.core.engine.scene.OrthographicCameraController
 import com.focus617.core.engine.scene.Scene
+import com.focus617.core.engine.scene_graph.components.MeshRenderer
+import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
 import kotlin.properties.Delegates
 
@@ -46,7 +48,8 @@ class XGLScene2D(val context: Context, val engine: Sandbox2D) : Scene() {
         for (layer in layerStack.mLayers) {
             layer.initOpenGlResource()
             for (gameObject in layer.gameObjectList) {
-                gameObject.mesh = Mesh(XGLVertexArray.buildVertexArray(gameObject))
+                val mesh = Mesh(XGLVertexArray.buildVertexArray(gameObject))
+                gameObject.meshRenderer = MeshRenderer(mesh, Material())
             }
         }
     }
