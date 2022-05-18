@@ -4,31 +4,19 @@ import com.focus617.core.engine.math.*
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene_graph.GameEntity
 import com.focus617.core.engine.scene_graph.IfMeshable
-import com.focus617.core.engine.scene_graph.components.MeshRenderer
 
 abstract class DrawableObject : GameEntity(), IfMeshable {
     private var modelMatrixInStack = getTransform()
 
     protected val boundingSphere = Sphere(Point3D(0f, 0f, 0f), 0.5f)
 
-    // mesh is initialized via calling XGLVertexArray.buildVertexArray
-    lateinit var meshRenderer: MeshRenderer
-
     // shaderName should be initialized by each concrete drawable object itself
     lateinit var shaderName: String
 
     var isSelected = false
 
-    init {
-        resetTransform()
-    }
-
     override fun submit(shader: Shader) {
-//        shader.bind()
-//        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
-//        mesh.draw()
-//        shader.unbind()
-        meshRenderer.onRender(shader, mTransform)
+        onRender(shader)
     }
 
     fun resetTransform() {

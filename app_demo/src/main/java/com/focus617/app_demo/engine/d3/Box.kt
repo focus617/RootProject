@@ -25,7 +25,8 @@ class Box : DrawableObject(), XGLDrawableObject{
 
     override fun initOpenGlResource() {
         val mesh = Mesh(XGLVertexArray.buildVertexArray(this))
-        meshRenderer = MeshRenderer(mesh, Material())
+        val meshRenderer = MeshRenderer(mesh, Material())
+        addComponent(meshRenderer)
     }
 
     override fun submit(shader: Shader) {
@@ -43,11 +44,8 @@ class Box : DrawableObject(), XGLDrawableObject{
         shader.setFloat3(U_MATERIAL_SPECULAR, specular)
         shader.setFloat(U_MATERIAL_SHININESS, shininess)
 
-//        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
-//        mesh.draw()
-//        shader.unbind()
-        meshRenderer.onRender(shader, mTransform)
-
+//        meshRenderer.onRender(shader, mTransform)
+        onRender(shader)
     }
 
     fun updateCameraPosition(point: Point3D) {

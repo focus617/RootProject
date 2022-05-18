@@ -27,10 +27,8 @@ class Earth : Ball(1.0f) {
         shader.setFloat(U_POINT_LIGHT_LINEAR, PointLight.Linear)
         shader.setFloat(U_POINT_LIGHT_QUADRATIC, PointLight.Quadratic)
 
-//        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
-//        mesh.draw()
-//        shader.unbind()
-        meshRenderer.onRender(shader, mTransform)
+//        meshRenderer.onRender(shader, mTransform)
+        onRender(shader)
     }
 
     fun updateCameraPosition(point: Point3D) {

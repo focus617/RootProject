@@ -35,7 +35,8 @@ class TerrainLayer(name: String, private val scene: XGLScene3D) : Layer(name) {
     override fun initOpenGlResource() {
         for (gameObject in gameObjectList) {
             val mesh = Mesh(XGLVertexArray.buildVertexArray(gameObject))
-            gameObject.meshRenderer = MeshRenderer(mesh, Material())
+            val meshRenderer = MeshRenderer(mesh, Material())
+            gameObject.addComponent(meshRenderer)
         }
     }
 

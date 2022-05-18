@@ -26,10 +26,8 @@ class SkyBox : Cube() {
         // This avoids problems with the skybox itself getting clipped.
         GLES31.glDepthFunc(GLES31.GL_LEQUAL)
 
-//        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
-//        mesh.draw()
-//        shader.unbind()
-        meshRenderer.onRender(shader, mTransform)
+//        meshRenderer.onRender(shader, mTransform)
+        onRender(shader)
 
         GLES31.glDepthFunc(GLES31.GL_LESS)
 

@@ -52,10 +52,8 @@ class Heightmap(val context: Context, private val filePath: String) : DynamicCre
         //Enable Cull Back Face
         GLES31.glEnable(GLES31.GL_CULL_FACE)
 
-//        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
-//        mesh.draw()
-//        shader.unbind()
-        meshRenderer.onRender(shader, mTransform)
+//        meshRenderer.onRender(shader, mTransform)
+        onRender(shader)
 
         GLES31.glDisable(GLES31.GL_CULL_FACE)
     }

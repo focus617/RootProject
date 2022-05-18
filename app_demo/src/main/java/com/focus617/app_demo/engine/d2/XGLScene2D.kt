@@ -49,7 +49,8 @@ class XGLScene2D(val context: Context, val engine: Sandbox2D) : Scene() {
             layer.initOpenGlResource()
             for (gameObject in layer.gameObjectList) {
                 val mesh = Mesh(XGLVertexArray.buildVertexArray(gameObject))
-                gameObject.meshRenderer = MeshRenderer(mesh, Material())
+                val meshRenderer = MeshRenderer(mesh, Material())
+                gameObject.addComponent(meshRenderer)
             }
         }
     }

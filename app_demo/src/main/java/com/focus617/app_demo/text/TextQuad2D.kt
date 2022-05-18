@@ -11,10 +11,8 @@ class TextQuad2D: FrameBufferQuad() {
     override fun submit(shader: Shader) {
         shaderWithColor.setFloat4(U_COLOR, fontColor)
 
-//        mesh.draw()
-//        shaderWithColor.unbind()
-        meshRenderer.onRender(shaderWithColor, mTransform)
-
+//        meshRenderer.onRender(shaderWithColor, mTransform)
+        onRender(shaderWithColor)
     }
 
     companion object {

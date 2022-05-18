@@ -41,7 +41,8 @@ class TextQuad3D(private val isPerspective: Boolean = true) : DrawableObject(), 
 
     override fun initOpenGlResource() {
         val mesh = Mesh(XGLVertexArray.buildVertexArray(this))
-        meshRenderer = MeshRenderer(mesh, Material())
+        val meshRenderer = MeshRenderer(mesh, Material())
+        addComponent(meshRenderer)
 
         textTexture = XGLTexture2D("TextTexture")
 
@@ -68,12 +69,8 @@ class TextQuad3D(private val isPerspective: Boolean = true) : DrawableObject(), 
         shader.setInt(U_TEXTURE, textureIndex)
         shader.setFloat4(U_COLOR, textColor)
 
-//        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
-//        mesh.draw()
-//        shader.unbind()
-        meshRenderer.onRender(shader, mTransform)
-
-
+//        meshRenderer.onRender(shader, mTransform)
+        onRender(shader)
     }
 
     override fun getVertices(): FloatArray = floatArrayOf(

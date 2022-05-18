@@ -17,7 +17,8 @@ open class FrameBufferQuad : DrawableObject(), XGLDrawableObject {
 
     override fun initOpenGlResource() {
         val mesh = Mesh(XGLVertexArray.buildVertexArray(this))
-        meshRenderer = MeshRenderer(mesh, Material())
+        val meshRenderer = MeshRenderer(mesh, Material())
+        addComponent(meshRenderer)
     }
 
     override fun submit(shader: Shader) {
@@ -28,9 +29,8 @@ open class FrameBufferQuad : DrawableObject(), XGLDrawableObject {
         shader.bind()
         shader.setInt(U_TEXTURE, screenTextureIndex)
 
-//        mesh.draw()
-//        shader.unbind()
-        meshRenderer.onRender(shader, mTransform)
+//        meshRenderer.onRender(shader, mTransform)
+        onRender(shader)
     }
 
     override fun getVertices(): FloatArray = floatArrayOf(
