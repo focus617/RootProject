@@ -7,8 +7,7 @@ import com.focus617.core.engine.scene_graph.IfMeshable
 import com.focus617.core.engine.scene_graph.renderer.Mesh
 
 abstract class DrawableObject : GameEntity(), IfMeshable {
-    val modelMatrix = Mat4()
-    private val modelMatrixInStack = Mat4()
+    private var modelMatrixInStack = getTransform()
 
     protected val boundingSphere = Sphere(Point3D(0f, 0f, 0f), 0.5f)
 
@@ -26,7 +25,7 @@ abstract class DrawableObject : GameEntity(), IfMeshable {
 
     override fun submit(shader: Shader) {
         shader.bind()
-        shader.setMat4(U_MODEL_MATRIX, modelMatrix)
+        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
 
         mesh.draw()
 
@@ -34,21 +33,22 @@ abstract class DrawableObject : GameEntity(), IfMeshable {
     }
 
     fun resetTransform() {
-        modelMatrix.setIdentity()
+       mTransform.reset()
     }
 
     fun scale(scaleSize: Vector3) {
-        modelMatrix.scale(scaleSize)
+        mTransform.setLocalScale(scaleSize)
         boundingSphere.radius *= (scaleSize.x + scaleSize.y + scaleSize.z) / 3
     }
 
     open fun onTransform3D(
         position: Vector3,
         scaleSize: Vector3,
-        rotation: Float = 0.0f
+        rotationZInDegree: Float = 0.0f
     ) {
-        modelMatrix.transform3D(position, scaleSize, rotation, 0.0f, 0.0f, 1.0f)
-        //LOG.info("ModelMatrix:" + XMatrix.toString(modelMatrix))
+        mTransform.setLocalPosition(position)
+        mTransform.setLocalScale(scaleSize)
+        mTransform.setLocalRotation(Vector3(0.0f, 0.0f, rotationZInDegree))
 
         boundingSphere.center += position
         boundingSphere.radius *= (scaleSize.x + scaleSize.y + scaleSize.z) / 3
@@ -57,20 +57,22 @@ abstract class DrawableObject : GameEntity(), IfMeshable {
     open fun onTransform2D(
         position: Vector2,
         scaleSize: Vector2,
-        rotation: Float = 0.0f
+        rotationZInDegree: Float = 0.0f
     ) {
-        modelMatrix.transform2D(Vector3(position.x, position.y, 0.0f), scaleSize, rotation)
+        mTransform.setLocalPosition(Vector3(position.x, position.y, 0.0f))
+        mTransform.setLocalScale(Vector3(scaleSize.x, scaleSize.y, 1f))
+        mTransform.setLocalRotation(Vector3(0.0f, 0.0f, rotationZInDegree))
 
         boundingSphere.center += Point3D(position.x, position.y, 0f)
         boundingSphere.radius *= (scaleSize.x + scaleSize.y) / 2
     }
 
     fun push() {
-        modelMatrixInStack.setValue(modelMatrix)
+        modelMatrixInStack = mTransform
     }
 
     fun pop() {
-        modelMatrix.setValue(modelMatrixInStack)
+        mTransform = modelMatrixInStack
     }
 
     open fun intersects(ray: Ray) {

@@ -27,7 +27,7 @@ class Box : DrawableObject(), XGLDrawableObject{
 
     override fun submit(shader: Shader) {
 
-        shader.setMat4(U_MODEL_MATRIX, modelMatrix)
+        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
 
         shader.setFloat3(U_POINT_VIEW_POSITION, viewPoint)
 

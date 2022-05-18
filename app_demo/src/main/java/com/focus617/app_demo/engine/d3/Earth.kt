@@ -16,7 +16,7 @@ class Earth : Ball(1.0f) {
     override fun submit(shader: Shader) {
         shader.setInt(U_TEXTURE_UNIT_1, textureIndexDay)
         shader.setInt(U_TEXTURE_UNIT_2, textureIndexNight)
-        shader.setMat4(U_MODEL_MATRIX, modelMatrix)
+        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
         shader.setFloat3(U_POINT_VIEW_POSITION, viewPoint)
 
         shader.setFloat3(U_POINT_LIGHT_POSITION, PointLight.position)

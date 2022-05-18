@@ -48,4 +48,11 @@ class Transform {
         mScale = newScale
         mIsDirty = true
     }
+
+    fun reset() {
+        mPos = Vector3(0.0f, 0.0f, 0.0f)
+        mEulerRot = Vector3(0.0f, 0.0f, 0.0f)
+        mScale = Vector3(1.0f, 1.0f, 1.0f)
+        computeLocalModelMatrix()
+    }
 }

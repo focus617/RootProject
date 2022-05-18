@@ -46,7 +46,7 @@ class Heightmap(val context: Context, private val filePath: String) : DynamicCre
     override fun submit(shader: Shader) {
         shader.setInt(U_TEXTURE_UNIT_1, textureIndexGrass)
         shader.setInt(U_TEXTURE_UNIT_2, textureIndexStone)
-        shader.setMat4(U_MODEL_MATRIX, modelMatrix)
+        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
         shader.setFloat3(Light.U_VECTOR_TO_LIGHT, Light.vectorToLight)
 
         //Enable Cull Back Face

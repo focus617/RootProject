@@ -11,7 +11,7 @@ open class GameEntity: BaseEntity(), IfEntity {
 
     private val mComponents: MutableList<IfComponent> = mutableListOf()
 
-    private val mTransform: Transform = Transform()
+    protected var mTransform: Transform = Transform()
 
     fun getParent() = mParent
     fun getTransform() = mTransform

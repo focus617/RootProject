@@ -62,7 +62,7 @@ class TextQuad3D(private val isPerspective: Boolean = true) : DrawableObject(), 
             shader.setMat4(Camera.U_VIEW_MATRIX, XRenderer.sViewMatrix)
         }
 
-        shader.setMat4(U_MODEL_MATRIX, modelMatrix)
+        shader.setMat4(U_MODEL_MATRIX, mTransform.getLocalModelMatrix())
         shader.setInt(U_TEXTURE, textureIndex)
         shader.setFloat4(U_COLOR, textColor)
 
