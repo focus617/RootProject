@@ -3,20 +3,11 @@ package com.focus617.core.engine.objects
 import com.focus617.core.engine.math.*
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.shader.Shader
-import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.VertexArray
+import com.focus617.core.engine.scene_graph.IfMeshable
 import com.focus617.core.platform.base.BaseEntity
 
-interface IfDrawable {
-    fun beforeBuild()
-    fun afterBuild()
-    fun getVertices(): FloatArray
-    fun getLayout(): BufferLayout
-    fun getIndices(): ShortArray
-    fun submit(shader: Shader)
-}
-
-abstract class DrawableObject : BaseEntity(), IfDrawable {
+abstract class DrawableObject : BaseEntity(), IfMeshable {
     //val modelMatrix: FloatArray = FloatArray(16)
     val modelMatrix = Mat4()
     private val modelMatrixInStack = Mat4()

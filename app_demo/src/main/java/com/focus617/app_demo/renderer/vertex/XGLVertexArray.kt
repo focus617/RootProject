@@ -2,10 +2,10 @@ package com.focus617.app_demo.renderer.vertex
 
 import android.opengl.GLES20.*
 import android.opengl.GLES31
-import com.focus617.core.engine.objects.IfDrawable
 import com.focus617.core.engine.renderer.IfBuffer
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.renderer.vertex.VertexArray
+import com.focus617.core.engine.scene_graph.IfMeshable
 import com.focus617.mylib.logging.WithLogging
 import java.io.Closeable
 import java.nio.IntBuffer
@@ -104,7 +104,7 @@ class XGLVertexArray : VertexArray(), IfBuffer, Closeable {
             }
         }
 
-        fun buildVertexArray(drawingObject: IfDrawable): XGLVertexArray {
+        fun buildVertexArray(drawingObject: IfMeshable): XGLVertexArray {
             val vertexArray =
                 XGLVertexBufferBuilder.createVertexArray() as XGLVertexArray
 
