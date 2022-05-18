@@ -17,8 +17,9 @@ import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureSpecifica
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.VertexArray
 import com.focus617.core.engine.resource.baseDataType.Color
-import com.focus617.core.engine.scene.Camera
-import com.focus617.core.engine.scene.CameraController
+import com.focus617.core.engine.scene_graph.components.camera.CameraController
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_PROJECT_MATRIX
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_VIEW_MATRIX
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -92,8 +93,8 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
 //                  LOG.info(XMatrix.toString(SceneData.sViewMatrix, matrixName = "ViewMatrix"))
 //                  LOG.info(XMatrix.toString(gameObject.modelMatrix, matrixName = "ModelMatrix"))
 
-                    setMat4(Camera.U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
-                    setMat4(Camera.U_VIEW_MATRIX, SceneData.sViewMatrix)
+                    setMat4(U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
+                    setMat4(U_VIEW_MATRIX, SceneData.sViewMatrix)
 
                     if (gameObject.isSelected) {
                         gameObject.submitWithOutlining(shader, Color.GOLD)

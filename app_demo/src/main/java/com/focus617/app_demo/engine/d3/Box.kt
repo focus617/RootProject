@@ -10,11 +10,22 @@ import com.focus617.core.engine.math.Ray
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.mesh.d3.Cube
 import com.focus617.core.engine.renderer.shader.Shader
-import com.focus617.core.engine.scene.PointLight
 import com.focus617.core.engine.scene_graph.DrawableEntity
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
 import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MATERIAL_SHININESS
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MATERIAL_SPECULAR
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MATERIAL_TEXTURE_DIFFUSE
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_AMBIENT
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_CONSTANT
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_DIFFUSE
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_LINEAR
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_POSITION
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_QUADRATIC
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_SPECULAR
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_VIEW_POSITION
+import com.focus617.core.engine.scene_graph.scene.PointLight
 
 class Box : DrawableEntity(), XGLDrawableObject{
     init {
@@ -23,7 +34,7 @@ class Box : DrawableEntity(), XGLDrawableObject{
 
     override fun initOpenGlResource() {
         val mesh = Mesh(XGLVertexArray.buildVertexArray(Cube()))
-        val meshRenderer = MeshRenderer(mesh, Material())
+        val meshRenderer = MeshRenderer(mesh, material)
         addComponent(meshRenderer)
     }
 
@@ -55,95 +66,6 @@ class Box : DrawableEntity(), XGLDrawableObject{
 
     }
 
-
-//    override fun getVertices(): FloatArray = floatArrayOf(
-//        // 立方体的顶点有4个属性:位置、法线和纹理坐标
-//        // 背面
-//        // positions         normals           texture Coords
-//        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
-//        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
-//        0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,
-//        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
-//        -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
-//        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
-//        // 正面
-//        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-//        0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-//        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-//        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-//        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-//        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-//        // 左侧
-//        -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-//        -0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-//        -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-//        -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-//        -0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-//        -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-//        // 右侧
-//        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-//        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-//        0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-//        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-//        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-//        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-//        // 底面
-//        -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
-//        0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
-//        0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-//        0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-//        -0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-//        -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
-//        // 顶面
-//        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-//        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-//        0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-//        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-//        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-//        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f
-//    )
-//
-//    override fun getLayout(): BufferLayout = BufferLayout(
-//        listOf(
-//            BufferElement("a_Position", ShaderDataType.Float3, true),
-//            BufferElement("a_Normal", ShaderDataType.Float3, true),
-//            BufferElement("a_TexCoords", ShaderDataType.Float2, true)
-//        )
-//    )
-//
-//    override fun getIndices(): ShortArray = shortArrayOf(
-//        // 顶点索引: 6 indices per cube side
-//        // Back
-//        0, 1, 2,
-//        3, 4, 5,
-//
-//        // Front
-//        6, 7, 8,
-//        9, 10, 11,
-//
-//        // Left
-//        12, 13, 14,
-//        15, 16, 17,
-//
-//        // Right
-//        18, 19, 20,
-//        21, 22, 23,
-//
-//        // Top
-//        24, 25, 26,
-//        27, 28, 29,
-//
-//        // Bottom
-//        30, 31, 32,
-//        33, 34, 35
-//    )
-//
-//    override fun beforeBuild() {
-//    }
-//
-//    override fun afterBuild() {
-//    }
-
     companion object {
         private const val SHADER_PATH = "Cube"
         private const val SHADER_FILE = "CubeWithTextureAndLight.glsl"
@@ -152,28 +74,20 @@ class Box : DrawableEntity(), XGLDrawableObject{
         const val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
         const val TextureFilePath: String = "$SHADER_PATH/$TEXTURE_FILE"
 
+        const val TEXTURE_BOX = "BoxTexture"
+
         var textureIndex: Int = -1
-        fun initTexture(context: Context) {
+        val material = Material()
+
+        fun initMaterial(context: Context) {
             val textureBox = XGLTextureBuilder.createTexture(context, TextureFilePath)
             textureBox?.apply {
-                textureIndex = XGLTextureSlots.getId(textureBox)
+                textureIndex = XGLTextureSlots.requestIndex(textureBox)
+                material.add(TEXTURE_BOX, textureBox)
             }
         }
 
         lateinit var viewPoint: Point3D
-
-        const val U_POINT_VIEW_POSITION = "u_ViewPos"
-        const val U_POINT_LIGHT_POSITION = "light.position"
-        const val U_POINT_LIGHT_AMBIENT = "light.ambient"
-        const val U_POINT_LIGHT_DIFFUSE = "light.diffuse"
-        const val U_POINT_LIGHT_SPECULAR = "light.specular"
-        const val U_POINT_LIGHT_CONSTANT = "light.constant"
-        const val U_POINT_LIGHT_LINEAR = "light.linear"
-        const val U_POINT_LIGHT_QUADRATIC = "light.quadratic"
-
-        const val U_MATERIAL_TEXTURE_DIFFUSE = "material.diffuse"
-        const val U_MATERIAL_SPECULAR = "material.specular"
-        const val U_MATERIAL_SHININESS = "material.shininess"
 
         // 镜面强度(Specular Intensity)
         var specular: Vector3 = Vector3(0.5f, 0.5f, 0.5f)

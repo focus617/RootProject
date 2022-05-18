@@ -5,7 +5,7 @@ import com.focus617.core.engine.renderer.vertex.VertexArray
 import com.focus617.core.platform.base.BaseEntity
 
 class Mesh(vertexArray: VertexArray) : BaseEntity() {
-    // vertexArray is initialized via calling XGLVertexArray.buildVertexArray
+    // vertexArray is initialized via calling XGLVertexArray.buildVertexArray(IfMeshable)
     private val mVertexArray: VertexArray = vertexArray
 
     fun draw() {

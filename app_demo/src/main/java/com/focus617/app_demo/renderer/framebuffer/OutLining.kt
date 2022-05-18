@@ -5,8 +5,9 @@ import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.renderer.XRenderer.SceneData
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.resource.baseDataType.Color
-import com.focus617.core.engine.scene.Camera
 import com.focus617.core.engine.scene_graph.DrawableEntity
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_PROJECT_MATRIX
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_VIEW_MATRIX
 
 const val U_COLOR = "u_Color"
 
@@ -38,8 +39,8 @@ fun DrawableEntity.submitWithOutlining(
 
     with(FrameBufferEntity.shaderOutlining) {
         bind()
-        setMat4(Camera.U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
-        setMat4(Camera.U_VIEW_MATRIX, SceneData.sViewMatrix)
+        setMat4(U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
+        setMat4(U_VIEW_MATRIX, SceneData.sViewMatrix)
         setFloat4(U_COLOR, color)
     }
     this.push()

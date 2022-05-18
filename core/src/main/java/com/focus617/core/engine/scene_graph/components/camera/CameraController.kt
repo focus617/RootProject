@@ -1,15 +1,14 @@
-package com.focus617.core.engine.scene
+package com.focus617.core.engine.scene_graph.components.camera
 
-import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Mat4
+import com.focus617.core.engine.scene_graph.IfComponent
 import com.focus617.core.platform.base.BaseEntity
-import com.focus617.core.platform.event.base.Event
 
 /**
  * CameraController抽象类
  * 负责管理 投影矩阵mProjectionMatrix：mProjectionMatrix
  */
-abstract class CameraController(protected val mCamera: Camera) : BaseEntity() {
+abstract class CameraController(protected val mCamera: Camera) : BaseEntity(), IfComponent {
     fun getCamera() = mCamera
 
     protected val mProjectionMatrix = Mat4()
@@ -20,10 +19,6 @@ abstract class CameraController(protected val mCamera: Camera) : BaseEntity() {
     // Viewport size
     abstract var mWidth: Int
     abstract var mHeight: Int
-
-    abstract fun onUpdate(timeStep: TimeStep)
-
-    abstract fun onEvent(event: Event): Boolean
 
     abstract fun onWindowSizeChange(width: Int, height: Int)
 

@@ -1,12 +1,19 @@
-package com.focus617.core.engine.scene
+package com.focus617.core.engine.scene_graph.components.camera
 
+import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.XMatrix
+import com.focus617.core.engine.renderer.shader.Shader
+import com.focus617.core.engine.scene_graph.GameEntity
+import com.focus617.core.engine.scene_graph.Transform
+import com.focus617.core.platform.event.base.Event
 import kotlin.math.cos
 import kotlin.math.sin
 
 class PerspectiveCamera : Camera() {
+    override lateinit var mParent: GameEntity
+
     override var mPosition: Point3D = Point3D(0.0f, 1.0f, defaultDistance)
 
     private val target: Point3D = Point3D(0.0f, 1.0f, 0.0f)
@@ -65,7 +72,13 @@ class PerspectiveCamera : Camera() {
         mViewMatrix.setValue(viewMatrixFloatArray)
     }
 
-    companion object{
+    override fun onEvent(event: Event): Boolean = false
+
+    override fun onUpdate(timeStep: TimeStep, transform: Transform) {}
+
+    override fun onRender(shader: Shader, transform: Transform) {}
+
+    companion object {
         val worldUp = Vector3(0.0f, 1.0f, 0.0f)
         const val defaultDistance: Float = 3.0F
     }

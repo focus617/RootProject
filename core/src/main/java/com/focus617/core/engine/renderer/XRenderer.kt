@@ -3,7 +3,7 @@ package com.focus617.core.engine.renderer
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.VertexArray
-import com.focus617.core.engine.scene.CameraController
+import com.focus617.core.engine.scene_graph.components.camera.CameraController
 import com.focus617.core.platform.base.BaseEntity
 
 abstract class XRenderer : BaseEntity() {

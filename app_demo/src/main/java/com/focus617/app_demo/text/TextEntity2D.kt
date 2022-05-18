@@ -4,7 +4,7 @@ import com.focus617.app_demo.renderer.framebuffer.FrameBufferEntity
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.resource.baseDataType.Color
 
-class TextQuad2D: FrameBufferEntity() {
+class TextEntity2D: FrameBufferEntity() {
     var fontColor: Color = Color.BLACK
 
     // 用于本对象作为一个GO时（目前就用在overLayer的字幕）

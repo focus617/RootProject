@@ -5,7 +5,7 @@ import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 
-open class GameEntity: BaseEntity(), IfEntity {
+open class GameEntity : BaseEntity(), IfEntity {
     private var mParent: GameEntity? = null
     private val mChildren: MutableList<GameEntity> = mutableListOf()
 
@@ -20,55 +20,59 @@ open class GameEntity: BaseEntity(), IfEntity {
         mTransform.reset()
     }
 
-    fun addChild(child: GameEntity){
+    fun addChild(child: GameEntity) {
         mChildren.add(child)
         child.mParent = this
     }
 
-    fun removeChild(child: GameEntity){
+    fun removeChild(child: GameEntity) {
         mChildren.remove(child)
         child.mParent = null
     }
 
-    fun addComponent(component: IfComponent){
+    fun addComponent(component: IfComponent) {
         mComponents.add(component)
         component.mParent = this
     }
 
-    fun removeComponent(component: IfComponent){
+    fun removeComponent(component: IfComponent) {
         mComponents.remove(component)
     }
 
     override fun onEvent(event: Event) {
-        mComponents.forEach{
+        mComponents.forEach {
             it.onEvent(event)
         }
-        mChildren.forEach{
+        mChildren.forEach {
             it.onEvent(event)
         }
     }
 
-    override fun onUpdate(timeStep: TimeStep){
-//        if(mTransform.isDirty()){
-//            if(mParent == null)  mTransform.computeModelMatrix()
-//            else mTransform.computeModelMatrix(mParent!!.getTransform().computeModelMatrix())
-//        }
+    override fun onUpdate(timeStep: TimeStep) {
+        mTransform.mGlobalModelMatrix =
+            if (mParent == null) {
+                // Root node , world transform is local transform !
+                mTransform.getLocalModelMatrix()
+            } else {
+                // This node has a parent ...
+                mParent!!.mTransform.mGlobalModelMatrix * mTransform.getLocalModelMatrix()
+            }
 
-        mComponents.forEach{
-            it.onUpdate(mTransform)
+        mComponents.forEach {
+            it.onUpdate(timeStep, mTransform)
         }
 
-        mChildren.forEach{
+        mChildren.forEach {
             it.onUpdate(timeStep)
         }
     }
 
-    override fun onRender(shader: Shader){
-        mComponents.forEach{
+    override fun onRender(shader: Shader) {
+        mComponents.forEach {
             it.onRender(shader, mTransform)
         }
 
-        mChildren.forEach{
+        mChildren.forEach {
             it.onRender(shader)
         }
     }

@@ -15,7 +15,7 @@ import com.focus617.platform.helper.BitmapHelper.convert
  */
 class TextLayer2D(name: String) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
-    private val mQuad: TextQuad2D = TextQuad2D()
+    private val mQuad: TextEntity2D = TextEntity2D()
 
     override fun initOpenGlResource() {
         mQuad.initOpenGlResource()
@@ -52,11 +52,11 @@ class TextLayer2D(name: String) : Layer(name) {
             )
             bitmap.recycle()
 
-            TextQuad2D.shaderWithColor.bind()
-            TextQuad2D.shaderWithColor.setInt(
-                TextQuad2D.U_TEXTURE, texture!!.screenTextureIndex
+            TextEntity2D.shaderWithColor.bind()
+            TextEntity2D.shaderWithColor.setInt(
+                TextEntity2D.U_TEXTURE, texture!!.screenTextureIndex
             )
-            mQuad.onRender(TextQuad2D.shaderWithColor)
+            mQuad.onRender(TextEntity2D.shaderWithColor)
         }
     }
 

@@ -1,14 +1,15 @@
-package com.focus617.core.engine.scene
+package com.focus617.core.engine.scene_graph.components.camera
 
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Point3D
+import com.focus617.core.engine.scene_graph.IfComponent
 import com.focus617.core.platform.base.BaseEntity
 
 /**
  * Camera 抽象类
  * 负责管理 视图矩阵mViewMatrix：mViewMatrix
  */
-abstract class Camera : BaseEntity() {
+abstract class Camera : BaseEntity(), IfComponent {
     // Camera本质就是两个Matrix——视图矩阵mViewMatrix和投影矩阵mProjectionMatrix
     // 投影矩阵mProjectionMatrix委托给了CameraController类
     protected val mViewMatrix = Mat4()
@@ -32,9 +33,4 @@ abstract class Camera : BaseEntity() {
     abstract fun setRotation(rollZInDegree: Float = 90f)
     fun getRotation() = mRotationZAxisInDegree
 
-    companion object {
-        const val U_VIEW_MATRIX = "u_ViewMatrix"
-        const val U_PROJECT_MATRIX = "u_ProjectionMatrix"
-
-    }
 }

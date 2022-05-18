@@ -1,7 +1,10 @@
 package com.focus617.app_demo.terrain
 
+import android.content.Context
 import android.opengl.GLES31
 import com.focus617.app_demo.engine.XGLDrawableObject
+import com.focus617.app_demo.renderer.texture.XGLTextureCubeMap
+import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.mesh.d3.Cube
 import com.focus617.core.engine.renderer.shader.Shader
@@ -17,7 +20,7 @@ class SkyBox : DrawableEntity(), XGLDrawableObject {
 
     override fun initOpenGlResource() {
         val mesh = Mesh(XGLVertexArray.buildVertexArray(Cube()))
-        val meshRenderer = MeshRenderer(mesh, Material())
+        val meshRenderer = MeshRenderer(mesh, material)
         addComponent(meshRenderer)
     }
 
@@ -32,7 +35,7 @@ class SkyBox : DrawableEntity(), XGLDrawableObject {
         GLES31.glDepthFunc(GLES31.GL_LESS)
     }
 
-    companion object{
+    companion object {
         val SKYBOX_SHADER_PATH = "SkyBox"
         private val SKYBOX_SHADER_FILE = "SkyBox.glsl"
 
@@ -40,10 +43,18 @@ class SkyBox : DrawableEntity(), XGLDrawableObject {
         val SkyBoxTextureFilePath: String = "$SKYBOX_SHADER_PATH/SkyBox"
 
         const val U_TEXTURE_UNIT = "u_TextureUnit"
+        const val TEXTURE_CUBE_MAP = "CubeMap"
         const val textureIndexCubeMap = 0 // skybox always use slot 0
+        val material = Material()
+
+        fun initMaterial(context: Context) {
+            val texture = XGLTextureCubeMap(
+                context,
+                SKYBOX_SHADER_PATH,
+                arrayOf("left.png", "right.png", "bottom.png", "top.png", "front.png", "back.png")
+            )
+            material.add(TEXTURE_CUBE_MAP, texture)
+            XGLTextureSlots.TextureSlots[0] = texture
+        }
     }
-
-
-
-
 }

@@ -6,6 +6,7 @@ object ShaderUniformConstants {
     const val U_PROJECT_MATRIX = "u_ProjectionMatrix"
 
     const val U_POINT_VIEW_POSITION = "u_ViewPos"
+
     const val U_POINT_LIGHT_POSITION = "light.position"
     const val U_POINT_LIGHT_AMBIENT = "light.ambient"
     const val U_POINT_LIGHT_DIFFUSE = "light.diffuse"
