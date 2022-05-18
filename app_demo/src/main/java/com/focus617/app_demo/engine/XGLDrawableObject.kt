@@ -1,7 +1,5 @@
 package com.focus617.app_demo.engine
 
-import com.focus617.core.engine.objects.DrawableObject
-
-abstract class XGLDrawableObject : DrawableObject() {
+interface XGLDrawableObject {
     abstract fun initOpenGlResource()
 }

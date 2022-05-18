@@ -3,10 +3,6 @@ package com.focus617.platform.objTools
 import android.content.Context
 import android.text.TextUtils
 import com.focus617.core.engine.math.Vector3
-import com.focus617.myopengldemo.utils.objTools.ObjInfo
-import com.focus617.myopengldemo.utils.objTools.ObjNormal
-import com.focus617.myopengldemo.utils.objTools.ObjTexture
-import com.focus617.myopengldemo.utils.objTools.ObjVertex
 import com.focus617.platform.helper.FileHelper
 import timber.log.Timber
 import java.util.*
@@ -15,7 +11,7 @@ import java.util.*
 /**
  * @description Wavefront Obj 3D模型文件解析类
  */
-object ObjLoader {
+object ObjLoaderOld {
 
     //模型文件所在目录
     private lateinit var directory: String
@@ -215,7 +211,7 @@ object ObjLoader {
     private fun fillFaceList(line: String) {
 
         val vertexIndices = line.split(DELIMITER).toTypedArray()
-        if (vertexIndices.size != 4) return
+        if (vertexIndices.size != 5) return
 
         if (currentIndexList == null) {
             Timber.d("fillFaceList(): this Obj hasn't 'USEMTL'! ")
@@ -297,8 +293,6 @@ object ObjLoader {
 
         } else {
             // vertexIndices[] format: "f vertexIndex/textureIndex/normalIndex .."
-//            mObjInfo.hasNormalInFace = true
-//            mObjInfo.hasTextureInFace = true
 
             for (i in 1..3) {
                 val indices = vertexIndices[i].split("/").toTypedArray()
@@ -307,16 +301,16 @@ object ObjLoader {
                     if (indices[0].isNotEmpty()) Integer.valueOf(indices[0]) - 1 else 0
 
                 val textureIndex =
-                    if (indices[1].isNotEmpty()) Integer.valueOf(indices[1]) - 1 else 0
+                    if (indices[1].isNotEmpty()) Integer.valueOf(indices[1]) - 1 else -1
 
                 val normalIndex =
-                    if (indices[2].isNotEmpty()) Integer.valueOf(indices[2]) - 1 else 0
+                    if (indices[2].isNotEmpty()) Integer.valueOf(indices[2]) - 1 else -1
 
                 currentVertexList!!.add(mObjInfo.mVertices[vertexIndex].x)
                 currentVertexList!!.add(mObjInfo.mVertices[vertexIndex].y)
                 currentVertexList!!.add(mObjInfo.mVertices[vertexIndex].z)
 
-                if(normalIndex == 0){
+                if(normalIndex == -1){
                     currentVertexList!!.add(0f)
                     currentVertexList!!.add(0f)
                     currentVertexList!!.add(0f)
@@ -329,7 +323,7 @@ object ObjLoader {
                     currentVertexList!!.add(mObjInfo.mNormals[normalIndex].z)
                 }
 
-                if(textureIndex == 0){
+                if(textureIndex == -1){
                     currentVertexList!!.add(0f)
                     currentVertexList!!.add(0f)
                     currentVertexList!!.add(0f)
@@ -341,8 +335,6 @@ object ObjLoader {
                     currentVertexList!!.add(mObjInfo.mTextureCoords[textureIndex].t)
                     if (mObjInfo.textureDimension == 3) {
                         currentVertexList!!.add(mObjInfo.mTextureCoords[textureIndex].w)
-                    } else {
-                        currentVertexList!!.add(0f)
                     }
                 }
 

@@ -2,15 +2,15 @@ package com.focus617.app_demo.renderer.framebuffer
 
 import android.opengl.GLES31.*
 import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.objects.DrawableObject
 import com.focus617.core.engine.renderer.XRenderer.SceneData
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.engine.scene.Camera
+import com.focus617.core.engine.scene_graph.DrawableEntity
 
 const val U_COLOR = "u_Color"
 
-fun DrawableObject.submitWithOutlining(
+fun DrawableEntity.submitWithOutlining(
     shader: Shader,
     color: Color = Color.CYAN,
     scaleSize: Vector3 = Vector3(1.05f, 1.05f, 1.05f)
@@ -25,7 +25,7 @@ fun DrawableObject.submitWithOutlining(
     glStencilMask(0xFF)                        // 在正常绘制时确保打开模板缓冲的写入
 
     shader.bind()
-    this.submit(shader)
+    this.onRender(shader)
 
     // 2nd. Render pass, now draw slightly scaled versions of the objects,
     // this time disabling stencil writing.
@@ -36,7 +36,7 @@ fun DrawableObject.submitWithOutlining(
     glStencilMask(0x00)
     //glDisable(GL_DEPTH_TEST)
 
-    with(FrameBufferQuad.shaderOutlining) {
+    with(FrameBufferEntity.shaderOutlining) {
         bind()
         setMat4(Camera.U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
         setMat4(Camera.U_VIEW_MATRIX, SceneData.sViewMatrix)
@@ -44,7 +44,7 @@ fun DrawableObject.submitWithOutlining(
     }
     this.push()
     this.scale(scaleSize)
-    this.submit(FrameBufferQuad.shaderOutlining)
+    this.onRender(FrameBufferEntity.shaderOutlining)
     this.pop()
 
 // 关闭模板测试

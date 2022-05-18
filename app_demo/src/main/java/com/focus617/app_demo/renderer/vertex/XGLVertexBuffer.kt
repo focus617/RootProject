@@ -11,6 +11,10 @@ import java.io.Closeable
 import java.nio.*
 
 class XGLVertexBuffer private constructor() : BaseEntity(), IfBuffer, IfBufferLayout, Closeable {
+    private var mVBOBuf: IntBuffer = IntBuffer.allocate(1)
+
+    private var mHandle: Int = 0                // Vertex Buffer handle
+    private var mLayout: BufferLayout? = null   // Vertex Buffer layout
 
     constructor(vertices: FloatArray, size: Int) : this() {
         // Generate VBO ID
@@ -47,14 +51,6 @@ class XGLVertexBuffer private constructor() : BaseEntity(), IfBuffer, IfBufferLa
             GLES31.GL_ARRAY_BUFFER, size, null, GLES31.GL_DYNAMIC_DRAW
         )
     }
-
-    // Vertex Buffer handle
-    private var mHandle: Int = 0
-    private var mVBOBuf: IntBuffer = IntBuffer.allocate(1)
-
-    // Vertex Buffer layout
-    private var mLayout: BufferLayout? = null
-
 
     override fun close() {
         GLES20.glDeleteBuffers(1, mVBOBuf)

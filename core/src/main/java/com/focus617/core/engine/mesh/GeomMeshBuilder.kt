@@ -1,4 +1,4 @@
-package com.focus617.core.engine.objects
+package com.focus617.core.engine.mesh
 
 import com.focus617.core.engine.math.Vector3.Companion.calConeNormal
 import com.focus617.core.engine.renderer.vertex.BufferElement
@@ -8,7 +8,7 @@ import com.focus617.mylib.logging.WithLogging
 import kotlin.math.cos
 import kotlin.math.sin
 
-object ObjectBuilder : WithLogging() {
+object GeomMeshBuilder : WithLogging() {
     private val vertexList = ArrayList<Float>()
     private val indexList = ArrayList<Short>()
     private var index: Short = 0    // Vertex index
@@ -18,7 +18,7 @@ object ObjectBuilder : WithLogging() {
         indexList.clear()
     }
 
-    fun buildData(hasTexture: Boolean = true): GeneratedData {
+    fun buildMeshData(hasTexture: Boolean = true): GeneratedMeshData {
         val layout: BufferLayout =
             if (hasTexture) BufferLayout(
                 listOf(
@@ -44,7 +44,7 @@ object ObjectBuilder : WithLogging() {
 
         this.cleanBuffer()
 
-        return GeneratedData(numVertices, vertices, layout, indices)
+        return GeneratedMeshData(numVertices, vertices, layout, indices)
     }
 
     fun appendCircle(radius: Float, numPoints: Int, y: Float = 0f, UNIT_SIZE: Float = 1f) {

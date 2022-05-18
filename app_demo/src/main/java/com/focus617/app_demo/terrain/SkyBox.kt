@@ -1,13 +1,35 @@
 package com.focus617.app_demo.terrain
 
 import android.opengl.GLES31
-import com.focus617.core.engine.objects.d3.Cube
-import com.focus617.core.engine.renderer.RenderCommand
+import com.focus617.app_demo.engine.XGLDrawableObject
+import com.focus617.app_demo.renderer.vertex.XGLVertexArray
+import com.focus617.core.engine.mesh.d3.Cube
 import com.focus617.core.engine.renderer.shader.Shader
+import com.focus617.core.engine.scene_graph.DrawableEntity
+import com.focus617.core.engine.scene_graph.components.MeshRenderer
+import com.focus617.core.engine.scene_graph.renderer.Material
+import com.focus617.core.engine.scene_graph.renderer.Mesh
 
-class SkyBox : Cube() {
+class SkyBox : DrawableEntity(), XGLDrawableObject {
     init {
         shaderName = SkyBoxShaderFilePath
+    }
+
+    override fun initOpenGlResource() {
+        val mesh = Mesh(XGLVertexArray.buildVertexArray(Cube()))
+        val meshRenderer = MeshRenderer(mesh, Material())
+        addComponent(meshRenderer)
+    }
+
+    override fun onRender(shader: Shader) {
+        shader.setInt(U_TEXTURE_UNIT, textureIndexCubeMap)
+
+        // This avoids problems with the skybox itself getting clipped.
+        GLES31.glDepthFunc(GLES31.GL_LEQUAL)
+
+        super.onRender(shader)
+
+        GLES31.glDepthFunc(GLES31.GL_LESS)
     }
 
     companion object{
@@ -21,21 +43,7 @@ class SkyBox : Cube() {
         const val textureIndexCubeMap = 0 // skybox always use slot 0
     }
 
-    override fun submit(shader: Shader) {
-        shader.setInt(U_TEXTURE_UNIT, textureIndexCubeMap)
-        shader.setMat4(U_MODEL_MATRIX, modelMatrix)
 
-        // This avoids problems with the skybox itself getting clipped.
-        GLES31.glDepthFunc(GLES31.GL_LEQUAL)
 
-        vertexArray.bind()
-        RenderCommand.drawIndexed(vertexArray)
 
-        GLES31.glDepthFunc(GLES31.GL_LESS)
-
-        // 下面这两行可以省略，以节约GPU的运行资源；
-        // 在下个submit，会bind其它handle，自然会实现unbind
-        vertexArray.unbind()
-        shader.unbind()
-    }
 }

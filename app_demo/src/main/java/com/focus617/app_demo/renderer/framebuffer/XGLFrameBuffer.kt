@@ -21,7 +21,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     private var mColorAttachments = mutableListOf<XGLTexture2DBuffer>()   // ColorTextureBuffers
     private var mDepthBufferAttachment: XGLTexture2DBuffer? = null        // DepthBuffer
     private var mRenderBufferAttachment: XGLRenderBuffer? = null          // RenderBuffer
-    private val mQuad: FrameBufferQuad = FrameBufferQuad()
+    private val mQuad: FrameBufferEntity = FrameBufferEntity()
 
     private var mActiveColorAttachment: Int = 0
 
@@ -111,7 +111,8 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
                         )
                         mColorAttachments.add(colorTextureBuf)
                     }
-                    else -> {}
+                    else -> {
+                    }
                 }
             }
         }
@@ -135,7 +136,8 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
                         mSpecification.mHeight
                     )
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
     }

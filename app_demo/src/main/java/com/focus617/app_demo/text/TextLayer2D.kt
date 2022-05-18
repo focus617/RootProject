@@ -1,6 +1,5 @@
 package com.focus617.app_demo.text
 
-import com.focus617.app_demo.renderer.framebuffer.FrameBufferQuad
 import com.focus617.app_demo.renderer.framebuffer.XGLTexture2DBuffer
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
@@ -8,6 +7,7 @@ import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureFormat
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
+import com.focus617.platform.helper.BitmapHelper
 import com.focus617.platform.helper.BitmapHelper.convert
 
 /**
@@ -15,7 +15,7 @@ import com.focus617.platform.helper.BitmapHelper.convert
  */
 class TextLayer2D(name: String) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
-    private val mQuad: FrameBufferQuad = FrameBufferQuad()
+    private val mQuad: TextQuad2D = TextQuad2D()
 
     override fun initOpenGlResource() {
         mQuad.initOpenGlResource()
@@ -40,23 +40,23 @@ class TextLayer2D(name: String) : Layer(name) {
     }
 
     override fun beforeDrawFrame() {
-        textureBuffer?.apply {
+        texture?.apply {
             mQuad.fontColor = Color.CYAN
 
             val bitmap =
-                TextTexture2D.createBitmap("欢迎访问我的虚拟世界！", 50f).convert(1f, -1f)
-            textureBuffer!!.setData(
+                BitmapHelper.createBitmap("欢迎访问我的虚拟世界！", 50f).convert(1f, -1f)
+            texture!!.setData(
                 bitmap,
                 screenWidth - bitmap.width - 20,
                 screenHeight - bitmap.height - 20
             )
             bitmap.recycle()
 
-            FrameBufferQuad.shaderWithColor.bind()
-            FrameBufferQuad.shaderWithColor.setInt(
-                FrameBufferQuad.U_TEXTURE, textureBuffer!!.screenTextureIndex
+            TextQuad2D.shaderWithColor.bind()
+            TextQuad2D.shaderWithColor.setInt(
+                TextQuad2D.U_TEXTURE, texture!!.screenTextureIndex
             )
-            mQuad.submit(FrameBufferQuad.shaderWithColor)
+            mQuad.onRender(TextQuad2D.shaderWithColor)
         }
     }
 
@@ -75,7 +75,7 @@ class TextLayer2D(name: String) : Layer(name) {
     }
 
     companion object {
-        private var textureBuffer: XGLTexture2DBuffer? = null
+        private var texture: XGLTexture2DBuffer? = null
         private var screenWidth: Int = 0
         private var screenHeight: Int = 0
 
@@ -83,12 +83,13 @@ class TextLayer2D(name: String) : Layer(name) {
             screenWidth = width
             screenHeight = height
 
-            textureBuffer?.close()
+            texture?.close()
 
             // Generate Texture2D for Overlay
             // 把纹理的维度设置为屏幕大小：传入width和height，只分配相应的内存，而不填充
-            textureBuffer =
-                XGLTexture2DBuffer(FrameBufferTextureFormat.RGBA8, screenWidth, screenHeight)
+            texture = XGLTexture2DBuffer(
+                FrameBufferTextureFormat.RGBA8, screenWidth, screenHeight
+            )
         }
     }
 

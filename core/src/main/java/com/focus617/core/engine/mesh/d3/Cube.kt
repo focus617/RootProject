@@ -1,12 +1,12 @@
-package com.focus617.core.engine.objects.d3
+package com.focus617.core.engine.mesh.d3
 
-import com.focus617.core.engine.objects.DrawableObject
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
+import com.focus617.core.engine.scene_graph.IfMeshable
 
 
-open class Cube : DrawableObject() {
+open class Cube : IfMeshable {
 
     override fun getVertices(): FloatArray = floatArrayOf(
         // 立方体的顶点有4个属性:位置、法线和纹理坐标

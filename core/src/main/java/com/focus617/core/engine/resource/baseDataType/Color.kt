@@ -1,10 +1,12 @@
 package com.focus617.core.engine.resource.baseDataType
 
+import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
 
 data class Color(var r: Float, var g: Float, var b: Float, var a: Float) {
 
     fun toVector4() = Vector4(r, g, b, a)
+    fun toVector3() = Vector3(r, g, b)
 
     companion object {
         val WHITE = Color(1.0f, 1.0f, 1.0f, 1.0f)

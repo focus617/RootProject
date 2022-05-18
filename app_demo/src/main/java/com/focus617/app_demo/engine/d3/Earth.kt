@@ -1,23 +1,34 @@
 package com.focus617.app_demo.engine.d3
 
+import com.focus617.app_demo.engine.XGLDrawableObject
+import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.math.Point3D
-import com.focus617.core.engine.objects.d3.Ball
-import com.focus617.core.engine.renderer.RenderCommand
+import com.focus617.core.engine.mesh.d3.Ball
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene.PointLight
+import com.focus617.core.engine.scene_graph.DrawableEntity
+import com.focus617.core.engine.scene_graph.components.MeshRenderer
+import com.focus617.core.engine.scene_graph.renderer.Material
+import com.focus617.core.engine.scene_graph.renderer.Mesh
 import kotlin.properties.Delegates
 
-class Earth : Ball(1.0f) {
+class Earth : DrawableEntity(), XGLDrawableObject {
     lateinit var viewPoint: Point3D
 
     init {
         shaderName = ShaderFilePath
     }
 
-    override fun submit(shader: Shader) {
+    override fun initOpenGlResource() {
+        val mesh = Mesh(XGLVertexArray.buildVertexArray(Ball(1.0f)))
+        val meshRenderer = MeshRenderer(mesh, Material())
+        addComponent(meshRenderer)
+    }
+
+    override fun onRender(shader: Shader) {
         shader.setInt(U_TEXTURE_UNIT_1, textureIndexDay)
         shader.setInt(U_TEXTURE_UNIT_2, textureIndexNight)
-        shader.setMat4(U_MODEL_MATRIX, modelMatrix)
+
         shader.setFloat3(U_POINT_VIEW_POSITION, viewPoint)
 
         shader.setFloat3(U_POINT_LIGHT_POSITION, PointLight.position)
@@ -28,13 +39,7 @@ class Earth : Ball(1.0f) {
         shader.setFloat(U_POINT_LIGHT_LINEAR, PointLight.Linear)
         shader.setFloat(U_POINT_LIGHT_QUADRATIC, PointLight.Quadratic)
 
-        vertexArray.bind()
-        RenderCommand.drawIndexed(vertexArray)
-
-        // 下面这两行可以省略，以节约GPU的运行资源；
-        // 在下个submit，会bind其它handle，自然会实现unbind
-        vertexArray.unbind()
-        shader.unbind()
+        super.onRender(shader)
     }
 
     fun updateCameraPosition(point: Point3D) {
@@ -66,5 +71,4 @@ class Earth : Ball(1.0f) {
         const val U_POINT_LIGHT_LINEAR = "light.linear"
         const val U_POINT_LIGHT_QUADRATIC = "light.quadratic"
     }
-
 }

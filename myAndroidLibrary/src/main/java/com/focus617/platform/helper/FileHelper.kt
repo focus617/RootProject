@@ -18,6 +18,10 @@ object FileHelper {
             filePath.substring(filePath.lastIndexOf('/') + 1, filePath.length)
         else filePath
 
+    fun getFileExt(filePath: String): String{
+        val splitList: List<String> = filePath.split(".")
+        return splitList[splitList.size - 1]
+    }
 
     private const val DATA_FILE_NAME = "data"
 
