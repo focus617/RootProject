@@ -59,7 +59,7 @@ class TextEntity3D(private val isPerspective: Boolean = true) : DrawableEntity()
             preTextFont = textFont
         }
         // 注册到TextureSlots, 获得TextureUnit Index, 以便ActiveTexture
-        textureIndex = XGLTextureSlots.getId(textTexture)
+        textureIndex = XGLTextureSlots.requestIndex(textTexture)
         textTexture.bind(textureIndex)
 
         shader.bind()

@@ -94,13 +94,13 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         val textureGrass =
             XGLTextureBuilder.createTexture(context, Heightmap.HeightMapGrassFilePath)
         textureGrass?.apply {
-            Heightmap.textureIndexGrass = XGLTextureSlots.getId(textureGrass)
+            Heightmap.textureIndexGrass = XGLTextureSlots.requestIndex(textureGrass)
         }
 
         val textureStone =
             XGLTextureBuilder.createTexture(context, Heightmap.HeightMapStoneFilePath)
         textureStone?.apply {
-            Heightmap.textureIndexStone = XGLTextureSlots.getId(textureStone)
+            Heightmap.textureIndexStone = XGLTextureSlots.requestIndex(textureStone)
         }
 
         Box.initTexture(context)

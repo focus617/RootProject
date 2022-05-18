@@ -129,7 +129,7 @@ class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.
         fun drawQuad(
             position: Point3D, size: Vector2, texture: Texture2D, tilingFactor: Float = 1.0f
         ) {
-            val texIndex: Float = XGLTextureSlots.getId(texture).toFloat()
+            val texIndex: Float = XGLTextureSlots.requestIndex(texture).toFloat()
 
             Renderer2DData.putQuadVertex(
                 position, size, Color.WHITE, texIndex, tilingFactor
@@ -157,7 +157,7 @@ class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.
         fun drawQuad(
             position: Point3D, size: Vector2, subTexture: SubTexture2D, tilingFactor: Float = 1.0f
         ) {
-            val texIndex: Float = XGLTextureSlots.getId(subTexture.mTextureAtlas).toFloat()
+            val texIndex: Float = XGLTextureSlots.requestIndex(subTexture.mTextureAtlas).toFloat()
 
             Renderer2DData.putQuadVertex(
                 position, size, Color.WHITE, subTexture, texIndex, tilingFactor
@@ -242,7 +242,7 @@ class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.
             tilingFactor: Float = 1.0f,
             tintColor: Color = Color.WHITE
         ) {
-            val texIndex: Float = XGLTextureSlots.getId(texture).toFloat()
+            val texIndex: Float = XGLTextureSlots.requestIndex(texture).toFloat()
 
             val transform: Mat4 = Mat4().transform2D(position.toVector3(), size, rotationInDegree)
             //LOG.info(transform.toString("Transform Matrix"))
@@ -307,7 +307,7 @@ class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.
             tilingFactor: Float = 1.0f,
             tintColor: Color = Color.WHITE
         ) {
-            val texIndex: Float = XGLTextureSlots.getId(subTexCoords.mTextureAtlas).toFloat()
+            val texIndex: Float = XGLTextureSlots.requestIndex(subTexCoords.mTextureAtlas).toFloat()
 
             val transform: Mat4 = Mat4().transform2D(position.toVector3(), size, rotationInDegree)
             //LOG.info(transform.toString("Transform Matrix"))

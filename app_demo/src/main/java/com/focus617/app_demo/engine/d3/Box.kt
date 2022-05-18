@@ -156,7 +156,7 @@ class Box : DrawableEntity(), XGLDrawableObject{
         fun initTexture(context: Context) {
             val textureBox = XGLTextureBuilder.createTexture(context, TextureFilePath)
             textureBox?.apply {
-                textureIndex = XGLTextureSlots.getId(textureBox)
+                textureIndex = XGLTextureSlots.requestIndex(textureBox)
             }
         }
 

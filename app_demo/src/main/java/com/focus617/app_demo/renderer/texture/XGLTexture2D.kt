@@ -36,6 +36,10 @@ open class XGLTexture2D(filePath: String) : Texture2D(filePath) {
         mHandle = mHandleBuf[0]
     }
 
+    override fun close() {
+        glDeleteTextures(1, mHandleBuf, 0)
+    }
+
     /** 基于Assets中的文件构造 */
     constructor(context: Context, filePath: String) : this(filePath) {
         val bitmap = BitmapHelper.bitmapLoader(context, filePath)
@@ -137,8 +141,6 @@ open class XGLTexture2D(filePath: String) : Texture2D(filePath) {
         glBindTexture(GL_TEXTURE_2D, 0)
     }
 
-    override fun close() {
-        glDeleteTextures(1, mHandleBuf, 0)
-    }
+
 
 }

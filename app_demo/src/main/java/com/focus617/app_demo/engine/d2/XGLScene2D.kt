@@ -36,12 +36,12 @@ class XGLScene2D(val context: Context, val engine: Sandbox2D) : Scene() {
         var texture = XGLTextureBuilder.createTexture(
             context, TextureCheckboxFilePath
         )!!
-        textureCheckboxIndex = XGLTextureSlots.getId(texture)
+        textureCheckboxIndex = XGLTextureSlots.requestIndex(texture)
 
         texture = XGLTextureBuilder.createTexture(
             context, TextureAtlasFilePath
         )!!
-        textureAltasIndex = XGLTextureSlots.getId(texture)
+        textureAltasIndex = XGLTextureSlots.requestIndex(texture)
     }
 
     // TODO: My thought: I may call it in renderer.onSurfaceChanged when 2D GO ready,

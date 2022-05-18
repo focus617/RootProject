@@ -21,7 +21,7 @@ object XGLTextureSlots : TextureSlots() {
     }
 
     // Must be called in opengl env, such as scene.initOpenGlResource()
-    fun getMaxTextureSlotNumber(): Int {
+    private fun getMaxTextureSlotNumber(): Int {
         val numberBuf = IntBuffer.allocate(1)
         glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, numberBuf)
         return numberBuf[0]
