@@ -16,10 +16,12 @@ import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.scene.PerspectiveCamera
 import com.focus617.core.engine.scene.PerspectiveCameraController
 import com.focus617.core.engine.scene.Scene
+import com.focus617.core.engine.scene_graph.GameEntity
 
 class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
 
     private val model = Model(context, "3dModel/viking/cannon.obj")
+    private val rootEntity = GameEntity()
 
     init {
         mCamera = PerspectiveCamera()

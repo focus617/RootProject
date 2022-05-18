@@ -6,12 +6,46 @@ import com.focus617.core.engine.math.Vector3
 /**
  * SPACE INFORMATION
  */
-data class Transform (
+class Transform {
     //Local space information
-    val pos: Vector3 = Vector3(0.0f, 0.0f, 0.0f),
-    val eulerRot: Vector3 = Vector3(0.0f, 0.0f, 0.0f),
-    val scale: Vector3 = Vector3( 1.0f, 1.0f, 1.0f),
+    private var mPos: Vector3 = Vector3(0.0f, 0.0f, 0.0f)
+    private var mEulerRot: Vector3 = Vector3(0.0f, 0.0f, 0.0f)
+    private var mScale: Vector3 = Vector3(1.0f, 1.0f, 1.0f)
 
-    //Global space information concatenate in matrix
-    val modelMatrix: Mat4 = Mat4()
-)
+    //Dirty flag
+    private var mIsDirty = true
+
+    //Local space information concatenate in matrix
+    private val mModelMatrix: Mat4 = Mat4()
+
+    private fun computeLocalModelMatrix() {
+        mModelMatrix.transform3D(mPos, mScale, mEulerRot)
+        mIsDirty = false
+    }
+
+    fun getLocalModelMatrix(): Mat4 {
+        if (mIsDirty) computeLocalModelMatrix()
+        return mModelMatrix
+    }
+
+    fun getLocalPosition() = mPos
+    fun getLocalRotation() = mEulerRot
+    fun getLocalScale() = mScale
+
+    fun isDirty() = mIsDirty
+
+    fun setLocalPosition(newPosition: Vector3) {
+        mPos = newPosition
+        mIsDirty = true
+    }
+
+    fun setLocalRotation(newEulerRot: Vector3) {
+        mEulerRot = newEulerRot
+        mIsDirty = true
+    }
+
+    fun setLocalScale(newScale: Vector3) {
+        mScale = newScale
+        mIsDirty = true
+    }
+}

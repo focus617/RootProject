@@ -6,32 +6,36 @@ import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.app_demo.renderer.vertex.XGLVertexBuffer
 import com.focus617.app_demo.renderer.vertex.XGLVertexBufferBuilder
 import com.focus617.core.engine.renderer.texture.Texture2D
+import com.focus617.core.engine.scene_graph.GameEntity
 import com.focus617.core.engine.scene_graph.renderer.Mesh
-import com.focus617.core.platform.base.BaseEntity
 import com.focus617.platform.objLoader.ObjLoader
 import java.io.Closeable
 
 class Model(
     private val context: Context,
     private val filePath: String
-) : BaseEntity(), Closeable {
+) : GameEntity(), Closeable {
 
     //模型所包含的Mesh集合
     private val mMeshes = HashMap<String, Mesh>()
 
-//    //模型所包含的Material集合
+    //模型所包含的Material集合
 //    private val mMaterials = HashMap<String, Material>()
 
     // 对所有加载过的纹理全局储存，防止重复加载
     private val texturesLoaded = HashMap<String, Texture2D>()
 
 
-    fun initOpenGlResource() {
+    fun initUnderOpenGl() {
         LOG.info("load Obj model from $filePath")
 
+        // Retrieve Mesh List
         val meshList = ObjLoader.loadOBJ(context, filePath).toVertexArrayModel()
+        // Retrieve Material List
+        // Release memory
         ObjLoader.clear()
 
+        // Build Mesh
         meshList.forEach {
             val vertexArray =
                 XGLVertexBufferBuilder.createVertexArray() as XGLVertexArray
@@ -49,6 +53,7 @@ class Model(
 
             mMeshes[it.textureName] = Mesh(vertexArray)
         }
+        // Build Material
     }
 
 

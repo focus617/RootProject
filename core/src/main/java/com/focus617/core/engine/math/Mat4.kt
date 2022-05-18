@@ -134,4 +134,25 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
         XMatrix.xMultiplyMM(floatArray, 0, scale, 0, floatArray, 0)
         return this
     }
+
+    fun transform3D(
+        position: Vector3,
+        size: Vector3,
+        eulerRotationInDegree: Vector3
+    ): Mat4 {
+        val translate = Mat4().translate(position).toFloatArray()
+        val scale = Mat4().scale(size).toFloatArray()
+
+        val rotationX = Mat4().rotate3D(eulerRotationInDegree.x, 1.0f, 0.0f, 0.0f)
+        val rotationY = Mat4().rotate3D(eulerRotationInDegree.y, 0.0f, 1.0f, 0.0f)
+        val rotationZ = Mat4().rotate3D(eulerRotationInDegree.z, 0.0f, 0.0f, 1.0f)
+        val rotation = (rotationY * rotationX * rotationZ).toFloatArray()
+
+        /** 由于采用了列主序的转置矩阵，所以乘法的顺序是反的 */
+        setIdentity()
+        XMatrix.xMultiplyMM(floatArray, 0, translate, 0, floatArray, 0)
+        XMatrix.xMultiplyMM(floatArray, 0, rotation, 0, floatArray, 0)
+        XMatrix.xMultiplyMM(floatArray, 0, scale, 0, floatArray, 0)
+        return this
+    }
 }
