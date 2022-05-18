@@ -2,15 +2,15 @@ package com.focus617.app_demo.renderer.framebuffer
 
 import android.opengl.GLES31.*
 import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.objects.DrawableObject
 import com.focus617.core.engine.renderer.XRenderer.SceneData
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.engine.scene.Camera
+import com.focus617.core.engine.scene_graph.DrawableEntity
 
 const val U_COLOR = "u_Color"
 
-fun DrawableObject.submitWithOutlining(
+fun DrawableEntity.submitWithOutlining(
     shader: Shader,
     color: Color = Color.CYAN,
     scaleSize: Vector3 = Vector3(1.05f, 1.05f, 1.05f)

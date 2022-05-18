@@ -8,15 +8,15 @@ import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Ray
 import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.objects.DrawableObject
-import com.focus617.core.engine.objects.d3.Cube
+import com.focus617.core.engine.mesh.d3.Cube
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene.PointLight
+import com.focus617.core.engine.scene_graph.DrawableEntity
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
 import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
 
-class Box : DrawableObject(), XGLDrawableObject{
+class Box : DrawableEntity(), XGLDrawableObject{
     init {
         shaderName = ShaderFilePath
     }

@@ -2,18 +2,18 @@ package com.focus617.app_demo.renderer.framebuffer
 
 import com.focus617.app_demo.engine.XGLDrawableObject
 import com.focus617.app_demo.renderer.vertex.XGLVertexArray
-import com.focus617.core.engine.objects.DrawableObject
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
+import com.focus617.core.engine.scene_graph.DrawableEntity
 import com.focus617.core.engine.scene_graph.IfMeshable
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
 import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
 
 
-open class FrameBufferEntity : DrawableObject(), XGLDrawableObject {
+open class FrameBufferEntity : DrawableEntity(), XGLDrawableObject {
 
     override fun initOpenGlResource() {
         val mesh = Mesh(XGLVertexArray.buildVertexArray(FrameBufferQuad()))

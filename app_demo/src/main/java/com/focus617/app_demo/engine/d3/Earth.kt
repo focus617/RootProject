@@ -3,16 +3,16 @@ package com.focus617.app_demo.engine.d3
 import com.focus617.app_demo.engine.XGLDrawableObject
 import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.math.Point3D
-import com.focus617.core.engine.objects.DrawableObject
-import com.focus617.core.engine.objects.d3.Ball
+import com.focus617.core.engine.mesh.d3.Ball
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene.PointLight
+import com.focus617.core.engine.scene_graph.DrawableEntity
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
 import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
 import kotlin.properties.Delegates
 
-class Earth : DrawableObject(), XGLDrawableObject {
+class Earth : DrawableEntity(), XGLDrawableObject {
     lateinit var viewPoint: Point3D
 
     init {

@@ -1,4 +1,4 @@
-package com.focus617.core.engine.objects.d3
+package com.focus617.core.engine.mesh.d3
 
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout

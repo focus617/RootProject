@@ -1,8 +1,8 @@
-package com.focus617.core.engine.objects
+package com.focus617.core.engine.mesh
 
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 
-class GeneratedData (
+class GeneratedMeshData (
     val numVertices: Int,        // 顶点数量
     val vertices: FloatArray,    // 顶点数组
     val layout: BufferLayout,    // 顶点数组的布局

@@ -1,6 +1,6 @@
-package com.focus617.core.engine.objects.d3
+package com.focus617.core.engine.mesh.d3
 
-import com.focus617.core.engine.objects.ObjectBuilder
+import com.focus617.core.engine.mesh.GeomMeshBuilder
 import com.focus617.core.engine.scene_graph.renderer.DynamicCreationMesh
 
 // TODO: Z轴显示不正常
@@ -12,8 +12,8 @@ class Star(
 ) : DynamicCreationMesh() {
 
     override fun beforeBuild() {
-        ObjectBuilder.appendStar(angleNum, radius, R, z)
-        buildData = ObjectBuilder.buildData(false)
+        GeomMeshBuilder.appendStar(angleNum, radius, R, z)
+        buildData = GeomMeshBuilder.buildMeshData(false)
     }
 
 }

@@ -32,6 +32,7 @@ open class GameEntity: BaseEntity(), IfEntity {
 
     fun addComponent(component: IfComponent){
         mComponents.add(component)
+        component.mParent = this
     }
 
     fun removeComponent(component: IfComponent){

@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.objects.GeneratedData
+import com.focus617.core.engine.mesh.GeneratedMeshData
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
@@ -52,7 +52,7 @@ class HeightmapMesh(
 //        LOG.info("indices(size=${indices.size})")
 //        for (i in 0..11) LOG.info("$i : ${indices[i]}")
 
-        buildData = GeneratedData(width * height, vertices, verticesLayout, indices)
+        buildData = GeneratedMeshData(width * height, vertices, verticesLayout, indices)
     }
 
 
