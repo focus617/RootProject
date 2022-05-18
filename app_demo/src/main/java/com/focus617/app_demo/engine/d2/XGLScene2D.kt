@@ -5,17 +5,23 @@ import com.focus617.app_demo.engine.XGLDrawableObject
 import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.core.TimeStep
-import com.focus617.core.engine.scene.OrthographicCamera
-import com.focus617.core.engine.scene.OrthographicCameraController
-import com.focus617.core.engine.scene.Scene
+import com.focus617.core.engine.scene_graph.Transform
+import com.focus617.core.engine.scene_graph.components.camera.OrthographicCamera
+import com.focus617.core.engine.scene_graph.components.camera.OrthographicCameraController
+import com.focus617.core.engine.scene_graph.scene.Scene
 import kotlin.properties.Delegates
 
+/**
+ * Scene is root entity for all Game Entities.
+ */
 class XGLScene2D(val context: Context, val engine: Sandbox2D) : Scene() {
     var initialized: Boolean = false
 
     init {
         mCamera = OrthographicCamera()
+        addComponent(mCamera)
         mCameraController = OrthographicCameraController(mCamera as OrthographicCamera)
+        addComponent(mCameraController)
     }
 
     fun initOpenGlResource() {
@@ -53,7 +59,7 @@ class XGLScene2D(val context: Context, val engine: Sandbox2D) : Scene() {
     // Used for updating the global resource, such as objects in scene
     override fun onUpdate(timeStep: TimeStep) {
         // Update Camera
-        mCameraController.onUpdate(timeStep)
+        mCameraController.onUpdate(timeStep, Transform())
 
     }
 

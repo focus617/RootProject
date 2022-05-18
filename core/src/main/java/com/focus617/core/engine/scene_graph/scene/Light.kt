@@ -1,4 +1,4 @@
-package com.focus617.core.engine.scene
+package com.focus617.core.engine.scene_graph.scene
 
 import com.focus617.core.engine.math.Vector3
 

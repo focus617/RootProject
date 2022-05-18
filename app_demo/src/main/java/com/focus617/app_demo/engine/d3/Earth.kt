@@ -5,11 +5,11 @@ import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.mesh.d3.Ball
 import com.focus617.core.engine.renderer.shader.Shader
-import com.focus617.core.engine.scene.PointLight
 import com.focus617.core.engine.scene_graph.DrawableEntity
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
 import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
+import com.focus617.core.engine.scene_graph.scene.PointLight
 import kotlin.properties.Delegates
 
 class Earth : DrawableEntity(), XGLDrawableObject {

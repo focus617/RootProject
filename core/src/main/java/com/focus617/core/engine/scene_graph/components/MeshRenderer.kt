@@ -1,5 +1,6 @@
 package com.focus617.core.engine.scene_graph.components
 
+import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene_graph.GameEntity
 import com.focus617.core.engine.scene_graph.IfComponent
@@ -15,9 +16,9 @@ class MeshRenderer(mesh: Mesh, material: Material) : BaseEntity(), IfComponent {
     private var mMesh: Mesh = mesh
     private var mMaterial: Material = material
 
-    override fun onEvent(event: Event) {}
+    override fun onEvent(event: Event): Boolean = false
 
-    override fun onUpdate(transform: Transform) {}
+    override fun onUpdate(timeStep: TimeStep, transform: Transform) {}
 
     override fun onRender(shader: Shader, transform: Transform) {
         shader.bind()

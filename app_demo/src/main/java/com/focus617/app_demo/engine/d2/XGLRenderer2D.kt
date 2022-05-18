@@ -12,7 +12,7 @@ import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.renderer.texture.SubTexture2D
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.engine.resource.baseDataType.Color
-import com.focus617.core.engine.scene.CameraController
+import com.focus617.core.engine.scene_graph.components.camera.CameraController
 import java.io.Closeable
 import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig

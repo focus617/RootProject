@@ -13,18 +13,23 @@ import com.focus617.app_demo.terrain.SkyBox
 import com.focus617.app_demo.text.TextEntity3D
 import com.focus617.app_demo.text.TextQuad2D
 import com.focus617.core.engine.core.TimeStep
-import com.focus617.core.engine.scene.PerspectiveCamera
-import com.focus617.core.engine.scene.PerspectiveCameraController
-import com.focus617.core.engine.scene.Scene
+import com.focus617.core.engine.scene_graph.Transform
+import com.focus617.core.engine.scene_graph.components.camera.PerspectiveCamera
+import com.focus617.core.engine.scene_graph.components.camera.PerspectiveCameraController
+import com.focus617.core.engine.scene_graph.scene.Scene
 
+/**
+ * Scene is root entity for all Game Entities.
+ */
 class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
 
     private val model = Model(context, "3dModel/viking/cannon.obj")
-//     val rootEntity = GameEntity()
 
     init {
         mCamera = PerspectiveCamera()
+        addComponent(mCamera)
         mCameraController = PerspectiveCameraController(mCamera as PerspectiveCamera)
+        addComponent(mCameraController)
     }
 
     fun initOpenGlResource() {
@@ -116,7 +121,7 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
     // Used for updating the global resource, such as objects in scene
     override fun onUpdate(timeStep: TimeStep) {
         // Update Camera
-        mCameraController.onUpdate(timeStep)
+        mCameraController.onUpdate(timeStep, Transform())
 
     }
 

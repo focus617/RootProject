@@ -4,11 +4,11 @@ import android.opengl.GLES31
 import com.focus617.app_demo.engine.XGLDrawableObject
 import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.renderer.shader.Shader
-import com.focus617.core.engine.scene.Light
 import com.focus617.core.engine.scene_graph.DrawableEntity
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
 import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
+import com.focus617.core.engine.scene_graph.scene.Light
 import kotlin.properties.Delegates
 
 class Heightmap(val mesh: HeightmapMesh) : DrawableEntity(), XGLDrawableObject {

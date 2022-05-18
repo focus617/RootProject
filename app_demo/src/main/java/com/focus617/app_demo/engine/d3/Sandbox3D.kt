@@ -8,12 +8,12 @@ import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
 import com.focus617.core.engine.core.TimeStep
-import com.focus617.core.engine.scene.Scene
+import com.focus617.core.engine.scene_graph.scene.Scene
 import com.focus617.core.platform.event.base.EventType
 import java.io.Closeable
 
 class Sandbox3D(context: Context) : Engine(), Closeable {
-
+    // Create root entity
     var scene: Scene = XGLScene3D(context, this)
 
     init {

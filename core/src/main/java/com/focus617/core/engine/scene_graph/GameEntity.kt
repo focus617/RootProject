@@ -55,7 +55,7 @@ open class GameEntity: BaseEntity(), IfEntity {
 //        }
 
         mComponents.forEach{
-            it.onUpdate(mTransform)
+            it.onUpdate(timeStep, mTransform)
         }
 
         mChildren.forEach{

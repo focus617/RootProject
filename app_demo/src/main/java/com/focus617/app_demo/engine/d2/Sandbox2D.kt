@@ -7,13 +7,13 @@ import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.renderer.XRenderer
-import com.focus617.core.engine.scene.Scene
+import com.focus617.core.engine.scene_graph.scene.Scene
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
 import java.io.Closeable
 
 class Sandbox2D(context: Context) : Engine(), Closeable {
-
+    // Create root entity
     var scene: Scene = XGLScene2D(context, this)
 
     init {
