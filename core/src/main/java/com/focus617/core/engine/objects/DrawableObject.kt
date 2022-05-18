@@ -35,22 +35,6 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
         resetTransform()
     }
 
-    companion object {
-        const val U_MODEL_MATRIX = "u_ModelMatrix"
-    }
-
-    fun push() {
-        modelMatrixInStack.setValue(modelMatrix)
-    }
-
-    fun pop() {
-        modelMatrix.setValue(modelMatrixInStack)
-    }
-
-    open fun intersects(ray: Ray) {
-        isSelected = !isSelected
-    }
-
     override fun submit(shader: Shader) {
         shader.bind()
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
@@ -95,5 +79,22 @@ abstract class DrawableObject : BaseEntity(), IfDrawable {
         boundingSphere.center += Point3D(position.x, position.y, 0f)
         boundingSphere.radius *= (scaleSize.x + scaleSize.y) / 2
     }
+
+    fun push() {
+        modelMatrixInStack.setValue(modelMatrix)
+    }
+
+    fun pop() {
+        modelMatrix.setValue(modelMatrixInStack)
+    }
+
+    open fun intersects(ray: Ray) {
+        isSelected = !isSelected
+    }
+
+    companion object {
+        const val U_MODEL_MATRIX = "u_ModelMatrix"
+    }
+
 
 }
