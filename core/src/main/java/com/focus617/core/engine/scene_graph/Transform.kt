@@ -16,16 +16,19 @@ class Transform {
     private var mIsDirty = true
 
     //Local space information concatenate in matrix
-    private val mModelMatrix: Mat4 = Mat4()
+    private val mLocalModelMatrix: Mat4 = Mat4()
+
+    //Global space information concatenate in matrix
+    var mGlobalModelMatrix: Mat4 = Mat4()
 
     private fun computeLocalModelMatrix() {
-        mModelMatrix.transform3D(mPos, mScale, mEulerRot)
+        mLocalModelMatrix.transform3D(mPos, mScale, mEulerRot)
         mIsDirty = false
     }
 
     fun getLocalModelMatrix(): Mat4 {
         if (mIsDirty) computeLocalModelMatrix()
-        return mModelMatrix
+        return mLocalModelMatrix
     }
 
     fun getLocalPosition() = mPos
