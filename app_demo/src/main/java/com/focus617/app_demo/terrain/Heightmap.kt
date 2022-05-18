@@ -43,7 +43,7 @@ class Heightmap(val context: Context, private val filePath: String) : DynamicCre
         var textureIndexStone by Delegates.notNull<Int>()
     }
 
-    override fun submit(shader: Shader) {
+    override fun onRender(shader: Shader) {
         shader.setInt(U_TEXTURE_UNIT_1, textureIndexGrass)
         shader.setInt(U_TEXTURE_UNIT_2, textureIndexStone)
 
@@ -52,8 +52,7 @@ class Heightmap(val context: Context, private val filePath: String) : DynamicCre
         //Enable Cull Back Face
         GLES31.glEnable(GLES31.GL_CULL_FACE)
 
-//        meshRenderer.onRender(shader, mTransform)
-        onRender(shader)
+        super.onRender(shader)
 
         GLES31.glDisable(GLES31.GL_CULL_FACE)
     }

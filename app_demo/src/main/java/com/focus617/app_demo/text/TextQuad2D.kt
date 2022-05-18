@@ -8,11 +8,9 @@ class TextQuad2D: FrameBufferQuad() {
     var fontColor: Color = Color.BLACK
 
     // 用于本对象作为一个GO时（目前就用在overLayer的字幕）
-    override fun submit(shader: Shader) {
+    override fun onRender(shader: Shader) {
         shaderWithColor.setFloat4(U_COLOR, fontColor)
-
-//        meshRenderer.onRender(shaderWithColor, mTransform)
-        onRender(shaderWithColor)
+        super.onRender(shaderWithColor)
     }
 
     companion object {

@@ -20,14 +20,14 @@ class SkyBox : Cube() {
         const val textureIndexCubeMap = 0 // skybox always use slot 0
     }
 
-    override fun submit(shader: Shader) {
+    override fun onRender(shader: Shader) {
         shader.setInt(U_TEXTURE_UNIT, textureIndexCubeMap)
 
         // This avoids problems with the skybox itself getting clipped.
         GLES31.glDepthFunc(GLES31.GL_LEQUAL)
 
 //        meshRenderer.onRender(shader, mTransform)
-        onRender(shader)
+        super.onRender(shader)
 
         GLES31.glDepthFunc(GLES31.GL_LESS)
 

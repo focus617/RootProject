@@ -56,7 +56,7 @@ class TextLayer2D(name: String) : Layer(name) {
             TextQuad2D.shaderWithColor.setInt(
                 TextQuad2D.U_TEXTURE, texture!!.screenTextureIndex
             )
-            mQuad.submit(TextQuad2D.shaderWithColor)
+            mQuad.onRender(TextQuad2D.shaderWithColor)
         }
     }
 

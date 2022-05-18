@@ -25,7 +25,7 @@ fun DrawableObject.submitWithOutlining(
     glStencilMask(0xFF)                        // 在正常绘制时确保打开模板缓冲的写入
 
     shader.bind()
-    this.submit(shader)
+    this.onRender(shader)
 
     // 2nd. Render pass, now draw slightly scaled versions of the objects,
     // this time disabling stencil writing.
@@ -44,7 +44,7 @@ fun DrawableObject.submitWithOutlining(
     }
     this.push()
     this.scale(scaleSize)
-    this.submit(FrameBufferQuad.shaderOutlining)
+    this.onRender(FrameBufferQuad.shaderOutlining)
     this.pop()
 
 // 关闭模板测试

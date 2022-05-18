@@ -21,9 +21,6 @@ open class FrameBufferQuad : DrawableObject(), XGLDrawableObject {
         addComponent(meshRenderer)
     }
 
-    override fun submit(shader: Shader) {
-    }
-
     // 用于本对象作为FrameBuffer绘制时
     fun draw(screenTextureIndex: Int) {
         shader.bind()

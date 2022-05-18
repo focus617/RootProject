@@ -1,7 +1,6 @@
 package com.focus617.core.engine.objects
 
 import com.focus617.core.engine.math.*
-import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene_graph.GameEntity
 import com.focus617.core.engine.scene_graph.IfMeshable
 
@@ -14,10 +13,6 @@ abstract class DrawableObject : GameEntity(), IfMeshable {
     lateinit var shaderName: String
 
     var isSelected = false
-
-    override fun submit(shader: Shader) {
-        onRender(shader)
-    }
 
     fun resetTransform() {
         mTransform.reset()

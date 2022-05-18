@@ -1,6 +1,5 @@
 package com.focus617.core.engine.objects.d2
 
-import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
@@ -32,8 +31,6 @@ class Triangle : IfMeshable {
     override fun beforeBuild() {}
 
     override fun afterBuild() {}
-
-    override fun submit(shader: Shader) {}
 
     companion object {
         private const val SHADER_PATH = "Triangle"

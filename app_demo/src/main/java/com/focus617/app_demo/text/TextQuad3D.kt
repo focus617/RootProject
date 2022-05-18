@@ -49,7 +49,7 @@ class TextQuad3D(private val isPerspective: Boolean = true) : DrawableObject(), 
         textTexture.setText(text, textFont)
     }
 
-    override fun submit(shader: Shader) {
+    override fun onRender(shader: Shader) {
         if ((text != preText) || (textFont != preTextFont)) {
             textTexture.setText(text, textFont)
 
@@ -69,8 +69,7 @@ class TextQuad3D(private val isPerspective: Boolean = true) : DrawableObject(), 
         shader.setInt(U_TEXTURE, textureIndex)
         shader.setFloat4(U_COLOR, textColor)
 
-//        meshRenderer.onRender(shader, mTransform)
-        onRender(shader)
+        super.onRender(shader)
     }
 
     override fun getVertices(): FloatArray = floatArrayOf(

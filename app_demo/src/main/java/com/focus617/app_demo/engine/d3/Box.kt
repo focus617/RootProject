@@ -29,7 +29,7 @@ class Box : DrawableObject(), XGLDrawableObject{
         addComponent(meshRenderer)
     }
 
-    override fun submit(shader: Shader) {
+    override fun onRender(shader: Shader) {
         shader.setFloat3(U_POINT_VIEW_POSITION, viewPoint)
 
         shader.setFloat3(U_POINT_LIGHT_POSITION, PointLight.position)
@@ -44,8 +44,7 @@ class Box : DrawableObject(), XGLDrawableObject{
         shader.setFloat3(U_MATERIAL_SPECULAR, specular)
         shader.setFloat(U_MATERIAL_SHININESS, shininess)
 
-//        meshRenderer.onRender(shader, mTransform)
-        onRender(shader)
+        super.onRender(shader)
     }
 
     fun updateCameraPosition(point: Point3D) {

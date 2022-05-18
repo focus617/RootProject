@@ -13,7 +13,7 @@ class Earth : Ball(1.0f) {
         shaderName = ShaderFilePath
     }
 
-    override fun submit(shader: Shader) {
+    override fun onRender(shader: Shader) {
         shader.setInt(U_TEXTURE_UNIT_1, textureIndexDay)
         shader.setInt(U_TEXTURE_UNIT_2, textureIndexNight)
 
@@ -27,8 +27,7 @@ class Earth : Ball(1.0f) {
         shader.setFloat(U_POINT_LIGHT_LINEAR, PointLight.Linear)
         shader.setFloat(U_POINT_LIGHT_QUADRATIC, PointLight.Quadratic)
 
-//        meshRenderer.onRender(shader, mTransform)
-        onRender(shader)
+        super.onRender(shader)
     }
 
     fun updateCameraPosition(point: Point3D) {

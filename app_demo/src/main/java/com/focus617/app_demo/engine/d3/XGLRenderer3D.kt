@@ -98,7 +98,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
                     if (gameObject.isSelected) {
                         gameObject.submitWithOutlining(shader, Color.GOLD)
                     } else {
-                        gameObject.submit(shader)
+                        gameObject.onRender(shader)
                     }
                 }
             }
