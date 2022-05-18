@@ -7,7 +7,6 @@ import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.objects.DynamicCreationObject
 import com.focus617.core.engine.objects.GeneratedData
-import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
@@ -53,14 +52,9 @@ class Heightmap(val context: Context, private val filePath: String) : DynamicCre
         //Enable Cull Back Face
         GLES31.glEnable(GLES31.GL_CULL_FACE)
 
-        vertexArray.bind()
-        RenderCommand.drawIndexed(vertexArray)
+        mesh.draw()
 
         GLES31.glDisable(GLES31.GL_CULL_FACE)
-
-        // 下面这两行可以省略，以节约GPU的运行资源；
-        // 在下个submit，会bind其它handle，自然会实现unbind
-        vertexArray.unbind()
         shader.unbind()
     }
 

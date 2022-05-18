@@ -1,11 +1,12 @@
 package com.focus617.core.engine.objects.d2
 
-import com.focus617.core.engine.objects.DrawableObject
+import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
+import com.focus617.core.engine.scene_graph.IfMeshable
 
-class Triangle : DrawableObject() {
+class Triangle : IfMeshable {
 
     override fun getVertices(): FloatArray = floatArrayOf(
         // 每个顶点有2个顶点属性一位置、颜色、纹理（TODO： TextureId）
@@ -27,9 +28,17 @@ class Triangle : DrawableObject() {
         0, 1, 2
     )
 
-    override fun beforeBuild() {
-    }
 
-    override fun afterBuild() {
+    override fun beforeBuild() {}
+
+    override fun afterBuild() {}
+
+    override fun submit(shader: Shader) {}
+
+    companion object {
+        private const val SHADER_PATH = "Triangle"
+        private const val SHADER_FILE = "shader.glsl"
+
+        const val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
     }
 }

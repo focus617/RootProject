@@ -121,6 +121,20 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
 //            }
             layer.afterDrawFrame()
         }
+
+        //========= Test ==============
+//        val shader = scene.mShaderLibrary.get(Triangle.ShaderFilePath)
+//        shader?.apply {
+//            bind()
+////            LOG.info(SceneData.sProjectionMatrix.toString("ProjectionMatrix"))
+////            LOG.info(SceneData.sViewMatrix.toString("ViewMatrix"))
+//
+//            setMat4(ShaderUniformConstants.U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
+//            setMat4(ShaderUniformConstants.U_VIEW_MATRIX, SceneData.sViewMatrix)
+//            scene.rootEntity.onRender(shader)
+//        }
+        //========= Test ==============
+
         endScene()
         XGLContext.checkGLError("After endScene")
 

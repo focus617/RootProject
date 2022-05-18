@@ -13,15 +13,15 @@ import com.focus617.app_demo.terrain.SkyBox
 import com.focus617.app_demo.text.TextQuad2D
 import com.focus617.app_demo.text.TextQuad3D
 import com.focus617.core.engine.core.TimeStep
+import com.focus617.core.engine.objects.d2.Triangle
 import com.focus617.core.engine.scene.PerspectiveCamera
 import com.focus617.core.engine.scene.PerspectiveCameraController
 import com.focus617.core.engine.scene.Scene
-import com.focus617.core.engine.scene_graph.GameEntity
 
 class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
 
     private val model = Model(context, "3dModel/viking/cannon.obj")
-    private val rootEntity = GameEntity()
+//     val rootEntity = GameEntity()
 
     init {
         mCamera = PerspectiveCamera()
@@ -36,6 +36,11 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         initGameObjects()
 
         model.initUnderOpenGl()
+
+//        val vertexArray = XGLVertexArray.buildVertexArray(Triangle())
+//        val meshRenderer = MeshRenderer(Mesh(vertexArray), Material())
+//        rootEntity.addComponent(meshRenderer)
+
     }
 
     private fun initShader() {
@@ -68,12 +73,6 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
 
         shader = XGLShaderBuilder.createShader(
             context,
-            Earth.ShaderFilePath
-        ) as XGLShader
-        mShaderLibrary.add(shader)
-
-        shader = XGLShaderBuilder.createShader(
-            context,
             Box.ShaderFilePath
         ) as XGLShader
         mShaderLibrary.add(shader)
@@ -83,6 +82,14 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
             TextQuad3D.ShaderFilePath
         ) as XGLShader
         mShaderLibrary.add(TextQuad3D.shader)
+
+        //========= Test ==============
+        shader = XGLShaderBuilder.createShader(
+            context,
+            Triangle.ShaderFilePath
+        ) as XGLShader
+        mShaderLibrary.add(shader)
+        //========= Test ==============
     }
 
     private fun initTexture() {

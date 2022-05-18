@@ -9,12 +9,12 @@ import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Ray
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.objects.DrawableObject
-import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.scene.PointLight
+import com.focus617.core.engine.scene_graph.renderer.Mesh
 
 class Box : DrawableObject(), XGLDrawableObject{
     init {
@@ -22,7 +22,7 @@ class Box : DrawableObject(), XGLDrawableObject{
     }
 
     override fun initOpenGlResource() {
-        vertexArray = XGLVertexArray.buildVertexArray(this)
+        mesh = Mesh(XGLVertexArray.buildVertexArray(this))
     }
 
     override fun submit(shader: Shader) {
@@ -43,12 +43,8 @@ class Box : DrawableObject(), XGLDrawableObject{
         shader.setFloat3(U_MATERIAL_SPECULAR, specular)
         shader.setFloat(U_MATERIAL_SHININESS, shininess)
 
-        vertexArray.bind()
-        RenderCommand.drawIndexed(vertexArray)
+        mesh.draw()
 
-        // 下面这两行可以省略，以节约GPU的运行资源；
-        // 在下个submit，会bind其它handle，自然会实现unbind
-        vertexArray.unbind()
         shader.unbind()
     }
 

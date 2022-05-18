@@ -1,21 +1,19 @@
 package com.focus617.core.engine.objects
 
 import com.focus617.core.engine.math.*
-import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.shader.Shader
-import com.focus617.core.engine.renderer.vertex.VertexArray
+import com.focus617.core.engine.scene_graph.GameEntity
 import com.focus617.core.engine.scene_graph.IfMeshable
-import com.focus617.core.platform.base.BaseEntity
+import com.focus617.core.engine.scene_graph.renderer.Mesh
 
-abstract class DrawableObject : BaseEntity(), IfMeshable {
-    //val modelMatrix: FloatArray = FloatArray(16)
+abstract class DrawableObject : GameEntity(), IfMeshable {
     val modelMatrix = Mat4()
     private val modelMatrixInStack = Mat4()
 
     protected val boundingSphere = Sphere(Point3D(0f, 0f, 0f), 0.5f)
 
-    // vertexArray is initialized via calling XGLVertexArray.buildVertexArray
-    lateinit var vertexArray: VertexArray
+    // mesh is initialized via calling XGLVertexArray.buildVertexArray
+    lateinit var mesh: Mesh
 
     // shaderName should be initialized by each concrete drawable object itself
     lateinit var shaderName: String
@@ -30,12 +28,8 @@ abstract class DrawableObject : BaseEntity(), IfMeshable {
         shader.bind()
         shader.setMat4(U_MODEL_MATRIX, modelMatrix)
 
-        vertexArray.bind()
-        RenderCommand.drawIndexed(vertexArray)
+        mesh.draw()
 
-        // 下面这两行可以省略，以节约GPU的运行资源；
-        // 在下个submit，会bind其它handle，自然会实现unbind
-        vertexArray.unbind()
         shader.unbind()
     }
 

@@ -7,7 +7,6 @@ import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.objects.DrawableObject
-import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.BufferElement
@@ -15,6 +14,7 @@ import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.engine.scene.Camera
+import com.focus617.core.engine.scene_graph.renderer.Mesh
 
 /**
  *  * Two kinds of objects:
@@ -38,7 +38,7 @@ class TextQuad3D(private val isPerspective: Boolean = true) : DrawableObject(), 
     }
 
     override fun initOpenGlResource() {
-        vertexArray = XGLVertexArray.buildVertexArray(this)
+        mesh = Mesh(XGLVertexArray.buildVertexArray(this))
 
         textTexture = XGLTexture2D("TextTexture")
 
@@ -66,12 +66,8 @@ class TextQuad3D(private val isPerspective: Boolean = true) : DrawableObject(), 
         shader.setInt(U_TEXTURE, textureIndex)
         shader.setFloat4(U_COLOR, textColor)
 
-        vertexArray.bind()
-        RenderCommand.drawIndexed(vertexArray)
+        mesh.draw()
 
-        // 下面这两行可以省略，以节约GPU的运行资源；
-        // 在下个submit，会bind其它handle，自然会实现unbind
-        vertexArray.unbind()
         shader.unbind()
     }
 
