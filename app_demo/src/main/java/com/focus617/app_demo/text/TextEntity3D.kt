@@ -42,13 +42,14 @@ class TextEntity3D(private val isPerspective: Boolean = true) : DrawableEntity()
     }
 
     override fun initOpenGlResource() {
-        val mesh = Mesh(XGLVertexArray.buildVertexArray(TextQuad3D()))
-        val meshRenderer = MeshRenderer(mesh, Material())
-        addComponent(meshRenderer)
-
+        val material = Material()
         textTexture = XGLTexture2D("TextTexture")
-
         textTexture.setText(text, textFont)
+        material.add("diffuse", textTexture)
+
+        val mesh = Mesh(XGLVertexArray.buildVertexArray(TextQuad3D()))
+        val meshRenderer = MeshRenderer(mesh, material)
+        addComponent(meshRenderer)
     }
 
     override fun onRender(shader: Shader) {
