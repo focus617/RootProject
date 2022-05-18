@@ -1,10 +1,10 @@
 package com.focus617.core.engine.objects.d2
 
-import com.focus617.core.engine.objects.DynamicCreationObject
 import com.focus617.core.engine.objects.ObjectBuilder
+import com.focus617.core.engine.scene_graph.renderer.DynamicCreationMesh
 import kotlin.math.PI
 
-class Circle(var radius: Float) : DynamicCreationObject() {
+class Circle(var radius: Float) : DynamicCreationMesh() {
 
     override fun beforeBuild() {
         val numPoints: Int = (2 * PI * radius * 10).toInt()

@@ -1,7 +1,7 @@
 package com.focus617.app_demo.engine.d3
 
 import android.content.Context
-import com.focus617.app_demo.renderer.framebuffer.FrameBufferQuad
+import com.focus617.app_demo.renderer.framebuffer.FrameBufferEntity
 import com.focus617.app_demo.renderer.shader.XGLShader
 import com.focus617.app_demo.renderer.shader.XGLShaderBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
@@ -10,10 +10,9 @@ import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.app_demo.scene_graph.Model
 import com.focus617.app_demo.terrain.Heightmap
 import com.focus617.app_demo.terrain.SkyBox
+import com.focus617.app_demo.text.TextEntity3D
 import com.focus617.app_demo.text.TextQuad2D
-import com.focus617.app_demo.text.TextQuad3D
 import com.focus617.core.engine.core.TimeStep
-import com.focus617.core.engine.objects.d2.Triangle
 import com.focus617.core.engine.scene.PerspectiveCamera
 import com.focus617.core.engine.scene.PerspectiveCameraController
 import com.focus617.core.engine.scene.Scene
@@ -36,22 +35,17 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         initGameObjects()
 
         model.initUnderOpenGl()
-
-//        val vertexArray = XGLVertexArray.buildVertexArray(Triangle())
-//        val meshRenderer = MeshRenderer(Mesh(vertexArray), Material())
-//        rootEntity.addComponent(meshRenderer)
-
     }
 
     private fun initShader() {
-        FrameBufferQuad.shader = XGLShaderBuilder.createShader(
+        FrameBufferEntity.shader = XGLShaderBuilder.createShader(
             context,
-            FrameBufferQuad.ShaderFilePath
+            FrameBufferEntity.ShaderFilePath
         ) as XGLShader
 
-        FrameBufferQuad.shaderOutlining = XGLShaderBuilder.createShader(
+        FrameBufferEntity.shaderOutlining = XGLShaderBuilder.createShader(
             context,
-            FrameBufferQuad.ShaderOutliningFilePath
+            FrameBufferEntity.ShaderOutliningFilePath
         ) as XGLShader
 
         TextQuad2D.shaderWithColor = XGLShaderBuilder.createShader(
@@ -77,19 +71,11 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         ) as XGLShader
         mShaderLibrary.add(shader)
 
-        TextQuad3D.shader = XGLShaderBuilder.createShader(
+        TextEntity3D.shader = XGLShaderBuilder.createShader(
             context,
-            TextQuad3D.ShaderFilePath
+            TextEntity3D.ShaderFilePath
         ) as XGLShader
-        mShaderLibrary.add(TextQuad3D.shader)
-
-        //========= Test ==============
-        shader = XGLShaderBuilder.createShader(
-            context,
-            Triangle.ShaderFilePath
-        ) as XGLShader
-        mShaderLibrary.add(shader)
-        //========= Test ==============
+        mShaderLibrary.add(TextEntity3D.shader)
     }
 
     private fun initTexture() {

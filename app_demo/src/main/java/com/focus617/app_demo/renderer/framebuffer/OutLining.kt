@@ -36,7 +36,7 @@ fun DrawableObject.submitWithOutlining(
     glStencilMask(0x00)
     //glDisable(GL_DEPTH_TEST)
 
-    with(FrameBufferQuad.shaderOutlining) {
+    with(FrameBufferEntity.shaderOutlining) {
         bind()
         setMat4(Camera.U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
         setMat4(Camera.U_VIEW_MATRIX, SceneData.sViewMatrix)
@@ -44,7 +44,7 @@ fun DrawableObject.submitWithOutlining(
     }
     this.push()
     this.scale(scaleSize)
-    this.onRender(FrameBufferQuad.shaderOutlining)
+    this.onRender(FrameBufferEntity.shaderOutlining)
     this.pop()
 
 // 关闭模板测试

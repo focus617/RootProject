@@ -16,6 +16,10 @@ open class GameEntity: BaseEntity(), IfEntity {
     fun getParent() = mParent
     fun getTransform() = mTransform
 
+    fun resetTransform() {
+        mTransform.reset()
+    }
+
     fun addChild(child: GameEntity){
         mChildren.add(child)
         child.mParent = this

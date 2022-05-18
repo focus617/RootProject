@@ -1,16 +1,28 @@
 package com.focus617.app_demo.engine.d3
 
+import com.focus617.app_demo.engine.XGLDrawableObject
+import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.math.Point3D
+import com.focus617.core.engine.objects.DrawableObject
 import com.focus617.core.engine.objects.d3.Ball
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene.PointLight
+import com.focus617.core.engine.scene_graph.components.MeshRenderer
+import com.focus617.core.engine.scene_graph.renderer.Material
+import com.focus617.core.engine.scene_graph.renderer.Mesh
 import kotlin.properties.Delegates
 
-class Earth : Ball(1.0f) {
+class Earth : DrawableObject(), XGLDrawableObject {
     lateinit var viewPoint: Point3D
 
     init {
         shaderName = ShaderFilePath
+    }
+
+    override fun initOpenGlResource() {
+        val mesh = Mesh(XGLVertexArray.buildVertexArray(Ball(1.0f)))
+        val meshRenderer = MeshRenderer(mesh, Material())
+        addComponent(meshRenderer)
     }
 
     override fun onRender(shader: Shader) {
@@ -59,5 +71,4 @@ class Earth : Ball(1.0f) {
         const val U_POINT_LIGHT_LINEAR = "light.linear"
         const val U_POINT_LIGHT_QUADRATIC = "light.quadratic"
     }
-
 }

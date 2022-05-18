@@ -1,11 +1,11 @@
 package com.focus617.core.engine.objects.d2
 
-import com.focus617.core.engine.objects.DrawableObject
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
+import com.focus617.core.engine.scene_graph.IfMeshable
 
-class Quad : DrawableObject() {
+class Quad : IfMeshable {
 
     override fun getVertices(): FloatArray = floatArrayOf(
         // 每个顶点有2个顶点属性一位置、颜色、纹理（TODO： TextureId）

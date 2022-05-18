@@ -1,16 +1,13 @@
 package com.focus617.app_demo.engine.d2
 
 import android.content.Context
+import com.focus617.app_demo.engine.XGLDrawableObject
 import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
-import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.scene.OrthographicCamera
 import com.focus617.core.engine.scene.OrthographicCameraController
 import com.focus617.core.engine.scene.Scene
-import com.focus617.core.engine.scene_graph.components.MeshRenderer
-import com.focus617.core.engine.scene_graph.renderer.Material
-import com.focus617.core.engine.scene_graph.renderer.Mesh
 import kotlin.properties.Delegates
 
 class XGLScene2D(val context: Context, val engine: Sandbox2D) : Scene() {
@@ -48,9 +45,7 @@ class XGLScene2D(val context: Context, val engine: Sandbox2D) : Scene() {
         for (layer in layerStack.mLayers) {
             layer.initOpenGlResource()
             for (gameObject in layer.gameObjectList) {
-                val mesh = Mesh(XGLVertexArray.buildVertexArray(gameObject))
-                val meshRenderer = MeshRenderer(mesh, Material())
-                gameObject.addComponent(meshRenderer)
+                (gameObject as XGLDrawableObject).initOpenGlResource()
             }
         }
     }

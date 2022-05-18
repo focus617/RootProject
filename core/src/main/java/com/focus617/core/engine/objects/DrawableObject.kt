@@ -2,9 +2,8 @@ package com.focus617.core.engine.objects
 
 import com.focus617.core.engine.math.*
 import com.focus617.core.engine.scene_graph.GameEntity
-import com.focus617.core.engine.scene_graph.IfMeshable
 
-abstract class DrawableObject : GameEntity(), IfMeshable {
+abstract class DrawableObject : GameEntity() {
     private var modelMatrixInStack = getTransform()
 
     protected val boundingSphere = Sphere(Point3D(0f, 0f, 0f), 0.5f)
@@ -13,10 +12,6 @@ abstract class DrawableObject : GameEntity(), IfMeshable {
     lateinit var shaderName: String
 
     var isSelected = false
-
-    fun resetTransform() {
-        mTransform.reset()
-    }
 
     fun scale(scaleSize: Vector3) {
         mTransform.setLocalScale(scaleSize)

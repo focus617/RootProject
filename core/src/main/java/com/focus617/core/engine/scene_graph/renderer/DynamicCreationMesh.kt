@@ -1,8 +1,11 @@
-package com.focus617.core.engine.objects
+package com.focus617.core.engine.scene_graph.renderer
 
+import com.focus617.core.engine.objects.GeneratedData
 import com.focus617.core.engine.renderer.vertex.BufferLayout
+import com.focus617.core.engine.scene_graph.IfMeshable
+import com.focus617.core.platform.base.BaseEntity
 
-abstract class DynamicCreationObject() : DrawableObject() {
+abstract class DynamicCreationMesh : BaseEntity(), IfMeshable {
     var buildData: GeneratedData? = null
 
     // beforeBuild function must be overridden by subclass

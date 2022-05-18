@@ -1,13 +1,10 @@
 package com.focus617.app_demo.terrain
 
+import com.focus617.app_demo.engine.XGLDrawableObject
 import com.focus617.app_demo.engine.d3.XGLScene3D
-import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.scene_graph.components.MeshRenderer
-import com.focus617.core.engine.scene_graph.renderer.Material
-import com.focus617.core.engine.scene_graph.renderer.Mesh
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 
@@ -15,7 +12,8 @@ class TerrainLayer(name: String, private val scene: XGLScene3D) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
 
     init {
-        val heightmap = Heightmap(scene.context, Heightmap.HeightMapBitmapFilePath)
+        val heightmapMesh = HeightmapMesh(scene.context, Heightmap.HeightMapBitmapFilePath)
+        val heightmap = Heightmap(heightmapMesh)
         // Expand the heightmap's dimensions, but don't expand the height as
         // much so that we don't get insanely tall mountains.
         heightmap.onTransform3D(
@@ -34,9 +32,10 @@ class TerrainLayer(name: String, private val scene: XGLScene3D) : Layer(name) {
 
     override fun initOpenGlResource() {
         for (gameObject in gameObjectList) {
-            val mesh = Mesh(XGLVertexArray.buildVertexArray(gameObject))
-            val meshRenderer = MeshRenderer(mesh, Material())
-            gameObject.addComponent(meshRenderer)
+//            val mesh = Mesh(XGLVertexArray.buildVertexArray(gameObject))
+//            val meshRenderer = MeshRenderer(mesh, Material())
+//            gameObject.addComponent(meshRenderer)
+            (gameObject as XGLDrawableObject).initOpenGlResource()
         }
     }
 
