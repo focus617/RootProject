@@ -73,9 +73,9 @@ object ObjLoaderOld {
 
                     line.startsWith(MTLLIB) -> {
                         fillMtlLib(line)
-                        if (mObjInfo.mMtlFileName != null) {
-                            MtlLoader.parse(context, mObjInfo.mMtlFileName!!, mObjInfo.mMaterialInfos)
-                        }
+//                        if (mObjInfo.mMtlFileName != null) {
+//                            MtlLoader.parse(context, mObjInfo.mMtlFileName!!, mObjInfo.mMaterialInfos)
+//                        }
                     }
                     line.startsWith(O) -> {
                         fillObjName(line)

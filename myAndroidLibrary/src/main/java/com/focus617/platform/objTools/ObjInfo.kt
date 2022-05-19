@@ -1,5 +1,6 @@
 package com.focus617.platform.objTools
 
+import com.focus617.platform.objLoader.MaterialInfo
 import timber.log.Timber
 import kotlin.collections.component1
 import kotlin.collections.component2

@@ -1,8 +1,9 @@
-package com.focus617.platform.objTools
+package com.focus617.platform.objLoader
 
 import android.content.Context
 import android.text.TextUtils
 import com.focus617.core.engine.resource.baseDataType.Color
+import com.focus617.platform.helper.FileHelper
 import timber.log.Timber
 import java.util.*
 
@@ -10,25 +11,45 @@ import java.util.*
  * @description Wavefront Obj 3D模型之mtl文件解析类
  */
 object MtlLoader {
+    //存放解析出来Material材质列表
+    private val mMtlMap = HashMap<String, MaterialInfo>()
 
     private var currentMaterialInfo: MaterialInfo? = null
 
-    /**
-     * 加载并分析 mtl文件，并将结果存入 XuScene的材质列表 [XuScene.mMaterials]
-     * @param context   Context
-     * @param mtlFileName assets的 mtl文件路径
-     * @return
-     */
-    fun parse(context: Context, mtlFileName: String, mMtlMap: HashMap<String, MaterialInfo>) {
+    fun clear() {
+        mMtlMap.clear()
 
-        Timber.d("load from Mtl File: $mtlFileName")
-        if (mtlFileName.isEmpty() or TextUtils.isEmpty(mtlFileName)) {
-            Timber.w("Mtl File doesn't exist")
-            return
+        currentMaterialInfo = null
+    }
+
+    /**
+     * 加载并分析 mtl文件，并将结果存入 的材质列表 [mMtlMap]
+     * @param context   Context
+     * @param mtlFilePath assets的 mtl文件路径
+     * @return MtlLoader
+     */
+    fun loadMtl(context: Context, mtlFilePath: String): MtlLoader {
+        Timber.d("load from Mtl File: $mtlFilePath")
+
+        if (mtlFilePath.isEmpty() or TextUtils.isEmpty(mtlFilePath)) {
+            Timber.e("Mtl File doesn't exist")
         }
 
+        if (FileHelper.getFileExt(mtlFilePath) != "mtl") {
+            Timber.e("File format not supported for material data.")
+        }
+
+        parse(context, mtlFilePath)
+
+        return this
+    }
+
+    /**
+     * 分析 mtl文件
+     */
+    private fun parse(context: Context, mtlFilePath: String) {
         try {
-            val scanner = Scanner(context.assets.open(mtlFileName))
+            val scanner = Scanner(context.assets.open(mtlFilePath))
             while (scanner.hasNextLine()) {
                 val line = scanner.nextLine().trim()
 
@@ -38,7 +59,7 @@ object MtlLoader {
                     line.startsWith(ANNOTATION) -> continue // 注释行
 
                     line.startsWith(NEWMTL) -> {            // 定义一个名为 'xxx'的材质
-                        fillNewMTL(line, mMtlMap)
+                        fillNewMTL(line)
                     }
                     line.startsWith(KA) -> {                // 环境光
                         currentMaterialInfo!!.Ka_Color = getColorFromLine(line)
@@ -85,14 +106,16 @@ object MtlLoader {
 
             scanner.close()
         } catch (ex: Exception) {
-            Timber.e(ex.message.toString())
+            Timber.e("${ex.javaClass} for " + ex.message.toString())
         }
         // 将最后一个材质保存
-        mMtlMap[currentMaterialInfo!!.name!!] = currentMaterialInfo!!
-        Timber.d("MTL: ${currentMaterialInfo!!.name!!} finished")
+        currentMaterialInfo?.apply {
+            mMtlMap[currentMaterialInfo!!.name!!] = currentMaterialInfo!!
+            Timber.d("MTL: ${currentMaterialInfo!!.name!!} finished")
+        }
     }
 
-    private fun fillNewMTL(line: String, mMtlMap: HashMap<String, MaterialInfo>) {
+    private fun fillNewMTL(line: String) {
         val items = line.split(DELIMITER).toTypedArray()
         if (items.size != 2) return
 
@@ -103,7 +126,7 @@ object MtlLoader {
         }
         currentMaterialInfo = MaterialInfo()
         currentMaterialInfo!!.name = items[1]
-        Timber.d("Create new mtl: ${currentMaterialInfo!!.name!!} ")
+        Timber.i("Create new mtl: ${currentMaterialInfo!!.name!!} ")
     }
 
     private fun fillNs(line: String) {

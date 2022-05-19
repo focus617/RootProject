@@ -36,7 +36,11 @@ object ObjLoader {
         mTexCoords.clear()
         mNormals.clear()
         mFaceIndices.clear()
+
+        mCurrentIndices = null
     }
+
+    fun getMtlFilePath() = mMtlFilePath ?: ""
 
     /**
      * 加载并分析Obj文件，构造 Meshes 和 Materials
@@ -119,7 +123,7 @@ object ObjLoader {
             }
             scanner.close()
         } catch (ex: Exception) {
-            Timber.e(ex.message.toString())
+            Timber.e("${ex.javaClass} for " + ex.message.toString())
         }
     }
 
@@ -299,52 +303,31 @@ object ObjLoader {
         return BufferLayout(elements.toList())
     }
 
-//    fun toIndexedModel(): IndexedModel {
-//        val result = IndexedModel()
-//        val normalModel = IndexedModel()
-//
-//        val resultIndexMap = HashMap<ObjIndex, Int>()
-//        val normalIndexMap = HashMap<Int, Int>()
-//        val indexMap = HashMap<Int, Int>()
-//
-//        for (i in 0 until mCurrentIndices.size) {
-//            val currentIndex: ObjIndex = mCurrentIndices[i]
-//
-//            val currentPosition: Vector3 = mPositions[currentIndex.mVertexIndex]
-//
-//            val currentTexCoord: Vector3 =
-//                if (mHasTexCoords) mTexCoords[currentIndex.mTexCoordIndex]
-//                else Vector3(0f, 0f, 0f)
-//
-//            val currentNormal: Vector3 = if (mHasNormals) mNormals[currentIndex.mNormalIndex]
-//            else Vector3(0f, 0f, 0f)
-//
-//            var modelVertexIndex = resultIndexMap[currentIndex]
-//            if (modelVertexIndex == null) {
-//                modelVertexIndex = result.getPositions().size
-//                resultIndexMap[currentIndex] = modelVertexIndex
-//                result.getPositions().add(currentPosition)
-//                result.getTexCoords().add(currentTexCoord)
-//                if (mHasNormals) result.getNormals().add(currentNormal)
-//            }
-//
-//            var normalModelIndex = normalIndexMap[currentIndex.mVertexIndex]
-//            if (normalModelIndex == null) {
-//                normalModelIndex = normalModel.getPositions().size
-//                normalIndexMap[currentIndex.mVertexIndex] = normalModelIndex
-//                normalModel.getPositions().add(currentPosition)
-//                normalModel.getTexCoords().add(currentTexCoord)
-//                normalModel.getNormals().add(currentNormal)
-//                normalModel.getTangents().add(Vector3(0f, 0f, 0f))
-//            }
-//
-//            result.getIndices().add(modelVertexIndex)
-//            normalModel.getIndices().add(normalModelIndex)
-//            indexMap[modelVertexIndex] = normalModelIndex
-//        }
-//
-//        return result
-//    }
+    /**
+     * Define the data structure for face index parsing
+     */
+    data class ObjIndex(
+        var mVertexIndex: Int,
+        var mTexCoordIndex: Int,
+        var mNormalIndex: Int
+    ) {
+        override fun equals(other: Any?): Boolean {
+            return if (other !is ObjIndex) false
+            else (mVertexIndex == other.mVertexIndex
+                    && mTexCoordIndex == other.mTexCoordIndex
+                    && mNormalIndex == other.mNormalIndex)
+        }
+
+        override fun hashCode(): Int {
+            val BASE = 17
+            val MULTIPLIER = 31
+            var result = BASE
+            result = MULTIPLIER * result + mVertexIndex
+            result = MULTIPLIER * result + mTexCoordIndex
+            result = MULTIPLIER * result + mNormalIndex
+            return result
+        }
+    }
 
     /**
      * obj需解析字段
@@ -365,7 +348,7 @@ object ObjLoader {
 
     private const val USEMTL = "usemtl"     // 使用的材质
 
-    private const val F = "f"   // v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3(索引起始于1)
+    private const val F = "f"   //f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3(索引起始于1)
 
     private val DELIMITER = Regex("[ ]+")    // 分隔符
 }

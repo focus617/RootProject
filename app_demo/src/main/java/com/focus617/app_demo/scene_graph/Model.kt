@@ -8,6 +8,7 @@ import com.focus617.app_demo.renderer.vertex.XGLVertexBufferBuilder
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.engine.scene_graph.GameEntity
 import com.focus617.core.engine.scene_graph.renderer.Mesh
+import com.focus617.platform.objLoader.MtlLoader
 import com.focus617.platform.objLoader.ObjLoader
 import java.io.Closeable
 
@@ -32,8 +33,10 @@ class Model(
         // Retrieve Mesh List
         val meshList = ObjLoader.loadOBJ(context, filePath).toVertexArrayModel()
         // Retrieve Material List
+        MtlLoader.loadMtl(context, ObjLoader.getMtlFilePath())
         // Release memory
         ObjLoader.clear()
+        MtlLoader.clear()
 
         // Build Mesh
         meshList.forEach {
