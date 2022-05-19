@@ -1,5 +1,9 @@
 package com.focus617.core.engine.math
 
+fun degreeToRadians(degree: Float): Float = (degree * Math.PI / 180f).toFloat()
+
+fun radiansToDegree(radians: Float): Float = (radians * 180f / Math.PI).toFloat()
+
 fun clamp(value: Int, min: Int, max: Int): Int {
     return kotlin.math.max(min, kotlin.math.min(max, value))
 }

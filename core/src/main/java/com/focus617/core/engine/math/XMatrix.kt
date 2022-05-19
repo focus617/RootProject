@@ -112,11 +112,11 @@ object XMatrix : WithLogging() {
      * or lhsMatOffset + 16 > lhsMat.length or
      * rhsVecOffset + 4 > rhsVec.length.
      */
-    external fun multiplyMV(
-        resultVec: FloatArray,
-        resultVecOffset: Int, lhsMat: FloatArray, lhsMatOffset: Int,
-        rhsVec: FloatArray, rhsVecOffset: Int
-    )
+//    external fun multiplyMV(
+//        resultVec: FloatArray,
+//        resultVecOffset: Int, lhsMat: FloatArray, lhsMatOffset: Int,
+//        rhsVec: FloatArray, rhsVecOffset: Int
+//    )
 
     fun xMultiplyMV(
         resultVec: FloatArray,

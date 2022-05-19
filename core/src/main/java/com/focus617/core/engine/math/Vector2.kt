@@ -1,5 +1,7 @@
 package com.focus617.core.engine.math
 
+import kotlin.math.acos
+
 class Vector2(var x: Float, var y: Float) {
     constructor(from: Point2D, to: Point2D) : this(to.x - from.x, to.y - from.y)
 
@@ -48,8 +50,9 @@ class Vector2(var x: Float, var y: Float) {
             if ((vector.length() == 0F) || (ref.length() == 0F)) throw Exception()
 
             val cosine: Float = (vector.dotProduct(ref)) / (vector.length() * ref.length())
-            val angle: Double = (kotlin.math.acos(cosine) * 180) / Math.PI
-            return angle.toFloat()
+//            val angle: Double = (kotlin.math.acos(cosine) * 180) / Math.PI
+//            return angle.toFloat()
+            return radiansToDegree(acos(cosine))
         }
     }
 

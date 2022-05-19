@@ -4,6 +4,7 @@ import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.XMatrix
+import com.focus617.core.engine.math.degreeToRadians
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene_graph.GameEntity
 import com.focus617.core.engine.scene_graph.Transform
@@ -34,7 +35,8 @@ class PerspectiveCamera : Camera() {
 
     // 相机位置不动，旋转directionUp
     override fun setRotation(rollZInDegree: Float) {
-        val angle: Float = rollZInDegree * (Math.PI / 180.0f).toFloat()
+        val angle: Float = degreeToRadians(rollZInDegree)
+        //val angle: Float = rollZInDegree * (Math.PI / 180.0f).toFloat()
 
         directionUp.x = sin(angle)
         directionUp.y = cos(angle)
@@ -43,8 +45,10 @@ class PerspectiveCamera : Camera() {
     }
 
     fun setRotation(pitchXInDegree: Float = 0f, yawYInDegree: Float = 90f) {
-        val pitchXInRadians: Float = pitchXInDegree * (Math.PI / 180.0f).toFloat()
-        val yawYInRadians: Float = yawYInDegree * (Math.PI / 180.0f).toFloat()
+//        val pitchXInRadians: Float = pitchXInDegree * (Math.PI / 180.0f).toFloat()
+//        val yawYInRadians: Float = yawYInDegree * (Math.PI / 180.0f).toFloat()
+        val pitchXInRadians: Float = degreeToRadians(pitchXInDegree)
+        val yawYInRadians: Float = degreeToRadians(yawYInDegree)
 
         mPosition.y = sin(pitchXInRadians) * mTargetDistance
         mPosition.x = cos(pitchXInRadians) * cos(yawYInRadians) * mTargetDistance

@@ -6,6 +6,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.view.Surface
 import com.focus617.app_demo.GameActivity
+import com.focus617.core.engine.math.radiansToDegree
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.sensorEvents.SensorRotationEvent
 
@@ -73,10 +74,13 @@ class SensorInput(private val mainActivity: GameActivity) : BaseEntity(), Sensor
 
         // Convert the rotation matrix into yaw(azimuth), pitch, roll
         SensorManager.getOrientation(adjustedRotationMatrix, orientation)
-        val RadiusToDegree: Float = (-180f / Math.PI).toFloat()
-        val yaw: Float = orientation[0] * RadiusToDegree
-        val pitch: Float = orientation[1] * RadiusToDegree
-        val roll: Float = orientation[2] * RadiusToDegree
+//        val RadiusToDegree: Float = (-180f / Math.PI).toFloat()
+//        val yaw: Float = orientation[0] * RadiusToDegree
+//        val pitch: Float = orientation[1] * RadiusToDegree
+//        val roll: Float = orientation[2] * RadiusToDegree
+        val yaw: Float = - radiansToDegree(orientation[0])
+        val pitch: Float = - radiansToDegree(orientation[1])
+        val roll: Float = - radiansToDegree(orientation[2])
 
         val nativeEvent = SensorRotationEvent(pitch, yaw, roll, event.sensor)
         mainActivity.mGLSurfaceView.mData.callback?.let { it(nativeEvent) }
