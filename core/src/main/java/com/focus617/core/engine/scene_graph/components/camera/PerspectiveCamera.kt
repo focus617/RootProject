@@ -6,14 +6,14 @@ import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.math.degreeToRadians
 import com.focus617.core.engine.renderer.shader.Shader
-import com.focus617.core.engine.scene_graph.NodeEntity
+import com.focus617.core.engine.scene_graph.ParentEntity
 import com.focus617.core.engine.scene_graph.Transform
 import com.focus617.core.platform.event.base.Event
 import kotlin.math.cos
 import kotlin.math.sin
 
 class PerspectiveCamera : Camera() {
-    override lateinit var mParent: NodeEntity
+    override lateinit var mParent: ParentEntity
 
     override var mPosition: Point3D = Point3D(0.0f, 1.0f, defaultDistance)
 

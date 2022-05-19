@@ -6,7 +6,7 @@ import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.app_demo.renderer.vertex.XGLVertexBuffer
 import com.focus617.app_demo.renderer.vertex.XGLVertexBufferBuilder
 import com.focus617.core.engine.renderer.texture.Texture2D
-import com.focus617.core.engine.scene_graph.NodeEntity
+import com.focus617.core.engine.scene_graph.ParentEntity
 import com.focus617.core.engine.scene_graph.renderer.Mesh
 import com.focus617.platform.objLoader.MtlLoader
 import com.focus617.platform.objLoader.ObjLoader
@@ -15,7 +15,7 @@ import java.io.Closeable
 class Model(
     private val context: Context,
     private val filePath: String
-) : NodeEntity(), Closeable {
+) : ParentEntity(), Closeable {
 
     //模型所包含的Mesh集合
     private val mMeshes = HashMap<String, Mesh>()
