@@ -16,6 +16,8 @@ class MeshRenderer(mesh: Mesh, material: Material) : BaseEntity(), IfComponent {
     private var mMesh: Mesh = mesh
     private var mMaterial: Material = material
 
+    override fun close() {}
+
     override fun onEvent(event: Event): Boolean = false
 
     override fun onUpdate(timeStep: TimeStep, transform: Transform) {}

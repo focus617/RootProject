@@ -18,6 +18,8 @@ abstract class Camera : BaseEntity(), IfComponent {
     protected open var mPosition: Point3D = Point3D(0.0f, 0.0f, 0.0f)
     protected open var mRotationZAxisInDegree: Float = 90F //在XY平面绕Z轴的旋转角度
 
+    override fun close() {}
+
     // 根据相机的空间位置和相机绕Z轴的旋转角度，重新计算相机的视图矩阵
     abstract fun reCalculateViewMatrix()
 

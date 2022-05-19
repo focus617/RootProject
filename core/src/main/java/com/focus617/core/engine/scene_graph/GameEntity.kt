@@ -4,14 +4,27 @@ import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
+import java.io.Closeable
 
-open class GameEntity : BaseEntity(), IfEntity {
+open class GameEntity : BaseEntity(), IfEntity, Closeable {
     private var mParent: GameEntity? = null
     private val mChildren: MutableList<GameEntity> = mutableListOf()
 
     private val mComponents: MutableList<IfComponent> = mutableListOf()
 
     protected var mTransform: Transform = Transform()
+
+    // release this object from memory
+    override fun close() {
+        mChildren.forEach{
+            it.close()
+        }
+        mComponents.forEach{
+            it.close()
+        }
+        mChildren.clear()
+        mComponents.clear()
+    }
 
     fun getParent() = mParent
     fun getTransform() = mTransform

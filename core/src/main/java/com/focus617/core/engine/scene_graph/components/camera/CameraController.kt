@@ -23,4 +23,6 @@ abstract class CameraController(protected val mCamera: Camera) : BaseEntity(), I
     abstract fun onWindowSizeChange(width: Int, height: Int)
 
     abstract fun setPosition(x: Float, y: Float, z: Float)
+
+    override fun close() {}
 }
