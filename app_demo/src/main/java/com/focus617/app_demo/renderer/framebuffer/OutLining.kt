@@ -5,13 +5,13 @@ import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.renderer.XRenderer.SceneData
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.resource.baseDataType.Color
-import com.focus617.core.engine.scene_graph.DrawableEntity
+import com.focus617.core.engine.scene_graph.GeometryEntity
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_PROJECT_MATRIX
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_VIEW_MATRIX
 
 const val U_COLOR = "u_Color"
 
-fun DrawableEntity.submitWithOutlining(
+fun GeometryEntity.submitWithOutlining(
     shader: Shader,
     color: Color = Color.CYAN,
     scaleSize: Vector3 = Vector3(1.05f, 1.05f, 1.05f)

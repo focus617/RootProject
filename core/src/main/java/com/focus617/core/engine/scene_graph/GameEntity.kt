@@ -14,7 +14,7 @@ open class GameEntity : BaseEntity(), IfEntity, Closeable {
 
     protected var mTransform: Transform = Transform()
 
-    // release this object from memory
+    // release this object and its children/components from memory
     override fun close() {
         mChildren.forEach{
             it.close()

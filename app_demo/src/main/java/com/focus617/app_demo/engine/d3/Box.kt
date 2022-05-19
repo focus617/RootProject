@@ -10,7 +10,7 @@ import com.focus617.core.engine.math.Ray
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.mesh.d3.Cube
 import com.focus617.core.engine.renderer.shader.Shader
-import com.focus617.core.engine.scene_graph.DrawableEntity
+import com.focus617.core.engine.scene_graph.GeometryEntity
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
 import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
@@ -27,7 +27,7 @@ import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_PO
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_VIEW_POSITION
 import com.focus617.core.engine.scene_graph.scene.PointLight
 
-class Box : DrawableEntity(), XGLDrawableObject{
+class Box : GeometryEntity(), XGLDrawableObject{
     init {
         shaderName = ShaderFilePath
     }
