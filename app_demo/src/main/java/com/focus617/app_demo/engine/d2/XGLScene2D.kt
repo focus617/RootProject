@@ -5,9 +5,10 @@ import com.focus617.app_demo.engine.XGLDrawableObject
 import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.core.TimeStep
-import com.focus617.core.engine.scene_graph.Transform
 import com.focus617.core.engine.scene_graph.components.camera.OrthographicCamera
 import com.focus617.core.engine.scene_graph.components.camera.OrthographicCameraController
+import com.focus617.core.engine.scene_graph.core.NodeEntity
+import com.focus617.core.engine.scene_graph.core.Transform
 import com.focus617.core.engine.scene_graph.scene.Scene
 import kotlin.properties.Delegates
 
@@ -59,7 +60,7 @@ class XGLScene2D(val context: Context, val engine: Sandbox2D) : Scene() {
     // Used for updating the global resource, such as objects in scene
     override fun onUpdate(timeStep: TimeStep) {
         // Update Camera
-        mCameraController.onUpdate(timeStep, Transform())
+        mCameraController.onUpdate(timeStep, Transform(NodeEntity()))
 
     }
 

@@ -12,7 +12,7 @@ import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.resource.baseDataType.Color
-import com.focus617.core.engine.scene_graph.DrawableEntity
+import com.focus617.core.engine.scene_graph.GeometryEntity
 import com.focus617.core.engine.scene_graph.IfMeshable
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
 import com.focus617.core.engine.scene_graph.renderer.Material
@@ -26,7 +26,7 @@ import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_VI
  * 2. Orthographic 3D Text, which projection matrix is orthographic(no zoom)
  *    textQuad2 is example for this type.
  */
-class TextEntity3D(private val isPerspective: Boolean = true) : DrawableEntity(), XGLDrawableObject {
+class TextEntity3D(private val isPerspective: Boolean = true) : GeometryEntity(), XGLDrawableObject {
     private lateinit var textTexture: XGLTexture2D
     private var textureIndex: Int = -1    // 在TextureSlots内的Index
 

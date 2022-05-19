@@ -7,6 +7,8 @@
       <module name="MyApp.login" target="11" />
       <module name="MyApp.myAndroidLibrary" target="11" />
       <module name="RootProject.buildSrc" target="11" />
+      <module name="RootProject.buildSrc.main" target="11" />
+      <module name="RootProject.buildSrc.test" target="11" />
       <module name="TankWar.app_bookreader" target="11" />
       <module name="TankWar.app_tankwar" target="11" />
       <module name="TankWar.login" target="11" />

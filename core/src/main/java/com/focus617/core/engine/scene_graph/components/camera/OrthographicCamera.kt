@@ -4,12 +4,12 @@ import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.renderer.shader.Shader
-import com.focus617.core.engine.scene_graph.GameEntity
-import com.focus617.core.engine.scene_graph.Transform
+import com.focus617.core.engine.scene_graph.core.ParentEntity
+import com.focus617.core.engine.scene_graph.core.Transform
 import com.focus617.core.platform.event.base.Event
 
 class OrthographicCamera : Camera() {
-    override lateinit var mParent: GameEntity
+    override lateinit var mParent: ParentEntity
     override var mPosition: Point3D = Point3D(0f, 0f, 0f)
     override var mRotationZAxisInDegree: Float = 0F // 相机绕Z轴的旋转角度
 

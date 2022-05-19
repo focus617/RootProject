@@ -1,6 +1,6 @@
 package com.focus617.core.engine.core
 
-import com.focus617.core.engine.scene_graph.DrawableEntity
+import com.focus617.core.engine.scene_graph.GeometryEntity
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 import java.io.Closeable
@@ -9,7 +9,7 @@ abstract class Layer(
     protected var mDebugName: String = "Layer"
 ) : BaseEntity(), Closeable {
 
-    val gameObjectList = mutableListOf<DrawableEntity>()
+    val gameObjectList = mutableListOf<GeometryEntity>()
 
     abstract fun onAttach()
     abstract fun onDetach()

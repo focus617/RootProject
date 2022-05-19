@@ -11,9 +11,10 @@ import com.focus617.app_demo.terrain.SkyBox
 import com.focus617.app_demo.text.TextEntity2D
 import com.focus617.app_demo.text.TextEntity3D
 import com.focus617.core.engine.core.TimeStep
-import com.focus617.core.engine.scene_graph.Transform
 import com.focus617.core.engine.scene_graph.components.camera.PerspectiveCamera
 import com.focus617.core.engine.scene_graph.components.camera.PerspectiveCameraController
+import com.focus617.core.engine.scene_graph.core.NodeEntity
+import com.focus617.core.engine.scene_graph.core.Transform
 import com.focus617.core.engine.scene_graph.scene.Scene
 
 /**
@@ -21,7 +22,7 @@ import com.focus617.core.engine.scene_graph.scene.Scene
  */
 class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
 
-    private val model = Model(context, "3dModel/viking/cannon.obj")
+    private val model = Model(context, "sampledata/Andy/andy.obj")
 
     init {
         mCamera = PerspectiveCamera()
@@ -102,7 +103,7 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
     // Used for updating the global resource, such as objects in scene
     override fun onUpdate(timeStep: TimeStep) {
         // Update Camera
-        mCameraController.onUpdate(timeStep, Transform())
+        mCameraController.onUpdate(timeStep, Transform(NodeEntity()))
 
     }
 
