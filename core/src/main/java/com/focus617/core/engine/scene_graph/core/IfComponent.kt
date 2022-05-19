@@ -11,6 +11,4 @@ interface IfComponent: Closeable {
     fun onEvent(event: Event): Boolean
     fun onUpdate(timeStep: TimeStep, transform: Transform)
     fun onRender(shader: Shader, transform: Transform)
-
-    fun getTransform() = mParent.mTransform
 }

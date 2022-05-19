@@ -13,6 +13,7 @@ import com.focus617.app_demo.text.TextEntity3D
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.scene_graph.components.camera.PerspectiveCamera
 import com.focus617.core.engine.scene_graph.components.camera.PerspectiveCameraController
+import com.focus617.core.engine.scene_graph.core.NodeEntity
 import com.focus617.core.engine.scene_graph.core.Transform
 import com.focus617.core.engine.scene_graph.scene.Scene
 
@@ -102,7 +103,7 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
     // Used for updating the global resource, such as objects in scene
     override fun onUpdate(timeStep: TimeStep) {
         // Update Camera
-        mCameraController.onUpdate(timeStep, Transform())
+        mCameraController.onUpdate(timeStep, Transform(NodeEntity()))
 
     }
 

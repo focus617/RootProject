@@ -16,9 +16,6 @@ abstract class ParentEntity : BaseEntity(), Closeable {
 
     protected val mComponents: MutableList<IfComponent> = mutableListOf()
 
-    var mTransform: Transform = Transform()
-        protected set
-
     // release this object and its children/components from memory
     override fun close() {
         mChildren.forEach {
@@ -31,10 +28,6 @@ abstract class ParentEntity : BaseEntity(), Closeable {
         mComponents.clear()
     }
 
-    fun resetTransform() {
-        mTransform.reset()
-    }
-
     /**
      * Adds a node as a child of this Node.
      * If the node already has a parent, it is removed from its old parent.
@@ -42,7 +35,7 @@ abstract class ParentEntity : BaseEntity(), Closeable {
      *
      * @param child the node to add as a child
      */
-    fun addChild(child: NodeEntity) {
+    open fun addChild(child: NodeEntity) {
         // Return early if the parent hasn't changed.
         if (child.mParent === this) {
             return
