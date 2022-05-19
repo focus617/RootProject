@@ -8,9 +8,12 @@ import com.focus617.core.engine.math.Vector3
  */
 class Transform {
     //Local space information
-    private var mPos: Vector3 = Vector3(0.0f, 0.0f, 0.0f)
-    private var mEulerRot: Vector3 = Vector3(0.0f, 0.0f, 0.0f)
-    private var mScale: Vector3 = Vector3(1.0f, 1.0f, 1.0f)
+    var mPos: Vector3 = Vector3(0.0f, 0.0f, 0.0f)
+        private set
+    var mEulerRot: Vector3 = Vector3(0.0f, 0.0f, 0.0f)
+        private set
+    var mScale: Vector3 = Vector3(1.0f, 1.0f, 1.0f)
+        private set
 
     //Dirty flag
     private var mIsDirty = true
@@ -30,10 +33,6 @@ class Transform {
         if (mIsDirty) computeLocalModelMatrix()
         return mLocalModelMatrix
     }
-
-    fun getLocalPosition() = mPos
-    fun getLocalRotation() = mEulerRot
-    fun getLocalScale() = mScale
 
     fun isDirty() = mIsDirty
 

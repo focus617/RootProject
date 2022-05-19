@@ -4,7 +4,7 @@ import com.focus617.core.engine.math.*
 
 // 包含了ModelMatrix栈， 包围球，碰撞检测， 被选择， Shader查询Key（ShaderName）
 abstract class GeometryEntity : GameEntity() {
-    private var modelMatrixInStack = getTransform()
+    private var modelMatrixInStack = mTransform
 
     protected val boundingSphere = Sphere(Point3D(0f, 0f, 0f), 0.5f)
 

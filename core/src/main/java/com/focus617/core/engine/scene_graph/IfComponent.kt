@@ -12,5 +12,5 @@ interface IfComponent: Closeable {
     fun onUpdate(timeStep: TimeStep, transform: Transform)
     fun onRender(shader: Shader, transform: Transform)
 
-    fun getTransform() = mParent.getTransform()
+    fun getTransform() = mParent.mTransform
 }

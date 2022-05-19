@@ -7,12 +7,15 @@ import com.focus617.core.platform.event.base.Event
 import java.io.Closeable
 
 open class GameEntity : BaseEntity(), IfEntity, Closeable {
-    private var mParent: GameEntity? = null
+    var mParent: GameEntity? = null
+        private set
+
     private val mChildren: MutableList<GameEntity> = mutableListOf()
 
     private val mComponents: MutableList<IfComponent> = mutableListOf()
 
-    protected var mTransform: Transform = Transform()
+    var mTransform: Transform = Transform()
+         protected set
 
     // release this object and its children/components from memory
     override fun close() {
@@ -25,9 +28,6 @@ open class GameEntity : BaseEntity(), IfEntity, Closeable {
         mChildren.clear()
         mComponents.clear()
     }
-
-    fun getParent() = mParent
-    fun getTransform() = mTransform
 
     fun resetTransform() {
         mTransform.reset()
