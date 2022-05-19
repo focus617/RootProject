@@ -5,7 +5,7 @@ import com.focus617.app_demo.renderer.framebuffer.FrameBufferEntity
 import com.focus617.app_demo.renderer.shader.XGLShader
 import com.focus617.app_demo.renderer.shader.XGLShaderBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
-import com.focus617.app_demo.scene_graph.Model
+import com.focus617.app_demo.scene_graph.ModelRenderable
 import com.focus617.app_demo.terrain.Heightmap
 import com.focus617.app_demo.terrain.SkyBox
 import com.focus617.app_demo.text.TextEntity2D
@@ -22,7 +22,7 @@ import com.focus617.core.engine.scene_graph.scene.Scene
  */
 class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
 
-    private val model = Model(context, "sampledata/Andy/andy.obj")
+    private val model = ModelRenderable(context, "sampledata/Andy/andy.obj")
 
     init {
         mCamera = PerspectiveCamera()

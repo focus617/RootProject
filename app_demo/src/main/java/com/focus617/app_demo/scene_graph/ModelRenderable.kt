@@ -6,16 +6,19 @@ import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.app_demo.renderer.vertex.XGLVertexBuffer
 import com.focus617.app_demo.renderer.vertex.XGLVertexBufferBuilder
 import com.focus617.core.engine.renderer.texture.Texture2D
-import com.focus617.core.engine.scene_graph.core.ParentEntity
 import com.focus617.core.engine.scene_graph.renderer.Mesh
+import com.focus617.core.engine.scene_graph.renderer.Renderable
 import com.focus617.platform.objLoader.MtlLoader
 import com.focus617.platform.objLoader.ObjLoader
 import java.io.Closeable
 
-class Model(
+/**
+ * Renders a 3D Model by attaching it to a {@link NodeEntity} with setRenderable(Renderable).
+ */
+class ModelRenderable(
     private val context: Context,
     private val filePath: String
-) : ParentEntity(), Closeable {
+) : Renderable(), Closeable {
 
     //模型所包含的Mesh集合
     private val mMeshes = HashMap<String, Mesh>()
