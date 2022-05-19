@@ -1,71 +1,84 @@
 package com.focus617.app_demo.scene_graph
 
 import android.content.Context
+import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
 import com.focus617.app_demo.renderer.vertex.XGLIndexBuffer
 import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.app_demo.renderer.vertex.XGLVertexBuffer
 import com.focus617.app_demo.renderer.vertex.XGLVertexBufferBuilder
-import com.focus617.core.engine.renderer.texture.Texture2D
+import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
 import com.focus617.core.engine.scene_graph.renderer.Renderable
 import com.focus617.platform.objLoader.MtlLoader
 import com.focus617.platform.objLoader.ObjLoader
-import java.io.Closeable
 
 /**
  * Renders a 3D Model by attaching it to a {@link NodeEntity} with setRenderable(Renderable).
  */
-class ModelRenderable(
-    private val context: Context,
-    private val filePath: String
-) : Renderable(), Closeable {
-
-    //模型所包含的Mesh集合
-    private val mMeshes = HashMap<String, Mesh>()
-
-    //模型所包含的Material集合
-//    private val mMaterials = HashMap<String, Material>()
-
-    // 对所有加载过的纹理全局储存，防止重复加载
-    private val texturesLoaded = HashMap<String, Texture2D>()
+class ModelRenderable private constructor() : Renderable() {
 
 
-    fun initUnderOpenGl() {
-        LOG.info("load Obj model from $filePath")
+    companion object{
+        fun builder(context: Context, filePath: String): ModelRenderable {
+            LOG.info("load Obj model from $filePath")
+            val model = ModelRenderable()
 
-        // Retrieve Mesh List
-        val meshList = ObjLoader.loadOBJ(context, filePath).toVertexArrayModel()
-        // Retrieve Material List
-        MtlLoader.loadMtl(context, ObjLoader.getMtlFilePath())
-        // Release memory
-        ObjLoader.clear()
-        MtlLoader.clear()
+            // Retrieve Mesh List
+            val meshList = ObjLoader.loadOBJ(context, filePath).toVertexArrayModel()
+            // Retrieve Material List
+            MtlLoader.loadMtl(context, ObjLoader.getMtlFilePath())
 
-        // Build Mesh
-        meshList.forEach {
-            val vertexArray =
-                XGLVertexBufferBuilder.createVertexArray() as XGLVertexArray
+            // Build Mesh
+            meshList.forEach {
+                val vertexArray =
+                    XGLVertexBufferBuilder.createVertexArray() as XGLVertexArray
 
-            val vertexBuffer = XGLVertexBufferBuilder.createVertexBuffer(
-                it.vertices, it.vertices.size * Float.SIZE_BYTES
-            ) as XGLVertexBuffer
-            vertexBuffer.setLayout(it.layout)
-            vertexArray.addVertexBuffer(vertexBuffer)
+                val vertexBuffer = XGLVertexBufferBuilder.createVertexBuffer(
+                    it.vertices, it.vertices.size * Float.SIZE_BYTES
+                ) as XGLVertexBuffer
+                vertexBuffer.setLayout(it.layout)
+                vertexArray.addVertexBuffer(vertexBuffer)
 
-            val indexBuffer = XGLVertexBufferBuilder.createIndexBuffer(
-                it.indices, it.indices.size
-            ) as XGLIndexBuffer
-            vertexArray.setIndexBuffer(indexBuffer)
+                val indexBuffer = XGLVertexBufferBuilder.createIndexBuffer(
+                    it.indices, it.indices.size
+                ) as XGLIndexBuffer
+                vertexArray.setIndexBuffer(indexBuffer)
 
-            mMeshes[it.textureName] = Mesh(vertexArray)
+                model.mMeshes[it.textureName] = Mesh(vertexArray)
+            }
+            // Build Material
+            for((key, materialInfo) in MtlLoader.mMtlMap){
+                LOG.info("load material name = $key")
+                val material = Material()
+                model.mMaterials[key] = material
+
+                materialInfo.Kd_Texture?.apply {
+                    val textureName = "${MtlLoader.directory}/${materialInfo.Kd_Texture}"
+                    LOG.info("Create KD texture: $textureName")
+
+                    val texture = XGLTextureBuilder.createTexture(
+                        context, textureName
+                    )!!
+                    material.add("${materialInfo.Kd_Texture}", texture)
+                }
+
+                materialInfo.Ka_Texture?.apply {
+                    val textureName = "${MtlLoader.directory}/${materialInfo.Ka_Texture}"
+                    LOG.info("Create KA texture: $textureName")
+                }
+
+                materialInfo.Ks_ColorTexture?.apply {
+                    val textureName = "${MtlLoader.directory}/${materialInfo.Ks_ColorTexture}"
+                    LOG.info("Create KsColor texture: $textureName")
+                }
+            }
+
+            // Release memory
+            ObjLoader.clear()
+            MtlLoader.clear()
+
+            return model
         }
-        // Build Material
     }
 
-
-    override fun close() {
-        mMeshes.clear()
-//        mMaterials.clear()
-        texturesLoaded.clear()
-    }
 }

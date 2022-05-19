@@ -22,7 +22,7 @@ import com.focus617.core.engine.scene_graph.scene.Scene
  */
 class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
 
-    private val model = ModelRenderable(context, "sampledata/Andy/andy.obj")
+    lateinit var model: ModelRenderable
 
     init {
         mCamera = PerspectiveCamera()
@@ -38,7 +38,7 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         initTexture()
         initGameObjects()
 
-        model.initUnderOpenGl()
+        model = ModelRenderable.builder(context, "3d/Andy/andy.obj")
     }
 
     private fun initShader() {

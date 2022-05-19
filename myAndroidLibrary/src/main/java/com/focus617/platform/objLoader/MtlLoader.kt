@@ -12,9 +12,12 @@ import java.util.*
  */
 object MtlLoader {
     //存放解析出来Material材质列表
-    private val mMtlMap = HashMap<String, MaterialInfo>()
+    val mMtlMap = HashMap<String, MaterialInfo>()
 
     private var currentMaterialInfo: MaterialInfo? = null
+
+    // 文件所在目录
+    var directory: String? = null
 
     fun clear() {
         mMtlMap.clear()
@@ -29,7 +32,7 @@ object MtlLoader {
      * @return MtlLoader
      */
     fun loadMtl(context: Context, mtlFilePath: String): MtlLoader {
-        Timber.d("load from Mtl File: $mtlFilePath")
+        Timber.d("load Mtl from File: $mtlFilePath")
 
         if (mtlFilePath.isEmpty() or TextUtils.isEmpty(mtlFilePath)) {
             Timber.e("Mtl File doesn't exist")
@@ -38,6 +41,8 @@ object MtlLoader {
         if (FileHelper.getFileExt(mtlFilePath) != "mtl") {
             Timber.e("File format not supported for material data.")
         }
+
+        directory = FileHelper.getPath(mtlFilePath)
 
         parse(context, mtlFilePath)
 
