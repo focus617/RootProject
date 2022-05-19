@@ -52,7 +52,7 @@ abstract class ParentEntity : BaseEntity(), Closeable {
         previousParent?.removeChild(child)
 
         mChildren.add(child)
-        child.mParent = this
+        child.setParent(this)
     }
 
     /**
@@ -70,7 +70,7 @@ abstract class ParentEntity : BaseEntity(), Closeable {
         }
 
         mChildren.remove(child)
-        child.mParent = null
+        child.setParent(null)
     }
 
     fun addComponent(component: IfComponent) {
