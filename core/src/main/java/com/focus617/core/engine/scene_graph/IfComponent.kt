@@ -6,7 +6,7 @@ import com.focus617.core.platform.event.base.Event
 import java.io.Closeable
 
 interface IfComponent: Closeable {
-    var mParent: GameEntity
+    var mParent: NodeEntity
 
     fun onEvent(event: Event): Boolean
     fun onUpdate(timeStep: TimeStep, transform: Transform)

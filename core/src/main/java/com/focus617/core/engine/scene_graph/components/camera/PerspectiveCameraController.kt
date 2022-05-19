@@ -3,7 +3,7 @@ package com.focus617.core.engine.scene_graph.components.camera
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.*
 import com.focus617.core.engine.renderer.shader.Shader
-import com.focus617.core.engine.scene_graph.GameEntity
+import com.focus617.core.engine.scene_graph.NodeEntity
 import com.focus617.core.engine.scene_graph.Transform
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.screenTouchEvents.*
@@ -14,7 +14,7 @@ import com.focus617.mylib.helper.DateHelper
  * Perspective Camera 的 Controller类
  */
 class PerspectiveCameraController(camera: PerspectiveCamera) : CameraController(camera) {
-    override lateinit var mParent: GameEntity
+    override lateinit var mParent: NodeEntity
     override var mZoomLevel: Float = 0.05f
 
     // Viewport size

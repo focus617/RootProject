@@ -5,7 +5,7 @@ import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.renderer.shader.Shader
-import com.focus617.core.engine.scene_graph.GameEntity
+import com.focus617.core.engine.scene_graph.NodeEntity
 import com.focus617.core.engine.scene_graph.Transform
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.screenTouchEvents.*
@@ -15,7 +15,7 @@ import com.focus617.mylib.helper.DateHelper
  * Orthographic Camera 的 Controller类
  */
 class OrthographicCameraController(camera: OrthographicCamera) : CameraController(camera) {
-    override lateinit var mParent: GameEntity
+    override lateinit var mParent: NodeEntity
     override fun onRender(shader: Shader, transform: Transform) {
         TODO("Not yet implemented")
     }

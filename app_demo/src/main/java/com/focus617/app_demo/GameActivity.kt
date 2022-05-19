@@ -30,7 +30,7 @@ class GameActivity : BaseActivity() {
         Timber.i("On Create Method Calling Native Library")
         val nativeLib = NativeLib()             // loadFile Native Library
         Timber.i(nativeLib.stringFromJNI())
-        NativeLib.openGlEsSdkNativeLibraryInit("3dModel/teapot/teapot.obj", 1)
+        NativeLib.openGlEsSdkNativeLibraryInit("sampledata/teapot/teapot.obj", 1)
 
         mWindowManager = windowManager
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager

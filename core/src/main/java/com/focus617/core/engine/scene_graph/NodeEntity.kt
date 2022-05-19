@@ -6,11 +6,11 @@ import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 import java.io.Closeable
 
-open class GameEntity : BaseEntity(), IfEntity, Closeable {
-    var mParent: GameEntity? = null
+open class NodeEntity : BaseEntity(), IfEntity, Closeable {
+    var mParent: NodeEntity? = null
         private set
 
-    private val mChildren: MutableList<GameEntity> = mutableListOf()
+    private val mChildren: MutableList<NodeEntity> = mutableListOf()
 
     private val mComponents: MutableList<IfComponent> = mutableListOf()
 
@@ -33,12 +33,12 @@ open class GameEntity : BaseEntity(), IfEntity, Closeable {
         mTransform.reset()
     }
 
-    fun addChild(child: GameEntity) {
+    fun addChild(child: NodeEntity) {
         mChildren.add(child)
         child.mParent = this
     }
 
-    fun removeChild(child: GameEntity) {
+    fun removeChild(child: NodeEntity) {
         mChildren.remove(child)
         child.mParent = null
     }

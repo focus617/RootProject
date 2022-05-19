@@ -2,7 +2,7 @@ package com.focus617.core.engine.scene_graph.scene
 
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.renderer.shader.ShaderLibrary
-import com.focus617.core.engine.scene_graph.GameEntity
+import com.focus617.core.engine.scene_graph.NodeEntity
 import com.focus617.core.engine.scene_graph.components.camera.Camera
 import com.focus617.core.engine.scene_graph.components.camera.CameraController
 import java.io.Closeable
@@ -10,7 +10,7 @@ import java.io.Closeable
 /**
  * Scene is root entity for all Game Entities.
  */
-open class Scene : GameEntity(), Closeable {
+open class Scene : NodeEntity(), Closeable {
     val mShaderLibrary = ShaderLibrary()
 
     lateinit var mCamera: Camera

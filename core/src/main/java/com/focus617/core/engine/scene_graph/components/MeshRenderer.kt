@@ -2,8 +2,8 @@ package com.focus617.core.engine.scene_graph.components
 
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.renderer.shader.Shader
-import com.focus617.core.engine.scene_graph.GameEntity
 import com.focus617.core.engine.scene_graph.IfComponent
+import com.focus617.core.engine.scene_graph.NodeEntity
 import com.focus617.core.engine.scene_graph.Transform
 import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
@@ -12,7 +12,7 @@ import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 
 class MeshRenderer(mesh: Mesh, material: Material) : BaseEntity(), IfComponent {
-    override lateinit var mParent: GameEntity
+    override lateinit var mParent: NodeEntity
     private var mMesh: Mesh = mesh
     private var mMaterial: Material = material
 

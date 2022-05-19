@@ -60,6 +60,9 @@ dependencies {
     api project(':core')
     implementation project(path: ':nativelib')
 
+    // use ArSceneView without the UX dependency
+    implementation 'com.google.ar.sceneform:core:1.15.0'
+
     // Basic
     implementation(
             Jetpack.ANDROIDX_CORE,
