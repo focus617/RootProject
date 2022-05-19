@@ -6,8 +6,8 @@ import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.math.degreeToRadians
 import com.focus617.core.engine.renderer.shader.Shader
-import com.focus617.core.engine.scene_graph.ParentEntity
-import com.focus617.core.engine.scene_graph.Transform
+import com.focus617.core.engine.scene_graph.core.ParentEntity
+import com.focus617.core.engine.scene_graph.core.Transform
 import com.focus617.core.platform.event.base.Event
 import kotlin.math.cos
 import kotlin.math.sin

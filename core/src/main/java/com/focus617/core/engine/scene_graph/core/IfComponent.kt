@@ -1,4 +1,4 @@
-package com.focus617.core.engine.scene_graph
+package com.focus617.core.engine.scene_graph.core
 
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.renderer.shader.Shader

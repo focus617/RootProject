@@ -3,10 +3,10 @@ package com.focus617.core.engine.scene_graph.scene
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.shader.ShaderLibrary
-import com.focus617.core.engine.scene_graph.IfEntity
-import com.focus617.core.engine.scene_graph.ParentEntity
 import com.focus617.core.engine.scene_graph.components.camera.Camera
 import com.focus617.core.engine.scene_graph.components.camera.CameraController
+import com.focus617.core.engine.scene_graph.core.IfEntity
+import com.focus617.core.engine.scene_graph.core.ParentEntity
 import com.focus617.core.platform.event.base.Event
 import java.io.Closeable
 

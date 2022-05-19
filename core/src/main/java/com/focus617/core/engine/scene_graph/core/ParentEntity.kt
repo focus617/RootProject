@@ -1,4 +1,4 @@
-package com.focus617.core.engine.scene_graph
+package com.focus617.core.engine.scene_graph.core
 
 import com.focus617.core.platform.base.BaseEntity
 import java.io.Closeable

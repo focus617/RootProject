@@ -4,8 +4,8 @@ import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.renderer.shader.Shader
-import com.focus617.core.engine.scene_graph.ParentEntity
-import com.focus617.core.engine.scene_graph.Transform
+import com.focus617.core.engine.scene_graph.core.ParentEntity
+import com.focus617.core.engine.scene_graph.core.Transform
 import com.focus617.core.platform.event.base.Event
 
 class OrthographicCamera : Camera() {

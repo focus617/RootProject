@@ -5,9 +5,9 @@ import com.focus617.app_demo.engine.XGLDrawableObject
 import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.core.TimeStep
-import com.focus617.core.engine.scene_graph.Transform
 import com.focus617.core.engine.scene_graph.components.camera.OrthographicCamera
 import com.focus617.core.engine.scene_graph.components.camera.OrthographicCameraController
+import com.focus617.core.engine.scene_graph.core.Transform
 import com.focus617.core.engine.scene_graph.scene.Scene
 import kotlin.properties.Delegates
 

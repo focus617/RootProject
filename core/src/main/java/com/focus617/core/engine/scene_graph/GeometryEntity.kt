@@ -1,6 +1,7 @@
 package com.focus617.core.engine.scene_graph
 
 import com.focus617.core.engine.math.*
+import com.focus617.core.engine.scene_graph.core.NodeEntity
 
 // 包含了ModelMatrix栈， 包围球，碰撞检测， 被选择， Shader查询Key（ShaderName）
 abstract class GeometryEntity : NodeEntity() {

@@ -1,7 +1,7 @@
 package com.focus617.core.engine.scene_graph.components.camera
 
 import com.focus617.core.engine.math.Mat4
-import com.focus617.core.engine.scene_graph.IfComponent
+import com.focus617.core.engine.scene_graph.core.IfComponent
 import com.focus617.core.platform.base.BaseEntity
 
 /**

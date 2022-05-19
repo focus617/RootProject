@@ -1,4 +1,4 @@
-package com.focus617.core.engine.scene_graph
+package com.focus617.core.engine.scene_graph.core
 
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.renderer.shader.Shader
@@ -38,13 +38,13 @@ open class NodeEntity : ParentEntity(), IfEntity {
     }
 
     override fun onUpdate(timeStep: TimeStep) {
-        mTransform.mGlobalModelMatrix =
+        mTransform.mWorldModelMatrix =
             if (mParent == null) {
                 // Root node , world transform is local transform !
                 mTransform.getLocalModelMatrix()
             } else {
                 // This node has a parent ...
-                mParent!!.mTransform.mGlobalModelMatrix * mTransform.getLocalModelMatrix()
+                mParent!!.mTransform.mWorldModelMatrix * mTransform.getLocalModelMatrix()
             }
 
         mComponents.forEach {

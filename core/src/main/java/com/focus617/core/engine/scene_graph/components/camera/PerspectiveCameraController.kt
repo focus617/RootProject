@@ -3,8 +3,8 @@ package com.focus617.core.engine.scene_graph.components.camera
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.*
 import com.focus617.core.engine.renderer.shader.Shader
-import com.focus617.core.engine.scene_graph.ParentEntity
-import com.focus617.core.engine.scene_graph.Transform
+import com.focus617.core.engine.scene_graph.core.ParentEntity
+import com.focus617.core.engine.scene_graph.core.Transform
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.screenTouchEvents.*
 import com.focus617.core.platform.event.sensorEvents.SensorRotationEvent
