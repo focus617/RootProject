@@ -18,14 +18,14 @@ class TextLayer3D(name: String) : Layer(name) {
 
     init {
         textQuad1.onTransform3D(
-            Vector3(0f, 1.5f, 0f),
+            Vector3(0.0f, 2.0f, 0f),
             Vector3(1.0f, 0.5f, 1.0f)
         )
         textQuad1.textColor = Color.GOLD
         gameObjectList.add(textQuad1)
 
         textQuad2.onTransform3D(
-            Vector3(-1.0f, 0.5f, 0.0f),
+            Vector3(-1.5f, 0.5f, 0.5f),
             Vector3(1.0f, 0.5f, 1.0f)
         )
         gameObjectList.add(textQuad2)

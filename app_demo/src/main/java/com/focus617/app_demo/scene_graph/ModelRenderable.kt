@@ -2,6 +2,7 @@ package com.focus617.app_demo.scene_graph
 
 import android.content.Context
 import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
+import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.app_demo.renderer.vertex.XGLIndexBuffer
 import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.app_demo.renderer.vertex.XGLVertexBuffer
@@ -62,8 +63,8 @@ class ModelRenderable private constructor() : Renderable() {
                     val texture = XGLTextureBuilder.createTexture(
                         context, textureName
                     )!!
-                    material.add(U_MATERIAL_TEXTURE_DIFFUSE, texture)
-//                    val textureIndex = XGLTextureSlots.requestIndex(texture)
+                    val textureIndex = XGLTextureSlots.requestIndex(texture)
+                    material.add(U_MATERIAL_TEXTURE_DIFFUSE, textureIndex)
                 }
 
                 materialInfo.Ka_Texture?.apply {

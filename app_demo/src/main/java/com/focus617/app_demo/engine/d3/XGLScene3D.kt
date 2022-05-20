@@ -5,7 +5,6 @@ import com.focus617.app_demo.renderer.framebuffer.FrameBufferEntity
 import com.focus617.app_demo.renderer.shader.XGLShader
 import com.focus617.app_demo.renderer.shader.XGLShaderBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
-import com.focus617.app_demo.scene_graph.ModelRenderable
 import com.focus617.app_demo.terrain.Heightmap
 import com.focus617.app_demo.terrain.SkyBox
 import com.focus617.app_demo.text.TextEntity2D
@@ -23,8 +22,6 @@ import com.focus617.core.engine.scene_graph.scene.Scene
  */
 class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
 
-    lateinit var model: ModelRenderable
-
     init {
         mLight = PointLight()
         addComponent(mLight)
@@ -40,13 +37,6 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         initShader()
         initTexture()
         initGameObjects()
-
-        testModel()
-    }
-
-    private fun testModel() {
-        model = ModelRenderable.builder(context, "3d/Andy/andy.obj")
-
     }
 
     private fun initShader() {
@@ -83,6 +73,12 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         ) as XGLShader
         mShaderLibrary.add(shader)
 
+        shader = XGLShaderBuilder.createShader(
+            context,
+            CommonShaderFilePath
+        ) as XGLShader
+        mShaderLibrary.add(shader)
+
         TextEntity3D.shader = XGLShaderBuilder.createShader(
             context,
             TextEntity3D.ShaderFilePath
@@ -94,6 +90,7 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         SkyBox.initMaterial(context)
         Heightmap.initMaterial(context)
         Box.initMaterial(context)
+        ModelTest.initModel(context)
     }
 
     private fun initGameObjects() {
@@ -113,6 +110,12 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         // Update Camera
         mCameraController.onUpdate(timeStep, Transform(NodeEntity()))
 
+    }
+
+    companion object{
+        private const val SHADER_PATH = "common"
+        private const val SHADER_FILE = "ShaderWithTextureAndLight.glsl"
+        const val CommonShaderFilePath = "$SHADER_PATH/$SHADER_FILE"
     }
 
 }

@@ -61,7 +61,7 @@ class TextEntity3D(private val isPerspective: Boolean = true) : GeometryEntity()
         }
         // 注册到TextureSlots, 获得TextureUnit Index, 以便ActiveTexture
         textureIndex = XGLTextureSlots.requestIndex(textTexture)
-        LOG.info("onRender: use texture index=$textureIndex")
+//        LOG.info("onRender: use texture index=$textureIndex")
         textTexture.bind(textureIndex)
 
         if (!isPerspective) {

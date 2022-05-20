@@ -16,10 +16,11 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
 
     private val box1 = Box()
     private val box2 = Box()
+    private val node = ModelTest()
 
     init {
         box1.onTransform3D(
-            Vector3(0f, 0.54f, 0f),
+            Vector3(-1.5f, 0.54f, -2.0f),
             Vector3(1.0f, 1.0f, 1.0f)
         )
         gameObjectList.add(box1)
@@ -30,6 +31,11 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
         )
         gameObjectList.add(box2)
 
+        node.onTransform3D(
+            Vector3(0.0f, 0.0f, 0.0f),
+            Vector3(8f, 8f, 8f)
+        )
+        gameObjectList.add(node)
     }
 
     override fun initOpenGlResource() {
