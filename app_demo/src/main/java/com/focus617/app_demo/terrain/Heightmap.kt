@@ -11,6 +11,7 @@ import com.focus617.core.engine.scene_graph.GeometryEntity
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
 import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_VECTOR_TO_LIGHT
 import com.focus617.core.engine.scene_graph.scene.Light
 
 class Heightmap(val mesh: HeightmapMesh) : GeometryEntity(), XGLDrawableObject {
@@ -30,7 +31,7 @@ class Heightmap(val mesh: HeightmapMesh) : GeometryEntity(), XGLDrawableObject {
         shader.setInt(U_TEXTURE_UNIT_1, textureIndexGrass)
         shader.setInt(U_TEXTURE_UNIT_2, textureIndexStone)
 
-        shader.setFloat3(Light.U_VECTOR_TO_LIGHT, Light.vectorToLight)
+        shader.setFloat3(U_VECTOR_TO_LIGHT, Light.vectorToLight)
 
         //Enable Cull Back Face
         GLES31.glEnable(GLES31.GL_CULL_FACE)
