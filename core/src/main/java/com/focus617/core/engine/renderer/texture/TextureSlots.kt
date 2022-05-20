@@ -16,7 +16,7 @@ abstract class TextureSlots : WithLogging(), Closeable {
         }
     }
 
-    fun resetTextureSlot(){
+    fun resetTextureSlot() {
         TextureSlotIndex = 1
     }
 
@@ -25,20 +25,22 @@ abstract class TextureSlots : WithLogging(), Closeable {
     }
 
     fun requestIndex(texture: Texture): Int {
-        for (i in 1 until TextureSlotIndex)
-            if (TextureSlots[i] == texture) {
-                return i
-            }
+        synchronized(TextureSlots) {
+            for (i in 1 until TextureSlotIndex)
+                if (TextureSlots[i] == texture) {
+                    return i
+                }
 
-        val newIndex = TextureSlotIndex
-        if (newIndex < MaxTextureSlots) {
-            TextureSlots[TextureSlotIndex] = texture
-            TextureSlotIndex++
-            return newIndex
-        } else {
-            val str = "Texture already reached to Max Texture Slot!"
-            LOG.error(str)
-            throw IllegalMonitorStateException(str)
+            val newIndex = TextureSlotIndex
+            if (newIndex < MaxTextureSlots) {
+                TextureSlots[TextureSlotIndex] = texture
+                TextureSlotIndex++
+                return newIndex
+            } else {
+                val str = "Texture already reached to Max Texture Slot!"
+                LOG.error(str)
+                throw IllegalMonitorStateException(str)
+            }
         }
     }
 }

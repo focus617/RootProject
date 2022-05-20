@@ -26,7 +26,7 @@ class ModelRenderable private constructor() : Renderable() {
             // Retrieve Mesh List
             val meshList = ObjLoader.loadOBJ(context, filePath).toVertexArrayModel()
             // Retrieve Material List
-            MtlLoader.loadMtl(context, ObjLoader.getMtlFilePath())
+            MtlLoader.loadMtl(context, ObjLoader.getMtlFilePath()).dump()
 
             // Build Mesh
             meshList.forEach {

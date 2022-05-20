@@ -25,6 +25,13 @@ object MtlLoader {
         currentMaterialInfo = null
     }
 
+    fun dump(){
+        Timber.i("Dump MtlLoader(directory=$directory, mapSize=${mMtlMap.size})")
+        mMtlMap.forEach{
+            it.value.dump()
+        }
+    }
+
     /**
      * 加载并分析 mtl文件，并将结果存入 的材质列表 [mMtlMap]
      * @param context   Context
