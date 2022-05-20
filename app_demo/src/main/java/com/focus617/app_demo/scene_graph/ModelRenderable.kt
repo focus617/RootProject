@@ -46,6 +46,7 @@ class ModelRenderable private constructor() : Renderable() {
 
                 model.mMeshes[it.textureName] = Mesh(vertexArray)
             }
+
             // Build Material
             for((key, materialInfo) in MtlLoader.mMtlMap){
                 LOG.info("load material name = $key")

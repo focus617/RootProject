@@ -67,12 +67,13 @@ class Box : GeometryEntity(), XGLDrawableObject{
     }
 
     companion object {
-        private const val SHADER_PATH = "Cube"
-        private const val SHADER_FILE = "CubeWithTextureAndLight.glsl"
+        private const val SHADER_PATH = "common"
+        private const val SHADER_FILE = "ShaderWithTextureAndLight.glsl"
+        private const val TEXTURE_PATH = "Cube"
         private const val TEXTURE_FILE = "box.png"
 
         const val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
-        const val TextureFilePath: String = "$SHADER_PATH/$TEXTURE_FILE"
+        const val TextureFilePath: String = "$TEXTURE_PATH/$TEXTURE_FILE"
 
         const val TEXTURE_BOX = "BoxTexture"
 
