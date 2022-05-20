@@ -41,7 +41,12 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         initTexture()
         initGameObjects()
 
+        testModel()
+    }
+
+    private fun testModel() {
         model = ModelRenderable.builder(context, "3d/Andy/andy.obj")
+
     }
 
     private fun initShader() {

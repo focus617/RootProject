@@ -46,6 +46,7 @@ class ModelRenderable private constructor() : Renderable() {
                 vertexArray.setIndexBuffer(indexBuffer)
 
                 model.mMeshes[it.textureName] = Mesh(vertexArray)
+                LOG.info("load Mesh: texture=${it.textureName}, indiceSize=${it.indices.size}")
             }
 
             // Build Material

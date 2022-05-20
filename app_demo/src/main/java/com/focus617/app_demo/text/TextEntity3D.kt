@@ -42,14 +42,11 @@ class TextEntity3D(private val isPerspective: Boolean = true) : GeometryEntity()
     }
 
     override fun initOpenGlResource() {
-        val material = Material()
         textTexture = XGLTexture2D("TextTexture")
         textTexture.setText(text, textFont)
-        material.add(U_TEXTURE, textTexture)
-
 
         val mesh = Mesh(XGLVertexArray.buildVertexArray(TextQuad3D()))
-        val meshRenderer = MeshRenderer(mesh, material)
+        val meshRenderer = MeshRenderer(mesh, Material())
         addComponent(meshRenderer)
     }
 
