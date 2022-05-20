@@ -8,11 +8,11 @@ import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene_graph.GeometryEntity
+import com.focus617.core.engine.scene_graph.components.Light
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
 import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_VECTOR_TO_LIGHT
-import com.focus617.core.engine.scene_graph.scene.Light
 
 class Heightmap(val mesh: HeightmapMesh) : GeometryEntity(), XGLDrawableObject {
 

@@ -18,15 +18,7 @@ import com.focus617.core.engine.scene_graph.renderer.Mesh
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MATERIAL_SHININESS
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MATERIAL_SPECULAR
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MATERIAL_TEXTURE_DIFFUSE
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_AMBIENT
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_CONSTANT
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_DIFFUSE
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_LINEAR
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_POSITION
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_QUADRATIC
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_SPECULAR
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_VIEW_POSITION
-import com.focus617.core.engine.scene_graph.scene.PointLight
 
 class Box : GeometryEntity(), XGLDrawableObject{
     val material = Material()
@@ -48,15 +40,6 @@ class Box : GeometryEntity(), XGLDrawableObject{
 
     override fun onRender(shader: Shader) {
         shader.setFloat3(U_POINT_VIEW_POSITION, viewPoint)
-
-        shader.setFloat3(U_POINT_LIGHT_POSITION, PointLight.position)
-        shader.setFloat3(U_POINT_LIGHT_AMBIENT, PointLight.ambient)
-        shader.setFloat3(U_POINT_LIGHT_DIFFUSE, PointLight.diffuse)
-        shader.setFloat3(U_POINT_LIGHT_SPECULAR, PointLight.specular)
-        shader.setFloat(U_POINT_LIGHT_CONSTANT, PointLight.Constant)
-        shader.setFloat(U_POINT_LIGHT_LINEAR, PointLight.Linear)
-        shader.setFloat(U_POINT_LIGHT_QUADRATIC, PointLight.Quadratic)
-
         super.onRender(shader)
     }
 

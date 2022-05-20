@@ -3,6 +3,7 @@ package com.focus617.core.engine.scene_graph.scene
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.shader.ShaderLibrary
+import com.focus617.core.engine.scene_graph.components.Light
 import com.focus617.core.engine.scene_graph.components.camera.Camera
 import com.focus617.core.engine.scene_graph.components.camera.CameraController
 import com.focus617.core.engine.scene_graph.core.IfEntity
@@ -16,6 +17,7 @@ import java.io.Closeable
 abstract class Scene : ParentEntity(), IfEntity, Closeable {
     val mShaderLibrary = ShaderLibrary()
 
+    lateinit var mLight: Light
     lateinit var mCamera: Camera
     lateinit var mCameraController: CameraController
 

@@ -11,6 +11,7 @@ import com.focus617.app_demo.terrain.SkyBox
 import com.focus617.app_demo.text.TextEntity2D
 import com.focus617.app_demo.text.TextEntity3D
 import com.focus617.core.engine.core.TimeStep
+import com.focus617.core.engine.scene_graph.components.PointLight
 import com.focus617.core.engine.scene_graph.components.camera.PerspectiveCamera
 import com.focus617.core.engine.scene_graph.components.camera.PerspectiveCameraController
 import com.focus617.core.engine.scene_graph.core.NodeEntity
@@ -25,6 +26,8 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
     lateinit var model: ModelRenderable
 
     init {
+        mLight = PointLight()
+        addComponent(mLight)
         mCamera = PerspectiveCamera()
         addComponent(mCamera)
         mCameraController = PerspectiveCameraController(mCamera as PerspectiveCamera)
