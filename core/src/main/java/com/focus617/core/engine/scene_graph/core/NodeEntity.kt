@@ -137,9 +137,17 @@ open class NodeEntity : ParentEntity(), IfEntity {
      */
     fun setRenderable(renderable: Renderable) {
         renderableInstance = renderable
+        var material: Material? = null
 
         for ((key, mesh) in renderableInstance!!.mMeshes) {
-            val meshRenderer = MeshRenderer(mesh, Material())
+            if (key == "Default") {
+                for ((key, value) in renderableInstance!!.mMaterials) {
+                    material = value
+                    break
+                }
+            } else material = renderableInstance!!.mMaterials[key]
+
+            val meshRenderer = MeshRenderer(mesh, material)
             addComponent(meshRenderer)
         }
     }

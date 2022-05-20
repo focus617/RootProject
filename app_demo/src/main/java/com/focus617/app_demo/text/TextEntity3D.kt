@@ -44,6 +44,8 @@ class TextEntity3D(private val isPerspective: Boolean = true) : GeometryEntity()
     override fun initOpenGlResource() {
         textTexture = XGLTexture2D("TextTexture")
         textTexture.setText(text, textFont)
+        //TODO: Why below routine will cause abnormal
+//        textureIndex = XGLTextureSlots.requestIndex(textTexture)
 
         val mesh = Mesh(XGLVertexArray.buildVertexArray(TextQuad3D()))
         val meshRenderer = MeshRenderer(mesh, Material())
@@ -59,6 +61,7 @@ class TextEntity3D(private val isPerspective: Boolean = true) : GeometryEntity()
         }
         // 注册到TextureSlots, 获得TextureUnit Index, 以便ActiveTexture
         textureIndex = XGLTextureSlots.requestIndex(textTexture)
+        LOG.info("onRender: use texture index=$textureIndex")
         textTexture.bind(textureIndex)
 
         if (!isPerspective) {

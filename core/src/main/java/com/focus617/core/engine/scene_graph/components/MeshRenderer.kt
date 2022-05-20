@@ -11,10 +11,10 @@ import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MO
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 
-class MeshRenderer(mesh: Mesh, material: Material) : BaseEntity(), IfComponent {
+class MeshRenderer(mesh: Mesh, material: Material?) : BaseEntity(), IfComponent {
     override lateinit var mParent: ParentEntity
     private var mMesh: Mesh = mesh
-    private var mMaterial: Material = material
+    private var mMaterial: Material? = material
 
     override fun close() {}
 
@@ -27,7 +27,7 @@ class MeshRenderer(mesh: Mesh, material: Material) : BaseEntity(), IfComponent {
             shader.bind()
 
             // 设置材质相关的Texture和参数
-            mMaterial.onRender(shader)
+            mMaterial?.onRender(shader)
 
             // TODO: Model Matrix need to be global matrix
 //        LOG.info(transform.getLocalModelMatrix().toString("ModelMatrix"))

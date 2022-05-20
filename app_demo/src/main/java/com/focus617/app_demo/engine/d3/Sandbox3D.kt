@@ -18,8 +18,9 @@ class Sandbox3D(context: Context) : Engine(), Closeable {
 
     init {
         pushLayer(GamePlayerLayer("GamePlayerLayer", scene as XGLScene3D))
-        pushLayer(TerrainLayer("TerrainLayer", scene as XGLScene3D))
         pushLayer(TextLayer3D("TextLayer"))
+        pushLayer(TerrainLayer("TerrainLayer", scene as XGLScene3D))
+
 
         pushOverLayer(TextLayer2D("OverLayer"))
     }
