@@ -2,6 +2,7 @@ package com.focus617.app_demo.engine.d3
 
 import android.content.Context
 import com.focus617.app_demo.engine.XGLDrawableObject
+import com.focus617.app_demo.renderer.texture.XGLTexture2D
 import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.app_demo.renderer.vertex.XGLVertexArray
@@ -28,11 +29,18 @@ import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_PO
 import com.focus617.core.engine.scene_graph.scene.PointLight
 
 class Box : GeometryEntity(), XGLDrawableObject{
+    val material = Material()
+
     init {
         shaderName = ShaderFilePath
     }
 
     override fun initOpenGlResource() {
+        val textureIndex = XGLTextureSlots.requestIndex(textureBox)
+        material.add(U_MATERIAL_TEXTURE_DIFFUSE, textureIndex)
+        material.add(U_MATERIAL_SHININESS, shininess)
+        material.add(U_MATERIAL_SPECULAR, specular)
+
         val mesh = Mesh(XGLVertexArray.buildVertexArray(Cube()))
         val meshRenderer = MeshRenderer(mesh, material)
         addComponent(meshRenderer)
@@ -48,10 +56,6 @@ class Box : GeometryEntity(), XGLDrawableObject{
         shader.setFloat(U_POINT_LIGHT_CONSTANT, PointLight.Constant)
         shader.setFloat(U_POINT_LIGHT_LINEAR, PointLight.Linear)
         shader.setFloat(U_POINT_LIGHT_QUADRATIC, PointLight.Quadratic)
-
-        shader.setInt(U_MATERIAL_TEXTURE_DIFFUSE, textureIndex)
-        shader.setFloat3(U_MATERIAL_SPECULAR, specular)
-        shader.setFloat(U_MATERIAL_SHININESS, shininess)
 
         super.onRender(shader)
     }
@@ -75,17 +79,11 @@ class Box : GeometryEntity(), XGLDrawableObject{
         const val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
         const val TextureFilePath: String = "$TEXTURE_PATH/$TEXTURE_FILE"
 
-        const val TEXTURE_BOX = "BoxTexture"
+        lateinit var textureBox: XGLTexture2D
 
-        var textureIndex: Int = -1
-        val material = Material()
-
+        // 因为需要context，所以单独定义一个静态函数，有Scene负责调用初始化
         fun initMaterial(context: Context) {
-            val textureBox = XGLTextureBuilder.createTexture(context, TextureFilePath)
-            textureBox?.apply {
-                textureIndex = XGLTextureSlots.requestIndex(textureBox)
-                material.add(TEXTURE_BOX, textureBox)
-            }
+            textureBox = XGLTextureBuilder.createTexture(context, TextureFilePath)!!
         }
 
         lateinit var viewPoint: Point3D

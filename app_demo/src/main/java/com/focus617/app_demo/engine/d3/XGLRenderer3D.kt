@@ -91,7 +91,6 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
                     bind()
 //                  LOG.info(XMatrix.toString(SceneData.sProjectionMatrix, matrixName = "ProjectionMatrix"))
 //                  LOG.info(XMatrix.toString(SceneData.sViewMatrix, matrixName = "ViewMatrix"))
-//                  LOG.info(XMatrix.toString(gameObject.modelMatrix, matrixName = "ModelMatrix"))
 
                     setMat4(U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
                     setMat4(U_VIEW_MATRIX, SceneData.sViewMatrix)
