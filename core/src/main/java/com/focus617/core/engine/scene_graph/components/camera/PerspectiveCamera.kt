@@ -8,6 +8,7 @@ import com.focus617.core.engine.math.degreeToRadians
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene_graph.core.ParentEntity
 import com.focus617.core.engine.scene_graph.core.Transform
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_VIEW_POSITION
 import com.focus617.core.platform.event.base.Event
 import kotlin.math.cos
 import kotlin.math.sin
@@ -78,9 +79,11 @@ class PerspectiveCamera : Camera() {
 
     override fun onEvent(event: Event): Boolean = false
 
-    override fun onUpdate(timeStep: TimeStep, transform: Transform) {}
+    override fun onUpdate(timeStep: TimeStep, transform: Transform?) {}
 
-    override fun onRender(shader: Shader, transform: Transform) {}
+    override fun onRender(shader: Shader, transform: Transform?) {
+        shader.setFloat3(U_POINT_VIEW_POSITION, mPosition)
+    }
 
     companion object {
         val worldUp = Vector3(0.0f, 1.0f, 0.0f)

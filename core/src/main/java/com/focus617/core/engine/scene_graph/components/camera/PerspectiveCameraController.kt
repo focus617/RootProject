@@ -39,10 +39,10 @@ class PerspectiveCameraController(camera: PerspectiveCamera) : CameraController(
         (mCamera as PerspectiveCamera).setPosition(Point3D(x, y, z))
     }
 
-    override fun onRender(shader: Shader, transform: Transform) {}
+    override fun onRender(shader: Shader, transform: Transform?) {}
 
     private var mCameraRotation: Float = 0F
-    override fun onUpdate(timeStep: TimeStep, transform: Transform) {
+    override fun onUpdate(timeStep: TimeStep, transform: Transform?) {
 //        val mCameraRotationSpeed: Float = 0.001F
 //        mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed
 

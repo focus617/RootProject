@@ -30,6 +30,10 @@ abstract class Scene : ParentEntity(), IfEntity, Closeable {
     // Used for updating the global resource, such as objects in scene
     override fun onUpdate(timeStep: TimeStep) {}
 
-    override fun onRender(shader: Shader) {}
+    override fun onRender(shader: Shader) {
+        mComponents.forEach {
+            it.onRender(shader, null)
+        }
+    }
 
 }

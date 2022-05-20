@@ -19,11 +19,11 @@ import com.focus617.core.platform.event.base.Event
 open class Light : BaseEntity(), IfComponent {
     override lateinit var mParent: ParentEntity
 
-    override fun onRender(shader: Shader, transform: Transform) {}
+    override fun onRender(shader: Shader, transform: Transform?) {}
 
     override fun onEvent(event: Event): Boolean = false
 
-    override fun onUpdate(timeStep: TimeStep, transform: Transform) {}
+    override fun onUpdate(timeStep: TimeStep, transform: Transform?) {}
 
     override fun close() {}
 
@@ -44,7 +44,7 @@ class PointLight : Light() {
     private val Linear: Float = 0.09f
     private val Quadratic: Float = 0.032f
 
-    override fun onRender(shader: Shader, transform: Transform) {
+    override fun onRender(shader: Shader, transform: Transform?) {
         shader.setFloat3(U_POINT_LIGHT_POSITION, position)
         shader.setFloat3(U_POINT_LIGHT_AMBIENT, ambient)
         shader.setFloat3(U_POINT_LIGHT_DIFFUSE, diffuse)

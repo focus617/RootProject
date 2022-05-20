@@ -6,11 +6,9 @@ import com.focus617.app_demo.renderer.texture.XGLTexture2D
 import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
 import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.app_demo.renderer.vertex.XGLVertexArray
-import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Ray
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.mesh.d3.Cube
-import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene_graph.GeometryEntity
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
 import com.focus617.core.engine.scene_graph.renderer.Material
@@ -18,7 +16,6 @@ import com.focus617.core.engine.scene_graph.renderer.Mesh
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MATERIAL_SHININESS
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MATERIAL_SPECULAR
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MATERIAL_TEXTURE_DIFFUSE
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_VIEW_POSITION
 
 class Box : GeometryEntity(), XGLDrawableObject{
     val material = Material()
@@ -36,15 +33,6 @@ class Box : GeometryEntity(), XGLDrawableObject{
         val mesh = Mesh(XGLVertexArray.buildVertexArray(Cube()))
         val meshRenderer = MeshRenderer(mesh, material)
         addComponent(meshRenderer)
-    }
-
-    override fun onRender(shader: Shader) {
-        shader.setFloat3(U_POINT_VIEW_POSITION, viewPoint)
-        super.onRender(shader)
-    }
-
-    fun updateCameraPosition(point: Point3D) {
-        viewPoint = point
     }
 
     override fun intersects(ray: Ray) {
@@ -68,8 +56,6 @@ class Box : GeometryEntity(), XGLDrawableObject{
         fun initMaterial(context: Context) {
             textureBox = XGLTextureBuilder.createTexture(context, TextureFilePath)!!
         }
-
-        lateinit var viewPoint: Point3D
 
         // 镜面强度(Specular Intensity)
         var specular: Vector3 = Vector3(0.5f, 0.5f, 0.5f)

@@ -16,7 +16,7 @@ import com.focus617.mylib.helper.DateHelper
  */
 class OrthographicCameraController(camera: OrthographicCamera) : CameraController(camera) {
     override lateinit var mParent: ParentEntity
-    override fun onRender(shader: Shader, transform: Transform) {
+    override fun onRender(shader: Shader, transform: Transform?) {
         TODO("Not yet implemented")
     }
 
@@ -37,7 +37,7 @@ class OrthographicCameraController(camera: OrthographicCamera) : CameraControlle
     }
 
     private var mCameraRotation: Float = 0F
-    override fun onUpdate(timeStep: TimeStep, transform: Transform) {
+    override fun onUpdate(timeStep: TimeStep, transform: Transform?) {
         val mCameraRotationSpeed: Float = 0.01F
 
         //mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed

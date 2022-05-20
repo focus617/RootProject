@@ -55,8 +55,6 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
 
     override fun onUpdate(timeStep: TimeStep) {
         //LOG.info("${this.mDebugName} onUpdate")
-        box1.updateCameraPosition(scene.mCamera.getPosition())
-        box2.updateCameraPosition(scene.mCamera.getPosition())
     }
 
     override fun beforeDrawFrame() {

@@ -89,7 +89,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
 
                 shader?.apply {
                     bind()
-                    scene.mLight.onRender(shader, gameObject.mTransform)
+                    scene.onRender(shader)
 
 //                  LOG.info(XMatrix.toString(SceneData.sProjectionMatrix, matrixName = "ProjectionMatrix"))
 //                  LOG.info(XMatrix.toString(SceneData.sViewMatrix, matrixName = "ViewMatrix"))
