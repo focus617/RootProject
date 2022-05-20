@@ -9,6 +9,7 @@ import com.focus617.app_demo.renderer.vertex.XGLVertexBufferBuilder
 import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
 import com.focus617.core.engine.scene_graph.renderer.Renderable
+import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MATERIAL_TEXTURE_DIFFUSE
 import com.focus617.platform.objLoader.MtlLoader
 import com.focus617.platform.objLoader.ObjLoader
 
@@ -60,17 +61,18 @@ class ModelRenderable private constructor() : Renderable() {
                     val texture = XGLTextureBuilder.createTexture(
                         context, textureName
                     )!!
-                    material.add("${materialInfo.Kd_Texture}", texture)
+                    material.add(U_MATERIAL_TEXTURE_DIFFUSE, texture)
+//                    val textureIndex = XGLTextureSlots.requestIndex(texture)
                 }
 
                 materialInfo.Ka_Texture?.apply {
                     val textureName = "${MtlLoader.directory}/${materialInfo.Ka_Texture}"
-                    LOG.info("Create KA texture: $textureName")
+                    LOG.info("Need create KA texture: $textureName")
                 }
 
                 materialInfo.Ks_ColorTexture?.apply {
                     val textureName = "${MtlLoader.directory}/${materialInfo.Ks_ColorTexture}"
-                    LOG.info("Create KsColor texture: $textureName")
+                    LOG.info("Need create KsColor texture: $textureName")
                 }
             }
 
