@@ -46,16 +46,16 @@ class MaterialInfo {
     // 材质对象名称
     var name: String? = null
 
-    // 环境光
+    // 环境光 ambient
     var Ka_Color = Color(0f, 0f, 0f, 1f)
 
-    // 散射光
+    // 散射光 diffuse
     var Kd_Color = Color(0f, 0f, 0f, 1f)
 
-    // 镜面光
+    // 镜面光 specular
     var Ks_Color = Color(0f, 0f, 0f, 1f)
 
-    // 高光调整参数
+    // 高光调整参数 shininess
     var ns = 100f
 
     // 溶解度，为0时完全透明，1完全不透明
@@ -73,7 +73,7 @@ class MaterialInfo {
     var bumpTexture: String? = null
 
     fun dump() {
-        Timber.d("MtlName: $name")
+        Timber.d("MaterialName: $name")
         Timber.d("Ka_Color: $Ka_Color")
         Timber.d("Kd_Color: $Kd_Color")
         Timber.d("Ks_Color: $Ks_Color")

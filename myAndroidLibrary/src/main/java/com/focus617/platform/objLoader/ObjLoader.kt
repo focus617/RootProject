@@ -211,7 +211,7 @@ object ObjLoader {
             mCurrentIndices = ArrayList<ObjIndex>()
             mFaceIndices["Default"] = mCurrentIndices!!
         }
-
+        //将所有类型，包括多于三角的情形，统一转换为三角Mesh
         for (i in 0 until tokens.size - 3) {
             mCurrentIndices!!.add(parseFaceIndex(tokens[1]))
             mCurrentIndices!!.add(parseFaceIndex(tokens[2 + i]))

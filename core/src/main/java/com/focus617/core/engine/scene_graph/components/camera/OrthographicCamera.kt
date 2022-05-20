@@ -31,8 +31,8 @@ class OrthographicCamera : Camera() {
 
     override fun onEvent(event: Event) : Boolean = false
 
-    override fun onUpdate(timeStep: TimeStep, transform: Transform) {}
+    override fun onUpdate(timeStep: TimeStep, transform: Transform?) {}
 
-    override fun onRender(shader: Shader, transform: Transform) {}
+    override fun onRender(shader: Shader, transform: Transform?) {}
 
 }

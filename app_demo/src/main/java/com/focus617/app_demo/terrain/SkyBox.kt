@@ -25,8 +25,6 @@ class SkyBox : GeometryEntity(), XGLDrawableObject {
     }
 
     override fun onRender(shader: Shader) {
-        shader.setInt(U_TEXTURE_UNIT, textureIndexCubeMap)
-
         // This avoids problems with the skybox itself getting clipped.
         GLES31.glDepthFunc(GLES31.GL_LEQUAL)
 
@@ -38,23 +36,20 @@ class SkyBox : GeometryEntity(), XGLDrawableObject {
     companion object {
         val SKYBOX_SHADER_PATH = "SkyBox"
         private val SKYBOX_SHADER_FILE = "SkyBox.glsl"
-
         val SkyBoxShaderFilePath: String = "$SKYBOX_SHADER_PATH/$SKYBOX_SHADER_FILE"
-        val SkyBoxTextureFilePath: String = "$SKYBOX_SHADER_PATH/SkyBox"
 
         const val U_TEXTURE_UNIT = "u_TextureUnit"
-        const val TEXTURE_CUBE_MAP = "CubeMap"
         const val textureIndexCubeMap = 0 // skybox always use slot 0
-        val material = Material()
 
+        val material = Material()
         fun initMaterial(context: Context) {
             val texture = XGLTextureCubeMap(
                 context,
                 SKYBOX_SHADER_PATH,
                 arrayOf("left.png", "right.png", "bottom.png", "top.png", "front.png", "back.png")
             )
-            material.add(TEXTURE_CUBE_MAP, texture)
-            XGLTextureSlots.TextureSlots[0] = texture
+            XGLTextureSlots.TextureSlots[textureIndexCubeMap] = texture
+            material.add(U_TEXTURE_UNIT, textureIndexCubeMap)
         }
     }
 }

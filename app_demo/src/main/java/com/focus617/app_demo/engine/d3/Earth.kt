@@ -12,15 +12,7 @@ import com.focus617.core.engine.scene_graph.GeometryEntity
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
 import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_AMBIENT
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_CONSTANT
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_DIFFUSE
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_LINEAR
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_POSITION
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_QUADRATIC
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_LIGHT_SPECULAR
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_VIEW_POSITION
-import com.focus617.core.engine.scene_graph.scene.PointLight
 
 class Earth : GeometryEntity(), XGLDrawableObject {
     lateinit var viewPoint: Point3D
@@ -40,15 +32,6 @@ class Earth : GeometryEntity(), XGLDrawableObject {
         shader.setInt(U_TEXTURE_UNIT_2, textureIndexNight)
 
         shader.setFloat3(U_POINT_VIEW_POSITION, viewPoint)
-
-        shader.setFloat3(U_POINT_LIGHT_POSITION, PointLight.position)
-        shader.setFloat3(U_POINT_LIGHT_AMBIENT, PointLight.ambient)
-        shader.setFloat3(U_POINT_LIGHT_DIFFUSE, PointLight.diffuse)
-        shader.setFloat3(U_POINT_LIGHT_SPECULAR, PointLight.specular)
-        shader.setFloat(U_POINT_LIGHT_CONSTANT, PointLight.Constant)
-        shader.setFloat(U_POINT_LIGHT_LINEAR, PointLight.Linear)
-        shader.setFloat(U_POINT_LIGHT_QUADRATIC, PointLight.Quadratic)
-
         super.onRender(shader)
     }
 

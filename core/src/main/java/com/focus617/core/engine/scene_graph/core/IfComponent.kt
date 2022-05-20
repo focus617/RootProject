@@ -9,6 +9,6 @@ interface IfComponent: Closeable {
     var mParent: ParentEntity
 
     fun onEvent(event: Event): Boolean
-    fun onUpdate(timeStep: TimeStep, transform: Transform)
-    fun onRender(shader: Shader, transform: Transform)
+    fun onUpdate(timeStep: TimeStep, transform: Transform?)
+    fun onRender(shader: Shader, transform: Transform?)
 }

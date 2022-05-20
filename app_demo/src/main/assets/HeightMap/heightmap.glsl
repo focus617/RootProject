@@ -15,13 +15,13 @@ uniform mat4 u_ProjectionMatrix;
 uniform vec3 u_VectorToLight;
 
 //用于传递给片元着色器的变量
+out vec2 v_TexCoords;
 out vec3 v_Color;
-out vec2 v_TextureCoordinates;
 out float v_Ratio;
 
 void main()
 {
-    v_TextureCoordinates = a_TexCoords;
+    v_TexCoords = a_TexCoords;
     v_Ratio = a_Position.y;
 
     v_Color = mix(vec3(0.180f, 0.467f, 0.153f),    // A dark green
@@ -51,8 +51,8 @@ precision mediump float;
 #endif
 
 //接收从顶点着色器过来的参数
+in vec2 v_TexCoords;
 in vec3 v_Color;
-in vec2 v_TextureCoordinates;
 in float v_Ratio;
 
 uniform sampler2D u_TextureUnit1;
@@ -62,9 +62,9 @@ out vec4 FragColor;
 
 void main()
 {
-    FragColor = texture(u_TextureUnit1, v_TextureCoordinates) * (1.0 - v_Ratio);
+    FragColor = texture(u_TextureUnit1, v_TexCoords) * (1.0 - v_Ratio);
     // Divide the texture coordinates by 2 to make the stone texture repeat half as often.
-    FragColor += texture(u_TextureUnit2, v_TextureCoordinates / 2.0) * v_Ratio;
+    FragColor += texture(u_TextureUnit2, v_TexCoords / 2.0) * v_Ratio;
 
     FragColor *= vec4(v_Color, 1.0f);
 }

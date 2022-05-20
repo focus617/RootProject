@@ -3,6 +3,9 @@ package com.focus617.core.engine.scene_graph.core
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.renderer.shader.Shader
+import com.focus617.core.engine.scene_graph.components.MeshRenderer
+import com.focus617.core.engine.scene_graph.renderer.Material
+import com.focus617.core.engine.scene_graph.renderer.Renderable
 import com.focus617.core.engine.scene_graph.scene.Scene
 import com.focus617.core.platform.event.base.Event
 
@@ -18,6 +21,9 @@ open class NodeEntity : ParentEntity(), IfEntity {
 
     var mTransform: Transform = Transform(this)
         protected set
+
+    // Rendering fields.
+    private var renderableInstance: Renderable? = null
 
     /**
      * Changes the parent node of this node.(Used for ParentEntity)
@@ -120,6 +126,29 @@ open class NodeEntity : ParentEntity(), IfEntity {
                 // 递归到Children Node
                 it.markTransformChangedRecursively(flagsToMark, originatingNode)
             }
+        }
+    }
+
+    /**
+     * Sets the {@link Renderable} to display for this node.
+     *
+     * @see Renderable
+     * @param renderable Usually a 3D model. If null, this node's current renderable will be removed.
+     */
+    fun setRenderable(renderable: Renderable) {
+        renderableInstance = renderable
+        var material: Material? = null
+
+        for ((key, mesh) in renderableInstance!!.mMeshes) {
+            if (key == "Default") {
+                for ((key, value) in renderableInstance!!.mMaterials) {
+                    material = value
+                    break
+                }
+            } else material = renderableInstance!!.mMaterials[key]
+
+            val meshRenderer = MeshRenderer(mesh, material)
+            addComponent(meshRenderer)
         }
     }
 }

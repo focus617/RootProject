@@ -12,14 +12,24 @@ import java.util.*
  */
 object MtlLoader {
     //存放解析出来Material材质列表
-    private val mMtlMap = HashMap<String, MaterialInfo>()
+    val mMtlMap = HashMap<String, MaterialInfo>()
 
     private var currentMaterialInfo: MaterialInfo? = null
+
+    // 文件所在目录
+    var directory: String? = null
 
     fun clear() {
         mMtlMap.clear()
 
         currentMaterialInfo = null
+    }
+
+    fun dump(){
+        Timber.i("Dump MtlLoader(directory=$directory, mapSize=${mMtlMap.size})")
+        mMtlMap.forEach{
+            it.value.dump()
+        }
     }
 
     /**
@@ -29,7 +39,7 @@ object MtlLoader {
      * @return MtlLoader
      */
     fun loadMtl(context: Context, mtlFilePath: String): MtlLoader {
-        Timber.d("load from Mtl File: $mtlFilePath")
+        Timber.d("load Mtl from File: $mtlFilePath")
 
         if (mtlFilePath.isEmpty() or TextUtils.isEmpty(mtlFilePath)) {
             Timber.e("Mtl File doesn't exist")
@@ -38,6 +48,8 @@ object MtlLoader {
         if (FileHelper.getFileExt(mtlFilePath) != "mtl") {
             Timber.e("File format not supported for material data.")
         }
+
+        directory = FileHelper.getPath(mtlFilePath)
 
         parse(context, mtlFilePath)
 
@@ -116,32 +128,64 @@ object MtlLoader {
     }
 
     private fun fillNewMTL(line: String) {
-        val items = line.split(DELIMITER).toTypedArray()
-        if (items.size != 2) return
+        val tokens = line.split(DELIMITER).toTypedArray()
+        if (tokens.size != 2) return
 
         if (currentMaterialInfo != null) {
             // 开始定义一个新的材质，因此要将上一个材质存入 mMtlMap
             mMtlMap[currentMaterialInfo!!.name!!] = currentMaterialInfo!!
-            Timber.d("MTL: ${currentMaterialInfo!!.name!!} closed")
+            Timber.i("MTL: ${currentMaterialInfo!!.name!!} closed")
         }
         currentMaterialInfo = MaterialInfo()
-        currentMaterialInfo!!.name = items[1]
+        currentMaterialInfo!!.name = tokens[1]
         Timber.i("Create new mtl: ${currentMaterialInfo!!.name!!} ")
     }
 
     private fun fillNs(line: String) {
-        val items = line.split(DELIMITER).toTypedArray()
-        if (items.size != 2) return
+        val tokens = line.split(DELIMITER).toTypedArray()
+        if (tokens.size != 2) return
 
-        currentMaterialInfo!!.ns = items[1].toFloat()
+        currentMaterialInfo!!.ns = tokens[1].toFloat()
+    }
+
+    /**
+     * 返回一个0xffffffff格式的颜色值
+     *
+     * @param parts
+     * @return
+     */
+    private fun getColorFromLine(line: String): Color {
+        val tokens = line.split(DELIMITER).toTypedArray()
+        if (tokens.size != 4) return Color(0f, 0f, 0f, 1f)
+
+        val r = tokens[1].toFloat() * 255f
+        val g = tokens[2].toFloat() * 255f
+        val b = tokens[3].toFloat() * 255f
+        return Color(r, g, b, 1f)
+    }
+
+    private fun getFloatFromLine(line: String): Float {
+        val tokens = line.split(DELIMITER).toTypedArray()
+        return if (tokens.size == 2) tokens[1].toFloat() else 0f
+    }
+
+    private fun getIntFromLine(line: String): Int {
+        val tokens = line.split(DELIMITER).toTypedArray()
+        return if (tokens.size == 2) tokens[1].toInt() else 0
+    }
+
+    private fun getStringFromLine(line: String): String {
+        val tokens = line.split(DELIMITER).toTypedArray()
+        return if (tokens.size == 2) tokens[1] else ""
     }
 
 
-    private const val DELIMITER = " "    // 分隔符
 
     /**
      * 材质需解析字段
      */
+    private const val DELIMITER = " "    // 分隔符
+
     // 注释
     private const val ANNOTATION = "#"
 
@@ -177,35 +221,4 @@ object MtlLoader {
     private const val MAP_D = "map_d"
     private const val MAP_TR = "map_Tr"
     private const val MAP_BUMP = "map_Bump"
-
-    /**
-     * 返回一个0xffffffff格式的颜色值
-     *
-     * @param parts
-     * @return
-     */
-    private fun getColorFromLine(line: String): Color {
-        val items = line.split(DELIMITER).toTypedArray()
-        if (items.size != 4) return Color(0f, 0f, 0f, 1f)
-
-        val r = items[1].toFloat() * 255f
-        val g = items[2].toFloat() * 255f
-        val b = items[3].toFloat() * 255f
-        return Color(r, g, b, 1f)
-    }
-
-    private fun getFloatFromLine(line: String): Float {
-        val items = line.split(DELIMITER).toTypedArray()
-        return if (items.size == 2) items[1].toFloat() else 0f
-    }
-
-    private fun getIntFromLine(line: String): Int {
-        val items = line.split(DELIMITER).toTypedArray()
-        return if (items.size == 2) items[1].toInt() else 0
-    }
-
-    private fun getStringFromLine(line: String): String {
-        val items = line.split(DELIMITER).toTypedArray()
-        return if (items.size == 2) items[1] else ""
-    }
 }
