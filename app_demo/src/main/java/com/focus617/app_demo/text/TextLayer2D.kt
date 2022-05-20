@@ -17,6 +17,28 @@ class TextLayer2D(name: String) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
     private val mQuad: TextEntity2D = TextEntity2D()
 
+    private var welcome = "欢迎访问我的虚拟世界！"
+    private var isDirty = true
+
+    fun setWelcome(words: String){
+        welcome = words
+        isDirty = true
+    }
+
+    private fun refreshWelcome() {
+        if(isDirty) {
+            val bitmap =
+                BitmapHelper.createBitmap(welcome, 50f).convert(1f, -1f)
+            texture!!.setData(
+                bitmap,
+                screenWidth - bitmap.width - 20,
+                screenHeight - bitmap.height - 20
+            )
+            bitmap.recycle()
+            isDirty = false
+        }
+    }
+
     override fun initOpenGlResource() {
         mQuad.initOpenGlResource()
     }
@@ -43,14 +65,7 @@ class TextLayer2D(name: String) : Layer(name) {
         texture?.apply {
             mQuad.fontColor = Color.CYAN
 
-            val bitmap =
-                BitmapHelper.createBitmap("欢迎访问我的虚拟世界！", 50f).convert(1f, -1f)
-            texture!!.setData(
-                bitmap,
-                screenWidth - bitmap.width - 20,
-                screenHeight - bitmap.height - 20
-            )
-            bitmap.recycle()
+            refreshWelcome()
 
             TextEntity2D.shaderWithColor.bind()
             TextEntity2D.shaderWithColor.setInt(
@@ -59,6 +74,8 @@ class TextLayer2D(name: String) : Layer(name) {
             mQuad.onRender(TextEntity2D.shaderWithColor)
         }
     }
+
+
 
     override fun afterDrawFrame() {
     }
