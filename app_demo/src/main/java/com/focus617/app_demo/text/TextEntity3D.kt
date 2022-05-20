@@ -45,7 +45,8 @@ class TextEntity3D(private val isPerspective: Boolean = true) : GeometryEntity()
         val material = Material()
         textTexture = XGLTexture2D("TextTexture")
         textTexture.setText(text, textFont)
-        material.add("diffuse", textTexture)
+        material.add(U_TEXTURE, textTexture)
+
 
         val mesh = Mesh(XGLVertexArray.buildVertexArray(TextQuad3D()))
         val meshRenderer = MeshRenderer(mesh, material)
@@ -63,7 +64,6 @@ class TextEntity3D(private val isPerspective: Boolean = true) : GeometryEntity()
         textureIndex = XGLTextureSlots.requestIndex(textTexture)
         textTexture.bind(textureIndex)
 
-        shader.bind()
         if (!isPerspective) {
             shader.setMat4(U_PROJECT_MATRIX, mProjectionMatrix)
             shader.setMat4(U_VIEW_MATRIX, XRenderer.sViewMatrix)
