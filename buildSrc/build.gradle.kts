@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    kotlin("jvm") version "1.5.21"
+    kotlin("jvm") version "1.5.31"
 
     // Using the Plugin Development plugin for writing plugins
     id("java-gradle-plugin")
