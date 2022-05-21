@@ -19,7 +19,7 @@ object ClassPath {
 
 object Jetpack {
     private const val lifecycle_version = "2.4.1"
-    private const val room_version = "2.4.1"
+    private const val room_version = "2.4.2"
 
     const val MATERIAL = "com.google.android.material:material:1.4.0"
 
