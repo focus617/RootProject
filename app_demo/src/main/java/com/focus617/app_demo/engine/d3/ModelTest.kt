@@ -7,7 +7,7 @@ import com.focus617.core.engine.scene_graph.GeometryEntity
 
 class ModelTest: GeometryEntity(), XGLDrawableObject {
     init {
-        shaderName = XGLScene3D.CommonShaderFilePath
+        shaderName = XGLScene3D.CommonShader
     }
 
 

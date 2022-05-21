@@ -75,7 +75,7 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
 
         shader = XGLShaderBuilder.createShader(
             context,
-            CommonShaderFilePath
+            CommonShader
         ) as XGLShader
         mShaderLibrary.add(shader)
 
@@ -115,7 +115,7 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
     companion object{
         private const val SHADER_PATH = "common"
         private const val SHADER_FILE = "ShaderWithTextureAndLight.glsl"
-        const val CommonShaderFilePath = "$SHADER_PATH/$SHADER_FILE"
+        const val CommonShader = "$SHADER_PATH/$SHADER_FILE"
     }
 
 }
