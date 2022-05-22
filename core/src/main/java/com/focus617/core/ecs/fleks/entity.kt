@@ -17,12 +17,13 @@ value class Entity(val id: Int)
 interface EntityListener {
     /**
      * Function that gets called when an [entity's][Entity] component configuration changes.
-     * This happens when a component gets added or removed or the [entity] gets added or removed from the [world][World].
+     * This happens when a component gets added or removed or the [entity] gets added or removed
+     * from the [world][World].
      *
      * @param entity the [entity][Entity] with the updated component configuration.
      *
-     * @param cmpMask the [BitArray] representing what type of components the entity has. Each component type has a
-     * unique id. Refer to [ComponentMapper] for more details.
+     * @param cmpMask the [BitArray] representing what type of components the entity has.
+     * Each component type has a unique id. Refer to [ComponentMapper] for more details.
      */
     fun onEntityCfgChanged(entity: Entity, cmpMask: BitArray) = Unit
 }

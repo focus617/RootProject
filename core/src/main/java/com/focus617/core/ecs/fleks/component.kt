@@ -16,9 +16,10 @@ interface ComponentListener<T> {
 }
 
 /**
- * A class that is responsible to store components of a specific type for all [entities][Entity] in a [world][World].
- * Each component is assigned a unique [id] for fast access and to avoid lookups via a class which is slow.
- * A component of the [components] array at index X belongs to the [Entity] of id X.
+ * A class that is responsible to store components of a specific type for all [entities][Entity]
+ * in a [world][World].
+ * Each component is assigned a unique [id] for fast access and to avoid lookups via a class
+ * which is slow. A component of the [components] array at index X belongs to the [Entity] of id X.
  *
  * Refer to [ComponentService] for more details.
  */
@@ -34,7 +35,8 @@ class ComponentMapper<T>(
     internal val listeners = bag<ComponentListener<T>>(2)
 
     /**
-     * Creates and returns a new component of the specific type for the given [entity] and applies the [configuration].
+     * Creates and returns a new component of the specific type for the given [entity] and applies
+     * the [configuration].
      * If the [entity] already has a component of that type then no new instance will be created.
      * Notifies any registered [ComponentListener].
      */
@@ -52,8 +54,8 @@ class ComponentMapper<T>(
         } else {
             // component already added -> reuse it and do not create a new instance.
             // Call onComponentRemoved first in case users do something special in onComponentAdded.
-            // Otherwise, onComponentAdded will be executed twice on a single component without executing onComponentRemoved
-            // which is not correct.
+            // Otherwise, onComponentAdded will be executed twice on a single component without
+            // executing onComponentRemoved which is not correct.
             listeners.forEach { it.onComponentRemoved(entity, cmp) }
             val existingCmp = cmp.apply(configuration)
             listeners.forEach { it.onComponentAdded(entity, existingCmp) }
@@ -62,7 +64,8 @@ class ComponentMapper<T>(
     }
 
     /**
-     * Creates a new component if the [entity] does not have it yet. Otherwise, updates the existing component.
+     * Creates a new component if the [entity] does not have it yet. Otherwise, updates the existing
+     * component.
      * Applies the [configuration] in both cases and returns the component.
      * Notifies any registered [ComponentListener] if a new component is created.
      */

@@ -6,9 +6,11 @@ import kotlin.math.min
  * A BitArray implementation in Kotlin containing only the necessary functions for Fleks.
  *
  * Boolean[] gives a better performance when iterating over a BitArray, but uses more memory and
- * also the amount of array resizing is increased when enlarging the array which makes it then slower in the end.
+ * also the amount of array resizing is increased when enlarging the array which makes it then
+ * slower in the end.
  *
- * For that reason I used a Long[] implementation which is similar to the one of java.util with inspirations also from
+ * For that reason I used a Long[] implementation which is similar to the one of java.util with
+ * inspirations also from
  * https://github.com/lemire/javaewah/blob/master/src/main/java/com/googlecode/javaewah/datastructure/BitSet.java.
  * It is more memory efficient and requires less resizing calls since one Long can store up to 64 bits.
  */
