@@ -27,15 +27,16 @@ annotation class NoneOf(val components: Array<KClass<*>> = [])
 annotation class AnyOf(val components: Array<KClass<*>> = [])
 
 /**
- * A family of [entities][Entity]. It stores [entities][Entity] that have a specific configuration of components.
- * A configuration is defined via the three annotations: [AllOf], [NoneOf] and [AnyOf].
- * Each component is assigned to a unique index. That index is set in the [allOf], [noneOf] or [anyOf][] [BitArray].
+ * A family of [entities][Entity]. It stores [entities][Entity] that have a specific configuration
+ * of components. A configuration is defined via the three annotations: [AllOf], [NoneOf] and [AnyOf].
+ * Each component is assigned to a unique index. That index is set in the [allOf], [noneOf] or
+ * [anyOf][] [BitArray].
  *
- * A family is an [EntityListener] and gets notified when an [entity][Entity] is added to the world or the
- * entity's component configuration changes.
+ * A family is an [EntityListener] and gets notified when an [entity][Entity] is added to the world
+ * or the entity's component configuration changes.
  *
- * Every [IteratingSystem] is linked to exactly one family. Families are created by the [SystemService] automatically
- * when a [world][World] gets created.
+ * Every [IteratingSystem] is linked to exactly one family. Families are created by the [SystemService]
+ * automatically when a [world][World] gets created.
  *
  * @param allOf all the components that an [entity][Entity] must have. Default value is null.
  * @param noneOf all the components that an [entity][Entity] must not have. Default value is null.

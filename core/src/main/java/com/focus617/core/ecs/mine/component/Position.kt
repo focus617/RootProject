@@ -11,10 +11,10 @@ data class Position(val position: Vector3 = Vector3(0f, 0f, 0f))
 class PositionComponentListener : WithLogging(), ComponentListener<Position> {
 
     override fun onComponentAdded(entity: Entity, component: Position) {
-        LOG.info("Component 'position' added, value=${component.position}")
+        LOG.info("Component 'position' added to Entity(${entity.id}), value=${component.position}")
     }
 
     override fun onComponentRemoved(entity: Entity, component: Position) {
-        LOG.info("Component 'position' removed")
+        LOG.info("Component 'position' removed from Entity(${entity.id}) ")
     }
 }

@@ -220,8 +220,9 @@ abstract class IteratingSystem(
 }
 
 /**
- * A service class for any [IntervalSystem] of a [world][World]. It is responsible to create systems using
- * constructor dependency injection. It also stores [systems] and updates [enabled][IntervalSystem.enabled] systems
+ * A service class for any [IntervalSystem] of a [world][World].
+ * It is responsible to create systems using constructor dependency injection.
+ * It also stores [systems] and updates [enabled][IntervalSystem.enabled] systems
  * each time [update] is called.
  *
  * @param world the [world][World] the service belongs to.

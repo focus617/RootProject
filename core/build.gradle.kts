@@ -28,8 +28,6 @@ dependencies {
     implementation(Kotlin.HILT_CORE)
     kapt(Kotlin.HILT_COMPILER)
 
-
-
     // Test
     testImplementation(Testing.JUNIT)
     testImplementation(Testing.MOCKITO)

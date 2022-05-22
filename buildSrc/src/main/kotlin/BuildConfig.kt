@@ -112,6 +112,8 @@ object Libs {
 object Testing {
     private const val arch_version = "2.1.0"
 
+    const val KOTLIN_TEST = "org.jetbrains.kotlin:kotlin-test:1.6.21"
+
     const val JUNIT = "junit:junit:4.13.2"
     const val HAMCREST = "org.hamcrest:hamcrest-all:1.3"
     const val MOCKITO = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
