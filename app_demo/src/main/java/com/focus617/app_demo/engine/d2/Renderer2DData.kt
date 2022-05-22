@@ -1,14 +1,6 @@
 package com.focus617.app_demo.engine.d2
 
 import android.content.Context
-import com.focus617.app_demo.renderer.shader.XGLShader
-import com.focus617.app_demo.renderer.shader.XGLShaderBuilder
-import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
-import com.focus617.app_demo.renderer.texture.XGLTextureSlots
-import com.focus617.app_demo.renderer.vertex.XGLIndexBuffer
-import com.focus617.app_demo.renderer.vertex.XGLVertexArray
-import com.focus617.app_demo.renderer.vertex.XGLVertexBuffer
-import com.focus617.app_demo.renderer.vertex.XGLVertexBufferBuilder
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
@@ -20,6 +12,14 @@ import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.mylib.logging.WithLogging
+import com.focus617.opengles.renderer.shader.XGLShader
+import com.focus617.opengles.renderer.shader.XGLShaderBuilder
+import com.focus617.opengles.renderer.texture.XGLTextureBuilder
+import com.focus617.opengles.renderer.texture.XGLTextureSlots
+import com.focus617.opengles.renderer.vertex.XGLIndexBuffer
+import com.focus617.opengles.renderer.vertex.XGLVertexArray
+import com.focus617.opengles.renderer.vertex.XGLVertexBuffer
+import com.focus617.opengles.renderer.vertex.XGLVertexBufferBuilder
 import java.io.Closeable
 import java.nio.LongBuffer
 

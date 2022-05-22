@@ -1,0 +1,3 @@
+[submodule "Fleks"]
+	path = Fleks
+	url = https://github.com/focus617/Fleks.git

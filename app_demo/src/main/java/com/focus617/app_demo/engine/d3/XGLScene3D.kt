@@ -1,14 +1,6 @@
 package com.focus617.app_demo.engine.d3
 
 import android.content.Context
-import com.focus617.app_demo.renderer.framebuffer.FrameBufferEntity
-import com.focus617.app_demo.renderer.shader.XGLShader
-import com.focus617.app_demo.renderer.shader.XGLShaderBuilder
-import com.focus617.app_demo.renderer.texture.XGLTextureSlots
-import com.focus617.app_demo.terrain.Heightmap
-import com.focus617.app_demo.terrain.SkyBox
-import com.focus617.app_demo.text.TextEntity2D
-import com.focus617.app_demo.text.TextEntity3D
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.scene_graph.components.PointLight
 import com.focus617.core.engine.scene_graph.components.camera.PerspectiveCamera
@@ -16,6 +8,14 @@ import com.focus617.core.engine.scene_graph.components.camera.PerspectiveCameraC
 import com.focus617.core.engine.scene_graph.core.NodeEntity
 import com.focus617.core.engine.scene_graph.core.Transform
 import com.focus617.core.engine.scene_graph.scene.Scene
+import com.focus617.opengles.renderer.framebuffer.FrameBufferEntity
+import com.focus617.opengles.renderer.shader.XGLShader
+import com.focus617.opengles.renderer.shader.XGLShaderBuilder
+import com.focus617.opengles.renderer.texture.XGLTextureSlots
+import com.focus617.opengles.terrain.Heightmap
+import com.focus617.opengles.terrain.SkyBox
+import com.focus617.opengles.text.TextEntity2D
+import com.focus617.opengles.text.TextEntity3D
 
 /**
  * Scene is root entity for all Game Entities.
@@ -75,7 +75,7 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
 
         shader = XGLShaderBuilder.createShader(
             context,
-            CommonShaderFilePath
+            CommonShader
         ) as XGLShader
         mShaderLibrary.add(shader)
 
@@ -115,7 +115,7 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
     companion object{
         private const val SHADER_PATH = "common"
         private const val SHADER_FILE = "ShaderWithTextureAndLight.glsl"
-        const val CommonShaderFilePath = "$SHADER_PATH/$SHADER_FILE"
+        const val CommonShader = "$SHADER_PATH/$SHADER_FILE"
     }
 
 }

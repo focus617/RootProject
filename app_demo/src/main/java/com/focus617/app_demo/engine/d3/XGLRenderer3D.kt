@@ -1,13 +1,6 @@
 package com.focus617.app_demo.engine.d3
 
 import android.opengl.GLSurfaceView
-import com.focus617.app_demo.engine.XGLContext
-import com.focus617.app_demo.renderer.framebuffer.XGLFrameBuffer
-import com.focus617.app_demo.renderer.framebuffer.XGLFrameBufferBuilder
-import com.focus617.app_demo.renderer.framebuffer.submitWithOutlining
-import com.focus617.app_demo.renderer.texture.XGLTextureSlots
-import com.focus617.app_demo.text.TextEntity3D
-import com.focus617.app_demo.text.TextLayer2D
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferAttachmentSpecification
@@ -20,6 +13,13 @@ import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.engine.scene_graph.components.camera.CameraController
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_PROJECT_MATRIX
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_VIEW_MATRIX
+import com.focus617.opengles.egl.XGLContext
+import com.focus617.opengles.renderer.framebuffer.XGLFrameBuffer
+import com.focus617.opengles.renderer.framebuffer.XGLFrameBufferBuilder
+import com.focus617.opengles.renderer.framebuffer.submitWithOutlining
+import com.focus617.opengles.renderer.texture.XGLTextureSlots
+import com.focus617.opengles.text.TextEntity3D
+import com.focus617.opengles.text.TextLayer2D
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 

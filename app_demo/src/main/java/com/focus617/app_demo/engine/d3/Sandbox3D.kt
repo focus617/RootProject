@@ -1,25 +1,54 @@
 package com.focus617.app_demo.engine.d3
 
 import android.content.Context
-import com.focus617.app_demo.terrain.TerrainLayer
-import com.focus617.app_demo.text.TextLayer2D
-import com.focus617.app_demo.text.TextLayer3D
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
 import com.focus617.core.engine.core.TimeStep
+import com.focus617.core.engine.ecs.component.Animation
+import com.focus617.core.engine.ecs.component.Position
+import com.focus617.core.engine.ecs.component.PositionComponentListener
+import com.focus617.core.engine.ecs.component.Sprite
+import com.focus617.core.engine.ecs.system.DayNightSystem
 import com.focus617.core.engine.scene_graph.scene.Scene
+import com.focus617.core.fleks.Entity
+import com.focus617.core.fleks.World
 import com.focus617.core.platform.event.base.EventType
+import com.focus617.opengles.terrain.TerrainLayer
+import com.focus617.opengles.text.TextLayer2D
+import com.focus617.opengles.text.TextLayer3D
 import java.io.Closeable
 
 class Sandbox3D(context: Context) : Engine(), Closeable {
     // Create root entity
     var scene: Scene = XGLScene3D(context, this)
 
+    val eventManager = DayNightSystem.EventManager()
+    val animations = Animation(1)
+
+    val world = World {
+        entityCapacity = 600
+
+        system<DayNightSystem>()
+        inject(eventManager)
+
+//        system<AnimationSystem>()
+//        inject(animations)
+
+        // register the listener to the world
+        componentListener<PositionComponentListener>()
+    }
+
+    val entity: Entity = world.entity {
+        add<Position> { position.x = 1.5f }
+        add<Sprite>()
+    }
+
+
     init {
         pushLayer(GamePlayerLayer("GamePlayerLayer", scene as XGLScene3D))
         pushLayer(TextLayer3D("TextLayer"))
-        pushLayer(TerrainLayer("TerrainLayer", scene as XGLScene3D))
+        pushLayer(TerrainLayer("TerrainLayer", context))
 
 
         pushOverLayer(TextLayer2D("OverLayer"))
