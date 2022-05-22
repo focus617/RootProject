@@ -1,8 +1,8 @@
-package com.focus617.core.engine.ecs.component
+package com.focus617.core.ecs.mine.component
 
+import com.focus617.core.ecs.fleks.ComponentListener
+import com.focus617.core.ecs.fleks.Entity
 import com.focus617.core.engine.math.Vector3
-import com.focus617.core.fleks.ComponentListener
-import com.focus617.core.fleks.Entity
 import com.focus617.mylib.logging.WithLogging
 
 data class Position(val position: Vector3 = Vector3(0f, 0f, 0f))

@@ -1,6 +1,6 @@
-package com.focus617.core.fleks.collection
+package com.focus617.core.ecs.fleks.collection
 
-import com.focus617.core.fleks.Entity
+import com.focus617.core.ecs.fleks.Entity
 import kotlin.math.max
 import kotlin.math.min
 

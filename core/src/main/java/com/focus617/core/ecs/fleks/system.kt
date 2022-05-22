@@ -1,7 +1,7 @@
-package com.focus617.core.fleks
+package com.focus617.core.ecs.fleks
 
-import com.focus617.core.fleks.collection.BitArray
-import com.focus617.core.fleks.collection.EntityComparator
+import com.focus617.core.ecs.fleks.collection.BitArray
+import com.focus617.core.ecs.fleks.collection.EntityComparator
 import java.lang.reflect.Field
 import kotlin.reflect.KClass
 

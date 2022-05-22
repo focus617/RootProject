@@ -1,9 +1,9 @@
-package com.focus617.core.engine.ecs.system
+package com.focus617.core.ecs.mine.system
 
-import com.focus617.core.engine.ecs.component.Animation
-import com.focus617.core.engine.ecs.component.Health
-import com.focus617.core.engine.ecs.component.Position
-import com.focus617.core.fleks.*
+import com.focus617.core.ecs.fleks.*
+import com.focus617.core.ecs.mine.component.Animation
+import com.focus617.core.ecs.mine.component.Health
+import com.focus617.core.ecs.mine.component.Position
 
 @AllOf([Position::class])
 @NoneOf([Health::class])

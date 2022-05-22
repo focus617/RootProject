@@ -1,4 +1,4 @@
-package com.focus617.core.fleks
+package com.focus617.core.ecs.fleks
 
 import kotlin.reflect.KClass
 

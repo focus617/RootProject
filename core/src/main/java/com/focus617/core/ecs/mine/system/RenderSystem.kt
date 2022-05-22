@@ -1,11 +1,11 @@
-package com.focus617.core.engine.ecs.system
+package com.focus617.core.ecs.mine.system
 
-import com.focus617.core.engine.ecs.component.Position
-import com.focus617.core.fleks.AllOf
-import com.focus617.core.fleks.ComponentMapper
-import com.focus617.core.fleks.Entity
-import com.focus617.core.fleks.IteratingSystem
-import com.focus617.core.fleks.collection.compareEntity
+import com.focus617.core.ecs.fleks.AllOf
+import com.focus617.core.ecs.fleks.ComponentMapper
+import com.focus617.core.ecs.fleks.Entity
+import com.focus617.core.ecs.fleks.IteratingSystem
+import com.focus617.core.ecs.fleks.collection.compareEntity
+import com.focus617.core.ecs.mine.component.Position
 
 @AllOf([Position::class])
 class RenderSystem(

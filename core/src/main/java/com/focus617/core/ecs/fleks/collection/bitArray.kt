@@ -1,4 +1,4 @@
-package com.focus617.core.fleks.collection
+package com.focus617.core.ecs.fleks.collection
 
 import kotlin.math.min
 

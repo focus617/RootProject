@@ -1,6 +1,6 @@
-package com.focus617.core.engine.ecs.system
+package com.focus617.core.ecs.mine.system
 
-import com.focus617.core.fleks.IntervalSystem
+import com.focus617.core.ecs.fleks.IntervalSystem
 import com.focus617.core.platform.base.BaseEntity
 
 class DayNightSystem(

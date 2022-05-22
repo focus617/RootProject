@@ -1,7 +1,7 @@
-package com.focus617.core.fleks
+package com.focus617.core.ecs.fleks
 
-import com.focus617.core.fleks.collection.Bag
-import com.focus617.core.fleks.collection.bag
+import com.focus617.core.ecs.fleks.collection.Bag
+import com.focus617.core.ecs.fleks.collection.bag
 import java.lang.reflect.Constructor
 import kotlin.math.max
 import kotlin.reflect.KClass

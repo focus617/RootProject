@@ -1,4 +1,4 @@
-package com.focus617.core.fleks
+package com.focus617.core.ecs.fleks
 
 import java.lang.reflect.Constructor
 import java.lang.reflect.ParameterizedType
