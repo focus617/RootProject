@@ -1,7 +1,6 @@
 package com.focus617.app_demo.engine.d2
 
 import android.content.Context
-import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
@@ -10,6 +9,7 @@ import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene_graph.scene.Scene
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
+import com.focus617.opengles.renderer.texture.XGLTextureSlots
 import java.io.Closeable
 
 class Sandbox2D(context: Context) : Engine(), Closeable {

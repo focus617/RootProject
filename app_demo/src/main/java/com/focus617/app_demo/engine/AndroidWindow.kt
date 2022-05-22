@@ -12,7 +12,6 @@ import com.focus617.app_demo.engine.d3.Sandbox3D
 import com.focus617.app_demo.engine.d3.XGLRenderer3D
 import com.focus617.app_demo.engine.d3.XGLScene3D
 import com.focus617.app_demo.engine.input.GestureInput
-import com.focus617.app_demo.renderer.XGLRendererAPI
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.WindowProps
@@ -21,6 +20,8 @@ import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventHandler
+import com.focus617.opengles.egl.XGLContext
+import com.focus617.opengles.renderer.XGLRendererAPI
 import java.io.Closeable
 
 /**
@@ -72,16 +73,6 @@ class AndroidWindow private constructor(
             var VSync: Boolean = true
             var callback: EventHandler<Event>? = null
         }
-
-        // Surface format: RGBA8888
-        var redSize = 8
-        var greenSize = 8
-        var blueSize = 8
-        var alphaSize = 8
-        var depthSize = 16
-        var sampleSize = 4        // enabling Anti Aliasing
-        var stencilSize = 0
-        var value = IntArray(1)
 
         // 保证Window的单例
         private var instance: AndroidWindow? = null

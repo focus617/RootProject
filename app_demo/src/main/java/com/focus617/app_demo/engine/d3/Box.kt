@@ -1,11 +1,6 @@
 package com.focus617.app_demo.engine.d3
 
 import android.content.Context
-import com.focus617.app_demo.engine.XGLDrawableObject
-import com.focus617.app_demo.renderer.texture.XGLTexture2D
-import com.focus617.app_demo.renderer.texture.XGLTextureBuilder
-import com.focus617.app_demo.renderer.texture.XGLTextureSlots
-import com.focus617.app_demo.renderer.vertex.XGLVertexArray
 import com.focus617.core.engine.math.Ray
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.mesh.d3.Cube
@@ -16,8 +11,13 @@ import com.focus617.core.engine.scene_graph.renderer.Mesh
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MATERIAL_SHININESS
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MATERIAL_SPECULAR
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MATERIAL_TEXTURE_DIFFUSE
+import com.focus617.opengles.renderer.texture.XGLTexture2D
+import com.focus617.opengles.renderer.texture.XGLTextureBuilder
+import com.focus617.opengles.renderer.texture.XGLTextureSlots
+import com.focus617.opengles.renderer.vertex.XGLVertexArray
+import com.focus617.opengles.scene_graph.XGLDrawableObject
 
-class Box : GeometryEntity(), XGLDrawableObject{
+class Box : GeometryEntity(), XGLDrawableObject {
     val material = Material()
 
     init {

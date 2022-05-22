@@ -1,9 +1,6 @@
 package com.focus617.app_demo.engine.d3
 
 import android.content.Context
-import com.focus617.app_demo.terrain.TerrainLayer
-import com.focus617.app_demo.text.TextLayer2D
-import com.focus617.app_demo.text.TextLayer3D
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
@@ -17,6 +14,9 @@ import com.focus617.core.engine.scene_graph.scene.Scene
 import com.focus617.core.fleks.Entity
 import com.focus617.core.fleks.World
 import com.focus617.core.platform.event.base.EventType
+import com.focus617.opengles.terrain.TerrainLayer
+import com.focus617.opengles.text.TextLayer2D
+import com.focus617.opengles.text.TextLayer3D
 import java.io.Closeable
 
 class Sandbox3D(context: Context) : Engine(), Closeable {
@@ -48,7 +48,7 @@ class Sandbox3D(context: Context) : Engine(), Closeable {
     init {
         pushLayer(GamePlayerLayer("GamePlayerLayer", scene as XGLScene3D))
         pushLayer(TextLayer3D("TextLayer"))
-        pushLayer(TerrainLayer("TerrainLayer", scene as XGLScene3D))
+        pushLayer(TerrainLayer("TerrainLayer", context))
 
 
         pushOverLayer(TextLayer2D("OverLayer"))

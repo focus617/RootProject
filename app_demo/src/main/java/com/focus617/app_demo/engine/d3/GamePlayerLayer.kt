@@ -1,7 +1,6 @@
 package com.focus617.app_demo.engine.d3
 
 import android.opengl.GLES31.*
-import com.focus617.app_demo.engine.XGLDrawableObject
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Ray
@@ -10,6 +9,7 @@ import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.screenTouchEvents.TouchLongPressEvent
+import com.focus617.opengles.scene_graph.XGLDrawableObject
 
 class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name) {
     private val eventDispatcher = EventDispatcher()

@@ -1,6 +1,5 @@
 package com.focus617.app_demo.engine.d2
 
-import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Point3D
@@ -9,6 +8,7 @@ import com.focus617.core.engine.renderer.texture.SubTexture2D
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
+import com.focus617.opengles.renderer.texture.XGLTextureSlots
 
 class GameLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
     private val eventDispatcher = EventDispatcher()

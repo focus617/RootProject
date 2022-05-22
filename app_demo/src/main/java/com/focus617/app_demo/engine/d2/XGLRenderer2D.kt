@@ -1,8 +1,6 @@
 package com.focus617.app_demo.engine.d2
 
 import android.opengl.GLSurfaceView
-import com.focus617.app_demo.engine.XGLContext
-import com.focus617.app_demo.renderer.texture.XGLTextureSlots
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Point2D
 import com.focus617.core.engine.math.Point3D
@@ -13,6 +11,8 @@ import com.focus617.core.engine.renderer.texture.SubTexture2D
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.engine.scene_graph.components.camera.CameraController
+import com.focus617.opengles.egl.XGLContext
+import com.focus617.opengles.renderer.texture.XGLTextureSlots
 import java.io.Closeable
 import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
