@@ -1,11 +1,6 @@
 package com.focus617.app_demo.engine.d3
 
 import android.content.Context
-import com.focus617.core.ecs.fleks.World
-import com.focus617.core.ecs.mine.component.Camera
-import com.focus617.core.ecs.mine.component.CameraController
-import com.focus617.core.ecs.mine.component.PositionComponentListener
-import com.focus617.core.ecs.mine.system.DayNightSystem
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
@@ -18,42 +13,14 @@ import com.focus617.opengles.text.TextLayer3D
 import java.io.Closeable
 
 class Sandbox3D(context: Context) : Engine(), Closeable {
-
-    private val eventManager = DayNightSystem.EventManager()
-
-    val world = World {
-        entityCapacity = 600
-
-        system<DayNightSystem>()
-        inject(eventManager)
-
-        // register the listener to the world
-        componentListener<PositionComponentListener>()
-    }
-
-    val newScene = world.entity {
-        add<Camera>()
-        add<CameraController>()
-    }
-
-
-
-
     // Create root entity
     var scene: Scene = XGLScene3D(context, this)
 
     init {
-        pushLayer(GamePlayerLayer("GamePlayerLayer", scene as XGLScene3D))
+        pushLayer(GamePlayerLayer("GamePlayerLayer", ecsScene))
         pushLayer(TextLayer3D("TextLayer"))
         pushLayer(TerrainLayer("TerrainLayer", context))
         pushOverLayer(TextLayer2D("OverLayer"))
-
-
-        val cameraMapper = world.mapper<Camera>()
-        val comp = cameraMapper.getOrNull(newScene)
-        comp?.apply {
-            LOG.info("Retrieve component's type is ${comp::class.simpleName}!")
-        }
 
     }
 

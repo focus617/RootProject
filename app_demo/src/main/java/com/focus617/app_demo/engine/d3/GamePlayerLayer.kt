@@ -1,22 +1,34 @@
 package com.focus617.app_demo.engine.d3
 
 import android.opengl.GLES31.*
+import com.focus617.core.ecs.fleks.Entity
+import com.focus617.core.ecs.fleks.World
+import com.focus617.core.ecs.mine.component.Relationship
+import com.focus617.core.ecs.mine.component.Sprite
+import com.focus617.core.ecs.mine.component.Transform
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Ray
 import com.focus617.core.engine.math.Vector3
+import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.screenTouchEvents.TouchLongPressEvent
 import com.focus617.opengles.scene_graph.XGLDrawableObject
 
-class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name) {
+class GamePlayerLayer(name: String, private val game: World) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
 
     private val box1 = Box()
     private val box2 = Box()
     private val node = ModelTest()
+
+    private val ecsBox: Entity = game.entity {
+        add<Relationship>()
+        add<Transform>()
+        add<Sprite> {color= Color.RED}
+    }
 
     init {
         box1.onTransform3D(
@@ -36,6 +48,16 @@ class GamePlayerLayer(name: String, private val scene: XGLScene3D) : Layer(name)
             Vector3(8f, 8f, 8f)
         )
         gameObjectList.add(node)
+
+        val mapper = game.mapper<Transform>()
+        LOG.info("ecsBox has Transform component? ${mapper.contains(ecsBox)}")
+
+        // 测试获取Entity的Component，修改Component的属性值
+        val comp = mapper.getOrNull(ecsBox)
+        comp?.apply {
+            this.position.x = 1.5f
+            this.rotationInDegree.x = 50f
+        }
     }
 
     override fun initOpenGlResource() {

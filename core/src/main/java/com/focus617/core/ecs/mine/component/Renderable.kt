@@ -1,5 +1,7 @@
 package com.focus617.core.ecs.mine.component
 
-import com.focus617.core.engine.renderer.vertex.VertexArray
-
-data class Renderable(val vertexArray: VertexArray)
+data class Renderable(
+    var shader: Int = -1,                       // Shader Handle
+    var mesh: Int = -1,                         // VertexArray Handle
+    var textures: Array<Int> = emptyArray()    // Array of Texture Handle
+)
