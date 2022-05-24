@@ -22,7 +22,7 @@ class GamePlayerLayer(name: String, private val game: World) : Layer(name) {
 
     private val box1 = Box()
     private val box2 = Box()
-    private val node = ModelTest()
+    private val andy = ModelTest()
     private val coord = ModelCoord()
 
     private val ecsBox: Entity = game.entity {
@@ -44,15 +44,15 @@ class GamePlayerLayer(name: String, private val game: World) : Layer(name) {
         )
         gameObjectList.add(box2)
 
-        node.onTransform3D(
+        andy.onTransform3D(
             Vector3(0.0f, 0.0f, 0.0f),
             Vector3(8f, 8f, 8f)
         )
-        gameObjectList.add(node)
+        gameObjectList.add(andy)
 
         coord.onTransform3D(
-            Vector3(-2.0f, 2.0f, 0.0f),
-            Vector3(0.5f, 0.5f, 0.5f)
+            Vector3(1.5f, 1.0f, 0.5f),
+            Vector3(0.35f, 0.35f, 0.35f)
         )
         gameObjectList.add(coord)
 
