@@ -60,6 +60,8 @@ object MtlLoader {
      * 分析 mtl文件
      */
     private fun parse(context: Context, mtlFilePath: String) {
+        clear()
+
         try {
             val scanner = Scanner(context.assets.open(mtlFilePath))
             while (scanner.hasNextLine()) {

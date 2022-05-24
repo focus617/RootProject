@@ -39,7 +39,7 @@ open class FrameBufferEntity : GeometryEntity(), XGLDrawableObject {
         const val ShaderOutliningFilePath: String = "$SHADER_PATH/$SHADER_OUTLINING_FILE"
 
         lateinit var shader: Shader
-        lateinit var shaderOutlining: Shader
+//        lateinit var shaderOutlining: Shader
 
         const val U_TEXTURE = "u_screenTexture"
     }

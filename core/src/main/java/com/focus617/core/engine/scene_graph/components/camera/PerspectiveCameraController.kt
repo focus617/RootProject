@@ -1,6 +1,5 @@
 package com.focus617.core.engine.scene_graph.components.camera
 
-import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.*
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene_graph.core.ParentEntity
@@ -13,7 +12,7 @@ import com.focus617.mylib.helper.DateHelper
 /**
  * Perspective Camera 的 Controller类
  */
-class PerspectiveCameraController(camera: PerspectiveCamera) : CameraController(camera) {
+class PerspectiveCameraControllerOld(camera: PerspectiveCamera) : CameraController(camera) {
     override lateinit var mParent: ParentEntity
     override var mZoomLevel: Float = 0.05f
 
@@ -40,14 +39,6 @@ class PerspectiveCameraController(camera: PerspectiveCamera) : CameraController(
     }
 
     override fun onRender(shader: Shader, transform: Transform?) {}
-
-    private var mCameraRotation: Float = 0F
-    override fun onUpdate(timeStep: TimeStep, transform: Transform?) {
-//        val mCameraRotationSpeed: Float = 0.001F
-//        mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed
-
-        mCameraRotation = yawClamp(mCameraRotation)
-    }
 
     private var previousZoomLevel: Float = 1.0f
     private var previousSpan: Float = 1.0f

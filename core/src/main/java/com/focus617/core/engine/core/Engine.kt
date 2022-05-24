@@ -1,12 +1,12 @@
 package com.focus617.core.engine.core
 
+import com.focus617.core.engine.ecs.mine.static.Game
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 import java.io.Closeable
 
 open class Engine : BaseEntity(), Runnable, Closeable {
-
     // Game线程
     private var threadCore: Thread? = null
     private var isRunning: Boolean = true
@@ -24,6 +24,9 @@ open class Engine : BaseEntity(), Runnable, Closeable {
         threadCore!!.start()
     }
 
+    /**
+     * 销毁时, 停止线程的运行，防止内存泄漏
+     */
     /**
      * 销毁时, 停止线程的运行，防止内存泄漏
      */
@@ -77,8 +80,8 @@ open class Engine : BaseEntity(), Runnable, Closeable {
             val timeStep: TimeStep = TimeStep(time - mLastFrameTime)
             mLastFrameTime = time
 
-            // Update global data, such as scene
-            this.onUpdate(timeStep)
+            // Update ECS world
+            Game.world.update(timeStep.getMilliSecond().toFloat())
 
             // Update game objects in each layer
             beforeUpdate()
@@ -106,7 +109,7 @@ open class Engine : BaseEntity(), Runnable, Closeable {
     }
 
     // Used for updating the global resource, such as objects in scene
-    open fun onUpdate(timeStep: TimeStep) {}
+//    open fun onUpdate(timeStep: TimeStep) {}
 
     fun pushLayer(layer: Layer) {
         mLayerStack.PushLayer(layer)

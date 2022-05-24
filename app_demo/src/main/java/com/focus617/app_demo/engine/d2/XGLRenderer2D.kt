@@ -5,12 +5,12 @@ import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Point2D
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
+import com.focus617.core.engine.renderer.IfRenderer
 import com.focus617.core.engine.renderer.RenderCommand
-import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.renderer.texture.SubTexture2D
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.engine.resource.baseDataType.Color
-import com.focus617.core.engine.scene_graph.components.camera.CameraController
+import com.focus617.core.platform.base.BaseEntity
 import com.focus617.opengles.egl.XGLContext
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
 import java.io.Closeable
@@ -18,7 +18,9 @@ import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.Renderer, Closeable {
+class XGLRenderer2D(
+    private val scene: XGLScene2D
+) : BaseEntity(), IfRenderer, GLSurfaceView.Renderer, Closeable {
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         // 打印OpenGL Version，Vendor，etc
@@ -51,7 +53,7 @@ class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
 
-        beginScene(scene.mCameraController)
+        beginScene()
 
         endScene()
     }
@@ -60,7 +62,7 @@ class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.
         Renderer2DData.close()
     }
 
-    override fun beginScene(cameraController: CameraController) {
+    override fun beginScene() {
         XGLContext.checkGLError("before beginScene")
         with(Renderer2DData.TextureShader) {
             bind()
@@ -345,5 +347,10 @@ class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.
             )
         }
 
+    }
+
+    object SceneData {
+        var sProjectionMatrix: Mat4 = Mat4()
+        var sViewMatrix: Mat4 = Mat4()
     }
 }

@@ -37,6 +37,12 @@ object ObjLoader {
         mNormals.clear()
         mFaceIndices.clear()
 
+        mDirectory = ""
+        mObjInfoName = ""
+        mHasNormals = false
+        mHasTexCoords = false
+        mTextureDimension = 2
+        mMtlFilePath = null
         mCurrentIndices = null
     }
 
@@ -85,6 +91,8 @@ object ObjLoader {
      *   }
      */
     private fun parse(context: Context, objFilePathName: String) {
+        clear()
+
         try {
             val scanner = Scanner(context.assets.open(objFilePathName))
             while (scanner.hasNextLine()) {
@@ -207,7 +215,7 @@ object ObjLoader {
     private fun fillFaceList(line: String) {
         val tokens = line.split(DELIMITER)
 
-        if(mCurrentIndices == null){
+        if (mCurrentIndices == null) {
             mCurrentIndices = ArrayList<ObjIndex>()
             mFaceIndices["Default"] = mCurrentIndices!!
         }

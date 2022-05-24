@@ -1,7 +1,9 @@
 package com.focus617.core.engine.scene_graph.components.camera
 
+import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.scene_graph.core.IfComponent
+import com.focus617.core.engine.scene_graph.core.Transform
 import com.focus617.core.platform.base.BaseEntity
 
 /**
@@ -25,4 +27,6 @@ abstract class CameraController(protected val mCamera: Camera) : BaseEntity(), I
     abstract fun setPosition(x: Float, y: Float, z: Float)
 
     override fun close() {}
+
+    override fun onUpdate(timeStep: TimeStep, transform: Transform?){}
 }

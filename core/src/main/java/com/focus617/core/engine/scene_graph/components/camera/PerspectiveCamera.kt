@@ -46,8 +46,6 @@ class PerspectiveCamera : Camera() {
     }
 
     fun setRotation(pitchXInDegree: Float = 0f, yawYInDegree: Float = 90f) {
-//        val pitchXInRadians: Float = pitchXInDegree * (Math.PI / 180.0f).toFloat()
-//        val yawYInRadians: Float = yawYInDegree * (Math.PI / 180.0f).toFloat()
         val pitchXInRadians: Float = degreeToRadians(pitchXInDegree)
         val yawYInRadians: Float = degreeToRadians(yawYInDegree)
 

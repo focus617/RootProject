@@ -4,15 +4,8 @@ import android.content.Context
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
-import com.focus617.core.engine.core.TimeStep
-import com.focus617.core.engine.ecs.component.Animation
-import com.focus617.core.engine.ecs.component.Position
-import com.focus617.core.engine.ecs.component.PositionComponentListener
-import com.focus617.core.engine.ecs.component.Sprite
-import com.focus617.core.engine.ecs.system.DayNightSystem
-import com.focus617.core.engine.scene_graph.scene.Scene
-import com.focus617.core.fleks.Entity
-import com.focus617.core.fleks.World
+import com.focus617.core.engine.ecs.mine.static.Game
+import com.focus617.core.engine.ecs.mine.system.PerspectiveCameraSystem
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.opengles.terrain.TerrainLayer
 import com.focus617.opengles.text.TextLayer2D
@@ -21,44 +14,21 @@ import java.io.Closeable
 
 class Sandbox3D(context: Context) : Engine(), Closeable {
     // Create root entity
-    var scene: Scene = XGLScene3D(context, this)
-
-    val eventManager = DayNightSystem.EventManager()
-    val animations = Animation(1)
-
-    val world = World {
-        entityCapacity = 600
-
-        system<DayNightSystem>()
-        inject(eventManager)
-
-//        system<AnimationSystem>()
-//        inject(animations)
-
-        // register the listener to the world
-        componentListener<PositionComponentListener>()
-    }
-
-    val entity: Entity = world.entity {
-        add<Position> { position.x = 1.5f }
-        add<Sprite>()
-    }
-
+    var xglResourceManager = XGLResourceManager(context, this)
 
     init {
-        pushLayer(GamePlayerLayer("GamePlayerLayer", scene as XGLScene3D))
+        pushLayer(GamePlayerLayer("GamePlayerLayer", Game.world))
         pushLayer(TextLayer3D("TextLayer"))
         pushLayer(TerrainLayer("TerrainLayer", context))
-
-
         pushOverLayer(TextLayer2D("OverLayer"))
+
     }
 
     fun getLayerStack(): LayerStack = mLayerStack
     fun getOverLayerStack(): LayerStack = mOverlayStack
 
     override fun close() {
-        scene.close()
+        xglResourceManager.close()
     }
 
     override fun onAttachWindow(window: IfWindow) {
@@ -71,44 +41,36 @@ class Sandbox3D(context: Context) : Engine(), Closeable {
         unRegisterEventHandlers()
     }
 
-    override fun onUpdate(timeStep: TimeStep) {
-        scene?.onUpdate(timeStep)
-    }
 
     // 处理各种触屏事件，例如可能引起相机位置变化的事件
     private fun registerEventHandlers() {
-//        eventDispatcher.register(EventType.TouchDrag) { event ->
-//            val e: TouchDragEvent = event as TouchDragEvent
-//            LOG.info("Engine: ${e.name} from ${e.source} received")
-////                LOG.info("It's type is ${e.eventType}")
-////                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
-////                LOG.info("Current position is (${e.x}, ${e.y})\n")
-//            val hasConsumed = scene.mCameraController.onEvent(event)
-//            hasConsumed
-//        }
-
         eventDispatcher.register(EventType.TouchPress) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event)
+//            val hasConsumed = scene.mCameraController.onEvent(event)
+            val hasConsumed = PerspectiveCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchStart) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event)
+//            val hasConsumed = scene.mCameraController.onEvent(event)
+            val hasConsumed = PerspectiveCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchEnd) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event)
+//            val hasConsumed = scene.mCameraController.onEvent(event)
+            val hasConsumed = PerspectiveCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.Pinch) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event)
+//            val hasConsumed = scene.mCameraController.onEvent(event)
+            val hasConsumed = PerspectiveCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.SensorRotation) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event)
+//            val hasConsumed = scene.mCameraController.onEvent(event)
+            val hasConsumed = PerspectiveCameraSystem.onEvent(event)
             hasConsumed
         }
     }

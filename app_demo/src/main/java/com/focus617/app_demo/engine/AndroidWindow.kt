@@ -10,14 +10,14 @@ import com.focus617.app_demo.engine.d2.XGLRenderer2D
 import com.focus617.app_demo.engine.d2.XGLScene2D
 import com.focus617.app_demo.engine.d3.Sandbox3D
 import com.focus617.app_demo.engine.d3.XGLRenderer3D
-import com.focus617.app_demo.engine.d3.XGLScene3D
+import com.focus617.app_demo.engine.d3.XGLResourceManager
 import com.focus617.app_demo.engine.input.GestureInput
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.WindowProps
 import com.focus617.core.engine.renderer.IfGraphicsContext
+import com.focus617.core.engine.renderer.IfRenderer
 import com.focus617.core.engine.renderer.RenderCommand
-import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventHandler
 import com.focus617.opengles.egl.XGLContext
@@ -34,9 +34,9 @@ class AndroidWindow private constructor(
     override val LOG = logger()
 
     val mData = WindowData()
-    private lateinit var renderer: XRenderer
+    private lateinit var renderer: IfRenderer
 
-    override lateinit var mRenderer: XRenderer  // Used for Engine
+    override lateinit var mRenderer: IfRenderer  // Used for Engine
     override val mRenderContext: IfGraphicsContext = XGLContext(this)
 
     fun setDebug() {
@@ -119,7 +119,7 @@ class AndroidWindow private constructor(
 
                 // 创建并设置渲染器（Renderer）以在GLSurfaceView上绘制
                 renderer =
-                    if(engine is Sandbox3D) XGLRenderer3D(engine.scene as XGLScene3D)
+                    if(engine is Sandbox3D) XGLRenderer3D(engine.xglResourceManager as XGLResourceManager)
                     else XGLRenderer2D((engine as Sandbox2D).scene as XGLScene2D)
 
                 setRenderer(renderer as Renderer)
