@@ -82,6 +82,7 @@ class XGLResourceManager(val context: Context, val engine: Sandbox3D) : Closeabl
         Heightmap.initMaterial(context)
         Box.initMaterial(context)
         ModelTest.initModel(context)
+        ModelCoord.initModel(context)
     }
 
     private fun initGameObjects() {

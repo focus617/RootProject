@@ -23,6 +23,7 @@ class GamePlayerLayer(name: String, private val game: World) : Layer(name) {
     private val box1 = Box()
     private val box2 = Box()
     private val node = ModelTest()
+    private val coord = ModelCoord()
 
     private val ecsBox: Entity = game.entity {
         add<Relationship>()
@@ -32,13 +33,13 @@ class GamePlayerLayer(name: String, private val game: World) : Layer(name) {
 
     init {
         box1.onTransform3D(
-            Vector3(-1.5f, 0.54f, -2.0f),
+            Vector3(-2.5f, 0.54f, -2.0f),
             Vector3(1.0f, 1.0f, 1.0f)
         )
         gameObjectList.add(box1)
 
         box2.onTransform3D(
-            Vector3(1.5f, 0.54f, -1.5f),
+            Vector3(2.5f, 0.54f, -1.5f),
             Vector3(1.0f, 1.0f, 1.0f)
         )
         gameObjectList.add(box2)
@@ -48,6 +49,12 @@ class GamePlayerLayer(name: String, private val game: World) : Layer(name) {
             Vector3(8f, 8f, 8f)
         )
         gameObjectList.add(node)
+
+        coord.onTransform3D(
+            Vector3(-2.0f, 2.0f, 0.0f),
+            Vector3(0.5f, 0.5f, 0.5f)
+        )
+        gameObjectList.add(coord)
 
         val mapper = game.mapper<Transform>()
         LOG.info("ecsBox has Transform component? ${mapper.contains(ecsBox)}")
