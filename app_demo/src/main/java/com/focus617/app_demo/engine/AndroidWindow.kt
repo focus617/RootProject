@@ -6,11 +6,11 @@ import android.opengl.GLSurfaceView
 import com.focus617.app_demo.BuildConfig
 import com.focus617.app_demo.GameActivity
 import com.focus617.app_demo.engine.d2.Sandbox2D
+import com.focus617.app_demo.engine.d2.XGL2DResourceManager
 import com.focus617.app_demo.engine.d2.XGLRenderer2D
-import com.focus617.app_demo.engine.d2.XGLScene2D
 import com.focus617.app_demo.engine.d3.Sandbox3D
+import com.focus617.app_demo.engine.d3.XGL3DResourceManager
 import com.focus617.app_demo.engine.d3.XGLRenderer3D
-import com.focus617.app_demo.engine.d3.XGLResourceManager
 import com.focus617.app_demo.engine.input.GestureInput
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
@@ -119,8 +119,8 @@ class AndroidWindow private constructor(
 
                 // 创建并设置渲染器（Renderer）以在GLSurfaceView上绘制
                 renderer =
-                    if(engine is Sandbox3D) XGLRenderer3D(engine.xglResourceManager as XGLResourceManager)
-                    else XGLRenderer2D((engine as Sandbox2D).scene as XGLScene2D)
+                    if(engine is Sandbox3D) XGLRenderer3D(engine.xglResourceManager as XGL3DResourceManager)
+                    else XGLRenderer2D((engine as Sandbox2D).xglResourceManager as XGL2DResourceManager)
 
                 setRenderer(renderer as Renderer)
                 mRenderer = renderer

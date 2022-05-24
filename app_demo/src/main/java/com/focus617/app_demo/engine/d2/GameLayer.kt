@@ -10,7 +10,7 @@ import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
 
-class GameLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
+class GameLayer(name: String, private val scene: XGL2DResourceManager) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
 
     override fun initOpenGlResource() { }
@@ -55,13 +55,13 @@ class GameLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
 
             // 构造SubTexture
             val textureTree = SubTexture2D.createFromCoords(
-                XGLTextureSlots.TextureSlots[XGLScene2D.textureAltasIndex] as Texture2D,
+                XGLTextureSlots.TextureSlots[XGL2DResourceManager.textureAltasIndex] as Texture2D,
                 Vector2(0f, 10f),       // SubTexture Coords（原点在左上角，Y轴向下）
                 Vector2(128f, 128f),    // sprite size
                 Vector2(1f, 2f)         // cell size
             )
             val textureBarrel = SubTexture2D.createFromCoords(
-                XGLTextureSlots.TextureSlots[XGLScene2D.textureAltasIndex] as Texture2D,
+                XGLTextureSlots.TextureSlots[XGL2DResourceManager.textureAltasIndex] as Texture2D,
                 Vector2(6f, 12f),        // SubTexture Coords
                 Vector2(128f, 128f)     // SubTexture Size
             )

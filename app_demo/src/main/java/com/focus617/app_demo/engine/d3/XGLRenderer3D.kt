@@ -24,7 +24,7 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer3D(
-    private val xglResourceManager: XGLResourceManager
+    private val xglResourceManager: XGL3DResourceManager
 ) : BaseEntity(), IfRenderer, GLSurfaceView.Renderer {
 
     private lateinit var mFrameBuffer: XGLFrameBuffer

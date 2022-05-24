@@ -5,32 +5,30 @@ import com.focus617.core.engine.ecs.fleks.Entity
 import com.focus617.core.engine.ecs.fleks.IteratingSystem
 import com.focus617.core.engine.ecs.mine.component.CameraMatrix
 import com.focus617.core.engine.math.Mat4
+import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.XMatrix
-import com.focus617.core.engine.math.pitchClamp
-import com.focus617.core.engine.math.yawClamp
 import com.focus617.core.engine.scene_graph.components.camera.Camera
-import com.focus617.core.engine.scene_graph.components.camera.PerspectiveCamera
+import com.focus617.core.engine.scene_graph.components.camera.OrthographicCamera
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.screenTouchEvents.*
-import com.focus617.core.platform.event.sensorEvents.SensorRotationEvent
 import com.focus617.mylib.helper.DateHelper
 import com.focus617.mylib.logging.ILoggable
 import com.focus617.mylib.logging.WithLogging
 
-@AllOf([CameraMatrix::class, PerspectiveCamera::class])
-class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
+@AllOf([CameraMatrix::class, OrthographicCamera::class])
+class OrthographicCameraSystem : IteratingSystem(), ILoggable {
     private val LOG = logger()
 
     private val matrixMapper = world.mapper<CameraMatrix>()
 
     init{
-        LOG.info("PerspectiveCameraSystem launched.")
+        LOG.info("OrthographicCameraSystem launched.")
     }
 
     override fun onTickEntity(entity: Entity) {
-        LOG.info("PerspectiveCameraSystem onTickEntity.")
+        LOG.info("OrthographicCameraSystem onTickEntity.")
         if (isDirty) {
-            reCalculatePerspectiveProjectionMatrix()
+            reCalculateOrthoGraphicProjectionMatrix()
             isDirty = false
         }
 
@@ -40,7 +38,7 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
     }
 
     companion object: WithLogging() {
-        private val mCamera = PerspectiveCamera()
+        private val mCamera = OrthographicCamera()
         private val mProjectionMatrix = Mat4()
 
         fun getCamera(): Camera = mCamera as Camera
@@ -82,18 +80,14 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
 
                 is TouchDragEvent -> {
                     LOG.info("CameraSystem: on TouchDragEvent")
-                    val sensitivity = 10f
                     val deltaX = event.x - previousX
                     val deltaY = event.y - previousY
 
                     previousX = event.x
                     previousY = event.y
 
-                    pitchX += deltaY / sensitivity
-                    yawY += deltaX / sensitivity
-                    pitchX = pitchClamp(pitchX)
-                    yawY = yawClamp(yawY)
-                    setRotation(pitchX, yawY)
+                    val translation = Vector3(-deltaX, deltaY, 0f)
+                    translate(translation * 0.001f)
 
                     event.handleFinished()
                 }
@@ -124,15 +118,15 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
                     event.handleFinished()
                 }
 
-                is SensorRotationEvent -> {
+//                is SensorRotationEvent -> {
 //                LOG.info("CameraSystem: on SensorRotationEvent")
-                    setRotation(-event.pitchXInDegree, -event.yawYInDegree)
-                    when (event.yawYInDegree.toInt()) {
-                        in 0..180 -> setRotation(event.rollZInDegree)
-                        else -> setRotation(-event.rollZInDegree)
-                    }
-                    event.handleFinished()
-                }
+//                    setRotation(-event.pitchXInDegree, -event.yawYInDegree)
+//                    when (event.yawYInDegree.toInt()) {
+//                        in 0..180 -> setRotation(event.rollZInDegree)
+//                        else -> setRotation(-event.rollZInDegree)
+//                    }
+//                    event.handleFinished()
+//                }
 
                 else -> {
                     LOG.info("CameraSystem: ${event.name} from ${event.source} received")
@@ -150,54 +144,53 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
             setDirty()
         }
 
+        private fun translate(normalizedVector3: Vector3) {
+            with(mCamera) {
+                setPosition(getPosition().translate(normalizedVector3))
+            }
+        }
+
         private fun setZoomLevel(level: Float) {
             mZoomLevel = level
             setDirty()
         }
 
-        private fun setRotation(pitchX: Float = 0f, yawY: Float) {
-            mCamera.setRotation(pitchX, yawY)
-        }
-
-        private fun setRotation(rollZ: Float) {
-            mCamera.setRotation(rollZ)
-        }
-
-        private fun reCalculatePerspectiveProjectionMatrix() {
+        private fun reCalculateOrthoGraphicProjectionMatrix() {
             val matrix = FloatArray(16)
 
-            // 计算透视投影矩阵 (Project Matrix)
+            // 计算正交投影矩阵 (Project Matrix)
+            // 默认绘制的区间在横轴[-1.7778f, 1.778f]，纵轴[-1, 1]之间
             if (mWidth > mHeight) {
                 // Landscape
                 val aspect: Float = mWidth.toFloat() / mHeight.toFloat()
                 val ratio = aspect * mZoomLevel
-                XMatrix.frustumM(
+                // 用ZoomLevel来表示top，因为拉近镜头时，ZoomLevel变大，而对应可见区域会变小
+                XMatrix.orthoM(
                     matrix,
                     0,
                     -ratio,
                     ratio,
                     -mZoomLevel,
                     mZoomLevel,
-                    0.1f,
-                    100f
+                    -1.0f,
+                    1.0f
                 )
             } else {
                 // Portrait or Square
                 val aspect: Float = mHeight.toFloat() / mWidth.toFloat()
                 val ratio = aspect * mZoomLevel
-                XMatrix.frustumM(
+                XMatrix.orthoM(
                     matrix,
                     0,
                     -mZoomLevel,
                     mZoomLevel,
                     -ratio,
                     ratio,
-                    0.1f,
-                    100f
+                    -1.0f,
+                    1.0f
                 )
             }
             mProjectionMatrix.setValue(matrix)
         }
-
     }
 }

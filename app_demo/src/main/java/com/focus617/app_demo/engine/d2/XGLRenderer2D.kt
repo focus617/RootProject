@@ -1,6 +1,8 @@
 package com.focus617.app_demo.engine.d2
 
 import android.opengl.GLSurfaceView
+import com.focus617.core.engine.ecs.mine.system.OrthographicCameraSystem
+import com.focus617.core.engine.ecs.mine.system.RenderSystem
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Point2D
 import com.focus617.core.engine.math.Point3D
@@ -19,7 +21,7 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer2D(
-    private val scene: XGLScene2D
+    private val scene: XGL2DResourceManager
 ) : BaseEntity(), IfRenderer, GLSurfaceView.Renderer, Closeable {
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
@@ -45,7 +47,7 @@ class XGLRenderer2D(
         // 设置渲染的OpenGL场景（视口）的位置和大小
         RenderCommand.setViewport(0, 0, width, height)
 
-        scene.mCameraController.onWindowSizeChange(width, height)
+        OrthographicCameraSystem.onWindowSizeChange(width, height)
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -66,8 +68,8 @@ class XGLRenderer2D(
         XGLContext.checkGLError("before beginScene")
         with(Renderer2DData.TextureShader) {
             bind()
-            setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
-            setMat4("u_ViewMatrix", SceneData.sViewMatrix)
+            setMat4("u_ProjectionMatrix", RenderSystem.SceneData.sProjectionMatrix)
+            setMat4("u_ViewMatrix", RenderSystem.SceneData.sViewMatrix)
             setMat4("u_ModelMatrix", Mat4())
         }
     }

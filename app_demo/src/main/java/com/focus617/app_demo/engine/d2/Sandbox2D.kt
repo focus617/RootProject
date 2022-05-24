@@ -4,7 +4,7 @@ import android.content.Context
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
-import com.focus617.core.engine.scene_graph.scene.Scene
+import com.focus617.core.engine.ecs.mine.system.OrthographicCameraSystem
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
@@ -12,18 +12,18 @@ import java.io.Closeable
 
 class Sandbox2D(context: Context) : Engine(), Closeable {
     // Create root entity
-    var scene: Scene = XGLScene2D(context, this)
+    var xglResourceManager = XGL2DResourceManager(context, this)
 
     init {
-        pushLayer(MapLayer("MayLayer", scene as XGLScene2D))
-        pushLayer(GameLayer("GameLayer", scene as XGLScene2D))
+        pushLayer(MapLayer("MapLayer", xglResourceManager))
+        pushLayer(GameLayer("GameLayer", xglResourceManager))
 
     }
 
     fun getLayerStack(): LayerStack = mLayerStack
 
     override fun close() {
-        scene.close()
+        xglResourceManager.close()
     }
 
     override fun onAttachWindow(window: IfWindow) {
@@ -37,15 +37,6 @@ class Sandbox2D(context: Context) : Engine(), Closeable {
     }
 
     override fun beforeUpdate() {
-        // 在多线程渲染里，会把BeginScene函数放在RenderCommandQueue里执行
-        // camera在多线程渲染的时候不能保证主线程是否正在更改Camera的相关信息
-        scene?.mCameraController?.let {
-            synchronized(it) {
-                XGLRenderer2D.SceneData.sProjectionMatrix.setValue(it.getProjectionMatrix())
-                XGLRenderer2D.SceneData.sViewMatrix.setValue(it.getCamera().getViewMatrix())
-            }
-        }
-
         Renderer2DData.resetVertexBuffer()
         XGLTextureSlots.resetTextureSlot()
     }
@@ -63,30 +54,27 @@ class Sandbox2D(context: Context) : Engine(), Closeable {
         eventDispatcher.register(EventType.TouchDrag) { event ->
             val e: TouchDragEvent = event as TouchDragEvent
             LOG.info("Engine: ${e.name} from ${e.source} received")
-//                LOG.info("It's type is ${e.eventType}")
-//                LOG.info("It's was submit at ${DateHelper.timeStampAsStr(e.timestamp)}")
-//                LOG.info("Current position is (${e.x}, ${e.y})\n")
-            val hasConsumed = scene.mCameraController.onEvent(event)
+            val hasConsumed = OrthographicCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.TouchPress) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event)
+            val hasConsumed = OrthographicCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchStart) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event)
+            val hasConsumed = OrthographicCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchEnd) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event)
+            val hasConsumed = OrthographicCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.Pinch) { event ->
-            val hasConsumed = scene.mCameraController.onEvent(event)
+            val hasConsumed = OrthographicCameraSystem.onEvent(event)
             hasConsumed
         }
     }

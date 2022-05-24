@@ -14,7 +14,7 @@ import java.io.Closeable
 
 class Sandbox3D(context: Context) : Engine(), Closeable {
     // Create root entity
-    var xglResourceManager = XGLResourceManager(context, this)
+    var xglResourceManager = XGL3DResourceManager(context, this)
 
     init {
         pushLayer(GamePlayerLayer("GamePlayerLayer", Game.world))
