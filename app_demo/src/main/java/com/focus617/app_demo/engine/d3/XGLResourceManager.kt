@@ -27,6 +27,7 @@ class XGLResourceManager(val context: Context, val engine: Sandbox3D) : Closeabl
         XGLTextureSlots.initUnderOpenGl()
         initShader()
         initTexture()
+        initModel()
         initGameObjects()
     }
 
@@ -36,10 +37,10 @@ class XGLResourceManager(val context: Context, val engine: Sandbox3D) : Closeabl
             FrameBufferEntity.ShaderFilePath
         ) as XGLShader
 
-        FrameBufferEntity.shaderOutlining = XGLShaderBuilder.createShader(
-            context,
-            FrameBufferEntity.ShaderOutliningFilePath
-        ) as XGLShader
+//        FrameBufferEntity.shaderOutlining = XGLShaderBuilder.createShader(
+//            context,
+//            FrameBufferEntity.ShaderOutliningFilePath
+//        ) as XGLShader
 
         TextEntity2D.shaderWithColor = XGLShaderBuilder.createShader(
             context,
@@ -81,6 +82,9 @@ class XGLResourceManager(val context: Context, val engine: Sandbox3D) : Closeabl
         SkyBox.initMaterial(context)
         Heightmap.initMaterial(context)
         Box.initMaterial(context)
+    }
+
+    private fun initModel() {
         ModelTest.initModel(context)
         ModelCoord.initModel(context)
     }
