@@ -1,20 +1,30 @@
 package com.focus617.core.ecs.mine.system
 
 import com.focus617.core.ecs.fleks.AllOf
-import com.focus617.core.ecs.fleks.ComponentMapper
 import com.focus617.core.ecs.fleks.Entity
 import com.focus617.core.ecs.fleks.IteratingSystem
-import com.focus617.core.ecs.fleks.collection.compareEntity
-import com.focus617.core.ecs.mine.component.Position
+import com.focus617.core.ecs.mine.component.CameraMatrix
+import com.focus617.core.engine.math.Mat4
+import com.focus617.mylib.logging.ILoggable
 
-@AllOf([Position::class])
-class RenderSystem(
-    private val positions: ComponentMapper<Position>
-) : IteratingSystem(compareEntity {
-        entA, entB -> positions[entA].position.y.compareTo(positions[entB].position.y)
-}) {
+@AllOf([CameraMatrix::class])
+class RenderSystem : IteratingSystem(), ILoggable {
+    private val LOG = logger()
+
+    private val matrixMapper = world.mapper<CameraMatrix>()
+
+    init{
+        LOG.info("RenderSystem launched.")
+    }
 
     override fun onTickEntity(entity: Entity) {
-        // render entities: entities are sorted by their y-coordinate
+        val matrix = matrixMapper[entity]
+        sProjectionMatrix.setValue(matrix.projectionMatrix)
+        sViewMatrix.setValue(matrix.viewMatrix)
+    }
+
+    companion object SceneData {
+        var sProjectionMatrix: Mat4 = Mat4()
+        var sViewMatrix: Mat4 = Mat4()
     }
 }

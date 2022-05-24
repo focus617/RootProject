@@ -3,30 +3,32 @@ package com.focus617.core.ecs.mine.system
 import com.focus617.core.ecs.fleks.AllOf
 import com.focus617.core.ecs.fleks.Entity
 import com.focus617.core.ecs.fleks.IteratingSystem
-import com.focus617.core.ecs.mine.component.Camera
 import com.focus617.core.ecs.mine.component.CameraMatrix
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.math.pitchClamp
 import com.focus617.core.engine.math.yawClamp
+import com.focus617.core.engine.scene_graph.components.camera.Camera
 import com.focus617.core.engine.scene_graph.components.camera.PerspectiveCamera
-import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.screenTouchEvents.*
 import com.focus617.core.platform.event.sensorEvents.SensorRotationEvent
 import com.focus617.mylib.helper.DateHelper
 import com.focus617.mylib.logging.ILoggable
+import com.focus617.mylib.logging.WithLogging
 
-@AllOf([Camera::class, CameraMatrix::class])
+@AllOf([CameraMatrix::class])
 class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
     private val LOG = logger()
 
     private val matrixMapper = world.mapper<CameraMatrix>()
 
-    override fun onTickEntity(entity: Entity) {
-        LOG.info("entity id = ${entity.id} ")
+    init{
+        LOG.info("PerspectiveCameraSystem launched.")
+    }
 
-        if(isDirty){
+    override fun onTickEntity(entity: Entity) {
+        if (isDirty) {
             reCalculatePerspectiveProjectionMatrix()
             isDirty = false
         }
@@ -36,10 +38,13 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
         matrix.viewMatrix.setValue(mCamera.getViewMatrix())
     }
 
-    companion object {
+    companion object: WithLogging() {
         private val mCamera = PerspectiveCamera()
         private val mProjectionMatrix = Mat4()
-//        private val mViewMatrix = Mat4()
+
+        fun getCamera(): Camera = mCamera as Camera
+        fun getProjectionMatrix(): Mat4 = mProjectionMatrix
+
         private var isDirty: Boolean = true
         fun setDirty() {
             isDirty = true
@@ -67,7 +72,7 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
         fun onEvent(event: Event): Boolean {
             when (event) {
                 is TouchPressEvent -> {
-                    BaseEntity.LOG.info("CameraController: on TouchPressEvent")
+                    LOG.info("CameraController: on TouchPressEvent")
                     mode = ControllerWorkingMode.Scroll
                     previousX = event.x
                     previousY = event.y
@@ -75,7 +80,7 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
                 }
 
                 is TouchDragEvent -> {
-                    BaseEntity.LOG.info("CameraController: on TouchDragEvent")
+                    LOG.info("CameraController: on TouchDragEvent")
                     val sensitivity = 10f
                     val deltaX = event.x - previousX
                     val deltaY = event.y - previousY
@@ -93,7 +98,7 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
                 }
 
                 is PinchStartEvent -> {
-                    BaseEntity.LOG.info("CameraController: on PinchStartEvent")
+                    LOG.info("CameraController: on PinchStartEvent")
                     // 记录下本轮缩放操作的基准
                     previousZoomLevel = mZoomLevel
                     previousSpan = event.span
@@ -106,15 +111,15 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
                         // 根据双指间距的变化，计算相对变化量
                         val scaleFactor = previousSpan / event.span
                         setZoomLevel(previousZoomLevel * scaleFactor)
-                        BaseEntity.LOG.info("CameraController: on PinchEvent, ZoomLevel=$mZoomLevel")
+                        LOG.info("CameraController: on PinchEvent, ZoomLevel=$mZoomLevel")
                     }
                     event.handleFinished()
                 }
 
                 is PinchEndEvent -> {
-                    BaseEntity.LOG.info("CameraController: on PinchEndEvent")
+                    LOG.info("CameraController: on PinchEndEvent")
                     mode = ControllerWorkingMode.Scroll
-                    BaseEntity.LOG.info("CameraController: on PinchEndEvent, ZoomLevel=$mZoomLevel")
+                    LOG.info("CameraController: on PinchEndEvent, ZoomLevel=$mZoomLevel")
                     event.handleFinished()
                 }
 
@@ -129,9 +134,9 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
                 }
 
                 else -> {
-                    BaseEntity.LOG.info("CameraController: ${event.name} from ${event.source} received")
-                    BaseEntity.LOG.info("It's type is ${event.eventType}")
-                    BaseEntity.LOG.info("It's was submit at ${DateHelper.timeStampAsStr(event.timestamp)}")
+                    LOG.info("CameraController: ${event.name} from ${event.source} received")
+                    LOG.info("It's type is ${event.eventType}")
+                    LOG.info("It's was submit at ${DateHelper.timeStampAsStr(event.timestamp)}")
                 }
             }
 
@@ -141,7 +146,12 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
         fun onWindowSizeChange(width: Int, height: Int) {
             mWidth = width
             mHeight = height
-            reCalculatePerspectiveProjectionMatrix()
+            setDirty()
+        }
+
+        private fun setZoomLevel(level: Float) {
+            mZoomLevel = level
+            setDirty()
         }
 
         private fun setRotation(pitchX: Float = 0f, yawY: Float) {
@@ -150,11 +160,6 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
 
         private fun setRotation(rollZ: Float) {
             mCamera.setRotation(rollZ)
-        }
-
-        private fun setZoomLevel(level: Float) {
-            mZoomLevel = level
-            reCalculatePerspectiveProjectionMatrix()
         }
 
         private fun reCalculatePerspectiveProjectionMatrix() {
@@ -192,5 +197,6 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
             }
             mProjectionMatrix.setValue(matrix)
         }
+
     }
 }

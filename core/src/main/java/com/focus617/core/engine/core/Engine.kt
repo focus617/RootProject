@@ -1,14 +1,6 @@
 package com.focus617.core.engine.core
 
-import com.focus617.core.ecs.fleks.Entity
-import com.focus617.core.ecs.fleks.World
-import com.focus617.core.ecs.mine.component.Camera
-import com.focus617.core.ecs.mine.component.CameraMatrix
-import com.focus617.core.ecs.mine.component.PositionComponentListener
-import com.focus617.core.ecs.mine.component.Relationship
-import com.focus617.core.ecs.mine.static.setParent
-import com.focus617.core.ecs.mine.system.DayNightSystem
-import com.focus617.core.ecs.mine.system.PerspectiveCameraSystem
+import com.focus617.core.ecs.mine.static.Game
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
@@ -27,42 +19,9 @@ open class Engine : BaseEntity(), Runnable, Closeable {
 
     protected val eventDispatcher = EventDispatcher()
 
-    /** ++++++++ 构建 ECS ++++++++++ */
-    private val eventManager = DayNightSystem.EventManager()
-
-    val ecsScene: Entity
-    val camera: Entity
-
-    val world = World {
-        entityCapacity = 600
-
-        system<PerspectiveCameraSystem>()
-
-//        system<DayNightSystem>()
-//        inject(eventManager)
-
-        // register the listener to the world
-        componentListener<PositionComponentListener>()
-    }
-
-    /** +++++++++++++++++++++++++++ */
-
     init {
         threadCore = Thread(this)
         threadCore!!.start()
-
-        /** ++++++++ 构建 ECS ++++++++++ */
-        ecsScene = world.entity {
-            add<Relationship>()
-        }
-
-        camera = world.entity {
-            add<Camera>()
-            add<CameraMatrix>()
-            add<Relationship>()
-        }
-        camera.setParent(ecsScene)
-        /** +++++++++++++++++++++++++++ */
     }
 
     /**
@@ -117,21 +76,12 @@ open class Engine : BaseEntity(), Runnable, Closeable {
              * 注意, 这里time - m_LastFrameTIme, 正好算的应该是当前帧所经历的时间,
              * 而不是上一帧经历的时间
              */
-            /**
-             * 全平台通用的封装的API
-             * 虽然不同机器执行一次Loop函数的用时不同，但只要把每一帧里的运动，
-             * 跟该帧所经历的时间相乘，就能抵消因为帧率导致的数据不一致的问题。
-             * 注意, 这里time - m_LastFrameTIme, 正好算的应该是当前帧所经历的时间,
-             * 而不是上一帧经历的时间
-             */
             val time: Long = System.currentTimeMillis()
             val timeStep: TimeStep = TimeStep(time - mLastFrameTime)
             mLastFrameTime = time
 
-            // Update global data, such as scene
-            this.onUpdate(timeStep)
-            // Plan to replace above with ECS
-            world.update(timeStep.getMilliSecond().toFloat())
+            // Update ECS world
+            Game.world.update(timeStep.getMilliSecond().toFloat())
 
             // Update game objects in each layer
             beforeUpdate()
@@ -159,7 +109,7 @@ open class Engine : BaseEntity(), Runnable, Closeable {
     }
 
     // Used for updating the global resource, such as objects in scene
-    open fun onUpdate(timeStep: TimeStep) {}
+//    open fun onUpdate(timeStep: TimeStep) {}
 
     fun pushLayer(layer: Layer) {
         mLayerStack.PushLayer(layer)

@@ -7,7 +7,7 @@ import com.focus617.opengles.scene_graph.XGLDrawableObject
 
 class ModelTest: GeometryEntity(), XGLDrawableObject {
     init {
-        shaderName = XGLScene3D.CommonShader
+        shaderName = XGLResourceManager.CommonShader
     }
 
 

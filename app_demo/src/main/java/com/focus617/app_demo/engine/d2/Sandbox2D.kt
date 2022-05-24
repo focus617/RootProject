@@ -4,7 +4,6 @@ import android.content.Context
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
-import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene_graph.scene.Scene
 import com.focus617.core.platform.event.base.EventType
@@ -59,9 +58,6 @@ class Sandbox2D(context: Context) : Engine(), Closeable {
 //        )
     }
 
-    override fun onUpdate(timeStep: TimeStep) {
-        scene?.onUpdate(timeStep)
-    }
 
     // 处理各种触屏事件，例如可能引起相机位置变化的事件
     private fun registerEventHandlers() {

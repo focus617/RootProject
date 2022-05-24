@@ -1,13 +1,7 @@
 package com.focus617.app_demo.engine.d3
 
 import android.content.Context
-import com.focus617.core.engine.core.TimeStep
-import com.focus617.core.engine.scene_graph.components.PointLight
-import com.focus617.core.engine.scene_graph.components.camera.PerspectiveCamera
-import com.focus617.core.engine.scene_graph.components.camera.PerspectiveCameraController
-import com.focus617.core.engine.scene_graph.core.NodeEntity
-import com.focus617.core.engine.scene_graph.core.Transform
-import com.focus617.core.engine.scene_graph.scene.Scene
+import com.focus617.core.engine.renderer.shader.ShaderLibrary
 import com.focus617.opengles.renderer.framebuffer.FrameBufferEntity
 import com.focus617.opengles.renderer.shader.XGLShader
 import com.focus617.opengles.renderer.shader.XGLShaderBuilder
@@ -16,19 +10,16 @@ import com.focus617.opengles.terrain.Heightmap
 import com.focus617.opengles.terrain.SkyBox
 import com.focus617.opengles.text.TextEntity2D
 import com.focus617.opengles.text.TextEntity3D
+import java.io.Closeable
 
 /**
  * Scene is root entity for all Game Entities.
  */
-class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
+class XGLResourceManager(val context: Context, val engine: Sandbox3D) : Closeable {
+    val mShaderLibrary = ShaderLibrary()
 
-    init {
-        mLight = PointLight()
-        addComponent(mLight)
-        mCamera = PerspectiveCamera()
-        addComponent(mCamera)
-        mCameraController = PerspectiveCameraController(mCamera as PerspectiveCamera)
-        addComponent(mCameraController)
+    override fun close() {
+        mShaderLibrary.close()
     }
 
     fun initOpenGlResource() {
@@ -105,14 +96,8 @@ class XGLScene3D(val context: Context, val engine: Sandbox3D) : Scene() {
         }
     }
 
-    // Used for updating the global resource, such as objects in scene
-    override fun onUpdate(timeStep: TimeStep) {
-        // Update Camera
-        mCameraController.onUpdate(timeStep, Transform(NodeEntity()))
 
-    }
-
-    companion object{
+    companion object {
         private const val SHADER_PATH = "common"
         private const val SHADER_FILE = "ShaderWithTextureAndLight.glsl"
         const val CommonShader = "$SHADER_PATH/$SHADER_FILE"

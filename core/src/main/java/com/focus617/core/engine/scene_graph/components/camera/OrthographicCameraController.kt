@@ -1,6 +1,5 @@
 package com.focus617.core.engine.scene_graph.components.camera
 
-import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.XMatrix
@@ -34,19 +33,6 @@ class OrthographicCameraController(camera: OrthographicCamera) : CameraControlle
         mWidth = width
         mHeight = height
         reCalculateOrthoGraphicProjectionMatrix()
-    }
-
-    private var mCameraRotation: Float = 0F
-    override fun onUpdate(timeStep: TimeStep, transform: Transform?) {
-        val mCameraRotationSpeed: Float = 0.01F
-
-        //mCameraRotation += timeStep.getMilliSecond() * mCameraRotationSpeed
-        if (mCameraRotation > 180.0f)
-            mCameraRotation -= 360.0f;
-        else if (mCameraRotation <= -180.0f)
-            mCameraRotation += 360.0f;
-
-        setRotation(mCameraRotation)
     }
 
     private var previoudZoomLevel: Float = 1.0f
@@ -158,7 +144,12 @@ class OrthographicCameraController(camera: OrthographicCamera) : CameraControlle
     }
 
     fun setRotation(rollZ: Float = 90f) {
-        mCamera.setRotation(rollZ)
+        var rotation = rollZ
+        if (rotation > 180.0f)
+            rotation -= 360.0f;
+        else if (rotation <= -180.0f)
+            rotation += 360.0f;
+        mCamera.setRotation(rotation)
     }
 
     fun setPosition(position: Point3D) {

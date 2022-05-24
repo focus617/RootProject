@@ -2,16 +2,14 @@ package com.focus617.app_demo.engine.d3
 
 import android.opengl.GLSurfaceView
 import com.focus617.core.ecs.mine.system.PerspectiveCameraSystem
+import com.focus617.core.ecs.mine.system.RenderSystem
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferAttachmentSpecification
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferSpecification
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureFormat
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureSpecification
-import com.focus617.core.engine.renderer.shader.Shader
-import com.focus617.core.engine.renderer.vertex.VertexArray
 import com.focus617.core.engine.resource.baseDataType.Color
-import com.focus617.core.engine.scene_graph.components.camera.CameraController
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_PROJECT_MATRIX
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_VIEW_MATRIX
 import com.focus617.opengles.egl.XGLContext
@@ -24,7 +22,9 @@ import com.focus617.opengles.text.TextLayer2D
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.Renderer {
+class XGLRenderer3D(
+    private val xglResourceManager: XGLResourceManager
+) : XRenderer(), GLSurfaceView.Renderer {
 
     private lateinit var mFrameBuffer: XGLFrameBuffer
 
@@ -34,7 +34,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
 
         // TODO: 当前的问题是，必须在opengl线程才能调用opengl api，无法在主线程调用。
         // 调用scene.initOpenGlResource, 因为涉及opengl api, 只好在这里调用
-        scene.initOpenGlResource()
+        xglResourceManager.initOpenGlResource()
 
         RenderCommand.init()
         // 设置重绘背景框架颜色
@@ -62,12 +62,11 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         // 设置渲染的OpenGL场景（视口）的位置和大小
         RenderCommand.setViewport(0, 0, width, height)
 
-        scene.mCameraController.onWindowSizeChange(width, height)
         PerspectiveCameraSystem.onWindowSizeChange(width, height)
 
         mFrameBuffer.resizeColorAttachment(width, height)
         TextLayer2D.onWindowSizeChange(width, height)   // used for text on screen
-        TextEntity3D.onWindowSizeChange(width, height)      // used for projection matrix
+        TextEntity3D.onWindowSizeChange(width, height)  // used for projection matrix
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -75,7 +74,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         // First pass: draw on FrameBuffer
         mFrameBuffer.bind()
 
-        beginScene(scene.mCameraController)
+        beginScene()
 
         // 清理屏幕，重绘背景颜色
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1.0F))
@@ -83,20 +82,18 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
 
         XGLTextureSlots.flush()
 
-        val layerStack = scene.engine.getLayerStack()
+        val layerStack = xglResourceManager.engine.getLayerStack()
         for (layer in layerStack.mLayers) {
             layer.beforeDrawFrame()
             for (gameObject in layer.gameObjectList) {
-                val shader = scene.mShaderLibrary.get(gameObject.shaderName)
+                val shader = xglResourceManager.mShaderLibrary.get(gameObject.shaderName)
 
                 shader?.apply {
                     bind()
-                    scene.onRender(shader)
-
 //                  LOG.info(XMatrix.toString(SceneData.sProjectionMatrix, matrixName = "ProjectionMatrix"))
 //                  LOG.info(XMatrix.toString(SceneData.sViewMatrix, matrixName = "ViewMatrix"))
-                    setMat4(U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
-                    setMat4(U_VIEW_MATRIX, SceneData.sViewMatrix)
+                    setMat4(U_PROJECT_MATRIX, RenderSystem.SceneData.sProjectionMatrix)
+                    setMat4(U_VIEW_MATRIX, RenderSystem.SceneData.sViewMatrix)
 
                     if (gameObject.isSelected) {
                         gameObject.submitWithOutlining(shader, Color.GOLD)
@@ -108,20 +105,9 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
             layer.afterDrawFrame()
         }
 
-        val overLayerStack = scene.engine.getOverLayerStack()
+        val overLayerStack = xglResourceManager.engine.getOverLayerStack()
         for (layer in overLayerStack.mLayers) {
             layer.beforeDrawFrame() // 暂时先在这里DrawFrame
-
-//            for (gameObject in layer.gameObjectList) {
-//                val shader = scene.mShaderLibrary.get(gameObject.shaderName)
-//                shader?.apply {
-//                    if (gameObject.isSelected) {
-//                        gameObject.submitWithOutlining(shader, Color.GOLD)
-//                    } else {
-//                        gameObject.submit(shader)
-//                    }
-//                }
-//            }
             layer.afterDrawFrame()
         }
         endScene()
@@ -137,21 +123,6 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         mFrameBuffer.drawOnScreen()
 
         XGLContext.checkGLError("After onDrawFrame")
-    }
-
-
-    override fun beginScene(cameraController: CameraController) {
-        super.beginScene(cameraController)
-    }
-
-    override fun endScene() {
-    }
-
-    override fun submit(
-        shader: Shader,
-        vertexArray: VertexArray,
-        transform: FloatArray
-    ) {
     }
 
 }

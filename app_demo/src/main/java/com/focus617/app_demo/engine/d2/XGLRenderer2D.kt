@@ -10,7 +10,6 @@ import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.renderer.texture.SubTexture2D
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.engine.resource.baseDataType.Color
-import com.focus617.core.engine.scene_graph.components.camera.CameraController
 import com.focus617.opengles.egl.XGLContext
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
 import java.io.Closeable
@@ -51,7 +50,7 @@ class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
 
-        beginScene(scene.mCameraController)
+        beginScene()
 
         endScene()
     }
@@ -60,7 +59,7 @@ class XGLRenderer2D(private val scene: XGLScene2D) : XRenderer(), GLSurfaceView.
         Renderer2DData.close()
     }
 
-    override fun beginScene(cameraController: CameraController) {
+    override fun beginScene() {
         XGLContext.checkGLError("before beginScene")
         with(Renderer2DData.TextureShader) {
             bind()
