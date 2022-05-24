@@ -80,7 +80,7 @@ object XGLShaderHelper: BaseEntity() {
         fragmentShaderSource: String
     ): Int {
 
-        Timber.e("$TAG: buildProgram()")
+        Timber.d("$TAG: buildProgram()")
 
         val program: Int
 
