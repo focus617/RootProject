@@ -21,7 +21,7 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer2D(
-    private val scene: XGL2DResourceManager
+    private val xglResourceManager: XGL2DResourceManager
 ) : BaseEntity(), IfRenderer, GLSurfaceView.Renderer, Closeable {
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
@@ -30,7 +30,7 @@ class XGLRenderer2D(
 
         // TODO: 当前的问题是，必须在opengl线程才能调用opengl api，无法在主线程调用。
         // 调用scene.initOpenGlResource, 因为涉及opengl api, 只好在这里调用
-        scene.initOpenGlResource()
+        xglResourceManager.initOpenGlResource()
 
         RenderCommand.init()
         // 设置重绘背景框架颜色
