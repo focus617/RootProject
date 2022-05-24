@@ -1,6 +1,6 @@
 package com.focus617.core.engine.core
 
-import com.focus617.core.ecs.mine.static.Game
+import com.focus617.core.engine.ecs.mine.static.Game
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher

@@ -1,8 +1,8 @@
 package com.focus617.app_demo.engine.d3
 
 import android.opengl.GLSurfaceView
-import com.focus617.core.ecs.mine.system.PerspectiveCameraSystem
-import com.focus617.core.ecs.mine.system.RenderSystem
+import com.focus617.core.engine.ecs.mine.system.PerspectiveCameraSystem
+import com.focus617.core.engine.ecs.mine.system.RenderSystem
 import com.focus617.core.engine.renderer.IfRenderer
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferAttachmentSpecification
