@@ -1,8 +1,8 @@
 package com.focus617.opengles.renderer.framebuffer
 
 import android.opengl.GLES31.*
+import com.focus617.core.ecs.mine.system.RenderSystem
 import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.renderer.XRenderer.SceneData
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.engine.scene_graph.GeometryEntity
@@ -39,8 +39,8 @@ fun GeometryEntity.submitWithOutlining(
 
     with(FrameBufferEntity.shaderOutlining) {
         bind()
-        setMat4(U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
-        setMat4(U_VIEW_MATRIX, SceneData.sViewMatrix)
+        setMat4(U_PROJECT_MATRIX, RenderSystem.SceneData.sProjectionMatrix)
+        setMat4(U_VIEW_MATRIX, RenderSystem.SceneData.sViewMatrix)
         setFloat4(U_COLOR, color)
     }
     this.push()

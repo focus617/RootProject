@@ -3,8 +3,8 @@ package com.focus617.app_demo.engine.d3
 import android.opengl.GLSurfaceView
 import com.focus617.core.ecs.mine.system.PerspectiveCameraSystem
 import com.focus617.core.ecs.mine.system.RenderSystem
+import com.focus617.core.engine.renderer.IfRenderer
 import com.focus617.core.engine.renderer.RenderCommand
-import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferAttachmentSpecification
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferSpecification
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureFormat
@@ -12,6 +12,7 @@ import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureSpecifica
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_PROJECT_MATRIX
 import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_VIEW_MATRIX
+import com.focus617.core.platform.base.BaseEntity
 import com.focus617.opengles.egl.XGLContext
 import com.focus617.opengles.renderer.framebuffer.XGLFrameBuffer
 import com.focus617.opengles.renderer.framebuffer.XGLFrameBufferBuilder
@@ -24,7 +25,7 @@ import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer3D(
     private val xglResourceManager: XGLResourceManager
-) : XRenderer(), GLSurfaceView.Renderer {
+) : BaseEntity(), IfRenderer, GLSurfaceView.Renderer {
 
     private lateinit var mFrameBuffer: XGLFrameBuffer
 

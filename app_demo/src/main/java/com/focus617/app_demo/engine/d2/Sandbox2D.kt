@@ -4,7 +4,6 @@ import android.content.Context
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
-import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.scene_graph.scene.Scene
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
@@ -42,8 +41,8 @@ class Sandbox2D(context: Context) : Engine(), Closeable {
         // camera在多线程渲染的时候不能保证主线程是否正在更改Camera的相关信息
         scene?.mCameraController?.let {
             synchronized(it) {
-                XRenderer.sProjectionMatrix.setValue(it.getProjectionMatrix())
-                XRenderer.sViewMatrix.setValue(it.getCamera().getViewMatrix())
+                XGLRenderer2D.SceneData.sProjectionMatrix.setValue(it.getProjectionMatrix())
+                XGLRenderer2D.SceneData.sViewMatrix.setValue(it.getCamera().getViewMatrix())
             }
         }
 

@@ -16,8 +16,8 @@ import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.WindowProps
 import com.focus617.core.engine.renderer.IfGraphicsContext
+import com.focus617.core.engine.renderer.IfRenderer
 import com.focus617.core.engine.renderer.RenderCommand
-import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventHandler
 import com.focus617.opengles.egl.XGLContext
@@ -34,9 +34,9 @@ class AndroidWindow private constructor(
     override val LOG = logger()
 
     val mData = WindowData()
-    private lateinit var renderer: XRenderer
+    private lateinit var renderer: IfRenderer
 
-    override lateinit var mRenderer: XRenderer  // Used for Engine
+    override lateinit var mRenderer: IfRenderer  // Used for Engine
     override val mRenderContext: IfGraphicsContext = XGLContext(this)
 
     fun setDebug() {
