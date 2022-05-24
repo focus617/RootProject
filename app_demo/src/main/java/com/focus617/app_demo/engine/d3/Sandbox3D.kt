@@ -17,7 +17,7 @@ class Sandbox3D(context: Context) : Engine(), Closeable {
     var scene: Scene = XGLScene3D(context, this)
 
     init {
-        pushLayer(GamePlayerLayer("GamePlayerLayer", ecsScene))
+        pushLayer(GamePlayerLayer("GamePlayerLayer", world))
         pushLayer(TextLayer3D("TextLayer"))
         pushLayer(TerrainLayer("TerrainLayer", context))
         pushOverLayer(TextLayer2D("OverLayer"))

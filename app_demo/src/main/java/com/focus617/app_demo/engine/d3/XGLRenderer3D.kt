@@ -1,6 +1,7 @@
 package com.focus617.app_demo.engine.d3
 
 import android.opengl.GLSurfaceView
+import com.focus617.core.ecs.mine.system.PerspectiveCameraSystem
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.XRenderer
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferAttachmentSpecification
@@ -62,6 +63,7 @@ class XGLRenderer3D(private val scene: XGLScene3D) : XRenderer(), GLSurfaceView.
         RenderCommand.setViewport(0, 0, width, height)
 
         scene.mCameraController.onWindowSizeChange(width, height)
+        PerspectiveCameraSystem.onWindowSizeChange(width, height)
 
         mFrameBuffer.resizeColorAttachment(width, height)
         TextLayer2D.onWindowSizeChange(width, height)   // used for text on screen
