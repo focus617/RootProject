@@ -7,8 +7,8 @@ data class CameraMatrix(
     val viewMatrix: Mat4 = Mat4()
 )
 
-data class PerspectiveCamera(val mark: Int = 0)
+data class PerspectiveCameraCmp(val mark: Int = 0)
 
-data class OrthographicCamera(val mark: Int = 0)
+data class OrthographicCameraCmp(val mark: Int = 0)
 
 

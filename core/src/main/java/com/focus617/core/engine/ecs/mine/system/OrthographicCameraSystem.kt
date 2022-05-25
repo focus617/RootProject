@@ -4,6 +4,7 @@ import com.focus617.core.engine.ecs.fleks.AllOf
 import com.focus617.core.engine.ecs.fleks.Entity
 import com.focus617.core.engine.ecs.fleks.IteratingSystem
 import com.focus617.core.engine.ecs.mine.component.CameraMatrix
+import com.focus617.core.engine.ecs.mine.component.OrthographicCameraCmp
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.XMatrix
@@ -15,7 +16,7 @@ import com.focus617.mylib.helper.DateHelper
 import com.focus617.mylib.logging.ILoggable
 import com.focus617.mylib.logging.WithLogging
 
-@AllOf([CameraMatrix::class, OrthographicCamera::class])
+@AllOf([CameraMatrix::class, OrthographicCameraCmp::class])
 class OrthographicCameraSystem : IteratingSystem(), ILoggable {
     private val LOG = logger()
 
@@ -26,7 +27,7 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
     }
 
     override fun onTickEntity(entity: Entity) {
-        LOG.info("OrthographicCameraSystem onTickEntity.")
+//        LOG.info("OrthographicCameraSystem onTickEntity.")
         if (isDirty) {
             reCalculateOrthoGraphicProjectionMatrix()
             isDirty = false
@@ -41,7 +42,7 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
         private val mCamera = OrthographicCamera()
         private val mProjectionMatrix = Mat4()
 
-        fun getCamera(): Camera = mCamera as Camera
+        fun getCamera(): Camera = mCamera
         fun getProjectionMatrix(): Mat4 = mProjectionMatrix
 
         private var isDirty: Boolean = true
@@ -49,7 +50,7 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
             isDirty = true
         }
 
-        private var mZoomLevel: Float = 0.05f
+        private var mZoomLevel: Float = 0.85f
 
         // Viewport size
         private var mWidth: Int = 0
@@ -86,7 +87,7 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
                     previousX = event.x
                     previousY = event.y
 
-                    val translation = Vector3(-deltaX, deltaY, 0f)
+                    val translation = Vector3(deltaX, -deltaY, 0f)
                     translate(translation * 0.001f)
 
                     event.handleFinished()

@@ -4,6 +4,7 @@ import com.focus617.core.engine.ecs.fleks.AllOf
 import com.focus617.core.engine.ecs.fleks.Entity
 import com.focus617.core.engine.ecs.fleks.IteratingSystem
 import com.focus617.core.engine.ecs.mine.component.CameraMatrix
+import com.focus617.core.engine.ecs.mine.component.PerspectiveCameraCmp
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.math.pitchClamp
@@ -17,13 +18,13 @@ import com.focus617.mylib.helper.DateHelper
 import com.focus617.mylib.logging.ILoggable
 import com.focus617.mylib.logging.WithLogging
 
-@AllOf([CameraMatrix::class, PerspectiveCamera::class])
+@AllOf([CameraMatrix::class, PerspectiveCameraCmp::class])
 class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
     private val LOG = logger()
 
     private val matrixMapper = world.mapper<CameraMatrix>()
 
-    init{
+    init {
         LOG.info("PerspectiveCameraSystem launched.")
     }
 
@@ -39,11 +40,11 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
         matrix.viewMatrix.setValue(mCamera.getViewMatrix())
     }
 
-    companion object: WithLogging() {
+    companion object : WithLogging() {
         private val mCamera = PerspectiveCamera()
         private val mProjectionMatrix = Mat4()
 
-        fun getCamera(): Camera = mCamera as Camera
+        fun getCamera(): Camera = mCamera
         fun getProjectionMatrix(): Mat4 = mProjectionMatrix
 
         private var isDirty: Boolean = true

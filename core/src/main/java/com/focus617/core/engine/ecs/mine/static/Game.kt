@@ -3,7 +3,7 @@ package com.focus617.core.engine.ecs.mine.static
 import com.focus617.core.engine.ecs.fleks.Entity
 import com.focus617.core.engine.ecs.fleks.World
 import com.focus617.core.engine.ecs.mine.component.CameraMatrix
-import com.focus617.core.engine.ecs.mine.component.OrthographicCamera
+import com.focus617.core.engine.ecs.mine.component.OrthographicCameraCmp
 import com.focus617.core.engine.ecs.mine.component.Relationship
 import com.focus617.core.engine.ecs.mine.system.OrthographicCameraSystem
 import com.focus617.core.engine.ecs.mine.system.PerspectiveCameraSystem
@@ -29,7 +29,7 @@ object Game {
         }
 
         camera = world.entity {
-            add<OrthographicCamera>()
+            add<OrthographicCameraCmp>()
             add<CameraMatrix>()
             add<Relationship>()
         }
