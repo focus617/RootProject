@@ -9,6 +9,7 @@ import com.focus617.core.engine.ecs.mine.component.TransformMatrix
 import com.focus617.core.engine.ecs.mine.static.Game
 import com.focus617.core.engine.ecs.mine.static.setParent
 import com.focus617.core.engine.math.Mat4
+import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.renderer.texture.SubTexture2D
@@ -73,12 +74,12 @@ class GameLayer(name: String, private val resourceManager: XGL2DResourceManager)
             transformMapper[tree].transform.setValue(treeTransform)
 
             // 使用SubTexture绘制
-//            XGLRenderer2D.drawQuad(
-//                Point3D(0f, 0f, 1f),
-//                Vector2(1.0f, 2.0f),
-//                textureTree!!,
-//                1.0f
-//            )
+            XGLRenderer2D.drawQuad(
+                Point3D(0f, 0f, 1f),
+                Vector2(1.0f, 2.0f),
+                textureTree!!,
+                1.0f
+            )
 //            XGLRenderer2D.drawQuad(
 //                Point3D(0f, 0f, 2f),
 //                Vector2(1.0f, 1.0f),

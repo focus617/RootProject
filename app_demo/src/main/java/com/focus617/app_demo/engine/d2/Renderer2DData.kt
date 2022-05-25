@@ -213,10 +213,16 @@ object Renderer2DData : WithLogging(), Closeable {
         texIndex: Float,
         tilingFactor: Float
     ) {
-        if (QuadVertexNumber >= MaxVertices) {
-            LOG.error("Reach max vertices limitation.")
+        if(!initialized){
+            LOG.warn("Renderer2DData has not been initialized.")
             return
         }
+
+        if (QuadVertexNumber >= MaxVertices) {
+            LOG.error("Renderer2DData reach max vertices limitation.")
+            return
+        }
+
         put(position)
         put(color)
         put(texCoords)

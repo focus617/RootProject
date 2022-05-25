@@ -2,6 +2,7 @@ package com.focus617.app_demo.engine.d2
 
 import android.opengl.GLES31
 import android.opengl.GLSurfaceView
+import com.focus617.core.engine.ecs.mine.api.EcsRendererAPI
 import com.focus617.core.engine.ecs.mine.static.SceneData
 import com.focus617.core.engine.ecs.mine.system.OrthographicCameraSystem
 import com.focus617.core.engine.math.Mat4
@@ -145,7 +146,7 @@ class XGLRenderer2D(
 //        XGLTextureSlots.TextureSlotIndex = 1
 //    }
 
-    companion object {
+    companion object XGLEcsRendererAPI: EcsRendererAPI() {
         /**
          * 支持批处理 Batching Renderer后的 DrawQuad函数的做法是，每次调用 DrawQuad函数，
          * 就去动态填充Vertex Buffer里顶点的各项顶点属性数据。
@@ -223,7 +224,7 @@ class XGLRenderer2D(
             )
         }
 
-        fun drawQuad(
+        override fun drawQuad(
             transform: Mat4,
             color: Color
         ) {

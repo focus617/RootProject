@@ -10,7 +10,7 @@ abstract class EcsRendererAPI : WithLogging() {
         OpenGLES
     }
 
-    abstract fun DrawQuad(transform: Mat4, color: Color)
+    abstract fun drawQuad(transform: Mat4, color: Color)
 
     companion object {
         private val sEcsAPI: API = API.OpenGLES

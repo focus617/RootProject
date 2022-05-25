@@ -8,6 +8,6 @@ object EcsRenderCommand : BaseEntity() {
     var sEcsRendererAPI: EcsRendererAPI? = null
 
     fun DrawQuad(transform: Mat4, color: Color) {
-        sEcsRendererAPI?.DrawQuad(transform, color)
+        sEcsRendererAPI?.drawQuad(transform, color)
     }
 }
