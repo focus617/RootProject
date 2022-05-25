@@ -7,6 +7,7 @@ import com.focus617.core.engine.ecs.mine.component.OrthographicCameraCmp
 import com.focus617.core.engine.ecs.mine.component.Relationship
 import com.focus617.core.engine.ecs.mine.system.OrthographicCameraSystem
 import com.focus617.core.engine.ecs.mine.system.PerspectiveCameraSystem
+import com.focus617.core.engine.ecs.mine.system.Render2DSystem
 
 object Game {
     val world = World {
@@ -14,7 +15,8 @@ object Game {
 
         system<PerspectiveCameraSystem>()
         system<OrthographicCameraSystem>()
-//        system<Render2DSystem>()
+        system<Render2DSystem>()
+
     }
 
     /** ++++++++ ECS的公共组件 ++++++++++ */

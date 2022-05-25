@@ -223,7 +223,7 @@ class XGLRenderer2D(
             )
         }
 
-        fun drawRotatedQuad(
+        fun drawQuad(
             transform: Mat4,
             color: Color
         ) {
@@ -277,7 +277,7 @@ class XGLRenderer2D(
             val transform: Mat4 = Mat4().transform2D(position.toVector3(), size, rotationInDegree)
             //LOG.info(transform.toString("Transform Matrix"))
 
-            drawRotatedQuad(transform, color)
+            drawQuad(transform, color)
         }
 
         fun drawRotatedQuad(
@@ -290,7 +290,7 @@ class XGLRenderer2D(
         }
 
 
-        fun drawRotatedQuad(
+        fun drawQuad(
             transform: Mat4,
             texture: Texture2D,
             tilingFactor: Float = 1.0f,
@@ -342,7 +342,7 @@ class XGLRenderer2D(
         ) {
             val transform: Mat4 = Mat4().transform2D(position.toVector3(), size, rotationInDegree)
             //LOG.info(transform.toString("Transform Matrix"))
-            drawRotatedQuad(transform, texture, tilingFactor, tintColor)
+            drawQuad(transform, texture, tilingFactor, tintColor)
         }
 
         fun drawRotatedQuad(
@@ -364,7 +364,7 @@ class XGLRenderer2D(
         }
 
 
-        fun drawRotatedQuad(
+        fun drawQuad(
             transform: Mat4,
             subTexCoords: SubTexture2D,
             tilingFactor: Float = 1.0f,
@@ -397,7 +397,7 @@ class XGLRenderer2D(
         ) {
             val transform: Mat4 = Mat4().transform2D(position.toVector3(), size, rotationInDegree)
             //LOG.info(transform.toString("Transform Matrix"))
-            drawRotatedQuad(transform, subTexCoords, tilingFactor, tintColor)
+            drawQuad(transform, subTexCoords, tilingFactor, tintColor)
         }
 
         fun drawRotatedQuad(

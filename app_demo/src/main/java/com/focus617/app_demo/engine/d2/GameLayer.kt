@@ -68,7 +68,7 @@ class GameLayer(name: String, private val resourceManager: XGL2DResourceManager)
         if (Renderer2DData.initialized && resourceManager.initialized) {
 
             val treeTransform = Mat4().transform2D(
-                Vector3(0f, 0f, 1f), Vector2(1.0f, 2.0f), 0f
+                Vector3(0f, 0f, 0f), Vector2(1.0f, 1.0f), 0f
             )
             transformMapper[tree].transform.setValue(treeTransform)
 

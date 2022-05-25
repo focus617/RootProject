@@ -15,7 +15,7 @@ class Sandbox2D(context: Context) : Engine(), Closeable {
     var xglResourceManager = XGL2DResourceManager(context, this)
 
     init {
-        pushLayer(MapLayer("MapLayer", xglResourceManager))
+//        pushLayer(MapLayer("MapLayer", xglResourceManager))
         pushLayer(GameLayer("GameLayer", xglResourceManager))
 
     }

@@ -3,6 +3,7 @@ package com.focus617.core.engine.ecs.mine.system
 import com.focus617.core.engine.ecs.fleks.AllOf
 import com.focus617.core.engine.ecs.fleks.Entity
 import com.focus617.core.engine.ecs.fleks.IteratingSystem
+import com.focus617.core.engine.ecs.mine.api.EcsRenderCommand
 import com.focus617.core.engine.ecs.mine.component.Sprite
 import com.focus617.core.engine.ecs.mine.component.TransformMatrix
 import com.focus617.mylib.logging.ILoggable
@@ -11,17 +12,21 @@ import com.focus617.mylib.logging.ILoggable
 class Render2DSystem : IteratingSystem(), ILoggable {
     private val LOG = logger()
 
-    private val matrixMapper = world.mapper<TransformMatrix>()
+    private val transformMapper = world.mapper<TransformMatrix>()
+    private val spriteMapper = world.mapper<Sprite>()
 
     init {
-        LOG.info("RenderSystem launched.")
+        LOG.info("Render2DSystem launched.")
     }
 
     override fun onTickEntity(entity: Entity) {
-        val matrix = matrixMapper[entity]
-        // 使用SubTexture绘制
+//        LOG.info("Render2DSystem onTickEntity.")
 
+        val transform = transformMapper[entity]
+        val sprite = spriteMapper[entity]
+
+        // 绘制
+        EcsRenderCommand.DrawQuad(transform.transform, sprite.color)
     }
-
 
 }

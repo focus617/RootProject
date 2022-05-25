@@ -11,10 +11,12 @@ import com.focus617.app_demo.engine.d2.XGLRenderer2D
 import com.focus617.app_demo.engine.d3.Sandbox3D
 import com.focus617.app_demo.engine.d3.XGL3DResourceManager
 import com.focus617.app_demo.engine.d3.XGLRenderer3D
+import com.focus617.app_demo.engine.ecs.XGLEcsRendererAPI
 import com.focus617.app_demo.engine.input.GestureInput
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.WindowProps
+import com.focus617.core.engine.ecs.mine.api.EcsRenderCommand
 import com.focus617.core.engine.renderer.IfGraphicsContext
 import com.focus617.core.engine.renderer.IfRenderer
 import com.focus617.core.engine.renderer.RenderCommand
@@ -86,7 +88,7 @@ class AndroidWindow private constructor(
                 return if (instance != null) instance!!
                 else {
                     instance = create(context, props)
-                    initRendererCommand()
+                    initCommandAPI()
                     initView(
                         (context as GameActivity).isES3Supported(),
                         engine
@@ -107,8 +109,9 @@ class AndroidWindow private constructor(
             return window
         }
 
-        private fun initRendererCommand() {
+        private fun initCommandAPI() {
             RenderCommand.sRendererAPI = XGLRendererAPI()
+            EcsRenderCommand.sEcsRendererAPI = XGLEcsRendererAPI()
         }
 
         private fun initView(isES3Supported: Boolean, engine: Engine) {
