@@ -4,15 +4,9 @@ import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
-import com.focus617.core.engine.renderer.framebuffer.FrameBufferAttachmentSpecification
-import com.focus617.core.engine.renderer.framebuffer.FrameBufferSpecification
-import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureFormat
-import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureSpecification
 import com.focus617.core.engine.renderer.texture.SubTexture2D
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.platform.event.base.Event
-import com.focus617.opengles.renderer.framebuffer.XGLFrameBuffer
-import com.focus617.opengles.renderer.framebuffer.XGLFrameBufferBuilder
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
 
 class MapLayer(name: String, private val scene: XGL2DResourceManager) : Layer(name) {
@@ -22,21 +16,7 @@ class MapLayer(name: String, private val scene: XGL2DResourceManager) : Layer(na
     lateinit var textureTree: SubTexture2D
     lateinit var textureMilestone: SubTexture2D
 
-    // 这个FrameBuffer是不必要的，但是一旦不Create，屏幕显示就会黑屏
-    private var mFramebuffer: XGLFrameBuffer? = null
-
-    override fun initOpenGlResource() {
-        // TODO: remove all below
-        val fbSpec = FrameBufferSpecification()
-        fbSpec.attachment = FrameBufferAttachmentSpecification(
-            listOf(
-                FrameBufferTextureSpecification(FrameBufferTextureFormat.RGBA8)
-            )
-        )
-        fbSpec.mWidth = 1024
-        fbSpec.mHeight = 2048
-        mFramebuffer = XGLFrameBufferBuilder.createFrameBuffer(fbSpec) as XGLFrameBuffer
-    }
+    override fun initOpenGlResource() {}
 
     override fun close() {
         LOG.info("${this.mDebugName} closed")
@@ -47,6 +27,7 @@ class MapLayer(name: String, private val scene: XGL2DResourceManager) : Layer(na
         LOG.info("${this.mDebugName} onAttach()")
 
     }
+
     //当Layer从LayerStack移除的时候会调用此函数，相当于Shutdown函数
     override fun onDetach() {
         LOG.info("${this.mDebugName} onDetach")

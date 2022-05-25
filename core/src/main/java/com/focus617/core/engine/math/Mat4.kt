@@ -84,7 +84,8 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
 
     // 绕Z轴旋转
     fun rotate2D(rotationInDegree: Float): Mat4 {
-        XMatrix.rotateM(floatArray, 0, rotationInDegree, 0.0f, 0.0f, 1.0f)
+        val rotationInternal = yawClamp(rotationInDegree, 0f, 360f)
+        XMatrix.rotateM(floatArray, 0, rotationInternal, 0.0f, 0.0f, 1.0f)
         return this
     }
 
@@ -94,7 +95,8 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
         yAxis: Float,
         zAxis: Float
     ): Mat4 {
-        XMatrix.rotateM(floatArray, 0, rotationInDegree, xAxis, yAxis, zAxis)
+        val rotationInternal = yawClamp(rotationInDegree, 0f, 360f)
+        XMatrix.rotateM(floatArray, 0, rotationInternal, xAxis, yAxis, zAxis)
         return this
     }
 
@@ -105,7 +107,9 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
     ): Mat4 {
         val translate = Mat4().translate(position).toFloatArray()
         val scale = Mat4().scale(size).toFloatArray()
-        val rotation = Mat4().rotate2D(rotationInDegree).toFloatArray()
+
+        val rotationInternal = yawClamp(rotationInDegree, 0f, 360f)
+        val rotation = Mat4().rotate2D(rotationInternal).toFloatArray()
 
         /** 由于采用了列主序的转置矩阵，所以乘法的顺序是反的 */
         setIdentity()
@@ -125,7 +129,9 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
     ): Mat4 {
         val translate = Mat4().translate(position).toFloatArray()
         val scale = Mat4().scale(size).toFloatArray()
-        val rotation = Mat4().rotate3D(rotationInDegree, xAxis, yAxis, zAxis).toFloatArray()
+
+        val rotationInternal = yawClamp(rotationInDegree, 0f, 360f)
+        val rotation = Mat4().rotate3D(rotationInternal, xAxis, yAxis, zAxis).toFloatArray()
 
         /** 由于采用了列主序的转置矩阵，所以乘法的顺序是反的 */
         setIdentity()

@@ -20,13 +20,13 @@ class Render2DSystem : IteratingSystem(), ILoggable {
     }
 
     override fun onTickEntity(entity: Entity) {
-//        LOG.info("Render2DSystem onTickEntity.")
+        LOG.info("Render2DSystem onTickEntity: entity.id=${entity.id}")
 
         val transform = transformMapper[entity]
         val sprite = spriteMapper[entity]
 
         // 绘制
-        EcsRenderCommand.DrawQuad(transform.transform, sprite.color)
+        EcsRenderCommand.drawQuad(transform.transform, sprite.color)
     }
 
 }

@@ -9,11 +9,12 @@ import com.focus617.core.engine.ecs.mine.component.TransformMatrix
 import com.focus617.core.engine.ecs.mine.static.Game
 import com.focus617.core.engine.ecs.mine.static.setParent
 import com.focus617.core.engine.math.Mat4
-import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.math.Vector3
+import com.focus617.core.engine.math.yawClamp
 import com.focus617.core.engine.renderer.texture.SubTexture2D
 import com.focus617.core.engine.renderer.texture.Texture2D
+import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
@@ -28,7 +29,7 @@ class GameLayer(name: String, private val resourceManager: XGL2DResourceManager)
 //            add<Transform>()
 //            add<Dirty> { dirty = true }
             add<TransformMatrix>()
-            add<Sprite>()
+            add<Sprite> { color = Color.GOLD }
             add<Relationship>()
         }
         tree.setParent(Game.scene)
@@ -63,29 +64,39 @@ class GameLayer(name: String, private val resourceManager: XGL2DResourceManager)
         LOG.info("${this.mDebugName} onDetach")
     }
 
+    var rotationInDegree: Float = 0f
     override fun onUpdate(timeStep: TimeStep) {
-        val transformMapper = Game.world.mapper<TransformMatrix>()
-
         if (Renderer2DData.initialized && resourceManager.initialized) {
+            rotationInDegree ++
 
+            val transformMapper = Game.world.mapper<TransformMatrix>()
+            val spriteMapper = Game.world.mapper<Sprite>()
+
+            val rotationInternal = yawClamp(rotationInDegree, 0f, 360f)
             val treeTransform = Mat4().transform2D(
-                Vector3(0f, 0f, 0f), Vector2(1.0f, 1.0f), 0f
+                Vector3(0f, 0f, 0f), Vector2(1.0f, 1.0f), rotationInternal
             )
             transformMapper[tree].transform.setValue(treeTransform)
 
+
             // 使用SubTexture绘制
-            XGLRenderer2D.drawQuad(
-                Point3D(0f, 0f, 1f),
-                Vector2(1.0f, 2.0f),
-                textureTree!!,
-                1.0f
-            )
+//            XGLRenderer2D.drawQuad(
+//                transformMapper[tree].transform,
+//                spriteMapper[tree].color
+//            )
+//            XGLRenderer2D.drawQuad(
+//                Point3D(0f, 0f, 1f),
+//                Vector2(1.0f, 2.0f),
+//                textureTree!!,
+//                1.0f
+//            )
 //            XGLRenderer2D.drawQuad(
 //                Point3D(0f, 0f, 2f),
 //                Vector2(1.0f, 1.0f),
 //                textureBarrel!!,
 //                1.0f
 //            )
+
         }
     }
 

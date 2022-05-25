@@ -80,14 +80,15 @@ open class Engine : BaseEntity(), Runnable, Closeable {
             val timeStep: TimeStep = TimeStep(time - mLastFrameTime)
             mLastFrameTime = time
 
-            // Update ECS world
-            Game.world.update(timeStep.getMilliSecond().toFloat())
-
             // Update game objects in each layer
             beforeUpdate()
             for (layer in mLayerStack.mLayers) {
                 layer.onUpdate(timeStep)
             }
+
+            // Update ECS world
+            Game.world.update(timeStep.getMilliSecond().toFloat())
+
             afterUpdate()
 
             // 如果Window处于onDetach状态时，不再更新Overlay

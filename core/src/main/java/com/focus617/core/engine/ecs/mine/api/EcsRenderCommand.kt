@@ -7,7 +7,8 @@ import com.focus617.core.platform.base.BaseEntity
 object EcsRenderCommand : BaseEntity() {
     var sEcsRendererAPI: EcsRendererAPI? = null
 
-    fun DrawQuad(transform: Mat4, color: Color) {
+    fun drawQuad(transform: Mat4, color: Color) {
         sEcsRendererAPI?.drawQuad(transform, color)
     }
+
 }
