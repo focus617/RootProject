@@ -10,10 +10,11 @@ import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
 
-class GameLayer(name: String, private val scene: XGL2DResourceManager) : Layer(name) {
+class GameLayer(name: String, private val resourceManager: XGL2DResourceManager) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
 
-    override fun initOpenGlResource() { }
+    private lateinit var textureTree: SubTexture2D
+    private lateinit var textureBarrel: SubTexture2D
 
     override fun close() {
         LOG.info("${this.mDebugName} closed")
@@ -28,50 +29,16 @@ class GameLayer(name: String, private val scene: XGL2DResourceManager) : Layer(n
         LOG.info("${this.mDebugName} onDetach")
     }
 
-    var rotation: Float = 0.0f
     override fun onUpdate(timeStep: TimeStep) {
-        if (Renderer2DData.initialized && scene.initialized) {
-            rotation += timeStep * 0.01f
+        if (Renderer2DData.initialized && resourceManager.initialized) {
 
-//            XGLRenderer2D.drawQuad(Point3D(0f, 0f, 2f), Vector2(1f, 1f), RED)
-//            //XGLRenderer2D.drawQuad(Vector2(0.5f, 0.5f), Vector2(0.75f, 0.5f), BLUE)
-//            XGLRenderer2D.drawRotatedQuad(
-//                Point3D(0f, -1.0f, 0.5f), Vector2(1.0f, 0.8f), rotation, BLUE
-//            )
-//
-//            XGLRenderer2D.drawQuad(
-//                Point3D(-5f, -5f, 0.1f),
-//                Vector2(1f, 1f),
-//                XGLTextureSlots.TextureSlots[XGLScene2D.textureCheckboxIndex] as Texture2D,
-//                10f
-//            )
-//            XGLRenderer2D.drawRotatedQuad(
-//                Point3D(0.0f, 1.0f, 0.1f),
-//                Vector2(1.0f, 1.0f),
-//                rotation,
-//                XGLTextureSlots.TextureSlots[XGLScene2D.textureCheckboxIndex] as Texture2D,
-//                20f
-//            )
-
-            // 构造SubTexture
-            val textureTree = SubTexture2D.createFromCoords(
-                XGLTextureSlots.TextureSlots[XGL2DResourceManager.textureAltasIndex] as Texture2D,
-                Vector2(0f, 10f),       // SubTexture Coords（原点在左上角，Y轴向下）
-                Vector2(128f, 128f),    // sprite size
-                Vector2(1f, 2f)         // cell size
-            )
-            val textureBarrel = SubTexture2D.createFromCoords(
-                XGLTextureSlots.TextureSlots[XGL2DResourceManager.textureAltasIndex] as Texture2D,
-                Vector2(6f, 12f),        // SubTexture Coords
-                Vector2(128f, 128f)     // SubTexture Size
-            )
             // 使用SubTexture绘制
-//            XGLRenderer2D.drawQuad(
-//                Point3D(0f, 0f, 1f),
-//                Vector2(1.0f, 2.0f),
-//                textureTree,
-//                1.0f
-//            )
+            XGLRenderer2D.drawQuad(
+                Point3D(0f, 0f, 1f),
+                Vector2(1.0f, 2.0f),
+                textureTree,
+                1.0f
+            )
             XGLRenderer2D.drawQuad(
                 Point3D(0f, 0f, 2f),
                 Vector2(1.0f, 1.0f),
@@ -81,11 +48,24 @@ class GameLayer(name: String, private val scene: XGL2DResourceManager) : Layer(n
         }
     }
 
-    override fun beforeDrawFrame() {
+    override fun initOpenGlResource() {
+        // 构造SubTexture
+        textureTree = SubTexture2D.createFromCoords(
+            XGLTextureSlots.TextureSlots[XGL2DResourceManager.textureAltasIndex] as Texture2D,
+            Vector2(0f, 10f),       // SubTexture Coords（原点在左上角，Y轴向下）
+            Vector2(128f, 128f),    // sprite size
+            Vector2(1f, 2f)         // cell size
+        )
+
+        textureBarrel = SubTexture2D.createFromCoords(
+            XGLTextureSlots.TextureSlots[XGL2DResourceManager.textureAltasIndex] as Texture2D,
+            Vector2(6f, 12f),        // SubTexture Coords
+            Vector2(128f, 128f)     // SubTexture Size
+        )
     }
 
-    override fun afterDrawFrame() {
-    }
+    override fun beforeDrawFrame() {}
+    override fun afterDrawFrame() {}
 
     override fun onEvent(event: Event): Boolean {
         return eventDispatcher.dispatch(event)

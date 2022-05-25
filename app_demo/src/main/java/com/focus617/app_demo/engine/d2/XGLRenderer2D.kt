@@ -1,5 +1,6 @@
 package com.focus617.app_demo.engine.d2
 
+import android.opengl.GLES31
 import android.opengl.GLSurfaceView
 import com.focus617.core.engine.ecs.mine.system.OrthographicCameraSystem
 import com.focus617.core.engine.ecs.mine.system.RenderSystem
@@ -79,9 +80,16 @@ class XGLRenderer2D(
         // 清理屏幕，重绘背景颜色
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
+        GLES31.glDisable(GLES31.GL_DEPTH_TEST)
 
         beginScene()
-
+        // 将顶点数据注入VertexBuffer
+        with(Renderer2DData) {
+            QuadVertexBuffer.setData(
+                FloatBuffer.wrap(QuadVertexBufferBase),
+                QuadVertexBufferPtr * Float.SIZE_BYTES
+            )
+        }
         endScene()
         XGLContext.checkGLError("After endScene")
 
@@ -114,13 +122,6 @@ class XGLRenderer2D(
     }
 
     override fun endScene() {
-        // 将顶点数据注入VertexBuffer
-        with(Renderer2DData) {
-            QuadVertexBuffer.setData(
-                FloatBuffer.wrap(QuadVertexBufferBase),
-                QuadVertexBufferPtr * Float.SIZE_BYTES
-            )
-        }
         flush()
         XGLContext.checkGLError("after endScene")
     }

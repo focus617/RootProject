@@ -22,14 +22,15 @@ class MapLayer(name: String, private val scene: XGL2DResourceManager) : Layer(na
     lateinit var textureTree: SubTexture2D
     lateinit var textureMilestone: SubTexture2D
 
+    // 这个FrameBuffer是不必要的，但是一旦不Create，屏幕显示就会黑屏
     private var mFramebuffer: XGLFrameBuffer? = null
 
     override fun initOpenGlResource() {
+        // TODO: remove all below
         val fbSpec = FrameBufferSpecification()
         fbSpec.attachment = FrameBufferAttachmentSpecification(
             listOf(
-                FrameBufferTextureSpecification(FrameBufferTextureFormat.RGBA8),
-                FrameBufferTextureSpecification(FrameBufferTextureFormat.DEPTH24STENCIL8)
+                FrameBufferTextureSpecification(FrameBufferTextureFormat.RGBA8)
             )
         )
         fbSpec.mWidth = 1024
@@ -53,7 +54,6 @@ class MapLayer(name: String, private val scene: XGL2DResourceManager) : Layer(na
 
     override fun onUpdate(timeStep: TimeStep) {
         //LOG.info("${this.mDebugName} onUpdate")
-        mFramebuffer?.bind()
 
         if (Renderer2DData.initialized && scene.initialized) {
             if (!this.initialized) initSubTexture()
@@ -78,8 +78,6 @@ class MapLayer(name: String, private val scene: XGL2DResourceManager) : Layer(na
                     )
                 }
         }
-
-        mFramebuffer?.unbind()
     }
 
     override fun beforeDrawFrame() {

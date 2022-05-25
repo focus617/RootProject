@@ -33,31 +33,7 @@ open class FrameBufferEntity : GeometryEntity(), XGLDrawableObject {
         onRender(shader)
     }
 
-    companion object {
-        const val SHADER_PATH = "framebuffer"
-        const val SHADER_FILE = "shader.glsl"
-        const val SHADER_OUTLINING_FILE = "shaderSingleColor.glsl"
 
-        const val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
-        const val ShaderOutliningFilePath: String = "$SHADER_PATH/$SHADER_OUTLINING_FILE"
-
-        lateinit var shader: Shader
-//        lateinit var shaderOutlining: Shader
-
-        const val U_TEXTURE = "u_screenTexture"
-
-        fun initShader(context: Context) {
-            shader = XGLShaderBuilder.createShader(
-                context,
-                ShaderFilePath
-            ) as XGLShader
-
-//        shaderOutlining = XGLShaderBuilder.createShader(
-//            context,
-//            ShaderOutliningFilePath
-//        ) as XGLShader
-        }
-    }
 
     class FrameBufferQuad : IfMeshable {
         override fun getVertices(): FloatArray = floatArrayOf(
@@ -85,6 +61,32 @@ open class FrameBufferEntity : GeometryEntity(), XGLDrawableObject {
         }
 
         override fun afterBuild() {
+        }
+    }
+
+    companion object {
+        const val SHADER_PATH = "framebuffer"
+        const val SHADER_FILE = "shader.glsl"
+        const val SHADER_OUTLINING_FILE = "shaderSingleColor.glsl"
+
+        const val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
+        const val ShaderOutliningFilePath: String = "$SHADER_PATH/$SHADER_OUTLINING_FILE"
+
+        lateinit var shader: Shader
+//        lateinit var shaderOutlining: Shader
+
+        const val U_TEXTURE = "u_screenTexture"
+
+        fun initShader(context: Context) {
+            shader = XGLShaderBuilder.createShader(
+                context,
+                ShaderFilePath
+            ) as XGLShader
+
+//        shaderOutlining = XGLShaderBuilder.createShader(
+//            context,
+//            ShaderOutliningFilePath
+//        ) as XGLShader
         }
     }
 }
