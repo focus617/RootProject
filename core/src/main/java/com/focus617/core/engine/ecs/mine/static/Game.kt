@@ -7,6 +7,7 @@ import com.focus617.core.engine.ecs.mine.component.OrthographicCameraCmp
 import com.focus617.core.engine.ecs.mine.component.Relationship
 import com.focus617.core.engine.ecs.mine.system.OrthographicCameraSystem
 import com.focus617.core.engine.ecs.mine.system.PerspectiveCameraSystem
+import com.focus617.core.engine.ecs.mine.system.PhysicsSystem
 import com.focus617.core.engine.ecs.mine.system.Render2DSystem
 
 object Game {
@@ -15,6 +16,8 @@ object Game {
 
         system<PerspectiveCameraSystem>()
         system<OrthographicCameraSystem>()
+
+        system<PhysicsSystem>()
         system<Render2DSystem>()
 
     }
@@ -25,6 +28,7 @@ object Game {
 
     /** ++++++++ 构建 ECS ++++++++++ */
     init {
+        // Scene is always the first entity(id=0)
         scene = world.entity {
             add<Relationship>()
         }

@@ -8,10 +8,8 @@ import com.focus617.core.engine.ecs.mine.component.Sprite
 import com.focus617.core.engine.ecs.mine.component.TransformMatrix
 import com.focus617.core.engine.ecs.mine.static.Game
 import com.focus617.core.engine.ecs.mine.static.setParent
-import com.focus617.core.engine.math.Mat4
+import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
-import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.math.yawClamp
 import com.focus617.core.engine.renderer.texture.SubTexture2D
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.engine.resource.baseDataType.Color
@@ -22,17 +20,41 @@ import com.focus617.opengles.renderer.texture.XGLTextureSlots
 class GameLayer(name: String, private val resourceManager: XGL2DResourceManager) : Layer(name) {
     private val eventDispatcher = EventDispatcher()
 
-    private val tree: Entity
+    private val square: Entity
 
     init {
-        tree = Game.world.entity {
+        square = Game.world.entity { square ->
 //            add<Transform>()
 //            add<Dirty> { dirty = true }
             add<TransformMatrix>()
             add<Sprite> { color = Color.GOLD }
             add<Relationship>()
+
+            square.setParent(Game.scene)
         }
-        tree.setParent(Game.scene)
+
+    }
+
+    var rotationInDegree: Float = 0f
+    override fun onUpdate(timeStep: TimeStep) {
+        if (Renderer2DData.initialized && resourceManager.initialized) {
+
+            // 使用SubTexture绘制
+
+            XGLRenderer2D.drawQuad(
+                Point3D(-0.5f, 1f, 0f),
+                Vector2(0.5f, 1.0f),
+                textureTree!!,
+                1.0f
+            )
+            XGLRenderer2D.drawQuad(
+                Point3D(0f, -1.5f, 0f),
+                Vector2(0.5f, 0.5f),
+                textureBarrel!!,
+                1.0f
+            )
+
+        }
     }
 
     override fun initOpenGlResource() {
@@ -56,55 +78,20 @@ class GameLayer(name: String, private val resourceManager: XGL2DResourceManager)
         eventDispatcher.close()
     }
 
+    override fun beforeDrawFrame() {}
+
+    override fun afterDrawFrame() {}
+
+    override fun onEvent(event: Event): Boolean {
+        return eventDispatcher.dispatch(event)
+    }
+
     override fun onAttach() {
         LOG.info("${this.mDebugName} onAttach()")
     }
 
     override fun onDetach() {
         LOG.info("${this.mDebugName} onDetach")
-    }
-
-    var rotationInDegree: Float = 0f
-    override fun onUpdate(timeStep: TimeStep) {
-        if (Renderer2DData.initialized && resourceManager.initialized) {
-            rotationInDegree ++
-
-            val transformMapper = Game.world.mapper<TransformMatrix>()
-            val spriteMapper = Game.world.mapper<Sprite>()
-
-            val rotationInternal = yawClamp(rotationInDegree, 0f, 360f)
-            val treeTransform = Mat4().transform2D(
-                Vector3(0f, 0f, 0f), Vector2(1.0f, 1.0f), rotationInternal
-            )
-            transformMapper[tree].transform.setValue(treeTransform)
-
-
-            // 使用SubTexture绘制
-//            XGLRenderer2D.drawQuad(
-//                transformMapper[tree].transform,
-//                spriteMapper[tree].color
-//            )
-//            XGLRenderer2D.drawQuad(
-//                Point3D(0f, 0f, 1f),
-//                Vector2(1.0f, 2.0f),
-//                textureTree!!,
-//                1.0f
-//            )
-//            XGLRenderer2D.drawQuad(
-//                Point3D(0f, 0f, 2f),
-//                Vector2(1.0f, 1.0f),
-//                textureBarrel!!,
-//                1.0f
-//            )
-
-        }
-    }
-
-    override fun beforeDrawFrame() {}
-    override fun afterDrawFrame() {}
-
-    override fun onEvent(event: Event): Boolean {
-        return eventDispatcher.dispatch(event)
     }
 
     companion object {
