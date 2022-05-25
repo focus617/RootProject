@@ -29,12 +29,12 @@ class PhysicsSystem : IteratingSystem(), ILoggable {
     override fun onTickEntity(entity: Entity) {
         rotationInDegree++
         val rotationInternal = yawClamp(rotationInDegree, 0f, 360f)
-        val treeTransform = Mat4().transform2D(
-            Vector3(0f, 0f, 0f), Vector2(1.0f, 1.0f), rotationInternal
+        val squareTransform = Mat4().transform2D(
+            Vector3(0f, 0f, 0f), Vector2(0.75f, 0.75f), rotationInternal
         )
 
         configureEntity(entity) {
-            transforms.addOrUpdate(it) { transform.setValue(treeTransform) }
+            transforms.addOrUpdate(it) { transform.setValue(squareTransform) }
         }
     }
 
