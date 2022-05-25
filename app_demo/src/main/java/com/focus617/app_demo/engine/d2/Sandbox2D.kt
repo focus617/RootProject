@@ -11,7 +11,7 @@ import com.focus617.opengles.renderer.texture.XGLTextureSlots
 import java.io.Closeable
 
 class Sandbox2D(context: Context) : Engine(), Closeable {
-    // Create root entity
+    // Create resource manager with context
     var xglResourceManager = XGL2DResourceManager(context, this)
 
     init {

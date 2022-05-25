@@ -7,7 +7,6 @@ import com.focus617.opengles.renderer.texture.XGLTextureBuilder
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
 import com.focus617.opengles.scene_graph.XGLDrawableObject
 import java.io.Closeable
-import kotlin.properties.Delegates
 
 /**
  * Scene is root entity for all Game Entities.
@@ -63,8 +62,8 @@ class XGL2DResourceManager(val context: Context, val engine: Sandbox2D) : BaseEn
         val TextureCheckboxFilePath = "$PATH/$TEXTURE_FILE_CKBoard"
         val TextureAtlasFilePath = "$PATH/$TEXTURE_FILE_Atlas"
 
-        var textureCheckboxIndex by Delegates.notNull<Int>()
-        var textureAltasIndex by Delegates.notNull<Int>()
+        var textureCheckboxIndex: Int = -1
+        var textureAltasIndex: Int = -1
     }
 
 }
