@@ -42,7 +42,8 @@ class PerspectiveCamera : Camera() {
         directionUp.x = sin(angle)
         directionUp.y = cos(angle)
         directionUp.z = 0f
-        reCalculateViewMatrix()
+
+        setDirty()
     }
 
     fun setRotation(pitchXInDegree: Float = 0f, yawYInDegree: Float = 90f) {
@@ -60,7 +61,7 @@ class PerspectiveCamera : Camera() {
         // the more you look up or down which results in slower movement.
         directionUp = directionRight.crossProduct(directionFront).normalize()
 
-        reCalculateViewMatrix()
+        setDirty()
     }
 
     // 根据相机的空间位置和相机绕Z轴的旋转角度，重新计算相机的视图矩阵(View Matrix)

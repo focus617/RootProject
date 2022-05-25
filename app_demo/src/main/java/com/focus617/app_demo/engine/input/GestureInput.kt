@@ -4,7 +4,7 @@ import android.os.Handler
 import android.view.MotionEvent
 import android.view.View
 import com.focus617.app_demo.engine.AndroidWindow
-import com.focus617.core.engine.ecs.mine.system.RenderSystem
+import com.focus617.core.engine.ecs.mine.static.SceneData
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Point2D
 import com.focus617.core.platform.event.screenTouchEvents.*
@@ -34,9 +34,9 @@ class GestureInput(private val window: AndroidWindow) : WithLogging(), View.OnTo
         window.mData.callback?.let {
             val projectMat = Mat4()
             val viewMat = Mat4()
-            synchronized(RenderSystem.SceneData) {
-                projectMat.setValue(RenderSystem.SceneData.sProjectionMatrix)
-                viewMat.setValue(RenderSystem.SceneData.sViewMatrix)
+            synchronized(SceneData) {
+                projectMat.setValue(SceneData.sProjectionMatrix)
+                viewMat.setValue(SceneData.sViewMatrix)
             }
             // Create an inverted matrix for touch picking.
             val invertViewProjectionMat = (projectMat * viewMat).invert()

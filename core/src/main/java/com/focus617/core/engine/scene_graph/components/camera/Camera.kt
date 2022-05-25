@@ -14,6 +14,12 @@ abstract class Camera : BaseEntity(), IfComponent {
     // 投影矩阵mProjectionMatrix委托给了CameraController类
     protected val mViewMatrix = Mat4()
 
+    private var isDirty: Boolean = true
+    fun isDirty() = isDirty
+    fun setDirty() {
+        isDirty = true
+    }
+
     // 相机的其它属性
     protected open var mPosition: Point3D = Point3D(0.0f, 0.0f, 0.0f)
     protected open var mRotationZAxisInDegree: Float = 90F //在XY平面绕Z轴的旋转角度
@@ -23,12 +29,18 @@ abstract class Camera : BaseEntity(), IfComponent {
     // 根据相机的空间位置和相机绕Z轴的旋转角度，重新计算相机的视图矩阵
     abstract fun reCalculateViewMatrix()
 
-    fun getViewMatrix(): Mat4 = mViewMatrix
+    fun getViewMatrix(): Mat4{
+        if(isDirty){
+            reCalculateViewMatrix()
+            isDirty = false
+        }
+        return mViewMatrix
+    }
 
     fun getPosition() = mPosition
     open fun setPosition(position: Point3D) {
         mPosition = position
-        reCalculateViewMatrix()
+        setDirty()
     }
 
     // 相机位置不动，旋转directionUp

@@ -2,8 +2,8 @@ package com.focus617.app_demo.engine.d2
 
 import android.opengl.GLES31
 import android.opengl.GLSurfaceView
+import com.focus617.core.engine.ecs.mine.static.SceneData
 import com.focus617.core.engine.ecs.mine.system.OrthographicCameraSystem
-import com.focus617.core.engine.ecs.mine.system.RenderSystem
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Point2D
 import com.focus617.core.engine.math.Point3D
@@ -115,8 +115,8 @@ class XGLRenderer2D(
         XGLContext.checkGLError("before beginScene")
         with(Renderer2DData.TextureShader) {
             bind()
-            setMat4("u_ProjectionMatrix", RenderSystem.SceneData.sProjectionMatrix)
-            setMat4("u_ViewMatrix", RenderSystem.SceneData.sViewMatrix)
+            setMat4("u_ProjectionMatrix", SceneData.sProjectionMatrix)
+            setMat4("u_ViewMatrix", SceneData.sViewMatrix)
             setMat4("u_ModelMatrix", Mat4())
         }
     }
@@ -418,10 +418,5 @@ class XGLRenderer2D(
             )
         }
 
-    }
-
-    object SceneData {
-        var sProjectionMatrix: Mat4 = Mat4()
-        var sViewMatrix: Mat4 = Mat4()
     }
 }

@@ -1,7 +1,7 @@
 package com.focus617.opengles.text
 
 
-import com.focus617.core.engine.ecs.mine.system.RenderSystem
+import com.focus617.core.engine.ecs.mine.static.SceneData
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.XMatrix
 import com.focus617.core.engine.renderer.shader.Shader
@@ -68,7 +68,7 @@ class TextEntity3D(private val isPerspective: Boolean = true) : GeometryEntity()
 
         if (!isPerspective) {
             shader.setMat4(U_PROJECT_MATRIX, mProjectionMatrix)
-            shader.setMat4(U_VIEW_MATRIX, RenderSystem.SceneData.sViewMatrix)
+            shader.setMat4(U_VIEW_MATRIX, SceneData.sViewMatrix)
         }
 
         shader.setInt(U_TEXTURE, textureIndex)

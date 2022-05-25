@@ -1,8 +1,8 @@
 package com.focus617.app_demo.engine.d3
 
 import android.opengl.GLSurfaceView
+import com.focus617.core.engine.ecs.mine.static.SceneData
 import com.focus617.core.engine.ecs.mine.system.PerspectiveCameraSystem
-import com.focus617.core.engine.ecs.mine.system.RenderSystem
 import com.focus617.core.engine.renderer.IfRenderer
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferAttachmentSpecification
@@ -98,8 +98,8 @@ class XGLRenderer3D(
                     bind()
 //                  LOG.info(XMatrix.toString(SceneData.sProjectionMatrix, matrixName = "ProjectionMatrix"))
 //                  LOG.info(XMatrix.toString(SceneData.sViewMatrix, matrixName = "ViewMatrix"))
-                    setMat4(U_PROJECT_MATRIX, RenderSystem.SceneData.sProjectionMatrix)
-                    setMat4(U_VIEW_MATRIX, RenderSystem.SceneData.sViewMatrix)
+                    setMat4(U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
+                    setMat4(U_VIEW_MATRIX, SceneData.sViewMatrix)
 
                     if (gameObject.isSelected) {
                         gameObject.submitWithOutlining(shader, Color.GOLD)

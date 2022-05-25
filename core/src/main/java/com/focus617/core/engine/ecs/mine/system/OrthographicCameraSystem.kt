@@ -5,10 +5,10 @@ import com.focus617.core.engine.ecs.fleks.Entity
 import com.focus617.core.engine.ecs.fleks.IteratingSystem
 import com.focus617.core.engine.ecs.mine.component.CameraMatrix
 import com.focus617.core.engine.ecs.mine.component.OrthographicCameraCmp
+import com.focus617.core.engine.ecs.mine.static.SceneData
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.XMatrix
-import com.focus617.core.engine.scene_graph.components.camera.Camera
 import com.focus617.core.engine.scene_graph.components.camera.OrthographicCamera
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.screenTouchEvents.*
@@ -22,28 +22,33 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
 
     private val matrixMapper = world.mapper<CameraMatrix>()
 
-    init{
+    init {
         LOG.info("OrthographicCameraSystem launched.")
     }
 
     override fun onTickEntity(entity: Entity) {
-//        LOG.info("OrthographicCameraSystem onTickEntity.")
         if (isDirty) {
+            LOG.info("OrthographicCameraSystem onTickEntity.")
+
             reCalculateOrthoGraphicProjectionMatrix()
+            synchronized(SceneData) {
+                SceneData.sProjectionMatrix.setValue(mProjectionMatrix)
+            }
             isDirty = false
         }
 
-        val matrix = matrixMapper[entity]
-        matrix.projectionMatrix.setValue(mProjectionMatrix)
-        matrix.viewMatrix.setValue(mCamera.getViewMatrix())
+        if(mCamera.isDirty()){
+            LOG.info("OrthographicCameraSystem onTickEntity.")
+
+            synchronized(SceneData) {
+                SceneData.sViewMatrix.setValue(mCamera.getViewMatrix())
+            }
+        }
     }
 
-    companion object: WithLogging() {
+    companion object : WithLogging() {
         private val mCamera = OrthographicCamera()
         private val mProjectionMatrix = Mat4()
-
-        fun getCamera(): Camera = mCamera
-        fun getProjectionMatrix(): Mat4 = mProjectionMatrix
 
         private var isDirty: Boolean = true
         fun setDirty() {
