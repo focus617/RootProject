@@ -3,6 +3,7 @@ package com.focus617.app_demo.engine.d2
 import android.content.Context
 import com.focus617.core.engine.renderer.shader.ShaderLibrary
 import com.focus617.core.platform.base.BaseEntity
+import com.focus617.opengles.renderer.framebuffer.FrameBufferEntity
 import com.focus617.opengles.renderer.texture.XGLTextureBuilder
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
 import com.focus617.opengles.scene_graph.XGLDrawableObject
@@ -21,6 +22,7 @@ class XGL2DResourceManager(val context: Context, val engine: Sandbox2D) : BaseEn
     var initialized: Boolean = false
 
     fun initOpenGlResource() {
+        FrameBufferEntity.initShader(context)
         XGLTextureSlots.initUnderOpenGl()
         Renderer2DData.initStaticData(context)     // 初始化本Render的静态数据
         initTexture()

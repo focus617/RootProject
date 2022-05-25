@@ -9,11 +9,17 @@ import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
 import com.focus617.core.engine.renderer.IfRenderer
 import com.focus617.core.engine.renderer.RenderCommand
+import com.focus617.core.engine.renderer.framebuffer.FrameBufferAttachmentSpecification
+import com.focus617.core.engine.renderer.framebuffer.FrameBufferSpecification
+import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureFormat
+import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureSpecification
 import com.focus617.core.engine.renderer.texture.SubTexture2D
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.opengles.egl.XGLContext
+import com.focus617.opengles.renderer.framebuffer.XGLFrameBuffer
+import com.focus617.opengles.renderer.framebuffer.XGLFrameBufferBuilder
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
 import java.io.Closeable
 import java.nio.FloatBuffer
@@ -23,6 +29,8 @@ import javax.microedition.khronos.opengles.GL10
 class XGLRenderer2D(
     private val xglResourceManager: XGL2DResourceManager
 ) : BaseEntity(), IfRenderer, GLSurfaceView.Renderer, Closeable {
+
+    private lateinit var mFrameBuffer: XGLFrameBuffer
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         // 打印OpenGL Version，Vendor，etc
@@ -39,6 +47,17 @@ class XGLRenderer2D(
 
         // ES3.2 doesn't support DebugMessageCallback
         //XGLContext.initDebug()
+
+        val fbSpec = FrameBufferSpecification()
+        fbSpec.attachment = FrameBufferAttachmentSpecification(
+            listOf(
+                FrameBufferTextureSpecification(FrameBufferTextureFormat.RGBA8),
+                FrameBufferTextureSpecification(FrameBufferTextureFormat.DEPTH24STENCIL8)
+            )
+        )
+        fbSpec.mWidth = 1080
+        fbSpec.mHeight = 2220
+        mFrameBuffer = XGLFrameBufferBuilder.createFrameBuffer(fbSpec) as XGLFrameBuffer
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
@@ -48,9 +67,15 @@ class XGLRenderer2D(
         RenderCommand.setViewport(0, 0, width, height)
 
         OrthographicCameraSystem.onWindowSizeChange(width, height)
+
+        mFrameBuffer.resizeColorAttachment(width, height)
     }
 
     override fun onDrawFrame(unused: GL10) {
+        XGLContext.checkGLError("Before onDrawFrame")
+        // First pass: draw on FrameBuffer
+        mFrameBuffer.bind()
+
         // 清理屏幕，重绘背景颜色
         RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1F))
         RenderCommand.clear()
@@ -58,10 +83,24 @@ class XGLRenderer2D(
         beginScene()
 
         endScene()
+        XGLContext.checkGLError("After endScene")
+
+        // Back to default framebuffer(draw on screen directly)
+        mFrameBuffer.unbind()
+
+        // 清理屏幕，重绘背景颜色
+        RenderCommand.setClearColor(Color(0.1F, 0.1F, 0.1F, 1.0F))
+        RenderCommand.clear()
+
+        // Second pass: draw on real screen
+        mFrameBuffer.drawOnScreen()
+
+        XGLContext.checkGLError("After onDrawFrame")
     }
 
     override fun close() {
         Renderer2DData.close()
+        mFrameBuffer.close()
     }
 
     override fun beginScene() {

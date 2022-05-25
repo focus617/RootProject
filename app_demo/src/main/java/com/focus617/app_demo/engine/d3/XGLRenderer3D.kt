@@ -20,14 +20,19 @@ import com.focus617.opengles.renderer.framebuffer.submitWithOutlining
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
 import com.focus617.opengles.text.TextEntity3D
 import com.focus617.opengles.text.TextLayer2D
+import java.io.Closeable
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer3D(
     private val xglResourceManager: XGL3DResourceManager
-) : BaseEntity(), IfRenderer, GLSurfaceView.Renderer {
+) : BaseEntity(), IfRenderer, GLSurfaceView.Renderer, Closeable {
 
     private lateinit var mFrameBuffer: XGLFrameBuffer
+
+    override fun close() {
+        mFrameBuffer.close()
+    }
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         // 打印OpenGL Version，Vendor，etc
