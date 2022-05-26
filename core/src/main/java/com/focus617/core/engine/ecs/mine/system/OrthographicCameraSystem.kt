@@ -27,7 +27,7 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
     }
 
     override fun onTickEntity(entity: Entity) {
-        if (isDirty) {
+        if (OrthographicCameraSystem.isDirty) {
             LOG.info("OrthographicCameraSystem onTickEntity.")
 
             reCalculateOrthoGraphicProjectionMatrix()
@@ -58,8 +58,12 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
         private var mZoomLevel: Float = 0.85f
 
         // Viewport size
-        private var mWidth: Int = 0
-        private var mHeight: Int = 0
+        private var mViewportWidth: Int = 0
+        private var mViewportHeight: Int = 0
+
+        // Near/Far Planes
+        private var mOrthographicNear = -1.0f
+        private var mOrthographicFar = 1.0f
 
         // Euler angle
         private var pitchX: Float = 0f
@@ -144,9 +148,9 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
             return event.hasBeenHandled
         }
 
-        fun onWindowSizeChange(width: Int, height: Int) {
-            mWidth = width
-            mHeight = height
+        fun onViewportResize(width: Int, height: Int) {
+            mViewportWidth = width
+            mViewportHeight = height
             setDirty()
         }
 
@@ -166,9 +170,9 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
 
             // 计算正交投影矩阵 (Project Matrix)
             // 默认绘制的区间在横轴[-1.7778f, 1.778f]，纵轴[-1, 1]之间
-            if (mWidth > mHeight) {
+            if (mViewportWidth > mViewportHeight) {
                 // Landscape
-                val aspect: Float = mWidth.toFloat() / mHeight.toFloat()
+                val aspect: Float = mViewportWidth.toFloat() / mViewportHeight.toFloat()
                 val ratio = aspect * mZoomLevel
                 // 用ZoomLevel来表示top，因为拉近镜头时，ZoomLevel变大，而对应可见区域会变小
                 XMatrix.orthoM(
@@ -178,12 +182,12 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
                     ratio,
                     -mZoomLevel,
                     mZoomLevel,
-                    -1.0f,
-                    1.0f
+                    mOrthographicNear,
+                    mOrthographicFar
                 )
             } else {
                 // Portrait or Square
-                val aspect: Float = mHeight.toFloat() / mWidth.toFloat()
+                val aspect: Float = mViewportHeight.toFloat() / mViewportWidth.toFloat()
                 val ratio = aspect * mZoomLevel
                 XMatrix.orthoM(
                     matrix,
@@ -192,8 +196,8 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
                     mZoomLevel,
                     -ratio,
                     ratio,
-                    -1.0f,
-                    1.0f
+                    mOrthographicNear,
+                    mOrthographicFar
                 )
             }
             mProjectionMatrix.setValue(matrix)

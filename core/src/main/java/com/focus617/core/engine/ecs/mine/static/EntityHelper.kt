@@ -4,8 +4,30 @@ import com.focus617.core.engine.ecs.fleks.Entity
 import com.focus617.core.engine.ecs.fleks.World
 import com.focus617.core.engine.ecs.mine.component.Relationship
 
+
+fun Entity.world() = World.CURRENT_WORLD
+
+fun Entity.scene() = Entity(0)
+
+inline fun <reified T : Any> Entity.hasComponent(): Boolean = (this in world().mapper<T>())
+
+inline fun <reified T : Any> Entity.getComponentOrNull(): T? {
+    val mapper = world().mapper<T>()
+    return if (this in mapper) mapper.getOrNull(this) else null
+}
+
+inline fun <reified T : Any> Entity.removeComponent() {
+    val mapper = world().mapper<T>()
+    if (this in mapper) mapper.removeInternal(this)
+}
+
+inline fun <reified T : Any> Entity.addOrUpdateComponent(configuration: T.() -> Unit = {}): T {
+    val mapper = world().mapper<T>()
+    return mapper.addOrUpdateInternal(this, configuration)
+}
+
 fun Entity.setParent(parentEntity: Entity) {
-    val mapper = World.CURRENT_WORLD.mapper<Relationship>()
+    val mapper = world().mapper<Relationship>()
     val parentRelationship = mapper[parentEntity]
     val childRelationship = mapper[this]
 
@@ -29,3 +51,56 @@ fun Entity.setParent(parentEntity: Entity) {
         mapper[prevEntity].next = this.id
     }
 }
+
+fun Entity.removeChild(child: Entity) {
+    val mapper = world().mapper<Relationship>()
+    val childRelationship = mapper[child]
+
+    check(this.id == childRelationship.parent) {
+        "wrong entity(${child.id}), which is not child of mine(${this.id})"
+        return
+    }
+
+    val parentRelationship = mapper[this]
+    val prevChildId = childRelationship.prev
+    val nextChildId = childRelationship.next
+
+    with(parentRelationship) {
+        childrenNumber--
+
+        // 删除的Child在链表的中间
+        if ((first != child.id) && (last != child.id)) {
+            with(mapper[Entity(prevChildId)]) {
+                next = nextChildId
+            }
+            with(mapper[Entity(nextChildId)]) {
+                prev = prevChildId
+            }
+        }
+
+        // 删除的Child在链表的首部
+        if (first == child.id) {
+            first = nextChildId
+            if (nextChildId != -1) {
+                mapper[Entity(nextChildId)].prev = -1
+            }
+        }
+
+        // 删除的Child在链表的尾部
+        if (last == child.id) {
+            last = prevChildId
+            if (prevChildId != -1) {
+                mapper[Entity(prevChildId)].next = -1
+            }
+        }
+    }
+
+    with(childRelationship) {
+        parent = -1
+        prev = -1
+        next = -1
+    }
+}
+
+
+

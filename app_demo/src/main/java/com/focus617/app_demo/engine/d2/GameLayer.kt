@@ -3,10 +3,12 @@ package com.focus617.app_demo.engine.d2
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.ecs.fleks.Entity
+import com.focus617.core.engine.ecs.mine.component.Animation
 import com.focus617.core.engine.ecs.mine.component.Relationship
 import com.focus617.core.engine.ecs.mine.component.Sprite
 import com.focus617.core.engine.ecs.mine.component.TransformMatrix
 import com.focus617.core.engine.ecs.mine.static.Game
+import com.focus617.core.engine.ecs.mine.static.hasComponent
 import com.focus617.core.engine.ecs.mine.static.setParent
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Point3D
@@ -36,6 +38,8 @@ class GameLayer(name: String, private val resourceManager: XGL2DResourceManager)
             square.setParent(Game.scene)
         }
 
+        LOG.info("Square has component Sprite = ${square.hasComponent<Sprite>()}")
+        LOG.info("Square has component Animation = ${square.hasComponent<Animation>()}")
     }
 
     var rotationInDegree: Float = 0f

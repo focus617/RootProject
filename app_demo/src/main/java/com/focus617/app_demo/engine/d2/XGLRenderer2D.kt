@@ -68,7 +68,7 @@ class XGLRenderer2D(
         // 设置渲染的OpenGL场景（视口）的位置和大小
         RenderCommand.setViewport(0, 0, width, height)
 
-        OrthographicCameraSystem.onWindowSizeChange(width, height)
+        OrthographicCameraSystem.onViewportResize(width, height)
 
         mFrameBuffer.resizeColorAttachment(width, height)
     }
