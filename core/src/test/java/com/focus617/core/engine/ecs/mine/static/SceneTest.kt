@@ -1,11 +1,8 @@
 package com.focus617.core.engine.ecs.mine.static
 
 import com.focus617.core.engine.ecs.fleks.Entity
-import com.focus617.core.engine.ecs.mine.component.CameraMatrix
-import com.focus617.core.engine.ecs.mine.component.OrthographicCameraCmp
-import com.focus617.core.engine.ecs.mine.component.Relationship
+import com.focus617.core.engine.ecs.mine.component.*
 import com.focus617.core.engine.ecs.mine.component.Relationship.Companion.InvalidateEntity
-import com.focus617.core.engine.ecs.mine.component.Tag
 import com.focus617.core.platform.base.BaseEntity
 import org.junit.Assert.*
 import org.junit.Before
@@ -50,7 +47,10 @@ class SceneTest : BaseEntity() {
         assertEquals(1, Scene.camera.id)
 
         assertTrue(Scene.camera.hasComponent<Tag>())
-        assertTrue(Scene.camera.hasComponent<OrthographicCameraCmp>())
+        assertTrue(
+            Scene.camera.hasComponent<OrthographicCameraCmp>()
+                    || Scene.camera.hasComponent<PerspectiveCameraCmp>()
+        )
         assertTrue(Scene.camera.hasComponent<CameraMatrix>())
         assertTrue(Scene.camera.hasComponent<Relationship>())
 
