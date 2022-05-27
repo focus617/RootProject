@@ -53,6 +53,7 @@ object Scene : BaseEntity() {
     }
 
     const val DefaultTag = "Entity"
+
     /** ++++++++ 构建 ECS ++++++++++ */
     fun createEntity(
         name: String = "",
@@ -67,7 +68,6 @@ object Scene : BaseEntity() {
         entity.setParent(parent)
         return entity
     }
-
 
 
 }
