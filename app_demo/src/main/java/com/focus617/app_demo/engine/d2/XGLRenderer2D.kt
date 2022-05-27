@@ -3,6 +3,7 @@ package com.focus617.app_demo.engine.d2
 import android.opengl.GLES31
 import android.opengl.GLSurfaceView
 import com.focus617.core.engine.ecs.mine.api.EcsRendererAPI
+import com.focus617.core.engine.ecs.mine.component.Sprite
 import com.focus617.core.engine.ecs.mine.static.SceneData
 import com.focus617.core.engine.ecs.mine.system.OrthographicCameraSystem
 import com.focus617.core.engine.math.Mat4
@@ -226,7 +227,8 @@ class XGLRenderer2D(
 
         override fun drawQuad(
             transform: Mat4,
-            color: Color
+            color: Color,
+            entityId: Int
         ) {
             val texIndex: Float = 0.0f // White Texture
             val tilingFactor: Float = 1.0f
@@ -263,6 +265,10 @@ class XGLRenderer2D(
             Renderer2DData.QuadIndexCount += 6
 
             Renderer2DData.stats.quadCount++
+        }
+
+        override fun drawSprite(transform: Mat4, src: Sprite, entityId: Int) {
+            TODO("Not yet implemented")
         }
 
 

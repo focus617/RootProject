@@ -24,7 +24,7 @@ class XGL2DResourceManager(val context: Context, val engine: Sandbox2D) : BaseEn
     fun initOpenGlResource() {
         FrameBufferEntity.initShader(context)
         XGLTextureSlots.initUnderOpenGl()
-        Renderer2DData.initStaticData(context)     // 初始化本Render的静态数据
+        Renderer2DData.initRenderer2DData(context)     // 初始化本Render的静态数据
         initTexture()
         initGameObjects()
         initialized = true

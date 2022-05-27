@@ -56,7 +56,7 @@ object Renderer2DData : WithLogging(), Closeable {
 
     val stats: Statistics = Statistics(0, 0)
 
-    fun initStaticData(context: Context) {
+    fun initRenderer2DData(context: Context) {
         initShader(context)
         initVertexArray()
         initTexture()
