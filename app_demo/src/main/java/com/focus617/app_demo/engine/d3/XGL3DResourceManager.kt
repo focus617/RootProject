@@ -2,6 +2,7 @@ package com.focus617.app_demo.engine.d3
 
 import android.content.Context
 import com.focus617.core.engine.renderer.shader.ShaderLibrary
+import com.focus617.core.platform.base.BaseEntity
 import com.focus617.opengles.renderer.framebuffer.FrameBufferEntity
 import com.focus617.opengles.renderer.shader.XGLShader
 import com.focus617.opengles.renderer.shader.XGLShaderBuilder
@@ -15,7 +16,7 @@ import java.io.Closeable
 /**
  * Scene is root entity for all Game Entities.
  */
-class XGLResourceManager(val context: Context, val engine: Sandbox3D) : Closeable {
+class XGL3DResourceManager(val context: Context, val engine: Sandbox3D) : BaseEntity(), Closeable {
     val mShaderLibrary = ShaderLibrary()
 
     override fun close() {
@@ -32,15 +33,16 @@ class XGLResourceManager(val context: Context, val engine: Sandbox3D) : Closeabl
     }
 
     private fun initShader() {
-        FrameBufferEntity.shader = XGLShaderBuilder.createShader(
-            context,
-            FrameBufferEntity.ShaderFilePath
-        ) as XGLShader
-
+//        FrameBufferEntity.shader = XGLShaderBuilder.createShader(
+//            context,
+//            FrameBufferEntity.ShaderFilePath
+//        ) as XGLShader
+//
 //        FrameBufferEntity.shaderOutlining = XGLShaderBuilder.createShader(
 //            context,
 //            FrameBufferEntity.ShaderOutliningFilePath
 //        ) as XGLShader
+        FrameBufferEntity.initShader(context)
 
         TextEntity2D.shaderWithColor = XGLShaderBuilder.createShader(
             context,

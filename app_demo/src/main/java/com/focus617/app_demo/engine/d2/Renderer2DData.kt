@@ -41,6 +41,12 @@ object Renderer2DData : WithLogging(), Closeable {
     var QuadVertexBufferPtr: Int = 0    // Index of FloatArray(记住计算size时要乘4)
     var QuadVertexNumber: Int = 0       // 当前已经填充的顶点数目
 
+    fun resetVertexBuffer() {
+        QuadVertexBufferPtr = 0
+        QuadVertexNumber = 0
+        QuadIndexCount = 0
+    }
+
     val QuadVertexPosition = arrayOf<Vector4>(
         Vector4(-0.5f, -0.5f, 0.0f, 1.0f),
         Vector4(0.5f, -0.5f, 0.0f, 1.0f),
@@ -50,6 +56,13 @@ object Renderer2DData : WithLogging(), Closeable {
 
     val stats: Statistics = Statistics(0, 0)
 
+    fun initStaticData(context: Context) {
+        initShader(context)
+        initVertexArray()
+        initTexture()
+        stats.resetStats()
+        initialized = true
+    }
 
     override fun close() {
         initialized = false
@@ -58,14 +71,6 @@ object Renderer2DData : WithLogging(), Closeable {
         TextureShader.close()
         WhiteTexture.close()
         QuadVertexBufferBase = FloatArray(1)
-    }
-
-    fun initStaticData(context: Context) {
-        initShader(context)
-        initVertexArray()
-        initTexture()
-        stats.resetStats()
-        initialized = true
     }
 
     private val PATH = "Quad"
@@ -132,12 +137,6 @@ object Renderer2DData : WithLogging(), Closeable {
         WhiteTexture.setData(LongBuffer.wrap(whiteTextureData), Int.SIZE_BYTES)
 
         XGLTextureSlots.TextureSlots[0] = WhiteTexture
-    }
-
-    fun resetVertexBuffer() {
-        QuadVertexBufferPtr = 0
-        QuadVertexNumber = 0
-        QuadIndexCount = 0
     }
 
     fun putQuadVertex(
@@ -214,10 +213,16 @@ object Renderer2DData : WithLogging(), Closeable {
         texIndex: Float,
         tilingFactor: Float
     ) {
-        if (QuadVertexNumber >= MaxVertices) {
-            LOG.error("Reach max vertices limitation.")
+        if(!initialized){
+            LOG.warn("Renderer2DData has not been initialized.")
             return
         }
+
+        if (QuadVertexNumber >= MaxVertices) {
+            LOG.error("Renderer2DData reach max vertices limitation.")
+            return
+        }
+
         put(position)
         put(color)
         put(texCoords)

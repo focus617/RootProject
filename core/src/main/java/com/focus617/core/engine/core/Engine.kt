@@ -1,6 +1,6 @@
 package com.focus617.core.engine.core
 
-import com.focus617.core.engine.ecs.mine.static.Game
+import com.focus617.core.engine.ecs.mine.static.Scene
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
@@ -80,14 +80,15 @@ open class Engine : BaseEntity(), Runnable, Closeable {
             val timeStep: TimeStep = TimeStep(time - mLastFrameTime)
             mLastFrameTime = time
 
-            // Update ECS world
-            Game.world.update(timeStep.getMilliSecond().toFloat())
-
             // Update game objects in each layer
             beforeUpdate()
             for (layer in mLayerStack.mLayers) {
                 layer.onUpdate(timeStep)
             }
+
+            // Update ECS world
+            Scene.world().update(timeStep.getMilliSecond().toFloat())
+
             afterUpdate()
 
             // 如果Window处于onDetach状态时，不再更新Overlay

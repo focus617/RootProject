@@ -4,7 +4,7 @@ import android.content.Context
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
-import com.focus617.core.engine.ecs.mine.static.Game
+import com.focus617.core.engine.ecs.mine.static.Scene
 import com.focus617.core.engine.ecs.mine.system.PerspectiveCameraSystem
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.opengles.terrain.TerrainLayer
@@ -14,10 +14,10 @@ import java.io.Closeable
 
 class Sandbox3D(context: Context) : Engine(), Closeable {
     // Create root entity
-    var xglResourceManager = XGLResourceManager(context, this)
+    var xglResourceManager = XGL3DResourceManager(context, this)
 
     init {
-        pushLayer(GamePlayerLayer("GamePlayerLayer", Game.world))
+        pushLayer(GamePlayerLayer("GamePlayerLayer", Scene.world()))
         pushLayer(TextLayer3D("TextLayer"))
         pushLayer(TerrainLayer("TerrainLayer", context))
         pushOverLayer(TextLayer2D("OverLayer"))

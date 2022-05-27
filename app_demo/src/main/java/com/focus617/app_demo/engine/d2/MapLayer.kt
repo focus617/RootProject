@@ -4,38 +4,19 @@ import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
-import com.focus617.core.engine.renderer.framebuffer.FrameBufferAttachmentSpecification
-import com.focus617.core.engine.renderer.framebuffer.FrameBufferSpecification
-import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureFormat
-import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureSpecification
 import com.focus617.core.engine.renderer.texture.SubTexture2D
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.platform.event.base.Event
-import com.focus617.opengles.renderer.framebuffer.XGLFrameBuffer
-import com.focus617.opengles.renderer.framebuffer.XGLFrameBufferBuilder
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
 
-class MapLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
+class MapLayer(name: String, private val scene: XGL2DResourceManager) : Layer(name) {
     var initialized: Boolean = false
     lateinit var textureDirty: SubTexture2D
     lateinit var textureWater: SubTexture2D
     lateinit var textureTree: SubTexture2D
     lateinit var textureMilestone: SubTexture2D
 
-    private var mFramebuffer: XGLFrameBuffer? = null
-
-    override fun initOpenGlResource() {
-        val fbSpec = FrameBufferSpecification()
-        fbSpec.attachment = FrameBufferAttachmentSpecification(
-            listOf(
-                FrameBufferTextureSpecification(FrameBufferTextureFormat.RGBA8),
-                FrameBufferTextureSpecification(FrameBufferTextureFormat.DEPTH24STENCIL8)
-            )
-        )
-        fbSpec.mWidth = 1024
-        fbSpec.mHeight = 2048
-        mFramebuffer = XGLFrameBufferBuilder.createFrameBuffer(fbSpec) as XGLFrameBuffer
-    }
+    override fun initOpenGlResource() {}
 
     override fun close() {
         LOG.info("${this.mDebugName} closed")
@@ -46,6 +27,7 @@ class MapLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
         LOG.info("${this.mDebugName} onAttach()")
 
     }
+
     //当Layer从LayerStack移除的时候会调用此函数，相当于Shutdown函数
     override fun onDetach() {
         LOG.info("${this.mDebugName} onDetach")
@@ -53,7 +35,6 @@ class MapLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
 
     override fun onUpdate(timeStep: TimeStep) {
         //LOG.info("${this.mDebugName} onUpdate")
-        mFramebuffer?.bind()
 
         if (Renderer2DData.initialized && scene.initialized) {
             if (!this.initialized) initSubTexture()
@@ -78,8 +59,6 @@ class MapLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
                     )
                 }
         }
-
-        mFramebuffer?.unbind()
     }
 
     override fun beforeDrawFrame() {
@@ -97,7 +76,7 @@ class MapLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
         LOG.info("${this.mDebugName} onUpdate - initialize sub-texture")
         // 构造SubTexture
         textureDirty = SubTexture2D.createFromCoords(
-            XGLTextureSlots.TextureSlots[XGLScene2D.textureAltasIndex] as Texture2D,
+            XGLTextureSlots.TextureSlots[XGL2DResourceManager.textureAltasIndex] as Texture2D,
             Vector2(6f, 1f),            // SubTexture Coords（原点在左上角，Y轴向下）
             Vector2(SpriteSize, SpriteSize), // sprite size
             Vector2(1f, 1f)             // cell size
@@ -105,14 +84,14 @@ class MapLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
         sMap['D'] = textureDirty
 
         textureWater = SubTexture2D.createFromCoords(
-            XGLTextureSlots.TextureSlots[XGLScene2D.textureAltasIndex] as Texture2D,
+            XGLTextureSlots.TextureSlots[XGL2DResourceManager.textureAltasIndex] as Texture2D,
             Vector2(11f, 1f),           // SubTexture Coords
             Vector2(SpriteSize, SpriteSize)  // sprite size
         )
         sMap['W'] = textureWater
 
         textureTree = SubTexture2D.createFromCoords(
-            XGLTextureSlots.TextureSlots[XGLScene2D.textureAltasIndex] as Texture2D,
+            XGLTextureSlots.TextureSlots[XGL2DResourceManager.textureAltasIndex] as Texture2D,
             Vector2(0f, 10f),           // SubTexture Coords（原点在左上角，Y轴向下）
             Vector2(SpriteSize, SpriteSize), // sprite size
             Vector2(1f, 2f)             // cell size
@@ -120,7 +99,7 @@ class MapLayer(name: String, private val scene: XGLScene2D) : Layer(name) {
         sMap['T'] = textureTree
 
         textureMilestone = SubTexture2D.createFromCoords(
-            XGLTextureSlots.TextureSlots[XGLScene2D.textureAltasIndex] as Texture2D,
+            XGLTextureSlots.TextureSlots[XGL2DResourceManager.textureAltasIndex] as Texture2D,
             Vector2(9f, 10f),           // SubTexture Coords
             Vector2(SpriteSize, SpriteSize)  // sprite size
         )

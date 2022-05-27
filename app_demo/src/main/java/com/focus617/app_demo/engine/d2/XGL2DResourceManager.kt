@@ -1,28 +1,28 @@
 package com.focus617.app_demo.engine.d2
 
 import android.content.Context
-import com.focus617.core.engine.scene_graph.components.camera.OrthographicCamera
-import com.focus617.core.engine.scene_graph.components.camera.OrthographicCameraController
-import com.focus617.core.engine.scene_graph.scene.Scene
+import com.focus617.core.engine.renderer.shader.ShaderLibrary
+import com.focus617.core.platform.base.BaseEntity
+import com.focus617.opengles.renderer.framebuffer.FrameBufferEntity
 import com.focus617.opengles.renderer.texture.XGLTextureBuilder
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
 import com.focus617.opengles.scene_graph.XGLDrawableObject
-import kotlin.properties.Delegates
+import java.io.Closeable
 
 /**
  * Scene is root entity for all Game Entities.
  */
-class XGLScene2D(val context: Context, val engine: Sandbox2D) : Scene() {
-    var initialized: Boolean = false
+class XGL2DResourceManager(val context: Context, val engine: Sandbox2D) : BaseEntity(), Closeable {
+    val mShaderLibrary = ShaderLibrary()
 
-    init {
-        mCamera = OrthographicCamera()
-        addComponent(mCamera)
-        mCameraController = OrthographicCameraController(mCamera as OrthographicCamera)
-        addComponent(mCameraController)
+    override fun close() {
+        mShaderLibrary.close()
     }
 
+    var initialized: Boolean = false
+
     fun initOpenGlResource() {
+        FrameBufferEntity.initShader(context)
         XGLTextureSlots.initUnderOpenGl()
         Renderer2DData.initStaticData(context)     // 初始化本Render的静态数据
         initTexture()
@@ -64,8 +64,8 @@ class XGLScene2D(val context: Context, val engine: Sandbox2D) : Scene() {
         val TextureCheckboxFilePath = "$PATH/$TEXTURE_FILE_CKBoard"
         val TextureAtlasFilePath = "$PATH/$TEXTURE_FILE_Atlas"
 
-        var textureCheckboxIndex by Delegates.notNull<Int>()
-        var textureAltasIndex by Delegates.notNull<Int>()
+        var textureCheckboxIndex: Int = -1
+        var textureAltasIndex: Int = -1
     }
 
 }

@@ -1,8 +1,8 @@
 package com.focus617.app_demo.engine.d3
 
 import android.opengl.GLSurfaceView
+import com.focus617.core.engine.ecs.mine.static.SceneData
 import com.focus617.core.engine.ecs.mine.system.PerspectiveCameraSystem
-import com.focus617.core.engine.ecs.mine.system.RenderSystem
 import com.focus617.core.engine.renderer.IfRenderer
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferAttachmentSpecification
@@ -20,14 +20,19 @@ import com.focus617.opengles.renderer.framebuffer.submitWithOutlining
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
 import com.focus617.opengles.text.TextEntity3D
 import com.focus617.opengles.text.TextLayer2D
+import java.io.Closeable
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class XGLRenderer3D(
-    private val xglResourceManager: XGLResourceManager
-) : BaseEntity(), IfRenderer, GLSurfaceView.Renderer {
+    private val xglResourceManager: XGL3DResourceManager
+) : BaseEntity(), IfRenderer, GLSurfaceView.Renderer, Closeable {
 
     private lateinit var mFrameBuffer: XGLFrameBuffer
+
+    override fun close() {
+        mFrameBuffer.close()
+    }
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         // 打印OpenGL Version，Vendor，etc
@@ -93,8 +98,8 @@ class XGLRenderer3D(
                     bind()
 //                  LOG.info(XMatrix.toString(SceneData.sProjectionMatrix, matrixName = "ProjectionMatrix"))
 //                  LOG.info(XMatrix.toString(SceneData.sViewMatrix, matrixName = "ViewMatrix"))
-                    setMat4(U_PROJECT_MATRIX, RenderSystem.SceneData.sProjectionMatrix)
-                    setMat4(U_VIEW_MATRIX, RenderSystem.SceneData.sViewMatrix)
+                    setMat4(U_PROJECT_MATRIX, SceneData.sProjectionMatrix)
+                    setMat4(U_VIEW_MATRIX, SceneData.sViewMatrix)
 
                     if (gameObject.isSelected) {
                         gameObject.submitWithOutlining(shader, Color.GOLD)

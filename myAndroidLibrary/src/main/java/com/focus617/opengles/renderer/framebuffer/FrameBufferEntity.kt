@@ -1,5 +1,6 @@
 package com.focus617.opengles.renderer.framebuffer
 
+import android.content.Context
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
@@ -9,6 +10,8 @@ import com.focus617.core.engine.scene_graph.IfMeshable
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
 import com.focus617.core.engine.scene_graph.renderer.Material
 import com.focus617.core.engine.scene_graph.renderer.Mesh
+import com.focus617.opengles.renderer.shader.XGLShader
+import com.focus617.opengles.renderer.shader.XGLShaderBuilder
 import com.focus617.opengles.renderer.vertex.XGLVertexArray
 import com.focus617.opengles.scene_graph.XGLDrawableObject
 
@@ -30,19 +33,7 @@ open class FrameBufferEntity : GeometryEntity(), XGLDrawableObject {
         onRender(shader)
     }
 
-    companion object {
-        const val SHADER_PATH = "framebuffer"
-        const val SHADER_FILE = "shader.glsl"
-        const val SHADER_OUTLINING_FILE = "shaderSingleColor.glsl"
 
-        const val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
-        const val ShaderOutliningFilePath: String = "$SHADER_PATH/$SHADER_OUTLINING_FILE"
-
-        lateinit var shader: Shader
-//        lateinit var shaderOutlining: Shader
-
-        const val U_TEXTURE = "u_screenTexture"
-    }
 
     class FrameBufferQuad : IfMeshable {
         override fun getVertices(): FloatArray = floatArrayOf(
@@ -70,6 +61,32 @@ open class FrameBufferEntity : GeometryEntity(), XGLDrawableObject {
         }
 
         override fun afterBuild() {
+        }
+    }
+
+    companion object {
+        const val SHADER_PATH = "framebuffer"
+        const val SHADER_FILE = "shader.glsl"
+        const val SHADER_OUTLINING_FILE = "shaderSingleColor.glsl"
+
+        const val ShaderFilePath: String = "$SHADER_PATH/$SHADER_FILE"
+        const val ShaderOutliningFilePath: String = "$SHADER_PATH/$SHADER_OUTLINING_FILE"
+
+        lateinit var shader: Shader
+//        lateinit var shaderOutlining: Shader
+
+        const val U_TEXTURE = "u_screenTexture"
+
+        fun initShader(context: Context) {
+            shader = XGLShaderBuilder.createShader(
+                context,
+                ShaderFilePath
+            ) as XGLShader
+
+//        shaderOutlining = XGLShaderBuilder.createShader(
+//            context,
+//            ShaderOutliningFilePath
+//        ) as XGLShader
         }
     }
 }
