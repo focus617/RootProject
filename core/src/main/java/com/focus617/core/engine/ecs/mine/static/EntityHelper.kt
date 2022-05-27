@@ -1,33 +1,27 @@
 package com.focus617.core.engine.ecs.mine.static
 
 import com.focus617.core.engine.ecs.fleks.Entity
-import com.focus617.core.engine.ecs.fleks.World
 import com.focus617.core.engine.ecs.mine.component.Relationship
 
-
-fun Entity.world() = World.CURRENT_WORLD
-
-fun Entity.scene() = Entity(0)
-
-inline fun <reified T : Any> Entity.hasComponent(): Boolean = (this in world().mapper<T>())
+inline fun <reified T : Any> Entity.hasComponent(): Boolean = (this in Scene.world().mapper<T>())
 
 inline fun <reified T : Any> Entity.getComponentOrNull(): T? {
-    val mapper = world().mapper<T>()
+    val mapper = Scene.world().mapper<T>()
     return if (this in mapper) mapper.getOrNull(this) else null
 }
 
 inline fun <reified T : Any> Entity.removeComponent() {
-    val mapper = world().mapper<T>()
+    val mapper = Scene.world().mapper<T>()
     if (this in mapper) mapper.removeInternal(this)
 }
 
 inline fun <reified T : Any> Entity.addOrUpdateComponent(configuration: T.() -> Unit = {}): T {
-    val mapper = world().mapper<T>()
+    val mapper = Scene.world().mapper<T>()
     return mapper.addOrUpdateInternal(this, configuration)
 }
 
 fun Entity.setParent(parentEntity: Entity) {
-    val mapper = world().mapper<Relationship>()
+    val mapper = Scene.world().mapper<Relationship>()
     val parentRelationship = mapper[parentEntity]
     val childRelationship = mapper[this]
 
@@ -53,7 +47,7 @@ fun Entity.setParent(parentEntity: Entity) {
 }
 
 fun Entity.removeChild(child: Entity) {
-    val mapper = world().mapper<Relationship>()
+    val mapper = Scene.world().mapper<Relationship>()
     val childRelationship = mapper[child]
 
     check(this.id == childRelationship.parent) {
@@ -100,6 +94,19 @@ fun Entity.removeChild(child: Entity) {
         prev = -1
         next = -1
     }
+}
+
+fun Entity.removeChild(childEntityId: Int){
+    val mapper = Scene.world().mapper<Relationship>()
+    val childEntity = Entity(childEntityId)
+    val childRelationship = mapper[childEntity]
+
+    check(this.id == childRelationship.parent) {
+        "wrong entity($childEntityId), which is not child of mine(${this.id})"
+        return
+    }
+
+    removeChild(childEntity)
 }
 
 

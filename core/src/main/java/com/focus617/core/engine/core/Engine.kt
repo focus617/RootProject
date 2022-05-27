@@ -1,6 +1,6 @@
 package com.focus617.core.engine.core
 
-import com.focus617.core.engine.ecs.mine.static.Game
+import com.focus617.core.engine.ecs.mine.static.Scene
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventDispatcher
@@ -87,7 +87,7 @@ open class Engine : BaseEntity(), Runnable, Closeable {
             }
 
             // Update ECS world
-            Game.world.update(timeStep.getMilliSecond().toFloat())
+            Scene.world().update(timeStep.getMilliSecond().toFloat())
 
             afterUpdate()
 

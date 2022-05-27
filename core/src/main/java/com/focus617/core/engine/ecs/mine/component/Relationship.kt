@@ -8,15 +8,15 @@ import com.focus617.core.engine.ecs.fleks.Entity
  */
 data class Relationship(
     var childrenNumber: Int = 0,
-    var first: Int = invalidateEntity.id,   // children链表的表头
-    var last: Int = invalidateEntity.id,    // children链表的表尾
+    var first: Int = InvalidateEntity.id,   // children链表的表头
+    var last: Int = InvalidateEntity.id,    // children链表的表尾
 
-    var parent: Int = invalidateEntity.id,
-    var prev: Int = invalidateEntity.id,    // 链表的前一个
-    var next: Int = invalidateEntity.id     // 链表的后一个
+    var parent: Int = InvalidateEntity.id,
+    var prev: Int = InvalidateEntity.id,    // 链表的前一个
+    var next: Int = InvalidateEntity.id     // 链表的后一个
 ){
 
     companion object{
-        val invalidateEntity = Entity(-1)
+        val InvalidateEntity = Entity(-1)
     }
 }

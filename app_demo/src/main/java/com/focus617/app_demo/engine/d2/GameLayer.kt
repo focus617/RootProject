@@ -4,12 +4,10 @@ import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.ecs.fleks.Entity
 import com.focus617.core.engine.ecs.mine.component.Animation
-import com.focus617.core.engine.ecs.mine.component.Relationship
 import com.focus617.core.engine.ecs.mine.component.Sprite
 import com.focus617.core.engine.ecs.mine.component.TransformMatrix
-import com.focus617.core.engine.ecs.mine.static.Game
+import com.focus617.core.engine.ecs.mine.static.Scene
 import com.focus617.core.engine.ecs.mine.static.hasComponent
-import com.focus617.core.engine.ecs.mine.static.setParent
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
@@ -30,12 +28,10 @@ class GameLayer(name: String, private val resourceManager: XGL2DResourceManager)
         val squareTransform = Mat4().transform2D(
             Vector3(0f, 0f, 0f), Vector2(0.75f, 0.75f), 0f
         )
-        square = Game.world.entity { square ->
-            add<TransformMatrix>{ transform.setValue(squareTransform)}
-            add<Sprite> { color = Color.GOLD }
 
-            add<Relationship>()
-            square.setParent(Game.scene)
+        square = Scene.createEntity("Square") {
+            add<TransformMatrix> { transform.setValue(squareTransform) }
+            add<Sprite> { color = Color.GOLD }
         }
 
         LOG.info("Square has component Sprite = ${square.hasComponent<Sprite>()}")
@@ -45,9 +41,7 @@ class GameLayer(name: String, private val resourceManager: XGL2DResourceManager)
     var rotationInDegree: Float = 0f
     override fun onUpdate(timeStep: TimeStep) {
         if (Renderer2DData.initialized && resourceManager.initialized) {
-
             // 使用SubTexture绘制
-
             XGLRenderer2D.drawQuad(
                 Point3D(-0.5f, 1f, 0f),
                 Vector2(0.25f, 0.5f),
@@ -60,7 +54,6 @@ class GameLayer(name: String, private val resourceManager: XGL2DResourceManager)
                 textureBarrel!!,
                 1.0f
             )
-
         }
     }
 
