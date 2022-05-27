@@ -5,9 +5,16 @@ import com.focus617.mylib.logging.ILoggable
 
 enum class FrameBufferTextureFormat : ILoggable {
     None,
-    RGBA8,              // Color
-    DEPTH_COMPONENT32F, // Depth
-    DEPTH24STENCIL8;    // Depth/stencil
+
+    // Color
+    RGBA8,
+    RED_INTEGER,
+
+    // Depth
+    DEPTH_COMPONENT32F,
+
+    // Depth/stencil
+    DEPTH24STENCIL8;
 
     val LOG = logger()
 
