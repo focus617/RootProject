@@ -25,7 +25,7 @@ class MyApplication : BaseApplication() {
 
         // 初始化引擎
         // is3D是选择2D，或3D的总开关
-        val is3D = false
+        val is3D = true
         gameEngine = if (is3D) Sandbox3D(this) else Sandbox2D(this)
     }
 
