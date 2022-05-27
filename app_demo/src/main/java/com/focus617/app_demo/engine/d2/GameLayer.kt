@@ -23,6 +23,7 @@ class GameLayer(name: String, private val resourceManager: XGL2DResourceManager)
     private val eventDispatcher = EventDispatcher()
 
     private val square: Entity
+    private var texIndex: Float = -1f
 
     init {
         val squareTransform = Mat4().transform2D(
@@ -65,6 +66,7 @@ class GameLayer(name: String, private val resourceManager: XGL2DResourceManager)
             Vector2(128f, 128f),    // sprite size
             Vector2(1f, 2f)         // cell size
         )
+        texIndex = XGLTextureSlots.requestIndex(textureTree!!.mTextureAtlas).toFloat()
 
         textureBarrel = SubTexture2D.createFromCoords(
             XGLTextureSlots.TextureSlots[XGL2DResourceManager.textureAltasIndex] as Texture2D,

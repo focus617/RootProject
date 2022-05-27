@@ -52,17 +52,22 @@ object Scene : BaseEntity() {
         camera.setParent(sceneEntity)
     }
 
+    const val DefaultTag = "Entity"
     /** ++++++++ 构建 ECS ++++++++++ */
     fun createEntity(
-        name: String,
+        name: String = "",
         parent: Entity = sceneEntity,
         configuration: EntityCreateCfg.(Entity) -> Unit = {}
     ): Entity {
         val entity = world.entity(configuration)
-        entity.addOrUpdateComponent<Tag> { tag = name }
+        entity.addOrUpdateComponent<Tag> {
+            tag = name.ifEmpty { DefaultTag }
+        }
         entity.addOrUpdateComponent<Relationship>()
         entity.setParent(parent)
         return entity
     }
+
+
 
 }

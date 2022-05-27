@@ -64,13 +64,20 @@ class SceneTest : BaseEntity() {
     }
 
     @Test
+    fun `createEntity_by default has default Tag with correct value`() {
+        val entity = Scene.createEntity()
+
+        assertTrue(entity.hasComponent<Tag>())
+        assertEquals(Scene.DefaultTag, entity.getComponentOrNull<Tag>()!!.tag)
+    }
+
+    @Test
     fun `createEntity_by default has Tag component with correct value`() {
         val tag = "NewEntity"
         val entity = Scene.createEntity(tag)
 
         assertTrue(entity.hasComponent<Tag>())
         assertEquals(tag, entity.getComponentOrNull<Tag>()!!.tag)
-
     }
 
     @Test
