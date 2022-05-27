@@ -12,8 +12,11 @@ abstract class FrameBuffer(
     // 像下面的mShowOnScreen为false的Framebuffer，其实就是一个渲染到屏幕上的RenderPass
     protected var mShowOnScreen: Boolean = false
 
+    protected var mActiveColorAttachment: Int = 0
+
     abstract fun bind()
     abstract fun unbind()
-    abstract fun resizeColorAttachment(width: Int, height: Int)
-    abstract fun getColorAttachmentTextureId(index: Int): Int
+    abstract fun resize(width: Int, height: Int)
+    abstract fun readPixel(attachmentIndex: Int, x: Int, y: Int): Int
+    abstract fun getColorAttachmentTextureId(index: Int = mActiveColorAttachment): Int
 }

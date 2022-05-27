@@ -70,7 +70,7 @@ class XGLRenderer3D(
 
         PerspectiveCameraSystem.onWindowSizeChange(width, height)
 
-        mFrameBuffer.resizeColorAttachment(width, height)
+        mFrameBuffer.resize(width, height)
         TextLayer2D.onWindowSizeChange(width, height)   // used for text on screen
         TextEntity3D.onWindowSizeChange(width, height)  // used for projection matrix
     }
