@@ -4,7 +4,7 @@ import com.focus617.core.engine.ecs.fleks.Entity
 import com.focus617.core.engine.ecs.fleks.EntityCreateCfg
 import com.focus617.core.engine.ecs.fleks.World
 import com.focus617.core.engine.ecs.mine.component.CameraMatrix
-import com.focus617.core.engine.ecs.mine.component.OrthographicCameraCmp
+import com.focus617.core.engine.ecs.mine.component.PerspectiveCameraCmp
 import com.focus617.core.engine.ecs.mine.component.Relationship
 import com.focus617.core.engine.ecs.mine.component.Tag
 import com.focus617.core.engine.ecs.mine.system.OrthographicCameraSystem
@@ -45,7 +45,7 @@ object Scene : BaseEntity() {
 
         camera = world.entity {
             add<Tag> { tag = "SceneCamera" }
-            add<OrthographicCameraCmp>()
+            add<PerspectiveCameraCmp>()
             add<CameraMatrix>()
             add<Relationship>()
         }
@@ -53,6 +53,7 @@ object Scene : BaseEntity() {
     }
 
     const val DefaultTag = "Entity"
+
     /** ++++++++ 构建 ECS ++++++++++ */
     fun createEntity(
         name: String = "",
@@ -67,7 +68,6 @@ object Scene : BaseEntity() {
         entity.setParent(parent)
         return entity
     }
-
 
 
 }
