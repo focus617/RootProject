@@ -70,7 +70,7 @@ class XGLRenderer2D(
 
         OrthographicCameraSystem.onViewportResize(width, height)
 
-        mFrameBuffer.resizeColorAttachment(width, height)
+        mFrameBuffer.resize(width, height)
     }
 
     override fun onDrawFrame(unused: GL10) {

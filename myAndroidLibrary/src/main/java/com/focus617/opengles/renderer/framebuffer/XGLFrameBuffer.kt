@@ -24,8 +24,6 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     private var mRenderBufferAttachment: XGLRenderBuffer? = null          // RenderBuffer
     private val mQuad: FrameBufferEntity = FrameBufferEntity()
 
-    private var mActiveColorAttachment: Int = 0
-
     // Must call under EGL
     init {
         for (format in specification.attachment.attachments) {
@@ -41,6 +39,16 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         Timber.i("XGLFrameBuffer created.")
     }
 
+    override fun close() {
+        glDeleteFramebuffers(1, mFrameBuf)
+        mDepthBufferAttachment?.close()
+        mRenderBufferAttachment?.close()
+        mColorAttachments.forEach { it.close() }
+
+        mDepthBufferAttachment = null
+        mRenderBufferAttachment = null
+        mHandle = -1
+    }
 
     private fun invalidate() {
         if (mHandle != -1) this.close()
@@ -60,7 +68,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
 
         // Make FrameBuffer Active
         glBindFramebuffer(GL_FRAMEBUFFER, mHandle)
-        if(mActiveColorAttachment < mColorAttachments.size) {
+        if (mActiveColorAttachment < mColorAttachments.size) {
             // Attach the first Texture2D to FBO color attachment point
             glFramebufferTexture2D(
                 GL_DRAW_FRAMEBUFFER,
@@ -145,13 +153,6 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         }
     }
 
-    override fun close() {
-        glDeleteFramebuffers(1, mFrameBuf)
-        mDepthBufferAttachment?.close()
-        mRenderBufferAttachment?.close()
-        mColorAttachments.forEach { it.close() }
-    }
-
     override fun bind() {
         /**
          * Bind a framebuffer object to the GL_DRAW_FRAMEBUFFER framebuffer binding point,
@@ -173,10 +174,15 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0)
     }
 
-    override fun getColorAttachmentTextureId(index: Int) = mColorAttachments[index].mHandle
+    override fun getColorAttachmentTextureId(index: Int): Int {
+        check(index < mColorAttachments.size) {
+            "Index is larger than real size of ColorAttachments"
+        }
+        return mColorAttachments[index].mHandle
+    }
 
-    override fun resizeColorAttachment(width: Int, height: Int) {
-        Timber.i("XGLFrameBuffer resizeColorAttachment($width, $height)")
+    override fun resize(width: Int, height: Int) {
+        Timber.i("XGLFrameBuffer resize to ($width, $height)")
         if (width == 0 || height == 0 || width > sMaxFrameBufferSize || height > sMaxFrameBufferSize) {
             Timber.w("Attempt to resize framebuffer to $width, $height")
             return
@@ -184,6 +190,16 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         mSpecification.mWidth = width
         mSpecification.mHeight = height
         invalidate()
+    }
+
+    override fun readPixel(attachmentIndex: Int, x: Int, y: Int): Int {
+        check(attachmentIndex < mColorAttachments.size) {
+            "Index is larger than real size of ColorAttachments"
+        }
+        glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex)
+        val pixelData = IntBuffer.allocate(1)
+        glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, pixelData)
+        return pixelData[0]
     }
 
     fun drawOnScreen() {
@@ -206,5 +222,12 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
 
     companion object {
         const val sMaxFrameBufferSize = 8192
+
+        fun FrameBufferTextureFormatToGlValue(format: FrameBufferTextureFormat): Int =
+            when (format) {
+                FrameBufferTextureFormat.RGBA8 -> GL_RGBA8
+                FrameBufferTextureFormat.RED_INTEGER -> GL_RED_INTEGER
+                else -> 0
+            }
     }
 }
