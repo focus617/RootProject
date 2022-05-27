@@ -1,7 +1,6 @@
 package com.focus617.opengles.renderer.vertex
 
-import android.opengl.GLES20.*
-import android.opengl.GLES31
+import android.opengl.GLES31.*
 import com.focus617.core.engine.renderer.IfBuffer
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.renderer.vertex.VertexArray
@@ -28,7 +27,7 @@ class XGLVertexArray : VertexArray(), IfBuffer, Closeable {
 
     init {
         // Generate VAO ID(顶点数组对象)
-        GLES31.glGenVertexArrays(1, mVAOBuf)
+        glGenVertexArrays(1, mVAOBuf)
         if (mVAOBuf.get(0) == 0) {
             throw RuntimeException("Could not create a new vertex array object.")
         }
@@ -41,11 +40,11 @@ class XGLVertexArray : VertexArray(), IfBuffer, Closeable {
     }
 
     override fun bind() {
-        GLES31.glBindVertexArray(mHandle)
+        glBindVertexArray(mHandle)
     }
 
     override fun unbind() {
-        GLES31.glBindVertexArray(0)
+        glBindVertexArray(0)
     }
 
     fun addVertexBuffer(vertexBuffer: XGLVertexBuffer): Boolean {
@@ -56,28 +55,72 @@ class XGLVertexArray : VertexArray(), IfBuffer, Closeable {
             return false
         }
 
-        GLES31.glBindVertexArray(mHandle)
+        glBindVertexArray(mHandle)
         vertexBuffer.bind()
 
         for ((index, element) in elements.withIndex()) {
-            // 启用顶点属性
-            glEnableVertexAttribArray(index)
-            // 设置顶点属性
-            glVertexAttribPointer(
-                index,
-                element.type.getComponentCount(),
-                shaderDataTypeToOpenGLBaseType(element.type),
-                element.normalized,
-                layout.getStride(),
-                element.offset
-            )
+            when (element.type) {
+                ShaderDataType.Float1,
+                ShaderDataType.Float2,
+                ShaderDataType.Float3,
+                ShaderDataType.Float4 -> {
+                    // 启用顶点属性
+                    glEnableVertexAttribArray(index)
+                    // 设置顶点属性
+                    glVertexAttribPointer(
+                        index,
+                        element.type.getComponentCount(),
+                        shaderDataTypeToOpenGLBaseType(element.type),
+                        element.normalized,
+                        layout.getStride(),
+                        element.offset
+                    )
+                }
+
+                ShaderDataType.Bool,
+                ShaderDataType.Int1,
+                ShaderDataType.Int2,
+                ShaderDataType.Int3,
+                ShaderDataType.Int4 -> {
+                    // 启用顶点属性
+                    glEnableVertexAttribArray(index)
+                    // 设置顶点属性
+                    glVertexAttribIPointer(
+                        index,
+                        element.type.getComponentCount(),
+                        shaderDataTypeToOpenGLBaseType(element.type),
+                        layout.getStride(),
+                        element.offset
+                    )
+                }
+
+                ShaderDataType.Mat3,
+                ShaderDataType.Mat4 -> {
+                    val count = element.type.getComponentCount()
+                    for (i in 0 until count) {
+                        // 启用顶点属性
+                        glEnableVertexAttribArray(index)
+                        // 设置顶点属性
+                        glVertexAttribPointer(
+                            index,
+                            count,
+                            shaderDataTypeToOpenGLBaseType(element.type),
+                            element.normalized,
+                            layout.getStride(),
+                            element.offset + Float.SIZE_BYTES * count * i
+                        )
+                        glVertexAttribDivisor(index, 1)
+                    }
+                }
+            }
         }
+
         mVertexBufferStack.add(vertexBuffer)
         return true
     }
 
     fun setIndexBuffer(indexBuffer: XGLIndexBuffer) {
-        GLES31.glBindVertexArray(mHandle)
+        glBindVertexArray(mHandle)
         indexBuffer.bind()
         mIndexBuffer = indexBuffer
     }
