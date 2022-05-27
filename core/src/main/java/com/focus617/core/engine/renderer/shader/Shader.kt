@@ -1,9 +1,6 @@
 package com.focus617.core.engine.renderer.shader
 
-import com.focus617.core.engine.math.Mat4
-import com.focus617.core.engine.math.Point3D
-import com.focus617.core.engine.math.Vector3
-import com.focus617.core.engine.math.Vector4
+import com.focus617.core.engine.math.*
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.core.platform.base.BaseEntity
 import java.io.Closeable
@@ -30,6 +27,7 @@ abstract class Shader(
     abstract fun setInt(name: String, value: Int)
     abstract fun setIntArray(name: String, values: IntArray, count: Int)
     abstract fun setFloat(name: String, value: Float)
+    abstract fun setFloat2(name: String, value: Vector2)
     abstract fun setFloat3(name: String, value: Vector3)
     abstract fun setFloat3(name: String, value: Point3D)
     abstract fun setFloat4(name: String, value: Vector4)

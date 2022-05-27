@@ -67,6 +67,10 @@ class XGLShader constructor(
         uploadUniformFloat(name, value)
     }
 
+    override fun setFloat2(name: String, value: Vector2) {
+        uploadUniformFloat2(name, value)
+    }
+
     override fun setFloat3(name: String, value: Vector3) {
         uploadUniformFloat3(name, value)
     }
