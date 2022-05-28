@@ -27,8 +27,8 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
     }
 
     override fun onTickEntity(entity: Entity) {
-        if (OrthographicCameraSystem.isDirty) {
-            LOG.info("OrthographicCameraSystem onTickEntity.")
+        if (isDirty) {
+            LOG.info("OrthographicCameraSystem onTickEntity(based on projectionMatrix).")
 
             reCalculateOrthoGraphicProjectionMatrix()
             synchronized(SceneData) {
@@ -38,7 +38,7 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
         }
 
         if(mCamera.isDirty()){
-            LOG.info("OrthographicCameraSystem onTickEntity.")
+            LOG.info("OrthographicCameraSystem onTickEntity(based on viewMatrix).")
 
             synchronized(SceneData) {
                 SceneData.sViewMatrix.setValue(mCamera.getViewMatrix())
