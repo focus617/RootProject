@@ -233,6 +233,11 @@ class XGLRenderer2D(
             val texIndex: Float = 0.0f // White Texture
             val tilingFactor: Float = 1.0f
 
+            if(Renderer2DData.QuadIndexCount >= (Renderer2DData.MaxIndices - 6)){
+                LOG.warn("drawQuad(): Exceed the max indices limitation.")
+                return
+            }
+
             Renderer2DData.putVertex(
                 (transform * Renderer2DData.QuadVertexPosition[0]).toPoint3D()!!,
                 color,

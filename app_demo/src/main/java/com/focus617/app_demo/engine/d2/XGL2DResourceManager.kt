@@ -31,12 +31,12 @@ class XGL2DResourceManager(val context: Context, val engine: Sandbox2D) : BaseEn
     }
 
     private fun initTexture() {
-        var texture = XGLTextureBuilder.createTexture(
-            context, TextureCheckboxFilePath
-        )!!
-        textureCheckboxIndex = XGLTextureSlots.requestIndex(texture)
+//        var texture = XGLTextureBuilder.createTexture(
+//            context, TextureCheckboxFilePath
+//        )!!
+//        textureCheckboxIndex = XGLTextureSlots.requestIndex(texture)
 
-        texture = XGLTextureBuilder.createTexture(
+        val texture = XGLTextureBuilder.createTexture(
             context, TextureAtlasFilePath
         )!!
         textureAltasIndex = XGLTextureSlots.requestIndex(texture)

@@ -35,7 +35,7 @@ object Renderer2DData : WithLogging(), Closeable {
     lateinit var TextureShader: XGLShader
     lateinit var WhiteTexture: Texture2D
 
-    var QuadIndexCount: Int = 0
+    var QuadIndexCount: Int = 0       // 当前已经填充的Indices的size
 
     lateinit var QuadVertexBufferBase: FloatArray
     var QuadVertexBufferPtr: Int = 0    // Index of FloatArray(记住计算size时要乘4)
