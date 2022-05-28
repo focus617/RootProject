@@ -1,10 +1,10 @@
 package com.focus617.opengles.scene_graph
 
 import android.content.Context
-import com.focus617.core.engine.scene_graph.renderer.Material
-import com.focus617.core.engine.scene_graph.renderer.Mesh
-import com.focus617.core.engine.scene_graph.renderer.Renderable
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MATERIAL_TEXTURE_DIFFUSE
+import com.focus617.core.engine.mesh.Mesh
+import com.focus617.core.engine.renderer.Material
+import com.focus617.core.engine.renderer.Renderable
+import com.focus617.core.engine.renderer.api.ShaderUniformConstants.U_MATERIAL_TEXTURE_DIFFUSE
 import com.focus617.opengles.renderer.texture.XGLTextureBuilder
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
 import com.focus617.opengles.renderer.vertex.XGLIndexBuffer

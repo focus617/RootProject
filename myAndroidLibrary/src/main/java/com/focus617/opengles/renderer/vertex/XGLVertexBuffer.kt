@@ -3,8 +3,8 @@ package com.focus617.opengles.renderer.vertex
 import android.opengl.GLES20
 import android.opengl.GLES20.*
 import android.opengl.GLES31
-import com.focus617.core.engine.renderer.IfBuffer
-import com.focus617.core.engine.renderer.IfBufferLayout
+import com.focus617.core.engine.renderer.api.IfBuffer
+import com.focus617.core.engine.renderer.api.IfBufferLayout
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.platform.base.BaseEntity
 import java.io.Closeable

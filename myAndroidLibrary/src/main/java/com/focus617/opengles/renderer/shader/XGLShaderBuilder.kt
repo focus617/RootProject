@@ -1,7 +1,7 @@
 package com.focus617.opengles.renderer.shader
 
 import android.content.Context
-import com.focus617.core.engine.renderer.RendererAPI
+import com.focus617.core.engine.renderer.api.RendererAPI
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.shader.ShaderBuilder
 import timber.log.Timber

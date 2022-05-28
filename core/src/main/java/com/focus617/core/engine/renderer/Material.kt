@@ -1,10 +1,12 @@
-package com.focus617.core.engine.scene_graph.renderer
+package com.focus617.core.engine.renderer
 
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.texture.Texture
 
-
+/**
+ * Material = shader + below materialCfg
+ */
 class Material() {
     private val mFloatHashMap = HashMap<String, Float>()
     private val mVector3HashMap = HashMap<String, Vector3>()

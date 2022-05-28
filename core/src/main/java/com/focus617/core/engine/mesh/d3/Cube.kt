@@ -1,9 +1,9 @@
 package com.focus617.core.engine.mesh.d3
 
+import com.focus617.core.engine.mesh.IfMeshable
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
-import com.focus617.core.engine.scene_graph.IfMeshable
 
 
 open class Cube : IfMeshable {

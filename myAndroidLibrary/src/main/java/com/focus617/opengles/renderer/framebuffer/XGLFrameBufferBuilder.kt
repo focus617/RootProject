@@ -1,6 +1,6 @@
 package com.focus617.opengles.renderer.framebuffer
 
-import com.focus617.core.engine.renderer.RendererAPI
+import com.focus617.core.engine.renderer.api.RendererAPI
 import com.focus617.core.engine.renderer.framebuffer.FrameBuffer
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferBuilder
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferSpecification

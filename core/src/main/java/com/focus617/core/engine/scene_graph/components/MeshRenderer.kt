@@ -1,13 +1,13 @@
 package com.focus617.core.engine.scene_graph.components
 
 import com.focus617.core.engine.core.TimeStep
+import com.focus617.core.engine.mesh.Mesh
+import com.focus617.core.engine.renderer.Material
+import com.focus617.core.engine.renderer.api.ShaderUniformConstants.U_MODEL_MATRIX
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene_graph.core.IfComponent
 import com.focus617.core.engine.scene_graph.core.ParentEntity
 import com.focus617.core.engine.scene_graph.core.Transform
-import com.focus617.core.engine.scene_graph.renderer.Material
-import com.focus617.core.engine.scene_graph.renderer.Mesh
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_MODEL_MATRIX
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.base.Event
 

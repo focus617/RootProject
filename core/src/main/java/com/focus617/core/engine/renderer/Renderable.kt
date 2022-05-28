@@ -1,5 +1,6 @@
-package com.focus617.core.engine.scene_graph.renderer
+package com.focus617.core.engine.renderer
 
+import com.focus617.core.engine.mesh.Mesh
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.platform.base.BaseEntity
 import java.io.Closeable

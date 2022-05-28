@@ -3,7 +3,7 @@ package com.focus617.opengles.renderer.texture
 import android.content.Context
 import android.opengl.GLES31.GL_TEXTURE_2D
 import android.opengl.GLES31.GL_TEXTURE_2D_MULTISAMPLE
-import com.focus617.core.engine.renderer.RendererAPI
+import com.focus617.core.engine.renderer.api.RendererAPI
 import com.focus617.mylib.logging.WithLogging
 import timber.log.Timber
 

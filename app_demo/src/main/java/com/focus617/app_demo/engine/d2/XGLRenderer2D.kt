@@ -10,8 +10,8 @@ import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Point2D
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
-import com.focus617.core.engine.renderer.IfRenderer
 import com.focus617.core.engine.renderer.RenderCommand
+import com.focus617.core.engine.renderer.api.IfRenderer
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferAttachmentSpecification
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferSpecification
 import com.focus617.core.engine.renderer.framebuffer.FrameBufferTextureFormat

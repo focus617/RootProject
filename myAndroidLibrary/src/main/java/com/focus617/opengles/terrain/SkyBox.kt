@@ -2,12 +2,12 @@ package com.focus617.opengles.terrain
 
 import android.content.Context
 import android.opengl.GLES31
+import com.focus617.core.engine.mesh.Mesh
 import com.focus617.core.engine.mesh.d3.Cube
+import com.focus617.core.engine.renderer.Material
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene_graph.GeometryEntity
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
-import com.focus617.core.engine.scene_graph.renderer.Material
-import com.focus617.core.engine.scene_graph.renderer.Mesh
 import com.focus617.opengles.renderer.texture.XGLTextureCubeMap
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
 import com.focus617.opengles.renderer.vertex.XGLVertexArray

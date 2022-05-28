@@ -1,7 +1,7 @@
 package com.focus617.core.engine.mesh.d2
 
+import com.focus617.core.engine.mesh.DynamicCreationMesh
 import com.focus617.core.engine.mesh.GeomMeshBuilder
-import com.focus617.core.engine.scene_graph.renderer.DynamicCreationMesh
 import kotlin.math.PI
 
 class Circle(var radius: Float) : DynamicCreationMesh() {

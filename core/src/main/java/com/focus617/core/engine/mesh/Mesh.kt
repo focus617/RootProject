@@ -1,4 +1,4 @@
-package com.focus617.core.engine.scene_graph.renderer
+package com.focus617.core.engine.mesh
 
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.vertex.VertexArray

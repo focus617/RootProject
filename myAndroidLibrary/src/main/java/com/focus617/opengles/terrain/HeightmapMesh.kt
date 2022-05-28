@@ -4,11 +4,11 @@ import android.content.Context
 import android.graphics.Color
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector3
+import com.focus617.core.engine.mesh.DynamicCreationMesh
 import com.focus617.core.engine.mesh.GeneratedMeshData
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
-import com.focus617.core.engine.scene_graph.renderer.DynamicCreationMesh
 import com.focus617.platform.helper.BitmapHelper
 import timber.log.Timber
 

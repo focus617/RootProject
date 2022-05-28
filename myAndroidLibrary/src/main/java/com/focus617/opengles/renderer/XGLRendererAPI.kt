@@ -1,7 +1,7 @@
 package com.focus617.opengles.renderer
 
 import android.opengl.GLES31.*
-import com.focus617.core.engine.renderer.RendererAPI
+import com.focus617.core.engine.renderer.api.RendererAPI
 import com.focus617.core.engine.renderer.vertex.VertexArray
 import com.focus617.core.engine.resource.baseDataType.Color
 import com.focus617.opengles.renderer.vertex.XGLVertexArray

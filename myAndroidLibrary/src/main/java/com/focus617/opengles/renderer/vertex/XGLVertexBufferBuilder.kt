@@ -1,7 +1,7 @@
 package com.focus617.opengles.renderer.vertex
 
-import com.focus617.core.engine.renderer.IfBuffer
-import com.focus617.core.engine.renderer.RendererAPI
+import com.focus617.core.engine.renderer.api.IfBuffer
+import com.focus617.core.engine.renderer.api.RendererAPI
 import com.focus617.core.engine.renderer.vertex.VertexBufferBuilder
 import timber.log.Timber
 

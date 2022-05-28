@@ -1,10 +1,10 @@
 package com.focus617.opengles.renderer.vertex
 
 import android.opengl.GLES31.*
-import com.focus617.core.engine.renderer.IfBuffer
+import com.focus617.core.engine.mesh.IfMeshable
+import com.focus617.core.engine.renderer.api.IfBuffer
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.renderer.vertex.VertexArray
-import com.focus617.core.engine.scene_graph.IfMeshable
 import com.focus617.mylib.logging.WithLogging
 import timber.log.Timber
 import java.io.Closeable

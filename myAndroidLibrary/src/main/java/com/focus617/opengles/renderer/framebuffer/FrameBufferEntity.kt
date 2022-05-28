@@ -1,15 +1,15 @@
 package com.focus617.opengles.renderer.framebuffer
 
 import android.content.Context
+import com.focus617.core.engine.mesh.IfMeshable
+import com.focus617.core.engine.mesh.Mesh
+import com.focus617.core.engine.renderer.Material
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.renderer.vertex.BufferElement
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 import com.focus617.core.engine.renderer.vertex.ShaderDataType
 import com.focus617.core.engine.scene_graph.GeometryEntity
-import com.focus617.core.engine.scene_graph.IfMeshable
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
-import com.focus617.core.engine.scene_graph.renderer.Material
-import com.focus617.core.engine.scene_graph.renderer.Mesh
 import com.focus617.opengles.renderer.shader.XGLShader
 import com.focus617.opengles.renderer.shader.XGLShaderBuilder
 import com.focus617.opengles.renderer.vertex.XGLVertexArray

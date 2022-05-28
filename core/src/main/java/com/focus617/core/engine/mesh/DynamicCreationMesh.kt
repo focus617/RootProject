@@ -1,8 +1,6 @@
-package com.focus617.core.engine.scene_graph.renderer
+package com.focus617.core.engine.mesh
 
-import com.focus617.core.engine.mesh.GeneratedMeshData
 import com.focus617.core.engine.renderer.vertex.BufferLayout
-import com.focus617.core.engine.scene_graph.IfMeshable
 import com.focus617.core.platform.base.BaseEntity
 
 abstract class DynamicCreationMesh : BaseEntity(), IfMeshable {

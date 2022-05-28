@@ -2,10 +2,10 @@ package com.focus617.core.engine.scene_graph.core
 
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.math.Vector3
+import com.focus617.core.engine.renderer.Material
+import com.focus617.core.engine.renderer.Renderable
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
-import com.focus617.core.engine.scene_graph.renderer.Material
-import com.focus617.core.engine.scene_graph.renderer.Renderable
 import com.focus617.core.engine.scene_graph.scene.Scene
 import com.focus617.core.platform.event.base.Event
 

@@ -2,13 +2,13 @@ package com.focus617.app_demo.engine.d3
 
 import android.content.Context
 import com.focus617.core.engine.math.Point3D
+import com.focus617.core.engine.mesh.Mesh
 import com.focus617.core.engine.mesh.d3.Ball
+import com.focus617.core.engine.renderer.Material
+import com.focus617.core.engine.renderer.api.ShaderUniformConstants.U_POINT_VIEW_POSITION
 import com.focus617.core.engine.renderer.shader.Shader
 import com.focus617.core.engine.scene_graph.GeometryEntity
 import com.focus617.core.engine.scene_graph.components.MeshRenderer
-import com.focus617.core.engine.scene_graph.renderer.Material
-import com.focus617.core.engine.scene_graph.renderer.Mesh
-import com.focus617.core.engine.scene_graph.renderer.ShaderUniformConstants.U_POINT_VIEW_POSITION
 import com.focus617.opengles.renderer.texture.XGLTextureBuilder
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
 import com.focus617.opengles.renderer.vertex.XGLVertexArray

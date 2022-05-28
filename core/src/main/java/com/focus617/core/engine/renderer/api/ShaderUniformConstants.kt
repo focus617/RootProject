@@ -1,4 +1,4 @@
-package com.focus617.core.engine.scene_graph.renderer
+package com.focus617.core.engine.renderer.api
 
 object ShaderUniformConstants {
     const val U_MODEL_MATRIX = "u_ModelMatrix"

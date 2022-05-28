@@ -16,9 +16,9 @@ import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.WindowProps
 import com.focus617.core.engine.ecs.mine.api.EcsRenderCommand
-import com.focus617.core.engine.renderer.IfGraphicsContext
-import com.focus617.core.engine.renderer.IfRenderer
 import com.focus617.core.engine.renderer.RenderCommand
+import com.focus617.core.engine.renderer.api.IfGraphicsContext
+import com.focus617.core.engine.renderer.api.IfRenderer
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.base.EventHandler
 import com.focus617.opengles.egl.XGLContext

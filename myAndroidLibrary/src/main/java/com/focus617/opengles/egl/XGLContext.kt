@@ -3,7 +3,7 @@ package com.focus617.opengles.egl
 import android.opengl.GLES31.*
 import android.opengl.GLES32
 import android.opengl.GLSurfaceView
-import com.focus617.core.engine.renderer.IfGraphicsContext
+import com.focus617.core.engine.renderer.api.IfGraphicsContext
 import com.focus617.core.platform.base.BaseEntity
 import timber.log.Timber
 

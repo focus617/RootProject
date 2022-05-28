@@ -1,4 +1,4 @@
-package com.focus617.core.engine.scene_graph
+package com.focus617.core.engine.mesh
 
 import com.focus617.core.engine.renderer.vertex.BufferLayout
 
