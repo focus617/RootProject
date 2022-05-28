@@ -18,6 +18,14 @@ class Vector3(var x: Float, var y: Float, var z: Float) {
     constructor(from: Vector3, to: Vector3) :
             this((to.x - from.x), (to.y - from.y), (to.z - from.z))
 
+    constructor(): this(0f, 0f, 0f)
+
+    @JvmOverloads
+    constructor(x: Number, y: Number = x, z: Number = x) : this(
+        x.toFloat(), y.toFloat(), z.toFloat()
+    )
+
+
     override fun toString(): String = "Vector($x, $y, $z)"
 
     override fun equals(other: Any?): Boolean =
@@ -32,6 +40,9 @@ class Vector3(var x: Float, var y: Float, var z: Float) {
 
     //求向量的模的方法
     fun length(): Float = kotlin.math.sqrt((x * x + y * y + z * z).toDouble()).toFloat()
+
+    /** Returns the squared length of the quaternion. */
+    fun length2() : Float = x * x + y * y + z * z
 
     //向量规格化的方法
     fun normalize(): Vector3 = scale(1f / length())
@@ -54,9 +65,14 @@ class Vector3(var x: Float, var y: Float, var z: Float) {
         (z*other).toFloat(),
     )
 
+    // -- Unary arithmetic operators --
+    operator fun unaryPlus() = this
+
+    operator fun unaryMinus() = Vector3(-x, -y, -z)
+
     //求向量叉积的方法
     // http://en.wikipedia.org/wiki/Cross_product
-    fun crossProduct(other: Vector3) = Vector3(
+    infix fun crossProduct(other: Vector3) = Vector3(
         y * other.z - z * other.y,
         z * other.x - x * other.z,
         x * other.y - y * other.x
@@ -64,7 +80,7 @@ class Vector3(var x: Float, var y: Float, var z: Float) {
 
     //求向量点积的方法
     // http://en.wikipedia.org/wiki/Dot_product
-    fun dotProduct(other: Vector3): Float =
+    infix fun dotProduct(other: Vector3): Float =
         x * other.x + y * other.y + z * other.z
 
     fun scale(f: Float) = Vector3(

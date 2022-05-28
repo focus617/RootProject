@@ -27,18 +27,24 @@ class Vector2(var x: Float, var y: Float) {
         y - other.y,
     )
 
+    // -- Unary arithmetic operators --
+    operator fun unaryPlus() = this
+
+    operator fun unaryMinus() = Vector2(-x, -y)
+
+    //求向量叉积的方法
+    // http://en.wikipedia.org/wiki/Cross_product
+    infix fun crossProduct(other: Vector2) = Vector3(0F, 0F, x * other.y - y * other.x)
+
+    //求向量点积的方法
+    // http://en.wikipedia.org/wiki/Dot_product
+    infix fun dotProduct(other: Vector2): Float = x * other.x + y * other.y
+
+
     fun scale(f: Float) = Vector2(
         x * f,
         y * f,
     )
-
-    //求向量叉积的方法
-    // http://en.wikipedia.org/wiki/Cross_product
-    fun crossProduct(other: Vector2) = Vector3(0F, 0F, x * other.y - y * other.x)
-
-    //求向量点积的方法
-    // http://en.wikipedia.org/wiki/Dot_product
-    fun dotProduct(other: Vector2): Float = x * other.x + y * other.y
 
     fun atOppositeDir(other: Vector2): Boolean = (this.dotProduct(other) < 0)
 
