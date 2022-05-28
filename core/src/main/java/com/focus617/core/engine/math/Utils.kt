@@ -1,16 +1,27 @@
 package com.focus617.core.engine.math
 
+import kotlin.math.max
+import kotlin.math.min
+
 fun degreeToRadians(degree: Float): Float = (degree * Math.PI / 180f).toFloat()
 
 fun radiansToDegree(radians: Float): Float = (radians * 180f / Math.PI).toFloat()
 
-fun clamp(value: Int, min: Int, max: Int): Int {
-    return kotlin.math.max(min, kotlin.math.min(max, value))
-}
+fun min(a: Char, b: Char): Char = if (a < b) a else b
+fun min(a: Byte, b: Byte): Byte = min(a.toInt(), b.toInt()).toByte()
+fun min(a: Short, b: Short): Short = min(a.toInt(), b.toInt()).toShort()
 
-fun clamp(value: Float, min: Float, max: Float): Float {
-    return kotlin.math.max(min, kotlin.math.min(max, value))
-}
+fun max(a: Char, b: Char): Char = if (a < b) b else a
+fun max(a: Byte, b: Byte): Byte = max(a.toInt(), b.toInt()).toByte()
+fun max(a: Short, b: Short): Short = max(a.toInt(), b.toInt()).toShort()
+
+fun clamp(a: Float, min: Float, max: Float) = min(max(a, min), max)
+fun clamp(a: Double, min: Double, max: Double) = min(max(a, min), max)
+fun clamp(a: Byte, min: Byte, max: Byte) = min(max(a, min), max)
+fun clamp(a: Int, min: Int, max: Int) = min(max(a, min), max)
+fun clamp(a: Long, min: Long, max: Long) = min(max(a, min), max)
+fun clamp(a: Short, min: Short, max: Short) = min(max(a, min), max)
+fun clamp(a: Char, min: Char, max: Char) = min(max(a, min), max)
 
 fun yawClamp(yaw: Float, min: Float = -180.0f, max: Float = 180.0f): Float {
     var degree: Float = yaw

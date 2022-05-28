@@ -20,6 +20,12 @@ class Vector3(var x: Float, var y: Float, var z: Float) {
 
     constructor(): this(0f, 0f, 0f)
 
+    @JvmOverloads
+    constructor(x: Number, y: Number = x, z: Number = x) : this(
+        x.toFloat(), y.toFloat(), z.toFloat()
+    )
+
+
     override fun toString(): String = "Vector($x, $y, $z)"
 
     override fun equals(other: Any?): Boolean =
@@ -34,6 +40,9 @@ class Vector3(var x: Float, var y: Float, var z: Float) {
 
     //求向量的模的方法
     fun length(): Float = kotlin.math.sqrt((x * x + y * y + z * z).toDouble()).toFloat()
+
+    /** Returns the squared length of the quaternion. */
+    fun length2() : Float = x * x + y * y + z * z
 
     //向量规格化的方法
     fun normalize(): Vector3 = scale(1f / length())

@@ -3,6 +3,7 @@ package com.focus617.core.engine.math.quat
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
+import com.focus617.core.engine.math.quat.QuaternionTrigonometric.angleAxis
 import java.io.PrintStream
 import kotlin.math.cos
 import kotlin.math.sin
@@ -157,6 +158,14 @@ class Quat(w: Float, x: Float, y: Float, z: Float) : QuatT<Float>(w, x, y, z) {
     infix fun dot(b: Quat) = dot(this, b)
 
     companion object {
+        const val epsilonF = Float.MIN_VALUE
+
+        @JvmField
+        val PI = kotlin.math.PI
+
+        @JvmField
+        val PIf = kotlin.math.PI.toFloat()
+
         @JvmField
         val length = 4
 
@@ -172,7 +181,7 @@ class Quat(w: Float, x: Float, y: Float, z: Float) : QuatT<Float>(w, x, y, z) {
         /** Returns the length of the quaternion.   */
         fun length(q: Quat): Float = sqrt(dot(q, q))
 
-        /** Returns the squared length of x. */
+        /** Returns the squared length of the quaternion. */
         fun length2(q: Quat) = q dot q
 
         /** Returns the normalized quaternion.  */
@@ -419,47 +428,49 @@ class Quat(w: Float, x: Float, y: Float, z: Float) : QuatT<Float>(w, x, y, z) {
 //                k0 * x.z + k1 * y2.z)
 //        }
 //
-//        /** Quaternion normalized linear interpolation.
-//         *  @see gtx_quaternion */
-//        fun fastMix(x: Quat, y: Quat, a: Float) = glm.normalize(x * (1 - a) + y * a)
-//
-//        /** Compute the rotation between two vectors.
-//         *  param orig vector, needs to be normalized
-//         *  param dest vector, needs to be normalized
-//         *  @see gtx_quaternion */
-//        fun rotation(orig: Vector3, dest: Vector3): Quat {
-//
-//            val cosTheta = orig dot dest
-//
-//            if (cosTheta >= 1 - epsilonF)
-//            // orig and dest point in the same direction
-//                return quatIdentity()
-//
-//            if (cosTheta < -1 + epsilonF) {
-//                /*  special case when vectors in opposite directions :
-//                    there is no "ideal" rotation axis
-//                    So guess one; any will do as long as it's perpendicular to start
-//                    This implementation favors a rotation around the Up axis (Y), since it's often what you want to do. */
-//                var rotationAxis = Vector3(0, 0, 1) cross orig
-//                if (rotationAxis.length2() < epsilonF) // bad luck, they were parallel, try again!
-//                    rotationAxis = Vector3(1, 0, 0) cross orig
-//
-//                rotationAxis = rotationAxis.normalize()
-//                return angleAxis(PIf, rotationAxis)
-//            }
-//
-//            // Implementation from Stan Melax's Game Programming Gems 1 article
-//            val rotationAxis = orig cross dest
-//
-//            val s = sqrt((1 + cosTheta) * 2)
-//            val invs = 1 / s
-//
-//            return Quat(
-//                s * 0.5f,
-//                rotationAxis.x * invs,
-//                rotationAxis.y * invs,
-//                rotationAxis.z * invs)
-//        }
+        /**
+         * Quaternion normalized linear interpolation.
+         */
+        fun fastMix(x: Quat, y: Quat, a: Float) = normalize(x * (1 - a) + y * a)
+
+        /**
+         * Compute the rotation between two vectors.
+         *  param orig vector, needs to be normalized
+         *  param dest vector, needs to be normalized
+         */
+        fun rotation(orig: Vector3, dest: Vector3): Quat {
+
+            val cosTheta = orig dotProduct  dest
+
+            if (cosTheta >= 1 - epsilonF)
+            // orig and dest point in the same direction
+                return quatIdentity()
+
+            if (cosTheta < -1 + epsilonF) {
+                /*  special case when vectors in opposite directions :
+                    there is no "ideal" rotation axis
+                    So guess one; any will do as long as it's perpendicular to start
+                    This implementation favors a rotation around the Up axis (Y), since it's often what you want to do. */
+                var rotationAxis = Vector3(0, 0, 1) crossProduct  orig
+                if (rotationAxis.length2() < epsilonF) // bad luck, they were parallel, try again!
+                    rotationAxis = Vector3(1, 0, 0) crossProduct orig
+
+                rotationAxis = rotationAxis.normalize()
+                return angleAxis(PIf, rotationAxis)
+            }
+
+            // Implementation from Stan Melax's Game Programming Gems 1 article
+            val rotationAxis = orig crossProduct  dest
+
+            val s = sqrt((1 + cosTheta) * 2)
+            val invs = 1 / s
+
+            return Quat(
+                s * 0.5f,
+                rotationAxis.x * invs,
+                rotationAxis.y * invs,
+                rotationAxis.z * invs)
+        }
 
     }
 }
