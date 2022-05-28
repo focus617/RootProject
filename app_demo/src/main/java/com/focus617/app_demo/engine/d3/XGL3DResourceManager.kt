@@ -33,15 +33,6 @@ class XGL3DResourceManager(val context: Context, val engine: Sandbox3D) : BaseEn
     }
 
     private fun initShader() {
-//        FrameBufferEntity.shader = XGLShaderBuilder.createShader(
-//            context,
-//            FrameBufferEntity.ShaderFilePath
-//        ) as XGLShader
-//
-//        FrameBufferEntity.shaderOutlining = XGLShaderBuilder.createShader(
-//            context,
-//            FrameBufferEntity.ShaderOutliningFilePath
-//        ) as XGLShader
         FrameBufferEntity.initShader(context)
 
         TextEntity2D.shaderWithColor = XGLShaderBuilder.createShader(
