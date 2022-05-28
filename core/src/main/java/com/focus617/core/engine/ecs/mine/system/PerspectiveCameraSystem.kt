@@ -30,7 +30,7 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
 
     override fun onTickEntity(entity: Entity) {
         if (isDirty) {
-            LOG.info("PerspectiveCameraSystem onTickEntity.")
+            LOG.info("PerspectiveCameraSystem onTickEntity(based on projectionMatrix).")
 
             reCalculatePerspectiveProjectionMatrix()
             synchronized(SceneData){
@@ -40,7 +40,7 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
         }
 
         if(mCamera.isDirty()){
-            LOG.info("PerspectiveCameraSystem onTickEntity.")
+            LOG.info("PerspectiveCameraSystem onTickEntity(based on viewMatrix).")
 
             synchronized(SceneData) {
                 SceneData.sViewMatrix.setValue(mCamera.getViewMatrix())
