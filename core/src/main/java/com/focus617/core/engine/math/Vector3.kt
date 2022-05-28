@@ -18,6 +18,8 @@ class Vector3(var x: Float, var y: Float, var z: Float) {
     constructor(from: Vector3, to: Vector3) :
             this((to.x - from.x), (to.y - from.y), (to.z - from.z))
 
+    constructor(): this(0f, 0f, 0f)
+
     override fun toString(): String = "Vector($x, $y, $z)"
 
     override fun equals(other: Any?): Boolean =
@@ -54,9 +56,14 @@ class Vector3(var x: Float, var y: Float, var z: Float) {
         (z*other).toFloat(),
     )
 
+    // -- Unary arithmetic operators --
+    operator fun unaryPlus() = this
+
+    operator fun unaryMinus() = Vector3(-x, -y, -z)
+
     //求向量叉积的方法
     // http://en.wikipedia.org/wiki/Cross_product
-    fun crossProduct(other: Vector3) = Vector3(
+    infix fun crossProduct(other: Vector3) = Vector3(
         y * other.z - z * other.y,
         z * other.x - x * other.z,
         x * other.y - y * other.x
@@ -64,7 +71,7 @@ class Vector3(var x: Float, var y: Float, var z: Float) {
 
     //求向量点积的方法
     // http://en.wikipedia.org/wiki/Dot_product
-    fun dotProduct(other: Vector3): Float =
+    infix fun dotProduct(other: Vector3): Float =
         x * other.x + y * other.y + z * other.z
 
     fun scale(f: Float) = Vector3(

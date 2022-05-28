@@ -6,6 +6,8 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
         setIdentity()
     }
 
+    override fun toString(): String = toString("Matrix")
+
     fun toString(matrixName: String? = null): String {
         val name = matrixName ?: "Matrix"
         return StringBuilder("\n$name:\n").apply {
@@ -45,17 +47,35 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
         return this
     }
 
-    operator fun times(vector4: Vector4): Vector4{
+    operator fun times(vector4: Vector4): Vector4 {
         val result = FloatArray(4)
         XMatrix.xMultiplyMV(result, 0, floatArray, 0, vector4)
         return Vector4(result)
     }
 
-    operator fun times(mat: Mat4): Mat4{
+    operator fun times(mat: Mat4): Mat4 {
         val result = FloatArray(16)
         XMatrix.xMultiplyMM(result, 0, floatArray, 0, mat.toFloatArray(), 0)
         return Mat4().setValue(result)
     }
+
+    // -- Accesses --
+    operator fun get(column: Int, row: Int) = floatArray[column * 4 + row]
+
+    operator fun set(column: Int, row: Int, value: Float) =
+        floatArray.set(column * 4 + row, value)
+
+
+    // -- Unary arithmetic operators --
+    operator fun unaryPlus() = this
+    operator fun unaryMinus() = Mat4(
+        floatArrayOf(
+            -floatArray[0], -floatArray[1], -floatArray[2], -floatArray[3],
+            -floatArray[4], -floatArray[5], -floatArray[6], -floatArray[7],
+            -floatArray[8], -floatArray[9], -floatArray[10], -floatArray[11],
+            -floatArray[12], -floatArray[13], -floatArray[14], -floatArray[15]
+        )
+    )
 
     fun setIdentity(): Mat4 {
         XMatrix.setIdentityM(floatArray, 0)
@@ -70,6 +90,11 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
 
     fun translate(position: Vector3): Mat4 {
         XMatrix.translateM(floatArray, 0, position)
+        return this
+    }
+
+    fun translate(position: Point3D): Mat4 {
+        XMatrix.translateM(floatArray, 0, position.toVector3())
         return this
     }
 
@@ -161,4 +186,5 @@ data class Mat4(private val floatArray: FloatArray = FloatArray(16)) {
         XMatrix.xMultiplyMM(floatArray, 0, scale, 0, floatArray, 0)
         return this
     }
+
 }

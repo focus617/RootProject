@@ -6,12 +6,6 @@ data class Vector4(var x: Float, var y: Float, var z: Float, var w: Float) {
 
     constructor(a: Vector4) : this(a.x, a.y, a.z, a.w)
 
-    fun normalize(): Vector4 =
-        if (w == 0F) Vector4(x, y, z, 0F)       // 如果是向量
-        else Vector4(x / w, y / w, z / w, 1F)
-
-    fun toFloatArray(): FloatArray = floatArrayOf(x, y, z, w)
-
     override fun toString(): String = "Vector($x, $y, $z, $w)"
 
     override fun equals(other: Any?): Boolean =
@@ -24,6 +18,18 @@ data class Vector4(var x: Float, var y: Float, var z: Float, var w: Float) {
         (z + other.z) / (w + other.w),
         1F
     )
+
+    // -- Unary arithmetic operators --
+    operator fun unaryPlus() = this
+
+    operator fun unaryMinus() = Vector4(-x, -y, -z, -w)
+
+
+    fun normalize(): Vector4 =
+        if (w == 0F) Vector4(x, y, z, 0F)       // 如果是向量
+        else Vector4(x / w, y / w, z / w, 1F)
+
+    fun toFloatArray(): FloatArray = floatArrayOf(x, y, z, w)
 
     fun setValue(aX: Float, aY: Float, aZ: Float, aW: Float = 1.0f) {
         x = aX
