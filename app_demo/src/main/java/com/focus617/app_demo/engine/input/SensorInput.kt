@@ -6,7 +6,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.view.Surface
 import com.focus617.app_demo.GameActivity
-import com.focus617.core.engine.math.radiansToDegree
+import com.focus617.core.engine.math.Trigonometric.radiansToDegree
 import com.focus617.core.platform.base.BaseEntity
 import com.focus617.core.platform.event.sensorEvents.SensorRotationEvent
 

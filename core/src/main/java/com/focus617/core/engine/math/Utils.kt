@@ -3,9 +3,6 @@ package com.focus617.core.engine.math
 import kotlin.math.max
 import kotlin.math.min
 
-fun degreeToRadians(degree: Float): Float = (degree * Math.PI / 180f).toFloat()
-
-fun radiansToDegree(radians: Float): Float = (radians * 180f / Math.PI).toFloat()
 
 fun min(a: Char, b: Char): Char = if (a < b) a else b
 fun min(a: Byte, b: Byte): Byte = min(a.toInt(), b.toInt()).toByte()
