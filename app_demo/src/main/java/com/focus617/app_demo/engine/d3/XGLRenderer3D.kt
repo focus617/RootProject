@@ -2,7 +2,7 @@ package com.focus617.app_demo.engine.d3
 
 import android.opengl.GLSurfaceView
 import com.focus617.core.engine.ecs.mine.static.SceneData
-import com.focus617.core.engine.ecs.mine.system.PerspectiveCameraSystem
+import com.focus617.core.engine.ecs.mine.system.SceneCameraSystem
 import com.focus617.core.engine.renderer.RenderCommand
 import com.focus617.core.engine.renderer.api.IfRenderer
 import com.focus617.core.engine.renderer.api.ShaderUniformConstants.U_PROJECT_MATRIX
@@ -68,7 +68,7 @@ class XGLRenderer3D(
         // 设置渲染的OpenGL场景（视口）的位置和大小
         RenderCommand.setViewport(0, 0, width, height)
 
-        PerspectiveCameraSystem.onWindowSizeChange(width, height)
+        SceneCameraSystem.onWindowSizeChange(width, height)
 
         mFrameBuffer.resize(width, height)
         TextLayer2D.onWindowSizeChange(width, height)   // used for text on screen

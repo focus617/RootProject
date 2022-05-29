@@ -1,10 +1,12 @@
 package com.focus617.core.engine.math.quat
 
 import com.focus617.core.engine.math.Mat4
+import com.focus617.core.engine.math.Trigonometric.atan
 import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.math.Vector4
 import com.focus617.core.engine.math.quat.QuaternionTrigonometric.angleAxis
 import java.io.PrintStream
+import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
@@ -333,7 +335,7 @@ class Quat(w: Float, x: Float, y: Float, z: Float) : QuatT<Float>(w, x, y, z) {
 
         /**
          * Rotates a 4 components vector by a quaternion.
-          */
+         */
         fun rotate(q: Quat, v: Vector4) = q * v
 
         /**
@@ -385,7 +387,6 @@ class Quat(w: Float, x: Float, y: Float, z: Float) : QuatT<Float>(w, x, y, z) {
         fun mat4_cast(q: Quat) = mat4_cast(q, Mat4())
 
 
-
 //        /** Converts a 3 * 3 matrix to a quaternion.
 //         *  @see gtx_quaternion */
 //        fun toQuat(x: Mat3) = x.toQuat()
@@ -394,40 +395,42 @@ class Quat(w: Float, x: Float, y: Float, z: Float) : QuatT<Float>(w, x, y, z) {
 //         *  @see gtx_quaternion */
 //        fun toQuat(x: Mat4) = x.toQuat()
 //
-//        /** Quaternion interpolation using the rotation short path.
-//         *  @see gtx_quaternion */
-//        fun shortMix(x: Quat, y: Quat, a: Float): Quat {
-//
-//            if (a <= 0) return x
-//            if (a >= 1) return y
-//
-//            var fCos = x dot y
-//            var y2 = Quat(y) //BUG!!! tquat<T> y2;
-//            if (fCos < 0) {
-//                y2 = -y
-//                fCos = -fCos
-//            }
-//
-//            //if(fCos > 1.0f) // problem
-//            val k0: Float
-//            val k1: Float
-//            if (fCos > 1 - epsilonF) {
-//                k0 = 1 - a
-//                k1 = 0 + a //BUG!!! 1.0f + a;
-//            } else {
-//                val fSin = sqrt(1 - fCos * fCos)
-//                val fAngle = atan(fSin, fCos)
-//                val fOneOverSin = 1 / fSin
-//                k0 = sin((1 - a) * fAngle) * fOneOverSin
-//                k1 = sin((0 + a) * fAngle) * fOneOverSin
-//            }
-//            return Quat(
-//                k0 * x.w + k1 * y2.w,
-//                k0 * x.x + k1 * y2.x,
-//                k0 * x.y + k1 * y2.y,
-//                k0 * x.z + k1 * y2.z)
-//        }
-//
+        /**
+         * Quaternion interpolation using the rotation short path.
+         */
+        fun shortMix(x: Quat, y: Quat, a: Float): Quat {
+
+            if (a <= 0) return x
+            if (a >= 1) return y
+
+            var fCos = x dot y
+            var y2 = Quat(y) //BUG!!! tquat<T> y2;
+            if (fCos < 0) {
+                y2 = -y
+                fCos = -fCos
+            }
+
+            //if(fCos > 1.0f) // problem
+            val k0: Float
+            val k1: Float
+            if (fCos > 1 - epsilonF) {
+                k0 = 1 - a
+                k1 = 0 + a //BUG!!! 1.0f + a;
+            } else {
+                val fSin = sqrt(1 - fCos * fCos)
+                val fAngle = atan(fSin, fCos)
+                val fOneOverSin = 1 / fSin
+                k0 = sin((1 - a) * fAngle) * fOneOverSin
+                k1 = sin((0 + a) * fAngle) * fOneOverSin
+            }
+            return Quat(
+                k0 * x.w + k1 * y2.w,
+                k0 * x.x + k1 * y2.x,
+                k0 * x.y + k1 * y2.y,
+                k0 * x.z + k1 * y2.z
+            )
+        }
+
         /**
          * Quaternion normalized linear interpolation.
          */
@@ -440,7 +443,7 @@ class Quat(w: Float, x: Float, y: Float, z: Float) : QuatT<Float>(w, x, y, z) {
          */
         fun rotation(orig: Vector3, dest: Vector3): Quat {
 
-            val cosTheta = orig dotProduct  dest
+            val cosTheta = orig dotProduct dest
 
             if (cosTheta >= 1 - epsilonF)
             // orig and dest point in the same direction
@@ -451,7 +454,7 @@ class Quat(w: Float, x: Float, y: Float, z: Float) : QuatT<Float>(w, x, y, z) {
                     there is no "ideal" rotation axis
                     So guess one; any will do as long as it's perpendicular to start
                     This implementation favors a rotation around the Up axis (Y), since it's often what you want to do. */
-                var rotationAxis = Vector3(0, 0, 1) crossProduct  orig
+                var rotationAxis = Vector3(0, 0, 1) crossProduct orig
                 if (rotationAxis.length2() < epsilonF) // bad luck, they were parallel, try again!
                     rotationAxis = Vector3(1, 0, 0) crossProduct orig
 
@@ -460,7 +463,7 @@ class Quat(w: Float, x: Float, y: Float, z: Float) : QuatT<Float>(w, x, y, z) {
             }
 
             // Implementation from Stan Melax's Game Programming Gems 1 article
-            val rotationAxis = orig crossProduct  dest
+            val rotationAxis = orig crossProduct dest
 
             val s = sqrt((1 + cosTheta) * 2)
             val invs = 1 / s
@@ -469,8 +472,54 @@ class Quat(w: Float, x: Float, y: Float, z: Float) : QuatT<Float>(w, x, y, z) {
                 s * 0.5f,
                 rotationAxis.x * invs,
                 rotationAxis.y * invs,
-                rotationAxis.z * invs)
+                rotationAxis.z * invs
+            )
         }
+
+        /**
+         * Rotates a quaternion from a vector of 3 components axis main.and an angle.
+         */
+        fun rotate(q: Quat, angle: Float, vX: Float, vY: Float, vZ: Float, res: Quat): Quat {
+
+            var tmpX = vX
+            var tmpY = vY
+            var tmpZ = vZ
+            // Axis of rotation must be normalised
+            val len = sqrt(vX * vX + vY * vY + vZ * vZ)
+            if (abs(len - 1f) > 0.001f) {
+                val oneOverLen = 1f / len
+                tmpX *= oneOverLen
+                tmpY *= oneOverLen
+                tmpZ *= oneOverLen
+            }
+            val sin = sin(angle * 0.5f)
+
+            val pW = cos(angle * 0.5f)
+            val pX = tmpX * sin
+            val pY = tmpY * sin
+            val pZ = tmpZ * sin
+
+            val w = q.w * pW - q.x * pX - q.y * pY - q.z * pZ
+            val x = q.w * pX + q.x * pW + q.y * pZ - q.z * pY
+            val y = q.w * pY + q.y * pW + q.z * pX - q.x * pZ
+            val z = q.w * pZ + q.z * pW + q.x * pY - q.y * pX
+
+            res.w = w
+            res.x = x
+            res.y = y
+            res.z = z
+
+            return res
+        }
+
+        fun rotate(q: Quat, angle: Float, vX: Float, vY: Float, vZ: Float): Quat =
+            rotate(q, angle, vX, vY, vZ, Quat())
+
+        fun rotate(q: Quat, angle: Float, v: Vector3, res: Quat): Quat =
+            rotate(q, angle, v.x, v.y, v.z, res)
+
+        fun rotate(q: Quat, angle: Float, v: Vector3): Quat =
+            rotate(q, angle, v.x, v.y, v.z, Quat())
 
     }
 }

@@ -32,4 +32,7 @@ object Trigonometric {
 
     fun atan(y: Double, x: Double) = atan2(y, x)
     fun atan(y: Float, x: Float) = atan2(y.toDouble(), x.toDouble()).toFloat()
+
+    fun degreeToRadians(degree: Float): Float = (degree * Math.PI / 180f).toFloat()
+    fun radiansToDegree(radians: Float): Float = (radians * 180f / Math.PI).toFloat()
 }

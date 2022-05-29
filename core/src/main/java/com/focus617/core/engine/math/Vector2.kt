@@ -1,5 +1,6 @@
 package com.focus617.core.engine.math
 
+import com.focus617.core.engine.math.Trigonometric.radiansToDegree
 import kotlin.math.acos
 
 class Vector2(var x: Float, var y: Float) {

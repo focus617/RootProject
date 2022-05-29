@@ -4,7 +4,7 @@ import android.content.Context
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
-import com.focus617.core.engine.ecs.mine.system.PerspectiveCameraSystem
+import com.focus617.core.engine.ecs.mine.system.SceneCameraSystem
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.opengles.terrain.TerrainLayer
 import com.focus617.opengles.text.TextLayer2D
@@ -45,31 +45,31 @@ class Sandbox3D(context: Context) : Engine(), Closeable {
     private fun registerEventHandlers() {
         eventDispatcher.register(EventType.TouchPress) { event ->
 //            val hasConsumed = scene.mCameraController.onEvent(event)
-            val hasConsumed = PerspectiveCameraSystem.onEvent(event)
+            val hasConsumed = SceneCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchStart) { event ->
 //            val hasConsumed = scene.mCameraController.onEvent(event)
-            val hasConsumed = PerspectiveCameraSystem.onEvent(event)
+            val hasConsumed = SceneCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchEnd) { event ->
 //            val hasConsumed = scene.mCameraController.onEvent(event)
-            val hasConsumed = PerspectiveCameraSystem.onEvent(event)
+            val hasConsumed = SceneCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.Pinch) { event ->
 //            val hasConsumed = scene.mCameraController.onEvent(event)
-            val hasConsumed = PerspectiveCameraSystem.onEvent(event)
+            val hasConsumed = SceneCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.SensorRotation) { event ->
 //            val hasConsumed = scene.mCameraController.onEvent(event)
-            val hasConsumed = PerspectiveCameraSystem.onEvent(event)
+            val hasConsumed = SceneCameraSystem.onEvent(event)
             hasConsumed
         }
     }

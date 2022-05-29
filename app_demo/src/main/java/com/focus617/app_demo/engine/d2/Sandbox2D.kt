@@ -4,7 +4,7 @@ import android.content.Context
 import com.focus617.core.engine.core.Engine
 import com.focus617.core.engine.core.IfWindow
 import com.focus617.core.engine.core.LayerStack
-import com.focus617.core.engine.ecs.mine.system.OrthographicCameraSystem
+import com.focus617.core.engine.ecs.mine.system.SceneCameraSystem
 import com.focus617.core.platform.event.base.EventType
 import com.focus617.core.platform.event.screenTouchEvents.TouchDragEvent
 import com.focus617.opengles.renderer.texture.XGLTextureSlots
@@ -54,27 +54,27 @@ class Sandbox2D(context: Context) : Engine(), Closeable {
         eventDispatcher.register(EventType.TouchDrag) { event ->
             val e: TouchDragEvent = event as TouchDragEvent
             LOG.info("Engine: ${e.name} from ${e.source} received")
-            val hasConsumed = OrthographicCameraSystem.onEvent(event)
+            val hasConsumed = SceneCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.TouchPress) { event ->
-            val hasConsumed = OrthographicCameraSystem.onEvent(event)
+            val hasConsumed = SceneCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchStart) { event ->
-            val hasConsumed = OrthographicCameraSystem.onEvent(event)
+            val hasConsumed = SceneCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.PinchEnd) { event ->
-            val hasConsumed = OrthographicCameraSystem.onEvent(event)
+            val hasConsumed = SceneCameraSystem.onEvent(event)
             hasConsumed
         }
 
         eventDispatcher.register(EventType.Pinch) { event ->
-            val hasConsumed = OrthographicCameraSystem.onEvent(event)
+            val hasConsumed = SceneCameraSystem.onEvent(event)
             hasConsumed
         }
     }
