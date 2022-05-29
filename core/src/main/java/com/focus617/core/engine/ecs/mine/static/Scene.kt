@@ -17,7 +17,6 @@ object Scene : BaseEntity() {
         entityCapacity = 600
 
         system<SceneCameraSystem>()
-
         system<PhysicsSystem>()
         system<Render2DSystem>()
     }

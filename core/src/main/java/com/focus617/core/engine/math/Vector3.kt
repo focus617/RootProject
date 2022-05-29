@@ -89,6 +89,12 @@ class Vector3(var x: Float, var y: Float, var z: Float) {
         z * f
     )
 
+    fun setValue(valueX: Float, valueY: Float, valueZ: Float) {
+        x = valueX
+        y = valueY
+        z = valueZ
+    }
+
     companion object {
 
         //计算当前向量v1与参考向量v2的夹角

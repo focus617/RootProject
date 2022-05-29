@@ -3,15 +3,11 @@ package com.focus617.app_demo.engine.d2
 import com.focus617.core.engine.core.Layer
 import com.focus617.core.engine.core.TimeStep
 import com.focus617.core.engine.ecs.fleks.Entity
-import com.focus617.core.engine.ecs.mine.component.Animation
-import com.focus617.core.engine.ecs.mine.component.Sprite
-import com.focus617.core.engine.ecs.mine.component.TransformMatrix
+import com.focus617.core.engine.ecs.mine.component.*
 import com.focus617.core.engine.ecs.mine.static.Scene
 import com.focus617.core.engine.ecs.mine.static.hasComponent
-import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector2
-import com.focus617.core.engine.math.Vector3
 import com.focus617.core.engine.renderer.texture.SubTexture2D
 import com.focus617.core.engine.renderer.texture.Texture2D
 import com.focus617.core.engine.resource.baseDataType.Color
@@ -25,12 +21,15 @@ class GameLayer(name: String, private val resourceManager: XGL2DResourceManager)
     private val square: Entity
 
     init {
-        val squareTransform = Mat4().transform2D(
-            Vector3(0f, 0f, 0f), Vector2(0.75f, 0.75f), 0f
-        )
-
         square = Scene.createEntity("Square") {
-            add<TransformMatrix> { transform.setValue(squareTransform) }
+            // 设置Entity的transform属性的初始值
+            add<Transform> {
+                position.setValue(0f, 0f, 0f)
+                scale.setValue(0.75f, 0.75f, 1f)
+                rotationInDegree.setValue(0f, 0f, 0f)
+            }
+            add<Dirty>()    // 暂时无用
+            add<TransformMatrix>()
             add<Sprite> { color = Color.GOLD }
         }
 

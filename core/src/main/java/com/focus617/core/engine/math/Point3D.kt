@@ -37,6 +37,12 @@ class Point3D(var x: Float, var y: Float, var z: Float) {
     operator fun plus(other: Vector3) =
         Point3D(x + other.x, y + other.y, z + other.z)
 
+    fun setValue(valueX: Float, valueY: Float, valueZ: Float) {
+        x = valueX
+        y = valueY
+        z = valueZ
+    }
+
     fun translate(vector: Vector3) = plus(vector)
 
 }
