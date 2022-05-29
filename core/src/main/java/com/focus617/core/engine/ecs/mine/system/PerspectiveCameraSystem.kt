@@ -5,12 +5,10 @@ import com.focus617.core.engine.ecs.fleks.Entity
 import com.focus617.core.engine.ecs.fleks.IteratingSystem
 import com.focus617.core.engine.ecs.mine.component.CameraMatrix
 import com.focus617.core.engine.ecs.mine.component.PerspectiveCameraCmp
+import com.focus617.core.engine.ecs.mine.objlib.Camera
+import com.focus617.core.engine.ecs.mine.objlib.ProjectionType
 import com.focus617.core.engine.ecs.mine.static.SceneData
-import com.focus617.core.engine.math.Mat4
-import com.focus617.core.engine.math.XMatrix
-import com.focus617.core.engine.math.pitchClamp
-import com.focus617.core.engine.math.yawClamp
-import com.focus617.core.engine.scene_graph.components.camera.PerspectiveCamera
+import com.focus617.core.engine.math.Vector3
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.screenTouchEvents.*
 import com.focus617.core.platform.event.sensorEvents.SensorRotationEvent
@@ -29,52 +27,32 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
     }
 
     override fun onTickEntity(entity: Entity) {
-        if (isDirty) {
-            LOG.info("PerspectiveCameraSystem onTickEntity(based on projectionMatrix).")
-
-            reCalculatePerspectiveProjectionMatrix()
-            synchronized(SceneData){
-                SceneData.sProjectionMatrix.setValue(mProjectionMatrix)
-            }
-            isDirty = false
-        }
-
-        if(mCamera.isDirty()){
-            LOG.info("PerspectiveCameraSystem onTickEntity(based on viewMatrix).")
-
-            synchronized(SceneData) {
-                SceneData.sViewMatrix.setValue(mCamera.getViewMatrix())
-            }
+        synchronized(SceneData) {
+            SceneData.sProjectionMatrix.setValue(mCamera.getProjectionMatrix())
+            SceneData.sViewMatrix.setValue(mCamera.getViewMatrix())
         }
     }
 
     companion object : WithLogging() {
-        private val mCamera = PerspectiveCamera()
-        private val mProjectionMatrix = Mat4()
+        private val mCamera = Camera()
 
-        private var isDirty: Boolean = true
-        fun setDirty() {
-            isDirty = true
+        init {
+            mCamera.setProjectionType(ProjectionType.Perspective)
         }
-
-        private var mZoomLevel: Float = 0.05f
-
-        // Viewport size
-        private var mWidth: Int = 0
-        private var mHeight: Int = 0
-
-        // Euler angle
-        private var pitchX: Float = 0f
-        private var yawY: Float = 90f
 
         enum class ControllerWorkingMode { Scroll, Zoom }
 
         private var mode: ControllerWorkingMode = ControllerWorkingMode.Scroll
 
-        private var previousZoomLevel: Float = 1.0f
+        private var previousFov: Float = 1.0f
         private var previousSpan: Float = 1.0f
         private var previousX: Float = 0.0f
         private var previousY: Float = 0.0f
+
+        // Euler angle
+        private var pitchX: Float = 0f
+        private var yawY: Float = 90f
+        private var rollZ: Float = 0f
 
         fun onEvent(event: Event): Boolean {
             when (event) {
@@ -95,11 +73,11 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
                     previousX = event.x
                     previousY = event.y
 
-                    pitchX += deltaY / sensitivity
-                    yawY += deltaX / sensitivity
-                    pitchX = pitchClamp(pitchX)
-                    yawY = yawClamp(yawY)
-                    setRotation(pitchX, yawY)
+//                    pitchX += deltaY / sensitivity
+//                    yawY += deltaX / sensitivity
+//                    pitchX = pitchClamp(pitchX)
+//                    yawY = yawClamp(yawY)
+//                    mCamera.setRotation(Vector3(pitchX, yawY, rollZ))
 
                     event.handleFinished()
                 }
@@ -107,7 +85,7 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
                 is PinchStartEvent -> {
                     LOG.info("CameraSystem: on PinchStartEvent")
                     // 记录下本轮缩放操作的基准
-                    previousZoomLevel = mZoomLevel
+                    previousFov = mCamera.mPerspectiveFOVInDegree
                     previousSpan = event.span
                     mode = ControllerWorkingMode.Zoom
                     event.handleFinished()
@@ -117,8 +95,9 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
                     if (mode == ControllerWorkingMode.Zoom) {
                         // 根据双指间距的变化，计算相对变化量
                         val scaleFactor = previousSpan / event.span
-                        setZoomLevel(previousZoomLevel * scaleFactor)
-                        LOG.info("CameraSystem: on PinchEvent, ZoomLevel=$mZoomLevel")
+                        val fov = previousFov * scaleFactor
+                        mCamera.setPerspectiveVerticalFov(fov)
+                        LOG.info("CameraSystem: on PinchEvent, fov=$fov")
                     }
                     event.handleFinished()
                 }
@@ -126,17 +105,20 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
                 is PinchEndEvent -> {
                     LOG.info("CameraSystem: on PinchEndEvent")
                     mode = ControllerWorkingMode.Scroll
-                    LOG.info("CameraSystem: on PinchEndEvent, ZoomLevel=$mZoomLevel")
+                    LOG.info("CameraSystem: on PinchEndEvent, fov=${mCamera.mPerspectiveFOVInDegree}")
                     event.handleFinished()
                 }
 
                 is SensorRotationEvent -> {
 //                LOG.info("CameraSystem: on SensorRotationEvent")
-                    setRotation(-event.pitchXInDegree, -event.yawYInDegree)
-                    when (event.yawYInDegree.toInt()) {
-                        in 0..180 -> setRotation(event.rollZInDegree)
-                        else -> setRotation(-event.rollZInDegree)
+
+                    pitchX = -event.pitchXInDegree
+                    yawY = -event.yawYInDegree
+                    rollZ = when (event.yawYInDegree.toInt()) {
+                        in 0..180 -> event.rollZInDegree
+                        else -> -event.rollZInDegree
                     }
+                    mCamera.setRotation(Vector3(pitchX, yawY, rollZ))
                     event.handleFinished()
                 }
 
@@ -151,58 +133,7 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
         }
 
         fun onWindowSizeChange(width: Int, height: Int) {
-            mWidth = width
-            mHeight = height
-            setDirty()
-        }
-
-        private fun setZoomLevel(level: Float) {
-            mZoomLevel = level
-            setDirty()
-        }
-
-        private fun setRotation(pitchX: Float = 0f, yawY: Float) {
-            mCamera.setRotation(pitchX, yawY)
-        }
-
-        private fun setRotation(rollZ: Float) {
-            mCamera.setRotation(rollZ)
-        }
-
-        private fun reCalculatePerspectiveProjectionMatrix() {
-            val matrix = FloatArray(16)
-
-            // 计算透视投影矩阵 (Project Matrix)
-            if (mWidth > mHeight) {
-                // Landscape
-                val aspect: Float = mWidth.toFloat() / mHeight.toFloat()
-                val ratio = aspect * mZoomLevel
-                XMatrix.frustumM(
-                    matrix,
-                    0,
-                    -ratio,
-                    ratio,
-                    -mZoomLevel,
-                    mZoomLevel,
-                    0.1f,
-                    100f
-                )
-            } else {
-                // Portrait or Square
-                val aspect: Float = mHeight.toFloat() / mWidth.toFloat()
-                val ratio = aspect * mZoomLevel
-                XMatrix.frustumM(
-                    matrix,
-                    0,
-                    -mZoomLevel,
-                    mZoomLevel,
-                    -ratio,
-                    ratio,
-                    0.1f,
-                    100f
-                )
-            }
-            mProjectionMatrix.setValue(matrix)
+            mCamera.setViewportSize(width, height)
         }
 
     }
