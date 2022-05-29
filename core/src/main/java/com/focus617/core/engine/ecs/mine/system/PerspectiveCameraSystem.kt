@@ -28,8 +28,8 @@ class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
 
     override fun onTickEntity(entity: Entity) {
         synchronized(SceneData) {
-            SceneData.sProjectionMatrix.setValue(mCamera.getProjectionMatrix())
-            SceneData.sViewMatrix.setValue(mCamera.getViewMatrix())
+            SceneData.sProjectionMatrix.setValue(mCamera.mProjectionMatrix)
+            SceneData.sViewMatrix.setValue(mCamera.mViewMatrix)
         }
     }
 

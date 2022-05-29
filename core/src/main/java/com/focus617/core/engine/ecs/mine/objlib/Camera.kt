@@ -14,45 +14,16 @@ enum class ProjectionType(val index: Int) {
 
 class Camera : BaseEntity() {
     // Camera本质就是两个Matrix——视图矩阵mViewMatrix和投影矩阵mProjectionMatrix
-    private val mProjectionMatrix = Mat4()
-    private val mViewMatrix = Mat4()
-
-    var mProjectionType: ProjectionType = ProjectionType.Perspective
+    var mProjectionMatrix = Mat4()
         private set
-    var isProjectionMatrixDirty: Boolean = true
-        private set
-    var isViewMatrixDirty: Boolean = true
+    var mViewMatrix = Mat4()
         private set
 
-    fun setProjectionMatrixDirty() {
-        isProjectionMatrixDirty = true
-    }
-
-    fun setViewMatrixDirty() {
-        isViewMatrixDirty = true
-    }
+    var mProjectionType: ProjectionType = ProjectionType.Orthographic
+        private set
 
     fun setProjectionType(projectionType: ProjectionType) {
         mProjectionType = projectionType
-    }
-
-    fun getProjectionMatrix(): Mat4 {
-//        if (isProjectionMatrixDirty) {
-        when (mProjectionType) {
-            ProjectionType.Perspective -> updatePerspectiveProjectionMatrix()
-            ProjectionType.Orthographic -> updateOrthographicProjectionMatrix()
-        }
-//        isProjectionMatrixDirty = false
-//        }
-        return mProjectionMatrix
-    }
-
-    fun getViewMatrix(): Mat4 {
-//        if (isViewMatrixDirty) {
-        updateViewMatrix()
-//        isViewMatrixDirty = false
-//        }
-        return mViewMatrix
     }
 
     // 相机的内部属性
@@ -63,7 +34,7 @@ class Camera : BaseEntity() {
     var mPerspectiveFarClip: Float = 1000.0f
         private set
 
-    var mOrthographicSize: Float = 10.0f
+    var mOrthographicSize: Float = 4.0f
         private set
     var mOrthographicNearClip: Float = -1.0f
         private set
@@ -80,26 +51,32 @@ class Camera : BaseEntity() {
     // 相机的外部几何设置， 原则：相机位置跟踪focusPoint
     var mFocusPoint: Point3D = Point3D(0.0f, 0.0f, 0.0f)
         private set
-    var mDistance: Float = 10.0f
+    var mDistance: Float = 1.0f
         private set
     var mEulerAngleInDegree: Vector3 = Vector3(0f, 0f, 0f)
         private set
     private var mPosition: Point3D = Point3D(0.0f, 0.0f, 0.0f)
 
     fun setViewportSize(width: Int, height: Int) {
+        check(width>0 && height > 0){
+            "Wrong size: width=$width, height=$height"
+        }
+
         mWidth = width
         mHeight = height
         mAspectRatio = mWidth.toFloat() / mHeight.toFloat()
-        setProjectionMatrixDirty()
+        reCalculateProjection()
     }
 
     fun setOrthographic(size: Float, nearClip: Float, farClip: Float) {
+        mProjectionType = ProjectionType.Orthographic
         setOrthographicSize(size)
         setOrthographicNearClip(nearClip)
         setOrthographicFarClip(farClip)
     }
 
     fun setPerspective(fovInDegree: Float, nearClip: Float, farClip: Float) {
+        mProjectionType = ProjectionType.Perspective
         setPerspectiveVerticalFov(fovInDegree)
         setPerspectiveNearClip(nearClip)
         setPerspectiveFarClip(farClip)
@@ -107,47 +84,55 @@ class Camera : BaseEntity() {
 
     fun setPerspectiveVerticalFov(fovInDegree: Float) {
         mPerspectiveFOVInDegree = fovInDegree
-        setProjectionMatrixDirty()
+        reCalculateProjection()
     }
 
     fun setPerspectiveNearClip(nearClip: Float) {
         mPerspectiveNearClip = nearClip
-        setProjectionMatrixDirty()
+        reCalculateProjection()
     }
 
     fun setPerspectiveFarClip(farClip: Float) {
         mPerspectiveFarClip = farClip
-        setProjectionMatrixDirty()
+        reCalculateProjection()
     }
 
     fun setOrthographicSize(size: Float) {
         mOrthographicSize = size
-        setProjectionMatrixDirty()
+        reCalculateProjection()
     }
 
     fun setOrthographicNearClip(nearClip: Float) {
         mOrthographicNearClip = nearClip
-        setProjectionMatrixDirty()
+        reCalculateProjection()
     }
 
     fun setOrthographicFarClip(farClip: Float) {
         mOrthographicFarClip = farClip
-        setProjectionMatrixDirty()
+        reCalculateProjection()
     }
 
     fun setFocusPoint(point: Point3D) {
         mFocusPoint = point
-        setViewMatrixDirty()
+        reCalculateViewMatrix()
     }
 
     fun setDistance(distance: Float) {
         mDistance = distance
-        setViewMatrixDirty()
+        reCalculateViewMatrix()
     }
 
     fun setRotation(eulerAngleInDegree: Vector3) {
         mEulerAngleInDegree = eulerAngleInDegree
-        setViewMatrixDirty()
+        reCalculateViewMatrix()
+    }
+
+    private fun reCalculateProjection() {
+        if (mProjectionType == ProjectionType.Perspective) {
+            updatePerspectiveProjectionMatrix()
+        } else {
+            updateOrthographicProjectionMatrix()
+        }
     }
 
     private fun updatePerspectiveProjectionMatrix() {
@@ -170,62 +155,27 @@ class Camera : BaseEntity() {
         LOG.info("OrthographicCamera recalculate projectionMatrix.")
         val matrix = FloatArray(16)
 
-//        mAspectRatio = mWidth.toFloat() / mHeight.toFloat()
-//        val orthoLeft: Float = -mOrthographicSize * mAspectRatio * 0.5f
-//        val orthoRight: Float = mOrthographicSize * mAspectRatio * 0.5f
-//        val orthoTop: Float = mOrthographicSize * 0.5f
-//        val orthoBottom: Float = -mOrthographicSize * 0.5f
-//
-//        // 计算正交投影矩阵 (Project Matrix)
-//        XMatrix.orthoM(
-//            matrix,
-//            0,
-//            orthoLeft,
-//            orthoRight,
-//            orthoBottom,
-//            orthoTop,
-//            mOrthographicNearClip,
-//            mOrthographicFarClip
-//        )
-//        mProjectionMatrix.setValue(matrix)
+        mAspectRatio = mWidth.toFloat() / mHeight.toFloat()
+        val orthoLeft: Float = -mOrthographicSize * mAspectRatio * 0.5f
+        val orthoRight: Float = mOrthographicSize * mAspectRatio * 0.5f
+        val orthoTop: Float = mOrthographicSize * 0.5f
+        val orthoBottom: Float = -mOrthographicSize * 0.5f
 
-        var mZoomLevel: Float = 0.5f
         // 计算正交投影矩阵 (Project Matrix)
-        // 默认绘制的区间在横轴[-1.7778f, 1.778f]，纵轴[-1, 1]之间
-        if (mWidth > mHeight) {
-            // Landscape
-            val aspect: Float = mWidth.toFloat() / mHeight.toFloat()
-            val ratio = aspect * mZoomLevel
-            // 用ZoomLevel来表示top，因为拉近镜头时，ZoomLevel变大，而对应可见区域会变小
-            XMatrix.orthoM(
-                matrix,
-                0,
-                -ratio,
-                ratio,
-                -mZoomLevel,
-                mZoomLevel,
-                -1.0f,
-                1.0f
-            )
-        } else {
-            // Portrait or Square
-            val aspect: Float = mHeight.toFloat() / mWidth.toFloat()
-            val ratio = aspect * mZoomLevel
-            XMatrix.orthoM(
-                matrix,
-                0,
-                -mZoomLevel,
-                mZoomLevel,
-                -ratio,
-                ratio,
-                -1.0f,
-                1.0f
-            )
-        }
+        XMatrix.orthoM(
+            matrix,
+            0,
+            orthoLeft,
+            orthoRight,
+            orthoBottom,
+            orthoTop,
+            mOrthographicNearClip,
+            mOrthographicFarClip
+        )
         mProjectionMatrix.setValue(matrix)
     }
 
-    private fun updateViewMatrix() {
+    private fun reCalculateViewMatrix() {
         LOG.info("Camera recalculate viewMatrix.")
         mPosition = calculatePosition()
         val orientation = getOrientation()

@@ -6,6 +6,7 @@ import com.focus617.core.engine.ecs.fleks.IteratingSystem
 import com.focus617.core.engine.ecs.mine.component.CameraMatrix
 import com.focus617.core.engine.ecs.mine.component.OrthographicCameraCmp
 import com.focus617.core.engine.ecs.mine.objlib.Camera
+import com.focus617.core.engine.ecs.mine.objlib.ProjectionType
 import com.focus617.core.engine.ecs.mine.static.SceneData
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.platform.event.base.Event
@@ -26,8 +27,8 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
 
     override fun onTickEntity(entity: Entity) {
         synchronized(SceneData) {
-            SceneData.sProjectionMatrix.setValue(mCamera.getProjectionMatrix())
-            SceneData.sViewMatrix.setValue(mCamera.getViewMatrix())
+            SceneData.sProjectionMatrix.setValue(mCamera.mProjectionMatrix)
+            SceneData.sViewMatrix.setValue(mCamera.mViewMatrix)
         }
     }
 
@@ -35,7 +36,7 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
         private val mCamera = Camera()
 
         init {
-//            mCamera.setProjectionType(ProjectionType.Orthographic)
+            mCamera.setProjectionType(ProjectionType.Orthographic)
         }
 
         enum class ControllerWorkingMode { Scroll, Zoom }
@@ -65,7 +66,7 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
                     previousX = event.x
                     previousY = event.y
 
-                    val factor = 0.005f
+                    val factor = 0.002f
                     val x = mCamera.mFocusPoint.x - deltaX * factor
                     val y = mCamera.mFocusPoint.y + deltaY * factor
                     val z = mCamera.mFocusPoint.z
