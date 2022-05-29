@@ -35,7 +35,8 @@ class SceneCameraSystem : IteratingSystem(), ILoggable {
                 ProjectionType.Perspective.index -> {
                     mProjectionType = ProjectionType.Perspective
                     mCamera.setProjectionType(mProjectionType)
-                    mCamera.setDistance(10f)
+                    mCamera.setDistance(7f)
+                    mCamera.setFocusPoint(Point3D(0f, 0.5f, 0f))
                 }
                 else ->{
                     mProjectionType = ProjectionType.Orthographic
@@ -101,6 +102,7 @@ class SceneCameraSystem : IteratingSystem(), ILoggable {
                     LOG.info("CameraSystem: on PinchStartEvent")
                     // 记录下本轮缩放操作的基准
                     previousSize = mCamera.mOrthographicSize
+                    previousFov = mCamera.mPerspectiveFOVInDegree
                     previousSpan = event.span
                     mode = ControllerWorkingMode.Zoom
                     event.handleFinished()
