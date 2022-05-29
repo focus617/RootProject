@@ -3,14 +3,12 @@ package com.focus617.core.engine.ecs.mine.static
 import com.focus617.core.engine.ecs.fleks.Entity
 import com.focus617.core.engine.ecs.fleks.EntityCreateCfg
 import com.focus617.core.engine.ecs.fleks.World
-import com.focus617.core.engine.ecs.mine.component.CameraMatrix
-import com.focus617.core.engine.ecs.mine.component.OrthographicCameraCmp
 import com.focus617.core.engine.ecs.mine.component.Relationship
+import com.focus617.core.engine.ecs.mine.component.SceneCamera
 import com.focus617.core.engine.ecs.mine.component.Tag
-import com.focus617.core.engine.ecs.mine.system.OrthographicCameraSystem
-import com.focus617.core.engine.ecs.mine.system.PerspectiveCameraSystem
 import com.focus617.core.engine.ecs.mine.system.PhysicsSystem
 import com.focus617.core.engine.ecs.mine.system.Render2DSystem
+import com.focus617.core.engine.ecs.mine.system.SceneCameraSystem
 import com.focus617.core.platform.base.BaseEntity
 
 object Scene : BaseEntity() {
@@ -18,8 +16,7 @@ object Scene : BaseEntity() {
     private val world = World {
         entityCapacity = 600
 
-        system<PerspectiveCameraSystem>()
-        system<OrthographicCameraSystem>()
+        system<SceneCameraSystem>()
 
         system<PhysicsSystem>()
         system<Render2DSystem>()
@@ -45,8 +42,7 @@ object Scene : BaseEntity() {
 
         camera = world.entity {
             add<Tag> { tag = "SceneCamera" }
-            add<OrthographicCameraCmp>()
-            add<CameraMatrix>()
+            add<SceneCamera>{ projectionTypeIndex = 2 }
             add<Relationship>()
         }
         camera.setParent(sceneEntity)

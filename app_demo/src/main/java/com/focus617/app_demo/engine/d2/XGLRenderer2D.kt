@@ -5,7 +5,7 @@ import android.opengl.GLSurfaceView
 import com.focus617.core.engine.ecs.mine.api.EcsRendererAPI
 import com.focus617.core.engine.ecs.mine.component.Sprite
 import com.focus617.core.engine.ecs.mine.static.SceneData
-import com.focus617.core.engine.ecs.mine.system.OrthographicCameraSystem
+import com.focus617.core.engine.ecs.mine.system.SceneCameraSystem
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Point2D
 import com.focus617.core.engine.math.Point3D
@@ -69,7 +69,7 @@ class XGLRenderer2D(
         // 设置渲染的OpenGL场景（视口）的位置和大小
         RenderCommand.setViewport(0, 0, width, height)
 
-        OrthographicCameraSystem.onWindowSizeChange(width, height)
+        SceneCameraSystem.onWindowSizeChange(width, height)
 
         mFrameBuffer.resize(width, height)
     }

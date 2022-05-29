@@ -8,8 +8,16 @@ import com.focus617.core.engine.math.quat.Quat
 import com.focus617.core.platform.base.BaseEntity
 
 enum class ProjectionType(val index: Int) {
+    None(0),
     Perspective(1),
-    Orthographic(2)
+    Orthographic(2);
+
+    override fun toString() = when (index) {
+        0 -> "Undefined"
+        1 -> "Perspective Camera"
+        2 -> "Orthographic Camera"
+        else -> "Unknown Camera"
+    }
 }
 
 class Camera : BaseEntity() {
@@ -18,13 +26,8 @@ class Camera : BaseEntity() {
         private set
     var mViewMatrix = Mat4()
         private set
-
     var mProjectionType: ProjectionType = ProjectionType.Orthographic
         private set
-
-    fun setProjectionType(projectionType: ProjectionType) {
-        mProjectionType = projectionType
-    }
 
     // 相机的内部属性
     var mPerspectiveFOVInDegree: Float = 45.0f
@@ -57,8 +60,13 @@ class Camera : BaseEntity() {
         private set
     private var mPosition: Point3D = Point3D(0.0f, 0.0f, 0.0f)
 
+    fun setProjectionType(projectionType: ProjectionType) {
+        mProjectionType = projectionType
+        reCalculateProjection()
+    }
+
     fun setViewportSize(width: Int, height: Int) {
-        check(width>0 && height > 0){
+        check(width > 0 && height > 0) {
             "Wrong size: width=$width, height=$height"
         }
 

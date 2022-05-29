@@ -3,29 +3,42 @@ package com.focus617.core.engine.ecs.mine.system
 import com.focus617.core.engine.ecs.fleks.AllOf
 import com.focus617.core.engine.ecs.fleks.Entity
 import com.focus617.core.engine.ecs.fleks.IteratingSystem
-import com.focus617.core.engine.ecs.mine.component.CameraMatrix
-import com.focus617.core.engine.ecs.mine.component.OrthographicCameraCmp
+import com.focus617.core.engine.ecs.mine.component.SceneCamera
 import com.focus617.core.engine.ecs.mine.objlib.Camera
 import com.focus617.core.engine.ecs.mine.objlib.ProjectionType
 import com.focus617.core.engine.ecs.mine.static.SceneData
 import com.focus617.core.engine.math.Point3D
+import com.focus617.core.engine.math.Vector3
 import com.focus617.core.platform.event.base.Event
 import com.focus617.core.platform.event.screenTouchEvents.*
+import com.focus617.core.platform.event.sensorEvents.SensorRotationEvent
 import com.focus617.mylib.helper.DateHelper
 import com.focus617.mylib.logging.ILoggable
 import com.focus617.mylib.logging.WithLogging
 
-@AllOf([CameraMatrix::class, OrthographicCameraCmp::class])
-class OrthographicCameraSystem : IteratingSystem(), ILoggable {
+@AllOf([SceneCamera::class])
+class SceneCameraSystem : IteratingSystem(), ILoggable {
     private val LOG = logger()
 
-    private val matrixMapper = world.mapper<CameraMatrix>()
+    private var mProjectionType: ProjectionType = ProjectionType.None
 
     init {
-        LOG.info("OrthographicCameraSystem launched.")
+        LOG.info("SceneCameraSystem launched.")
     }
 
     override fun onTickEntity(entity: Entity) {
+        val cameraCmp = world.mapper<SceneCamera>()
+        val index = cameraCmp[entity].projectionTypeIndex
+
+        if(mProjectionType.index != index){
+            mProjectionType = when(index){
+                ProjectionType.Perspective.index -> ProjectionType.Perspective
+                else -> ProjectionType.Orthographic
+            }
+            mCamera.setProjectionType(mProjectionType)
+            LOG.info("Switch to $mProjectionType.")
+        }
+
         synchronized(SceneData) {
             SceneData.sProjectionMatrix.setValue(mCamera.mProjectionMatrix)
             SceneData.sViewMatrix.setValue(mCamera.mViewMatrix)
@@ -35,18 +48,20 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
     companion object : WithLogging() {
         private val mCamera = Camera()
 
-        init {
-            mCamera.setProjectionType(ProjectionType.Orthographic)
-        }
-
         enum class ControllerWorkingMode { Scroll, Zoom }
 
         private var mode: ControllerWorkingMode = ControllerWorkingMode.Scroll
 
         private var previousSize: Float = mCamera.mOrthographicSize
+        private var previousFov: Float = 1.0f
         private var previousSpan: Float = 1.0f
         private var previousX: Float = 0.0f
         private var previousY: Float = 0.0f
+
+        // Euler angle
+        private var pitchX: Float = 0f
+        private var yawY: Float = 90f
+        private var rollZ: Float = 0f
 
         fun onEvent(event: Event): Boolean {
             when (event) {
@@ -88,9 +103,22 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
                     if (mode == ControllerWorkingMode.Zoom) {
                         // 根据双指间距的变化，计算相对变化量
                         val scaleFactor = previousSpan / event.span
-                        val size = previousSize * scaleFactor
-                        mCamera.setOrthographicSize(size)
-                        LOG.info("CameraSystem: on PinchEvent, Size=$size")
+                        when(mCamera.mProjectionType){
+                            ProjectionType.Orthographic -> {
+                                val size = previousSize * scaleFactor
+                                mCamera.setOrthographicSize(size)
+                                LOG.info("CameraSystem: on PinchEvent, Size=$size")
+                            }
+
+                            ProjectionType.Perspective -> {
+                                val fov = previousFov * scaleFactor
+                                mCamera.setPerspectiveVerticalFov(fov)
+                                LOG.info("CameraSystem: on PinchEvent, fov=$fov")
+                            }
+
+                            else -> Unit
+                        }
+
                     }
                     event.handleFinished()
                 }
@@ -100,6 +128,20 @@ class OrthographicCameraSystem : IteratingSystem(), ILoggable {
                     mode = ControllerWorkingMode.Scroll
                     LOG.info("CameraSystem: on PinchEndEvent, ZoomLevel=${mCamera.mOrthographicSize}")
                     event.handleFinished()
+                }
+
+                is SensorRotationEvent -> {
+//                LOG.info("CameraSystem: on SensorRotationEvent")
+                    if(mCamera.mProjectionType == ProjectionType.Perspective) {
+                        pitchX = -event.pitchXInDegree
+                        yawY = -event.yawYInDegree
+                        rollZ = when (event.yawYInDegree.toInt()) {
+                            in 0..180 -> event.rollZInDegree
+                            else -> -event.rollZInDegree
+                        }
+                        mCamera.setRotation(Vector3(pitchX, yawY, rollZ))
+                        event.handleFinished()
+                    }
                 }
 
                 else -> {

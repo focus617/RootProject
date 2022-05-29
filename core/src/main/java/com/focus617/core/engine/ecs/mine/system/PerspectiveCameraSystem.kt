@@ -3,8 +3,7 @@ package com.focus617.core.engine.ecs.mine.system
 import com.focus617.core.engine.ecs.fleks.AllOf
 import com.focus617.core.engine.ecs.fleks.Entity
 import com.focus617.core.engine.ecs.fleks.IteratingSystem
-import com.focus617.core.engine.ecs.mine.component.CameraMatrix
-import com.focus617.core.engine.ecs.mine.component.PerspectiveCameraCmp
+import com.focus617.core.engine.ecs.mine.component.SceneCamera
 import com.focus617.core.engine.ecs.mine.objlib.Camera
 import com.focus617.core.engine.ecs.mine.objlib.ProjectionType
 import com.focus617.core.engine.ecs.mine.static.SceneData
@@ -16,11 +15,11 @@ import com.focus617.mylib.helper.DateHelper
 import com.focus617.mylib.logging.ILoggable
 import com.focus617.mylib.logging.WithLogging
 
-@AllOf([CameraMatrix::class, PerspectiveCameraCmp::class])
+@AllOf([SceneCamera::class])
 class PerspectiveCameraSystem : IteratingSystem(), ILoggable {
     private val LOG = logger()
 
-    private val matrixMapper = world.mapper<CameraMatrix>()
+    private val matrixMapper = world.mapper<Camera>()
 
     init {
         LOG.info("PerspectiveCameraSystem launched.")
