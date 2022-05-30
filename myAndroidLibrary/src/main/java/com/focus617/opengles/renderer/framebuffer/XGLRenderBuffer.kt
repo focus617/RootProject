@@ -40,15 +40,16 @@ class XGLRenderBuffer private constructor() : BaseEntity(), Closeable, IfFrameBu
     GL_COLOR_BUFFER_BIT, GL_NEAREST)
      */
     // Renderbuffer for multisampling
-    constructor(width: Int, height: Int) : this() {
+    constructor(width: Int, height: Int, samples: Int, format: Int = GL_RGBA8) : this() {
         // Generate RBO
         glGenRenderbuffers(1, mRenderBuf)
         if (mRenderBuf[0] == 0) {
             throw RuntimeException("Could not create a new render buffer object.")
         }
         mHandle = mRenderBuf[0]
+
         glBindRenderbuffer(GL_RENDERBUFFER, mHandle)
-        glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_RGBA8, width, height)
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, format, width, height)
         glBindRenderbuffer(GL_RENDERBUFFER, 0)
     }
 

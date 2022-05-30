@@ -52,6 +52,7 @@ class XGLRenderer2D(
         //XGLContext.initDebug()
 
         val fbSpec = FrameBufferSpecification()
+        fbSpec.samples = 1
         fbSpec.attachment = FrameBufferAttachmentSpecification(
             listOf(
                 FrameBufferTextureSpecification(FrameBufferTextureFormat.RGBA8),

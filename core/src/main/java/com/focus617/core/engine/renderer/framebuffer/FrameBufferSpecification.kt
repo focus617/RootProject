@@ -47,6 +47,6 @@ class FrameBufferSpecification : BaseEntity() {
     var mHeight: Int = 0
 
     lateinit var attachment: FrameBufferAttachmentSpecification
-    val samples: Int = 1
+    var samples: Int = 1
     var swapChainTarget: Boolean = false
 }

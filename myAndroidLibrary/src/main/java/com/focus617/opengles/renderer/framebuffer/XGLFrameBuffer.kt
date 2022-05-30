@@ -19,10 +19,15 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     private var mDepthAttachmentSpecification =
         FrameBufferTextureSpecification(FrameBufferTextureFormat.None)
 
+    private val isMultiSample = mSpecification.samples > 1
     private var mMaxColorAttachment = 0
     private var mColorAttachments = mutableListOf<XGLTexture2DBuffer>()   // ColorTextureBuffers
     private var mDepthBufferAttachment: XGLTexture2DBuffer? = null        // DepthBuffer
     private var mRenderBufferAttachment: XGLRenderBuffer? = null          // RenderBuffer
+
+    private var mMultiSampleRenderBufferForColor: XGLRenderBuffer? = null
+    private var mMultiSampleRenderBufferForDepth: XGLRenderBuffer? = null
+
     private val mQuad: FrameBufferEntity = FrameBufferEntity()
 
     // Must call under EGL
@@ -39,8 +44,14 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         invalidate()
 
         mQuad.initOpenGlResource()
-        Timber.i("Created XGLFrameBuffer with ${mColorAttachments.size} ColorAttachment" +
-                "and ${if(mRenderBufferAttachment!=null) "one" else "null"} depthAttachment.")
+
+        if (isMultiSample)
+            Timber.i("Created XGLFrameBuffer with multiSample RenderBuffers")
+        else
+            Timber.i(
+            "Created XGLFrameBuffer with ${mColorAttachments.size} ColorAttachment" +
+                    "and ${if (mRenderBufferAttachment != null) "one" else "null"} depthAttachment."
+        )
     }
 
     // Must be called in opengl env, such as scene.initOpenGlResource()
@@ -51,13 +62,19 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     }
 
     override fun close() {
-        glDeleteFramebuffers(1, mFrameBuf)
+        mColorAttachments.forEach { it.close() }
         mDepthBufferAttachment?.close()
         mRenderBufferAttachment?.close()
-        mColorAttachments.forEach { it.close() }
+
+        mMultiSampleRenderBufferForColor?.close()
+        mMultiSampleRenderBufferForDepth?.close()
+
+        glDeleteFramebuffers(1, mFrameBuf)
 
         mDepthBufferAttachment = null
         mRenderBufferAttachment = null
+        mMultiSampleRenderBufferForColor = null
+        mMultiSampleRenderBufferForDepth = null
         mHandle = -1
     }
 
@@ -65,9 +82,9 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         if (mHandle != -1) this.close()
 
         XGLContext.checkGLError("FrameBuffer init begin")
-        val multiSample: Boolean = mSpecification.samples > 1
 
-        initAttachments()
+        initColorAttachments()
+        initDepthAttachments()
         XGLContext.checkGLError("FrameBufferAttachment initialized")
 
         // Generate FBO
@@ -80,70 +97,114 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         // Make FrameBuffer Active
         glBindFramebuffer(GL_FRAMEBUFFER, mHandle)
 
-        for((index,colorAttachment) in mColorAttachments.withIndex()) {
-            // Attach the Texture2D as color attachment to FBO color attachment point
-            glFramebufferTexture2D(
-                GL_DRAW_FRAMEBUFFER,
-                GL_COLOR_ATTACHMENT0 + index,
-                GL_TEXTURE_2D,
-                colorAttachment.mHandle,
-                0
-            )
-        }
+        if (isMultiSample) {
+            // Attach multiSampler RenderBuffer
+            mMultiSampleRenderBufferForColor?.apply {
+                glFramebufferRenderbuffer(
+                    GL_FRAMEBUFFER,
+                    GL_COLOR_ATTACHMENT0,
+                    GL_RENDERBUFFER,
+                    mMultiSampleRenderBufferForColor!!.mHandle
+                )
+            }
+            mMultiSampleRenderBufferForDepth?.apply {
+                glFramebufferRenderbuffer(
+                    GL_FRAMEBUFFER,
+                    GL_DEPTH_ATTACHMENT,
+                    GL_RENDERBUFFER,
+                    mMultiSampleRenderBufferForDepth!!.mHandle
+                )
+            }
 
-        // Attach the RenderBuffer to FBO Stencil and Depth attachment point
-        mRenderBufferAttachment?.apply {
-            glFramebufferRenderbuffer(
-                GL_FRAMEBUFFER,
-                GL_DEPTH_STENCIL_ATTACHMENT,
-                GL_RENDERBUFFER,
-                mRenderBufferAttachment!!.mHandle
-            )
-        }
-        // Attach the DepthBuffer to FBO Depth attachment point
-        mDepthBufferAttachment?.apply {
-            glFramebufferRenderbuffer(
-                GL_FRAMEBUFFER,
-                GL_DEPTH_ATTACHMENT,
-                GL_TEXTURE_2D,
-                mDepthBufferAttachment!!.mHandle
-            )
+        } else {
+            for ((index, colorAttachment) in mColorAttachments.withIndex()) {
+                // Attach the Texture2D as color attachment to FBO color attachment point
+                glFramebufferTexture2D(
+                    GL_DRAW_FRAMEBUFFER,
+                    GL_COLOR_ATTACHMENT0 + index,
+                    GL_TEXTURE_2D,
+                    colorAttachment.mHandle,
+                    0
+                )
+            }
+
+            // Attach the RenderBuffer to FBO Stencil and Depth attachment point
+            mRenderBufferAttachment?.apply {
+                glFramebufferRenderbuffer(
+                    GL_FRAMEBUFFER,
+                    GL_DEPTH_STENCIL_ATTACHMENT,
+                    GL_RENDERBUFFER,
+                    mRenderBufferAttachment!!.mHandle
+                )
+            }
+            // Attach the DepthBuffer to FBO Depth attachment point
+            mDepthBufferAttachment?.apply {
+                glFramebufferRenderbuffer(
+                    GL_FRAMEBUFFER,
+                    GL_DEPTH_ATTACHMENT,
+                    GL_TEXTURE_2D,
+                    mDepthBufferAttachment!!.mHandle
+                )
+            }
         }
 
         // check FBO status
-        val state: Boolean = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
-        check(state) { Timber.w("Framebuffer is incomplete!") }
+        val state = glCheckFramebufferStatus(GL_FRAMEBUFFER)
+        check(state == GL_FRAMEBUFFER_COMPLETE) {
+            Timber.w("Framebuffer is incomplete! State=$state")
+        }
 
         // Restore default framebuffer.
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
         XGLContext.checkGLError("FrameBuffer init finish")
     }
 
-    private fun initAttachments() {
-        // Attachment
-        if (mColorAttachmentSpecifications.size != 0) {
+    private fun initColorAttachments() {
+        // opengl es only support renderbuffer for multisampling.
+        if (isMultiSample) {
+            // Generate multiSample RenderBuffer
+            mMultiSampleRenderBufferForColor = XGLRenderBuffer(
+                mSpecification.mWidth,
+                mSpecification.mHeight,
+                mSpecification.samples,
+                GL_RGBA8    //TODO: only this format?
+            )
+
+        } else {
+            // Attachment
             for (spec in mColorAttachmentSpecifications) {
-                if(mColorAttachments.size < mMaxColorAttachment) {
-                    when (spec.textureFormat) {
-                        FrameBufferTextureFormat.RGBA8 -> {
-                            // Generate Texture2D for FrameBuffer's Color Attachment
-                            // 把纹理的维度设置为屏幕大小：传入width和height，只分配相应的内存，而不填充
-                            val colorTextureBuf = XGLTexture2DBuffer(
-                                FrameBufferTextureFormat.RGBA8,
-                                mSpecification.mWidth,
-                                mSpecification.mHeight
-                            )
-                            mColorAttachments.add(colorTextureBuf)
-                        }
-                        else -> {
-                        }
+                if (mColorAttachments.size < mMaxColorAttachment) {
+                    if (spec.textureFormat == FrameBufferTextureFormat.RGBA8) {
+                        // Generate Texture2D for FrameBuffer's Color Attachment
+                        // 把纹理的维度设置为屏幕大小：传入width和height，只分配相应的内存，而不填充
+                        val colorTextureBuf = XGLTexture2DBuffer(
+                            FrameBufferTextureFormat.RGBA8,
+                            mSpecification.mWidth,
+                            mSpecification.mHeight
+                        )
+                        mColorAttachments.add(colorTextureBuf)
+
+                    } else {
+                        Timber.w("Unknown color attachment format!")
+                        continue
                     }
-                }
-                else break
+                } else break
             }
         }
+    }
 
-        if (mDepthAttachmentSpecification.textureFormat != FrameBufferTextureFormat.None) {
+    private fun initDepthAttachments() {
+        // opengl es only support renderbuffer for multisampling.
+        if (isMultiSample) {
+            // Generate multiSample RenderBuffer
+            mMultiSampleRenderBufferForDepth = XGLRenderBuffer(
+                mSpecification.mWidth,
+                mSpecification.mHeight,
+                mSpecification.samples,
+                GL_DEPTH_COMPONENT16    //TODO: only this format?
+            )
+
+        } else {
             when (mDepthAttachmentSpecification.textureFormat) {
 
                 FrameBufferTextureFormat.DEPTH24STENCIL8 -> {
@@ -154,6 +215,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
                         GL_DEPTH24_STENCIL8
                     )
                 }
+
                 FrameBufferTextureFormat.DEPTH_COMPONENT32F -> {
                     // Generate Texture2D for FrameBuffer's Depth Attachment
                     mDepthBufferAttachment = XGLTexture2DBuffer(
@@ -162,11 +224,13 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
                         mSpecification.mHeight
                     )
                 }
+
                 else -> {
                 }
             }
         }
     }
+
 
     override fun bind() {
         /**
@@ -222,7 +286,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         glDisable(GL_DEPTH_TEST)
         glDisable(GL_BLEND)
 
-        mColorAttachments.forEach{
+        mColorAttachments.forEach {
             if (it.screenTextureIndex != -1) {
                 it.bind(it.screenTextureIndex)
                 mQuad.draw(it.screenTextureIndex)
