@@ -19,7 +19,7 @@ class XGLContext(private val windowHandle: GLSurfaceView) : BaseEntity(), IfGrap
 
 //            setEGLConfigChooser(MultiSampleConfigChooser())
             setEGLContextFactory(ContextFactory())
-            setEGLConfigChooser(MultiSampleConfigChooser())
+            setEGLConfigChooser(ConfigChooser())
 
         } else {
             // Request an OpenGL ES 2.0 compatible context.

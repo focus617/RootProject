@@ -18,9 +18,9 @@ class ConfigChooser : GLSurfaceView.EGLConfigChooser {
             EGL10.EGL_GREEN_SIZE, greenSize,
             EGL10.EGL_BLUE_SIZE, blueSize,
             EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-            EGL10.EGL_SAMPLES, sampleSize,
             EGL10.EGL_DEPTH_SIZE, depthSize,
             EGL10.EGL_STENCIL_SIZE, stencilSize,
+//            EGL10.EGL_SAMPLES, sampleSize,
             EGL10.EGL_NONE
         )
         val numConfig = IntArray(1)
@@ -81,8 +81,9 @@ class ConfigChooser : GLSurfaceView.EGLConfigChooser {
         var blueSize = 8
         var alphaSize = 8
         var depthSize = 16
-        var sampleSize = 4        // enabling Anti Aliasing
         var stencilSize = 0
+        var sampleSize = 4        // enabling Anti Aliasing
+
         var value = IntArray(1)
     }
 
