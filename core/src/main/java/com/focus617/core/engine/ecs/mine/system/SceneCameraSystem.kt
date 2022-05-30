@@ -35,8 +35,10 @@ class SceneCameraSystem : IteratingSystem(), ILoggable {
                 ProjectionType.Perspective.index -> {
                     mProjectionType = ProjectionType.Perspective
                     mCamera.setProjectionType(mProjectionType)
-                    mCamera.setDistance(7f)
-                    mCamera.setFocusPoint(Point3D(0f, 0.5f, 0f))
+                    mCamera.setPerspective(60f, 0.01f, 1000f)
+                    mCamera.setDistance(4f)
+                    mCamera.setRotation(Vector3(0f, 0f, 0f))
+                    mCamera.setFocusPoint(Point3D(0f, 0.5f, 5.0f))
                 }
                 else ->{
                     mProjectionType = ProjectionType.Orthographic
@@ -67,9 +69,9 @@ class SceneCameraSystem : IteratingSystem(), ILoggable {
         private var previousY: Float = 0.0f
 
         // Euler angle
-        private var pitchX: Float = 0f
-        private var yawY: Float = 90f
-        private var rollZ: Float = 0f
+        private var pitchX: Float = mCamera.mEulerAngleInDegree.x
+        private var yawY: Float = mCamera.mEulerAngleInDegree.y
+        private var rollZ: Float = mCamera.mEulerAngleInDegree.z
 
         fun onEvent(event: Event): Boolean {
             when (event) {
