@@ -19,6 +19,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
     private var mDepthAttachmentSpecification =
         FrameBufferTextureSpecification(FrameBufferTextureFormat.None)
 
+    private var mMaxColorAttachment = 0
     private var mColorAttachments = mutableListOf<XGLTexture2DBuffer>()   // ColorTextureBuffers
     private var mDepthBufferAttachment: XGLTexture2DBuffer? = null        // DepthBuffer
     private var mRenderBufferAttachment: XGLRenderBuffer? = null          // RenderBuffer
@@ -26,6 +27,8 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
 
     // Must call under EGL
     init {
+        mMaxColorAttachment = getMaxColorAttachmentNumber()
+
         for (format in specification.attachment.attachments) {
             if (!FrameBufferTextureFormat.isDepthFormat(format.textureFormat))
                 mColorAttachmentSpecifications.add(format)
@@ -37,6 +40,13 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
 
         mQuad.initOpenGlResource()
         Timber.i("XGLFrameBuffer created.")
+    }
+
+    // Must be called in opengl env, such as scene.initOpenGlResource()
+    private fun getMaxColorAttachmentNumber(): Int {
+        val numberBuf = IntBuffer.allocate(1)
+        glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, numberBuf)
+        return numberBuf[0]
     }
 
     override fun close() {
@@ -111,20 +121,23 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         // Attachment
         if (mColorAttachmentSpecifications.size != 0) {
             for (spec in mColorAttachmentSpecifications) {
-                when (spec.textureFormat) {
-                    FrameBufferTextureFormat.RGBA8 -> {
-                        // Generate Texture2D for FrameBuffer's Color Attachment
-                        // 把纹理的维度设置为屏幕大小：传入width和height，只分配相应的内存，而不填充
-                        val colorTextureBuf = XGLTexture2DBuffer(
-                            FrameBufferTextureFormat.RGBA8,
-                            mSpecification.mWidth,
-                            mSpecification.mHeight
-                        )
-                        mColorAttachments.add(colorTextureBuf)
-                    }
-                    else -> {
+                if(mColorAttachments.size < mMaxColorAttachment) {
+                    when (spec.textureFormat) {
+                        FrameBufferTextureFormat.RGBA8 -> {
+                            // Generate Texture2D for FrameBuffer's Color Attachment
+                            // 把纹理的维度设置为屏幕大小：传入width和height，只分配相应的内存，而不填充
+                            val colorTextureBuf = XGLTexture2DBuffer(
+                                FrameBufferTextureFormat.RGBA8,
+                                mSpecification.mWidth,
+                                mSpecification.mHeight
+                            )
+                            mColorAttachments.add(colorTextureBuf)
+                        }
+                        else -> {
+                        }
                     }
                 }
+                else break
             }
         }
 
@@ -207,10 +220,10 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         glDisable(GL_DEPTH_TEST)
         glDisable(GL_BLEND)
 
-        mColorAttachments.forEach {
-            if (it.screenTextureIndex != -1) {
-                it.bind(it.screenTextureIndex)
-                mQuad.draw(it.screenTextureIndex)
+        with(mColorAttachments[mActiveColorAttachment]){
+            if (screenTextureIndex != -1) {
+                bind(screenTextureIndex)
+                mQuad.draw(screenTextureIndex)
             }
         }
 
