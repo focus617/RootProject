@@ -39,7 +39,8 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         invalidate()
 
         mQuad.initOpenGlResource()
-        Timber.i("XGLFrameBuffer created.")
+        Timber.i("Created XGLFrameBuffer with ${mColorAttachments.size} ColorAttachment" +
+                "and ${if(mRenderBufferAttachment!=null) "one" else "null"} depthAttachment.")
     }
 
     // Must be called in opengl env, such as scene.initOpenGlResource()
@@ -78,13 +79,14 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
 
         // Make FrameBuffer Active
         glBindFramebuffer(GL_FRAMEBUFFER, mHandle)
-        if (mActiveColorAttachment < mColorAttachments.size) {
-            // Attach the first Texture2D to FBO color attachment point
+
+        for((index,colorAttachment) in mColorAttachments.withIndex()) {
+            // Attach the Texture2D as color attachment to FBO color attachment point
             glFramebufferTexture2D(
                 GL_DRAW_FRAMEBUFFER,
-                GL_COLOR_ATTACHMENT0,
+                GL_COLOR_ATTACHMENT0 + index,
                 GL_TEXTURE_2D,
-                mColorAttachments[mActiveColorAttachment].mHandle,
+                colorAttachment.mHandle,
                 0
             )
         }
@@ -220,10 +222,10 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         glDisable(GL_DEPTH_TEST)
         glDisable(GL_BLEND)
 
-        with(mColorAttachments[mActiveColorAttachment]){
-            if (screenTextureIndex != -1) {
-                bind(screenTextureIndex)
-                mQuad.draw(screenTextureIndex)
+        mColorAttachments.forEach{
+            if (it.screenTextureIndex != -1) {
+                it.bind(it.screenTextureIndex)
+                mQuad.draw(it.screenTextureIndex)
             }
         }
 

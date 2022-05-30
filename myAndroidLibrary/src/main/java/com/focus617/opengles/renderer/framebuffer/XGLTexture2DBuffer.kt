@@ -40,8 +40,10 @@ class XGLTexture2DBuffer private constructor() :
                 screenTextureIndex = XGLTextureSlots.requestIndex(this)
             }
 
-            // 作为FrameBuffer的Color Attachment
-            FrameBufferTextureFormat.DEPTH_COMPONENT32F -> createDepthStorage(width, height)
+            // 作为FrameBuffer的Depth Attachment
+            FrameBufferTextureFormat.DEPTH_COMPONENT32F -> {
+                createDepthStorage(width, height)
+            }
 
             else -> {
                 Timber.e("Unknown Texture Format!")
@@ -100,6 +102,21 @@ class XGLTexture2DBuffer private constructor() :
         )
     }
 
+    private fun createDepthStorage(width: Int, height: Int) {
+        // Allocate texture storage
+        glTexImage2D(
+            GL_TEXTURE_2D,
+            0,
+            GL_DEPTH_COMPONENT32F,
+            width,
+            height,
+            0,
+            GL_DEPTH_COMPONENT,
+            GL_FLOAT,
+            null
+        )
+    }
+
     fun setData(bitmap: Bitmap, xOffset: Int, yOffset: Int) {
         require((xOffset + bitmap.width) < mWidth) {
             "Bitmap width(${bitmap.width} plug xoffset($xOffset) must less than texture width($mWidth)"
@@ -129,21 +146,5 @@ class XGLTexture2DBuffer private constructor() :
         // Unbind from the texture.
         glBindTexture(GL_TEXTURE_2D, 0)
     }
-
-    private fun createDepthStorage(width: Int, height: Int) {
-        // Allocate texture storage
-        glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            GL_DEPTH_COMPONENT32F,
-            width,
-            height,
-            0,
-            GL_DEPTH_COMPONENT,
-            GL_FLOAT,
-            null
-        )
-    }
-
 
 }
