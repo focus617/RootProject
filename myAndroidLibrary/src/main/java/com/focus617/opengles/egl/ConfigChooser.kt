@@ -1,5 +1,6 @@
 package com.focus617.opengles.egl
 
+import android.opengl.EGL14.EGL_OPENGL_ES2_BIT
 import android.opengl.GLSurfaceView
 import timber.log.Timber
 import javax.microedition.khronos.egl.EGL10
@@ -10,7 +11,6 @@ import javax.microedition.khronos.egl.EGLDisplay
 class ConfigChooser : GLSurfaceView.EGLConfigChooser {
 
     override fun chooseConfig(egl: EGL10, display: EGLDisplay): EGLConfig? {
-        val EGL_OPENGL_ES2_BIT = 4
 
         // to send the desired configuration that I want
         val configAttributes = intArrayOf(
@@ -25,9 +25,7 @@ class ConfigChooser : GLSurfaceView.EGLConfigChooser {
         )
         val numConfig = IntArray(1)
         require(
-            egl.eglChooseConfig(
-                display, configAttributes, null, 0, numConfig
-            )
+            egl.eglChooseConfig(display, configAttributes, null, 0, numConfig)
         ) { "eglChooseConfig failed" }
 
         val numConfigs = numConfig[0]   // returns number of configs available
@@ -75,8 +73,8 @@ class ConfigChooser : GLSurfaceView.EGLConfigChooser {
         egl.eglGetConfigAttrib(display, config, attribute, value)
     ) value[0]
     else defaultValue
-    
-    companion object{
+
+    companion object {
         // Surface format: RGBA8888
         var redSize = 8
         var greenSize = 8

@@ -1,5 +1,7 @@
 package com.focus617.opengles.egl
 
+import android.opengl.EGL14.EGL_OPENGL_ES2_BIT
+import android.opengl.GLES20.GL_TRUE
 import android.opengl.GLSurfaceView
 import timber.log.Timber
 import javax.microedition.khronos.egl.EGL10
@@ -33,29 +35,27 @@ class MultiSampleConfigChooser : GLSurfaceView.EGLConfigChooser {
 
         // Try to find a normal multisample configuration first.
         var configSpec = intArrayOf(
-            EGL10.EGL_RED_SIZE, 5,
-            EGL10.EGL_GREEN_SIZE, 6,
-            EGL10.EGL_BLUE_SIZE, 5,
-            EGL10.EGL_DEPTH_SIZE, 16,
+            EGL10.EGL_RED_SIZE, redSize,
+            EGL10.EGL_GREEN_SIZE, greenSize,
+            EGL10.EGL_BLUE_SIZE, blueSize,
+            EGL10.EGL_DEPTH_SIZE, depthSize,
+            EGL10.EGL_STENCIL_SIZE, stencilSize,
+
             // Requires that setEGLContextClientVersion(2) is called on the view.
-            EGL10.EGL_RENDERABLE_TYPE, 4 /* EGL_OPENGL_ES2_BIT */,
-            EGL10.EGL_SAMPLE_BUFFERS, 1 /* true */,
-            EGL10.EGL_SAMPLES, 2,
+            EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+
+            EGL10.EGL_SAMPLE_BUFFERS, GL_TRUE /* 打开多采样抗锯齿 */,
+            EGL10.EGL_SAMPLES, sampleSize /* 指定采样器的个数 */,
             EGL10.EGL_NONE
         )
         require(
-            egl.eglChooseConfig(
-                display,
-                configSpec,
-                null,
-                0,
-                numConfig
-            )
+            egl.eglChooseConfig(display, configSpec, null, 0, numConfig)
         ) { "eglChooseConfig failed" }
 
         var numConfigs = numConfig[0]
         if (numConfigs <= 0) {
-            Timber.v("%s%s%s",
+            Timber.v(
+                "%s%s%s",
                 "No normal multisampling config was found. ",
                 "Attempting to create a coverage multisampling configuration, ",
                 "for the nVidia Tegra2. See the EGL_NV_coverage_sample documentation."
@@ -69,19 +69,13 @@ class MultiSampleConfigChooser : GLSurfaceView.EGLConfigChooser {
                 EGL10.EGL_GREEN_SIZE, 8,
                 EGL10.EGL_BLUE_SIZE, 8,
                 EGL10.EGL_DEPTH_SIZE, 16,
-                EGL10.EGL_RENDERABLE_TYPE, 4 /* EGL_OPENGL_ES2_BIT */,
+                EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
                 EGL_COVERAGE_BUFFERS_NV, 1   /* true */,
                 EGL_COVERAGE_SAMPLES_NV, 2,  // always 5 in practice on tegra 2
                 EGL10.EGL_NONE
             )
             require(
-                egl.eglChooseConfig(
-                    display,
-                    configSpec,
-                    null,
-                    0,
-                    numConfig
-                )
+                egl.eglChooseConfig(display, configSpec, null, 0, numConfig)
             ) { "2nd eglChooseConfig failed" }
 
             numConfigs = numConfig[0]
@@ -95,14 +89,9 @@ class MultiSampleConfigChooser : GLSurfaceView.EGLConfigChooser {
                     EGL10.EGL_NONE
                 )
                 require(
-                    egl.eglChooseConfig(
-                        display,
-                        configSpec,
-                        null,
-                        0,
-                        numConfig
-                    )
+                    egl.eglChooseConfig(display, configSpec, null, 0, numConfig)
                 ) { "3rd eglChooseConfig failed" }
+
                 numConfigs = numConfig[0]
                 require(numConfigs > 0) { "No configs match configSpec" }
             } else {
@@ -144,6 +133,18 @@ class MultiSampleConfigChooser : GLSurfaceView.EGLConfigChooser {
 
     fun usesCoverageAa(): Boolean {
         return mUsesCoverageAa
+    }
+
+    companion object {
+        // Surface format: RGBA8888
+        var redSize = 8
+        var greenSize = 8
+        var blueSize = 8
+        var alphaSize = 8
+        var depthSize = 16
+        var sampleSize = 4        // enabling Anti Aliasing
+        var stencilSize = 0
+        var value = IntArray(1)
     }
 
 }
