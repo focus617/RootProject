@@ -1,4 +1,4 @@
-package com.focus617.core.engine.ecs.mine.objlib
+package com.focus617.core.engine.ecs.mine.gameobject
 
 import com.focus617.core.engine.math.Mat4
 import com.focus617.core.engine.math.Point3D

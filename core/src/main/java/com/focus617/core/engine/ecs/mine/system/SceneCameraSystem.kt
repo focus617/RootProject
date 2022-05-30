@@ -4,8 +4,8 @@ import com.focus617.core.engine.ecs.fleks.AllOf
 import com.focus617.core.engine.ecs.fleks.Entity
 import com.focus617.core.engine.ecs.fleks.IteratingSystem
 import com.focus617.core.engine.ecs.mine.component.SceneCamera
-import com.focus617.core.engine.ecs.mine.objlib.Camera
-import com.focus617.core.engine.ecs.mine.objlib.ProjectionType
+import com.focus617.core.engine.ecs.mine.gameobject.Camera
+import com.focus617.core.engine.ecs.mine.gameobject.ProjectionType
 import com.focus617.core.engine.ecs.mine.static.SceneData
 import com.focus617.core.engine.math.Point3D
 import com.focus617.core.engine.math.Vector3
