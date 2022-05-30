@@ -264,7 +264,6 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
 
     override fun unbind() {
         if (isMultiSample) {
-            glBindFramebuffer(GL_READ_FRAMEBUFFER, mHandle)
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0)
             mMultiSampleRenderBuffersForColor.forEach { it.unbind() }
         } else {
@@ -306,6 +305,10 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         glDisable(GL_BLEND)
 
         if (isMultiSample) {
+            // now blit multiSampled buffer(s) to normal ColorBuffer of intermediate FBO.
+            // Image is stored in screenTexture
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, mHandle)
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0)
             mMultiSampleRenderBuffersForColor.forEach {
                 glBlitFramebuffer(
                     0,
@@ -342,7 +345,6 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
         }
 
         glViewport(0, 0, mSpecification.mWidth, mSpecification.mHeight)
-
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_BLEND)
     }
