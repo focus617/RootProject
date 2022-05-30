@@ -35,7 +35,13 @@ class XGLTexture2DBuffer private constructor() :
         when (format) {
             // 作为FrameBuffer的Color Attachment
             FrameBufferTextureFormat.RGBA8 -> {
-                createColorStorage(width, height)
+                createColorStorage(width, height, GL_RGBA, GL_RGBA8)
+                // 注册到TextureSlots, 获得TextureUnit Index, 以便ActiveTexture
+                screenTextureIndex = XGLTextureSlots.requestIndex(this)
+            }
+
+            FrameBufferTextureFormat.RED_INTEGER -> {
+                createColorStorage(width, height, GL_RED_INTEGER, GL_R32I)
                 // 注册到TextureSlots, 获得TextureUnit Index, 以便ActiveTexture
                 screenTextureIndex = XGLTextureSlots.requestIndex(this)
             }
@@ -87,16 +93,16 @@ class XGLTexture2DBuffer private constructor() :
         }
     }
 
-    private fun createColorStorage(width: Int, height: Int) {
+    private fun createColorStorage(width: Int, height: Int, format: Int, internalFormat: Int) {
         // Allocate texture storage
         glTexImage2D(
             GL_TEXTURE_2D,
             0,
-            GL_RGBA8,
+            internalFormat,
             width,
             height,
             0,
-            GL_RGBA,
+            format,
             GL_UNSIGNED_BYTE,
             null
         )
