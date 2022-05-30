@@ -41,7 +41,7 @@ object Scene : BaseEntity() {
 
         camera = world.entity {
             add<Tag> { tag = "SceneCamera" }
-            add<SceneCamera> { projectionTypeIndex = 2 }
+            add<SceneCamera> { projectionTypeIndex = 1 }
             add<Relationship>()
         }
         camera.setParent(sceneEntity)
