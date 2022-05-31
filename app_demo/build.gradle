@@ -28,15 +28,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets {
-        String sharedTestDir = 'src/sharedTest/java'
-        test {
-            java.srcDir sharedTestDir
-        }
-        androidTest {
-            java.srcDir sharedTestDir
-        }
-    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -58,7 +49,6 @@ android {
 dependencies {
     api project(':myAndroidLibrary')
     api project(':core')
-    implementation project(path: ':nativelib')
 
     // use ArSceneView without the UX dependency
     implementation 'com.google.ar.sceneform:core:1.15.0'

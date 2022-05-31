@@ -3,8 +3,6 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id 'kotlin-parcelize'
-    id 'androidx.navigation.safeargs'
 }
 
 kapt {
@@ -15,8 +13,7 @@ android {
     compileSdk = BuildConfig.COMPILE_SDK
 
     defaultConfig {
-        applicationId = "com.focus617.bookreader"
-
+        applicationId "com.focus617.modeldemo"
         minSdk = BuildConfig.MIN_SDK
         targetSdk = BuildConfig.TARGET_SDK
         versionCode = BuildConfig.versionCodeMobile
@@ -31,54 +28,28 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
-
     compileOptions {
-        sourceCompatibility = BuildConfig.javaVersion
-        targetCompatibility = BuildConfig.javaVersion
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
     buildFeatures {
         viewBinding true
-        dataBinding true
     }
-
-    testOptions {
-        unitTests {
-            includeAndroidResources = true
-        }
-    }
-    packagingOptions {
-        resources {
-            excludes += ['META-INF/INDEX.LIST', 'META-INF/io.netty.versions.properties']
-        }
-    }
-
 }
 
-
 dependencies {
-    implementation project(':core')
-    api project(':myAndroidLibrary')
-
-    if (!(ModuleConfig.isModule))
-        implementation project(':login')
+    api project(path: ':nativelib')
 
     // Basic
     implementation(
-            Jetpack.LEGACY_SUPPORT,
-
             Jetpack.ANDROIDX_CORE,
             Jetpack.APPCOMPAT,
             Jetpack.MATERIAL,
             Jetpack.CONSTRAINTLAYOUT,
             Jetpack.PREFERENCE,
-
-            // WorkManager
-            Jetpack.WORK_RUNTIME_KTX,
 
             // Lifecycle
             Jetpack.LIFECYCLE_LIVEDATA_KTX,           // ViewModel and LiveData,
@@ -107,16 +78,12 @@ dependencies {
     // optional - Test helpers
     testImplementation(Jetpack.ROOM_TESTING)
 
-
-    // Log
+    // Timber log
     implementation(
             Libs.TIMBER,
             Kotlin.KOTLIN_LOGGING,
             Libs.SLF4J
     )
-
-    // Glide
-    implementation(Libs.GLIDE)
 
     // Network
     implementation(
@@ -126,8 +93,9 @@ dependencies {
             Libs.RETROFIT2_MOSHI_CONVERTER,
             // Retrofit library that integrates coroutines.
             Libs.RETROFIT2_KOTLIN_COROUTINES_ADAPTER,
+            // Netty
+            //Libs.NETTY  // TODO:需要裁剪，留下有用的jar
     )
-
 
     // Test
     testImplementation(
@@ -175,4 +143,3 @@ dependencies {
             Kotlin.COROUTINES_TEST
     )
 }
-

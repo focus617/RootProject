@@ -15,6 +15,7 @@
       <module name="TankWar.myAndroidLibrary" target="11" />
       <module name="XApp.app_bookreader" target="11" />
       <module name="XApp.app_demo" target="11" />
+      <module name="XApp.app_native" target="11" />
       <module name="XApp.app_tankwar" target="11" />
       <module name="XApp.app_xgame" target="11" />
       <module name="XApp.login" target="11" />

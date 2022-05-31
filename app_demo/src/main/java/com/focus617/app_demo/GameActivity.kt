@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.view.WindowManager
 import com.focus617.app_demo.engine.AndroidWindow
 import com.focus617.app_demo.engine.input.SensorInput
-import com.focus617.nativelib.NativeLib
 import com.focus617.platform.uicontroller.BaseActivity
 import timber.log.Timber
 
@@ -26,11 +25,6 @@ class GameActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Timber.i("On Create Method Calling Native Library")
-        val nativeLib = NativeLib()             // loadFile Native Library
-        Timber.i(nativeLib.stringFromJNI())
-        NativeLib.openGlEsSdkNativeLibraryInit("sampledata/teapot/teapot.obj", 1)
 
         mWindowManager = windowManager
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
