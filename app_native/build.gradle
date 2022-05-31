@@ -38,9 +38,16 @@ android {
     buildFeatures {
         viewBinding true
     }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/INDEX.LIST', 'META-INF/io.netty.versions.properties']
+        }
+    }
 }
 
 dependencies {
+    api project(':myAndroidLibrary')
+    api project(':core')
     api project(path: ':nativelib')
 
     // Basic

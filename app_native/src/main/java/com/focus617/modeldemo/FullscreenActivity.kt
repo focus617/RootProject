@@ -1,6 +1,7 @@
 package com.focus617.modeldemo
 
 import android.annotation.SuppressLint
+import android.opengl.GLSurfaceView
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -9,10 +10,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsets
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.focus617.modeldemo.databinding.ActivityFullscreenBinding
 import com.focus617.nativelib.NativeLib
+import com.focus617.opengles.egl.ConfigChooser
+import com.focus617.opengles.egl.ContextFactory
 import timber.log.Timber
 
 /**
@@ -20,6 +22,13 @@ import timber.log.Timber
  * status bar and navigation/system bar) with user interaction.
  */
 class FullscreenActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityFullscreenBinding
+    private lateinit var glSurfaceView: GLSurfaceView
+    private lateinit var fullscreenContentControls: LinearLayout
+    private val hideHandler = Handler(Looper.myLooper()!!)
+
+    private val renderer = GraphicsRenderer()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,8 +46,13 @@ class FullscreenActivity : AppCompatActivity() {
         isFullscreen = true
 
         // Set up the user interaction to manually show or hide the system UI.
-        fullscreenContent = binding.fullscreenContent
-        fullscreenContent.setOnClickListener { toggle() }
+        glSurfaceView = binding.glSurfaceview
+        // Request an OpenGL ES 3.0 compatible context.
+        glSurfaceView.setEGLContextClientVersion(3)
+        glSurfaceView.setEGLContextFactory(ContextFactory())
+        glSurfaceView.setEGLConfigChooser(ConfigChooser())
+        glSurfaceView.setRenderer(renderer)
+        glSurfaceView.setOnClickListener { toggle() }
 
         fullscreenContentControls = binding.fullscreenContentControls
 
@@ -47,6 +61,16 @@ class FullscreenActivity : AppCompatActivity() {
         // while interacting with the UI.
         binding.dummyButton.setOnTouchListener(delayHideTouchListener)
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        glSurfaceView.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        glSurfaceView.onResume()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -58,21 +82,17 @@ class FullscreenActivity : AppCompatActivity() {
         delayedHide(100)
     }
 
-    private lateinit var binding: ActivityFullscreenBinding
-    private lateinit var fullscreenContent: TextView
-    private lateinit var fullscreenContentControls: LinearLayout
-    private val hideHandler = Handler(Looper.myLooper()!!)
 
     @SuppressLint("InlinedApi")
     private val hidePart2Runnable = Runnable {
         // Delayed removal of status and navigation bar
         if (Build.VERSION.SDK_INT >= 30) {
-            fullscreenContent.windowInsetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+            glSurfaceView.windowInsetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
         } else {
             // Note that some of these constants are new as of API 16 (Jelly Bean)
             // and API 19 (KitKat). It is safe to use them, as they are inlined
             // at compile-time and do nothing on earlier devices.
-            fullscreenContent.systemUiVisibility =
+            glSurfaceView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LOW_PROFILE or
                         View.SYSTEM_UI_FLAG_FULLSCREEN or
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -129,9 +149,9 @@ class FullscreenActivity : AppCompatActivity() {
     private fun show() {
         // Show the system bar
         if (Build.VERSION.SDK_INT >= 30) {
-            fullscreenContent.windowInsetsController?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+            glSurfaceView.windowInsetsController?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
         } else {
-            fullscreenContent.systemUiVisibility =
+            glSurfaceView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         }

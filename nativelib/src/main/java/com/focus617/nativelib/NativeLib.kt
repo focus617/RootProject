@@ -14,6 +14,8 @@ class NativeLib {
         init {
             System.loadLibrary("nativelib")
         }
-        external fun openGlEsSdkNativeLibraryInit(filePath: String, line: Int)
+
+        external fun init(width: Int, height: Int)
+        external fun step()
     }
 }

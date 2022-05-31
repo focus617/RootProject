@@ -14,7 +14,7 @@
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 #define LOGF(...) __android_log_print(ANDROID_LOG_FATAL, LOG_TAG, __VA_ARGS__)
 
- #define MALLOC_CHECK(ptr_type, ptr, size)                                        \
+#define MALLOC_CHECK(ptr_type, ptr, size)                                        \
  {                                                                                \
      ptr = (ptr_type) malloc(size);                                               \
      if (ptr == NULL)                                                             \
@@ -24,7 +24,7 @@
      }                                                                            \
  }
 
- #define REALLOC_CHECK(ptr_type, ptr, size)                                       \
+#define REALLOC_CHECK(ptr_type, ptr, size)                                       \
  {                                                                                \
      ptr = (ptr_type) realloc(ptr, size);                                         \
      if (ptr == NULL)                                                             \
@@ -34,13 +34,13 @@
      }                                                                            \
  }
 
- #define FREE_CHECK(ptr) \
+#define FREE_CHECK(ptr) \
  {                       \
      free((void*) ptr);  \
      ptr = NULL;         \
  }
 
- #define GL_CHECK(x)                                                                         \
+#define GL_CHECK(x)                                                                         \
  x;                                                                                          \
  {                                                                                           \
      GLenum glError = glGetError();                                                          \
@@ -54,15 +54,14 @@
 void loadFile(const char *filePath, int line) {
     LOGI("FilePath=%s(line#%d)", filePath, line);
 
-    FILE * file = fopen(filePath, "r");
-    if(file == nullptr)
-    {
+    FILE *file = fopen(filePath, "r");
+    if (file == nullptr) {
         LOGE("Failure to loadFile the file");
         return;
     }
-    char * fileContent =(char *) malloc(sizeof(char) * 1000);
+    char *fileContent = (char *) malloc(sizeof(char) * 1000);
     fread(fileContent, 1000, 1, file);
-    LOGI("%s",fileContent);
+    LOGI("%s", fileContent);
     free(fileContent);
     fclose(file);
 }
@@ -83,7 +82,7 @@ Java_com_focus617_nativelib_NativeLib_00024Companion_openGlEsSdkNativeLibraryIni
     LOGI("Hello From the Native Side!!");
 
     //convert Java strings to cstrings, and release them when finish process
-    const char* filePathC = env->GetStringUTFChars(filePath, nullptr);
+    const char *filePathC = env->GetStringUTFChars(filePath, nullptr);
     loadFile(filePathC, line);
     env->ReleaseStringUTFChars(filePath, filePathC);
 }
@@ -91,3 +90,16 @@ Java_com_focus617_nativelib_NativeLib_00024Companion_openGlEsSdkNativeLibraryIni
 }
 
 
+extern "C"
+{
+JNIEXPORT void JNICALL
+Java_com_focus617_nativelib_NativeLib_00024Companion_init(
+        JNIEnv *env, jobject thiz, jint width, jint height) {
+}
+
+JNIEXPORT void JNICALL
+Java_com_focus617_nativelib_NativeLib_00024Companion_step(
+        JNIEnv *env, jobject thiz) {
+}
+
+}
