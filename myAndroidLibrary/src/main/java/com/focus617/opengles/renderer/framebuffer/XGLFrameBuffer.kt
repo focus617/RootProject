@@ -121,7 +121,7 @@ class XGLFrameBuffer(specification: FrameBufferSpecification) : FrameBuffer(spec
             for ((index, colorAttachment) in mColorAttachments.withIndex()) {
                 // Attach the Texture2D as color attachment to FBO color attachment point
                 glFramebufferTexture2D(
-                    GL_DRAW_FRAMEBUFFER,
+                    GL_FRAMEBUFFER,         // GL_DRAW_FRAMEBUFFER,
                     GL_COLOR_ATTACHMENT0 + index,
                     GL_TEXTURE_2D,
                     colorAttachment.mHandle,
