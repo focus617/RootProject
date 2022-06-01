@@ -12,7 +12,10 @@ class NativeLib {
             System.loadLibrary("nativelib")
         }
 
+        // Native methods are listed here but implemented in C++ files
         external fun init(width: Int, height: Int)
         external fun step()
+
+        external fun ndkEmboss(data: IntArray?, width: Int, height: Int)
     }
 }

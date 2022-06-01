@@ -25,10 +25,10 @@ class FullscreenActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFullscreenBinding
     private lateinit var glSurfaceView: GLSurfaceView
+    private val renderer = GraphicsRenderer()
+
     private lateinit var fullscreenContentControls: LinearLayout
     private val hideHandler = Handler(Looper.myLooper()!!)
-
-    private val renderer = GraphicsRenderer()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
