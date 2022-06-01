@@ -11,11 +11,11 @@ class GraphicsRenderer : GLSurfaceView.Renderer {
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
-            NativeLib.init(width, height)
+        NativeLib.init(width, height)
     }
 
     override fun onDrawFrame(gl: GL10?) {
-            NativeLib.step()
+        NativeLib.step()
     }
 
 }

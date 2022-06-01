@@ -34,9 +34,9 @@ class FullscreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // loadFile Native Library
         Timber.i("On Create Method Calling Native Library")
-        val nativeLib = NativeLib()             // loadFile Native Library
-        Timber.i(nativeLib.stringFromJNI())
+        val nativeLib = NativeLib()
 
         binding = ActivityFullscreenBinding.inflate(layoutInflater)
         setContentView(binding.root)

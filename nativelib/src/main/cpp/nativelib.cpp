@@ -1,105 +1,163 @@
 #include <jni.h>
-#include <android/log.h>
-
-#include <GLES3/gl3.h>
-
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
 #include <string>
 
-#define LOG_TAG "libNative"
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
-#define LOGF(...) __android_log_print(ANDROID_LOG_FATAL, LOG_TAG, __VA_ARGS__)
+#include <unistd.h>
 
-#define MALLOC_CHECK(ptr_type, ptr, size)                                        \
- {                                                                                \
-     ptr = (ptr_type) malloc(size);                                               \
-     if (ptr == NULL)                                                             \
-     {                                                                            \
-         LOGF("Memory allocation error FILE: %s LINE: %i\n", __FILE__, __LINE__); \
-         exit(EXIT_FAILURE);                                                      \
-     }                                                                            \
- }
+#include <GLES3/gl3.h>
+#include <GLES3/gl3ext.h>
 
-#define REALLOC_CHECK(ptr_type, ptr, size)                                       \
- {                                                                                \
-     ptr = (ptr_type) realloc(ptr, size);                                         \
-     if (ptr == NULL)                                                             \
-     {                                                                            \
-         LOGF("Memory allocation error FILE: %s LINE: %i\n", __FILE__, __LINE__); \
-         exit(EXIT_FAILURE);                                                      \
-     }                                                                            \
- }
+#include "Core.h"
 
-#define FREE_CHECK(ptr) \
- {                       \
-     free((void*) ptr);  \
-     ptr = NULL;         \
- }
+static const char glVertexShader[] =
+        "attribute vec4 vPosition;\n"
+        "void main()\n"
+        "{\n"
+        "  gl_Position = vPosition;\n"
+        "}\n";
 
-#define GL_CHECK(x)                                                                         \
- x;                                                                                          \
- {                                                                                           \
-     GLenum glError = glGetError();                                                          \
-     if(glError != GL_NO_ERROR)                                                              \
-     {                                                                                       \
-         LOGE("glGetError() = %i (%#.8x) at %s:%i\n", glError, glError, __FILE__, __LINE__); \
-         exit(EXIT_FAILURE);                                                                 \
-     }                                                                                       \
- }
+static const char glFragmentShader[] =
+        "precision mediump float;\n"
+        "void main()\n"
+        "{\n"
+        "  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
 
-void loadFile(const char *filePath, int line) {
-    LOGI("FilePath=%s(line#%d)", filePath, line);
-
-    FILE *file = fopen(filePath, "r");
-    if (file == nullptr) {
-        LOGE("Failure to loadFile the file");
-        return;
-    }
-    char *fileContent = (char *) malloc(sizeof(char) * 1000);
-    fread(fileContent, 1000, 1, file);
-    LOGI("%s", fileContent);
-    free(fileContent);
-    fclose(file);
-}
-
-extern "C"
+GLuint loadShader(GLenum shaderType, const char* shaderSource)
 {
-
-JNIEXPORT jstring JNICALL
-Java_com_focus617_nativelib_NativeLib_stringFromJNI(JNIEnv *env, jobject /* this */) {
-    std::string hello = "Hello from C++";
-    return env->NewStringUTF(hello.c_str());
+    GLuint shader = glCreateShader(shaderType);
+    if (shader)
+    {
+        glShaderSource(shader, 1, &shaderSource, NULL);
+        glCompileShader(shader);
+        GLint compiled = 0;
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+        if (!compiled)
+        {
+            GLint infoLen = 0;
+            glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
+            if (infoLen)
+            {
+                char * buf = (char*) malloc(infoLen);
+                if (buf)
+                {
+                    glGetShaderInfoLog(shader, infoLen, NULL, buf);
+                    LOGE("Could not Compile Shader %d:\n%s\n", shaderType, buf);
+                    free(buf);
+                }
+                glDeleteShader(shader);
+                shader = 0;
+            }
+        }
+    }
+    return shader;
 }
 
-JNIEXPORT void JNICALL
-Java_com_focus617_nativelib_NativeLib_00024Companion_openGlEsSdkNativeLibraryInit(
-        JNIEnv *env, jobject thiz, jstring filePath, jint line
-) {
-    LOGI("Hello From the Native Side!!");
-
-    //convert Java strings to cstrings, and release them when finish process
-    const char *filePathC = env->GetStringUTFChars(filePath, nullptr);
-    loadFile(filePathC, line);
-    env->ReleaseStringUTFChars(filePath, filePathC);
+GLuint createProgram(const char* vertexSource, const char * fragmentSource)
+{
+    GLuint vertexShader = loadShader(GL_VERTEX_SHADER, vertexSource);
+    if (!vertexShader)
+    {
+        return 0;
+    }
+    GLuint fragmentShader = loadShader(GL_FRAGMENT_SHADER, fragmentSource);
+    if (!fragmentShader)
+    {
+        return 0;
+    }
+    GLuint program = glCreateProgram();
+    if (program)
+    {
+        glAttachShader(program , vertexShader);
+        glAttachShader(program, fragmentShader);
+        glLinkProgram(program);
+        GLint linkStatus = GL_FALSE;
+        glGetProgramiv(program , GL_LINK_STATUS, &linkStatus);
+        if( linkStatus != GL_TRUE)
+        {
+            GLint bufLength = 0;
+            glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufLength);
+            if (bufLength)
+            {
+                char* buf = (char*) malloc(bufLength);
+                if (buf)
+                {
+                    glGetProgramInfoLog(program, bufLength, NULL, buf);
+                    LOGE("Could not link program:\n%s\n", buf);
+                    free(buf);
+                }
+            }
+            glDeleteProgram(program);
+            program = 0;
+        }
+    }
+    return program;
 }
 
+/* [setupGraphics] */
+GLuint simpleTriangleProgram;
+GLuint vPosition;
+
+bool setupGraphics(int w, int h)
+{
+    simpleTriangleProgram = createProgram(glVertexShader, glFragmentShader);
+    if (!simpleTriangleProgram)
+    {
+        LOGE ("Could not create program");
+        return false;
+    }
+    vPosition = glGetAttribLocation(simpleTriangleProgram, "vPosition");
+    glViewport(0, 0, w, h);
+    return true;
 }
 
+const GLfloat triangleVertices[] = {
+        0.0f, 1.0f,
+        -1.0f, -1.0f,
+        1.0f, -1.0f
+};
 
+void renderFrame()
+{
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear (GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    glUseProgram(simpleTriangleProgram);
+    glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0 ,triangleVertices);
+    glEnableVertexAttribArray(vPosition);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+/* [Function prototypes] */
 extern "C"
 {
 JNIEXPORT void JNICALL
 Java_com_focus617_nativelib_NativeLib_00024Companion_init(
-        JNIEnv *env, jobject thiz, jint width, jint height) {
-}
+        JNIEnv *env, jobject obj, jint width, jint height);
 
 JNIEXPORT void JNICALL
 Java_com_focus617_nativelib_NativeLib_00024Companion_step(
-        JNIEnv *env, jobject thiz) {
-}
+        JNIEnv *env, jobject obj);
 
 }
+/* [Function prototypes] */
+
+/* [Function definition] */
+extern "C" JNIEXPORT void JNICALL
+Java_com_focus617_nativelib_NativeLib_00024Companion_init(
+        JNIEnv *env, jobject thiz, jint width, jint height)
+{
+    setupGraphics(width, height);
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_focus617_nativelib_NativeLib_00024Companion_step(
+        JNIEnv *env, jobject thiz)
+{
+    renderFrame();
+}
+/* [Function definition] */
+
+
+

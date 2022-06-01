@@ -6,9 +6,6 @@ class NativeLib {
      * A native method that is implemented by the 'nativelib' native library,
      * which is packaged with this application.
      */
-    external fun stringFromJNI(): String
-
-
     companion object {
         // Used to loadFile the 'nativelib' library on application startup.
         init {
