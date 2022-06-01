@@ -2,7 +2,7 @@
 // Created by Xu Zhiyong on 2022/6/1.
 //
 
-#include "MyJNIHelper.h"
+#include "include/MyJNIHelper.h"
 #include <android/asset_manager_jni.h>
 #include <Core.h>
 
