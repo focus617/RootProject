@@ -4,6 +4,7 @@
 
 #include "MyJNIHelper.h"
 #include <android/asset_manager_jni.h>
+#include <Core.h>
 
 
 MyJNIHelper::MyJNIHelper(
@@ -41,7 +42,7 @@ bool MyJNIHelper::ExtractAssetReturnFilename(std::string assetName, std::string 
     FILE* file = fopen(filename.c_str(), "rb");
     if (file && checkIfFileIsAvailable) {
 
-        MyLOGI("Found extracted file in assets: %s", filename.c_str());
+        LOGI("Found extracted file in assets: %s", filename.c_str());
         fclose(file);
         pthread_mutex_unlock( &threadMutex);
         return true;
@@ -70,11 +71,11 @@ bool MyJNIHelper::ExtractAssetReturnFilename(std::string assetName, std::string 
         AAsset_close(asset);
         result = true;
 
-        MyLOGI("Asset extracted: %s", filename.c_str());
+        LOGI("Asset extracted: %s", filename.c_str());
     }
     else
     {
-        MyLOGE("Asset not found: %s", assetName.c_str());
+        LOGE("Asset not found: %s", assetName.c_str());
     }
 
     pthread_mutex_unlock( &threadMutex);

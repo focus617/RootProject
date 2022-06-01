@@ -23,7 +23,7 @@ add_library( # Sets the name of the library.
         # Provides a relative path to your source file(s).
         # Note: that the relative path is meant to be relative to the directory
         # where you kept the CMakeLists.txt build script.
-        nativelib.cpp)
+        nativelib.cpp Matrix.cpp)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -55,12 +55,15 @@ target_link_libraries( # Specifies the target library.
         # included in the NDK.
         ${log-lib})
 
+#设置生成的so动态库最后输出的路径
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/../jniLibs/${ANDROID_ABI})
 
 # Set the third-party library header files directory.
+# =====  ASSIMP  =====
 add_library(assimp SHARED IMPORTED)
 
 set_property(TARGET assimp PROPERTY IMPORTED_LOCATION
-        ${PROJECT_SOURCE_DIR}/vendors/assimp/${ANDROID_ABI}/libassimp.so)
+        ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libassimp.so)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
         ${PROJECT_SOURCE_DIR}/vendors/assimp/include)

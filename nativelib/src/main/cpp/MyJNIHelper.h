@@ -8,6 +8,7 @@
 #include <pthread.h>
 #include <string>
 #include <jni.h>
+#include <android/asset_manager_jni.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,10 +31,8 @@ public:
     bool ExtractAssetReturnFilename(std::string assetName, std::string &filename,
                                     bool checkIfFileIsAvailable = false);
 
-    bool ReadFileFromAssetsToBuffer(const char *filename, std::vector <uint8_t> *bufferRef);
+    bool ReadFileFromAssetsToBuffer(const char *filename, std::vector<uint8_t> *bufferRef);
 };
-
-}
 
 extern MyJNIHelper *gHelperObject;
 
