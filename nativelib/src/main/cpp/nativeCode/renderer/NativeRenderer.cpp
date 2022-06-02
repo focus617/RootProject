@@ -16,7 +16,8 @@
 
 #include "Core.h"
 #include "NativeRenderer.h"
-#include "../math/Matrix.h"
+#include "nativeCode/common/MyJNIHelper.h"
+#include "nativeCode/math/Matrix.h"
 
 
 /* The global Assimp scene object. */

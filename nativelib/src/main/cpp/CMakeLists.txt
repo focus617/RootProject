@@ -47,7 +47,7 @@ find_library( # Sets the name of the path variable.
 
 # Add the directories where the Cpp header files are to let CMake find
 # them during compile time
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 # Specifies libraries CMake should link to your target library. You

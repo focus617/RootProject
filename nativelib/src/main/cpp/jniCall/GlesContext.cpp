@@ -1,13 +1,17 @@
 
 #include <jni.h>
-#include "../nativeCode/renderer/GLESNative.h"
+#include "nativeCode/renderer/GLESNative.h"
+#include "nativeCode/common/MyJNIHelper.h"
 
 /* [Function definition] */
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// global pointer is used in JNI calls to reference to same object of type Cube
+// global pointer to instance of MyJNIHelper that is used to read from assets
+MyJNIHelper *gHelperObject = nullptr;
+
+// global pointer is used in JNI calls to reference to object in charge of render
 GLESNative *gGlesObject = nullptr;
 
 JNIEXPORT jboolean JNICALL
@@ -35,9 +39,11 @@ Java_com_focus617_nativelib_NativeLib_00024Companion_getGLESVersionNative(
 
 JNIEXPORT void JNICALL
 Java_com_focus617_nativelib_NativeLib_00024Companion_createObjectNative(
-        JNIEnv *env, jobject thiz,
-        jobject asset_manager,
-        jstring path_to_internal_dir) {
+        JNIEnv *env, jobject instance,
+        jobject assetManager,
+        jstring pathToInternalDir) {
+
+    gHelperObject = new MyJNIHelper(env, instance, assetManager, pathToInternalDir);
 
     gGlesObject = new GLESNative();
 }
@@ -45,6 +51,11 @@ Java_com_focus617_nativelib_NativeLib_00024Companion_createObjectNative(
 JNIEXPORT void JNICALL
 Java_com_focus617_nativelib_NativeLib_00024Companion_deleteObjectNative(
         JNIEnv *env, jobject thiz) {
+
+    if (gHelperObject != nullptr) {
+        delete gHelperObject;
+    }
+    gHelperObject = nullptr;
 
     if (gGlesObject != nullptr) {
         delete gGlesObject;
