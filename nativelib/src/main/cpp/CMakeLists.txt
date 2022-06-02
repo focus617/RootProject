@@ -47,7 +47,11 @@ find_library( # Sets the name of the path variable.
 
 # Add the directories where the Cpp header files are to let CMake find
 # them during compile time
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../vendors)
+
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 # Specifies libraries CMake should link to your target library. You
@@ -76,11 +80,11 @@ set_property(TARGET assimp PROPERTY IMPORTED_LOCATION
         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libassimp.so)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-        ${PROJECT_SOURCE_DIR}/vendors/assimp/include)
+        ${PROJECT_SOURCE_DIR}/../vendors/assimp-5.2.4/include)
 
 target_link_libraries(${sample} assimp)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_CURRENT_SOURCE_DIR}/vendors/assimp/${ANDROID_ABI}/libassimp.so
+        ${CMAKE_CURRENT_SOURCE_DIR}/../vendors/assimp-5.2.4/${ANDROID_ABI}/libassimp.so
         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
