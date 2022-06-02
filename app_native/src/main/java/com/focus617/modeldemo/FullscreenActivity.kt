@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsets
 import android.widget.LinearLayout
@@ -28,8 +27,7 @@ class FullscreenActivity : AppCompatActivity() {
     private lateinit var glSurfaceView: GLSurfaceView
     private val renderer = GraphicsRenderer()
 
-    private lateinit var fullscreenContentControls: LinearLayout
-    private val hideHandler = Handler(Looper.myLooper()!!)
+    private lateinit var gestureObject: GestureClass
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +62,11 @@ class FullscreenActivity : AppCompatActivity() {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        binding.dummyButton.setOnTouchListener(delayHideTouchListener)
+//        binding.dummyButton.setOnTouchListener(delayHideTouchListener)
+
+        // mGestureObject will handle touch gestures on the screen
+        gestureObject = GestureClass(this);
+        glSurfaceView.setOnTouchListener(gestureObject.TwoFingerGestureListener);
 
     }
 
@@ -94,6 +96,12 @@ class FullscreenActivity : AppCompatActivity() {
         NativeLib.deleteObjectNative()
     }
 
+
+    private lateinit var fullscreenContentControls: LinearLayout
+    private var isFullscreen: Boolean = false
+    private val hideHandler = Handler(Looper.myLooper()!!)
+    private val hideRunnable = Runnable { hide() }
+
     @SuppressLint("InlinedApi")
     private val hidePart2Runnable = Runnable {
         // Delayed removal of status and navigation bar
@@ -117,25 +125,35 @@ class FullscreenActivity : AppCompatActivity() {
         supportActionBar?.show()
         fullscreenContentControls.visibility = View.VISIBLE
     }
-    private var isFullscreen: Boolean = false
 
-    private val hideRunnable = Runnable { hide() }
+
 
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
      * system UI. This is to prevent the jarring behavior of controls going away
      * while interacting with activity UI.
      */
-    private val delayHideTouchListener = View.OnTouchListener { view, motionEvent ->
-        when (motionEvent.action) {
-            MotionEvent.ACTION_DOWN -> if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS)
-            }
-            MotionEvent.ACTION_UP -> view.performClick()
-            else -> {
-            }
+//    private val delayHideTouchListener = View.OnTouchListener { view, motionEvent ->
+//        when (motionEvent.action) {
+//            MotionEvent.ACTION_DOWN -> if (AUTO_HIDE) {
+//                delayedHide(AUTO_HIDE_DELAY_MILLIS)
+//            }
+//            MotionEvent.ACTION_UP -> view.performClick()
+//            else -> {
+//            }
+//        }
+//        false
+//    }
+
+    /**
+     * Schedules a call to hide() in [delayMillis], canceling any
+     * previously scheduled calls.
+     */
+    fun delayedHide(delayMillis: Int = AUTO_HIDE_DELAY_MILLIS) {
+        if (AUTO_HIDE) {
+            hideHandler.removeCallbacks(hideRunnable)
+            hideHandler.postDelayed(hideRunnable, delayMillis.toLong())
         }
-        false
     }
 
     private fun toggle() {
@@ -173,14 +191,6 @@ class FullscreenActivity : AppCompatActivity() {
         hideHandler.postDelayed(showPart2Runnable, UI_ANIMATION_DELAY.toLong())
     }
 
-    /**
-     * Schedules a call to hide() in [delayMillis], canceling any
-     * previously scheduled calls.
-     */
-    private fun delayedHide(delayMillis: Int) {
-        hideHandler.removeCallbacks(hideRunnable)
-        hideHandler.postDelayed(hideRunnable, delayMillis.toLong())
-    }
 
     companion object {
         /**
