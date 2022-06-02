@@ -11,8 +11,7 @@
 #include <string>
 
 #include "Core.h"
-//#include "myGLFunctions.h"
-//#include "myGLCamera.h"
+#include "AssimpLoader.h"
 
 class ModelAssimp {
 public:
@@ -34,7 +33,7 @@ private:
 
 //    std::vector<float> modelDefaultPosition;
 //    MyGLCamera * myGLCamera;
-//    AssimpLoader * modelObject;
+    AssimpLoader * modelObject;
 };
 
 #endif //XAPP_MODELASSIMP_H

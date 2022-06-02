@@ -112,6 +112,22 @@ std::string MyJNIHelper::GetFileName(const std::string &fileName) {
 }
 
 /**
+ * Extract only the directory part from the file name
+ */
+std::string MyJNIHelper::GetDirectoryName(const std::string &fullFileName) {
+    std::string::size_type slashIndex = fullFileName.find_last_of('/');
+    std::string directoryName;
+    if (slashIndex == std::string::npos) {
+        directoryName = ".";
+    } else if (slashIndex == 0) {
+        directoryName = "/";
+    } else {
+        directoryName = fullFileName.substr(0, slashIndex);
+    }
+    return directoryName;
+}
+
+/**
  * Read the shader code from assets
  */
 bool MyJNIHelper::ReadShaderCode(
@@ -142,5 +158,6 @@ bool MyJNIHelper::ReadShaderCode(
     LOGI("Read successfully");
     return true;
 }
+
 
 

@@ -50,6 +50,34 @@ void CheckGLError(const std::string& funcName){
     }
 }
 
+/*
+ * get the attribute location of an input variable in a shader
+ */
+GLuint GetAttributeLocation(GLuint programID, std::string variableName) {
+
+    GLint loc = glGetAttribLocation(programID, variableName.c_str());
+    if (loc == -1) {
+        LOGF("Error in getting attribute: %s", variableName.c_str());
+        return (0);
+    } else {
+        return ((GLuint) loc);
+    }
+}
+
+/*
+ * get the location of a uniform variable in a shader
+ */
+GLint GetUniformLocation(GLuint programID, std::string uniformName) {
+
+    GLint loc = glGetUniformLocation(programID, uniformName.c_str());
+    if (loc == -1) {
+        LOGF("error in uniform: %s", uniformName.c_str());
+        return loc;
+    } else {
+        return loc;
+    }
+}
+
 /**
  * Class constructor
  */

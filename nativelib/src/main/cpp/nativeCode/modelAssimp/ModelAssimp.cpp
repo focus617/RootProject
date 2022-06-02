@@ -2,6 +2,8 @@
 // Created by Xu Zhiyong on 2022/6/2.
 //
 
+#include <nativeCode/renderer/GLESNative.h>
+#include <nativeCode/common/MyJNIHelper.h>
 #include "Core.h"
 #include "ModelAssimp.h"
 
@@ -19,7 +21,7 @@ ModelAssimp::ModelAssimp() {
 //    std::copy(&pos[0], &pos[5], std::back_inserter(modelDefaultPosition));
 //    myGLCamera->SetModelPosition(modelDefaultPosition);
 
-//    modelObject = NULL;
+    modelObject = NULL;
 }
 
 ModelAssimp::~ModelAssimp() {
@@ -28,9 +30,9 @@ ModelAssimp::~ModelAssimp() {
 //    if (myGLCamera) {
 //        delete myGLCamera;
 //    }
-//    if (modelObject) {
-//        delete modelObject;
-//    }
+    if (modelObject) {
+        delete modelObject;
+    }
 }
 
 /**
@@ -42,22 +44,22 @@ void ModelAssimp::PerformGLInits() {
 //
 //    MyGLInits();
 //
-//    modelObject = new AssimpLoader();
+    modelObject = new AssimpLoader();
 
     // extract the OBJ and companion files from assets
     std::string objFilename, mtlFilename, texFilename;
-//    bool isFilesPresent  =
-//            gHelperObject->ExtractAssetReturnFilename("amenemhat/amenemhat.obj", objFilename) &&
-//            gHelperObject->ExtractAssetReturnFilename("amenemhat/amenemhat.mtl", mtlFilename) &&
-//            gHelperObject->ExtractAssetReturnFilename("amenemhat/amenemhat.jpg", texFilename);
-//    if( !isFilesPresent ) {
-//        LOGE("Model %s does not exist!", objFilename.c_str());
-//        return;
-//    }
+    bool isFilesPresent  =
+            gHelperObject->ExtractAssetReturnFilename("amenemhat/amenemhat.obj", objFilename) &&
+            gHelperObject->ExtractAssetReturnFilename("amenemhat/amenemhat.mtl", mtlFilename) &&
+            gHelperObject->ExtractAssetReturnFilename("amenemhat/amenemhat.jpg", texFilename);
+    if( !isFilesPresent ) {
+        LOGE("Model %s does not exist!", objFilename.c_str());
+        return;
+    }
 
-//    modelObject->Load3DModel(objFilename);
+    modelObject->Load3DModel(objFilename);
 
-//    CheckGLError("ModelAssimp::PerformGLInits");
+    CheckGLError("ModelAssimp::PerformGLInits");
     initsDone = true;
 }
 
@@ -73,7 +75,7 @@ void ModelAssimp::Render() {
 //    glm::mat4 mvpMat = myGLCamera->GetMVP();
 //    modelObject->Render3DModel(&mvpMat);
 
-//    CheckGLError("ModelAssimp::Render");
+    CheckGLError("ModelAssimp::Render");
 
 }
 
@@ -85,7 +87,7 @@ void ModelAssimp::SetViewport(int width, int height) {
     screenHeight = height;
     screenWidth = width;
     glViewport(0, 0, width, height);
-//    CheckGLError("Cube::SetViewport");
+    CheckGLError("Cube::SetViewport");
 
 //    myGLCamera->SetAspectRatio((float) width / height);
 }

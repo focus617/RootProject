@@ -34,14 +34,17 @@ public:
 
     void Init(JNIEnv *env, jobject obj, jobject assetManager, jstring pathToInternalDir);
 
-    bool ExtractAssetReturnFilename(const std::string& assetName, std::string &filename,
+    bool ExtractAssetReturnFilename(const std::string &assetName, std::string &filename,
                                     bool checkIfFileIsAvailable = false);
 
     /** Strip out the path and return just the filename */
-    static std::string GetFileName(const std::string& fileName);
+    static std::string GetFileName(const std::string &fileName);
 
     /**  Read the shader code from assets */
     static bool ReadShaderCode(std::string &shaderCode, std::string &shaderFileName);
+
+    /** Extract only the directory part from the file name */
+    static std::string GetDirectoryName(const std::string &fullFileName);
 };
 
 /**
