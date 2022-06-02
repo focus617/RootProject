@@ -15,16 +15,16 @@
 #include <vector>
 
 #include "Core.h"
-#include "Matrix.h"
+#include "nativeCode/math/Matrix.h"
 #include "MyBitmapHelper.h"
 
 /* The global Assimp scene object. */
-const struct aiScene* scene = NULL;
+const struct aiScene *scene = NULL;
 
 std::vector<GLfloat> vertices;
 std::vector<GLushort> indices;
 
-static const char  glVertexShader[] =
+static const char glVertexShader[] =
         "attribute vec4 vertexPosition;\n"
         "attribute vec3 vertexColour;\n"
         "varying vec3 fragColour;\n"
@@ -36,7 +36,7 @@ static const char  glVertexShader[] =
         "    fragColour = vertexColour;\n"
         "}\n";
 
-static const char  glFragmentShader[] =
+static const char glFragmentShader[] =
         "precision mediump float;\n"
         "varying vec3 fragColour;\n"
         "void main()\n"
@@ -126,7 +126,7 @@ bool setupGraphics(int width, int height) {
     modelViewLocation = glGetUniformLocation(program, "modelView");
 
     /* Setup the perspective */
-    matrixPerspective(projectionMatrix, 45, (float)width / (float)height, 0.1f, 100);
+    matrixPerspective(projectionMatrix, 45, (float) width / (float) height, 0.1f, 100);
     glEnable(GL_DEPTH_TEST);
 
     glViewport(0, 0, width, height);
@@ -134,8 +134,7 @@ bool setupGraphics(int width, int height) {
     /* [Load a model into the Open Asset Importer.] */
     std::string sphere = "s 0 0 0 10";
     scene = aiImportFileFromMemory(sphere.c_str(), sphere.length(), 0, ".nff");
-    if(!scene)
-    {
+    if (!scene) {
         LOGE("Open Asset Importer could not load scene. \n");
         return false;
     }
@@ -145,12 +144,10 @@ bool setupGraphics(int width, int height) {
     /* [Accumulate the model vertices and indices.] */
     int vertices_accumulation = 0;
     /* Go through each mesh in the scene. */
-    for (int i = 0; i < scene->mNumMeshes; i++)
-    {
+    for (int i = 0; i < scene->mNumMeshes; i++) {
         /* Add all the vertices in the mesh to our array. */
-        for (int j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
-        {
-            const aiVector3D& vector = scene->mMeshes[i]->mVertices[j];
+        for (int j = 0; j < scene->mMeshes[i]->mNumVertices; j++) {
+            const aiVector3D &vector = scene->mMeshes[i]->mVertices[j];
             vertices.push_back(vector.x);
             vertices.push_back(vector.y);
             vertices.push_back(vector.z);
@@ -161,9 +158,8 @@ bool setupGraphics(int width, int height) {
          * Because we are adding all vertices from all meshes to one array we must add an offset
          * to the indices to correct for this.
          */
-        for (unsigned int j = 0 ; j < scene->mMeshes[i]->mNumFaces ; j++)
-        {
-            const aiFace& face = scene->mMeshes[i]->mFaces[j];
+        for (unsigned int j = 0; j < scene->mMeshes[i]->mNumFaces; j++) {
+            const aiFace &face = scene->mMeshes[i]->mFaces[j];
             indices.push_back(face.mIndices[0] + vertices_accumulation);
             indices.push_back(face.mIndices[1] + vertices_accumulation);
             indices.push_back(face.mIndices[2] + vertices_accumulation);
@@ -200,13 +196,12 @@ void renderFrame() {
     /* [Pass the the model vertices and indices to OpenGL ES.] */
 
     angle += 1;
-    if (angle > 360)
-    {
+    if (angle > 360) {
         angle -= 360;
     }
 }
 
-/* [Function prototypes] */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -230,8 +225,9 @@ Java_com_focus617_nativelib_NativeLib_00024Companion_ndkEmboss(
     Emboss(env, thiz, data, width, height);
 }
 
-
 #ifdef __cplusplus
 }
 #endif
+
 /* [Function definition] */
+

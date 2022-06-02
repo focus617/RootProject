@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 /** @file commonMetaData.h
- *  @brief Defines a set of common scene metadata keys.
+ *  @brief Defines a set of nativeCode.common scene metadata keys.
  */
 #pragma once
 #ifndef AI_COMMONMETADATA_H_INC

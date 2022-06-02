@@ -55,10 +55,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace Assimp {
 namespace Math {
 
-/// @brief  Will return the greatest common divisor.
+/// @brief  Will return the greatest nativeCode.common divisor.
 /// @param  a   [in] Value a.
 /// @param  b   [in] Value b.
-/// @return The greatest common divisor.
+/// @return The greatest nativeCode.common divisor.
 template <typename IntegerType>
 inline IntegerType gcd( IntegerType a, IntegerType b ) {
 	const IntegerType zero = (IntegerType)0;
@@ -75,10 +75,10 @@ inline IntegerType gcd( IntegerType a, IntegerType b ) {
 	}
 }
 
-/// @brief  Will return the greatest common divisor.
+/// @brief  Will return the greatest nativeCode.common divisor.
 /// @param  a   [in] Value a.
 /// @param  b   [in] Value b.
-/// @return The greatest common divisor.
+/// @return The greatest nativeCode.common divisor.
 template < typename IntegerType >
 inline IntegerType lcm( IntegerType a, IntegerType b ) {
 	const IntegerType t = gcd (a,b);

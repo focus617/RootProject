@@ -71,7 +71,7 @@ struct LogStreamInfo;
  *  #get() returns this primary logger. By default the underlying implementation is
  *  just a #NullLogger which rejects all log messages. By calling #create(), logging
  *  is turned on. To capture the log output multiple log streams (#LogStream) can be
- *  attach to the logger. Some default streams for common streaming locations (such as
+ *  attach to the logger. Some default streams for nativeCode.common streaming locations (such as
  *  a file, std::cout, OutputDebugString()) are also provided.
  *
  *  If you wish to customize the logging at an even deeper level supply your own

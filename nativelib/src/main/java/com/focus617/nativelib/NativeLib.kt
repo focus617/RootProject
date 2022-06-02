@@ -1,5 +1,7 @@
 package com.focus617.nativelib
 
+import android.content.res.AssetManager
+
 class NativeLib {
 
     /**
@@ -15,6 +17,12 @@ class NativeLib {
         // Native methods are listed here but implemented in C++ files
         external fun init(width: Int, height: Int)
         external fun step()
+
+        external fun createObjectNative(
+            assetManager: AssetManager, pathToInternalDir: String
+        )
+
+        external fun deleteObjectNative()
 
         external fun ndkEmboss(data: IntArray?, width: Int, height: Int)
     }

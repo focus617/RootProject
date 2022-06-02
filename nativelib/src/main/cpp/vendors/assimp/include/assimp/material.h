@@ -174,7 +174,7 @@ enum aiTextureMapping {
 /** @brief Defines the purpose of a texture
  *
  *  This is a very difficult topic. Different 3D packages support different
- *  kinds of textures. For very common texture types, such as bumpmaps, the
+ *  kinds of textures. For very nativeCode.common texture types, such as bumpmaps, the
  *  rendering results depend on implementation details in the rendering
  *  pipelines of these applications. Assimp loads all texture references from
  *  the model file and tries to determine which of the predefined texture
@@ -282,7 +282,7 @@ enum aiTextureType {
      * PBR definitions from maya and other modelling packages now use this standard.
      * This was originally introduced around 2012.
      * Support for this is in game engines like Godot, Unreal or Unity3D.
-     * Modelling packages which use this are very common now.
+     * Modelling packages which use this are very nativeCode.common now.
      */
 
     aiTextureType_BASE_COLOR = 12,
@@ -348,7 +348,7 @@ ASSIMP_API const char *aiTextureTypeToString(enum aiTextureType in);
  *  specular term for diffuse shading models like Oren-Nayar remains
  *  undefined). <br>
  *  Again, this value is just a hint. Assimp tries to select the shader whose
- *  most common implementation matches the original rendering results of the
+ *  most nativeCode.common implementation matches the original rendering results of the
  *  3D modeler which wrote a particular model as closely as possible.
  *
  */

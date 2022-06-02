@@ -57,7 +57,7 @@ extern "C" {
 #endif
 
 /** Mixed set of flags for #aiImporterDesc, indicating some features
-  *  common to many importers*/
+  *  nativeCode.common to many importers*/
 enum aiImporterFlags {
     /** Indicates that there is a textual encoding of the
      *  file format; and that it is supported.*/
@@ -86,11 +86,11 @@ enum aiImporterFlags {
 
 /** Meta information about a particular importer. Importers need to fill
  *  this structure, but they can freely decide how talkative they are.
- *  A common use case for loader meta info is a user interface
+ *  A nativeCode.common use case for loader meta info is a user interface
  *  in which the user can choose between various import/export file
  *  formats. Building such an UI by hand means a lot of maintenance
  *  as importers/exporters are added to Assimp, so it might be useful
- *  to have a common mechanism to query some rough importer
+ *  to have a nativeCode.common mechanism to query some rough importer
  *  characteristics. */
 struct aiImporterDesc {
     /** Full name of the importer (i.e. Blender3D importer)*/
@@ -105,7 +105,7 @@ struct aiImporterDesc {
     /** Implementation comments, i.e. unimplemented features*/
     const char *mComments;
 
-    /** These flags indicate some characteristics common to many
+    /** These flags indicate some characteristics nativeCode.common to many
         importers. */
     unsigned int mFlags;
 
@@ -134,7 +134,7 @@ struct aiImporterDesc {
         to load the file until one importer "claims" the file. Apart
         from file extension checks, importers typically use
         other methods to quickly reject files (i.e. magic
-        words) so this does not mean that common or generic
+        words) so this does not mean that nativeCode.common or generic
         file extensions such as XML would be tediously slow. */
     const char *mFileExtensions;
 };

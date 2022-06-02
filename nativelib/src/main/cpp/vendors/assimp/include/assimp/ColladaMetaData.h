@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 /** @file ColladaMetaData.h
- * Declares common metadata constants used by Collada files
+ * Declares nativeCode.common metadata constants used by Collada files
  */
 #pragma once
 #ifndef AI_COLLADAMETADATA_H_INC

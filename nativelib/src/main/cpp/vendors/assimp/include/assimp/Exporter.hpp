@@ -299,7 +299,7 @@ public:
      *    monotonously.
      *  @param desc Exporter description.
      *  @return aiReturn_SUCCESS if the export format was successfully
-     *    registered. A common cause that would prevent an exporter
+     *    registered. A nativeCode.common cause that would prevent an exporter
      *    from being registered is that its format id is already
      *    occupied by another format. */
     aiReturn RegisterExporter(const ExportFormatEntry &desc);

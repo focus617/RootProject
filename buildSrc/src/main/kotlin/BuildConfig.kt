@@ -50,7 +50,7 @@ object Jetpack {
     const val LIFECYCLE_VIEWMODEL_SAVEDSTATE =
         "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
     // Annotation processor - if using Java8, use the following instead of lifecycle-compiler
-    const val LIFECYCLE_ANNOTATION = "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    const val LIFECYCLE_ANNOTATION = "androidx.lifecycle:lifecycle-nativeCode.common-java8:$lifecycle_version"
 
     const val NAVIGATION_FRAGMENT_KTX = "androidx.navigation:navigation-fragment-ktx:2.3.5"
     const val NAVIGATION_UI_KTX = "androidx.navigation:navigation-ui-ktx:2.3.5"

@@ -1,6 +1,7 @@
 package com.focus617.modeldemo
 
 import android.annotation.SuppressLint
+import android.content.res.AssetManager
 import android.opengl.GLSurfaceView
 import android.os.Build
 import android.os.Bundle
@@ -37,6 +38,10 @@ class FullscreenActivity : AppCompatActivity() {
         // loadFile Native Library
         Timber.i("On Create Method Calling Native Library")
         val nativeLib = NativeLib()
+        val assetManager: AssetManager = assets
+        val pathToInternalDir = filesDir.absolutePath
+
+
 
         binding = ActivityFullscreenBinding.inflate(layoutInflater)
         setContentView(binding.root)

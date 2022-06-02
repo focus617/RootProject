@@ -9,13 +9,20 @@ cmake_minimum_required(VERSION 3.18.1)
 
 project("nativelib")
 
+aux_source_directory(. _SOURCES)
+#添加子文件目录
+add_subdirectory(jniCall)
+add_subdirectory(nativeCode/common)
+add_subdirectory(nativeCode/math)
+add_subdirectory(nativeCode/modelAssimp)
+add_subdirectory(nativeCode/renderer)
+
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
-
 add_library( # Sets the name of the library.
-        nativelib
+        ${CMAKE_PROJECT_NAME}
 
         # Sets the library as a shared library.
         SHARED
@@ -23,7 +30,7 @@ add_library( # Sets the name of the library.
         # Provides a relative path to your source file(s).
         # Note: that the relative path is meant to be relative to the directory
         # where you kept the CMakeLists.txt build script.
-        nativelib.cpp Matrix.cpp MyBitmapHelper.cpp)
+        ${_SOURCES})
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -40,7 +47,8 @@ find_library( # Sets the name of the path variable.
 
 # Add the directories where the Cpp header files are to let CMake find
 # them during compile time
-include_directories(include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this

@@ -73,7 +73,7 @@ class IOStream;
                                           (string[1] << 16) + (string[2] << 8) + string[3]))
 
 // ---------------------------------------------------------------------------
-/** FOR IMPORTER PLUGINS ONLY: The BaseImporter defines a common interface
+/** FOR IMPORTER PLUGINS ONLY: The BaseImporter defines a nativeCode.common interface
  *  for all importer worker classes.
  *
  * The interface defines two functions: CanRead() is used to check if the

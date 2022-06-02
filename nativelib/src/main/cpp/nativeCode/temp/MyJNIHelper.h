@@ -8,6 +8,7 @@
 #include <pthread.h>
 #include <string>
 #include <jni.h>
+#include <vector>
 #include <android/asset_manager_jni.h>
 
 #ifdef __cplusplus

@@ -330,7 +330,7 @@ AI_FORCE_INLINE aiMatrix3x3t<TReal>& aiMatrix3x3t<TReal>::FromToMatrix(const aiV
             mtx[i][i] += static_cast<TReal>(1.0);
         }
     }
-    else  /* the most common case, unless "from"="to", or "from"=-"to" */
+    else  /* the most nativeCode.common case, unless "from"="to", or "from"=-"to" */
     {
         const aiVector3D v = from ^ to;
         /* ... use this hand optimized version (9 mults less) */
