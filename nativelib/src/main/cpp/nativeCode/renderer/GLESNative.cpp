@@ -13,7 +13,7 @@
 /**
  * Checks for OpenGL errors.Very useful while debugging. Call it as often as required
  */
-void CheckGLError(std::string funcName){
+void CheckGLError(const std::string& funcName){
 
     GLenum err = glGetError();
     if (err == GL_NO_ERROR) {

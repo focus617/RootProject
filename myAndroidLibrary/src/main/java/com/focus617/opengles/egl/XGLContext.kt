@@ -1,5 +1,6 @@
 package com.focus617.opengles.egl
 
+import android.opengl.GLES20.GL_INVALID_FRAMEBUFFER_OPERATION
 import android.opengl.GLES31.*
 import android.opengl.GLES32
 import android.opengl.GLSurfaceView
@@ -46,10 +47,18 @@ class XGLContext(private val windowHandle: GLSurfaceView) : BaseEntity(), IfGrap
 
         fun checkGLError(msg: String) {
             val error = glGetError()
-            if (error != GL_NO_ERROR) {
-                val hexErrorCode = Integer.toHexString(error)
-                Timber.w("Check glError $msg errorCode:$hexErrorCode")
-                //throw RuntimeException("GLError")
+            if (error == GL_NO_ERROR) return
+            else {
+                Timber.w("Check glError $msg errorCode:${Integer.toHexString(error)}")
+            }
+
+            when (error) {
+                GL_INVALID_ENUM -> Timber.w("GL_INVALID_ENUM: GLenum argument out of range")
+                GL_INVALID_VALUE -> Timber.w("GL_INVALID_VALUE: numeric argument out of range")
+                GL_INVALID_OPERATION -> Timber.w("GL_INVALID_OPERATION: operation illegal in current state")
+                GL_INVALID_FRAMEBUFFER_OPERATION -> Timber.w("GL_INVALID_FRAMEBUFFER_OPERATION: framebuffer object is not complete")
+                GL_OUT_OF_MEMORY -> Timber.w("GL_OUT_OF_MEMORY: not enough memory left to execute command")
+                else -> Timber.w("unlisted error")
             }
         }
 
