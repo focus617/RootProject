@@ -5,6 +5,8 @@
 #include <jni.h>
 
 #include "AssimpLoader.h"
+#include <jni.h>
+#include <jni.h>
 
 
 
@@ -20,8 +22,9 @@ AssimpLoader *gAssimpObject = NULL;
 JNIEXPORT void JNICALL
 Java_com_focus617_nativelib_NativeLib_00024Companion_createObjectNative(
         JNIEnv *env, jobject thiz,
-        jobject asset_manager, jstring path_to_internal_dir) {
-    // TODO: implement CreateObjectNative()
+        jobject asset_manager,
+        jstring path_to_internal_dir) {
+    // TODO: implement createObjectNative()
 }
 
 JNIEXPORT void JNICALL
@@ -34,3 +37,4 @@ Java_com_focus617_nativelib_NativeLib_00024Companion_deleteObjectNative(
 }
 #endif
 /* [Function definition] */
+

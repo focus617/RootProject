@@ -16,7 +16,7 @@
 
 #include "Core.h"
 #include "nativeCode/math/Matrix.h"
-#include "MyBitmapHelper.h"
+#include "nativeCode/common/MyBitmapHelper.h"
 
 /* The global Assimp scene object. */
 const struct aiScene *scene = NULL;
