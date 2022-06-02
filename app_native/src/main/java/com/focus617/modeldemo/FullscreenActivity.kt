@@ -41,7 +41,7 @@ class FullscreenActivity : AppCompatActivity() {
         val assetManager: AssetManager = assets
         val pathToInternalDir = filesDir.absolutePath
 
-
+        NativeLib.createObjectNative(assetManager, pathToInternalDir)
 
         binding = ActivityFullscreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -87,6 +87,12 @@ class FullscreenActivity : AppCompatActivity() {
         delayedHide(100)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // Delete native objects
+        NativeLib.deleteObjectNative()
+    }
 
     @SuppressLint("InlinedApi")
     private val hidePart2Runnable = Runnable {

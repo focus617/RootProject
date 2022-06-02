@@ -1,9 +1,11 @@
-//
-// Created by Xu Zhiyong on 2022/6/2.
-//
+/**
+ * OpenGL ES Native renderer
+ */
 
 #ifndef XAPP_GLESNATIVE_H
 #define XAPP_GLESNATIVE_H
+
+#include <string>
 
 class GLESNative {
 public:
@@ -15,7 +17,7 @@ public:
     std::string GetGLESVersionInfo() {return glesVersionInfo;}
 
 private:
-    bool    initsDone;
+    bool        initsDone;
     std::string glesVersionInfo;
 };
 

@@ -15,8 +15,9 @@ class NativeLib {
         }
 
         // Native methods are listed here but implemented in C++ files
-        external fun init(width: Int, height: Int)
-        external fun step()
+        external fun isInitDoneNative(): Boolean
+
+        external fun getGLESVersionNative(): String
 
         external fun createObjectNative(
             assetManager: AssetManager, pathToInternalDir: String
@@ -24,6 +25,13 @@ class NativeLib {
 
         external fun deleteObjectNative()
 
+        external fun surfaceCreatedNative()
+
+        external fun surfaceChangedNative(width: Int, height: Int)
+
+        external fun drawFrameNative()
+
         external fun ndkEmboss(data: IntArray?, width: Int, height: Int)
+
     }
 }

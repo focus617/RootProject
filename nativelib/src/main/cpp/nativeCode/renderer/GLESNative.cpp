@@ -1,16 +1,14 @@
-//
-// Created by Xu Zhiyong on 2022/6/2.
-//
+
 #include <sstream>
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 #include <string>
 
-#include <GLES3/gl3.h>
+#include <GLES2/gl2.h>
+#include "gl3stub.h"
 
 #include "Core.h"
 #include "GLESNative.h"
-
 
 /**
  * Checks for OpenGL errors.Very useful while debugging. Call it as often as required
@@ -50,4 +48,57 @@ void CheckGLError(std::string funcName){
             LOGE("unlisted error");
             break;
     }
+}
+
+/**
+ * Class constructor
+ */
+GLESNative::GLESNative() {
+    initsDone = false;
+    glesVersionInfo ="";
+}
+
+/**
+ * Perform inits and set various GLES options before rendering image
+ */
+void GLESNative::PerformGLInits() {
+
+    // Black background
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+    // load the GLES version into a string
+    std::ostringstream version_string;
+    version_string << glGetString(GL_VERSION) << ", " << glGetString(GL_SHADING_LANGUAGE_VERSION);
+    glesVersionInfo = std::string(version_string.str());
+
+    // check if the device supports GLES 3 or GLES 2
+    const char* versionStr = (const char*)glGetString(GL_VERSION);
+    if (strstr(versionStr, "OpenGL ES 3.") && gl3stubInit()) {
+        LOGD("Device supports GLES 3");
+    } else {
+        LOGD("Device supports GLES 2");
+    }
+
+    initsDone = true;
+
+    CheckGLError("GLESNative::PerformGLInits");
+}
+
+void GLESNative::SetViewport(int width, int height) {
+    // set the viewport
+    // function is also called when user changes device orientation
+    glViewport(0, 0, width, height);
+
+    CheckGLError("GLESNative::SetViewport");
+}
+
+void GLESNative::Render() {
+
+    // black background
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+    // clear the screen
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    CheckGLError("GLESNative::Render");
 }

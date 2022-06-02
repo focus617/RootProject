@@ -15,11 +15,12 @@
 #include <vector>
 
 #include "Core.h"
-#include "nativeCode/math/Matrix.h"
-#include "nativeCode/common/MyBitmapHelper.h"
+#include "NativeRenderer.h"
+#include "../math/Matrix.h"
+
 
 /* The global Assimp scene object. */
-const struct aiScene *scene = NULL;
+const struct aiScene *scene = nullptr;
 
 std::vector<GLfloat> vertices;
 std::vector<GLushort> indices;
@@ -47,7 +48,7 @@ static const char glFragmentShader[] =
 GLuint loadShader(GLenum shaderType, const char *shaderSource) {
     GLuint shader = glCreateShader(shaderType);
     if (shader) {
-        glShaderSource(shader, 1, &shaderSource, NULL);
+        glShaderSource(shader, 1, &shaderSource, nullptr);
         glCompileShader(shader);
         GLint compiled = 0;
         glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
@@ -57,7 +58,7 @@ GLuint loadShader(GLenum shaderType, const char *shaderSource) {
             if (infoLen) {
                 char *buf = (char *) malloc(infoLen);
                 if (buf) {
-                    glGetShaderInfoLog(shader, infoLen, NULL, buf);
+                    glGetShaderInfoLog(shader, infoLen, nullptr, buf);
                     LOGE("Could not Compile Shader %d:\n%s\n", shaderType, buf);
                     free(buf);
                 }
@@ -91,7 +92,7 @@ GLuint createProgram(const char *vertexSource, const char *fragmentSource) {
             if (bufLength) {
                 char *buf = (char *) malloc(bufLength);
                 if (buf) {
-                    glGetProgramInfoLog(program, bufLength, NULL, buf);
+                    glGetProgramInfoLog(program, bufLength, nullptr, buf);
                     LOGE("Could not link program:\n%s\n", buf);
                     free(buf);
                 }
@@ -128,8 +129,6 @@ bool setupGraphics(int width, int height) {
     /* Setup the perspective */
     matrixPerspective(projectionMatrix, 45, (float) width / (float) height, 0.1f, 100);
     glEnable(GL_DEPTH_TEST);
-
-    glViewport(0, 0, width, height);
 
     /* [Load a model into the Open Asset Importer.] */
     std::string sphere = "s 0 0 0 10";
@@ -173,9 +172,6 @@ bool setupGraphics(int width, int height) {
 }
 
 void renderFrame() {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
     matrixIdentityFunction(modelViewMatrix);
     matrixRotateX(modelViewMatrix, angle);
     matrixRotateY(modelViewMatrix, angle);
@@ -201,33 +197,4 @@ void renderFrame() {
     }
 }
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/* [Function definition] */
-JNIEXPORT void JNICALL
-Java_com_focus617_nativelib_NativeLib_00024Companion_init(
-        JNIEnv *env, jobject thiz, jint width, jint height) {
-    setupGraphics(width, height);
-}
-
-JNIEXPORT void JNICALL
-Java_com_focus617_nativelib_NativeLib_00024Companion_step(
-        JNIEnv *env, jobject thiz) {
-    renderFrame();
-}
-
-JNIEXPORT void JNICALL
-Java_com_focus617_nativelib_NativeLib_00024Companion_ndkEmboss(
-        JNIEnv *env, jobject thiz, jintArray data, jint width, jint height) {
-    Emboss(env, thiz, data, width, height);
-}
-
-#ifdef __cplusplus
-}
-#endif
-
-/* [Function definition] */
 

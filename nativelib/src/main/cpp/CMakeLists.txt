@@ -57,6 +57,8 @@ message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries( # Specifies the target library.
         nativelib
         GLESv3
+        android
+        EGL
         assimp
 
         # Links the target library to the log library
