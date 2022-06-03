@@ -1,8 +1,8 @@
 
 #include <jni.h>
-#include "../nativeCode/renderer/GLESNative.h"
-#include "../nativeCode/renderer/NativeRenderer.h"
-#include "../nativeCode/common/MyBitmapHelper.h"
+#include "renderer/GLESNative.h"
+#include "renderer/NativeRenderer.h"
+#include "common/MyBitmapHelper.h"
 
 /* [Function definition] */
 #ifdef __cplusplus

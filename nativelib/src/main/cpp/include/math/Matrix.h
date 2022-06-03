@@ -1,10 +1,8 @@
-//
-// Created by Xu Zhiyong on 2022/6/1.
-//
 
 #ifndef XAPP_MATRIX_H
 #define XAPP_MATRIX_H
-#include <math.h>
+
+#include "math.h"
 
 void matrixIdentityFunction(float* matrix);
 

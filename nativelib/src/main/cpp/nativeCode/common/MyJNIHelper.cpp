@@ -1,13 +1,10 @@
-//
-// Created by Xu Zhiyong on 2022/6/1.
-//
 
-#include "MyJNIHelper.h"
 #include <android/asset_manager_jni.h>
 #include <iostream>
 #include <fstream>
 
 #include "Core.h"
+#include "common/MyJNIHelper.h"
 
 MyJNIHelper::MyJNIHelper(
         JNIEnv *env, jobject obj, jobject assetManager, jstring pathToInternalDir

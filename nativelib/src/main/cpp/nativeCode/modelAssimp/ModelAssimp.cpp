@@ -1,11 +1,8 @@
-//
-// Created by Xu Zhiyong on 2022/6/2.
-//
 
-#include <nativeCode/renderer/GLESNative.h>
-#include <nativeCode/common/MyJNIHelper.h>
 #include "Core.h"
-#include "ModelAssimp.h"
+#include "modelAssimp/ModelAssimp.h"
+#include "renderer/GLESNative.h"
+#include "common/MyJNIHelper.h"
 
 /**
  * Class constructor
@@ -59,7 +56,7 @@ void ModelAssimp::PerformGLInits() {
 
     modelObject->Load3DModel(objFilename);
 
-    CheckGLError("ModelAssimp::PerformGLInits");
+    CheckGLError("ModelAssimp::PerformGLInits", __FILE__, __LINE__);
     initsDone = true;
 }
 
@@ -75,7 +72,7 @@ void ModelAssimp::Render() {
 //    glm::mat4 mvpMat = myGLCamera->GetMVP();
 //    modelObject->Render3DModel(&mvpMat);
 
-    CheckGLError("ModelAssimp::Render");
+    CheckGLError("ModelAssimp::Render", __FILE__, __LINE__);
 
 }
 
@@ -87,7 +84,7 @@ void ModelAssimp::SetViewport(int width, int height) {
     screenHeight = height;
     screenWidth = width;
     glViewport(0, 0, width, height);
-    CheckGLError("Cube::SetViewport");
+    CheckGLError("Cube::SetViewport", __FILE__, __LINE__);
 
 //    myGLCamera->SetAspectRatio((float) width / height);
 }

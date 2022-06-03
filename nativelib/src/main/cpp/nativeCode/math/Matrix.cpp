@@ -1,7 +1,5 @@
-//
-// Created by Xu Zhiyong on 2022/6/1.
-//
-#include "Matrix.h"
+
+#include "math/Matrix.h"
 
 /* [matrixIdentity] */
 void matrixIdentityFunction(float *matrix) {

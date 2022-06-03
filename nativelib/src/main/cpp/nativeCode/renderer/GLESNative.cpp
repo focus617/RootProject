@@ -4,50 +4,56 @@
 #include <cstdio>
 #include <string>
 
-#include <GLES2/gl2.h>
-#include "gl3stub.h"
-
+#include "renderer/gl3stub.h"
 #include "Core.h"
-#include "GLESNative.h"
+#include "renderer/GLESNative.h"
 
 /**
  * Checks for OpenGL errors.Very useful while debugging. Call it as often as required
  */
-void CheckGLError(const std::string& funcName){
+#define EXIT_ON_GL_ERROR
+void CheckGLError(const std::string &funcName, const std::string &file, int line) {
 
-    GLenum err = glGetError();
-    if (err == GL_NO_ERROR) {
-        return;
-    } else {
-        LOGF("[FAIL GL] %s", funcName.c_str());
+    GLenum error = 0;
+    bool is_error = false;
+    while ((error = glGetError()) != GL_NO_ERROR) {
+
+        LOGF("[FAIL GL] '%s' (%s:%d)\n", funcName.c_str(), file.c_str(), line);
+
+        is_error = true;
+
+        switch (error) {
+
+            case GL_INVALID_ENUM:
+                LOGE("GL_INVALID_ENUM: GLenum argument out of range");
+                break;
+
+            case GL_INVALID_VALUE:
+                LOGE("GL_INVALID_VALUE: numeric argument out of range");
+                break;
+
+            case GL_INVALID_OPERATION:
+                LOGE("GL_INVALID_OPERATION: operation illegal in current state");
+                break;
+
+            case GL_INVALID_FRAMEBUFFER_OPERATION:
+                LOGE("GL_INVALID_FRAMEBUFFER_OPERATION: framebuffer object is not complete");
+                break;
+
+            case GL_OUT_OF_MEMORY:
+                LOGE("GL_OUT_OF_MEMORY: not enough memory left to execute command");
+                break;
+
+            default:
+                LOGE("unlisted error");
+                break;
+        }
     }
-
-    switch(err) {
-
-        case GL_INVALID_ENUM:
-            LOGE("GL_INVALID_ENUM: GLenum argument out of range");
-            break;
-
-        case GL_INVALID_VALUE:
-            LOGE("GL_INVALID_VALUE: numeric argument out of range");
-            break;
-
-        case GL_INVALID_OPERATION:
-            LOGE("GL_INVALID_OPERATION: operation illegal in current state");
-            break;
-
-        case GL_INVALID_FRAMEBUFFER_OPERATION:
-            LOGE("GL_INVALID_FRAMEBUFFER_OPERATION: framebuffer object is not complete");
-            break;
-
-        case GL_OUT_OF_MEMORY:
-            LOGE( "GL_OUT_OF_MEMORY: not enough memory left to execute command");
-            break;
-
-        default:
-            LOGE("unlisted error");
-            break;
+#ifdef EXIT_ON_GL_ERROR
+    if (is_error) {
+        exit(1);
     }
+#endif
 }
 
 /*
@@ -83,7 +89,7 @@ GLint GetUniformLocation(GLuint programID, std::string uniformName) {
  */
 GLESNative::GLESNative() {
     initsDone = false;
-    glesVersionInfo ="";
+    glesVersionInfo = "";
 }
 
 /**
@@ -100,7 +106,7 @@ void GLESNative::PerformGLInits() {
     glesVersionInfo = std::string(version_string.str());
 
     // check if the device supports GLES 3 or GLES 2
-    const char* versionStr = (const char*)glGetString(GL_VERSION);
+    const char *versionStr = (const char *) glGetString(GL_VERSION);
     if (strstr(versionStr, "OpenGL ES 3.") && gl3stubInit()) {
         LOGD("Device supports GLES 3");
     } else {
@@ -109,7 +115,7 @@ void GLESNative::PerformGLInits() {
 
     initsDone = true;
 
-    CheckGLError("GLESNative::PerformGLInits");
+    CheckGLError("GLESNative::PerformGLInits", __FILE__, __LINE__);
 }
 
 void GLESNative::SetViewport(int width, int height) {
@@ -117,7 +123,7 @@ void GLESNative::SetViewport(int width, int height) {
     // function is also called when user changes device orientation
     glViewport(0, 0, width, height);
 
-    CheckGLError("GLESNative::SetViewport");
+    CheckGLError("GLESNative::SetViewport", __FILE__, __LINE__);
 }
 
 void GLESNative::Render() {
@@ -128,5 +134,5 @@ void GLESNative::Render() {
     // clear the screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    CheckGLError("GLESNative::Render");
+    CheckGLError("GLESNative::Render", __FILE__, __LINE__);
 }

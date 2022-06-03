@@ -1,6 +1,3 @@
-//
-// Created by Xu Zhiyong on 2022/6/1.
-//
 
 #include <jni.h>
 #include <cstdio>
@@ -8,7 +5,7 @@
 #include <cmath>
 #include <string>
 
-#include "MyBitmapHelper.h"
+#include "common/MyBitmapHelper.h"
 
 void Emboss(JNIEnv *env, jobject thiz, jintArray data, jint width, jint height)
 {

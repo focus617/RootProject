@@ -5,12 +5,12 @@
 #ifndef XAPP_ASSIMPLOADER_H
 #define XAPP_ASSIMPLOADER_H
 
-#include <map>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include <GLES3/gl3.h>
-#include <vector>
+#include "../../../../../../../../../Tools/Android/Sdk/ndk/24.0.8215888/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/map"
+#include "../../../vendors/assimp-5.2.4/include/assimp/Importer.hpp"
+#include "../../../vendors/assimp-5.2.4/include/assimp/scene.h"
+#include "../../../vendors/assimp-5.2.4/include/assimp/postprocess.h"
+#include "../../../../../../../../../Tools/Android/Sdk/ndk/24.0.8215888/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/GLES3/gl3.h"
+#include "../../../../../../../../../Tools/Android/Sdk/ndk/24.0.8215888/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/vector"
 
 // info used to render a mesh
 struct MeshInfo {

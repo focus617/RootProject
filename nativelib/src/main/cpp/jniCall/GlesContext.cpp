@@ -1,7 +1,7 @@
 
 #include <jni.h>
-#include "nativeCode/renderer/GLESNative.h"
-#include "nativeCode/common/MyJNIHelper.h"
+#include "renderer/GLESNative.h"
+#include "common/MyJNIHelper.h"
 
 /* [Function definition] */
 #ifdef __cplusplus

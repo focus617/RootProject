@@ -10,15 +10,15 @@
 #include <GLES3/gl3ext.h>
 
 /* [New includes and global variables.] */
-#include <assimp/cimport.h>
-#include <assimp/scene.h>
 #include <vector>
 
-#include "Core.h"
-#include "NativeRenderer.h"
-#include "nativeCode/common/MyJNIHelper.h"
-#include "nativeCode/math/Matrix.h"
+#include <assimp/cimport.h>
+#include <assimp/scene.h>
 
+#include "Core.h"
+#include "renderer/NativeRenderer.h"
+#include "common/MyJNIHelper.h"
+#include "math/Matrix.h"
 
 /* The global Assimp scene object. */
 const struct aiScene *scene = nullptr;

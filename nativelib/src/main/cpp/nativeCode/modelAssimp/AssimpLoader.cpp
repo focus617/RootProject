@@ -1,11 +1,10 @@
 /**
  * AssimpLoader class contains methods to read a 3D model using Assimp’s C++ API.
  */
-
-#include <nativeCode/common/MyJNIHelper.h>
 #include "Core.h"
-#include "AssimpLoader.h"
-#include "nativeCode/renderer/GLESNative.h"
+#include "modelAssimp/AssimpLoader.h"
+#include "common/MyJNIHelper.h"
+#include "renderer/GLESNative.h"
 
 /**
  * Class constructor, loads shaders & gets locations of variables in them
@@ -15,7 +14,7 @@ AssimpLoader::AssimpLoader() {
     scene = nullptr;
     isObjectLoaded = false;
 
-    CheckGLError("AssimpLoader::AssimpLoader");
+    CheckGLError("AssimpLoader::AssimpLoader", __FILE__, __LINE__);
 }
 
 /**

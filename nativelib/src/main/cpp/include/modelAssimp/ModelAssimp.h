@@ -5,12 +5,12 @@
 #ifndef XAPP_MODELASSIMP_H
 #define XAPP_MODELASSIMP_H
 
-#include <sstream>
-#include <iostream>
-#include <stdio.h>
-#include <string>
+#include "../../../../../../../../../Tools/Android/Sdk/ndk/24.0.8215888/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/sstream"
+#include "../../../../../../../../../Tools/Android/Sdk/ndk/24.0.8215888/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/iostream"
+#include "../../../../../../../../../Tools/Android/Sdk/ndk/24.0.8215888/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/stdio.h"
+#include "../../../../../../../../../Tools/Android/Sdk/ndk/24.0.8215888/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/string"
 
-#include "Core.h"
+#include "../Core.h"
 #include "AssimpLoader.h"
 
 class ModelAssimp {

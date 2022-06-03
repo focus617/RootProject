@@ -4,7 +4,7 @@
 
 
 #include <EGL/egl.h>
-#include "gl3stub.h"
+#include "renderer/gl3stub.h"
 
 GLboolean gl3stubInit() {
     #define FIND_PROC(s) s = (void*)eglGetProcAddress(#s)
