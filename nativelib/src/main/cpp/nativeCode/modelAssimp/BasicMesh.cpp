@@ -1,9 +1,7 @@
-////
-//// Created by Xu Zhiyong on 2022/6/1.
-////
+//
 //#include <cassert>
 //
-//#include "modelAssimp/Mesh.h"
+//#include "modelAssimp/BasicMesh.h"
 //#include "common/MyJNIHelper.h"
 //
 //using namespace std;
@@ -12,12 +10,12 @@
 //#define TEX_COORD_LOCATION 1
 //#define NORMAL_LOCATION    2
 //
-//Mesh::~Mesh()
+//BasicMesh::~BasicMesh()
 //{
 //    Clear();
 //}
 //
-//void Mesh::Clear()
+//void BasicMesh::Clear()
 //{
 //    if (m_Buffers[0] != 0) {
 //        glDeleteBuffers(ARRAY_SIZE_IN_ELEMENTS(m_Buffers), m_Buffers);
@@ -29,7 +27,7 @@
 //    }
 //}
 //
-//bool Mesh::LoadMesh(const string& Filename)
+//bool BasicMesh::LoadMesh(const string& Filename)
 //{
 //    // Release the previously loaded mesh (if it exists)
 //    Clear();
@@ -60,7 +58,7 @@
 //    return Ret;
 //}
 //
-//bool Mesh::InitFromScene(const aiScene* pScene, const string& Filename)
+//bool BasicMesh::InitFromScene(const aiScene* pScene, const string& Filename)
 //{
 //    m_Meshes.resize(pScene->mNumMeshes);
 //    m_Materials.resize(pScene->mNumMaterials);
@@ -83,7 +81,7 @@
 //    return GLCheckError();
 //}
 //
-//void Mesh::CountVerticesAndIndices(
+//void BasicMesh::CountVerticesAndIndices(
 //        const aiScene* pScene, unsigned int& NumVertices, unsigned int& NumIndices)
 //{
 //    for (unsigned int i = 0 ; i < m_Meshes.size() ; i++) {
@@ -97,7 +95,7 @@
 //    }
 //}
 //
-//void Mesh::ReserveSpace(unsigned int NumVertices, unsigned int NumIndices)
+//void BasicMesh::ReserveSpace(unsigned int NumVertices, unsigned int NumIndices)
 //{
 //    m_Positions.reserve(NumVertices);
 //    m_Normals.reserve(NumVertices);
@@ -105,7 +103,7 @@
 //    m_Indices.reserve(NumIndices);
 //}
 //
-//void Mesh::InitAllMeshes(const aiScene* pScene)
+//void BasicMesh::InitAllMeshes(const aiScene* pScene)
 //{
 //    for (unsigned int i = 0 ; i < m_Meshes.size() ; i++) {
 //        const aiMesh* paiMesh = pScene->mMeshes[i];
@@ -113,7 +111,7 @@
 //    }
 //}
 //
-//void Mesh::InitSingleMesh(uint MeshIndex, const aiMesh* paiMesh)
+//void BasicMesh::InitSingleMesh(uint MeshIndex, const aiMesh* paiMesh)
 //{
 //    const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
 //
@@ -149,7 +147,7 @@
 //
 //
 //
-//bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
+//bool BasicMesh::InitMaterials(const aiScene* pScene, const string& Filename)
 //{
 ////    string Dir = GetDirFromFilename(Filename);
 //    string Dir = MyJNIHelper::GetDirectoryName(Filename);
@@ -171,14 +169,14 @@
 //}
 //
 //
-//void Mesh::LoadTextures(const string& Dir, const aiMaterial* pMaterial, int index)
+//void BasicMesh::LoadTextures(const string& Dir, const aiMaterial* pMaterial, int index)
 //{
 //    LoadDiffuseTexture(Dir, pMaterial, index);
 //    LoadSpecularTexture(Dir, pMaterial, index);
 //}
 //
 //
-////void Mesh::LoadDiffuseTexture(const string& Dir, const aiMaterial* pMaterial, int index)
+////void BasicMesh::LoadDiffuseTexture(const string& Dir, const aiMaterial* pMaterial, int index)
 ////{
 ////    m_Materials[index].pDiffuse = NULL;
 ////
@@ -214,7 +212,7 @@
 ////}
 ////
 ////
-////void Mesh::LoadSpecularTexture(const string& Dir, const aiMaterial* pMaterial, int index)
+////void BasicMesh::LoadSpecularTexture(const string& Dir, const aiMaterial* pMaterial, int index)
 ////{
 ////    m_Materials[index].pSpecularExponent = NULL;
 ////
@@ -245,7 +243,7 @@
 ////    }
 ////}
 //
-//void Mesh::LoadColors(const aiMaterial* pMaterial, int index)
+//void BasicMesh::LoadColors(const aiMaterial* pMaterial, int index)
 //{
 //    aiColor3D AmbientColor(0.0f, 0.0f, 0.0f);
 //    Vector3f AllOnes(1.0f, 1.0f, 1.0f);
@@ -284,7 +282,7 @@
 //}
 //
 //
-//void Mesh::PopulateBuffers()
+//void BasicMesh::PopulateBuffers()
 //{
 //    glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[POS_VB]);
 //    glBufferData(GL_ARRAY_BUFFER, sizeof(m_Positions[0]) * m_Positions.size(), &m_Positions[0], GL_STATIC_DRAW);
@@ -307,7 +305,7 @@
 //
 //
 //// Introduced in youtube tutorial #18
-////void Mesh::Render(IRenderCallbacks* pRenderCallbacks)
+////void BasicMesh::Render(IRenderCallbacks* pRenderCallbacks)
 ////{
 ////    glBindVertexArray(m_VAO);
 ////
@@ -339,7 +337,7 @@
 ////}
 //
 //
-////void Mesh::Render(unsigned int DrawIndex, unsigned int PrimID)
+////void BasicMesh::Render(unsigned int DrawIndex, unsigned int PrimID)
 ////{
 ////    glBindVertexArray(m_VAO);
 ////
@@ -367,7 +365,7 @@
 //
 //
 ////// Used only by instancing
-////void Mesh::Render(unsigned int NumInstances, const Matrix4f* WVPMats, const Matrix4f* WorldMats)
+////void BasicMesh::Render(unsigned int NumInstances, const Matrix4f* WVPMats, const Matrix4f* WorldMats)
 ////{
 ////    glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[WVP_MAT_VB]);
 ////    glBufferData(GL_ARRAY_BUFFER, sizeof(Matrix4f) * NumInstances, WVPMats, GL_DYNAMIC_DRAW);
@@ -403,7 +401,7 @@
 ////}
 //
 //
-//const Material& Mesh::GetMaterial()
+//const Material& BasicMesh::GetMaterial()
 //{
 //    for (unsigned int i = 0 ; i < m_Materials.size() ; i++) {
 //        if (m_Materials[i].AmbientColor != Vector3f(0.0f, 0.0f, 0.0f)) {
@@ -415,7 +413,7 @@
 //}
 //
 //
-//void Mesh::GetLeadingVertex(uint DrawIndex, uint PrimID, Vector3f& Vertex)
+//void BasicMesh::GetLeadingVertex(uint DrawIndex, uint PrimID, Vector3f& Vertex)
 //{
 //    uint MeshIndex = DrawIndex; // Each mesh is rendered in its own draw call
 //

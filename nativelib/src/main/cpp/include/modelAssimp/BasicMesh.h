@@ -1,28 +1,24 @@
-//
-// Created by Xu Zhiyong on 2022/6/1.
-//
 
-#ifndef XAPP_MESH_H
-#define XAPP_MESH_H
+#ifndef XAPP_BASICMESH_H
+#define XAPP_BASICMESH_H
 
-#include "../../../../../../../../../Tools/Android/Sdk/ndk/24.0.8215888/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/string"
-#include "../../../../../../../../../Tools/Android/Sdk/ndk/24.0.8215888/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/map"
-#include "../../../../../../../../../Tools/Android/Sdk/ndk/24.0.8215888/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1/vector"
+#include <string>
+#include <map>
+#include <vector>
 
-#include "../../../vendors/assimp-5.2.4/include/assimp/Importer.hpp"  // C++ importer interface
-#include "../../../vendors/assimp-5.2.4/include/assimp/scene.h"       // Output data structure
-#include "../../../vendors/assimp-5.2.4/include/assimp/postprocess.h" // Post processing flags
+#include "assimp-5.2.4/include/assimp/Importer.hpp"  // C++ importer interface
+#include "assimp-5.2.4/include/assimp/scene.h"       // Output data structure
+#include "assimp-5.2.4/include/assimp/postprocess.h" // Post processing flags
 
-#include "../common/MeshCommon.h"
-
-#include "../Core.h"
+#include "Core.h"
+#include "common/MeshCommon.h"
 #include "Material.h"
 
-class Mesh : public MeshCommon {
+class BasicMesh : public MeshCommon {
 public:
-    Mesh() {};
+    BasicMesh() {};
 
-    ~Mesh();
+    ~BasicMesh();
 
     bool LoadMesh(const std::string &Filename);
 
@@ -109,4 +105,4 @@ private:
 };
 
 
-#endif //XAPP_MESH_H
+#endif //XAPP_BASICMESH_H
